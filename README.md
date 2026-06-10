@@ -55,6 +55,16 @@ namespaced — `top-tier-engineer:chief-engineer`, `top-tier-engineer:senior-rev
 never collide with similarly named standalone skills, and the folder stays intact so every skill
 can read `PROTOCOL.md` + `MAP.md` at the suite root.
 
+**From GitHub (any machine):** the same marketplace lives in this repo, so on a machine with `gh`/git
+authenticated to the account, install straight from GitHub:
+
+```
+/plugin marketplace add thanaponai01-collab/top-tier-engineer-skill
+/plugin install top-tier-engineer@thanaponai01-skills
+```
+
+(The repo is private, so the machine must have access to it.)
+
 **Fallback (loose skills):** copy each folder under `skills/` into `~/.claude/skills/` and keep
 `PROTOCOL.md` + `MAP.md` at a stable path the skills can read (e.g. `~/.claude/skills/`). Note this
 forfeits namespacing, so it will clash with any existing `senior-review` / `wire-check` skills.
