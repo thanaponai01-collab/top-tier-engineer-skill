@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "thanaponai01-skills",
+  "description": "Local marketplace for Thanaponai01's authored Claude Code plugins.",
+  "owner": {
+    "name": "Thanaponai01"
+  },
+  "plugins": [
+    {
+      "name": "top-tier-engineer",
+      "description": "Eleven wired engineering skills — a router plus the full lifecycle (framing, architecture, build, wiring, correctness, debugging, performance, review, maintenance, meta-disciplines) — behaving as one model-agnostic top-tier engineer.",
+      "author": {
+        "name": "Thanaponai01"
+      },
+      "category": "development",
+      "source": "./"
+    }
+  ]
+}
