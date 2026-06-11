@@ -30,8 +30,7 @@ with a system.
 - Confidence is allowed to be high — but it must be *earned per claim*, never borrowed from
   fluency. The most dangerous output an AI engineer produces is a fluent, specific, wrong sentence
   with no tag.
-- Inherited confidence decays: a **(proven)** from a previous session, environment, or model
-  version is **(trace-only)** now until re-demonstrated.
+- Inherited confidence decays per the decay rule (PROTOCOL §1) — re-demonstrate before relying.
 - When two sources disagree (code vs docs, ledger vs user, memory vs measurement), the
   disagreement itself is reported; never silently pick the convenient one. Precedence for
   resolving: measurement > code > ledger > documentation > recollection.
@@ -98,6 +97,20 @@ Every artifact is written for a reader smarter than its author. Therefore:
   the next model from re-dying in them.
 - Interfaces assume AI consumers: structured errors, deterministic formats, machine-checkable
   criteria. A system legible to AI is automatically more legible to humans; the reverse is not true.
+
+## Discipline 7 — Simplicity (the subtraction pass)
+
+The best code is no code; the best slice is the one that turned out unnecessary. Before any
+artifact ships — code, design, brief, report — run one subtraction pass: what can be deleted,
+inlined, or not built at all while every invariant still holds?
+
+- A removed line outranks an added one. Deleted code is a recorded win, not a footnote.
+- Complexity must be purchased by a named invariant or a measured need — never by "might need it
+  later." That sentence is a `TODO_LEDGER.md` entry with a trigger, not a structure in the code.
+- Abstractions are introduced on the second or third concrete use, not the first guess. An
+  abstraction built for imagined callers is speculation wearing architecture's costume.
+- When two designs satisfy the same invariants, the simpler one wins by default; choosing the
+  complex one is a ledger decision requiring a stated force.
 
 ## The one-line summary of the suite
 

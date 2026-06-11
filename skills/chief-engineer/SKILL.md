@@ -1,7 +1,7 @@
 ---
 name: chief-engineer
 description: >
-  The dispatcher that turns ten specialist engineering skills into one top-tier engineer. Use at
+  The dispatcher that turns eleven specialist engineering skills into one top-tier engineer. Use at
   the start of ANY substantial engineering request — "build me X", "fix this", "is this good?",
   "make it faster", "continue the project" — whenever it is unclear which lifecycle stage applies,
   whenever a request spans multiple stages ("build and test it"), whenever resuming a project after
@@ -16,8 +16,8 @@ through the right specialist skill(s) in the right order, and enforces the hando
 talks to an engineer and the lifecycle happens underneath.
 
 Shared rules, vocabulary, ledger registry, and the handoff chain live in `PROTOCOL.md` at the
-suite root — read it once per session. (Gloss: evidence tags are **(proven)** executed /
-**(trace-only)** read / **(assumed)** unverified.)
+suite root — read it once per session. (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
+**(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 ## Operating contract
 
@@ -34,6 +34,14 @@ suite root — read it once per session. (Gloss: evidence tags are **(proven)** 
    scales down; it never disappears.
 4. **One report.** However many skills run, the user receives one director-readable report: what
    was done, what was proven, what needs a decision — then depth.
+
+## Phase 0 — Locate and load
+
+- Find the suite root per `PROTOCOL.md` §0 — plugin install: two directories above this file.
+  Read `PROTOCOL.md` once per session; `MAP.md` only when orienting a human to the suite itself.
+- To run a routed skill, open `<root>/skills/<name>/SKILL.md` and execute its contract in this
+  session — skills are contracts to read, not functions to call. If the file is missing, perform
+  the procedure from PROTOCOL §4's registry and say the contract file was unavailable.
 
 ## Phase 1 — Read the ground
 
@@ -67,12 +75,38 @@ Census the project root before classifying anything:
 | "It's broken / wrong output / crashes / worked yesterday" — cause unknown | debug-protocol → evolve-maintain |
 | Bug with known cause, dependency update, refactor, incident | evolve-maintain |
 | "Slow / expensive / heavy / optimize" | perf-optimize (only past a passed gate; else gate first) |
-| "Review / audit / is this code good / second opinion" | senior-review |
+| "Review / audit this codebase / is this code good" | senior-review |
+| "Second opinion / scrutinize this PR, diff, plan, design doc" — a delta, not a codebase | scrutinize |
 | "Where are we / what's next / resume" | this skill alone: state report + recommended next stage |
+| Question / explanation only — nothing will be built or changed | no lifecycle skill: answer directly, evidence-tagged; meta-skills still bind; no ledgers |
+| "Explore / try / prototype / is X even possible?" | spike mode (below): timeboxed, quarantined, knowledge-only output |
+| No owning skill (deploy infra, CI pipelines, data migration, copywriting…) | say so plainly; propose the nearest mandate or plain execution under meta-skills — never silently stretch a mandate |
 
 Multi-stage requests ("build and test it") become an announced pipeline. Ambiguous requests are
 classified by Phase 1 state, and the classification is stated in one line so the user can redirect
 cheaply — never ask which skill to use; that is this skill's job.
+
+### The fast path (Rule 3, made concrete)
+
+A request qualifies when it is single-session, single-slice, and touches no existing ledger.
+Fast path = one pass, one report: a ≤5-line **inline** brief (job, invariant(s), proof line);
+inline decisions recorded only for one-way doors; build per `build-discipline` with `wire-check`'s
+five links walked inline; the proof line executed; one combined verdict block at the end. No
+ledger files are created (scale rule, PROTOCOL §7) — the report carries the inline equivalents so
+any future session can promote them to files verbatim. The fast path compresses ceremony, never
+evidence: a proof line still executes, and every claim still carries its tag.
+
+### Spike mode (legal throwaway)
+
+A spike answers a question, not a requirement — and the suite makes it legal so it never has to
+happen illegally. Contract: declared at the start (`SPIKE: <question> | timebox`); quarantined in
+a separate directory or branch and never wired into the system (wire-check on a spike should
+*fail*, by design); exempt from build-discipline's ceremony but not from evidence tags. Its only
+durable output is knowledge: the answer lands in `DECISION_LEDGER.md` or `ASSUMPTIONS.md` (or
+inline, per the scale rule), and the code is then deleted or kept only as a labeled reference.
+Spike code never graduates by merge — if the answer is "build it," it is rebuilt under
+build-discipline with the spike as a crib sheet. The undeclared spike — a prototype that quietly
+becomes production — is the anti-pattern this mode exists to kill.
 
 ## Phase 3 — Execute the route
 
@@ -80,7 +114,9 @@ cheaply — never ask which skill to use; that is this skill's job.
 - At each handoff, verify the produced artifact actually satisfies the consumer's input (a brief
   with no falsifiable criteria does not satisfy arch-design — bounce it back, don't pass it on).
 - Parallel gates before any "ship" declaration: correctness-gate (is it provably right?) and, when
-  the user signals stakes, senior-review (is it wise?). Neither substitutes for the other.
+  the user signals stakes, senior-review (is it wise?). Neither substitutes for the other. For a
+  delta that hasn't landed yet, the cheap pre-gate is scrutinize — kill bad changes before they
+  cost a build.
 
 ## Phase 4 — Report
 

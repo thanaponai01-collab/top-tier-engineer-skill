@@ -41,6 +41,10 @@ and inside this skill, only **(proven)** closes a slice.
 
 ### Phase 2 — Build
 
+- **Smallest diff that satisfies the proof line** (meta-skills Discipline 7, simplicity): prefer
+  deleting or reusing over adding; introduce an abstraction on its second concrete use, not its
+  first guess; "might need it later" is a `TODO_LEDGER.md` entry with a trigger, never speculative
+  structure in the code.
 - **Error paths first**: write what happens on bad input, missing dependency, and partial failure
   before polishing the happy path. Happy-path-only code is the largest single source of later
   incidents.
@@ -71,6 +75,9 @@ inward. New code that exists but is unreachable is the slice's failure, not a fo
 
 ### Phase 5 — Commit
 
+- **Read the entire diff as its own reviewer before committing** (the short leash — non-negotiable
+  for generated code): every changed line must be both explainable and intended. A line you cannot
+  explain does not ship; a line you did not intend is a finding, not a freebie.
 - One slice, one commit (or one clearly bounded changeset). The message states the behavior change
   and the proof line result, not the file list.
 - The committed state must be **rollback-ready**: reverting this commit alone returns the system
@@ -81,8 +88,8 @@ inward. New code that exists but is unreachable is the slice's failure, not a fo
 ## Resuming an interrupted build
 
 Before writing anything: read `TODO_LEDGER.md`, the last slice's proof line, and `git log`/diff of
-uncommitted work. Re-prove the last claimed-working slice before stacking on it — inherited
-**(proven)** decays to **(trace-only)** the moment the environment or code has changed under it.
+uncommitted work. Re-prove the last claimed-working slice before stacking on it
+(decay rule, PROTOCOL §1: a **(proven)** from a changed environment or code state is **(trace-only)** now).
 
 ## Rules
 

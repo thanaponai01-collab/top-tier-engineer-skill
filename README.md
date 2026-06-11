@@ -9,7 +9,7 @@ running it.
 ```
 top-tier-engineer/
 ├── README.md            ← you are here
-├── MAP.md               ← the picture: how the eleven skills connect
+├── MAP.md               ← the picture: how the twelve skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once)
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
 └── skills/
@@ -22,6 +22,7 @@ top-tier-engineer/
     ├── debug-protocol/      ← NEW: why is it wrong? (proven cause before any fix)
     ├── perf-optimize/       ← stage 5: measured, guarded improvement
     ├── senior-review/       ← parallel gate: is it wise?
+    ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
     ├── evolve-maintain/     ← stage 6: years-long health, incidents → invariants
     └── meta-skills/         ← always on: calibration, escalation, communication
 ```
@@ -33,6 +34,7 @@ You don't pick skills. You talk to the engineer:
 - "I want an app that..." → routed through framing → design → build → gate
 - "It's broken and I don't know why" → debug-protocol proves the cause, evolve-maintain fixes it
 - "Is this code good?" → senior-review
+- "Look at this PR / plan before it lands" → scrutinize
 - "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step
 
 `chief-engineer` routes by **artifact state, not by your phrasing** — say "build it" with no brief
@@ -75,6 +77,20 @@ skill into context. Every skill degrades gracefully when used alone (see PROTOCO
 **Any other agent:** the files are plain markdown contracts — paste and go. Nothing here depends
 on a vendor, a framework, or a model version. That is the point.
 
+## Bootstrap a project (recommended)
+
+Claude Code auto-reads a project's `CLAUDE.md` — it does not auto-read your ledgers or this suite.
+Add this block to each governed project's `CLAUDE.md` so every fresh session lands wired:
+
+```
+This project is governed by the top-tier-engineer suite.
+Route every substantial engineering request through the chief-engineer skill
+(top-tier-engineer:chief-engineer) before acting.
+Project memory lives in the ledgers at the repo root (PROBLEM_BRIEF.md, ASSUMPTIONS.md,
+ARCHITECTURE.md, DECISION_LEDGER.md, TODO_LEDGER.md, CORRECTNESS_VERDICT.md, PERF_BUDGET.md,
+REVIEW_LEDGER.md, MAINT_LOG.md) — read the ones that exist before writing anything.
+```
+
 ## Design decisions made while wiring (the diagnosis behind this artifact)
 
 1. **Vocabulary was duplicated and had drifted.** Every skill restated the evidence tags, and
@@ -97,11 +113,37 @@ on a vendor, a framework, or a model version. That is the point.
    model can walk the chain from any file it lands in.
 5. **Every skill now ends in a machine-parseable verdict line** (wire-check and senior-review
    gained theirs) so a transcript or log shows where the lifecycle stopped, greppably.
-6. **One thing deliberately NOT added** (anti-scope): no security-audit, release-management, or
+6. **The suite assumed its own wiring.** "Read PROTOCOL.md at the suite root" never said *where*
+   the root is from inside an installed plugin, and "invoke skill X" never said what invoking
+   means when skills are files, not functions. The suite failed its own wire-check: its links
+   existed but were not Routed. Fix: PROTOCOL §0 (resolution order + invocation semantics),
+   chief-engineer Phase 0, and the CLAUDE.md bootstrap block above.
+7. **Scaling down was a promise, not a mechanism.** "Lightweight by default" had no definition, so
+   a thirty-line script could legally spawn nine ledger files. Fix: the scale rule (PROTOCOL §7 —
+   ledgers materialize as files only when memory must outlive the session, else inline) and the
+   concrete fast path in chief-engineer. The escape hatch is now also explicit: questions and
+   explanations route to no lifecycle skill at all, and requests with no owning mandate are named
+   as such instead of stretched into one.
+8. **Rigor without taste was a ceiling.** v1.2 adds the judgment layer great engineers carry:
+   simplicity as a discipline with teeth (the subtraction pass, meta-skills D7), a dependency
+   adoption bar (arch-design), a legal throwaway mode so prototyping never has to break discipline
+   (spike mode, chief-engineer), mandatory diff self-review before any commit (the short leash,
+   build-discipline), and direct inspection of real outputs alongside assertions
+   (correctness-gate). Process keeps you safe; these keep you sharp.
+9. **A twelfth skill passed the bar.** `scrutinize` (adapted from an external skill) owns the
+   delta — a plan, PR, diff, or design doc that hasn't landed — asking "should this change exist,
+   and does it do what it claims?" Nobody owned that: senior-review judges codebases and mentors
+   authors; correctness-gate proves built systems. Adapting it meant conforming it to suite law:
+   a Wiring block (it was an orphan — ironic for an end-to-end reviewer), evidence tags replacing
+   its informal claim-vs-verification rule, its simpler-alternative pass becoming the
+   operationalization of Discipline 7 rather than a second statement of it, a Law 3 guard on its
+   outsider stance (plus a ledger check, so explained surprises read as archaeology, not signal),
+   a registry verdict line, and a clean trigger boundary against senior-review.
+10. **One thing deliberately NOT added** (anti-scope): no security-audit, release-management, or
    data-migration skills. Security lives inside senior-review's "Safety & trust" dimension and
    correctness-gate's hostile tests; releases are a passed gate + review; adding skills that
    overlap existing mandates would violate Law 1. Add a new skill only when a question has no
-   owner — that was debug-protocol's bar, and it should be the next one's too.
+   owner — that was debug-protocol's bar and scrutinize's, and it should be the next one's too.
 
 ## The one-line summary
 

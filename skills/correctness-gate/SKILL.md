@@ -76,6 +76,10 @@ Tests passing is necessary, not sufficient — measure whether the suite can act
 - **Coverage as evidence, never as goal**: report uncovered regions that contain logic, ignore the
   percentage. Chasing a number produces assertion-free tests, which are worse than no tests because
   they manufacture false confidence.
+- **Look at the real thing**: beyond assertions, run a handful of real or realistic inputs
+  end-to-end and *read the actual outputs*. Eyeballing ten real outputs catches categories of
+  wrongness that tests encode around, because tests only check what someone thought to check.
+  Paste one representative input→output pair into the verdict as evidence this was done.
 - **Flake quarantine**: a test that passes and fails without code changes is removed from the gate,
   logged in `TODO_LEDGER.md` with trigger "before next gate", and never silently retried-until-green.
 

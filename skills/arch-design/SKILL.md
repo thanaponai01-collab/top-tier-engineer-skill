@@ -60,7 +60,14 @@ Every consequential choice goes through the same frame:
    - **One-way door** — expensive to undo (database choice, public API shape, multi-tenant model,
      auth model). Decide slowly: present the options to the director with your recommendation and
      the cost of being wrong. Never walk through a one-way door silently.
-4. **Verdict** with evidence tag — "Postgres handles our write volume **(trace-only: vendor docs,
+4. **The dependency bar** — adding a dependency is itself a consequential decision, and usually a
+   one-way door in disguise: it imports an upgrade treadmill, a supply chain, an idiom, and a
+   failure surface. A new dependency enters the ledger only with: (a) the approximate cost of
+   writing the needed slice ourselves, (b) the fraction of the library's surface we will actually
+   use, (c) its maintenance pulse (recent releases, open security issues) **(trace-only at
+   minimum)**, and (d) the pin/lock plan. Default: if we would use under ~10% of it or could write
+   the needed part in under ~100 lines, write it — owned simple code outlives borrowed complex code.
+5. **Verdict** with evidence tag — "Postgres handles our write volume **(trace-only: vendor docs,
    not benchmarked)**" is an honest decision; the same sentence without the tag is a future incident.
 
 ### Phase 4 — Stress

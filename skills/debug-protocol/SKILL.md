@@ -17,8 +17,8 @@ symptoms get patched while causes survive.
 
 Distinct mandate within the suite: `wire-check` asks *"is it connected?"*, `correctness-gate` asks
 *"is it right?"*, `senior-review` asks *"is it wise?"* — this skill asks *"why is it wrong?"*
-Shared vocabulary and laws: `PROTOCOL.md` at the suite root. (Gloss: **(proven)** executed /
-**(trace-only)** read / **(assumed)** unverified.)
+Shared vocabulary and laws: `PROTOCOL.md` at the suite root. (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
+**(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 ## Operating contract
 
@@ -70,7 +70,7 @@ gain for Phase 6.
 
 State the suspected cause in one falsifiable sentence: *"X fails because Y, therefore Z experiment
 will show W."* A hypothesis that doesn't predict a specific observable is intuition, not a
-hypothesis. Apply Law 3 before blaming unfamiliar code: strange-looking is not guilty-looking —
+hypothesis. Apply Law 3 (violation ≠ deviation) before blaming unfamiliar code: strange-looking is not guilty-looking —
 check `DECISION_LEDGER.md` archaeology for the fence's reason.
 
 ### Phase 5 — Prove
@@ -92,7 +92,7 @@ Produce the **Cause Verdict** (in the report, and as the root-cause input to `ev
 5. Verdict line: `CAUSE: proven(<one-line cause>) | trace-only(<reason>) | unreproduced`.
 
 The fix routes to `evolve-maintain` (which classifies it and executes via `build-discipline` +
-`correctness-gate`). This skill never ships the fix alone — but per Law 5, when the fix is obvious
+`correctness-gate`). This skill never ships the fix alone — but per Law 5 (diagnosis ships with the artifact), when the fix is obvious
 and small, hand off and fix in the same response, with the two acts clearly separated.
 
 ## Anti-patterns this skill exists to kill
