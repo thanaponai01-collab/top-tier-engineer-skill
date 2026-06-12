@@ -1,7 +1,7 @@
 {
   "name": "top-tier-engineer",
-  "description": "Twelve wired engineering skills — a router plus the full lifecycle (framing, architecture, build, wiring, correctness, debugging, performance, review, change scrutiny, maintenance, meta-disciplines) — behaving as one model-agnostic top-tier engineer.",
-  "version": "1.3.1",
+  "description": "Thirteen wired engineering skills — a router plus the full lifecycle (framing, architecture, build, wiring, correctness, debugging, symptom audit, performance, review, change scrutiny, maintenance, meta-disciplines) — behaving as one model-agnostic top-tier engineer.",
+  "version": "1.4.0",
   "author": {
     "name": "Thanaponai01"
   }

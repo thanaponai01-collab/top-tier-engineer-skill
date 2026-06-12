@@ -16,7 +16,7 @@ proven** — the fix itself is a separate act with its own discipline. Mixing th
 symptoms get patched while causes survive.
 
 Distinct mandate within the suite: `wire-check` asks *"is it connected?"*, `correctness-gate` asks
-*"is it right?"*, `senior-review` asks *"is it wise?"* — this skill asks *"why is it wrong?"*
+*"is it right?"*, `senior-review` asks *"is it wise?"* — `symptom-audit` asks *"where does the felt slow/clunky live?"* — this skill asks *"why is it wrong?"*; working-but-slow is not wrong
 Shared vocabulary and laws: `PROTOCOL.md` at the suite root. (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
 **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 

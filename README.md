@@ -9,7 +9,7 @@ running it.
 ```
 top-tier-engineer/
 ├── README.md            ← you are here
-├── MAP.md               ← the picture: how the twelve skills connect
+├── MAP.md               ← the picture: how the thirteen skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once)
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
 └── skills/
@@ -19,7 +19,8 @@ top-tier-engineer/
     ├── build-discipline/    ← stage 3: proven vertical slices
     ├── wire-check/          ← service: is it connected? (slice exit gate)
     ├── correctness-gate/    ← stage 4: is it provably right?
-    ├── debug-protocol/      ← NEW: why is it wrong? (proven cause before any fix)
+    ├── debug-protocol/      ← why is it wrong? (proven cause before any fix)
+    ├── symptom-audit/       ← NEW: where does the felt complaint live? (trace → prescribe)
     ├── perf-optimize/       ← stage 5: measured, guarded improvement
     ├── senior-review/       ← parallel gate: is it wise?
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
@@ -33,6 +34,7 @@ You don't pick skills. You talk to the engineer:
 
 - "I want an app that..." → routed through framing → design → build → gate
 - "It's broken and I don't know why" → debug-protocol proves the cause, evolve-maintain fixes it
+- "The app feels slow/clunky" → symptom-audit traces the complaint and prescribes a phased spec
 - "Is this code good?" → senior-review
 - "Look at this PR / plan before it lands" → scrutinize
 - "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step
@@ -88,7 +90,7 @@ Route every substantial engineering request through the chief-engineer skill
 (top-tier-engineer:chief-engineer) before acting.
 Project memory lives in the ledgers at the repo root (PROBLEM_BRIEF.md, ASSUMPTIONS.md,
 ARCHITECTURE.md, DECISION_LEDGER.md, TODO_LEDGER.md, CORRECTNESS_VERDICT.md, PERF_BUDGET.md,
-REVIEW_LEDGER.md, MAINT_LOG.md) — read the ones that exist before writing anything.
+AUDIT_SPEC.md, REVIEW_LEDGER.md, MAINT_LOG.md) — read the ones that exist before writing anything.
 ```
 
 ## Design decisions made while wiring (the diagnosis behind this artifact)
@@ -139,7 +141,19 @@ REVIEW_LEDGER.md, MAINT_LOG.md) — read the ones that exist before writing anyt
    operationalization of Discipline 7 rather than a second statement of it, a Law 3 guard on its
    outsider stance (plus a ledger check, so explained surprises read as archaeology, not signal),
    a registry verdict line, and a clean trigger boundary against senior-review.
-10. **One thing deliberately NOT added** (anti-scope): no security-audit, release-management, or
+10. **A thirteenth skill passed the bar.** `symptom-audit` (distilled from a real audit run, then
+   abstracted) owns the previously unowned question **"where does a felt complaint live in an
+   existing codebase, and what's the cheapest ranked path to relief?"** Nobody owned it:
+   perf-optimize *forbids* this mode (it requires a runnable, gated system and a profiler, and
+   bans trace-only results); debug-protocol owns broken, not slow-but-working; senior-review is
+   whole-codebase, not symptom-scoped. Conforming it to suite law meant: its evidence rule became
+   a pointer to the PROTOCOL vocabulary (its findings honestly cap at (trace-only) — only
+   perf-optimize may claim a measured gain); its "Verify" phase became *Pre-verify* — it
+   pre-writes the checks that perf-optimize/correctness-gate execute, never claiming them itself;
+   its rewrite escalation routes through arch-design; its swappable sweep checklist is named as
+   the only audit-type-specific part; ledger `AUDIT_SPEC.md`, verdict noun `AUDIT:`, routing rows
+   in chief-engineer split cleanly against perf-optimize.
+11. **One thing deliberately NOT added** (anti-scope): no security-audit, release-management, or
    data-migration skills. Security lives inside senior-review's "Safety & trust" dimension and
    correctness-gate's hostile tests; releases are a passed gate + review; adding skills that
    overlap existing mandates would violate Law 1. Add a new skill only when a question has no
@@ -148,5 +162,5 @@ REVIEW_LEDGER.md, MAINT_LOG.md) — read the ones that exist before writing anyt
 ## The one-line summary
 
 **Frame falsifiably, decide reversibly, build provably, verify connectedly, gate adversarially,
-debug causally, optimize measurably, maintain memorably — and at every step, know exactly how
+debug causally, audit symptomatically, optimize measurably, maintain memorably — and at every step, know exactly how
 much you know.**

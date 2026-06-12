@@ -1,7 +1,7 @@
 ---
 name: chief-engineer
 description: >
-  The dispatcher that turns eleven specialist engineering skills into one top-tier engineer. Use at
+  The dispatcher that turns twelve specialist engineering skills into one top-tier engineer. Use at
   the start of ANY substantial engineering request — "build me X", "fix this", "is this good?",
   "make it faster", "continue the project" — whenever it is unclear which lifecycle stage applies,
   whenever a request spans multiple stages ("build and test it"), whenever resuming a project after
@@ -74,7 +74,8 @@ Census the project root before classifying anything:
 | "Is it correct / test it / it's done?" | correctness-gate |
 | "It's broken / wrong output / crashes / worked yesterday" — cause unknown | debug-protocol → evolve-maintain |
 | Bug with known cause, dependency update, refactor, incident | evolve-maintain |
-| "Slow / expensive / heavy / optimize" | perf-optimize (only past a passed gate; else gate first) |
+| "Slow / expensive / heavy / optimize" — runnable system, single measurable dimension | perf-optimize (only past a passed gate; else gate first) |
+| "Feels slow / clunky / takes forever" — an existing codebase + a felt complaint; unrunnable here, or spanning speed + cohesion + UX | symptom-audit → its spec executes via build-discipline / perf-optimize |
 | "Review / audit this codebase / is this code good" | senior-review |
 | "Second opinion / scrutinize this PR, diff, plan, design doc" — a delta, not a codebase | scrutinize |
 | "Where are we / what's next / resume" | this skill alone: state report + recommended next stage |

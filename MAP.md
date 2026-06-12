@@ -1,6 +1,6 @@
-# The Top-Tier Engineer — Skill Map (v3)
+# The Top-Tier Engineer — Skill Map (v4)
 
-Twelve skills wired into one engineer. A router reads the project's artifact state and dispatches
+Thirteen skills wired into one engineer. A router reads the project's artifact state and dispatches
 every request to the right specialist; every specialist produces a **handoff artifact** the next
 stage consumes — so any future model, with zero conversation history, resumes from artifacts alone.
 The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, in `PROTOCOL.md`.
@@ -29,13 +29,17 @@ The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, 
                             ▼         back into invariants)
                       debug-protocol
                   (unknown cause → proven Cause Verdict → back to evolve-maintain)
+
+   symptom-audit ── felt complaint on an existing codebase → AUDIT_SPEC.md
+   (symptom → trace → sweep → prescribe; phases execute via build-discipline,
+    perf phases measured & guarded under perf-optimize)
 ```
 
 `scrutinize` sits beside `senior-review` as a parallel gate, invokable at any stage on any
 not-yet-landed delta — plan, design doc, PR, or diff — answering "should this change exist, and
 does it do what it claims?" before the change costs a build.
 
-## The twelve, in one line each
+## The thirteen, in one line each
 
 | Skill | Question it owns |
 |---|---|
@@ -46,6 +50,7 @@ does it do what it claims?" before the change costs a build.
 | `wire-check` | Is it connected? |
 | `correctness-gate` | Is it provably right? |
 | `debug-protocol` | Why is it wrong? |
+| `symptom-audit` | Where does the felt complaint live, and what's the cheapest path to relief? |
 | `perf-optimize` | Is it measurably within budget, and guarded there? |
 | `senior-review` | Is it wise? |
 | `scrutinize` | Should this change exist, and does it do what it claims? |

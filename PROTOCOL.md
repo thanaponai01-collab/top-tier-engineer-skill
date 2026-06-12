@@ -1,6 +1,6 @@
 # PROTOCOL.md — The Shared Layer
 
-This file is the **single authoritative statement** of everything the twelve skills share.
+This file is the **single authoritative statement** of everything the thirteen skills share.
 Per Law 1 below, no skill restates what is written here; skills carry at most a one-line gloss
 for graceful degradation (see §6). When a skill and this file appear to disagree, this file wins
 and the disagreement is reported as a defect in the skill.
@@ -64,6 +64,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | `TODO_LEDGER.md` | build-discipline | Deferred work, each entry with a trigger that makes it due |
 | `CORRECTNESS_VERDICT.md` | correctness-gate | Latest gate result, oracle table, mutation results, residual risk |
 | `PERF_BUDGET.md` | perf-optimize | Budgets, currents, guards per dimension |
+| `AUDIT_SPEC.md` | symptom-audit | Pinned symptom, cause→location→cost table, phased prescription, pre-written checks |
 | `REVIEW_LEDGER.md` | senior-review | Unresolved novelty: hypothesis + the experiment that would settle it |
 | `MAINT_LOG.md` | evolve-maintain | Append-only intervention history: symptom → root cause → treatment |
 
@@ -78,6 +79,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | wire-check | a slice or suspect component | chain table, connecting code | the invoking skill |
 | correctness-gate | criteria, contracts, proof lines | CORRECTNESS_VERDICT.md, test suite | perf-optimize / ship / senior-review |
 | debug-protocol | an observed failure | Cause Verdict (proven root cause) | evolve-maintain (the fix) |
+| symptom-audit | existing codebase + a felt complaint | AUDIT_SPEC.md (diagnosis + phased prescription) | build-discipline (execute phases); perf-optimize (measure & guard perf phases); debug-protocol / wire-check on reroute |
 | perf-optimize | a passed gate + a budget | PERF_BUDGET.md, guards | correctness-gate (re-gate), evolve-maintain |
 | senior-review | any codebase | mentorship report, REVIEW_LEDGER.md | director + relevant lifecycle skill |
 | scrutinize | a delta (plan/PR/diff/design doc) + host system | scrutiny report; REVIEW_LEDGER.md appends | director + the owning lifecycle skill per finding |
@@ -93,7 +95,7 @@ arbitrates which.
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|OPTIMIZE|REVIEW|SCRUTINY|MAINT):`)
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|REVIEW|SCRUTINY|MAINT):`)
 recovers any run's trajectory:
 
 | Noun | Owner | States |
@@ -105,6 +107,7 @@ recovers any run's trajectory:
 | `WIRE` | wire-check | `connected(tag) \| broken(link N: cause) \| blocked(environment)` |
 | `GATE` | correctness-gate | `pass(tag) \| fail(behaviors, evidence)` |
 | `CAUSE` | debug-protocol | `proven(cause) \| trace-only(reason) \| unreproduced` |
+| `AUDIT` | symptom-audit | `prescribed(N phases, top: …) \| clean(traced path healthy) \| rerouted(to skill: reason) \| blocked(symptom unpinnable)` |
 | `OPTIMIZE` | perf-optimize | `budgets-met \| improved(…) \| stopped(N) \| reverted(reason)` |
 | `REVIEW` | senior-review | `shippable \| shippable-with-findings(top) \| not-shippable(blocker)` |
 | `SCRUTINY` | scrutinize | `ship \| fix-then-ship(top) \| rework(reason) \| reject(reason) \| blocked(underspecified)` |

@@ -3,6 +3,27 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.4.0 — 2026-06-12
+
+**Thirteenth skill: `symptom-audit`** — symptom-scoped audit of an existing codebase, distilled
+from a real audit run and abstracted. Owns the previously unowned question "where does a felt
+complaint live, and what's the cheapest ranked path to relief?" Pipeline: Symptom → Map → Trace →
+Sweep → Diagnose → Prescribe → Pre-verify. Conformed to suite law on entry:
+- Mandate boundaries cut four ways and are stated on both sides: perf-optimize (runnable +
+  measurable → there; its wiring now names symptom-audit as diagnostic front-end, and it stays
+  the only skill that may claim measured gains), debug-protocol (broken vs slow-but-working),
+  senior-review (whole codebase vs pinned symptom), wire-check (nothing happens at all).
+- Its evidence discipline is a pointer to PROTOCOL §1, with the honest cap stated: read-only
+  audits produce (trace-only) findings, and clean checks are findings too.
+- "Verify" became **Pre-verify**: the skill pre-writes each phase's before/after check for
+  perf-optimize / correctness-gate to execute — prescription and proof stay separated.
+- Rewrite-scale causes escalate via arch-design as a separate decision, never inside a spec phase.
+- The sweep checklist (perceived/latency/volume/waste/locality + cohesion) is explicitly the
+  swappable, audit-type-specific part; the skeleton is audit-agnostic.
+- Registry: ledger `AUDIT_SPEC.md` (PROTOCOL §3), handoff row (§4), verdict noun `AUDIT:` in the
+  grep pattern (§5), chief-engineer routing rows split against perf-optimize, MAP/README/manifest
+  counts updated to thirteen.
+
 ## 1.3.1 — 2026-06-11
 
 **Fresh-eyes rule (PROTOCOL §8)** — separation of duties for review-class skills. When the

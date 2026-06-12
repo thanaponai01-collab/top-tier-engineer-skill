@@ -11,8 +11,9 @@ description: Principal-engineer code review that mentors rather than gatekeeps. 
 > session authored, the fresh-eyes rule applies (PROTOCOL §8). Produces:
 > the mentorship report + `REVIEW_LEDGER.md`. Findings route onward: framing flaws to
 > `problem-framing`, structural flaws to `arch-design`, wiring gaps to `wire-check`. Change-scoped
-> second opinions on a not-yet-landed delta (plan, PR, diff) belong to `scrutinize`; this skill
-> judges codebases and mentors authors. Shared
+> second opinions on a not-yet-landed delta (plan, PR, diff) belong to `scrutinize`; a specific
+> felt complaint ("navigation is slow") belongs to `symptom-audit`; this skill judges whole
+> codebases without a symptom, and mentors authors. Shared
 > vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
 
 A review conducted the way a principal engineer at a top-tier organization would conduct it: rigorous on evidence, humble about unfamiliarity, and always ending in mentorship — the developer should leave knowing not just *what* is wrong but *why* it matters and *how* to never write it again.
