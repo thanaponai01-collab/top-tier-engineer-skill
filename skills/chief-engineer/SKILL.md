@@ -75,8 +75,12 @@ Census the project root before classifying anything:
 | "It's broken / wrong output / crashes / worked yesterday" — cause unknown | debug-protocol → evolve-maintain |
 | Bug with known cause, dependency update, refactor, incident | evolve-maintain |
 | "Slow / expensive / heavy / optimize" — runnable system, single measurable dimension | perf-optimize (only past a passed gate; else gate first) |
+| "N+1 / will this query scale / add an index / does this endpoint hit the DB hard" — a data-access change | data-tier (gates cost class from the plan, before a budget exists) |
 | "Feels slow / clunky / takes forever" — an existing codebase + a felt complaint; unrunnable here, or spanning speed + cohesion + UX | symptom-audit → its spec executes via build-discipline / perf-optimize |
 | "Review / audit this codebase / is this code good" | senior-review |
+| "Is this secure / can this be abused / review the auth / we handle passwords/payments/PII" | threat-model (parallel security gate; mandatory before ship if a trust boundary exists) |
+| "Deploy / release / ship it / push to prod / cut a version" | ship-gate (after correctness-gate, and threat-model if a trust boundary is touched) |
+| "Migration / alter schema / rename column / backfill / change the model with prod data" | data-evolution (invoked by evolve-maintain or ship-gate) |
 | "Second opinion / scrutinize this PR, diff, plan, design doc" — a delta, not a codebase | scrutinize |
 | "Where are we / what's next / resume" | this skill alone: state report + recommended next stage |
 | Question / explanation only — nothing will be built or changed | no lifecycle skill: answer directly, evidence-tagged; meta-skills still bind; no ledgers |
@@ -90,6 +94,11 @@ cheaply — never ask which skill to use; that is this skill's job.
 ### The fast path (Rule 3, made concrete)
 
 A request qualifies when it is single-session, single-slice, and touches no existing ledger.
+**Carve-out (LIVE_RUN_001 process fix):** the fast path is *forbidden* — regardless of size —
+when the slice touches a **trust boundary** (auth, authorization, sessions, secrets, untrusted
+input crossing into a privileged sink) or **persistent data shape** (schema, migration, stored
+format). A 40-line diff can bypass authentication or corrupt stored data; such a slice routes
+through `threat-model` and/or `data-evolution` even when it would otherwise qualify as fast-path.
 Fast path = one pass, one report: a ≤5-line **inline** brief (job, invariant(s), proof line);
 inline decisions recorded only for one-way doors; build per `build-discipline` with `wire-check`'s
 five links walked inline; the proof line executed; one combined verdict block at the end. No
@@ -114,8 +123,10 @@ becomes production — is the anti-pattern this mode exists to kill.
 - Run each routed skill by its own contract; this skill adds no rules to theirs.
 - At each handoff, verify the produced artifact actually satisfies the consumer's input (a brief
   with no falsifiable criteria does not satisfy arch-design — bounce it back, don't pass it on).
-- Parallel gates before any "ship" declaration: correctness-gate (is it provably right?) and, when
-  the user signals stakes, senior-review (is it wise?). Neither substitutes for the other. For a
+- Parallel gates before any "ship" declaration: correctness-gate (is it provably right?),
+  `threat-model` when a trust boundary is touched (does it resist abuse?), and, when the user
+  signals stakes, senior-review (is it wise?). None substitutes for another. The act of shipping
+  itself — reversibility, blast radius, rollback — is owned by `ship-gate`, the last door. For a
   delta that hasn't landed yet, the cheap pre-gate is scrutinize — kill bad changes before they
   cost a build.
 

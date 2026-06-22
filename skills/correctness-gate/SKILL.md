@@ -57,7 +57,10 @@ Build the test suite as an adversary, in this priority order:
 2. **Property tests** — generate inputs, assert properties. Prefer these wherever an oracle from
    class 3 exists.
 3. **Boundary & hostile tests** — empty, maximal, malformed, concurrent, unicode, the input a
-   malicious or confused actor (human or AI agent) would send.
+   malicious or confused actor (human or AI agent) would send. Where the system has a real trust
+   boundary, the *adversarial* abuse cases are derived by `threat-model` and handed here as test
+   specs; this gate **executes and owns them as regressions** but does not derive the threat model
+   itself — that division keeps the security pipeline in one place (Law 1).
 4. **Regression tests** — one per bug ever found, named after the bug. A fixed bug without a
    regression test is a bug on layaway.
 5. **Example tests** — ordinary cases, last, because they catch the least.

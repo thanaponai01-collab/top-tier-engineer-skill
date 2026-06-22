@@ -115,5 +115,6 @@ inlined, or not built at all while every invariant still holds?
 ## The one-line summary of the suite
 
 **Frame falsifiably, decide reversibly, build provably, verify connectedly, gate adversarially,
-debug causally, optimize measurably, maintain memorably — and at every step, know exactly how
-much you know.**
+debug causally, audit symptomatically, optimize measurably, scale sub-linearly, defend
+adversarially, ship reversibly, migrate losslessly, maintain memorably — and at every step, know
+exactly how much you know.**

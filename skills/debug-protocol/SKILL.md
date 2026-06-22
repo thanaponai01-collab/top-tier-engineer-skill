@@ -64,7 +64,13 @@ Cut the search space in half repeatedly along whichever axis is cheapest to cut:
 
 Derive probes from *this* system's own observability (its logs, its REPL, its tests) before adding
 instrumentation; added instrumentation that proves useful is kept and flagged as an observability
-gain for Phase 6.
+gain for Phase 6. When static probes and log-reads leave the corruption point ambiguous, escalate
+to **runtime inspection**: pause execution at the suspect frame and read the actual program state
+there — live variable values, the call stack that reached this point, heap or allocation state for
+leaks — rather than inferring that state from source. Derive *this* runtime's inspection facility
+(its interactive debugger, its core-dump reader, its memory profiler) the same way wire-check
+derives a framework's wiring; naming a specific tool here would be a ceiling (Discipline 6). Observed
+runtime state is **(proven)** for what it shows; inferred state from reading code is **(trace-only)**.
 
 ### Phase 4 — Hypothesize
 

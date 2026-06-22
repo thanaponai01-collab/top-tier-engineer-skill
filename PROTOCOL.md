@@ -1,6 +1,6 @@
 # PROTOCOL.md — The Shared Layer
 
-This file is the **single authoritative statement** of everything the thirteen skills share.
+This file is the **single authoritative statement** of everything the seventeen skills share.
 Per Law 1 below, no skill restates what is written here; skills carry at most a one-line gloss
 for graceful degradation (see §6). When a skill and this file appear to disagree, this file wins
 and the disagreement is reported as a defect in the skill.
@@ -49,7 +49,16 @@ When any of those changes, it decays to **(trace-only)** until re-demonstrated.
    patched artifact in the same response wherever feasible.
 6. **Constrain process, never intelligence.** Skills specify phases, evidence rules, and stop
    conditions — never solutions. A stronger model inside the same contract produces strictly
-   better results.
+   better results. *Acceptance criterion (so this Law is falsifiable like any other):* a skill
+   conforms only if its body contains no hard-coded answer, stack name, threshold, or finding that
+   a future model would have to override to do better — every such particular is a worked example
+   labelled as illustrative, never the contract. The test is the **substitution test**: replace
+   every concrete instance in the skill with the phase or rule it illustrates; if the skill still
+   fully specifies the work, it constrains process; if removing the instances leaves a hole, that
+   instance was load-bearing knowledge and is a Law 6 violation. The thesis that a stronger model
+   *actually* does better through the same contract is, suite-wide, **(suspected)** until a
+   two-tier run measures it (the experiment is specified in `LIVE_RUN_003.md`); per-skill
+   conformance to the substitution test is **(trace-only)** and checkable by reading.
 
 ## 3. Ledger registry
 
@@ -64,8 +73,12 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | `TODO_LEDGER.md` | build-discipline | Deferred work, each entry with a trigger that makes it due |
 | `CORRECTNESS_VERDICT.md` | correctness-gate | Latest gate result, oracle table, mutation results, residual risk |
 | `PERF_BUDGET.md` | perf-optimize | Budgets, currents, guards per dimension |
+| `DATA_TIER.md` | data-tier | Access → cost-class → plan-evidence → verdict, per data-access change |
 | `AUDIT_SPEC.md` | symptom-audit | Pinned symptom, cause→location→cost table, phased prescription, pre-written checks |
 | `REVIEW_LEDGER.md` | senior-review | Unresolved novelty: hypothesis + the experiment that would settle it |
+| `THREAT_MODEL.md` | threat-model | Assets, trust boundaries, abuse cases, evidence tag, defense status |
+| `RELEASE_PLAN.md` | ship-gate | Rollout strategy, reversibility class, rollback steps, watch signals, go/no-go |
+| `MIGRATION_PLAN.md` | data-evolution | Forward + backward paths, point-of-no-return, verification evidence, cutover |
 | `MAINT_LOG.md` | evolve-maintain | Append-only intervention history: symptom → root cause → treatment |
 
 ## 4. The handoff chain
@@ -81,7 +94,11 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | debug-protocol | an observed failure | Cause Verdict (proven root cause) | evolve-maintain (the fix) |
 | symptom-audit | existing codebase + a felt complaint | AUDIT_SPEC.md (diagnosis + phased prescription) | build-discipline (execute phases); perf-optimize (measure & guard perf phases); debug-protocol / wire-check on reroute |
 | perf-optimize | a passed gate + a budget | PERF_BUDGET.md, guards | correctness-gate (re-gate), evolve-maintain |
+| data-tier | a data-access change + its schema | DATA_TIER.md + corrected query/index | perf-optimize (wall-clock budget); data-evolution (index migration); arch-design (data-model flaw) |
 | senior-review | any codebase | mentorship report, REVIEW_LEDGER.md | director + relevant lifecycle skill |
+| threat-model | a system/design + its trust boundaries | THREAT_MODEL.md + abuse-case test specs | correctness-gate (run the tests); arch-design (trust-placement); ship-gate (clearance) |
+| ship-gate | a gated (and threat-cleared) change + deploy target | RELEASE_PLAN.md, go/no-go | data-evolution (if migration); evolve-maintain (post-release) |
+| data-evolution | a structural data change + existing data | MIGRATION_PLAN.md + migration/rollback code | build-discipline + correctness-gate (execute); ship-gate (carry down-path) |
 | scrutinize | a delta (plan/PR/diff/design doc) + host system | scrutiny report; REVIEW_LEDGER.md appends | director + the owning lifecycle skill per finding |
 | evolve-maintain | incident/change + all ledgers | MAINT_LOG.md, strengthened invariants | build-discipline / problem-framing as classified |
 | meta-skills | (always on) | discipline, not artifacts | every phase of every skill |
@@ -95,7 +112,7 @@ arbitrates which.
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|REVIEW|SCRUTINY|MAINT):`)
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|THREAT|SHIP|MIGRATE|MAINT):`)
 recovers any run's trajectory:
 
 | Noun | Owner | States |
@@ -109,7 +126,11 @@ recovers any run's trajectory:
 | `CAUSE` | debug-protocol | `proven(cause) \| trace-only(reason) \| unreproduced` |
 | `AUDIT` | symptom-audit | `prescribed(N phases, top: …) \| clean(traced path healthy) \| rerouted(to skill: reason) \| blocked(symptom unpinnable)` |
 | `OPTIMIZE` | perf-optimize | `budgets-met \| improved(…) \| stopped(N) \| reverted(reason)` |
+| `DATATIER` | data-tier | `clean(N bounded) \| findings(top: …, class: O(…)) \| blocked(no plan: …)` |
 | `REVIEW` | senior-review | `shippable \| shippable-with-findings(top) \| not-shippable(blocker)` |
+| `THREAT` | threat-model | `clear(N modelled, M defended) \| findings(top: …) \| blocked(boundary unmappable: …)` |
+| `SHIP` | ship-gate | `go(strategy, rollback tag) \| stage(canary plan) \| hold(blocker) \| escalated(one-way door: …)` |
+| `MIGRATE` | data-evolution | `planned(reversible) \| planned(lossy-after-step-N) \| verified(copy) \| blocked(no safe backward path)` |
 | `SCRUTINY` | scrutinize | `ship \| fix-then-ship(top) \| rework(reason) \| reject(reason) \| blocked(underspecified)` |
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
 
@@ -128,6 +149,20 @@ The same pointer-with-fallback pattern applies to the decay rule (§1) and to an
 operationalizes: one short pointer line, never a second full statement. And skills never cite a
 Law by bare number — always number **plus name** ("Law 3, violation ≠ deviation") so the reference
 survives the skill being read standalone.
+
+**What the gloss must carry (the extraction floor).** A skill read alone — `skills/<name>/SKILL.md`
+with no `PROTOCOL.md` beside it — is a real deployment, not an error: skills get copied into other
+suites, pasted into prompts, vendored one-file. Before this version the gloss carried only the four
+evidence tags, so an extracted skill kept its tags and silently lost every Law, the ledger registry,
+and the verdict grammar — it operated lawless except for vocabulary. The fix is the **name-plus-clause
+rule**: because every Law is always cited by number *and* a ≤6-word naming clause (the rule above),
+the citation itself is the fallback. "Law 1, every rule lives in exactly one place" survives
+extraction whole; "Law 1" alone does not. A skill is therefore conformant only if every Law it relies
+on is cited name-and-clause at least once in its own body, so a reader with no `PROTOCOL.md` can
+recover the rule's content — not just its number — from the skill alone. The verdict line is its own
+fallback by construction: §5's grammar is restated by every skill's final-line example. This is the
+degradation floor: tags + named Laws + a verdict example, all carried in-skill, so extraction costs a
+skill its cross-references but never its constitution.
 
 ## 7. The scale rule (when ledgers become files)
 

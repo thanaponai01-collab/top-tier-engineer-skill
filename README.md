@@ -4,26 +4,51 @@ One folder that makes an AI coding agent behave like a top-tier engineer across 
 a project — from a vague idea to a system maintained for years — regardless of which model is
 running it.
 
+## Proven in practice
+
+This suite is not just designed; it has been run against real code, twice, and the runs are
+recorded honestly (see `LIVE_RUN_001.md`, `LIVE_RUN_002.md`):
+
+- **Run 1 — a ~1,700-LOC Flask/SQLite ticket app.** Seven findings, **all proven by executing the
+  real code**: a full admin-auth bypass, reversibly-stored passwords, overbooking past capacity (a
+  bad guard *and* a race), and two schema/lookup defects. Fixes shipped.
+- **Run 2 — an 18,300-LOC agent-memory system** (asyncio daemon, SQLite+HNSW, hybrid retrieval).
+  One **proven** N+1 on the hot retrieval path, found by `data-tier`. One concurrency hypothesis
+  **disproved** by its own two-way test and correctly refused as a finding. Two clean checks.
+
+The second run's disproved hypothesis matters as much as the findings: the suite's evidence rules
+forbid a plausible-but-unproven concern from ever wearing a verdict's costume. That is the whole
+point — *know exactly how much you know.*
+
 ## What's inside
 
 ```
 top-tier-engineer/
 ├── README.md            ← you are here
-├── MAP.md               ← the picture: how the thirteen skills connect
+├── MAP.md               ← the picture: how the seventeen skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once)
+├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
+├── LIVE_RUN_001.md      ← first real execution (Flask ticket app): 7 proven findings
+├── LIVE_RUN_002.md      ← second real execution (18k-LOC memory system): 1 proven, 1 disproved
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
+├── tools/
+│   └── verdict-lint.py  ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
 └── skills/
-    ├── chief-engineer/      ← NEW: the router — every request enters here
+    ├── chief-engineer/      ← the router — every request enters here
     ├── problem-framing/     ← stage 1: falsifiable spec before any code
     ├── arch-design/         ← stage 2: reversible, recorded decisions
     ├── build-discipline/    ← stage 3: proven vertical slices
     ├── wire-check/          ← service: is it connected? (slice exit gate)
     ├── correctness-gate/    ← stage 4: is it provably right?
     ├── debug-protocol/      ← why is it wrong? (proven cause before any fix)
-    ├── symptom-audit/       ← NEW: where does the felt complaint live? (trace → prescribe)
+    ├── symptom-audit/       ← where does the felt complaint live? (trace → prescribe)
     ├── perf-optimize/       ← stage 5: measured, guarded improvement
+    ├── data-tier/           ← does this query scale better than the data grows? (cost class)
+    ├── threat-model/        ← what can an adversary make it do that it must not?
     ├── senior-review/       ← parallel gate: is it wise?
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
+    ├── data-evolution/      ← how does stored data change shape without loss, reversibly?
+    ├── ship-gate/           ← is releasing it reversible, observable, bounded?
     ├── evolve-maintain/     ← stage 6: years-long health, incidents → invariants
     └── meta-skills/         ← always on: calibration, escalation, communication
 ```
@@ -35,13 +60,18 @@ You don't pick skills. You talk to the engineer:
 - "I want an app that..." → routed through framing → design → build → gate
 - "It's broken and I don't know why" → debug-protocol proves the cause, evolve-maintain fixes it
 - "The app feels slow/clunky" → symptom-audit traces the complaint and prescribes a phased spec
+- "Will this query scale / is this an N+1?" → data-tier judges cost class from the execution plan
+- "Is this secure / can this be abused?" → threat-model walks every trust boundary as an adversary
 - "Is this code good?" → senior-review
 - "Look at this PR / plan before it lands" → scrutinize
+- "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
+- "Change the schema / run a migration" → data-evolution evolves the data shape without loss
 - "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step
 
 `chief-engineer` routes by **artifact state, not by your phrasing** — say "build it" with no brief
 and it will (briefly, proportionally) frame first. Small tasks get the compressed lifecycle, never
-bureaucracy.
+bureaucracy. Slices that touch a trust boundary or persistent data never take the fast path,
+regardless of size.
 
 ## Install
 
@@ -90,10 +120,11 @@ Route every substantial engineering request through the chief-engineer skill
 (top-tier-engineer:chief-engineer) before acting.
 Project memory lives in the ledgers at the repo root (PROBLEM_BRIEF.md, ASSUMPTIONS.md,
 ARCHITECTURE.md, DECISION_LEDGER.md, TODO_LEDGER.md, CORRECTNESS_VERDICT.md, PERF_BUDGET.md,
-AUDIT_SPEC.md, REVIEW_LEDGER.md, MAINT_LOG.md) — read the ones that exist before writing anything.
+DATA_TIER.md, AUDIT_SPEC.md, THREAT_MODEL.md, REVIEW_LEDGER.md, MIGRATION_PLAN.md,
+RELEASE_PLAN.md, MAINT_LOG.md) — read the ones that exist before writing anything.
 ```
 
-## Design decisions made while wiring (the diagnosis behind this artifact)
+## The history (diagnosis, decisions, and what real runs proved)
 
 1. **Vocabulary was duplicated and had drifted.** Every skill restated the evidence tags, and
    `senior-review` had drifted to **(traced)** where the suite standard is **(trace-only)** — a
@@ -153,14 +184,57 @@ AUDIT_SPEC.md, REVIEW_LEDGER.md, MAINT_LOG.md) — read the ones that exist befo
    its rewrite escalation routes through arch-design; its swappable sweep checklist is named as
    the only audit-type-specific part; ledger `AUDIT_SPEC.md`, verdict noun `AUDIT:`, routing rows
    in chief-engineer split cleanly against perf-optimize.
-11. **One thing deliberately NOT added** (anti-scope): no security-audit, release-management, or
-   data-migration skills. Security lives inside senior-review's "Safety & trust" dimension and
-   correctness-gate's hostile tests; releases are a passed gate + review; adding skills that
-   overlap existing mandates would violate Law 1. Add a new skill only when a question has no
-   owner — that was debug-protocol's bar and scrutinize's, and it should be the next one's too.
+11. **The first real run changed everything (v1.5.0).** v1.3.1 flagged the suite's #1 risk: every
+   claim that it *worked* was (trace-only) until a real project ran the full lifecycle.
+   `LIVE_RUN_001` is that run — the suite executed against a real ~1,700-LOC Flask/SQLite ticket
+   app and produced **seven findings, all (proven) by executing the real code**: a forgeable admin
+   token (full auth bypass), reversibly-encrypted passwords, overbooking past venue capacity (a
+   guard that ignored the requested count *and* a TOCTOU race), a `unique=True` on a quantity
+   column, and OR-filter lookups returning unrelated rows. The lifecycle is now proven on foreign
+   code, not just on its own design.
+12. **Three skills the first run justified (v1.5.0).** Four findings had no owning skill with a real
+   *pipeline* — they were caught only as `senior-review` checkboxes. A dimension that *catches* a
+   finding is not a skill that *owns* the method, so: `threat-model` (adversarial security: assets →
+   trust boundaries → abuse-case tests handed to the gate), `ship-gate` (the previously unowned act
+   of shipping: reversibility, blast radius, rollback), and `data-evolution` (data-shape change,
+   whose rollback semantics differ from code's — `git revert` restores code, not dropped columns).
+   This **supersedes the earlier anti-scope decision** that folded security and releases into
+   existing dimensions: evidence showed a dimension was not enough.
+13. **First mechanical enforcement (v1.5.0).** The suite's standing residual risk was "exhortation
+   without enforcement." `tools/verdict-lint.py` parses verdict lines from a transcript/PR/log and
+   checks PROTOCOL §5 *form* — unregistered nouns, illegal states, trace-only verdicts missing the
+   required bold limitation marker, success/failure contradictions. It needs no live-run data, so it
+   was buildable immediately; it found and fixed five bugs in itself during development.
+14. **A seventeenth skill, built then validated (v1.6.0 → v1.6.1).** `data-tier` proves a
+   data-access change's *cost class* from its execution plan before a budget or profiler exists —
+   N+1 detection, index usage, sequential-scan rejection. It was added as a *candidate* on the
+   strength of two external critiques, with the explicit rule "validate it on a real N+1, not a
+   document's say-so." `LIVE_RUN_002` did exactly that: running the suite against an 18k-LOC agent
+   memory system, `data-tier` found a **proven** N+1 in the hot retrieval path (one DB query per
+   graph neighbour, 41 round trips collapsible to 1). Candidate promoted to confirmed-good.
+15. **The discipline proved itself by refusing a finding (v1.6.1).** In `LIVE_RUN_002`, an unlocked
+   shared index under concurrent daemon threads *looked* like a data race — it reads completely
+   true. The two-way test ran (6 threads, 1,600 concurrent adds) and showed zero corruption: the
+   GIL serializes it. Per the suite's own law, a hypothesis whose two-way test fails **does not
+   become a finding** — it was downgraded to a watch, not shipped as a verdict. This is the
+   cleanest demonstration across both runs of why `(suspected)` may never wear a proof's costume.
+
+16. **The suite audited itself (v1.6.2).** `LIVE_RUN_003` ran the full lifecycle with the suite as
+   its own subject: ten skills bound to a real subject, seven correctly returned not-applicable
+   (a doctrine repo has no slices, queries, trust boundaries, or releases — and forcing a verdict
+   there would break Law 3). The same root cause — *the laws bind only a cooperative model* —
+   surfaced from five independent lenses, stronger evidence than one reviewer asserting it once.
+   Four findings were fixed: a degradation floor so an extracted skill keeps its constitution
+   (PROTOCOL §6); a falsifiable acceptance criterion for Law 6, the suite's previously-untestable
+   central invariant; the model-agnostic thesis honestly downgraded to `(suspected)` with a
+   two-tier experiment written to settle it; and a both-sides boundary watch on the suite's
+   thinnest mandate split. What it pointedly did **not** fix — the absence of a mechanical
+   enforcement floor — is named as the real ceiling and the driver of the next run, not papered
+   over.
 
 ## The one-line summary
 
 **Frame falsifiably, decide reversibly, build provably, verify connectedly, gate adversarially,
-debug causally, audit symptomatically, optimize measurably, maintain memorably — and at every step, know exactly how
-much you know.**
+debug causally, audit symptomatically, optimize measurably, scale sub-linearly, defend
+adversarially, ship reversibly, migrate losslessly, maintain memorably — and at every step, know
+exactly how much you know.**

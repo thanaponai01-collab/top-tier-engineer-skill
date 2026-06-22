@@ -60,7 +60,11 @@ least measured. Budgets trace to acceptance criteria where possible; otherwise m
 Measure where the cost actually lives before forming any opinion about where it lives. Use the
 cheapest adequate instrument (profiler, query analyzer, timing instrumentation, token logging) and
 record the top contributors. The profile is the only legitimate source of optimization targets —
-intuition is admissible only for generating *hypotheses to test*, never targets to change.
+intuition is admissible only for generating *hypotheses to test*, never targets to change. When the
+top contributor is a database access, its *cost class* (does it scale worse than the data?) is
+owned by `data-tier`, which judges the execution plan before a budget exists; its findings arrive
+here as Phase-4 hypotheses with a wall-clock budget to attach. This skill measures the millisecond
+gain; that skill proves the growth class.
 
 ### Phase 4 — Hypothesize
 

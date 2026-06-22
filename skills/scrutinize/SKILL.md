@@ -12,7 +12,12 @@ description: Outsider, change-scoped second opinion on a delta — a plan, PR, d
 > system (+ ledgers, read first). Produces: the scrutiny report; unresolved novelty appended to
 > `REVIEW_LEDGER.md` per its owner's schema. Findings route onward: intent/scope flaws →
 > `problem-framing` or `arch-design`, wiring gaps → `wire-check`, unknown-cause breakage →
-> `debug-protocol`, post-merge concerns → `senior-review` or `evolve-maintain`. Shared vocabulary
+> `debug-protocol`, post-merge concerns → `senior-review` or `evolve-maintain`. **Boundary watch
+> (v1.6.2):** this skill and `senior-review` share most of their method (outsider stance,
+> Chesterton's Fence, severity-by-consequence, the novelty ledger); the split holds only while
+> *delta-not-yet-landed* (here) stays distinct from *whole-codebase-without-symptom* (there).
+> Stated from both sides per mandate-boundary discipline — if a run finds the two converging on one
+> artifact, collapse them (Discipline 7, subtraction). Shared vocabulary
 > and laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)**
 > executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
 > **(assumed)** unverified premise — log it.)

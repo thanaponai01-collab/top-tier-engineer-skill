@@ -53,6 +53,7 @@ Classify the intervention; the class determines the rules:
 |---|---|---|
 | **Fix** | Restore intended behavior | Root cause named, regression test added, incident→invariant step (Phase 4) |
 | **Adapt** | World changed (dependency, API, OS) | Compatibility surface diffed before upgrading; pin-and-schedule if not now |
+| **Migrate** | Persistent data shape changes (schema, format, backfill) | Routes to `data-evolution` — data has no `git revert`; it owns forward+backward paths, expand-contract, and the point-of-no-return. Never edit a populated schema in place from here |
 | **Improve** | Same behavior, better structure | Behavior frozen by tests *before* the refactor; zero observable change is the success criterion |
 | **Evolve** | New/changed behavior | Routes through `problem-framing` (criteria) and `arch-design` (decisions) — maintenance mode does not grant authority to grow scope |
 

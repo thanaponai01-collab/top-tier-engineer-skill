@@ -1,6 +1,6 @@
-# The Top-Tier Engineer — Skill Map (v4)
+# The Top-Tier Engineer — Skill Map (v5)
 
-Thirteen skills wired into one engineer. A router reads the project's artifact state and dispatches
+Seventeen skills wired into one engineer. A router reads the project's artifact state and dispatches
 every request to the right specialist; every specialist produces a **handoff artifact** the next
 stage consumes — so any future model, with zero conversation history, resumes from artifacts alone.
 The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, in `PROTOCOL.md`.
@@ -39,7 +39,7 @@ The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, 
 not-yet-landed delta — plan, design doc, PR, or diff — answering "should this change exist, and
 does it do what it claims?" before the change costs a build.
 
-## The thirteen, in one line each
+## The seventeen, in one line each
 
 | Skill | Question it owns |
 |---|---|
@@ -52,10 +52,19 @@ does it do what it claims?" before the change costs a build.
 | `debug-protocol` | Why is it wrong? |
 | `symptom-audit` | Where does the felt complaint live, and what's the cheapest path to relief? |
 | `perf-optimize` | Is it measurably within budget, and guarded there? |
+| `data-tier` | Does this query scale better than the data grows? |
+| `threat-model` | What can an adversary make it do that it must not? |
 | `senior-review` | Is it wise? |
 | `scrutinize` | Should this change exist, and does it do what it claims? |
+| `data-evolution` | How does stored data change shape without loss, reversibly? |
+| `ship-gate` | Is releasing it reversible, observable, and bounded? |
 | `evolve-maintain` | Does it stay healthy, and does every incident teach it? |
 | `meta-skills` | Is the engineer itself behaving like one? |
+
+> The three skills added in v1.5.0 (`threat-model`, `ship-gate`, `data-evolution`) each closed a
+> mandate gap exposed by the first real run (LIVE_RUN_001): security findings with no pipeline, the
+> unowned act of shipping, and data-shape change whose rollback semantics differ from code's. The
+> `tools/verdict-lint.py` validator added the suite's first mechanical enforcement.
 
 ## Where the shared rules live
 

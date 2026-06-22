@@ -86,7 +86,8 @@ Run category checks **against the traced path only**. For performance complaints
 - **Perceived** — does anything block the user from seeing progress?
 - **Latency** — redundant or serial round trips that could be parallel or absent?
 - **Volume** — does any query/payload grow unbounded with usage (the "fine in week 1, dead in
-  month 3" class)?
+  month 3" class)? When the suspect is a specific query's cost class, `data-tier` owns proving it
+  from the execution plan; this sweep flags the symptom, that skill gates the plan.
 - **Waste** — recomputing or re-invalidating more than necessary?
 - **Locality** — is compute far from its data?
 

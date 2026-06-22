@@ -13,7 +13,12 @@ description: Principal-engineer code review that mentors rather than gatekeeps. 
 > `problem-framing`, structural flaws to `arch-design`, wiring gaps to `wire-check`. Change-scoped
 > second opinions on a not-yet-landed delta (plan, PR, diff) belong to `scrutinize`; a specific
 > felt complaint ("navigation is slow") belongs to `symptom-audit`; this skill judges whole
-> codebases without a symptom, and mentors authors. Shared
+> codebases without a symptom, and mentors authors. **Boundary watch (v1.6.2):** this skill and
+> `scrutinize` share ~60% of their method (outsider stance, Chesterton's Fence, severity-by-
+> consequence, the novelty ledger); the split is load-bearing only while *codebase-without-symptom*
+> (here) stays distinct from *not-yet-landed-delta* (there). If a future run finds the two reports
+> converging on the same artifact, that is the merge signal — collapse them rather than maintain a
+> distinction that no longer pays rent (Discipline 7, subtraction). Shared
 > vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
 
 A review conducted the way a principal engineer at a top-tier organization would conduct it: rigorous on evidence, humble about unfamiliarity, and always ending in mentorship — the developer should leave knowing not just *what* is wrong but *why* it matters and *how* to never write it again.
@@ -52,7 +57,12 @@ Test the codebase against the invariants from Phase 1, organized through five ti
 
 1. **Correctness** — Can any input, ordering, or timing make the system violate a Phase 1 invariant? Hunt where state changes hands: boundaries, conversions, concurrency, error paths.
 2. **Design integrity** — Does responsibility have a single owner per concern? Where would the next requirement land, and would it land cleanly or require surgery?
-3. **Safety & trust** — Walk every trust boundary as an adversary. What does the system believe without verifying?
+3. **Safety & trust** — Walk every trust boundary as an adversary. What does the system believe
+   without verifying? This dimension *surfaces* trust concerns; a system whose security is the
+   actual question — auth, sessions, secrets, money, PII, untrusted input to a privileged sink —
+   routes to `threat-model`, which owns the adversarial pipeline (assets → boundaries → abuse-case
+   tests). A flagged trust concern here that warrants systematic treatment is handed there, not
+   resolved as a single review line.
 4. **Operability** — When this fails at 3 a.m. (and it will), what evidence will exist? Can failure be detected, diagnosed, and reversed?
 5. **Evolution** — Will a competent stranger understand this in a year? What knowledge lives only in the original author's head?
 
