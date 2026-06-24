@@ -16,8 +16,11 @@ description: Outsider, change-scoped second opinion on a delta — a plan, PR, d
 > (v1.6.2):** this skill and `senior-review` share most of their method (outsider stance,
 > Chesterton's Fence, severity-by-consequence, the novelty ledger); the split holds only while
 > *delta-not-yet-landed* (here) stays distinct from *whole-codebase-without-symptom* (there).
-> Stated from both sides per mandate-boundary discipline — if a run finds the two converging on one
-> artifact, collapse them (Discipline 7, subtraction). Shared vocabulary
+> Stated from both sides per mandate-boundary discipline. **Merge signal (falsifiable, v1.7.0):**
+> if scrutinize and senior-review, run on the same codebase at the same version within the same
+> engagement, produce finding sets where >70% of file:symptom pairs overlap, the boundary has
+> collapsed — collapse the skills (Discipline 7, subtraction). Reading substantial surrounding
+> code on a non-trivial PR is not the signal; shared findings at threshold are. Shared vocabulary
 > and laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)**
 > executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
 > **(assumed)** unverified premise — log it.)

@@ -16,9 +16,11 @@ description: Principal-engineer code review that mentors rather than gatekeeps. 
 > codebases without a symptom, and mentors authors. **Boundary watch (v1.6.2):** this skill and
 > `scrutinize` share ~60% of their method (outsider stance, Chesterton's Fence, severity-by-
 > consequence, the novelty ledger); the split is load-bearing only while *codebase-without-symptom*
-> (here) stays distinct from *not-yet-landed-delta* (there). If a future run finds the two reports
-> converging on the same artifact, that is the merge signal — collapse them rather than maintain a
-> distinction that no longer pays rent (Discipline 7, subtraction). Shared
+> (here) stays distinct from *not-yet-landed-delta* (there). **Merge signal (falsifiable, v1.7.0):** if senior-review and scrutinize, run on the same codebase
+> at the same version within the same engagement, produce finding sets where >70% of file:symptom
+> pairs overlap, the boundary has collapsed — collapse the skills (Discipline 7, subtraction).
+> A scrutinize run that reads substantial surrounding code is not the signal; shared findings at
+> threshold are. Shared
 > vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
 
 A review conducted the way a principal engineer at a top-tier organization would conduct it: rigorous on evidence, humble about unfamiliarity, and always ending in mentorship — the developer should leave knowing not just *what* is wrong but *why* it matters and *how* to never write it again.

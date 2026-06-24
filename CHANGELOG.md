@@ -3,6 +3,44 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.7.0 — 2026-06-25
+
+**Audit-report findings addressed.** No new skill. Six targeted fixes from the external audit
+report (`top-tier-engineer-audit-report.md`), each closing a named gap at the lowest viable scope.
+
+- **P2 — `verdict-lint.py`: three gaps closed.**
+  - *Gap 2a*: SLICE and MAINT were exempt from state validation ("free-form"). Both have defined
+    legal states; only LIFECYCLE (genuinely free-form stage labels) is now exempt.
+  - *Gap 2b*: the trace-only bold-marker check matched any `**` within 16 lines — too wide and
+    semantically blind. Now requires a line *beginning* with `**` (paragraph-level bold statement)
+    within 8 lines, distinguishing a purposeful limitation declaration from incidental inline bold.
+  - *Gap 2c*: no sequence validation existed. Added `_check_sequence()`: flags `GATE: pass` with
+    no preceding `SLICE: proven`, `SHIP: go/stage` with no preceding `GATE: pass`, and `MIGRATE`
+    with no preceding `SHIP` or `MAINT` — the three §4 chain invariants most likely to be violated
+    by a skipped skill or out-of-order transcript.
+- **P4 — scrutinize / senior-review merge signal made falsifiable.** The boundary watch-item in
+  both skills previously said "if the two converge on one artifact, collapse them" — undetectable
+  without human judgment. Now stated as a measurable threshold: if >70% of file:symptom pairs
+  overlap in the same engagement, the boundary has collapsed. Qualitative convergence is not the
+  signal; quantitative overlap at threshold is.
+- **P5 — handoff sequencing gaps closed in PROTOCOL §4.** Two boundary pairs had no ordering rule
+  when both fired on the same artifact: (a) data-tier + perf-optimize: DATATIER closes first,
+  findings arrive as Phase-4 hypotheses afterward; (b) evolve-maintain → data-evolution:
+  evolve-maintain closes its MAINT verdict immediately, then data-evolution runs as a peer.
+  verdict-lint.py's sequence check enforces (b) mechanically.
+- **P7 — Discipline 5 loop now requires independent validation.** The postmortem session that
+  proposes a skill edit cannot also approve it (fresh-eyes rule, Law 4, PROTOCOL §8, applied to
+  the suite itself). Fresh-context review is now required; same-context edits accepted only
+  provisionally, marked `(same-context review)` in the changelog. All fixes in this release are
+  `(same-context review)` — the rule was not in force when they were written.
+- **P8 — patches corpus linked to evidentiary record in MAP.md.** The `patches/` and
+  `patches_tiermemory/` directories are now referenced in `MAP.md` with an explicit description of
+  what each proves and why the finding delta is the closest thing to a measurable skill yield.
+
+**Not addressed (deferred by design or requiring live runs):**
+- P1 (CI enforcement), P3 (two-tier experiment), P6 (right-side pipeline), P9 (CI category gap) —
+  unchanged and stated plainly in the audit report.
+
 ## 1.6.2 — 2026-06-22
 
 **The suite audited itself, and fixed what that surfaced.** No new skill. This release is the

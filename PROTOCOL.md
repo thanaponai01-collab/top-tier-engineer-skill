@@ -107,6 +107,21 @@ A skill whose required input artifact is missing does not improvise it: it eithe
 producing skill or logs the gap as **(assumed)** with the cost of being wrong — chief-engineer
 arbitrates which.
 
+**Concurrent invocation sequencing (v1.7.0).** Two boundary pairs have ordering ambiguity when
+both fire on the same artifact in the same run:
+
+- **`data-tier` + `perf-optimize`**: when a data-access change warrants both a `DATATIER` finding
+  and a `PERF_BUDGET.md` wall-clock entry, `data-tier` closes first (`DATATIER` verdict), then its
+  findings arrive as perf-optimize Phase-4 hypotheses. The `DATATIER` verdict appears before
+  `OPTIMIZE` in the transcript; `verdict-lint.py` interprets any `DATATIER` before `OPTIMIZE` as
+  correct ordering.
+
+- **`evolve-maintain` → `data-evolution`**: when evolve-maintain classifies an intervention as
+  `Migrate` and invokes `data-evolution`, evolve-maintain closes immediately with its `MAINT`
+  verdict; `data-evolution` then runs as a peer and produces its `MIGRATE` verdict afterward. The
+  `MAINT` verdict appears before `MIGRATE` in the transcript. evolve-maintain does not hold its
+  verdict open waiting for data-evolution.
+
 ## 5. Verdict-line grammar and registry
 
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:

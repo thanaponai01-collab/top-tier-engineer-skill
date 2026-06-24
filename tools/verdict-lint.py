@@ -49,6 +49,7 @@ def lint(text: str):
     violations = []
     lines = text.splitlines()
     seen_nouns = set()
+    noun_events = []  # (line_no, noun, first_state) — for sequence validation (Gap 2c)
 
     for i, raw in enumerate(lines, 1):
         m = NOUN_RE.match(raw)
@@ -65,17 +66,21 @@ def lint(text: str):
         # First state keyword = text up to first '(' or '|' or whitespace.
         first_state = re.split(r'[(\s|]', rest, maxsplit=1)[0]
         legal = REGISTRY[noun]
-        # LIFECYCLE/MAINT have free-form leading tokens; only check the known-noun ones strictly.
-        if noun not in {"LIFECYCLE", "MAINT", "SLICE"} and first_state not in legal:
+        # Gap 2a fix: only LIFECYCLE is exempt (truly free-form stage labels).
+        # SLICE (proven|trace-only|failed) and MAINT (resolved|escalated|reverted) have
+        # defined states and must be validated.
+        if noun not in {"LIFECYCLE"} and first_state not in legal:
             violations.append((i, noun, f"state '{first_state}' not legal for {noun}; expected one of {sorted(legal)}"))
 
-        # Evidence-marker rule: a trace-only close must carry the bold limitation marker nearby
-        # (PROTOCOL §1 / build-discipline Phase 4 / debug-protocol Phase 5).
+        # Evidence-marker rule: a trace-only close must carry a paragraph-level bold limitation
+        # statement nearby (PROTOCOL §1). Gap 2b fix: require a line starting with '**' within
+        # 8 lines (paragraph-level bold, not incidental inline bold).
         if "trace-only" in rest:
-            window = "\n".join(lines[max(0, i-16):i])  # ~15 lines back, inclusive of current
-            if "**" not in window:
+            window_lines = lines[max(0, i-8):i+1]
+            if not any(re.match(r'^\s*\*\*', l) for l in window_lines):
                 violations.append((i, noun,
-                    "trace-only verdict without a bold limitation marker in the preceding context "
+                    "trace-only verdict without a paragraph-level bold limitation marker "
+                    "(a line beginning '**...') within the preceding 8 lines "
                     "(PROTOCOL §1: state the execution limitation in bold)"))
 
         # Contradiction: a success state on the same line as a failure state — but only WITHIN
@@ -92,7 +97,48 @@ def lint(text: str):
             if first_state != "shippable" or "with-findings" not in first_alt:
                 violations.append((i, noun, f"{noun} claims '{first_state}' but the same verdict names a failure state"))
 
+        noun_events.append((i, noun, first_state))
+
+    # Gap 2c: sequence validation — check §4 handoff chain ordering across the full transcript.
+    violations.extend(_check_sequence(noun_events))
+
     return violations, seen_nouns
+
+
+def _check_sequence(noun_events):
+    """Validate that verdict ordering follows the §4 handoff chain.
+
+    Checks three invariants that are individually valid verdicts but collectively impossible
+    if sequencing is violated:
+      - GATE: pass must have a preceding SLICE: proven (build-discipline before correctness-gate)
+      - SHIP: go|stage must have a preceding GATE: pass (correctness-gate before ship-gate)
+      - MIGRATE must have a preceding SHIP or MAINT (data-evolution is invoked by ship-gate or evolve-maintain)
+    """
+    violations = []
+    for idx, (line_no, noun, first_state) in enumerate(noun_events):
+        preceding = noun_events[:idx]
+
+        if noun == "GATE" and first_state == "pass":
+            if not any(n == "SLICE" and s == "proven" for _, n, s in preceding):
+                violations.append((line_no, "GATE",
+                    "pass verdict with no preceding SLICE: proven in this transcript "
+                    "(§4: correctness-gate consumes build-discipline's proven slices)"))
+
+        if noun == "SHIP" and first_state in {"go", "stage"}:
+            if not any(n == "GATE" and s == "pass" for _, n, s in preceding):
+                violations.append((line_no, "SHIP",
+                    "go/stage verdict with no preceding GATE: pass in this transcript "
+                    "(§4: ship-gate requires a passed correctness-gate)"))
+
+        if noun == "MIGRATE":
+            has_ship = any(n == "SHIP" for _, n, s in preceding)
+            has_maint = any(n == "MAINT" for _, n, s in preceding)
+            if not has_ship and not has_maint:
+                violations.append((line_no, "MIGRATE",
+                    "verdict with no preceding SHIP or MAINT in this transcript "
+                    "(§4: data-evolution is invoked by ship-gate or evolve-maintain)"))
+
+    return violations
 
 
 def main():

@@ -71,3 +71,18 @@ does it do what it claims?" before the change costs a build.
 `PROTOCOL.md` — evidence vocabulary, the six Laws, the ledger registry, the handoff chain, the
 verdict-line grammar, and the degradation rule for skills copied out of the suite. Per Law 1 it is
 the only place these are stated; this map is a picture of it, not a second copy.
+
+## Evidentiary record — what the suite has proven
+
+The patches directories are the suite's only artifacts that demonstrate concrete engineering value:
+bounded diffs, before/after reasoning, and the gap between what was known and what the suite found.
+Reading the delta is the closest the suite has to a measured yield per run.
+
+| Directory | Live Run | System | What it proves |
+|---|---|---|---|
+| `patches/` (`00_INDEX.md`) | LIVE_RUN_001 | flask\_ticket\_booking\_system | 5 patches, 7 findings: auth bypass, reversible passwords, overbooking race, schema correctness, RCE surface |
+| `patches_tiermemory/` | LIVE_RUN_002 | tier-memory daemon | 1 patch: graph-signal batch — data-tier finding, O(n) → O(1) |
+
+These directories are not supplementary — they are the evidence base for the suite's founding claim
+that it finds real bugs and ships fixes, not just reports. Any future quality metric ("skill yield")
+should be computed from the gap between pre-run knowledge and post-run findings recorded here.

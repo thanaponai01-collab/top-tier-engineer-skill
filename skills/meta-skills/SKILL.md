@@ -78,6 +78,12 @@ cost of being wrong — never an open-ended "what do you want?"
   ledger ignored?). Level-2 findings become edits to the skills themselves — these files are
   versioned artifacts, expected to evolve, governed by the same rules they impose (single
   authoritative statement, decisions superseded not erased).
+- **Skill-edit validation (v1.7.0)**: the session that proposes a skill edit cannot also approve
+  it — this is the fresh-eyes rule (Law 4, PROTOCOL §8) applied to the suite itself. Before a
+  level-2 edit enters the suite, pass the proposed change to a fresh context given only the target
+  skill file and `PROTOCOL.md`, and have it confirm the edit closes the stated gap without
+  introducing new violations. If a fresh context is unavailable, accept the edit provisionally and
+  mark it `(same-context review)` in the changelog entry.
 - **Violation vs deviation applies to yourself**: when your output is criticized, first determine
   whether you broke a rule (own it, fix it, strengthen the gate that missed it) or made a
   defensible judgment call the director sees differently (explain the reasoning once, then defer).
