@@ -6,8 +6,8 @@ running it.
 
 ## Proven in practice
 
-This suite is not just designed; it has been run against real code, twice, and the runs are
-recorded honestly (see `LIVE_RUN_001.md`, `LIVE_RUN_002.md`):
+This suite is not just designed; it has been run three times and the runs are recorded honestly
+(see `LIVE_RUN_001.md`, `LIVE_RUN_002.md`, `LIVE_RUN_003.md`):
 
 - **Run 1 — a ~1,700-LOC Flask/SQLite ticket app.** Seven findings, **all proven by executing the
   real code**: a full admin-auth bypass, reversibly-stored passwords, overbooking past capacity (a
@@ -15,6 +15,11 @@ recorded honestly (see `LIVE_RUN_001.md`, `LIVE_RUN_002.md`):
 - **Run 2 — an 18,300-LOC agent-memory system** (asyncio daemon, SQLite+HNSW, hybrid retrieval).
   One **proven** N+1 on the hot retrieval path, found by `data-tier`. One concurrency hypothesis
   **disproved** by its own two-way test and correctly refused as a finding. Two clean checks.
+- **Run 3 — the suite, run against itself.** Ten skills bound to the doctrine repo; seven correctly
+  returned not-applicable (no slices, no queries, no trust boundary — forcing a verdict would
+  violate Law 3). Four findings fixed in v1.6.2: the extraction floor, Law 6 made falsifiable, the
+  central "improves as models improve" thesis honestly downgraded to **(suspected)**, and the
+  scrutinize/senior-review boundary watched from both sides.
 
 The second run's disproved hypothesis matters as much as the findings: the suite's evidence rules
 forbid a plausible-but-unproven concern from ever wearing a verdict's costume. That is the whole
@@ -30,6 +35,7 @@ top-tier-engineer/
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
 ├── LIVE_RUN_001.md      ← first real execution (Flask ticket app): 7 proven findings
 ├── LIVE_RUN_002.md      ← second real execution (18k-LOC memory system): 1 proven, 1 disproved
+├── LIVE_RUN_003.md      ← third execution (suite audits itself): 4 findings, 7 not-applicable
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
 ├── tools/
 │   └── verdict-lint.py  ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
