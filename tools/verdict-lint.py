@@ -76,7 +76,7 @@ def lint(text: str):
         # statement nearby (PROTOCOL §1). Gap 2b fix: require a line starting with '**' within
         # 8 lines (paragraph-level bold, not incidental inline bold).
         if "trace-only" in rest:
-            window_lines = lines[max(0, i-8):i+1]
+            window_lines = lines[max(0, i-8):i]
             if not any(re.match(r'^\s*\*\*', l) for l in window_lines):
                 violations.append((i, noun,
                     "trace-only verdict without a paragraph-level bold limitation marker "
