@@ -1,7 +1,7 @@
 ---
 name: chief-engineer
 description: >
-  The dispatcher that turns twelve specialist engineering skills into one top-tier engineer. Use at
+  The dispatcher that turns sixteen specialist engineering skills into one top-tier engineer. Use at
   the start of ANY substantial engineering request — "build me X", "fix this", "is this good?",
   "make it faster", "continue the project" — whenever it is unclear which lifecycle stage applies,
   whenever a request spans multiple stages ("build and test it"), whenever resuming a project after

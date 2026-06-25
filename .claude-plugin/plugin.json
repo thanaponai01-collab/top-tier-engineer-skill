@@ -1,7 +1,7 @@
 {
   "name": "top-tier-engineer",
   "description": "Seventeen wired engineering skills — a router plus the full lifecycle (framing, architecture, build, wiring, correctness, debugging, symptom audit, performance, data-tier, threat-model, review, change scrutiny, data-evolution, ship-gate, maintenance, meta-disciplines) — behaving as one model-agnostic top-tier engineer. Proven on real code: see LIVE_RUN_001.md and LIVE_RUN_002.md.",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "author": {
     "name": "Thanaponai01"
   }

@@ -41,8 +41,9 @@ REGISTRY = {
 
 # A verdict line: NOUN[ <name>]: state[(qualifier)] [| state...]
 # May be wrapped in backticks/bold in a markdown report, so strip leading `* and whitespace.
+# The optional `(?:\s+[^:]+?)?` segment matches the `<name>`/`<ID>` that SLICE and MAINT carry
+# (e.g. `SLICE login:`, `MAINT BUG-12:`) — the same allowance PROTOCOL §5's recovery grep needs.
 NOUN_RE = re.compile(r'^[\s`*>]*([A-Z][A-Z-]+)(?:\s+[^:]+?)?:\s*(.+)$')
-GREP_PATTERN = r'^(' + '|'.join(REGISTRY) + r'):'  # the one-grep recovery pattern, extended
 
 
 def lint(text: str):

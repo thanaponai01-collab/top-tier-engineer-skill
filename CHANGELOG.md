@@ -3,6 +3,25 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.7.1 — 2026-06-25
+
+**Self-audit fixes (chief-engineer lifecycle run on the suite itself).** No new skill; three
+consistency/recovery defects closed at lowest viable scope.
+
+- **Router mis-stated its own scope.** `chief-engineer`'s frontmatter described it as turning
+  *"twelve specialist engineering skills into one"* while the suite has been seventeen since v1.6.0.
+  Corrected to *"sixteen specialist engineering skills"* (16 specialists + the dispatcher = 17),
+  matching the count in PROTOCOL.md, README.md, MAP.md, and both manifests.
+- **PROTOCOL §5 recovery grep was wrong for two nouns.** The documented one-grep
+  `^(LIFECYCLE|…|MAINT):` could not match the real verdict forms `SLICE <name>:` and
+  `MAINT <ID>:` — the only two nouns carrying an identifier before the colon — so trajectory
+  recovery silently dropped every build and maintenance verdict. Added the optional name segment
+  `( [^:]+)?` before the colon. `verdict-lint.py`'s `NOUN_RE` already handled this correctly; the
+  grammar doc now agrees with the tool.
+- **`verdict-lint.py` dead code removed.** The unused `GREP_PATTERN` constant carried the same
+  name-segment bug as the §5 grep while its comment claimed it was "extended" — a misleading
+  artifact. Deleted; the name-segment allowance is now documented on the live `NOUN_RE`.
+
 ## 1.7.0 — 2026-06-25
 
 **Audit-report findings addressed.** No new skill. Six targeted fixes from the external audit
