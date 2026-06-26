@@ -109,6 +109,11 @@ def lint(text: str):
     return violations, seen_nouns
 
 
+def _had(preceding, noun, state=None):
+    # ponytail: extracts the `and` from generators so _check_sequence stays under the complexity limit
+    return any(n == noun and (state is None or s == state) for _, n, s in preceding)
+
+
 def _check_sequence(noun_events):
     """Validate that verdict ordering follows the §4 handoff chain.
 
@@ -123,21 +128,19 @@ def _check_sequence(noun_events):
         preceding = noun_events[:idx]
 
         if noun == "GATE" and first_state == "pass":
-            if not any(n == "SLICE" and s == "proven" for _, n, s in preceding):
+            if not _had(preceding, "SLICE", "proven"):
                 violations.append((line_no, "GATE",
                     "pass verdict with no preceding SLICE: proven in this transcript "
                     "(§4: correctness-gate consumes build-discipline's proven slices)"))
 
         if noun == "SHIP" and first_state in {"go", "stage"}:
-            if not any(n == "GATE" and s == "pass" for _, n, s in preceding):
+            if not _had(preceding, "GATE", "pass"):
                 violations.append((line_no, "SHIP",
                     "go/stage verdict with no preceding GATE: pass in this transcript "
                     "(§4: ship-gate requires a passed correctness-gate)"))
 
         if noun == "MIGRATE":
-            has_ship = any(n == "SHIP" for _, n, s in preceding)
-            has_maint = any(n == "MAINT" for _, n, s in preceding)
-            if not has_ship and not has_maint:
+            if not _had(preceding, "SHIP") and not _had(preceding, "MAINT"):
                 violations.append((line_no, "MIGRATE",
                     "verdict with no preceding SHIP or MAINT in this transcript "
                     "(§4: data-evolution is invoked by ship-gate or evolve-maintain)"))

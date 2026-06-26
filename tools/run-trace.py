@@ -201,6 +201,11 @@ def infer_type(text, present_nouns):
     # strongest: deepest lifecycle stage actually reached, by verdict presence
     by_priority = [t for t in TYPE_PRIORITY
                    if any(NOUN_TO_TYPE.get(n) == t for n in present_nouns)]
+    # ponytail: conditional nouns (MAINT, DATATIER) don't confirm a type without the required co-signal
+    if "fix" in by_priority and "CAUSE" not in present_nouns:
+        by_priority = [t for t in by_priority if t != "fix"]
+    if "perf" in by_priority and "OPTIMIZE" not in present_nouns:
+        by_priority = [t for t in by_priority if t != "perf"]
     if by_priority:
         return by_priority[0], "verdict-presence"
     # fallback: phrase hints from the transcript text
