@@ -38,6 +38,8 @@ REGISTRY = {
     "THREAT":     {"clear", "findings", "blocked"},
     "SHIP":       {"go", "stage", "hold", "escalated"},
     "MIGRATE":    {"planned", "verified", "blocked"},
+    # v1.9.0: tool-output noun — emitted by run-trace.py, not owned by any skill
+    "TRACE":      {"complete", "incomplete", "blocked"},
 }
 
 # A verdict line: NOUN[ <name>]: state[(qualifier)] [| state...]

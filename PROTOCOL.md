@@ -151,6 +151,11 @@ recovers any run's trajectory:
 | `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| blocked(no analyzable source)` |
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
 
+**Tool-output nouns.** Some verdict nouns are emitted by suite *tools*, not skills, and so own no row
+in the skill registry above: `TRACE` (run-trace.py). Tool nouns are linted for form like any other
+but are not part of the §4 skill handoff chain. (Note: `STRUCTURE` is emitted by the tool
+`structure-report.py` *and* owned by the skill `structure-gate`, so it keeps its row above.)
+
 ## 6. Degradation rule
 
 Each skill carries a one-line gloss of the evidence tags so it survives being copied out of this

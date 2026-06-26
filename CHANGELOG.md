@@ -3,6 +3,33 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.9.0 — 2026-06-26
+
+**Run-completeness made visible (second self-discovered blind spot closed).** The skills are
+contracts the agent reads, not code that runs, so a director who can't read code couldn't tell
+whether a run executed the stages it should have. The verdict lines were the trace, but nothing
+checked them for completeness-by-request-type. Added the checker; no new skill, count stays
+eighteen.
+
+- **New tool `tools/run-trace.py` — "did it actually build?"** Reads a run transcript, infers
+  the request type (build / fix / review / scrutinize / ship / perf / audit / structure) from
+  verdict presence (falling back to phrase hints), and reports whether every verdict that kind of
+  work REQUIRES is present — in plain language a non-coder acts on. Complete / incomplete /
+  no-trace, with a `TRACE:` verdict line and matching exit code. Honest by construction: a missing
+  required verdict is (proven) evidence a stage was skipped; a present one is only (trace-only)
+  evidence it ran — stated in the tool's own output, never upgraded to a correctness claim.
+- **CI gains a third gate.** `enforcement-floor.yml` now runs run-trace on committed transcripts
+  and blocks on incompleteness, with a non-coder-readable summary line.
+- **Law-1 boundary held.** verdict-lint owns form+ordering; run-trace owns
+  completeness-for-request-type; the tools don't call each other and don't duplicate rules.
+  `TRACE` registered in verdict-lint REGISTRY as a tool-output noun (no skill owner), documented
+  in PROTOCOL §5.
+- **Self-applied to the live runs.** `RUN_TRACE_REPORT.md` records each LIVE_RUN's completeness.
+  LIVE_RUN_001 and LIVE_RUN_002 come back incomplete (missing CAUSE — they predate the discipline;
+  cause was in prose, not a verdict). LIVE_RUN_003 complete. Recorded honestly; not retrofitted.
+- **chief-engineer Rule 4 updated.** The one-report contract now requires citing the run-trace
+  result — completeness is surfaced in the report, not left for the director to wonder about.
+
 ## 1.8.0 — 2026-06-26
 
 **Mechanical enforcement floor closed (the highest-severity open finding since v1.6.2).**

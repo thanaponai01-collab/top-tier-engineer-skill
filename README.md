@@ -41,7 +41,8 @@ top-tier-engineer/
 │   └── enforcement-floor.yml ← CI: runs the tools below on every push/PR, blocks the merge on breach
 ├── tools/
 │   ├── verdict-lint.py     ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
-│   └── structure-report.py ← the spaghetti alarm: measures structural shape, plain-language verdict
+│   ├── structure-report.py ← the spaghetti alarm: measures structural shape, plain-language verdict
+│   └── run-trace.py        ← did the run actually execute the stages it should have? — completeness trace
 └── skills/
     ├── chief-engineer/      ← the router — every request enters here
     ├── problem-framing/     ← stage 1: falsifiable spec before any code

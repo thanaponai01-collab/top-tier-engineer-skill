@@ -86,6 +86,26 @@ jobs:
           done
           exit $rc
 
+      # ---- GATE 3: run-completeness on any committed transcripts ---------------
+      - name: Run-completeness gate
+        id: runtrace
+        if: always()
+        run: |
+          shopt -s nullglob globstar
+          targets=( **/*_RUN_*.md run-logs/**/*.md )
+          if [ ${#targets[@]} -eq 0 ]; then
+            echo "No run transcripts to trace — gate passes vacuously."
+            echo "runtrace_exit=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          rc=0
+          for f in "${targets[@]}"; do
+            echo "── run-trace: $f"
+            python3 tools/run-trace.py "$f" || rc=1
+          done
+          echo "runtrace_exit=$rc" >> "$GITHUB_OUTPUT"
+          exit $rc
+
       # ---- Plain-language summary for a director who cannot read code ---------
       - name: Write human-readable summary
         if: always()
@@ -104,6 +124,12 @@ jobs:
             echo '```'
             cat structure.out 2>/dev/null || echo "(structure report unavailable)"
             echo '```'
+            echo ""
+            if [ "${{ steps.runtrace.outputs.runtrace_exit }}" = "0" ]; then
+              echo "### ✅ Run completeness: all traced transcripts complete"
+            else
+              echo "### ⚠️ Run completeness: one or more transcripts incomplete — a required stage was skipped or not reported"
+            fi
             echo ""
             echo "_A flag means 'a reviewer should look,' not 'this is definitely wrong' — Chesterton's Fence (suite Law 3). This gate measures shape; senior-review owns the wisdom call._"
           } >> "$GITHUB_STEP_SUMMARY"

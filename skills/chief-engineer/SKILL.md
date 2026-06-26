@@ -1,7 +1,7 @@
 ---
 name: chief-engineer
 description: >
-  The dispatcher that turns seventeen specialist engineering skills into one top-tier engineer. Use at
+  The dispatcher that turns seventeen specialist engineering skills into one top-tier engineer (eighteen total with the dispatcher). Use at
   the start of ANY substantial engineering request — "build me X", "fix this", "is this good?",
   "make it faster", "continue the project" — whenever it is unclear which lifecycle stage applies,
   whenever a request spans multiple stages ("build and test it"), whenever resuming a project after
@@ -33,7 +33,12 @@ suite root — read it once per session. (Gloss: **(proven)** executed · **(tra
    (a three-line brief is still a brief) rather than refusing or bureaucratizing. The lifecycle
    scales down; it never disappears.
 4. **One report.** However many skills run, the user receives one director-readable report: what
-   was done, what was proven, what needs a decision — then depth.
+   was done, what was proven, what needs a decision — then depth. When a run completes, the report
+   must cite the run-trace result: state the inferred request type and whether every required stage
+   reported a verdict ("this was a build request; SLICE and GATE both present; run complete"). On
+   `incomplete`, the report names the missing stage and either runs it or logs why it was skipped
+   (assumption + cost, per Rule 2). Run `tools/run-trace.py` on the transcript to produce this
+   — do not self-report completeness without it.
 
 ## Phase 0 — Locate and load
 
