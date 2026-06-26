@@ -6,6 +6,18 @@ measurement by `tools/structure-report.py` over real source. A finding is **revi
 routed to `senior-review` for the wisdom call — never a condemnation (Chesterton's Fence,
 suite Law 3, violation ≠ deviation).
 
+## Run — v1.9.1 post-fix, 2026-06-26
+
+Command: `python tools/structure-report.py .` → `STRUCTURE: findings(top: cyclomatic, count: 1) | review-needed` (exit 1). **(proven)**
+
+| Signal | Location | Measurement | Disposition |
+|---|---|---|---|
+| Cyclomatic complexity | `tools/verdict-lint.py:112` `_check_sequence()` | complexity 17 (> 15) | **Open — routed to `senior-review`.** Unchanged from v1.8.0. |
+
+**What changed from v1.9.0:** `tools/run-trace.py`'s `human_report()` (67 lines) tripped the long-function threshold on the first self-scan. As brand-new code in this commit (no Chesterton's Fence — same principle as v1.8.0's `structure-report.py` `main()` cleanup), it was split into `_format_stage_result()` (stage-check rendering) and the trimmed `human_report()` (header/footer + dispatch). Re-scan: the tool's own source is **clean**. The Unicode crash on Windows was also fixed in the same pass. Net result: count returns to 1 (the pre-existing `_check_sequence()` open item).
+
+---
+
 ## Run — v1.8.0 install, 2026-06-26
 
 Command: `python tools/structure-report.py .` → `STRUCTURE: findings(top: cyclomatic, count: 1) | review-needed` (exit 1). **(proven)**

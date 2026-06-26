@@ -263,6 +263,41 @@ def analyze(text, forced_type=None):
     }
 
 
+def _format_stage_result(r):
+    out = []
+    out.append("  Required stages for this kind of work:")
+    for n in r["all_required"]:
+        mark = "✅" if n in r["present"] else "❌"
+        out.append(f"      {mark}  {n}")
+    if r["present_conditional"]:
+        out.append("")
+        out.append("  Optional stages that also ran:")
+        for n in r["present_conditional"]:
+            out.append(f"      ✅  {n}")
+    out.append("")
+    if not r["missing_required"]:
+        out.append("  ✅  COMPLETE — every stage this kind of work requires reported a")
+        out.append("      verdict. The run followed the lifecycle end to end.")
+        out.append("")
+        out.append("      Caveat (read this): a present verdict proves the stage was")
+        out.append("      REPORTED, not that the work behind it was real. This tool")
+        out.append("      confirms the run is complete; whether each GATE was DESERVED is")
+        out.append("      correctness-gate's and senior-review's call, not this one's.")
+    else:
+        out.append(f"  ⚠️  INCOMPLETE — {len(r['missing_required'])} required stage(s) "
+                   f"never reported:")
+        out.append("")
+        for n in r["missing_required"]:
+            why = r["plain_missing"].get(n, f"the {n} stage was expected but is absent")
+            out.append(f"      ❌  {n} — {why}")
+        out.append("")
+        out.append("      A missing required verdict is (proven) evidence that a stage was")
+        out.append("      skipped or never reported. This is the 'I don't know if it built'")
+        out.append("      feeling made concrete. Ask the agent to run the missing stage,")
+        out.append("      or to show the verdict if it believes the stage did run.")
+    return out
+
+
 def human_report(r):
     out = []
     out.append("=" * 70)
@@ -292,40 +327,7 @@ def human_report(r):
 
     out.append(f"  Request type (inferred by {r['inference']}): {r['label']}")
     out.append("")
-
-    # required stages, with check/cross
-    out.append("  Required stages for this kind of work:")
-    for n in r["all_required"]:
-        mark = "✅" if n in r["present"] else "❌"
-        out.append(f"      {mark}  {n}")
-    # conditional stages actually seen
-    if r["present_conditional"]:
-        out.append("")
-        out.append("  Optional stages that also ran:")
-        for n in r["present_conditional"]:
-            out.append(f"      ✅  {n}")
-    out.append("")
-
-    if not r["missing_required"]:
-        out.append("  ✅  COMPLETE — every stage this kind of work requires reported a")
-        out.append("      verdict. The run followed the lifecycle end to end.")
-        out.append("")
-        out.append("      Caveat (read this): a present verdict proves the stage was")
-        out.append("      REPORTED, not that the work behind it was real. This tool")
-        out.append("      confirms the run is complete; whether each GATE was DESERVED is")
-        out.append("      correctness-gate's and senior-review's call, not this one's.")
-    else:
-        out.append(f"  ⚠️  INCOMPLETE — {len(r['missing_required'])} required stage(s) "
-                   f"never reported:")
-        out.append("")
-        for n in r["missing_required"]:
-            why = r["plain_missing"].get(n, f"the {n} stage was expected but is absent")
-            out.append(f"      ❌  {n} — {why}")
-        out.append("")
-        out.append("      A missing required verdict is (proven) evidence that a stage was")
-        out.append("      skipped or never reported. This is the 'I don't know if it built'")
-        out.append("      feeling made concrete. Ask the agent to run the missing stage,")
-        out.append("      or to show the verdict if it believes the stage did run.")
+    out.extend(_format_stage_result(r))
     out.append("")
     out.append("-" * 70)
     out.append(r["verdict"])
@@ -333,6 +335,8 @@ def human_report(r):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description="Run-completeness trace (did it actually build?).")
     ap.add_argument("path", nargs="?", help="transcript file; stdin if omitted")
     ap.add_argument("--expect", choices=sorted(PROFILES), help="force request type, skip inference")

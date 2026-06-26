@@ -3,6 +3,13 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.9.1 — 2026-06-26
+
+**Two authoring-hygiene fixes to `tools/run-trace.py` found by the enforcement-floor self-check.**
+
+- **`run-trace.py` UTF-8 portability (proven bug).** The tool crashed on Windows consoles (cp1252) on its `✅/❌/⛔` glyphs — same failure mode as `structure-report.py` in v1.8.0. Fixed with the same one-line guarded `sys.stdout.reconfigure(encoding="utf-8")` in `main()`.
+- **`run-trace.py` `human_report()` cleaned at authoring.** On first self-scan the tool flagged its own `human_report()` (67 lines > 60 threshold). As brand-new code in this commit (no Chesterton's Fence), the stage-rendering section was extracted into `_format_stage_result()` — `human_report()` now dispatches and `_format_stage_result()` renders. Re-scan: clean (1 open flag, the pre-existing `_check_sequence()` item). Consistent with v1.8.0's treatment of `structure-report.py`'s own `main()`.
+
 ## 1.9.0 — 2026-06-26
 
 **Run-completeness made visible (second self-discovered blind spot closed).** The skills are
