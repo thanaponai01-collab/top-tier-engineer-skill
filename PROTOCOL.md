@@ -1,6 +1,6 @@
 # PROTOCOL.md — The Shared Layer
 
-This file is the **single authoritative statement** of everything the seventeen skills share.
+This file is the **single authoritative statement** of everything the eighteen skills share.
 Per Law 1 below, no skill restates what is written here; skills carry at most a one-line gloss
 for graceful degradation (see §6). When a skill and this file appear to disagree, this file wins
 and the disagreement is reported as a defect in the skill.
@@ -100,6 +100,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | ship-gate | a gated (and threat-cleared) change + deploy target | RELEASE_PLAN.md, go/no-go | data-evolution (if migration); evolve-maintain (post-release) |
 | data-evolution | a structural data change + existing data | MIGRATION_PLAN.md + migration/rollback code | build-discipline + correctness-gate (execute); ship-gate (carry down-path) |
 | scrutinize | a delta (plan/PR/diff/design doc) + host system | scrutiny report; REVIEW_LEDGER.md appends | director + the owning lifecycle skill per finding |
+| structure-gate | a codebase or a slice's changed files | STRUCTURE_REPORT.md + structural report | senior-review / scrutinize (wisdom call on each flag); arch-design (cycle ⇒ layering error, god-file ⇒ missing boundary) |
 | evolve-maintain | incident/change + all ledgers | MAINT_LOG.md, strengthened invariants | build-discipline / problem-framing as classified |
 | meta-skills | (always on) | discipline, not artifacts | every phase of every skill |
 
@@ -127,7 +128,7 @@ both fire on the same artifact in the same run:
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|THREAT|SHIP|MIGRATE|MAINT)( [^:]+)?:`)
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|THREAT|SHIP|MIGRATE|MAINT)( [^:]+)?:`)
 recovers any run's trajectory:
 
 | Noun | Owner | States |
@@ -147,6 +148,7 @@ recovers any run's trajectory:
 | `SHIP` | ship-gate | `go(strategy, rollback tag) \| stage(canary plan) \| hold(blocker) \| escalated(one-way door: …)` |
 | `MIGRATE` | data-evolution | `planned(reversible) \| planned(lossy-after-step-N) \| verified(copy) \| blocked(no safe backward path)` |
 | `SCRUTINY` | scrutinize | `ship \| fix-then-ship(top) \| rework(reason) \| reject(reason) \| blocked(underspecified)` |
+| `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| blocked(no analyzable source)` |
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
 
 ## 6. Degradation rule
@@ -205,3 +207,14 @@ never the build conversation. This is Law 2 with teeth: the artifacts must suffi
 reviewer who cannot operate from artifacts alone has found a Law 2 defect before reading a line
 of code. Same-context review remains legal below that stakes bar, and the report then carries the
 marker `(same-context review)` so the reader can weigh it accordingly.
+
+**§8.1 — Structural separation for review-class skills (harness obligation).**
+When `senior-review`, `scrutinize`, or `structure-gate` is run on work authored in the same
+session, the fresh-eyes requirement is satisfied **only** by one of: (a) a *separate invocation
+with no shared build context* — the reviewer is given the artifacts and the diff, not the build
+conversation; or (b) the mechanical gate (`enforcement-floor` CI), which is context-free by
+construction and therefore always counts as an independent reviewer for the structural and
+verdict-form dimensions it covers. The `(same-context review)` marker remains legal **only**
+when neither (a) nor (b) is available, and a run that used the marker where (b) was available is
+a defect: the CI gate was the independent reviewer and should have been cited. In short: *prefer
+a structural separation you cannot fake over a marker you can.*

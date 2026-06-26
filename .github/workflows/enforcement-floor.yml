@@ -1,0 +1,109 @@
+name: enforcement-floor
+
+# The mechanical enforcement floor for the top-tier-engineer suite.
+#
+# WHY THIS EXISTS
+# ---------------
+# Every anti-spaghetti rule in this suite is prose the agent is asked to follow.
+# Prose drifts — across a long session, a tired context window, a model swap. When
+# it drifts there has been NO detector: the report says (proven), the code looks
+# done, and spaghetti ships unseen. This workflow is the wall that does not drift.
+# A machine says no regardless of what any agent claims — which is the whole point
+# of the suite's evidence vocabulary: narrators are not to be trusted on their own
+# word.
+#
+# WHAT IT ENFORCES
+# ----------------
+#   1. verdict-lint.py     — PROTOCOL §5 verdict-line FORM on any run transcript
+#                            committed under run-logs/ or *_RUN_*.md (form, not merit).
+#   2. structure-report.py — STRUCTURAL shape of the source: complexity, nesting,
+#                            god-files, import cycles, duplication (the spaghetti alarm).
+#
+# Either tool exiting non-zero FAILS the check and blocks the merge. That is the
+# difference between "doctrine I hope the agent followed" and "an engineer plus a CI
+# that catches it when it didn't."
+#
+# READABLE BY A NON-CODER
+# -----------------------
+# The job writes a plain-language summary to the GitHub Step Summary, so the result
+# is "✅ no spaghetti / ⚠️ review needed" in words — not a log you must read code to
+# parse.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  enforcement-floor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Optional richer linters — structure-report.py NOTES them if present and the
+      # harness may escalate; it never hard-depends on them, so install is best-effort.
+      - name: Install optional richer linters (best-effort)
+        run: pip install radon ruff || true
+
+      # ---- GATE 1: structural quality (the spaghetti alarm) -------------------
+      - name: Structural-quality gate
+        id: structure
+        run: |
+          echo "Running structural-quality reporter over the repository source…"
+          python3 tools/structure-report.py . | tee structure.out
+          code=${PIPESTATUS[0]}
+          echo "structure_exit=$code" >> "$GITHUB_OUTPUT"
+          exit $code
+
+      # ---- GATE 2: verdict-line form on any committed run transcripts ---------
+      # Lints every *_RUN_*.md and anything under run-logs/. A repo with no
+      # transcripts passes this gate vacuously (verdict-lint treats "no verdict
+      # lines" as a soft pass), so this never blocks repos that simply don't keep
+      # run logs in-tree.
+      - name: Verdict-line form gate
+        if: always()
+        run: |
+          shopt -s nullglob globstar
+          targets=( **/*_RUN_*.md run-logs/**/*.md )
+          if [ ${#targets[@]} -eq 0 ]; then
+            echo "No run transcripts found to lint — gate passes vacuously."
+            exit 0
+          fi
+          rc=0
+          for f in "${targets[@]}"; do
+            echo "── verdict-lint: $f"
+            python3 tools/verdict-lint.py "$f" || rc=1
+          done
+          exit $rc
+
+      # ---- Plain-language summary for a director who cannot read code ---------
+      - name: Write human-readable summary
+        if: always()
+        run: |
+          {
+            echo "## Enforcement floor result"
+            echo ""
+            if [ "${{ steps.structure.outputs.structure_exit }}" = "0" ]; then
+              echo "### ✅ Structure: CLEAN — nothing reads as spaghetti"
+              echo "No god-files, tangled functions, deep nesting, circular imports, or copy-paste blocks above threshold."
+            else
+              echo "### ⚠️ Structure: REVIEW NEEDED — structural flags found"
+              echo "The source tripped one or more spaghetti signals. A reviewer (senior-review / scrutinize) should look before this ships. Details:"
+            fi
+            echo ""
+            echo '```'
+            cat structure.out 2>/dev/null || echo "(structure report unavailable)"
+            echo '```'
+            echo ""
+            echo "_A flag means 'a reviewer should look,' not 'this is definitely wrong' — Chesterton's Fence (suite Law 3). This gate measures shape; senior-review owns the wisdom call._"
+          } >> "$GITHUB_STEP_SUMMARY"

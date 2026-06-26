@@ -30,15 +30,18 @@ point — *know exactly how much you know.*
 ```
 top-tier-engineer/
 ├── README.md            ← you are here
-├── MAP.md               ← the picture: how the seventeen skills connect
+├── MAP.md               ← the picture: how the eighteen skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once)
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
 ├── LIVE_RUN_001.md      ← first real execution (Flask ticket app): 7 proven findings
 ├── LIVE_RUN_002.md      ← second real execution (18k-LOC memory system): 1 proven, 1 disproved
 ├── LIVE_RUN_003.md      ← third execution (suite audits itself): 4 findings, 7 not-applicable
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
+├── .github/workflows/
+│   └── enforcement-floor.yml ← CI: runs the tools below on every push/PR, blocks the merge on breach
 ├── tools/
-│   └── verdict-lint.py  ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
+│   ├── verdict-lint.py     ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
+│   └── structure-report.py ← the spaghetti alarm: measures structural shape, plain-language verdict
 └── skills/
     ├── chief-engineer/      ← the router — every request enters here
     ├── problem-framing/     ← stage 1: falsifiable spec before any code
@@ -53,6 +56,7 @@ top-tier-engineer/
     ├── threat-model/        ← what can an adversary make it do that it must not?
     ├── senior-review/       ← parallel gate: is it wise?
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
+    ├── structure-gate/      ← service gate (also runs in CI): measured structural shape — is it spaghetti?
     ├── data-evolution/      ← how does stored data change shape without loss, reversibly?
     ├── ship-gate/           ← is releasing it reversible, observable, bounded?
     ├── evolve-maintain/     ← stage 6: years-long health, incidents → invariants
@@ -69,6 +73,7 @@ You don't pick skills. You talk to the engineer:
 - "Will this query scale / is this an N+1?" → data-tier judges cost class from the execution plan
 - "Is this secure / can this be abused?" → threat-model walks every trust boundary as an adversary
 - "Is this code good?" → senior-review
+- "Is this a mess / spaghetti / maintainable?" → structure-gate measures the structural shape (and is the gate CI runs unattended)
 - "Look at this PR / plan before it lands" → scrutinize
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
 - "Change the schema / run a migration" → data-evolution evolves the data shape without loss

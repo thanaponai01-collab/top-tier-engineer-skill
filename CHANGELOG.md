@@ -3,6 +3,51 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.8.0 — 2026-06-26
+
+**Mechanical enforcement floor closed (the highest-severity open finding since v1.6.2).**
+Enforcement was entirely prose-based: `verdict-lint.py` existed but nothing invoked it, no CI
+existed, and nothing measured structural quality. This release adds the floor and gives the suite
+an owner for measured structure. New skill → **eighteen** total (17 specialists + dispatcher).
+
+- **New tool `tools/structure-report.py` — the structural-quality instrument.** Measures
+  cyclomatic complexity, nesting depth, function/file length, import cycles, and duplication;
+  emits a plain-language "is this spaghetti?" verdict a non-coder can act on, plus a machine
+  `STRUCTURE:` line. stdlib-only (Python-deep; language-agnostic line+duplication for other
+  languages, honestly scoped). Self-applied on first use against the suite's own source: the only
+  open finding is `verdict-lint._check_sequence()` at cyclomatic 17 — **recorded and routed to
+  `senior-review`** in `STRUCTURE_REPORT.md` per the measure-never-judge contract, **not**
+  auto-refactored to silence the gate.
+- **New CI workflow `.github/workflows/enforcement-floor.yml`.** Runs `structure-report` and
+  `verdict-lint` on every push/PR and **blocks the merge on breach** — the first mechanical "no"
+  in the suite, independent of any agent's self-report. Writes a non-coder-readable pass/fail
+  summary to the GitHub step summary. By design it reports **red** on the open routed
+  `_check_sequence` finding until `senior-review` rules — the red badge *is* the routing signal,
+  not a defect.
+- **New skill `structure-gate`.** Owns measured structural quality (passed the no-existing-owner
+  test); measures shape and routes every flag to `senior-review`/`scrutinize` for the wisdom call,
+  never deciding wisdom itself. Wired into PROTOCOL §4/§5 (new verdict noun `STRUCTURE`), MAP,
+  README, chief-engineer routing, and both manifests.
+- **PROTOCOL §8 strengthened — author≠reviewer is now a harness obligation (§8.1).** The
+  fresh-eyes rule is satisfied by a context-isolated invocation or by the CI gate (context-free by
+  construction); the `(same-context review)` marker is no longer legal when the CI gate could have
+  served as the independent reviewer.
+- **Two install-time fixes (this run), both proven on the director's own machine.**
+  - *`structure-report.py` UTF-8 portability.* The reporter crashed on Windows consoles (cp1252)
+    on its `✅/⚠️` glyphs *before* printing the verdict line — failing its own acceptance criterion
+    on the director's OS. Fixed with a one-line guarded `sys.stdout.reconfigure(encoding="utf-8")`;
+    no-op where stdout is already UTF-8 (CI).
+  - *`structure-report.py` `main()` cleaned at authoring.* On first self-scan the tool flagged its
+    own `main()` (complexity 19, 108 lines). As brand-new code in this commit (no Chesterton's
+    Fence), it was split into `analyze()` (measurement) and `print_human_report()` (rendering) —
+    the tool's own source now scans clean. Distinct from the `verdict-lint` finding, which is
+    pre-existing and left for `senior-review`; the difference is provenance, not double standard.
+  - *`verdict-lint.py` BOM tolerance.* The CI gate lints `*_RUN_*.md` transcripts; one saved with
+    a UTF-8 BOM (common on Windows editors) would hide its first verdict line behind a leading
+    byte-order mark, so the gate passed vacuously. Switched the transcript read to `utf-8-sig`,
+    which strips a BOM if present and is identical otherwise — the floor no longer has a silent
+    bypass.
+
 ## 1.7.1 — 2026-06-25
 
 **Self-audit fixes (chief-engineer lifecycle run on the suite itself).** No new skill; three

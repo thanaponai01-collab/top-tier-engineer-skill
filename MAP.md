@@ -1,6 +1,6 @@
 # The Top-Tier Engineer — Skill Map (v5)
 
-Seventeen skills wired into one engineer. A router reads the project's artifact state and dispatches
+Eighteen skills wired into one engineer. A router reads the project's artifact state and dispatches
 every request to the right specialist; every specialist produces a **handoff artifact** the next
 stage consumes — so any future model, with zero conversation history, resumes from artifacts alone.
 The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, in `PROTOCOL.md`.
@@ -39,7 +39,12 @@ The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, 
 not-yet-landed delta — plan, design doc, PR, or diff — answering "should this change exist, and
 does it do what it claims?" before the change costs a build.
 
-## The seventeen, in one line each
+`structure-gate` sits beside `wire-check` and `scrutinize` as a callable-any-stage service gate
+— and the one that runs unattended in CI (`enforcement-floor`). It answers **"measured
+structural shape — is it spaghetti?"** with numbers, then routes every flag to
+`senior-review`/`scrutinize` for the wisdom call; it never decides wisdom itself.
+
+## The eighteen, in one line each
 
 | Skill | Question it owns |
 |---|---|
@@ -56,6 +61,7 @@ does it do what it claims?" before the change costs a build.
 | `threat-model` | What can an adversary make it do that it must not? |
 | `senior-review` | Is it wise? |
 | `scrutinize` | Should this change exist, and does it do what it claims? |
+| `structure-gate` | What is its measured shape — does it read as spaghetti? |
 | `data-evolution` | How does stored data change shape without loss, reversibly? |
 | `ship-gate` | Is releasing it reversible, observable, and bounded? |
 | `evolve-maintain` | Does it stay healthy, and does every incident teach it? |

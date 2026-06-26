@@ -32,6 +32,7 @@ REGISTRY = {
     "DATATIER":   {"clean", "findings", "blocked"},
     "REVIEW":     {"shippable", "shippable-with-findings", "not-shippable"},
     "SCRUTINY":   {"ship", "fix-then-ship", "rework", "reject", "blocked"},
+    "STRUCTURE":  {"clean", "findings", "blocked"},
     "MAINT":      {"resolved", "escalated", "reverted"},
     # v1.5.0 additions:
     "THREAT":     {"clear", "findings", "blocked"},
@@ -144,7 +145,9 @@ def _check_sequence(noun_events):
 
 def main():
     if len(sys.argv) > 1:
-        with open(sys.argv[1], encoding="utf-8") as f:
+        # utf-8-sig so a transcript saved with a BOM (common on Windows editors) still lints —
+        # without it a leading ﻿ hides the first verdict line and the gate passes vacuously.
+        with open(sys.argv[1], encoding="utf-8-sig") as f:
             text = f.read()
     else:
         text = sys.stdin.read()

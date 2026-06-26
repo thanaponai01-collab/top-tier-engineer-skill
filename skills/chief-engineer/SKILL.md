@@ -1,7 +1,7 @@
 ---
 name: chief-engineer
 description: >
-  The dispatcher that turns sixteen specialist engineering skills into one top-tier engineer. Use at
+  The dispatcher that turns seventeen specialist engineering skills into one top-tier engineer. Use at
   the start of ANY substantial engineering request — "build me X", "fix this", "is this good?",
   "make it faster", "continue the project" — whenever it is unclear which lifecycle stage applies,
   whenever a request spans multiple stages ("build and test it"), whenever resuming a project after
@@ -78,6 +78,7 @@ Census the project root before classifying anything:
 | "N+1 / will this query scale / add an index / does this endpoint hit the DB hard" — a data-access change | data-tier (gates cost class from the plan, before a budget exists) |
 | "Feels slow / clunky / takes forever" — an existing codebase + a felt complaint; unrunnable here, or spanning speed + cohesion + UX | symptom-audit → its spec executes via build-discipline / perf-optimize |
 | "Review / audit this codebase / is this code good" | senior-review |
+| "Is this a mess / spaghetti / maintainable" — or a completed build whose director cannot read the result | structure-gate (measures shape; runs parallel to senior-review — shape vs. wisdom — exactly as correctness-gate ⫫ senior-review is proof vs. wisdom) |
 | "Is this secure / can this be abused / review the auth / we handle passwords/payments/PII" | threat-model (parallel security gate; mandatory before ship if a trust boundary exists) |
 | "Deploy / release / ship it / push to prod / cut a version" | ship-gate (after correctness-gate, and threat-model if a trust boundary is touched) |
 | "Migration / alter schema / rename column / backfill / change the model with prod data" | data-evolution (invoked by evolve-maintain or ship-gate) |
