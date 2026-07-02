@@ -33,16 +33,20 @@ top-tier-engineer/
 ├── MAP.md               ← the picture: how the eighteen skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once)
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
-├── LIVE_RUN_001.md      ← first real execution (Flask ticket app): 7 proven findings
-├── LIVE_RUN_002.md      ← second real execution (18k-LOC memory system): 1 proven, 1 disproved
-├── LIVE_RUN_003.md      ← third execution (suite audits itself): 4 findings, 7 not-applicable
+├── runs/                ← provenance, not product: real executions + the patches they produced
+│   ├── LIVE_RUN_001.md      ← first real execution (Flask ticket app): 7 proven findings
+│   ├── LIVE_RUN_002.md      ← second real execution (18k-LOC memory system): 1 proven, 1 disproved
+│   ├── LIVE_RUN_003.md      ← third execution (suite audits itself): 4 findings, 7 not-applicable
+│   └── patches*/            ← the concrete diffs those runs produced
+├── agents/              ← §8.2 parallel gates as isolated, artifacts-only subagents (fresh eyes, reproducible)
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
 ├── .github/workflows/
 │   └── enforcement-floor.yml ← CI: runs the tools below on every push/PR, blocks the merge on breach
 ├── tools/
 │   ├── verdict-lint.py     ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
 │   ├── structure-report.py ← the spaghetti alarm: measures structural shape, plain-language verdict
-│   └── run-trace.py        ← did the run actually execute the stages it should have? — completeness trace
+│   ├── run-trace.py        ← did the run actually execute the stages it should have? — completeness trace
+│   └── test_tools.py       ← the tools gate their own correctness (stdlib unittest, no deps)
 └── skills/
     ├── chief-engineer/      ← the router — every request enters here
     ├── problem-framing/     ← stage 1: falsifiable spec before any code

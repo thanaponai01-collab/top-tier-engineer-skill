@@ -337,6 +337,15 @@ def analyze(paths, thresholds):
             "thresholds": thresholds}
 
 
+def _safe_relpath(path):
+    # os.path.relpath raises ValueError on Windows when path and cwd are on different
+    # drives (e.g. scanning C:\Temp from an E:\ repo). Fall back to the absolute path.
+    try:
+        return os.path.relpath(path)
+    except ValueError:
+        return path
+
+
 def print_human_report(r):
     print("=" * 70)
     print("STRUCTURAL QUALITY REPORT  —  is this spaghetti?")
@@ -365,7 +374,7 @@ def print_human_report(r):
         for kind in sorted(by_kind, key=lambda k: order.index(k) if k in order else 99):
             print(f"  ── {PLAIN.get(kind, kind)}  ({by_kind[kind]})")
             for _, fpath, line, detail in [f for f in findings if f[0] == kind][:5]:
-                loc = f"{os.path.relpath(fpath)}" + (f":{line}" if line else "")
+                loc = _safe_relpath(fpath) + (f":{line}" if line else "")
                 print(f"       · {detail}   [{loc}]")
             if by_kind[kind] > 5:
                 print(f"       … and {by_kind[kind] - 5} more")

@@ -169,6 +169,12 @@ def release_check(root):
 
 
 def main():
+    # Output carries non-ASCII (the § section mark). On Windows a redirected pipe
+    # defaults to cp1252, so emit valid UTF-8 like run-trace.py / structure-report.py
+    # do — otherwise any UTF-8 consumer (or CI) chokes on the byte.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+
     if "--release" in sys.argv:
         i = sys.argv.index("--release")
         root = sys.argv[i + 1] if len(sys.argv) > i + 1 else "."

@@ -86,8 +86,8 @@ Reading the delta is the closest the suite has to a measured yield per run.
 
 | Directory | Live Run | System | What it proves |
 |---|---|---|---|
-| `patches/` (`00_INDEX.md`) | LIVE_RUN_001 | flask\_ticket\_booking\_system | 5 patches, 7 findings: auth bypass, reversible passwords, overbooking race, schema correctness, RCE surface |
-| `patches_tiermemory/` | LIVE_RUN_002 | tier-memory daemon | 1 patch: graph-signal batch — data-tier finding, O(n) → O(1) |
+| `runs/patches/` (`00_INDEX.md`) | LIVE_RUN_001 | flask\_ticket\_booking\_system | 5 patches, 7 findings: auth bypass, reversible passwords, overbooking race, schema correctness, RCE surface |
+| `runs/patches_tiermemory/` | LIVE_RUN_002 | tier-memory daemon | 1 patch: graph-signal batch — data-tier finding, O(n) → O(1) |
 
 These directories are not supplementary — they are the evidence base for the suite's founding claim
 that it finds real bugs and ships fixes, not just reports. Any future quality metric ("skill yield")

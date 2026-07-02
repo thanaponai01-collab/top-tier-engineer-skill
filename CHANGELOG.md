@@ -3,6 +3,33 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.12.0 — 2026-07-02
+
+**The tools stop being trusted on their own word.** Three items long carried as debt, each
+closing a gap where the suite asked for evidence it did not itself produce.
+
+- **The tools now gate their own correctness (`tools/test_tools.py`).** ~1,000 lines of Python
+  across `verdict-lint`, `run-trace`, `structure-report` shipped with zero tests and had already
+  regressed twice. A stdlib `unittest` suite (no deps) now exercises each through its real CLI —
+  verdict form + line numbers + §4 ordering + release-drift; run-completeness classification;
+  structural signals + a non-ASCII scan. It found **two live bugs on first run**, both fixed here:
+  - `verdict-lint` printed the `§` mark but never reconfigured stdout to UTF-8 (the other two
+    tools do) — on a Windows pipe it emitted cp1252 and crashed any UTF-8 consumer. Now
+    reconfigures like its siblings.
+  - `structure-report` called `os.path.relpath` unguarded — a `ValueError` crash when the scanned
+    path and cwd sit on different Windows drives (e.g. a `C:\Temp` fixture from an `E:\` repo).
+    Now falls back to the absolute path. (proven — suite executes green: 14 passed.)
+- **§8.2 parallel gates ship as agents (`agents/*.md`).** The four artifacts-only gates PROTOCOL
+  §8.2 names — `correctness-gate`, `structure-gate`, `threat-model`, `senior-review` — now exist
+  as isolated subagent definitions: no build-conversation context, fixed report format, one
+  verdict line each. The fresh-eyes review (§8.1) is reproducible instead of re-improvised per
+  release. Each agent is only the isolation wrapper; its owning skill still owns the method (Law 1).
+- **Repo hygiene.** Run provenance (`LIVE_RUN_00*.md`, `RUN_TRACE_REPORT.md`,
+  `STRUCTURE_REPORT.md`, `patches/`, `patches_tiermemory/`) moved under `runs/`, separating the
+  plugin surface an installer reads from the evidence of past runs. `plugin.json` /
+  `marketplace.json` gained `homepage`/`repository`/`keywords`, and the stale marketplace version
+  (1.9.0) is realigned to the manifest.
+
 ## 1.11.0 — 2026-07-02
 
 **The enforcement floor becomes mechanical.** Until now every rule depended on the model

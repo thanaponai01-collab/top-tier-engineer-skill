@@ -66,7 +66,7 @@ form of the stale-docs failure.
    fully specifies the work, it constrains process; if removing the instances leaves a hole, that
    instance was load-bearing knowledge and is a Law 6 violation. The thesis that a stronger model
    *actually* does better through the same contract is, suite-wide, **(suspected)** until a
-   two-tier run measures it (the experiment is specified in `LIVE_RUN_003.md`); per-skill
+   two-tier run measures it (the experiment is specified in `runs/LIVE_RUN_003.md`); per-skill
    conformance to the substitution test is **(trace-only)** and checkable by reading.
 
 ## 3. Ledger registry
