@@ -65,6 +65,11 @@ Census the project root before classifying anything:
 | + correctness verdict (pass) | gated — eligible for perf, review, ship |
 | + maint log | live system — maintenance mode is the default lens |
 
+- Executability census: establish whether this environment can actually run the project's code
+  and tests (runtime present, dependencies resolvable, a command that executes). This sets the
+  evidence ceiling of the whole run — an environment that cannot execute caps every downstream
+  verdict at **(trace-only)**, and the report states that ceiling in its first lines, not at the
+  point of failure.
 - Drift check: if artifacts contradict the code or each other, that finding outranks the user's
   request and is reported first (precedence: measurement > code > ledger > docs > recollection).
 
@@ -131,7 +136,9 @@ becomes production — is the anti-pattern this mode exists to kill.
   with no falsifiable criteria does not satisfy arch-design — bounce it back, don't pass it on).
 - Parallel gates before any "ship" declaration: correctness-gate (is it provably right?),
   `threat-model` when a trust boundary is touched (does it resist abuse?), and, when the user
-  signals stakes, senior-review (is it wise?). None substitutes for another. The act of shipping
+  signals stakes, senior-review (is it wise?). None substitutes for another. These gates consume
+  artifacts, not the build conversation — where the harness supports isolated contexts they run
+  concurrently (independence corollary, PROTOCOL §8.2), their verdicts merged into the one report. The act of shipping
   itself — reversibility, blast radius, rollback — is owned by `ship-gate`, the last door. For a
   delta that hasn't landed yet, the cheap pre-gate is scrutinize — kill bad changes before they
   cost a build.

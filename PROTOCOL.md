@@ -34,6 +34,15 @@ state that the contract file was unavailable — never silently skip the stage.
 Decay rule: **(proven)** is bound to the environment, code state, and session that produced it.
 When any of those changes, it decays to **(trace-only)** until re-demonstrated.
 
+Cutoff rule: the executor of these skills is a model whose knowledge has a training cutoff.
+Recollection of any **external interface** — a library's API, a CLI's flags, a wire format, a
+service's behavior, a version number — is therefore **(assumed)**, never (trace-only), until
+verified against this environment's ground truth: the installed package's source or types, the
+tool's own `--help`, the lockfile's pinned version, the live documentation. Reading that ground
+truth promotes the claim to (trace-only); executing against it promotes it to (proven). Interface
+drift is systematic, not incidental — treating memory of an API as evidence is the model-native
+form of the stale-docs failure.
+
 ## 2. The Laws
 
 1. **Every rule lives in exactly one place.** A skill never repeats itself; a project never has
@@ -223,3 +232,12 @@ verdict-form dimensions it covers. The `(same-context review)` marker remains le
 when neither (a) nor (b) is available, and a run that used the marker where (b) was available is
 a defect: the CI gate was the independent reviewer and should have been cited. In short: *prefer
 a structural separation you cannot fake over a marker you can.*
+
+**§8.2 — Independence corollary (parallel gates).** §8's isolation requirement pays a dividend:
+gates that consume only artifacts — `correctness-gate`, `structure-gate`, `threat-model`, and
+`senior-review` run against the same change — share no conversational state by construction, and
+may therefore run **concurrently** as isolated contexts where the harness supports it (subagents
+in Claude Code; separate sessions otherwise). The §4 sequencing rules still bind where declared
+(`DATATIER` before `OPTIMIZE`; `MAINT` before `MIGRATE`), and however many gates run, their
+verdicts merge into the one report chief-engineer owes (its Rule 4). Fresh eyes are thus not a
+compliance cost paid in wall-clock time; isolation is exactly what makes the gates parallelizable.

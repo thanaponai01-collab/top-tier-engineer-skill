@@ -3,6 +3,39 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.10.0 — 2026-07-02
+
+**The model-aware layer: the suite now names its executor's own failure modes.** Until this
+release the contracts constrained *process* but were silent about the *executor* — a model with a
+training cutoff, an environment it may not be able to execute in, and a documented tendency to
+patch-thrash. Four additions, each a process constraint (Law 6, constrain process never
+intelligence — no solutions hard-coded), each stated once (Law 1, every rule lives in exactly one
+place) with pointers elsewhere. No new skill; count stays eighteen. `(same-context review)` —
+fresh-context validation available on request; the CI gate covers the mechanical dimensions.
+
+- **PROTOCOL §1 — the cutoff rule** (sibling of the decay rule). Model recollection of any
+  external interface — library API, CLI flags, wire format, service behavior, version — is
+  **(assumed)**, never (trace-only), until verified against this environment's ground truth
+  (installed source/types, `--help`, lockfile pin, live docs). Reading promotes to (trace-only);
+  executing promotes to (proven). This is the highest-frequency real-world model failure mode
+  (interface drift past the training cutoff) and no rule covered it. Pointer added in
+  build-discipline Phase 2: interfaces from ground truth, not memory.
+- **chief-engineer Phase 1 — executability census.** Whether the environment can run the code and
+  tests sets the evidence ceiling of the entire run; it is now established during ground-reading
+  and stated in the report's first lines, instead of being discovered at the point of failure.
+- **meta-skills Discipline 5 — the thrash rule.** A second failed fix on the same symptom is
+  (proven) evidence the cause was never found; reroute to `debug-protocol` is mandatory before
+  any third attempt. debug-protocol's trigger prose already implied this; the counted form makes
+  it mechanical.
+- **PROTOCOL §8.2 — independence corollary (parallel gates).** Gates that consume only artifacts
+  (correctness-gate, structure-gate, threat-model, senior-review on the same change) share no
+  conversational state by §8's own isolation requirement, so they may run concurrently as
+  isolated contexts where the harness supports it. §4 sequencing rules still bind; verdicts merge
+  into chief-engineer's one report. Fresh eyes stop costing wall-clock time.
+- **Manifest version drift fixed (proven, trivially).** `plugin.json` still said `1.9.0` while
+  this changelog was at `1.9.2` — the same class of self-description defect as v1.7.1's router
+  scope mis-statement. Bumped to `1.10.0`.
+
 ## 1.9.2 — 2026-07-02
 
 **`run-trace.py` gained a security-audit completeness profile (proven gap from LIVE_RUN_004).**
