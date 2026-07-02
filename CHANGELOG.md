@@ -3,6 +3,20 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.9.2 — 2026-07-02
+
+**`run-trace.py` gained a security-audit completeness profile (proven gap from LIVE_RUN_004).**
+Running the suite against TickIt (a real Next.js app with a Supabase/RLS trust boundary) surfaced a
+proven blind spot: a pure `threat-model` run could not be completeness-checked. `THREAT` was absent
+from the tool's `PROFILES`, `NOUN_TO_TYPE`, `TYPE_PRIORITY`, and `PHRASE_HINTS`, so a security audit
+was either declared "complete" with zero checking (false green — `TRACE: complete(unclassified…)`)
+or misclassified as a `review` run and falsely flagged as missing REVIEW (false red) — both
+reproduced by executing the tool. Added a `threat` profile (required: THREAT) and registered the
+noun. Placed below `review` in `TYPE_PRIORITY` so combined review+threat runs are unchanged;
+LIVE_RUN_001/002/003/004 all trace identically after the change. No new skill; count stays eighteen.
+`verdict-lint.py` already knew `THREAT` (tools/verdict-lint.py:38), so the gap was isolated to
+`run-trace.py`. Invoker unchanged: chief-engineer Phase 4 Rule 4 and CI gate 3 already call the tool.
+
 ## 1.9.1 — 2026-06-26
 
 **Two authoring-hygiene fixes to `tools/run-trace.py` found by the enforcement-floor self-check.**

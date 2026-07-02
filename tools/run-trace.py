@@ -150,6 +150,15 @@ PROFILES = {
             "STRUCTURE": "no structure verdict — the spaghetti check never ran or never concluded",
         },
     },
+    "threat": {
+        "label": "Security audit / threat model (trust boundary present)",
+        "required": ["THREAT"],
+        "conditional": ["REVIEW", "STRUCTURE", "GATE"],
+        "plain_missing": {
+            "THREAT": "no threat verdict — a trust boundary exists but no abuse cases were "
+                      "modelled or defended; the security stage was skipped",
+        },
+    },
 }
 
 # ---- request-type inference -------------------------------------------------------
@@ -166,16 +175,18 @@ NOUN_TO_TYPE = {
     "REVIEW": "review",
     "SLICE": "build", "GATE": "build", "WIRE": "build",
     "STRUCTURE": "structure",
+    "THREAT": "threat",
 }
 # priority when several types are signalled (a ship run contains build verdicts too —
 # classify by the furthest-down-the-lifecycle stage reached).
-TYPE_PRIORITY = ["ship", "fix", "audit", "perf", "scrutinize", "review", "build", "structure"]
+TYPE_PRIORITY = ["ship", "fix", "audit", "perf", "scrutinize", "review", "threat", "build", "structure"]
 
 PHRASE_HINTS = [
     (re.compile(r'\b(ship|release|deploy|roll ?out)\b', re.I), "ship"),
     (re.compile(r'\b(bug|broken|crash|fix|regression|failing)\b', re.I), "fix"),
     (re.compile(r'\b(slow|faster|optimi|perf|latency|throughput)\b', re.I), "perf"),
     (re.compile(r'\b(scrutin|this PR|this diff|this plan|before (it|we) (lands|merge|build))\b', re.I), "scrutinize"),
+    (re.compile(r'\b(threat model|can this be abused|is this secure|vulnerab|exploit|attack surface|the auth boundary)\b', re.I), "threat"),
     (re.compile(r'\b(review|audit|code quality|is this (good|production))\b', re.I), "review"),
     (re.compile(r'\b(spaghetti|maintainab|messy|is this a mess|structur)\b', re.I), "structure"),
     (re.compile(r'\b(build|implement|add (the|a) feature|make it work|create)\b', re.I), "build"),
