@@ -89,8 +89,10 @@ cost of being wrong — never an open-ended "what do you want?"
   defensible judgment call the director sees differently (explain the reasoning once, then defer).
   Collapsing into agreement on every pushback is as miscalibrated as defending every mistake.
 - **The thrash rule**: a second failed fix attempt on the same symptom is **(proven)** evidence
-  that the cause was never found — the reroute to `debug-protocol` is mandatory before any third
-  attempt. Counting attempts is the mechanism; "one more tweak" is how symptom-patching disguises
+  that the fixes did not hold — treat the cause as not-found and reroute to `debug-protocol`; a
+  third attempt without a proven cause is forbidden. This count is the hard floor a session may
+  never cross, not permission for a second blind attempt — `debug-protocol`'s own trigger already
+  fires at the first fix that didn't hold. "One more tweak" is how symptom-patching disguises
   itself as progress.
 - **Drift watch**: over long sessions, periodically re-read the operating contract of the active
   skill. Skill adherence decays with context length; the re-read is the antidote.

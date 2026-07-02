@@ -10,8 +10,11 @@ release the contracts constrained *process* but were silent about the *executor*
 training cutoff, an environment it may not be able to execute in, and a documented tendency to
 patch-thrash. Four additions, each a process constraint (Law 6, constrain process never
 intelligence — no solutions hard-coded), each stated once (Law 1, every rule lives in exactly one
-place) with pointers elsewhere. No new skill; count stays eighteen. `(same-context review)` —
-fresh-context validation available on request; the CI gate covers the mechanical dimensions.
+place) with pointers elsewhere. No new skill; count stays eighteen. Fresh-context review performed
+per Discipline 5 (isolated context, artifacts + diff only): **CONFIRM-WITH-FIXES** — both required
+wording fixes applied in the follow-up commit (build-discipline pointer trimmed to Law 1 pointer
+form; thrash rule reconciled with debug-protocol's trigger and its (proven) claim tightened to
+what execution actually showed).
 
 - **PROTOCOL §1 — the cutoff rule** (sibling of the decay rule). Model recollection of any
   external interface — library API, CLI flags, wire format, service behavior, version — is
@@ -24,9 +27,10 @@ fresh-context validation available on request; the CI gate covers the mechanical
   tests sets the evidence ceiling of the entire run; it is now established during ground-reading
   and stated in the report's first lines, instead of being discovered at the point of failure.
 - **meta-skills Discipline 5 — the thrash rule.** A second failed fix on the same symptom is
-  (proven) evidence the cause was never found; reroute to `debug-protocol` is mandatory before
-  any third attempt. debug-protocol's trigger prose already implied this; the counted form makes
-  it mechanical.
+  (proven) evidence the fixes did not hold; treat the cause as not-found and reroute to
+  `debug-protocol` — no third attempt without a proven cause. debug-protocol's trigger already
+  fires at the first fix that didn't hold; this count is the hard floor a session may never
+  cross, stated where the always-on disciplines bind, never permission for a second blind attempt.
 - **PROTOCOL §8.2 — independence corollary (parallel gates).** Gates that consume only artifacts
   (correctness-gate, structure-gate, threat-model, senior-review on the same change) share no
   conversational state by §8's own isolation requirement, so they may run concurrently as

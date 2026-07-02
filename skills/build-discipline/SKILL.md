@@ -45,10 +45,9 @@ and inside this skill, only **(proven)** closes a slice.
   deleting or reusing over adding; introduce an abstraction on its second concrete use, not its
   first guess; "might need it later" is a `TODO_LEDGER.md` entry with a trigger, never speculative
   structure in the code.
-- **Interfaces from ground truth, not memory** (cutoff rule, PROTOCOL §1): before coding against
-  an external dependency, verify the interface from what is actually installed here — its source,
-  its types, its `--help`, the lockfile's pinned version. A remembered API is **(assumed)**; the
-  installed one is the only one the proof line will run against.
+- **Interfaces from ground truth, not memory**: verify an external dependency's interface against
+  this environment's ground truth before coding against it (cutoff rule, PROTOCOL §1) — a
+  remembered API is **(assumed)**.
 - **Error paths first**: write what happens on bad input, missing dependency, and partial failure
   before polishing the happy path. Happy-path-only code is the largest single source of later
   incidents.

@@ -138,8 +138,9 @@ becomes production — is the anti-pattern this mode exists to kill.
   `threat-model` when a trust boundary is touched (does it resist abuse?), and, when the user
   signals stakes, senior-review (is it wise?). None substitutes for another. These gates consume
   artifacts, not the build conversation — where the harness supports isolated contexts they run
-  concurrently (independence corollary, PROTOCOL §8.2), their verdicts merged into the one report. The act of shipping
-  itself — reversibility, blast radius, rollback — is owned by `ship-gate`, the last door. For a
+  concurrently (independence corollary, PROTOCOL §8.2), their verdicts merged into the one report.
+  The act of shipping itself — reversibility, blast radius, rollback — is owned by `ship-gate`,
+  the last door. For a
   delta that hasn't landed yet, the cheap pre-gate is scrutinize — kill bad changes before they
   cost a build.
 
