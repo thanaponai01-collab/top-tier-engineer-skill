@@ -148,7 +148,37 @@ def _check_sequence(noun_events):
     return violations
 
 
+def release_check(root):
+    """Manifest version must equal the top CHANGELOG heading. This drift shipped twice
+    (v1.7.1 router, v1.9.2→1.10.0 manifest) — cheaper to check than to remember."""
+    import json
+    from pathlib import Path
+    root = Path(root)
+    try:
+        manifest = json.loads((root / ".claude-plugin" / "plugin.json")
+                              .read_text(encoding="utf-8-sig"))["version"]
+        changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8-sig")
+    except (OSError, KeyError, ValueError):
+        return None  # not a plugin repo — nothing to check
+    m = re.search(r'^##\s+(\S+)', changelog, re.M)
+    if not m:
+        return "CHANGELOG.md has no '## <version>' heading"
+    if m.group(1) != manifest:
+        return f"version drift: plugin.json says {manifest}, CHANGELOG top entry is {m.group(1)}"
+    return None
+
+
 def main():
+    if "--release" in sys.argv:
+        i = sys.argv.index("--release")
+        root = sys.argv[i + 1] if len(sys.argv) > i + 1 else "."
+        err = release_check(root)
+        if err:
+            print(f"verdict-lint: {err}")
+            return 1
+        print("verdict-lint: release clean — manifest and CHANGELOG agree.")
+        return 0
+
     if len(sys.argv) > 1:
         # utf-8-sig so a transcript saved with a BOM (common on Windows editors) still lints —
         # without it a leading ﻿ hides the first verdict line and the gate passes vacuously.

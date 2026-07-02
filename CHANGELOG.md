@@ -3,6 +3,26 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.11.0 — 2026-07-02
+
+**The enforcement floor becomes mechanical.** Until now every rule depended on the model
+choosing to comply — the exact residual risk verdict-lint's own docstring names. This release
+wires the harness in: the plugin now ships a `Stop` hook (`hooks/hooks.json` →
+`tools/stop-gate.py`) that extracts assistant text from the session transcript and runs
+`verdict-lint` over it at every session stop. A malformed verdict, an illegal state, or a
+trace-only close without its bold limitation marker now *blocks the stop* (exit 2) until fixed;
+sessions with no verdict lines pass silently, so the gate costs nothing outside suite runs.
+The gate fails open on its own internal errors and respects `stop_hook_active`, so it can
+never wedge or loop a session.
+
+- **verdict-lint `--release <root>`** — plugin.json version must equal the top CHANGELOG
+  heading. This drift shipped twice (v1.7.1 router, v1.9.2→1.10.0 manifest); it is now a
+  mechanical check, run automatically by stop-gate when the session cwd is the plugin repo
+  itself, and runnable standalone in CI.
+- **`tools/stop-gate.py --selftest`** — the tools directory gets its first executable check:
+  asserts a malformed verdict blocks, a clean transcript passes, the loop guard holds, and
+  the plugin's own manifest/CHANGELOG agree. (proven — selftest executed green at release.)
+
 ## 1.10.0 — 2026-07-02
 
 **The model-aware layer: the suite now names its executor's own failure modes.** Until this
