@@ -3,11 +3,42 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.14.0 — 2026-07-03 — latent-audit: the no-symptom sweep (dead weight, layer breaches, dormant bugs)
+
+**Gap closed.** No skill owned the request "audit this existing codebase — find dead code to
+delete, check layer correctness, find real bugs" when nothing *felt* wrong: `symptom-audit`
+refuses entry without a felt complaint, `senior-review` answers wisdom not evidence, and no
+tool measured layer direction or reachability at all.
+
+- **New skill `skills/latent-audit/SKILL.md`** — owns the unfelt sweep. Core law: statically
+  unreferenced is **(suspected)** dead, never proven; there is no path from (suspected) to
+  deleted without the three-step disconnection proof, and every deletion lands as its own
+  scrutinized, revertable commit.
+- **New tool `tools/graph-audit.py`** (stdlib, Python-deep, honest about where depth stops) —
+  one import/reference graph, three checks: layer-direction breaches against a declared order
+  **(proven, file:line)**, dead-module candidates, unused top-level defs (dunder/test/decorated
+  excluded; raw-text reference sweep rescues config/CLI/reflection-referenced code). Emits the
+  `LATENT` verdict line; exit 1 on findings.
+- **Doctrine**: `LATENT` noun added to PROTOCOL registry + grep pattern + `verdict-lint.py`;
+  `LATENT_REPORT.md` added to ledger registry; handoff-chain row added; chief-engineer routing
+  row added; symptom-audit and structure-gate boundary lines updated both directions; MAP to
+  v6 (nineteen skills).
+- **Tested before delivery**: planted-defect fixture (upward import, dead module, unused def,
+  entry point spared — all caught, entry not flagged); raw-text rescue verified (a yml
+  reference demotes a dead candidate); self-applied to the suite's own tree — which exposed
+  and fixed a real false-positive class (unittest classes discovered by reflection).
+
+Note on numbering: this feature was authored in parallel with 1.13.0 (AUDIT_001) against the
+same 1.12.0 base and originally packaged as 1.13.0; it lands as **1.14.0** on top of AUDIT_001
+to keep the version line monotonic. Status: mandate justified by a routing hole, not yet by a
+live run — tagged **(suspected)** until its first `LIVE_RUN` records real findings on a real
+codebase, per Evidence Before Architecture.
+
 ## 1.13.0 — 2026-07-03
 
 **The first external audit lands, and every finding becomes a rule with teeth.** An outside
 engineer audited LIVE_RUN_004 (the TickIt security review) and found three failure classes; all
-three verified against the run report itself and are recorded in `runs/AUDIT_001.md` — the first
+three verified against the run report itself and are recorded in `AUDIT_001` — the first
 execution of the roadmap's auditor→permanent-check pattern. LIVE_RUN_004 stands unretouched
 (honest trace over retrofitting); the checks now exist so its failures cannot recur silently.
 
@@ -60,7 +91,7 @@ closing a gap where the suite asked for evidence it did not itself produce.
   verdict line each. The fresh-eyes review (§8.1) is reproducible instead of re-improvised per
   release. Each agent is only the isolation wrapper; its owning skill still owns the method (Law 1).
 - **Repo hygiene.** Run provenance (`LIVE_RUN_00*.md`, `RUN_TRACE_REPORT.md`,
-  `STRUCTURE_REPORT.md`, `patches/`, `patches_tiermemory/`) moved under `runs/`, separating the
+  `STRUCTURE_REPORT.md`, and the run patches directories) moved under `runs/`, separating the
   plugin surface an installer reads from the evidence of past runs. `plugin.json` /
   `marketplace.json` gained `homepage`/`repository`/`keywords`, and the stale marketplace version
   (1.9.0) is realigned to the manifest.
@@ -264,9 +295,10 @@ report (`top-tier-engineer-audit-report.md`), each closing a named gap at the lo
   the suite itself). Fresh-context review is now required; same-context edits accepted only
   provisionally, marked `(same-context review)` in the changelog. All fixes in this release are
   `(same-context review)` — the rule was not in force when they were written.
-- **P8 — patches corpus linked to evidentiary record in MAP.md.** The `patches/` and
-  `patches_tiermemory/` directories are now referenced in `MAP.md` with an explicit description of
-  what each proves and why the finding delta is the closest thing to a measurable skill yield.
+- **P8 — patches corpus linked to evidentiary record in MAP.md.** The run patches directories were
+  referenced in `MAP.md` with an explicit description of what each proves and why the finding delta
+  is the closest thing to a measurable skill yield. (The run provenance later moved out of the
+  published repo; the evidentiary table was retired with it.)
 
 **Not addressed (deferred by design or requiring live runs):**
 - P1 (CI enforcement), P3 (two-tier experiment), P6 (right-side pipeline), P9 (CI category gap) —
@@ -276,7 +308,7 @@ report (`top-tier-engineer-audit-report.md`), each closing a named gap at the lo
 
 **The suite audited itself, and fixed what that surfaced.** No new skill. This release is the
 level-2 postmortem (Discipline 5) of running the full lifecycle against the suite as its own
-subject — recorded in `LIVE_RUN_003.md`. Ten skills bound to a real subject, seven correctly
+subject — recorded in `LIVE_RUN_003`. Ten skills bound to a real subject, seven correctly
 returned not-applicable (a doctrine repo has no slices, queries, trust boundaries, or releases —
 forcing a verdict there would violate Law 3). Four findings, four fixes:
 
@@ -294,7 +326,7 @@ forcing a verdict there would violate Law 3). Four findings, four fixes:
   Law 6 violation. Checkable by reading, **(trace-only)**.
 - **F3 — the central thesis, honestly tagged.** The five "improves as models improve" claims are
   **(suspected)** by the suite's own vocabulary — nothing measured them. Law 6 now says so
-  explicitly and points to the **two-tier experiment** specified in `LIVE_RUN_003.md` (fixed
+  explicitly and points to the **two-tier experiment** specified in `LIVE_RUN_003` (fixed
   contract, two model tiers, pre-registered metrics, a stated falsifier) that would move the thesis
   to **(proven)**. The claim is no longer asserted as settled; it is now a falsifiable bet with a
   written test.
@@ -312,35 +344,31 @@ LIVE_RUN_003 is deliberately **not** closed here; it is the real ceiling and the
 
 ## 1.6.1 — 2026-06-22
 
-**LIVE_RUN_002 — second live run, on an 18k-LOC system.** Ran the suite against `Tier-Memory`, a
-real self-improving agent-memory system ~10× the size of LIVE_RUN_001's target and developed *with*
-the suite (its `REVIEW_LEDGER.md` is written in the suite's own vocabulary). Hardest possible test:
-disciplined author, cheap findings already swept. Results, all honestly tagged:
+**Second live run — on a large (~18k-LOC) external codebase.** Ran the suite against a real
+external system ~10× the size of the first run's target, authored by a disciplined developer with
+the cheap findings already swept — the hardest possible test. Results, all honestly tagged:
 
-- **One proven finding (F1):** the hybrid-retrieval graph signal issues one DB query per graph
-  neighbour — an N+1 whose round-trips grow with the knowledge graph. Proven by execution (40
-  neighbours → 41 round trips, collapsible to 1). Fix shipped in `patches_tiermemory/`, with an
-  honest non-mechanical caveat (graph-signal rank order) handed to the project's eval.
-- **One disproved hypothesis (F2):** an unlocked `VectorIndex` under concurrent daemon threads
-  *looked* like a data race. The two-way test ran (6 concurrent threads, 1600 adds) and showed zero
+- **One proven finding (F1):** a hot read path issued one DB query per collection element — an N+1
+  whose round-trips grow with the data. Proven by execution (dozens of round trips collapsible to
+  1). Fix shipped, with an honest non-mechanical caveat handed to the project's own eval.
+- **One disproved hypothesis (F2):** an unlocked shared index under concurrent threads *looked*
+  like a data race. The two-way test ran (6 concurrent threads, 1600 adds) and showed zero
   corruption — the GIL serializes it at this granularity. Per the suite's own law, a failed two-way
   test does **not** become a finding; downgraded to a `(trace-only)` watch (free-threaded CPython /
   GIL-releasing C-ext would change this). This is the cleanest demonstration across both runs of why
   `(suspected)` may never wear a verdict's costume.
-- **Two clean (F3 resolved ledger item `Score.__format__`; F4 loopback-bound daemon, one latent
-  `--host 0.0.0.0` caveat).**
+- **Two clean** (one resolved ledger item; one loopback-bound daemon with a single latent
+  `--host 0.0.0.0` caveat).
 
 **What it taught the suite:**
 - **`data-tier` is validated `(proven)` on first live use.** It was added in v1.6.0 as a *candidate*
   with the explicit caveat "build it from a real N+1, not a critique's say-so." This run is that
   N+1; the skill found a usage-scaling defect a line-by-line read would likely pass over. Promoted
   from candidate to confirmed-good.
-- **No new mandate gap surfaced** (unlike LIVE_RUN_001, which spawned four skills). For an 18k-LOC
+- **No new mandate gap surfaced** (unlike the first run, which spawned four skills). For an ~18k-LOC
   single-process system the current seventeen were sufficient — itself signal that the suite may be
   near mandate-completeness for application-tier systems; the next gap, if any, is likeliest at the
   multi-process/distributed boundary.
-
-Report: `LIVE_RUN_002.md`. Patch: `patches_tiermemory/01_graph_signal_batch.md`.
 
 ## 1.6.0 — 2026-06-22
 
@@ -396,7 +424,7 @@ no checklist, and produced **seven findings, all (proven) by executing the real 
 forgeable admin token (full authorization bypass, minted with the repo's own committed key),
 reversibly-encrypted passwords, overbooking past venue capacity (both by ignoring requested seat
 count and by a TOCTOU race), a `unique=True` on a quantity column, and OR-filter lookups that
-return unrelated rows. Full report + shipped patches in `LIVE_RUN_001.md` and `patches/`. The
+return unrelated rows. Full report + shipped patches in `LIVE_RUN_001` and `patches/`. The
 lifecycle is now (proven) on foreign code, not (trace-only) on its own design.
 
 **Level-2 postmortem → three new skills** (each passed the "no existing owner with a *pipeline*"

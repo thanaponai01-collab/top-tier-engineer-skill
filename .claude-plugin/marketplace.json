@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "top-tier-engineer",
-      "description": "Eighteen wired engineering skills — a router plus the full lifecycle (framing, architecture, build, wiring, correctness, debugging, symptom audit, performance, data-tier, threat-model, review, change scrutiny, structural-quality, data-evolution, ship-gate, maintenance, meta-disciplines) — behaving as one model-agnostic top-tier engineer.",
-      "version": "1.12.0",
+      "description": "Nineteen wired engineering skills — a router plus the full lifecycle (framing, architecture, build, wiring, correctness, debugging, symptom audit, latent audit, performance, data-tier, threat-model, review, change scrutiny, structural-quality, data-evolution, ship-gate, maintenance, meta-disciplines) — behaving as one model-agnostic top-tier engineer.",
+      "version": "1.14.0",
       "author": {
         "name": "Thanaponai01"
       },

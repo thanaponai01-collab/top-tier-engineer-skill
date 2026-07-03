@@ -51,7 +51,7 @@ working tree differs from that commit, or ` local-only` when it was never pushed
 (trace-only) evidence *at that revision only*; a consumer at any other revision — including the
 hosted copy of a local working tree — re-verifies every quoted line and signature before acting
 on it. This is the decay rule applied to reading, not just executing. `run-trace.py` refuses to
-mark any classified run complete without the pin. *Earned by `runs/AUDIT_001.md`: LIVE_RUN_004
+mark any classified run complete without the pin. *Earned by `AUDIT_001`: LIVE_RUN_004
 quoted a function signature that did not exist at the subject's pushed revision, and no reader
 could tell which revision the quote was true of.*
 
@@ -67,7 +67,7 @@ is rescoped and severity re-computed against the true residual (illustrative: no
 read everything" when insiders already can by the subject's design, but "a leaked API token now
 reads everything from outside the browser" — a different asset with a different blast radius).
 An imported invariant contradicted by unrebutted subject evidence grounds no severity. *Earned by
-`runs/AUDIT_001.md`.*
+`AUDIT_001`.*
 
 ## 2. The Laws
 
@@ -92,7 +92,7 @@ An imported invariant contradicted by unrebutted subject evidence grounds no sev
    fully specifies the work, it constrains process; if removing the instances leaves a hole, that
    instance was load-bearing knowledge and is a Law 6 violation. The thesis that a stronger model
    *actually* does better through the same contract is, suite-wide, **(suspected)** until a
-   two-tier run measures it (the experiment is specified in `runs/LIVE_RUN_003.md`); per-skill
+   two-tier run measures it (the experiment is specified in `LIVE_RUN_003`); per-skill
    conformance to the substitution test is **(trace-only)** and checkable by reading.
 
 ## 3. Ledger registry
@@ -110,6 +110,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | `PERF_BUDGET.md` | perf-optimize | Budgets, currents, guards per dimension |
 | `DATA_TIER.md` | data-tier | Access → cost-class → plan-evidence → verdict, per data-access change |
 | `AUDIT_SPEC.md` | symptom-audit | Pinned symptom, cause→location→cost table, phased prescription, pre-written checks |
+| `LATENT_REPORT.md` | latent-audit | Graph measurements, deletion manifest (with disconnection proofs), watch list, layer-breach table |
 | `REVIEW_LEDGER.md` | senior-review | Unresolved novelty: hypothesis + the experiment that would settle it |
 | `THREAT_MODEL.md` | threat-model | Assets, trust boundaries, abuse cases, evidence tag, defense status |
 | `RELEASE_PLAN.md` | ship-gate | Rollout strategy, reversibility class, rollback steps, watch signals, go/no-go |
@@ -128,6 +129,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | correctness-gate | criteria, contracts, proof lines | CORRECTNESS_VERDICT.md, test suite | perf-optimize / ship / senior-review |
 | debug-protocol | an observed failure | Cause Verdict (proven root cause) | evolve-maintain (the fix) |
 | symptom-audit | existing codebase + a felt complaint | AUDIT_SPEC.md (diagnosis + phased prescription) | build-discipline (execute phases); perf-optimize (measure & guard perf phases); debug-protocol / wire-check on reroute |
+| latent-audit | existing codebase, no symptom (+ declared layers) | LATENT_REPORT.md (deletion manifest + breach table) | scrutinize → build-discipline (each deletion, one commit); arch-design (layer breaches); debug-protocol / threat-model / senior-review (ride-along findings) |
 | perf-optimize | a passed gate + a budget | PERF_BUDGET.md, guards | correctness-gate (re-gate), evolve-maintain |
 | data-tier | a data-access change + its schema | DATA_TIER.md + corrected query/index | perf-optimize (wall-clock budget); data-evolution (index migration); arch-design (data-model flaw) |
 | senior-review | any codebase | mentorship report, REVIEW_LEDGER.md | director + relevant lifecycle skill |
@@ -163,7 +165,7 @@ both fire on the same artifact in the same run:
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|THREAT|SHIP|MIGRATE|MAINT|FIX)( [^:]+)?:`)
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|THREAT|SHIP|MIGRATE|MAINT|FIX)( [^:]+)?:`)
 (plus the shared noun `FIX`, see below) recovers any run's trajectory:
 
 | Noun | Owner | States |
@@ -184,12 +186,15 @@ so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE
 | `MIGRATE` | data-evolution | `planned(reversible) \| planned(lossy-after-step-N) \| verified(copy) \| blocked(no safe backward path)` |
 | `SCRUTINY` | scrutinize | `ship \| fix-then-ship(top) \| rework(reason) \| reject(reason) \| blocked(underspecified)` |
 | `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| blocked(no analyzable source)` |
+| `LATENT` | latent-audit | `clean(N modules traced) \| findings(dead: A, unused: B, layer-breaches: C) \| blocked(no analyzable source)` |
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
 
 **Tool-output nouns.** Some verdict nouns are emitted by suite *tools*, not skills, and so own no row
 in the skill registry above: `TRACE` (run-trace.py). Tool nouns are linted for form like any other
 but are not part of the §4 skill handoff chain. (Note: `STRUCTURE` is emitted by the tool
-`structure-report.py` *and* owned by the skill `structure-gate`, so it keeps its row above.)
+`structure-report.py` *and* owned by the skill `structure-gate`; likewise `LATENT` is emitted by
+`tools/graph-audit.py` *and* owned by `latent-audit` — the skill's line supersedes the tool's,
+and its finding counts may only shrink, never grow. Both keep their rows above.)
 
 **Shared nouns.** One noun is emitted by *whichever* skill performs the act, so it owns no
 single-skill row: `FIX` (owned by §9, delivered-fix discipline; emitted by any skill delivering a
@@ -276,7 +281,7 @@ compliance cost paid in wall-clock time; isolation is exactly what makes the gat
 ## 9. Delivered-fix discipline (a fix is a delta)
 
 Law 5, diagnosis ships with the artifact, obligates delivering the fix; this section governs the
-delivered fix itself. *Earned by `runs/AUDIT_001.md`: LIVE_RUN_004 delivered a fix while
+delivered fix itself. *Earned by `AUDIT_001`: LIVE_RUN_004 delivered a fix while
 recording `scrutinize (no delta)` in the same report — the fix was a delta, went unadjudicated,
 and carried two incoherences an outsider pass was built to catch.*
 

@@ -14,12 +14,16 @@ name: enforcement-floor
 #
 # WHAT IT ENFORCES
 # ----------------
+#   0. test_tools.py       — the suite tools gate their own correctness (stdlib
+#                            unittest) before any of them is trusted to judge the repo.
 #   1. verdict-lint.py     — PROTOCOL §5 verdict-line FORM on any run transcript
 #                            committed under run-logs/ or *_RUN_*.md (form, not merit).
 #   2. structure-report.py — STRUCTURAL shape of the source: complexity, nesting,
 #                            god-files, import cycles, duplication (the spaghetti alarm).
+#   3. run-trace.py        — run-completeness on committed transcripts (did the stages
+#                            actually execute).
 #
-# Either tool exiting non-zero FAILS the check and blocks the merge. That is the
+# Any tool exiting non-zero FAILS the check and blocks the merge. That is the
 # difference between "doctrine I hope the agent followed" and "an engineer plus a CI
 # that catches it when it didn't."
 #
@@ -54,6 +58,13 @@ jobs:
       # harness may escalate; it never hard-depends on them, so install is best-effort.
       - name: Install optional richer linters (best-effort)
         run: pip install radon ruff || true
+
+      # ---- GATE 0: the tools gate their own correctness ----------------------
+      # test_tools.py exercises every suite tool through its real CLI (stdlib
+      # unittest, no deps). If a tool regresses, this fails before any tool is
+      # trusted to judge the repo below.
+      - name: Tool self-tests
+        run: python3 tools/test_tools.py
 
       # ---- GATE 1: structural quality (the spaghetti alarm) -------------------
       - name: Structural-quality gate

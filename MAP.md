@@ -1,6 +1,6 @@
-# The Top-Tier Engineer — Skill Map (v5)
+# The Top-Tier Engineer — Skill Map (v6)
 
-Eighteen skills wired into one engineer. A router reads the project's artifact state and dispatches
+Nineteen skills wired into one engineer. A router reads the project's artifact state and dispatches
 every request to the right specialist; every specialist produces a **handoff artifact** the next
 stage consumes — so any future model, with zero conversation history, resumes from artifacts alone.
 The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, in `PROTOCOL.md`.
@@ -44,7 +44,13 @@ does it do what it claims?" before the change costs a build.
 structural shape — is it spaghetti?"** with numbers, then routes every flag to
 `senior-review`/`scrutinize` for the wisdom call; it never decides wisdom itself.
 
-## The eighteen, in one line each
+`latent-audit` is `symptom-audit`'s sibling for the *unfelt*: given no complaint at all, it
+runs `tools/graph-audit.py` over the import/reference graph to find dead modules and unused
+defs **(suspected — deletion only after a disconnection proof)** and layer-direction breaches
+against the declared architecture **(proven)**; deletions land one scrutinized commit at a
+time, never from the raw report.
+
+## The nineteen, in one line each
 
 | Skill | Question it owns |
 |---|---|
@@ -62,6 +68,7 @@ structural shape — is it spaghetti?"** with numbers, then routes every flag to
 | `senior-review` | Is it wise? |
 | `scrutinize` | Should this change exist, and does it do what it claims? |
 | `structure-gate` | What is its measured shape — does it read as spaghetti? |
+| `latent-audit` | What is provably dead, mislayered, or dormantly broken — with no symptom to guide the search? |
 | `data-evolution` | How does stored data change shape without loss, reversibly? |
 | `ship-gate` | Is releasing it reversible, observable, and bounded? |
 | `evolve-maintain` | Does it stay healthy, and does every incident teach it? |
@@ -77,17 +84,6 @@ structural shape — is it spaghetti?"** with numbers, then routes every flag to
 `PROTOCOL.md` — evidence vocabulary, the six Laws, the ledger registry, the handoff chain, the
 verdict-line grammar, and the degradation rule for skills copied out of the suite. Per Law 1 it is
 the only place these are stated; this map is a picture of it, not a second copy.
-
-## Evidentiary record — what the suite has proven
-
-The patches directories are the suite's only artifacts that demonstrate concrete engineering value:
-bounded diffs, before/after reasoning, and the gap between what was known and what the suite found.
-Reading the delta is the closest the suite has to a measured yield per run.
-
-| Directory | Live Run | System | What it proves |
-|---|---|---|---|
-| `runs/patches/` (`00_INDEX.md`) | LIVE_RUN_001 | flask\_ticket\_booking\_system | 5 patches, 7 findings: auth bypass, reversible passwords, overbooking race, schema correctness, RCE surface |
-| `runs/patches_tiermemory/` | LIVE_RUN_002 | tier-memory daemon | 1 patch: graph-signal batch — data-tier finding, O(n) → O(1) |
 
 These directories are not supplementary — they are the evidence base for the suite's founding claim
 that it finds real bugs and ships fixes, not just reports. Any future quality metric ("skill yield")

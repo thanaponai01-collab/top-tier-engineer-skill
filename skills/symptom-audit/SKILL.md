@@ -9,7 +9,7 @@ description: >
   coherence AND UX); and whenever the deliverable is a spec for someone else to execute rather
   than an executed change. Boundaries: broken/wrong output → debug-protocol; runnable system with
   a single measurable budget → perf-optimize directly; "is this codebase good?" with no symptom →
-  senior-review; "nothing happens at all" → wire-check.
+  senior-review; dead code / unused components / layer breaches with no symptom → latent-audit; "nothing happens at all" → wire-check.
 ---
 
 # Symptom Audit

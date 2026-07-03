@@ -33,6 +33,7 @@ REGISTRY = {
     "REVIEW":     {"shippable", "shippable-with-findings", "not-shippable"},
     "SCRUTINY":   {"ship", "fix-then-ship", "rework", "reject", "blocked"},
     "STRUCTURE":  {"clean", "findings", "blocked"},
+    "LATENT":     {"clean", "findings", "blocked"},
     "MAINT":      {"resolved", "escalated", "reverted"},
     # v1.5.0 additions:
     "THREAT":     {"clear", "findings", "blocked"},

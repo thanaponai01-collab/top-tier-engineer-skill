@@ -23,7 +23,9 @@ description: >
 > condemning it. Findings route onward: structural flags → `senior-review` or
 > `scrutinize`; an import cycle that reveals a layering error → `arch-design`; a
 > god-file that is really a missing module boundary → `arch-design`. Distinct from
-> `wire-check` (that asks *"is it connected?"*, this asks *"is it tangled?"*). Shared
+> `wire-check` (that asks *"is it connected?"*, this asks *"is it tangled?"*) and from
+> `latent-audit` (that asks *"is it dead or pointed the wrong way?"* — same import graph,
+> different question; layer-direction breaches and deletion manifests are its mandate, not this one's). Shared
 > vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
 > (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
 > **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise.)

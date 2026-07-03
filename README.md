@@ -4,40 +4,14 @@ One folder that makes an AI coding agent behave like a top-tier engineer across 
 a project — from a vague idea to a system maintained for years — regardless of which model is
 running it.
 
-## Proven in practice
-
-This suite is not just designed; it has been run three times and the runs are recorded honestly
-(see `LIVE_RUN_001.md`, `LIVE_RUN_002.md`, `LIVE_RUN_003.md`):
-
-- **Run 1 — a ~1,700-LOC Flask/SQLite ticket app.** Seven findings, **all proven by executing the
-  real code**: a full admin-auth bypass, reversibly-stored passwords, overbooking past capacity (a
-  bad guard *and* a race), and two schema/lookup defects. Fixes shipped.
-- **Run 2 — an 18,300-LOC agent-memory system** (asyncio daemon, SQLite+HNSW, hybrid retrieval).
-  One **proven** N+1 on the hot retrieval path, found by `data-tier`. One concurrency hypothesis
-  **disproved** by its own two-way test and correctly refused as a finding. Two clean checks.
-- **Run 3 — the suite, run against itself.** Ten skills bound to the doctrine repo; seven correctly
-  returned not-applicable (no slices, no queries, no trust boundary — forcing a verdict would
-  violate Law 3). Four findings fixed in v1.6.2: the extraction floor, Law 6 made falsifiable, the
-  central "improves as models improve" thesis honestly downgraded to **(suspected)**, and the
-  scrutinize/senior-review boundary watched from both sides.
-
-The second run's disproved hypothesis matters as much as the findings: the suite's evidence rules
-forbid a plausible-but-unproven concern from ever wearing a verdict's costume. That is the whole
-point — *know exactly how much you know.*
-
 ## What's inside
 
 ```
 top-tier-engineer/
 ├── README.md            ← you are here
-├── MAP.md               ← the picture: how the eighteen skills connect
+├── MAP.md               ← the picture: how the nineteen skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once)
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
-├── runs/                ← provenance, not product: real executions + the patches they produced
-│   ├── LIVE_RUN_001.md      ← first real execution (Flask ticket app): 7 proven findings
-│   ├── LIVE_RUN_002.md      ← second real execution (18k-LOC memory system): 1 proven, 1 disproved
-│   ├── LIVE_RUN_003.md      ← third execution (suite audits itself): 4 findings, 7 not-applicable
-│   └── patches*/            ← the concrete diffs those runs produced
 ├── agents/              ← §8.2 parallel gates as isolated, artifacts-only subagents (fresh eyes, reproducible)
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
 ├── .github/workflows/
@@ -46,6 +20,7 @@ top-tier-engineer/
 │   ├── verdict-lint.py     ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
 │   ├── structure-report.py ← the spaghetti alarm: measures structural shape, plain-language verdict
 │   ├── run-trace.py        ← did the run actually execute the stages it should have? — completeness trace
+│   ├── graph-audit.py      ← the no-symptom sweep: dead modules, unused defs, layer-direction breaches (LATENT)
 │   └── test_tools.py       ← the tools gate their own correctness (stdlib unittest, no deps)
 └── skills/
     ├── chief-engineer/      ← the router — every request enters here
@@ -62,6 +37,7 @@ top-tier-engineer/
     ├── senior-review/       ← parallel gate: is it wise?
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
     ├── structure-gate/      ← service gate (also runs in CI): measured structural shape — is it spaghetti?
+    ├── latent-audit/        ← no-symptom sweep: what is provably dead, mislayered, or dormantly broken?
     ├── data-evolution/      ← how does stored data change shape without loss, reversibly?
     ├── ship-gate/           ← is releasing it reversible, observable, bounded?
     ├── evolve-maintain/     ← stage 6: years-long health, incidents → invariants
@@ -79,6 +55,7 @@ You don't pick skills. You talk to the engineer:
 - "Is this secure / can this be abused?" → threat-model walks every trust boundary as an adversary
 - "Is this code good?" → senior-review
 - "Is this a mess / spaghetti / maintainable?" → structure-gate measures the structural shape (and is the gate CI runs unattended)
+- "Find dead code / are the layers respected?" (nothing feels wrong) → latent-audit sweeps the import graph for dead weight and layer breaches
 - "Look at this PR / plan before it lands" → scrutinize
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
 - "Change the schema / run a migration" → data-evolution evolves the data shape without loss
@@ -225,11 +202,11 @@ RELEASE_PLAN.md, MAINT_LOG.md) — read the ones that exist before writing anyth
    data-access change's *cost class* from its execution plan before a budget or profiler exists —
    N+1 detection, index usage, sequential-scan rejection. It was added as a *candidate* on the
    strength of two external critiques, with the explicit rule "validate it on a real N+1, not a
-   document's say-so." `LIVE_RUN_002` did exactly that: running the suite against an 18k-LOC agent
-   memory system, `data-tier` found a **proven** N+1 in the hot retrieval path (one DB query per
-   graph neighbour, 41 round trips collapsible to 1). Candidate promoted to confirmed-good.
-15. **The discipline proved itself by refusing a finding (v1.6.1).** In `LIVE_RUN_002`, an unlocked
-   shared index under concurrent daemon threads *looked* like a data race — it reads completely
+   document's say-so." A second live run did exactly that: running the suite against a large
+   external codebase, `data-tier` found a **proven** N+1 on a hot read path (one DB query per
+   collection element, dozens of round trips collapsible to 1). Candidate promoted to confirmed-good.
+15. **The discipline proved itself by refusing a finding (v1.6.1).** In that same run, an unlocked
+   shared index under concurrent threads *looked* like a data race — it reads completely
    true. The two-way test ran (6 threads, 1,600 concurrent adds) and showed zero corruption: the
    GIL serializes it. Per the suite's own law, a hypothesis whose two-way test fails **does not
    become a finding** — it was downgraded to a watch, not shipped as a verdict. This is the
