@@ -56,7 +56,17 @@ specific attacks were modelled and specific defenses were proven.
    cleverness" required. Enumerate them in the same pass; they are usually the cheapest to exploit.
 6. Law 3 (violation ≠ deviation) and Law 5 (diagnosis ships with the artifact) bind: an unfamiliar
    security pattern gets the strongest-competent-reason check before it is flagged, and a real
-   finding ships its remediation in the same response.
+   finding ships its remediation in the same response — the remediation itself closing under
+   delivered-fix discipline (PROTOCOL §9: a fix is a delta — scrutinized, surface-parity-checked,
+   authority-evidenced, ending in a `FIX` line).
+7. **Openness by design is baseline, not finding.** Per the baseline rule (PROTOCOL §1), a
+   boundary the subject deliberately leaves open — evidenced by its own policies, schema comments,
+   docs, or an existing surface serving the same data — sets the baseline an attack is measured
+   against. The finding, if any, is the residual *delta*: the same data newly reachable by a
+   credential class with a different blast radius (illustrative: an API token that lives in
+   scripts and shared docs, versus a browser session), or an incoherence between the subject's
+   declared model and its enforcement. Blast radius in Phase 1 is always computed against this
+   evidenced baseline.
 
 ## Pipeline: Assets → Boundaries → Abuse → Prove → Prescribe → Hand off
 

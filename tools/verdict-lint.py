@@ -40,6 +40,11 @@ REGISTRY = {
     "MIGRATE":    {"planned", "verified", "blocked"},
     # v1.9.0: tool-output noun — emitted by run-trace.py, not owned by any skill
     "TRACE":      {"complete", "incomplete", "blocked"},
+    # v1.13.0: shared noun (PROTOCOL §9) — emitted by whichever skill delivers a Law-5 fix.
+    # coherent/incoherent require a SCRUTINY verdict in the same transcript (a delivered fix
+    # is a delta); unscrutinized is the honest weak close and carries the same bold
+    # limitation marker a trace-only close carries. Both rules enforced below.
+    "FIX":        {"coherent", "incoherent", "unscrutinized"},
 }
 
 # A verdict line: NOUN[ <name>]: state[(qualifier)] [| state...]
@@ -47,6 +52,74 @@ REGISTRY = {
 # The optional `(?:\s+[^:]+?)?` segment matches the `<name>`/`<ID>` that SLICE and MAINT carry
 # (e.g. `SLICE login:`, `MAINT BUG-12:`) — the same allowance PROTOCOL §5's recovery grep needs.
 NOUN_RE = re.compile(r'^[\s`*>]*([A-Z][A-Z-]+)(?:\s+[^:]+?)?:\s*(.+)$')
+
+
+# Contradiction check vocabulary (module-level so _lint_verdict_line stays cheap).
+SUCCESS = {"pass", "proven", "ship", "go", "clear", "shippable", "ready",
+           "connected", "resolved", "budgets-met", "improved", "verified",
+           "planned", "clean"}
+FAILURE_RE = re.compile(r'\b(fail|failed|broken|reject|not-shippable|unreproduced|hold|reverted)\b')
+
+
+def _missing_bold_marker(lines, i):
+    """True when no paragraph-level bold line ('**...') exists in the 8 lines above line i.
+
+    This marker rule serves two honest-weak closes: a trace-only verdict (PROTOCOL §1) and a
+    FIX closed 'unscrutinized' (PROTOCOL §9) — same window, same shape (Gap 2b fix)."""
+    window_lines = lines[max(0, i - 8):i]
+    return not any(re.match(r'^\s*\*\*', l) for l in window_lines)
+
+
+def _lint_verdict_line(i, noun, rest, first_state, lines):
+    """All single-line checks for one verdict line; returns that line's violations."""
+    violations = []
+    legal = REGISTRY[noun]
+    # Gap 2a fix: only LIFECYCLE is exempt (truly free-form stage labels).
+    # SLICE (proven|trace-only|failed) and MAINT (resolved|escalated|reverted) have
+    # defined states and must be validated.
+    if noun not in {"LIFECYCLE"} and first_state not in legal:
+        violations.append((i, noun, f"state '{first_state}' not legal for {noun}; expected one of {sorted(legal)}"))
+
+    # Evidence-marker rule: a trace-only close must carry a paragraph-level bold limitation
+    # statement nearby (PROTOCOL §1).
+    if "trace-only" in rest and _missing_bold_marker(lines, i):
+        violations.append((i, noun,
+            "trace-only verdict without a paragraph-level bold limitation marker "
+            "(a line beginning '**...') within the preceding 8 lines "
+            "(PROTOCOL §1: state the execution limitation in bold)"))
+
+    # PROTOCOL §9: an unscrutinized fix is the FIX-noun analogue of trace-only — an honest
+    # weak close that must carry the same paragraph-level bold limitation marker.
+    if noun == "FIX" and first_state == "unscrutinized" and _missing_bold_marker(lines, i):
+        violations.append((i, noun,
+            "FIX closed 'unscrutinized' without a paragraph-level bold limitation "
+            "marker (a line beginning '**...') within the preceding 8 lines "
+            "(PROTOCOL §9: the honest weak close states its limitation in bold)"))
+
+    # Contradiction: a success state on the same line as a failure state — but only WITHIN
+    # the first alternative. Grammar lines list all states separated by '|' (e.g.
+    # 'go(...) | hold(...)'); those are alternatives, not a contradiction.
+    first_alt = rest.split('|')[0]
+    if first_state in SUCCESS and FAILURE_RE.search(first_alt):
+        # 'shippable-with-findings' legitimately pairs success+findings; exclude that compound.
+        if first_state != "shippable" or "with-findings" not in first_alt:
+            violations.append((i, noun, f"{noun} claims '{first_state}' but the same verdict names a failure state"))
+
+    return violations
+
+
+def _check_fix_scrutiny(noun_events, seen_nouns):
+    """PROTOCOL §9: a delivered fix is a delta. A FIX line claiming adjudication
+    (coherent/incoherent) without any SCRUTINY verdict in the transcript is the exact
+    failure AUDIT_001 found in LIVE_RUN_004 — a fix waved past the outsider pass."""
+    if "SCRUTINY" in seen_nouns:
+        return []
+    return [(ln, noun,
+             f"FIX claims '{state}' but no SCRUTINY verdict exists in this transcript "
+             "— a delivered fix is a delta and must be adjudicated by scrutinize "
+             "(PROTOCOL §9), or the FIX line must honestly close 'unscrutinized'")
+            for ln, noun, state in noun_events
+            if noun == "FIX" and state in {"coherent", "incoherent"}]
 
 
 def lint(text: str):
@@ -60,6 +133,12 @@ def lint(text: str):
         if not m:
             continue
         noun, rest = m.group(1), m.group(2).strip().rstrip('`*')
+        # §9 grammar precision: a FIX verdict is `FIX <id>:` where <id> is a bare token.
+        # Prose like "FIX (single batched IN-clause): ..." is not a verdict line — the loose
+        # NOUN_RE name segment would swallow the parenthetical, so re-check the strict shape
+        # here and skip non-conforming lines as prose (regression: LIVE_RUN_002 line 75).
+        if noun == "FIX" and not re.match(r'^[\s`*>]*FIX(?:\s+[A-Za-z0-9._-]+)?:', raw):
+            continue
         if noun not in REGISTRY:
             # Not a suite verdict noun — prose like "REVERSIBLE: True" in a code block.
             # We deliberately do NOT warn here: only registered nouns are linted, because
@@ -69,42 +148,13 @@ def lint(text: str):
 
         # First state keyword = text up to first '(' or '|' or whitespace.
         first_state = re.split(r'[(\s|]', rest, maxsplit=1)[0]
-        legal = REGISTRY[noun]
-        # Gap 2a fix: only LIFECYCLE is exempt (truly free-form stage labels).
-        # SLICE (proven|trace-only|failed) and MAINT (resolved|escalated|reverted) have
-        # defined states and must be validated.
-        if noun not in {"LIFECYCLE"} and first_state not in legal:
-            violations.append((i, noun, f"state '{first_state}' not legal for {noun}; expected one of {sorted(legal)}"))
-
-        # Evidence-marker rule: a trace-only close must carry a paragraph-level bold limitation
-        # statement nearby (PROTOCOL §1). Gap 2b fix: require a line starting with '**' within
-        # 8 lines (paragraph-level bold, not incidental inline bold).
-        if "trace-only" in rest:
-            window_lines = lines[max(0, i-8):i]
-            if not any(re.match(r'^\s*\*\*', l) for l in window_lines):
-                violations.append((i, noun,
-                    "trace-only verdict without a paragraph-level bold limitation marker "
-                    "(a line beginning '**...') within the preceding 8 lines "
-                    "(PROTOCOL §1: state the execution limitation in bold)"))
-
-        # Contradiction: a success state on the same line as a failure state — but only WITHIN
-        # the first alternative. Grammar lines list all states separated by '|' (e.g.
-        # 'go(...) | hold(...)'); those are alternatives, not a contradiction. Check only the
-        # text up to the first '|'.
-        first_alt = rest.split('|')[0]
-        SUCCESS = {"pass", "proven", "ship", "go", "clear", "shippable", "ready",
-                   "connected", "resolved", "budgets-met", "improved", "verified",
-                   "planned", "clean"}
-        FAILURE_RE = re.compile(r'\b(fail|failed|broken|reject|not-shippable|unreproduced|hold|reverted)\b')
-        if first_state in SUCCESS and FAILURE_RE.search(first_alt):
-            # 'shippable-with-findings' legitimately pairs success+findings; exclude that compound.
-            if first_state != "shippable" or "with-findings" not in first_alt:
-                violations.append((i, noun, f"{noun} claims '{first_state}' but the same verdict names a failure state"))
-
+        violations.extend(_lint_verdict_line(i, noun, rest, first_state, lines))
         noun_events.append((i, noun, first_state))
 
     # Gap 2c: sequence validation — check §4 handoff chain ordering across the full transcript.
     violations.extend(_check_sequence(noun_events))
+    # PROTOCOL §9: FIX adjudication requires a SCRUTINY verdict in the same transcript.
+    violations.extend(_check_fix_scrutiny(noun_events, seen_nouns))
 
     return violations, seen_nouns
 

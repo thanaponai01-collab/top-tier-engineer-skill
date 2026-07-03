@@ -55,6 +55,43 @@ class VerdictLint(unittest.TestCase):
         code, out, _ = run("verdict-lint.py", stdin="just some prose, no verdicts\n")
         self.assertEqual(code, 0, out)
 
+    # ---- PROTOCOL §9 delivered-fix discipline (AUDIT_001) ----
+
+    def test_fix_coherent_without_scrutiny_fails(self):
+        # The exact LIVE_RUN_004 failure: a delivered fix adjudicated by nobody.
+        code, out, _ = run("verdict-lint.py",
+                            stdin="FIX F1: coherent(surfaces: api, ui)\n")
+        self.assertEqual(code, 1, out)
+        self.assertIn("SCRUTINY", out)
+
+    def test_fix_coherent_with_scrutiny_passes(self):
+        code, out, _ = run("verdict-lint.py",
+                            stdin="SCRUTINY: fix-then-ship(top: parity)\n"
+                                  "FIX F1: coherent(surfaces: api, ui, export)\n")
+        self.assertEqual(code, 0, out)
+
+    def test_fix_unscrutinized_needs_bold_marker(self):
+        code, out, _ = run("verdict-lint.py", stdin="FIX F1: unscrutinized\n")
+        self.assertEqual(code, 1, out)
+        self.assertIn("unscrutinized", out)
+
+    def test_fix_unscrutinized_with_marker_passes(self):
+        code, out, _ = run("verdict-lint.py",
+                            stdin="**Limitation: no outsider pass ran on this fix.**\n"
+                                  "FIX F1: unscrutinized\n")
+        self.assertEqual(code, 0, out)
+
+    def test_fix_bad_state_fails(self):
+        code, out, _ = run("verdict-lint.py", stdin="FIX F1: shipped(done)\n")
+        self.assertEqual(code, 1, out)
+
+    def test_fix_prose_with_parenthetical_is_not_a_verdict(self):
+        # Regression (LIVE_RUN_002 line 75): §9 grammar is `FIX <id>:` with a bare-token id;
+        # prose like this must not be linted as a malformed FIX verdict.
+        code, out, _ = run("verdict-lint.py",
+                            stdin="FIX (single batched IN-clause): 1 DB round trip\n")
+        self.assertEqual(code, 0, out)
+
 
 class VerdictLintRelease(unittest.TestCase):
     def _repo(self, tmp, plugin_ver, changelog_ver):
@@ -86,7 +123,7 @@ class RunTrace(unittest.TestCase):
         return code, json.loads(out)
 
     def test_complete_build_passes(self):
-        code, r = self._json("SLICE: proven(x)\nGATE: pass(x)\n")
+        code, r = self._json("SUBJECT: demo @ abc1234\nSLICE: proven(x)\nGATE: pass(x)\n")
         self.assertEqual(code, 0)
         self.assertEqual(r["request_type"], "build")
         self.assertEqual(r["missing_required"], [])
@@ -100,13 +137,27 @@ class RunTrace(unittest.TestCase):
         self.assertIn("GATE", r["missing_required"])
 
     def test_fix_run_classifies_as_fix(self):
-        code, r = self._json("CAUSE: proven(root cause)\nMAINT: resolved(patched)\n")
+        code, r = self._json("SUBJECT: demo @ unversioned(pasted snippet)\n"
+                             "CAUSE: proven(root cause)\nMAINT: resolved(patched)\n")
         self.assertEqual(code, 0)
         self.assertEqual(r["request_type"], "fix")
 
     def test_no_verdicts_is_no_trace(self):
         code, r = self._json("hello world, nothing structured here\n")
         self.assertEqual(code, 2)
+
+    def test_classified_run_without_subject_pin_is_incomplete(self):
+        # PROTOCOL §1 pin rule (AUDIT_001): a classified run whose report never records the
+        # revision it read is incomplete — its file:line quotes are floating evidence.
+        code, r = self._json("REVIEW: shippable-with-findings(top: x)\n")
+        self.assertEqual(code, 1)
+        self.assertIn("SUBJECT", r["missing_required"])
+
+    def test_subject_pin_satisfies_pin_rule(self):
+        code, r = self._json("SUBJECT: tickit @ 9f3ab21 +dirty\n"
+                             "REVIEW: shippable-with-findings(top: x)\n")
+        self.assertEqual(code, 0)
+        self.assertNotIn("SUBJECT", r["missing_required"])
 
 
 class StructureReport(unittest.TestCase):

@@ -3,6 +3,41 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.13.0 — 2026-07-03
+
+**The first external audit lands, and every finding becomes a rule with teeth.** An outside
+engineer audited LIVE_RUN_004 (the TickIt security review) and found three failure classes; all
+three verified against the run report itself and are recorded in `runs/AUDIT_001.md` — the first
+execution of the roadmap's auditor→permanent-check pattern. LIVE_RUN_004 stands unretouched
+(honest trace over retrofitting); the checks now exist so its failures cannot recur silently.
+
+- **Pin rule (PROTOCOL §1).** LIVE_RUN_004 quoted a function signature that does not exist at the
+  subject's pushed revision, and nothing recorded which revision it *was* read from. Every run
+  report now carries `SUBJECT: <name> @ <revision>[ +dirty| local-only]` (or
+  `unversioned(<reason>)`); file:line quotes are evidence at that revision only. **Mechanical:**
+  `run-trace.py` refuses to mark any classified run complete without the pin.
+- **Baseline rule (PROTOCOL §1).** LIVE_RUN_004 ranked severity against an *imported* invariant
+  ("what a shared time-tracker is") that the subject's own quoted evidence contradicted — the
+  data was open to insiders by design, so the true asset was leaked-token blast radius, a tier
+  lower and differently named. Findings' consequences are now measured as the delta over the
+  subject's evidenced intent; invariants carry provenance (inherited / evidenced / imported) in
+  `senior-review` Phase 1; `threat-model` gains contract 7 (openness-by-design is baseline, not
+  finding). Prose-only by nature — the semantic reconciliation no regex can gate — and logged as
+  such in AUDIT_001.
+- **Delivered-fix discipline (new PROTOCOL §9).** LIVE_RUN_004 delivered a fix while recording
+  `scrutinize (no delta)` in the same report; the unadjudicated fix carried a surface-parity
+  incoherence (export gated, UI dialog open) and gated on a decorative predicate (membership,
+  while writes are open to all). A delivered fix is now a delta: scrutinize binds, surface parity
+  is enumerated, the gate predicate needs authority evidence, and every delivered fix closes with
+  a `FIX <id>: coherent(…) | incoherent(…) | unscrutinized` line. **Mechanical:**
+  `verdict-lint.py` lints the FIX form, blocks `coherent`/`incoherent` without a `SCRUTINY`
+  verdict in the transcript, and requires the bold limitation marker on `unscrutinized` — with
+  §9-grammar precision so historical prose (`FIX (single batched IN-clause): …`,
+  LIVE_RUN_002:75) is never a false positive.
+- **Tests.** `tools/test_tools.py` grows 14 → 22, covering every new rule from both sides
+  (violation caught, honest form passes, prose regression guarded). All existing run transcripts
+  still pass verdict-lint; stop-gate selftest green. (proven — suite executes green: 22 passed.)
+
 ## 1.12.0 — 2026-07-02
 
 **The tools stop being trusted on their own word.** Three items long carried as debt, each

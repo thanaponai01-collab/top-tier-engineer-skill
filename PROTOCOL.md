@@ -43,6 +43,32 @@ truth promotes the claim to (trace-only); executing against it promotes it to (p
 drift is systematic, not incidental — treating memory of an API as evidence is the model-native
 form of the stale-docs failure.
 
+Pin rule: evidence read from a subject codebase is bound to the exact revision read. Every run
+report that emits any §5 verdict therefore carries a subject pin line —
+`SUBJECT: <name> @ <revision>` — where `<revision>` is a VCS commit id (plus ` +dirty` when the
+working tree differs from that commit, or ` local-only` when it was never pushed) or
+`unversioned(<reason>)` when no VCS exists. File:line references and quoted signatures are
+(trace-only) evidence *at that revision only*; a consumer at any other revision — including the
+hosted copy of a local working tree — re-verifies every quoted line and signature before acting
+on it. This is the decay rule applied to reading, not just executing. `run-trace.py` refuses to
+mark any classified run complete without the pin. *Earned by `runs/AUDIT_001.md`: LIVE_RUN_004
+quoted a function signature that did not exist at the subject's pushed revision, and no reader
+could tell which revision the quote was true of.*
+
+Baseline rule: the consequence a finding claims is itself a claim, and its baseline is the
+**subject's evidenced intent** — never the reviewer's imported model of what such a system
+usually promises. The severity of an access or behavior defect is the *delta* between what the
+defect grants a principal and what the subject already deliberately grants that same principal
+elsewhere, as shown by its own policies, schema comments, docs, or an existing surface. When
+subject evidence contradicts a reviewer-derived invariant, the contradiction is reconciled
+*before* any finding cites that invariant: either the subject's intent is itself incoherent —
+then the incoherence is the finding, argued against the subject's own evidence — or the invariant
+is rescoped and severity re-computed against the true residual (illustrative: not "insiders can
+read everything" when insiders already can by the subject's design, but "a leaked API token now
+reads everything from outside the browser" — a different asset with a different blast radius).
+An imported invariant contradicted by unrebutted subject evidence grounds no severity. *Earned by
+`runs/AUDIT_001.md`.*
+
 ## 2. The Laws
 
 1. **Every rule lives in exactly one place.** A skill never repeats itself; a project never has
@@ -137,8 +163,8 @@ both fire on the same artifact in the same run:
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|THREAT|SHIP|MIGRATE|MAINT)( [^:]+)?:`)
-recovers any run's trajectory:
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|THREAT|SHIP|MIGRATE|MAINT|FIX)( [^:]+)?:`)
+(plus the shared noun `FIX`, see below) recovers any run's trajectory:
 
 | Noun | Owner | States |
 |---|---|---|
@@ -164,6 +190,11 @@ recovers any run's trajectory:
 in the skill registry above: `TRACE` (run-trace.py). Tool nouns are linted for form like any other
 but are not part of the §4 skill handoff chain. (Note: `STRUCTURE` is emitted by the tool
 `structure-report.py` *and* owned by the skill `structure-gate`, so it keeps its row above.)
+
+**Shared nouns.** One noun is emitted by *whichever* skill performs the act, so it owns no
+single-skill row: `FIX` (owned by §9, delivered-fix discipline; emitted by any skill delivering a
+fix under Law 5). States: `coherent(surfaces: …) | incoherent(named: …) | unscrutinized`.
+`verdict-lint.py` lints its form, its SCRUTINY co-occurrence, and its limitation marker per §9.
 
 ## 6. Degradation rule
 
@@ -241,3 +272,31 @@ in Claude Code; separate sessions otherwise). The §4 sequencing rules still bin
 (`DATATIER` before `OPTIMIZE`; `MAINT` before `MIGRATE`), and however many gates run, their
 verdicts merge into the one report chief-engineer owes (its Rule 4). Fresh eyes are thus not a
 compliance cost paid in wall-clock time; isolation is exactly what makes the gates parallelizable.
+
+## 9. Delivered-fix discipline (a fix is a delta)
+
+Law 5, diagnosis ships with the artifact, obligates delivering the fix; this section governs the
+delivered fix itself. *Earned by `runs/AUDIT_001.md`: LIVE_RUN_004 delivered a fix while
+recording `scrutinize (no delta)` in the same report — the fix was a delta, went unadjudicated,
+and carried two incoherences an outsider pass was built to catch.*
+
+1. **A delivered fix is a delta.** "Delivered, not committed" does not exempt it: a fix proposed
+   in a report is in scope for `scrutinize` exactly like a PR, and the §8/§8.1 fresh-eyes rules
+   apply when the same session authored it. A review-class run that delivers a fix may not return
+   scrutinize "not applicable" — the fix *is* the delta.
+2. **Surface parity.** Before a fix that changes who may do what is called coherent, enumerate
+   every surface exposing the same data or operation (UI views, API routes, server actions,
+   exports, background jobs, webhooks). The fix must leave those surfaces mutually coherent, or
+   name the incoherence it introduces as a residual finding — a gate added on one surface while a
+   sibling surface still serves the same rows is a product incoherence, not a completed fix.
+3. **Authority evidence.** The predicate a fix gates on (membership, role, ownership) must be
+   shown — with evidence from the subject — to be the subject's real authority model: enforced
+   elsewhere, actually maintained, not bypassable by open writes. Gating on a decorative
+   attribute manufactures a new defect (locking out a legitimate actor) and is reported as a
+   trade-off, never silently shipped as the fix.
+4. **The FIX line.** Every delivered fix closes with
+   `FIX <id>: coherent(surfaces: …) | incoherent(named: …) | unscrutinized`.
+   `coherent` / `incoherent` may be claimed only after rules 2–3 ran under a `SCRUTINY`
+   adjudication present in the same transcript; `unscrutinized` is the honest weak close and
+   carries the same paragraph-level bold limitation marker a trace-only close carries.
+   `verdict-lint.py` enforces the form, the co-occurrence, and the marker mechanically.

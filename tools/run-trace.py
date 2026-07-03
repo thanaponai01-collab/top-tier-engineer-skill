@@ -66,6 +66,14 @@ import argparse
 # reader of that grammar, not a second definition of it.)
 NOUN_RE = re.compile(r'^[\s`*>]*([A-Z][A-Z-]+)(?:\s+[^:]+?)?:\s*(.+)$')
 
+# PROTOCOL §1 pin rule: every run report that emits verdicts pins its subject to a revision —
+#     SUBJECT: <name> @ <sha>[ +dirty| local-only]     or     SUBJECT: <name> @ unversioned(<reason>)
+# Without the pin, every file:line reference and quoted signature in the report is floating
+# evidence: no reader can tell which revision of the subject it was true of (AUDIT_001: a
+# quoted signature in LIVE_RUN_004 did not exist at the subject's pushed revision, and nothing
+# recorded which revision it *was* read from). A classified run without the pin is incomplete.
+SUBJECT_RE = re.compile(r'^[\s`*>]*SUBJECT:\s*\S.*\s@\s\S', re.M)
+
 KNOWN_NOUNS = {
     "LIFECYCLE", "BRIEF", "DESIGN", "SLICE", "WIRE", "GATE", "CAUSE", "AUDIT",
     "OPTIMIZE", "DATATIER", "REVIEW", "SCRUTINY", "MAINT", "THREAT", "SHIP",
@@ -226,6 +234,20 @@ def infer_type(text, present_nouns):
     return None, "none"
 
 
+def _apply_pin_rule(text, missing, plain):
+    """§1 pin rule — the subject pin is required for every classified run, regardless of type.
+    Mutates `missing`/`plain` in place; returns whether the pin was found."""
+    subject_pinned = bool(SUBJECT_RE.search(text))
+    if not subject_pinned:
+        missing.append("SUBJECT")
+        plain["SUBJECT"] = ("no SUBJECT pin — the report never records which revision of the "
+                            "subject was read, so every file:line and quoted signature in it is "
+                            "floating evidence a reader cannot verify (PROTOCOL §1 pin rule: "
+                            "add `SUBJECT: <name> @ <sha>[ +dirty]` or "
+                            "`SUBJECT: <name> @ unversioned(<reason>)`)")
+    return subject_pinned
+
+
 def analyze(text, forced_type=None):
     events = parse_verdicts(text)
     present = {n for _, n, _ in events}
@@ -259,6 +281,8 @@ def analyze(text, forced_type=None):
     prof = PROFILES[rtype]
     missing = [n for n in prof["required"] if n not in present]
     present_cond = [n for n in prof["conditional"] if n in present]
+    plain = dict(prof.get("plain_missing", {}))
+    subject_pinned = _apply_pin_rule(text, missing, plain)
 
     if not missing:
         verdict = (f"TRACE: complete({rtype}: all {len(prof['required'])} "
@@ -273,8 +297,8 @@ def analyze(text, forced_type=None):
         "request_type": rtype, "inference": how, "label": prof["label"],
         "present": sorted(present), "missing_required": missing,
         "present_conditional": present_cond,
-        "all_required": prof["required"], "all_conditional": prof["conditional"],
-        "plain_missing": prof.get("plain_missing", {}),
+        "all_required": prof["required"] + ["SUBJECT"], "all_conditional": prof["conditional"],
+        "plain_missing": plain, "subject_pinned": subject_pinned,
         "verdict": verdict, "exit_code": code, "events": events,
     }
 
@@ -283,6 +307,10 @@ def _format_stage_result(r):
     out = []
     out.append("  Required stages for this kind of work:")
     for n in r["all_required"]:
+        if n == "SUBJECT":
+            mark = "✅" if r.get("subject_pinned") else "❌"
+            out.append(f"      {mark}  SUBJECT pin (which revision was read — PROTOCOL §1)")
+            continue
         mark = "✅" if n in r["present"] else "❌"
         out.append(f"      {mark}  {n}")
     if r["present_conditional"]:

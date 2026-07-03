@@ -6,7 +6,9 @@ description: Outsider, change-scoped second opinion on a delta — a plan, PR, d
 # Scrutinize
 
 > **Wiring** — Parallel gate, callable at any stage on any delta (plan, design doc, PR, diff,
-> proposed change). Mandate within the suite: `senior-review` asks *"is this codebase wise?"* and
+> proposed change — **including a fix delivered under Law 5, diagnosis ships with the artifact,
+> inside a review-class run**: per PROTOCOL §9, "delivered, not committed" is still a delta and
+> is adjudicated here, never waved through as "no delta"). Mandate within the suite: `senior-review` asks *"is this codebase wise?"* and
 > mentors its author; this skill asks **"should this change exist, and does it do what it
 > claims?"** — it serves the change's consumers, not its author. Consumes: the delta + its host
 > system (+ ledgers, read first). Produces: the scrutiny report; unresolved novelty appended to
