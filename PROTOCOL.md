@@ -1,6 +1,6 @@
 # PROTOCOL.md — The Shared Layer
 
-This file is the **single authoritative statement** of everything the eighteen skills share.
+This file is the **single authoritative statement** of everything the nineteen skills share.
 Per Law 1 below, no skill restates what is written here; skills carry at most a one-line gloss
 for graceful degradation (see §6). When a skill and this file appear to disagree, this file wins
 and the disagreement is reported as a defect in the skill.

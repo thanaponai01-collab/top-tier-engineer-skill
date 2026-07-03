@@ -3,6 +3,34 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.14.1 — 2026-07-04 — self-audit follow-ups: count-drift guard, verdict-lint --help, mandate ledger
+
+**A chief-engineer self-audit ("check the system, find the gaps") ran the full census + mechanical
+floor against the suite and fixed what it found.** No behavior change to any skill; three concrete
+hardenings, one of which the suite's own §9 gate caught mid-delivery.
+
+- **Drift fixed**: `PROTOCOL.md` §title said *"the eighteen skills share"* while the suite has been
+  nineteen since v1.5.0's split — drift in the very file that arbitrates drift. Corrected to nineteen.
+- **New guard `test_tools.py::SuiteConsistency`** — derives the skill count from `skills/*/` on disk
+  and asserts every current-state count surface (PROTOCOL, MAP, `plugin.json`, `marketplace.json`)
+  names the matching number-word and no ±1 neighbour. Phrasing-independent (catches both
+  "eighteen skills" and "eighteen wired engineering skills"); auto-tracks the filesystem, so
+  skill #20 will demand the docs say "twenty" with no test edit. README is excluded on purpose —
+  it narrates historical counts ("seventeenth skill") a strict check would false-fail on.
+  *Surface-parity note:* the first cut guarded only 2 of the 5 count surfaces; `scrutinize` (forced
+  by the §9 FIX gate) caught the gap and it was closed to all 4 machine-guardable surfaces before
+  the fix was called coherent — the delivered-fix discipline working on its own author.
+- **`verdict-lint.py --help/-h`** now prints usage and exits 0 instead of crashing with a raw
+  `FileNotFoundError` traceback (it was treating `--help` as a transcript path). Parity with the
+  other tools' `--selftest`/graceful-arg behavior.
+- **New `DECISION_LEDGER.md`** (root, arch-design schema) — records two open mandate questions the
+  audit surfaced as **(suspected)** gaps, logged not silently improvised (PROTOCOL §4): **D001**
+  observability (fold into ship-gate vs. own skill) and **D002** dependency-intake (arch-design
+  checklist vs. own gate). Both two-way doors; both recommend the conservative fold-in pending a
+  live run that produces an unownable finding — the same evidence bar that justified v1.5.0's splits.
+- **Tested before delivery**: full `test_tools.py` green at 27 tests (was 26); the new guard proven
+  to bite each of the four surfaces; `--help` guard verified rc=0; both manifests bumped to 1.14.1.
+
 ## 1.14.0 — 2026-07-03 — latent-audit: the no-symptom sweep (dead weight, layer breaches, dormant bugs)
 
 **Gap closed.** No skill owned the request "audit this existing codebase — find dead code to

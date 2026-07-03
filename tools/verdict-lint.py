@@ -226,6 +226,14 @@ def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
 
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print("verdict-lint — check PROTOCOL §5 verdict-line FORM (not merit).\n"
+              "  verdict-lint.py <transcript>   lint a file\n"
+              "  verdict-lint.py                lint stdin\n"
+              "  verdict-lint.py --release [root]   check manifest vs CHANGELOG\n"
+              "Exit: 0 clean, 1 violations.")
+        return 0
+
     if "--release" in sys.argv:
         i = sys.argv.index("--release")
         root = sys.argv[i + 1] if len(sys.argv) > i + 1 else "."
