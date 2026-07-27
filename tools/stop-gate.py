@@ -15,6 +15,7 @@ on its own bug.
 Usage:  Stop hook via hooks/hooks.json (payload on stdin)
         stop-gate.py --selftest
 """
+import ast
 import importlib.util
 import json
 import sys
@@ -52,6 +53,16 @@ def suite_root(cwd):
 
     Both are the same mistake — trusting where the code lives over what the session is
     working on.
+
+    SECURITY (the counter-mistake, and why this returns a DOCTRINE root, never a code
+    root): the candidate is found by walking cwd's ancestors and matching a manifest
+    `name` — a string any directory may assert. A session sitting anywhere under a repo
+    that declares this plugin's name would otherwise have that repo's `verdict-lint.py`
+    IMPORTED, executing its module body as the user on every Stop, silently. Identity by
+    self-asserted string is not authority (PROTOCOL §9 rule 3: the predicate a gate
+    relies on must be the real authority model, not a decorative attribute) — so the
+    resolved root may only be READ AS DATA. Code comes from PLUGIN_ROOT alone; see
+    `_load_lint`, which takes no root for exactly this reason.
     """
     # Identity comes from the manifest, never from a directory name: the install path
     # is <plugin>/<version>/ and the source checkout is named top-tier-engineer-skill,
@@ -70,13 +81,56 @@ def suite_root(cwd):
     return PLUGIN_ROOT
 
 
-def _load_lint(root=PLUGIN_ROOT):
+def _load_lint():
+    """Import the linter — ALWAYS from the installed plugin, never from a resolved root.
+
+    This function deliberately takes no argument. `exec_module` runs the target's module
+    body, so a root parameter here is an arbitrary-code-execution sink fed by whatever
+    directory the session happens to sit under (see `suite_root`). Keeping the path
+    un-parameterised is a separation that cannot be mis-called rather than a rule a
+    caller must remember.
+    """
     # verdict-lint.py has a dash in its name, so import it by path.
     spec = importlib.util.spec_from_file_location(
-        "verdict_lint", Path(root) / "tools" / "verdict-lint.py")
+        "verdict_lint", PLUGIN_ROOT / "tools" / "verdict-lint.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
+
+
+def registry_from_source(root):
+    """The §5 noun→states registry a checkout DECLARES, parsed as data, never executed.
+
+    This is what makes a source checkout's rules govern its own session (`suite_root`
+    reason 1 — a session adding a verdict state must be able to stop) without importing
+    anything from it. `ast.literal_eval` on the `REGISTRY` assignment evaluates only
+    literals: it cannot call, import, or access attributes. Anything unparseable or
+    non-literal yields {} — an untrusted checkout can widen the linter's accepted
+    vocabulary, which is the same authority it already has by being the code under
+    development, and nothing else.
+    """
+    try:
+        src = (Path(root) / "tools" / "verdict-lint.py").read_text(
+            encoding="utf-8-sig")
+        tree = ast.parse(src)
+    except (OSError, ValueError, SyntaxError, RecursionError):
+        return {}
+    for node in tree.body:                      # module level only
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(isinstance(t, ast.Name) and t.id == "REGISTRY"
+                   for t in node.targets):
+            continue
+        try:
+            raw = ast.literal_eval(node.value)
+        except (ValueError, TypeError, SyntaxError, MemoryError, RecursionError):
+            return {}
+        if not isinstance(raw, dict):
+            return {}
+        return {k: {s for s in v if isinstance(s, str)}
+                for k, v in raw.items()
+                if isinstance(k, str) and isinstance(v, (set, frozenset, list, tuple))}
+    return {}
 
 
 def transcript_text(path):
@@ -104,7 +158,17 @@ def run(payload):
     if payload.get("stop_hook_active"):
         return 0  # we already blocked once this stop — never loop the session
     root = suite_root(payload.get("cwd") or ".")
-    vl = _load_lint(root)
+    vl = _load_lint()                      # code: install path only, always
+    if root != PLUGIN_ROOT:                # doctrine: parsed as data, never executed
+        # STRICTLY ADDITIVE, AND ONLY FOR NOUNS THIS RELEASE DOES NOT KNOW.
+        # Merging states into an EXISTING noun would let a directory that merely
+        # asserts this plugin's name legalise `GATE: passed` and switch the
+        # enforcement floor off for a session that is not developing the suite at
+        # all. A checkout may teach the gate a noun it has never heard of; it may
+        # never loosen a rule the released PROTOCOL already fixed.
+        for noun, states in registry_from_source(root).items():
+            if noun not in vl.REGISTRY:
+                vl.REGISTRY[noun] = set(states)
     problems = []
 
     tp = payload.get("transcript_path")

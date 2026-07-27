@@ -49,8 +49,83 @@ A language with no lexer here is reported as coverage UNKNOWN, never as clean �
 silence about a region must never be presented as a result for that region.
 """
 import io
+import os
 import re
 import tokenize
+from collections import defaultdict
+
+
+def add_scanner_coverage(coverage, paths, n_scanned, admitted_exts, skip_dirs):
+    """Attach the scanner's own denominator: admitted files vs files on disk."""
+    unscanned = unscanned_census(paths, admitted_exts, skip_dirs)
+    n_disk = n_scanned + unscanned["files"]
+    coverage["files_scanned"] = n_scanned
+    coverage["files_on_disk"] = n_disk
+    coverage["pct_files_scanned"] = (round(100 * n_scanned / n_disk, 1)
+                                     if n_disk else 0.0)
+    coverage["unscanned"] = unscanned
+
+
+def print_coverage(c):
+    """The coverage block — printed ABOVE the headline verdict, never after it.
+
+    A director must not be able to read a green result without the fraction it was
+    measured over (§10 rule 5, and Law 4, director-readable output). Rendering lives
+    beside the measurement because the two must not drift: a coverage number nobody
+    prints is the same defect as one nobody measures.
+    """
+    print(f"Coverage: {c['code_lines']:,} code lines · {c['pct_entered']}% actually "
+          f"entered by a parser · {c['opaque']:,} opaque\n          (inside string "
+          f"literals) · {c['shallow']:,} shallow (no parser for that language here) · "
+          f"{c['documented']:,} docs")
+    if c["pct_entered"] < 100:
+        print("          Everything below was measured over the entered portion ONLY. The")
+        print("          rest is unmeasured, which is not the same as clean.")
+    u = c.get("unscanned") or {"files": 0, "bytes": 0, "by_ext": []}
+    print(f"          Files: {c.get('files_scanned', 0)} of "
+          f"{c.get('files_on_disk', 0)} on disk admitted by the scanner "
+          f"({c.get('pct_files_scanned', 0.0)}%).")
+    if u["files"]:
+        exts = ", ".join(f"{e}×{n}" for e, n in u["by_ext"][:6])
+        print(f"  ⚠️  UNKNOWN — {u['files']} file(s), {u['bytes']:,} bytes were never "
+              f"opened by this gate\n      (extension not in its admission list): {exts}"
+              + (" …" if len(u["by_ext"]) > 6 else ""))
+        print("      These are UNMEASURED, not clean. Every verdict below is scoped to "
+              "the\n      admitted files only.")
+
+
+def unscanned_census(paths, admitted_exts, skip_dirs):
+    """Blind-spot class 2: files on disk the SCANNER never admitted.
+
+    This module's other half measures class 1 — what the *parser* skipped inside a file
+    it opened. This measures the layer above: what never got opened at all, because its
+    extension was not in the caller's admission list. Both are PROTOCOL §10 rule 5, and
+    until this existed the class-2 region contributed zero to every signal AND zero to
+    the coverage denominator, so the reported percentage was a fraction of an
+    already-filtered population — unmeasured rendering as clean, one level up.
+
+    The admission list is a parameter, never a constant here: this census owns no
+    vocabulary of its own (§10 rule 6). It reports whatever the caller's list left out,
+    whatever that turns out to be, so it cannot date the way a marker list does.
+    """
+    n_files, n_bytes, by_ext = 0, 0, defaultdict(int)
+    for p in paths:
+        walk = ([(os.path.dirname(p) or ".", [], [os.path.basename(p)])]
+                if os.path.isfile(p) else os.walk(p))
+        for root, dirs, files in walk:
+            dirs[:] = [d for d in dirs if d not in skip_dirs]
+            for f in files:
+                ext = os.path.splitext(f)[1]
+                if ext in admitted_exts:
+                    continue
+                n_files += 1
+                by_ext[ext.lower() or "(no extension)"] += 1
+                try:
+                    n_bytes += os.path.getsize(os.path.join(root, f))
+                except OSError:
+                    pass
+    return {"files": n_files, "bytes": n_bytes,
+            "by_ext": sorted(by_ext.items(), key=lambda kv: -kv[1])}
 
 # ---- 1. OPACITY: ask the language's own lexer where the analysis stopped --------
 

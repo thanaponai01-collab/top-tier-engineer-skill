@@ -427,6 +427,25 @@ def _safe_relpath(path):
         return path
 
 
+def build_verdict(findings, by_kind, all_code, fn_count, coverage):
+    """The §5 verdict line and exit code — `clean` must state what it did not measure."""
+    if not all_code:
+        return "STRUCTURE: blocked(no analyzable source found)", 2
+    if findings:
+        top = min(by_kind, key=_severity)
+        return (f"STRUCTURE: findings(top: {top}, "
+                f"count: {len(findings)}) | review-needed"), 1
+    if coverage["pct_entered"] == 0:
+        # Files were admitted but no parser entered them: complexity, nesting, cycles
+        # and opacity never ran. A bare `clean` here is unmeasured reading as clean on
+        # the machine channel (PROTOCOL §10 rule 5) — the common case for any
+        # non-Python repo, which is the population this tool claims portability into.
+        return (f"STRUCTURE: clean({len(all_code)} files, length+duplication only "
+                f"— 0% deep-parsed)"), 0
+    return (f"STRUCTURE: clean({len(all_code)} files, "
+            f"{fn_count} functions scanned)"), 0
+
+
 def analyze(paths, thresholds):
     """Measure all signals over paths; return a result dict (findings + verdict + exit code)."""
     findings = []
@@ -468,15 +487,10 @@ def analyze(paths, thresholds):
     for f in findings:
         by_kind[f.kind] += 1
 
-    if not all_code:
-        verdict, exit_code = "STRUCTURE: blocked(no analyzable source found)", 2
-    elif not findings:
-        verdict = f"STRUCTURE: clean({len(all_code)} files, {fn_count} functions scanned)"
-        exit_code = 0
-    else:
-        top = min(by_kind, key=_severity)
-        verdict = f"STRUCTURE: findings(top: {top}, count: {len(findings)}) | review-needed"
-        exit_code = 1
+    verdict, exit_code = build_verdict(findings, by_kind, all_code, fn_count, coverage)
+
+    opacity.add_scanner_coverage(coverage, paths, len(all_code),
+                                 CODE_EXT, SKIP_DIRS)
 
     return {"findings": findings, "by_kind": by_kind, "all_code": all_code,
             "py_files": py_files, "non_py": non_py, "fn_count": fn_count,
@@ -638,14 +652,7 @@ def print_human_report(r):
     print(f"Scanned: {len(r['all_code'])} code files "
           f"({len(r['py_files'])} Python, deep-analyzed; "
           f"{len(r['non_py'])} other, length+duplication only) · {r['fn_count']} functions")
-    c = r["coverage"]
-    print(f"Coverage: {c['code_lines']:,} code lines · {c['pct_entered']}% actually "
-          f"entered by a parser · {c['opaque']:,} opaque\n          (inside string "
-          f"literals) · {c['shallow']:,} shallow (no parser for that language here) · "
-          f"{c['documented']:,} docs")
-    if c["pct_entered"] < 100:
-        print("          Everything below was measured over the entered portion ONLY. The")
-        print("          rest is unmeasured, which is not the same as clean.")
+    opacity.print_coverage(r["coverage"])
     if r["non_py"]:
         print("  note: complexity, nesting, cycle and opacity analysis is Python-only in "
               "this\n        version; other languages get file-length and duplication "
@@ -657,6 +664,24 @@ def print_human_report(r):
 
     if rt:
         _print_ratchet(rt)
+    elif not r["all_code"]:
+        # An empty admitted set breached no threshold because it measured nothing.
+        # The verdict line already said blocked; the prose above it used to say CLEAN,
+        # and Law 4, director-readable output, makes the prose the deliverable — so the
+        # two must never disagree on the same run (PROTOCOL §10 rule 5).
+        print("  ⛔  NOT MEASURED — no file here was analyzable by this gate.")
+        print("      This is UNKNOWN, not clean: zero findings over zero files is not")
+        print("      evidence of anything. See the coverage block above for what was")
+        print("      on disk and skipped.")
+    elif not r["findings"] and r["coverage"]["pct_entered"] == 0:
+        # Files were admitted but NO parser entered any of them — the deep signals
+        # (complexity, nesting, cycles, opacity) were not checked at all. Only length
+        # and duplication ran. Four of six signals unmeasured is not clean, and this is
+        # the COMMON case for any non-Python repo, not a corner (§10 rule 5).
+        print("  ⚠️  UNKNOWN ON THE DEEP SIGNALS — no file here has a parser in this")
+        print("      version, so complexity, nesting, cycles and opacity were never")
+        print("      checked. Length and duplication passed. Four of six signals are")
+        print("      unmeasured, which is not the same as clean.")
     elif not r["findings"]:
         print("  ✅  CLEAN — no structural threshold breached.")
         print("      No god-files, no tangled functions, no circular imports, no")

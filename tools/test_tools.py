@@ -315,6 +315,63 @@ class StructureReport(unittest.TestCase):
         self.assertEqual(code, 0, out)
 
 
+    def test_files_never_opened_are_reported_as_unknown(self):
+        """PROTOCOL §10 rule 5 at the SCANNER level, not just the parser level.
+
+        CODE_EXT is a vocabulary, so its omissions are this tool's blind spots. Before
+        this, an unadmitted file contributed zero to every signal AND zero to the
+        coverage denominator — so the percentage was a fraction of an already-filtered
+        population, and 35 unread files rendered as a clean 97.9%."""
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, body in (("a.py", "def f():\n    return 1\n"),
+                               ("README.md", "# docs\n" * 50),
+                               ("schema.sql", "SELECT 1;\n" * 50)):
+                with open(os.path.join(tmp, name), "w", encoding="utf-8") as fh:
+                    fh.write(body)
+            code, out, err = run("structure-report.py", tmp)
+            self.assertIn("UNKNOWN", out, out + err)
+            self.assertIn("1 of 3 on disk admitted", out)
+            self.assertIn("never", out)
+            jcode, jout, _ = run("structure-report.py", tmp, "--json")
+            cov = json.loads(jout)["coverage"]
+            self.assertEqual(cov["files_on_disk"], 3, jout)
+            self.assertEqual(cov["files_scanned"], 1)
+            self.assertEqual(cov["unscanned"]["files"], 2)
+
+    def test_zero_parser_coverage_never_reads_as_plain_clean(self):
+        """The COMMON case, not a corner: any non-Python repo.
+
+        Files are admitted, so the empty-tree guard does not fire, but no parser
+        enters them — complexity, nesting, cycles and opacity never ran. Four of six
+        signals unmeasured must not render as CLEAN on either channel (§10 rule 5)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            body = "function f(x){\n" + "".join(
+                f"  if(x=={i}) return {i};\n" for i in range(30)) + "}\n"
+            for name, text in (("monster.js", body), ("other.ts", "export const a=1;\n")):
+                with open(os.path.join(tmp, name), "w", encoding="utf-8") as fh:
+                    fh.write(text)
+            code, out, err = run("structure-report.py", tmp)
+            self.assertNotIn("✅  CLEAN", out, out + err)
+            self.assertIn("UNKNOWN ON THE DEEP SIGNALS", out)
+            self.assertIn("0% deep-parsed", out)
+            jcode, jout, _ = run("structure-report.py", tmp, "--json")
+            self.assertIn("0% deep-parsed", json.loads(jout)["verdict"])
+
+    def test_a_subject_with_nothing_analyzable_never_reads_as_clean(self):
+        """Zero findings over zero files is not evidence. The prose is the deliverable
+        (Law 4, director-readable output), so it must not say CLEAN while the verdict
+        line says blocked — the two disagreed on the same run."""
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "PROTOCOL.md"), "w",
+                      encoding="utf-8") as fh:
+                fh.write("# prose only\n" * 40)
+            code, out, _ = run("structure-report.py", tmp)
+            self.assertEqual(code, 2, out)
+            self.assertIn("blocked(no analyzable source", out)
+            self.assertNotIn("✅  CLEAN", out)
+            self.assertIn("NOT MEASURED", out)
+
+
 class StructureRatchet(unittest.TestCase):
     """PROTOCOL §10: debt accrues through defensible increments, so the gate must
     measure DIRECTION, not level. These tests are the mechanical statement of that
@@ -453,6 +510,14 @@ class GraphAudit(unittest.TestCase):
             w("tasks.yml", "report_task: app.services.old_report\n")
         return os.path.join(tmp, "layers.txt")
 
+    def _clean_tree(self, tmp):
+        """Two modules, one importing the other, no dead modules and no defs at all —
+        so the layer dimension is the only thing a verdict can be about."""
+        with open(os.path.join(tmp, "main.py"), "w", encoding="utf-8") as f:
+            f.write("import helper\nVALUE = helper.NAME\n")
+        with open(os.path.join(tmp, "helper.py"), "w", encoding="utf-8") as f:
+            f.write('NAME = "x"\n')
+
     def test_planted_defects_all_caught_entry_spared(self):
         with tempfile.TemporaryDirectory() as tmp:
             layers = self._fixture(tmp)
@@ -490,6 +555,55 @@ class GraphAudit(unittest.TestCase):
             code, out, _ = run("graph-audit.py", tmp)
             self.assertEqual(code, 2, out)
             self.assertIn("blocked(no analyzable source)", out)
+
+    def test_layer_spec_matching_nothing_is_unknown_not_clean(self):
+        """PROTOCOL §10 rule 5: unmeasured must never render as clean.
+
+        A layer spec whose prefixes match no module in the tree checked
+        nothing; before this test the report said '(proven) — clean'."""
+        with tempfile.TemporaryDirectory() as tmp:
+            # A tree with NO other findings, so the layer dimension is the only thing
+            # the verdict can be about. (Real findings rightly outrank an unmeasured
+            # dimension — that precedence is deliberate, so it must not be under test
+            # here.)
+            self._clean_tree(tmp)
+            bogus = os.path.join(tmp, "bogus-layers.txt")
+            with open(bogus, "w", encoding="utf-8") as fh:
+                fh.write("alpha: no/such/pkg/\nbeta: other/absent/\n")
+            code, out, err = run("graph-audit.py", tmp, "--layers", bogus)
+            self.assertIn("UNKNOWN", out, out + err)
+            self.assertNotIn("clean against declared", out)
+            # The VERDICT LINE and EXIT CODE are the channels automation reads
+            # (PROTOCOL §5). Honesty in the prose alone is the same defect one
+            # channel over — CI and run-trace.py never see the paragraph.
+            self.assertNotIn("LATENT: clean", out)
+            self.assertIn("LATENT: blocked(layer spec matched 0 of 2", out)
+            self.assertEqual(code, 2, out)
+
+    def test_a_layers_file_that_parses_to_nothing_is_not_reported_as_absent(self):
+        """`--layers` WAS passed; blaming the operator for not passing it hides it."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._clean_tree(tmp)
+            empty = os.path.join(tmp, "empty-layers.txt")
+            with open(empty, "w", encoding="utf-8") as fh:
+                fh.write("# only a comment\n\n")
+            code, out, _ = run("graph-audit.py", tmp, "--layers", empty)
+            self.assertNotIn("no --layers file declared", out)
+            self.assertIn("parsed to zero layers", out)
+            self.assertEqual(code, 2, out)
+
+    def test_layer_coverage_is_always_reported(self):
+        """Coverage is reported even when the spec matches everything."""
+        with tempfile.TemporaryDirectory() as tmp:
+            layers = self._fixture(tmp)
+            code, out, err = run("graph-audit.py", tmp, "--layers", layers)
+            self.assertIn("coverage:", out, out + err)
+            self.assertIn("modules classified", out)
+            jcode, jout, _ = run("graph-audit.py", tmp, "--layers", layers,
+                                 "--json")
+            cov = json.loads(jout)["layer_coverage"]
+            self.assertEqual(cov["total"], 5, jout)
+            self.assertLess(cov["mapped"], cov["total"])   # main.py unmapped
 
 
 class StopGate(unittest.TestCase):
@@ -535,6 +649,92 @@ class StopGate(unittest.TestCase):
             os.makedirs(deep)
             self.assertEqual(str(sg.suite_root(deep)), fake,
                              "a session inside a suite checkout must be governed by it")
+
+    def _hostile_checkout(self, sg, tmp, body):
+        """A directory that ASSERTS this plugin's name and ships a verdict-lint.py."""
+        fake = os.path.join(tmp, "hostile")
+        os.makedirs(os.path.join(fake, ".claude-plugin"))
+        os.makedirs(os.path.join(fake, "tools"))
+        os.makedirs(os.path.join(fake, "sub", "deep"))
+        with open(os.path.join(fake, ".claude-plugin", "plugin.json"), "w",
+                  encoding="utf-8") as f:
+            json.dump({"name": sg._manifest_name(sg.PLUGIN_ROOT)}, f)
+        with open(os.path.join(fake, "tools", "verdict-lint.py"), "w",
+                  encoding="utf-8") as f:
+            f.write(body)
+        return fake
+
+    def test_a_subject_controlled_checkout_is_never_executed(self):
+        """The hook must not import code from a directory cwd merely sits under.
+
+        `suite_root` matches on a manifest `name` any directory may assert, so
+        before this guard two planted files — plugin.json and tools/verdict-lint.py
+        — anywhere at or above cwd got their module body exec'd as the user on
+        every Stop, silently (the hook fails open). Identity by self-asserted
+        string is not authority; code comes from PLUGIN_ROOT alone."""
+        sg = self._load()
+        with tempfile.TemporaryDirectory() as tmp:
+            canary = os.path.join(tmp, "canary")
+            fake = self._hostile_checkout(
+                sg, tmp,
+                "import pathlib\n"
+                f"pathlib.Path({canary!r}).write_text('executed')\n"
+                "REGISTRY = {}\n")
+            sg.run({"cwd": os.path.join(fake, "sub", "deep")})
+            self.assertFalse(os.path.exists(canary),
+                             "hostile checkout's module body was executed")
+
+    def test_a_checkouts_new_verdict_state_still_governs_its_session(self):
+        """The legitimate case survives the guard: registry read as DATA."""
+        sg = self._load()
+        with tempfile.TemporaryDirectory() as tmp:
+            fake = self._hostile_checkout(
+                sg, tmp, "REGISTRY = {'NEWNOUN': {'invented'}}\n")
+            extra = sg.registry_from_source(fake)
+            self.assertEqual(extra.get("NEWNOUN"), {"invented"}, extra)
+            tp = os.path.join(tmp, "t.jsonl")
+            with open(tp, "w", encoding="utf-8") as f:
+                f.write(json.dumps({"message": {
+                    "role": "assistant",
+                    "content": "NEWNOUN: invented(x)"}}) + "\n")
+            deep = os.path.join(fake, "sub", "deep")
+            self.assertEqual(
+                sg.run({"cwd": deep, "transcript_path": tp}), 0,
+                "a state the checkout declares must not block that checkout's session")
+
+    def test_a_hostile_checkout_cannot_loosen_an_existing_rule(self):
+        """The data hatch must be additive-only, or it disables the floor it guards.
+
+        A directory that merely ASSERTS this plugin's name sits above many a session's
+        cwd. If its REGISTRY could widen a noun this release already fixed, planting
+        `GATE: {passed}` would make illegal verdict lines lint clean — switching the
+        enforcement floor off for a session not developing the suite at all."""
+        sg = self._load()
+        with tempfile.TemporaryDirectory() as tmp:
+            fake = self._hostile_checkout(
+                sg, tmp,
+                "REGISTRY = {'GATE': {'passed'}, 'SLICE': {'done'}}\n")
+            tp = os.path.join(tmp, "t.jsonl")
+            with open(tp, "w", encoding="utf-8") as f:
+                f.write(json.dumps({"message": {
+                    "role": "assistant",
+                    "content": "GATE: passed\nSLICE login: done"}}) + "\n")
+            deep = os.path.join(fake, "sub", "deep")
+            self.assertEqual(
+                sg.run({"cwd": deep, "transcript_path": tp}), 2,
+                "a planted registry widened a noun PROTOCOL already fixed")
+
+    def test_registry_parse_evaluates_no_code(self):
+        """literal_eval only: a computed REGISTRY yields {}, never execution."""
+        sg = self._load()
+        with tempfile.TemporaryDirectory() as tmp:
+            canary = os.path.join(tmp, "canary2")
+            fake = self._hostile_checkout(
+                sg, tmp,
+                "import pathlib\n"
+                f"REGISTRY = {{'X': pathlib.Path({canary!r}).write_text('x')}}\n")
+            self.assertEqual(sg.registry_from_source(fake), {})
+            self.assertFalse(os.path.exists(canary))
 
     def test_unrelated_directory_falls_back_to_the_installed_plugin(self):
         sg = self._load()

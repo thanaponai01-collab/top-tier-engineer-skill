@@ -27,6 +27,10 @@ layers, never a HIGHER one), '#' comments allowed:
     domain:    app/services/
     data:      app/models/, app/db/
 
+The layer check reports its own coverage on every run (PROTOCOL.md §10 rule 5):
+a spec that classifies no module measured nothing, and reports UNKNOWN rather
+than clean.  Modules the spec does not match are named as unmeasured.
+
 Verdict line (noun owned by the latent-audit skill; grammar per PROTOCOL.md):
   LATENT: clean(N modules traced)
         | findings(dead: A, unused: B, layer-breaches: C)
@@ -139,6 +143,61 @@ def build_graph(pyfiles, roots):
 
 
 # ---------------- check 1: layer breaches (proven) --------------------------
+def build_verdict(n_dead, n_unused, n_breaches, n_modules, layers_unknown):
+    """The §5 verdict line and the exit code — the two channels automation reads.
+
+    A layer spec that classified nothing measured nothing. Reporting UNKNOWN in the
+    prose while this line still said `clean` would put the honesty in the one channel
+    no CI and no `run-trace.py` ever parses — which is the defect §10 rule 5 exists to
+    stop, reappearing one channel over. Real findings still outrank an unmeasured
+    dimension: something known-wrong beats something unknown.
+    """
+    n_findings = n_dead + n_unused + n_breaches
+    if n_findings:
+        return (f"LATENT: findings(dead: {n_dead}, unused: {n_unused}, "
+                f"layer-breaches: {n_breaches})"), 1
+    if layers_unknown:
+        return (f"LATENT: blocked(layer spec matched 0 of {n_modules} "
+                f"modules — layer dimension unmeasured)"), 2
+    return f"LATENT: clean({n_modules} modules traced)", 0
+
+
+def print_layer_section(layers, breaches, unmapped, mapped, total):
+    """Render the layer verdict with its own denominator (PROTOCOL §10 rule 5).
+
+    Coverage is printed on every run that declared a spec.  A spec matching no
+    module checked nothing and says UNKNOWN — unmeasured is not clean.
+    """
+    if layers is None:
+        print("LAYERS — not checked: no --layers file declared. "
+              "This is a gap, not a clean result.")
+        return
+    if not layers:
+        # `--layers` WAS passed; it just parsed to nothing (typo, wrong separator,
+        # comments only). Reporting that as "no file declared" blames the operator for
+        # something they did do, and hides a spec that silently checks nothing.
+        print("LAYERS — UNKNOWN: the declared spec parsed to zero layers (no "
+              "'name: prefix' lines), so nothing was checked.")
+        return
+    names = " > ".join(n for n, _ in layers)
+    cover = f"{mapped} of {total} modules classified"
+    if breaches:
+        print(f"LAYER BREACHES (proven) — declared order: {names}")
+        for b in breaches:
+            print(f"  {rel(b['file'])}:{b['line']}  {b['edge']}")
+            print(f"      breaks: {b['rule']}")
+    elif mapped == 0:
+        print(f"LAYERS — UNKNOWN: the declared order ({names}) matched NO "
+              f"module in this tree, so nothing was checked. This is "
+              f"unmeasured, not clean.")
+    else:
+        print(f"LAYERS (proven over {cover}) — clean against declared "
+              f"order: {names}")
+    print(f"  coverage: {cover}"
+          + (f" · {total - mapped} unmeasured: " + ", ".join(unmapped[:8])
+             + (" …" if len(unmapped) > 8 else "") if unmapped else ""))
+
+
 def load_layers(path):
     layers = []  # [(name, [prefixes])] top first
     with open(path, encoding="utf-8") as fh:
@@ -282,43 +341,32 @@ def main():
         layers = load_layers(args.layers)
         breaches, unmapped = check_layers(modules, edges, layers)
 
+    # PROTOCOL §10 rule 5: a measurement's denominator is part of the
+    # measurement. A layer spec that classifies none of the subject's modules
+    # measured nothing, and "measured nothing" must never render as "clean".
+    mapped = len(modules) - len(unmapped) if args.layers else 0
     result = {"modules": len(modules),
               "edges": sum(len(v) for v in edges.values()),
               "layer_breaches": breaches, "layer_unmapped": unmapped,
+              "layer_coverage": {"mapped": mapped, "total": len(modules)}
+              if args.layers else None,
               "dead_modules": dead, "unused_defs": unused,
               "layers_declared": bool(args.layers)}
 
-    n_findings = len(breaches) + len(dead) + len(unused)
-    verdict = (f"LATENT: findings(dead: {len(dead)}, unused: {len(unused)}, "
-               f"layer-breaches: {len(breaches)})" if n_findings
-               else f"LATENT: clean({len(modules)} modules traced)")
+    layers_unknown = bool(args.layers) and mapped == 0
+    verdict, exit_code = build_verdict(
+        len(dead), len(unused), len(breaches), len(modules), layers_unknown)
     result["verdict"] = verdict
+    result["layers_unknown"] = layers_unknown
 
     if args.json:
         print(json.dumps(result, indent=2))
-        return 1 if n_findings else 0
+        return exit_code
     else:
         print(f"GRAPH — {result['modules']} modules, "
               f"{result['edges']} import edges traced.")
         print()
-        if args.layers:
-            names = " > ".join(n for n, _ in layers)
-            if breaches:
-                print(f"LAYER BREACHES (proven) — declared order: {names}")
-                for b in breaches:
-                    print(f"  {rel(b['file'])}:{b['line']}  {b['edge']}")
-                    print(f"      breaks: {b['rule']}")
-            else:
-                print(f"LAYERS (proven) — clean against declared "
-                      f"order: {names}")
-            if unmapped:
-                print(f"  note: {len(unmapped)} modules match no declared "
-                      f"layer (spec incomplete, not a breach): "
-                      + ", ".join(unmapped[:8])
-                      + (" …" if len(unmapped) > 8 else ""))
-        else:
-            print("LAYERS — not checked: no --layers file declared. "
-                  "This is a gap, not a clean result.")
+        print_layer_section(layers, breaches, unmapped, mapped, len(modules))
         print()
         if dead:
             print("DEAD MODULE CANDIDATES (suspected) — nothing in-tree "
@@ -344,7 +392,7 @@ def main():
         print()
 
     print(verdict)
-    return 1 if n_findings else 0
+    return exit_code
 
 
 if __name__ == "__main__":
