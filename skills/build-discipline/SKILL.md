@@ -12,10 +12,12 @@ description: >
 # Build Discipline
 
 > **Wiring** — Stage 3 of the lifecycle. Consumes: `ARCHITECTURE.md` + `PROBLEM_BRIEF.md` (invoke
-> their producers if absent, or log the gap per `chief-engineer` Rule 2). Produces: proven slices
-> as rollback-ready commits, `TODO_LEDGER.md`. Invokes: `wire-check` as the exit gate of every
-> slice (Phase 3). Downstream: `correctness-gate`. Shared vocabulary and laws: `PROTOCOL.md` at
-> the suite root — authoritative when present.
+> their producers if absent, or log the gap per `chief-engineer` Rule 2), plus `DEBT_LEDGER.md`
+> when one exists (Phase 2, carrying capacity). Produces: proven slices as rollback-ready commits,
+> `TODO_LEDGER.md`, and debt-ledger updates for any slice that grew an accepted breach. Invokes:
+> `wire-check` as the exit gate of every slice (Phase 3). Downstream: `correctness-gate`;
+> `structure-gate` when a slice touched a host on the debt ledger. Shared vocabulary and laws:
+> `PROTOCOL.md` at the suite root — authoritative when present.
 
 ## Operating contract
 
@@ -45,6 +47,28 @@ and inside this skill, only **(proven)** closes a slice.
   deleting or reusing over adding; introduce an abstraction on its second concrete use, not its
   first guess; "might need it later" is a `TODO_LEDGER.md` entry with a trigger, never speculative
   structure in the code.
+- **Carrying capacity — check the host before taking the smallest diff** (PROTOCOL §10, the
+  ratchet rule). "Smallest diff" is measured against the slice, not against the file it lands in,
+  so on an already-overloaded host it points the wrong way: the smallest diff into a structure
+  that is already too big is almost always *making it bigger*, because that is the option
+  requiring no new seam. Each such increment is individually defensible and collectively fatal —
+  it is how a codebase becomes unmaintainable with every slice proven. So before taking the
+  smallest diff, ask where it lands:
+  - **Host is clean** → smallest diff, unchanged. This is the normal case; do not manufacture
+    refactors to satisfy a rule.
+  - **Host carries accepted debt** (`DEBT_LEDGER.md` / the structural baseline) → the smallest
+    diff is a withdrawal against that ledger, not a free move. Prefer paying down first: extract
+    the seam this slice needs, prove the extraction, *then* add the behavior — often two slices,
+    and the first one has a real proof line, since an extraction that changes no behavior is
+    exactly the kind of change that can be proven. If you extend the host anyway, the slice does
+    not close silently: it names the withdrawal and its new measured value, and the debt ledger
+    row is updated in the same commit.
+  - **Host would newly breach because of this slice** → this is not debt, it is a fresh structural
+    decision made mid-slice. Route it as one: a new module boundary is `arch-design`'s call
+    (Law 3, violation ≠ deviation — an unfamiliar structure gets dialogue, not a silent fix).
+  A slice may not create code that no test harness can address. Untestable *by construction* is
+  not the same as untested: no later gate can report it missing, because no later gate can see it
+  (PROTOCOL §10 rules 5 and 7). Refusing it here is the only place it can be refused.
 - **Interfaces from ground truth, not memory**: verify an external dependency's interface against
   this environment's ground truth before coding against it (cutoff rule, PROTOCOL §1) — a
   remembered API is **(assumed)**.
@@ -102,10 +126,14 @@ uncommitted work. Re-prove the last claimed-working slice before stacking on it
   a wrong requirement is a framing issue, route it to `problem-framing`).
 - Generated code is held to the same standard as handwritten code; "the model wrote it" is not a
   provenance that lowers the bar.
+- A slice that grew a file already on the debt ledger says so in its report, with the before/after
+  measured value. Silent growth of known debt is the failure PROTOCOL §10 exists to catch, and a
+  proven slice is not a licence for it.
 - End every slice with: `SLICE <name>: proven | trace-only(reason) | failed(at link/phase)`.
 
 ## Anti-patterns this skill exists to kill
 
 Big-bang builds proven only at the end; orphan modules awaiting a caller that never comes; happy-
 path code; TODO comments that rot; commits that can't be reverted in isolation; "it should work"
-as a completion claim.
+as a completion claim; and the slow one — fifty individually-proven slices that append to the same
+overloaded file until nothing in it can be tested or moved.

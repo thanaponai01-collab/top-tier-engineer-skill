@@ -111,6 +111,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | `DATA_TIER.md` | data-tier | Access → cost-class → plan-evidence → verdict, per data-access change |
 | `AUDIT_SPEC.md` | symptom-audit | Pinned symptom, cause→location→cost table, phased prescription, pre-written checks |
 | `LATENT_REPORT.md` | latent-audit | Graph measurements, deletion manifest (with disconnection proofs), watch list, layer-breach table |
+| `DEBT_LEDGER.md` | structure-gate | Every **accepted** structural breach: what, why accepted, cost per future change, repayment trigger (§10) |
 | `REVIEW_LEDGER.md` | senior-review | Unresolved novelty: hypothesis + the experiment that would settle it |
 | `THREAT_MODEL.md` | threat-model | Assets, trust boundaries, abuse cases, evidence tag, defense status |
 | `RELEASE_PLAN.md` | ship-gate | Rollout strategy, reversibility class, rollback steps, watch signals, go/no-go |
@@ -137,7 +138,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | ship-gate | a gated (and threat-cleared) change + deploy target | RELEASE_PLAN.md, go/no-go | data-evolution (if migration); evolve-maintain (post-release) |
 | data-evolution | a structural data change + existing data | MIGRATION_PLAN.md + migration/rollback code | build-discipline + correctness-gate (execute); ship-gate (carry down-path) |
 | scrutinize | a delta (plan/PR/diff/design doc) + host system | scrutiny report; REVIEW_LEDGER.md appends | director + the owning lifecycle skill per finding |
-| structure-gate | a codebase or a slice's changed files | STRUCTURE_REPORT.md + structural report | senior-review / scrutinize (wisdom call on each flag); arch-design (cycle ⇒ layering error, god-file ⇒ missing boundary) |
+| structure-gate | a codebase or a slice's changed files (+ the accepted baseline) | STRUCTURE_REPORT.md, DEBT_LEDGER.md, structural baseline | senior-review / scrutinize (wisdom call on each flag); arch-design (cycle ⇒ layering error, god-file ⇒ missing boundary); build-discipline (§10 carrying capacity) |
 | evolve-maintain | incident/change + all ledgers | MAINT_LOG.md, strengthened invariants | build-discipline / problem-framing as classified |
 | meta-skills | (always on) | discipline, not artifacts | every phase of every skill |
 
@@ -185,7 +186,7 @@ so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE
 | `SHIP` | ship-gate | `go(strategy, rollback tag) \| stage(canary plan) \| hold(blocker) \| escalated(one-way door: …)` |
 | `MIGRATE` | data-evolution | `planned(reversible) \| planned(lossy-after-step-N) \| verified(copy) \| blocked(no safe backward path)` |
 | `SCRUTINY` | scrutinize | `ship \| fix-then-ship(top) \| rework(reason) \| reject(reason) \| blocked(underspecified)` |
-| `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| blocked(no analyzable source)` |
+| `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| held(accepted: K, repaid: R) \| regressed(new: A, worse: B, top: <signal>) \| blocked(no analyzable source)` |
 | `LATENT` | latent-audit | `clean(N modules traced) \| findings(dead: A, unused: B, layer-breaches: C) \| blocked(no analyzable source)` |
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
 
@@ -305,3 +306,79 @@ and carried two incoherences an outsider pass was built to catch.*
    adjudication present in the same transcript; `unscrutinized` is the honest weak close and
    carries the same paragraph-level bold limitation marker a trace-only close carries.
    `verdict-lint.py` enforces the form, the co-occurrence, and the marker mechanically.
+
+## 10. The ratchet rule (debt accrues through defensible increments)
+
+*Provenance: an external field report of a working system whose largest file had grown past
+maintainability, most of it a front end held inside a string literal, while every increment
+along the way was proven, wired, and committed under `build-discipline`. Carries no audit ID:
+the run ledger records executed runs, and this arrived as a report.*
+
+A point-in-time gate cannot see this failure. A threshold trips; Law 3, violation ≠ deviation,
+applies; the reviewer judges the breach justified — **and is right**. The next increment trips
+the same threshold and earns the same correct answer. Enough correct answers later the shape
+is unmaintainable and no single decision was wrong. **Debt is not accrued by bad decisions; it
+is accrued by defensible increments, and only accumulation is visible.**
+
+Therefore:
+
+1. **Any gate whose findings may legitimately be accepted must ratchet.** A gate that only
+   measures a level re-litigates the same accepted finding every run and converges on
+   "accepted" forever; a gate that measures *direction* cannot be worn down. The ratchet
+   asserts only that a number went up — a measurement — so it takes nothing from Law 3 and
+   steals no wisdom call from `senior-review`. The accepted breach is never called wrong;
+   it is only forbidden to grow.
+2. **Acceptance is recorded, never implied.** Accepted breaches live in a machine-readable
+   baseline (`structure-gate` owns `.structure-baseline.json`), and every file in that
+   baseline carries a `DEBT_LEDGER.md` row: *what was accepted · why · what it costs every
+   future change that touches it · the trigger that makes repayment due*. A baseline with
+   no ledger is permanent amnesty; the trigger requirement is `TODO_LEDGER.md`'s ("a TODO
+   with no trigger is a wish") applied to structure.
+3. **A baseline is regenerated only when debt is repaid, never to silence a regression.**
+   Re-baselining to make a red gate green is the one move that disables the ratchet, and it
+   is a defect reportable against whoever made it — the same class as weakening a proof line
+   to pass it (`build-discipline`).
+4. **Carrying capacity binds the increment, not the codebase.** When the smallest diff that
+   satisfies a slice's proof line lands in a file already carrying accepted debt, "smallest
+   diff" has stopped being the cheap option: it is a withdrawal against the ledger. The
+   slice either pays down first (extract, then add) or closes naming the withdrawal. This is
+   where the accrual actually happens, so this is where it is stopped.
+5. **A measurement's denominator is part of the measurement.** Every analyzer enters some
+   of its subject and skips the rest. The skipped part is not clean — it is *unmeasured*,
+   and in any report that omits coverage, unmeasured is indistinguishable from clean. A
+   region the analyzer never entered contributes zero to every signal, and every one of
+   those zeros is correct. **Every gate therefore reports what fraction of its subject it
+   actually entered, on every run**, and a region it could not enter is reported as UNKNOWN
+   — never omitted, and never folded into a clean result.
+
+   The blind spot is always one of four, and the same rule covers all four: skipped by the
+   **parser** (string literals, heredocs, macros), skipped by the **scanner** (unrecognised
+   extensions, ignored directories, generated files), skipped by **depth** (a language with
+   only shallow support), or **absent at analysis time** (codegen, templates, `eval`).
+
+6. **Find blind spots by structure, never by vocabulary.** The tempting detector matches
+   patterns from the languages its author happened to know, so it dates on contact with the
+   next one and is a Law 6 violation (constrain process, never intelligence). A detector
+   whose accuracy depends on a list is a detector whose blind spots are that list's
+   omissions. The general method needs no vocabulary and has three steps, each answerable in
+   any language including one invented tomorrow:
+
+   **(a) Ask the language, not a pattern.** Every lexer already classifies its own tokens as
+   code, string, or comment. That classification is exact and free; a marker list is a guess
+   about the same question. **(b) Discriminate by shape.** Whether an opaque region is code,
+   data, or prose follows from content-free statistics — code is a *tree of varied
+   statements*, prose is a uniform stream, tabular data is uniform rows. Any statistic
+   separating those three across syntax families qualifies; which ones an implementation
+   picks, and their calibration, belong to that implementation (Law 1, every rule lives in
+   exactly one place). **Beware the same bug one level down:** a statistic can look
+   content-free and still encode one syntax family's habits, so calibrate against fixtures
+   from *unlike* families — otherwise the vocabulary assumption merely moves somewhere
+   harder to see. **(c) Exempt only what the language itself declares.** Documentation in
+   the slot a language defines for documentation is not a blind spot — but that exemption
+   must come from the language's own structure, never from guessing what the text says.
+
+7. **Untestable-by-construction is a structural defect, not a coverage gap.** Code no test
+   harness can address — a function inside a string literal, a branch reachable only through
+   a generated blob — is invisible to `correctness-gate` *by construction* rather than by
+   omission, so `correctness-gate` cannot report its absence and must not be the gate
+   expected to catch it. `structure-gate` owns it, via rules 5 and 6.

@@ -23,10 +23,57 @@ from pathlib import Path
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 
 
-def _load_lint():
+def _manifest_name(root):
+    """The plugin name a directory declares, or None if it declares none."""
+    try:
+        return json.loads((Path(root) / ".claude-plugin" / "plugin.json")
+                          .read_text(encoding="utf-8-sig"))["name"]
+    except (OSError, KeyError, ValueError):
+        return None
+
+
+def suite_root(cwd):
+    """The suite whose RULES govern this session — the checkout being edited if there
+    is one, else the installed plugin.
+
+    Why this is not just PLUGIN_ROOT: the hook runs from wherever the plugin is
+    INSTALLED (a pinned version cache), while a session developing the suite is editing
+    a source checkout somewhere else. Resolving from `__file__` alone caused two real
+    failures, both found by this suite's own v1.15.0 work:
+
+      1. A session that ADDS a verdict state could never stop. Its transcript emits the
+         new state, the installed release's registry does not know it yet, and the gate
+         blocks — so the change cannot be finished until it is released, and it cannot
+         be released until it is finished. The suite must be lintable by the rules it
+         is currently writing, or it can never grow a verdict noun again.
+      2. The release check (plugin.json vs CHANGELOG, added v1.14.1) was inert in the
+         hook path: it only fires when `cwd == PLUGIN_ROOT`, and under the hook those
+         are never equal. It had been silently checking nothing.
+
+    Both are the same mistake — trusting where the code lives over what the session is
+    working on.
+    """
+    # Identity comes from the manifest, never from a directory name: the install path
+    # is <plugin>/<version>/ and the source checkout is named top-tier-engineer-skill,
+    # so neither directory is called what the plugin is called.
+    mine = _manifest_name(PLUGIN_ROOT)
+    if mine is None:
+        return PLUGIN_ROOT
+    try:
+        here = Path(cwd).resolve()
+    except (OSError, ValueError):
+        return PLUGIN_ROOT
+    for cand in (here, *here.parents):
+        if (cand / "tools" / "verdict-lint.py").is_file() \
+                and _manifest_name(cand) == mine:
+            return cand
+    return PLUGIN_ROOT
+
+
+def _load_lint(root=PLUGIN_ROOT):
     # verdict-lint.py has a dash in its name, so import it by path.
     spec = importlib.util.spec_from_file_location(
-        "verdict_lint", Path(__file__).with_name("verdict-lint.py"))
+        "verdict_lint", Path(root) / "tools" / "verdict-lint.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
@@ -56,7 +103,8 @@ def transcript_text(path):
 def run(payload):
     if payload.get("stop_hook_active"):
         return 0  # we already blocked once this stop — never loop the session
-    vl = _load_lint()
+    root = suite_root(payload.get("cwd") or ".")
+    vl = _load_lint(root)
     problems = []
 
     tp = payload.get("transcript_path")
@@ -64,9 +112,8 @@ def run(payload):
         violations, _seen = vl.lint(transcript_text(tp))
         problems += [f"line {n} [{noun}]: {msg}" for n, noun, msg in violations]
 
-    cwd = Path(payload.get("cwd") or ".").resolve()
-    if cwd == PLUGIN_ROOT:  # release check only when developing the plugin itself
-        err = vl.release_check(PLUGIN_ROOT)
+    if root != PLUGIN_ROOT:  # a source checkout of the suite: check its release state
+        err = vl.release_check(root)
         if err:
             problems.append(err)
 
@@ -105,11 +152,33 @@ def selftest():
         "plugin's own manifest and CHANGELOG must agree"
     assert vl.release_check(tempfile.gettempdir()) is None, \
         "non-plugin directory must be a no-op"
+
+    # Root resolution: the rules that govern a session come from the checkout it is
+    # editing, not from wherever the hook script happens to be installed. Regression
+    # guard for the two failures documented on suite_root().
+    assert suite_root(PLUGIN_ROOT / "tools") == PLUGIN_ROOT, \
+        "a path inside the suite must resolve to the suite root"
+    assert suite_root(tempfile.gettempdir()) == PLUGIN_ROOT, \
+        "an unrelated directory must fall back to the installed plugin"
+    assert _manifest_name(PLUGIN_ROOT) is not None, \
+        "the plugin must declare a name for root resolution to key on"
     print("stop-gate: selftest passed")
     return 0
 
 
 def main():
+    # This gate's findings carry the § section mark, and they go to STDERR — which the
+    # other tools' stdout-only reconfigure never covered. On Windows stderr defaults to
+    # cp1252, so the hook's own output reached the user mojibaked ("PROTOCOL §5" as
+    # "PROTOCOL \xa75") and any UTF-8 consumer choked on the byte. Same bug the suite
+    # already fixed for stdout in structure-report.py and verdict-lint.py.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            try:
+                stream.reconfigure(encoding="utf-8")
+            except (ValueError, OSError):
+                pass
+
     if "--selftest" in sys.argv:
         return selftest()
     try:

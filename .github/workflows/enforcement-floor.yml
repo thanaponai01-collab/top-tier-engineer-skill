@@ -66,12 +66,32 @@ jobs:
       - name: Tool self-tests
         run: python3 tools/test_tools.py
 
-      # ---- GATE 1: structural quality (the spaghetti alarm) -------------------
+      # The Stop hook is a tool too, and it had no CI coverage at all — which is how
+      # two root-resolution defects and a stderr-encoding bug survived in it. Its
+      # selftest exercises the hook payload path end to end.
+      - name: Stop-hook selftest
+        run: python3 tools/stop-gate.py --selftest
+
+      # ---- GATE 1: structural quality (the spaghetti alarm + the debt ratchet) --
+      # Ratchet mode when a baseline exists (PROTOCOL §10): accepted debt is frozen,
+      # and the gate fails only on a breach that is NEW or one that got WORSE. This
+      # is what keeps the gate alive on a codebase that already has debt — before the
+      # baseline existed this very step was red on main for two long-standing
+      # graph-audit.py findings, and a permanently-red gate is a disabled gate.
+      # --require-debt-ledger refuses a baseline whose files have no DEBT_LEDGER.md
+      # row: debt you did not write down is amnesty, not acceptance.
       - name: Structural-quality gate
         id: structure
         run: |
-          echo "Running structural-quality reporter over the repository source…"
-          python3 tools/structure-report.py . | tee structure.out
+          if [ -f .structure-baseline.json ]; then
+            echo "Ratcheting structural shape against the accepted baseline…"
+            python3 tools/structure-report.py \
+              --baseline .structure-baseline.json \
+              --require-debt-ledger . | tee structure.out
+          else
+            echo "No baseline present — reporting absolute structural shape…"
+            python3 tools/structure-report.py . | tee structure.out
+          fi
           code=${PIPESTATUS[0]}
           echo "structure_exit=$code" >> "$GITHUB_OUTPUT"
           exit $code
@@ -125,11 +145,11 @@ jobs:
             echo "## Enforcement floor result"
             echo ""
             if [ "${{ steps.structure.outputs.structure_exit }}" = "0" ]; then
-              echo "### ✅ Structure: CLEAN — nothing reads as spaghetti"
-              echo "No god-files, tangled functions, deep nesting, circular imports, or copy-paste blocks above threshold."
+              echo "### ✅ Structure: HELD — known problems did not get worse"
+              echo "No new god-files, tangled functions, deep nesting, circular imports, copy-paste blocks, or code hidden inside strings — and nothing already on the debt ledger grew."
             else
-              echo "### ⚠️ Structure: REVIEW NEEDED — structural flags found"
-              echo "The source tripped one or more spaghetti signals. A reviewer (senior-review / scrutinize) should look before this ships. Details:"
+              echo "### ⚠️ Structure: REGRESSED — the shape got worse"
+              echo "Either a NEW structural problem appeared, or one this project already agreed to freeze grew anyway. Unlike a plain flag this needs no judgement call to stand: a number the project froze has moved. See \`DEBT_LEDGER.md\` for what was accepted and why. Details:"
             fi
             echo ""
             echo '```'

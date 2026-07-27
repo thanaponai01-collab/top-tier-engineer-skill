@@ -42,7 +42,10 @@ does it do what it claims?" before the change costs a build.
 `structure-gate` sits beside `wire-check` and `scrutinize` as a callable-any-stage service gate
 — and the one that runs unattended in CI (`enforcement-floor`). It answers **"measured
 structural shape — is it spaghetti?"** with numbers, then routes every flag to
-`senior-review`/`scrutinize` for the wisdom call; it never decides wisdom itself.
+`senior-review`/`scrutinize` for the wisdom call; it never decides wisdom itself. Once a
+codebase has accepted debt it also asks the question no point-in-time gate can — **"did it get
+worse?"** — against a frozen baseline and `DEBT_LEDGER.md` (PROTOCOL §10, the ratchet rule),
+because debt is accrued by defensible increments and only accumulation is visible.
 
 `latent-audit` is `symptom-audit`'s sibling for the *unfelt*: given no complaint at all, it
 runs `tools/graph-audit.py` over the import/reference graph to find dead modules and unused
@@ -67,7 +70,7 @@ time, never from the raw report.
 | `threat-model` | What can an adversary make it do that it must not? |
 | `senior-review` | Is it wise? |
 | `scrutinize` | Should this change exist, and does it do what it claims? |
-| `structure-gate` | What is its measured shape — does it read as spaghetti? |
+| `structure-gate` | What is its measured shape — does it read as spaghetti, and did it get worse? |
 | `latent-audit` | What is provably dead, mislayered, or dormantly broken — with no symptom to guide the search? |
 | `data-evolution` | How does stored data change shape without loss, reversibly? |
 | `ship-gate` | Is releasing it reversible, observable, and bounded? |

@@ -3,6 +3,159 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.15.0 — 2026-07-27 — the debt ratchet: stopping accumulation by defensible increments
+
+**Earned by `AUDIT_002`, a real miss reported from outside the suite.** A dashboard reached
+**4,180 lines in one file** — ~3,000 of them an HTML/CSS/JS front end held inside a single
+Python string — while every slice along the way was proven, wired, and committed under
+`build-discipline`. No gate ever saw a violation, because no increment ever was one. Three
+separate defects let that through; a fourth surfaced when the fix tripped the suite's own Stop
+hook. All four are fixed here.
+
+### 1. The instrument was blind to the actual defect (`tools/structure-report.py`)
+
+Reproduced before fixing, with a scale model of the reported file (clean Python + a
+3,000-line embedded page containing 40 functions of 68 lines each, complexity ~20, nesting 6):
+
+- **Code inside string literals was invisible.** To `ast`, that entire front end is one
+  `Constant` node — the report counted **61 functions (all Python), 0 of the 40 JS ones**, and
+  emitted zero complexity, nesting, and function-length findings over the most dangerous mass
+  in the file. Every one of those zeros was correct.
+
+  **New signal `opaque_code`, and it names no language.** The first cut matched markers
+  (`<script`, `function `, `SELECT`) — hard-coded knowledge of four languages, which dates on
+  contact with the fifth and is a Law 6 violation (constrain process, never intelligence). It
+  was replaced, before shipping, with the general form in new `tools/structure_opacity.py`:
+  ask the file's **own lexer** which tokens it classified as string or comment (exact, free,
+  and true in every language), then decide what is inside by **content-free shape statistics**
+  — code is a *tree of varied statements*; prose is a uniform stream; tabular data is uniform
+  rows. The second cut of *those* statistics had the same bug one level up: bracket depth,
+  `;`/`}` terminators and symbol density describe the **C family**, not code, and scored Lua
+  1/4 as prose. What survived measurement is distinct indentation levels and line-length
+  variance, which separate every fixture with a wide margin:
+
+  | | prose (en / wrapped / Thai) | flat data (CSV / JSON) | code (web, Lua, Python, SQL, invented) |
+  |---|---|---|---|
+  | indent levels | 1 | 1–2 | 3–4 |
+  | line-length CV | 0.005–0.028 | 0.021–0.132 | 0.243–0.774 |
+
+  Guarded by a test that detects **Lua and a syntax that does not exist**, neither matching any
+  marker in the suite: if that test ever needs a vocabulary added to pass, the detector has
+  regressed to the version this replaced. A minified-bundle clause catches the one shape that
+  defeats both signals by construction (a flattened tree on one 14KB line), and docstrings are
+  exempt because prose in the slot the *language itself* defines for prose is not a blind spot
+  — an exclusion earned by three false positives on the suite's own module docstrings.
+
+- **Coverage is now reported on every run.** `Coverage: N code lines · X% actually entered by
+  a parser · … opaque · … shallow · … docs`. This is the general lesson, promoted to PROTOCOL
+  §10 rule 5: **a measurement's denominator is part of the measurement** — a region the
+  analyzer never entered is *unmeasured*, and in a report that omits coverage, unmeasured is
+  indistinguishable from clean. On the reproduction fixture the line reads **9.7% actually
+  entered**, which diagnoses the file more directly than any finding in the list beneath it.
+  Reported as a **testability** concern, not a style one (§10 rule 7).
+- **The god-file check never ran on non-Python files** — a bug, not a depth limit. `file_lines`
+  lived inside `analyze_python()`, so the same 3,000 lines extracted to a real `page.js` scored
+  **zero** god-file findings, while the report's own caveat claimed other languages received
+  "length + duplication" signals. They received duplication. Hoisted to a language-agnostic
+  pass; the caveat is now true.
+- `file_lines` findings previously rendered their location as `file.py:<SLoC>`, reading as a
+  line number. Now render as the bare path.
+
+### 2. Nothing measured accumulation — the ratchet (PROTOCOL §10, new section)
+
+The deeper failure. A point-in-time gate re-asks *"is this file too long?"* every run and keeps
+earning the same **correct** answer — "justified, it's a server with a page in it" — while the
+file triples. Fifty correct answers later the shape is unmaintainable and no single decision was
+wrong. **Debt is not accrued by bad decisions; it is accrued by defensible increments, and only
+accumulation is visible.**
+
+- **`--baseline` / `--write-baseline`**: accepted breaches are frozen in
+  `.structure-baseline.json`, and the gate then fails only on a breach that is **new** or one
+  that got **worse**. This asserts direction, not acceptability, so Law 3, violation ≠
+  deviation, is untouched — the accepted breach is never called wrong, only forbidden to grow.
+  Baseline keys are `(signal, file, symbol)`, never line numbers, so unrelated edits do not
+  manufacture phantom breaches (guarded by a test).
+- **New verdict states** `STRUCTURE: held(accepted: K, repaid: R)` and
+  `STRUCTURE: regressed(new: A, worse: B, top: <signal>)`, registered in PROTOCOL §5 and
+  `verdict-lint.py`. `regressed` needs no wisdom call to stand: a number the project agreed to
+  freeze has moved, which is a fact.
+- **New ledger `DEBT_LEDGER.md`** (owner: `structure-gate`, PROTOCOL §3). A baseline with no
+  repayment plan is amnesty, so every row carries *what · why accepted · cost per future change
+  that touches it · **repayment trigger*** — `TODO_LEDGER.md`'s "a deferral with no trigger is a
+  wish", applied to structure. `--require-debt-ledger` fails any run whose baselined files have
+  no row; wired on in `enforcement-floor`.
+- **The one forbidden move**, stated in §10 rule 3: re-baselining to turn a red gate green. A
+  baseline is regenerated when debt is **repaid** — silencing a regression with it is the
+  structural analogue of weakening a proof line to pass it.
+- Makes the gate survivable on legacy code, where an un-baselined run is red forever and a
+  permanently-red gate is a disabled gate. **Demonstrated on this repo:** `enforcement-floor`'s
+  structural step had been exiting 1 on `main` for two long-standing `graph-audit.py` findings.
+  Those are now ledgered (D-1, D-2) with triggers, and the gate is green and meaningful again.
+
+### 3. `build-discipline` was pointing at the debt (Phase 2, carrying capacity)
+
+"Smallest diff that satisfies the proof line" is measured against the *slice*, not the file it
+lands in — so on an overloaded host it points the wrong way: the smallest diff that adds a panel
+to a god-file is *appending to the god-file*. This is where the accrual physically happens, so
+this is where §10 rule 4 stops it. New Phase 2 clause routes three cases: host clean → smallest
+diff unchanged (no manufactured refactors); host carries ledgered debt → the diff is a
+withdrawal, pay down first or close naming it with the new measured value; host would *newly*
+breach → that is a fresh structural decision, route to `arch-design`. A slice may not create
+code no test harness can address.
+
+### 4. The Stop hook could not survive its own suite growing (`tools/stop-gate.py`)
+
+**Found by the hook blocking this very session.** The gate resolved everything from
+`Path(__file__)` — where the hook is *installed* — while a session developing the suite edits a
+checkout somewhere else. Two defects followed, and they are the same mistake: trusting where the
+code lives over what the session is working on.
+
+- **A session that adds a verdict state could never stop.** The transcript emits the new state,
+  the installed release's registry does not know it yet, and the gate blocks — so the change
+  cannot be finished until it is released and cannot be released until it is finished. Observed
+  exactly: a pinned v1.14.1 cache blocked the session introducing `STRUCTURE: regressed`. The
+  suite must be lintable by the rules it is currently writing, or it can never grow a verdict
+  noun again. `suite_root()` now resolves the governing rules from the session's cwd when that
+  cwd is a checkout of this plugin, falling back to the install otherwise.
+- **The release check had been inert in the hook path.** Added in v1.14.1, it only ran when
+  `cwd == PLUGIN_ROOT` — under the hook those are never equal, so the version-drift guard was
+  silently checking nothing since the day it shipped. It works when `stop-gate.py` is invoked
+  directly from the repo, which is why `--selftest` passed and nobody noticed.
+- Identity keys on the **manifest name**, never a directory name: the install path is
+  `<plugin>/<version>/` and the checkout is `top-tier-engineer-skill`, so neither directory is
+  named what the plugin is named and a path-name check would silently never match.
+- **stderr encoding.** The gate's findings carry `§` and go to stderr, which the stdout-only
+  reconfigure in the other tools never covered — on Windows the hook's own output reached the
+  user as `PROTOCOL \xa75`. Same bug already fixed for stdout elsewhere in the suite.
+
+Root cause of all four: **`stop-gate.py` had no test coverage and CI never ran its selftest.**
+Now it has five tests and its own CI gate.
+
+### Delivered under the suite's own rules
+
+The `structure-report.py` change pushed that file to 638 SLoC, newly breaching the god-file
+threshold. Per the carrying-capacity clause written in the same change, a *new* breach is not
+baselined away. It was paid down twice: first by moving duplicated doctrine out of the module
+docstring into PROTOCOL §10 and `structure-gate` (Law 1, every rule lives in exactly one place —
+the duplication was itself the defect), then by extracting the opacity measurement to
+`tools/structure_opacity.py`, which is why adding an entire new signal left the file **smaller
+than it started at 626 SLoC**. The residual 26 over threshold was recorded as **D-3** with an
+explicit trigger at 700 SLoC and an argued Chesterton's-Fence rationale, rather than paid by
+fragmenting a deliberately stdlib-only, copy-anywhere entry point. The baseline was then
+re-locked at 626 — the only legitimate reason to regenerate one (§10 rule 3).
+
+**Tests**: 18 new cases in `tools/test_tools.py` (46 total, all passing) — the non-Python
+god-file regression; the opaque-code catch; the language-independence proof (Lua + an invented
+syntax); the minified-bundle catch; false-positive guards for English prose, Thai prose, CSV,
+JSON and docstrings; mandatory coverage output; ratchet hold / worse / new / repaid;
+baseline-key stability under unrelated edits; debt-ledger enforcement; and a check that every
+new verdict state passes the suite's own `verdict-lint`; plus a first-ever `StopGate`
+class covering root resolution, manifest-name identity, fallback, and fail-open.
+
+**New file** `tools/structure_opacity.py` — the opacity measurement and its calibration, split
+out so the generality argument is readable on its own. Its extraction is why adding an entire
+new signal *lowered* `structure-report.py` from 638 to 626 SLoC (see `DEBT_LEDGER.md` D-3).
+
 ## 1.14.1 — 2026-07-04 — self-audit follow-ups: count-drift guard, verdict-lint --help, mandate ledger
 
 **A chief-engineer self-audit ("check the system, find the gaps") ran the full census + mechanical

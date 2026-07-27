@@ -32,7 +32,10 @@ REGISTRY = {
     "DATATIER":   {"clean", "findings", "blocked"},
     "REVIEW":     {"shippable", "shippable-with-findings", "not-shippable"},
     "SCRUTINY":   {"ship", "fix-then-ship", "rework", "reject", "blocked"},
-    "STRUCTURE":  {"clean", "findings", "blocked"},
+    # v1.15.0: `held`/`regressed` are the ratchet states — a run measured against an
+    # accepted structural baseline. `held` means known debt did not grow; `regressed`
+    # means a NEW breach appeared or an accepted one got worse (PROTOCOL §10).
+    "STRUCTURE":  {"clean", "findings", "blocked", "held", "regressed"},
     "LATENT":     {"clean", "findings", "blocked"},
     "MAINT":      {"resolved", "escalated", "reverted"},
     # v1.5.0 additions:
@@ -58,7 +61,7 @@ NOUN_RE = re.compile(r'^[\s`*>]*([A-Z][A-Z-]+)(?:\s+[^:]+?)?:\s*(.+)$')
 # Contradiction check vocabulary (module-level so _lint_verdict_line stays cheap).
 SUCCESS = {"pass", "proven", "ship", "go", "clear", "shippable", "ready",
            "connected", "resolved", "budgets-met", "improved", "verified",
-           "planned", "clean"}
+           "planned", "clean", "held"}
 FAILURE_RE = re.compile(r'\b(fail|failed|broken|reject|not-shippable|unreproduced|hold|reverted)\b')
 
 

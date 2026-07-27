@@ -1,0 +1,18 @@
+{
+  "entries": {
+    "cyclomatic|tools/graph-audit.py|build_graph": 21,
+    "cyclomatic|tools/graph-audit.py|main": 16,
+    "file_lines|tools/structure-report.py|": 626,
+    "function_lines|tools/graph-audit.py|main": 88
+  },
+  "note": "Accepted structural debt. Each entry must have a row in DEBT_LEDGER.md naming why it was accepted, what it costs per future change, and the trigger that makes repayment due. Regenerate only when debt is REPAID \u2014 never to silence a regression (that is how the ratchet gets disabled).",
+  "thresholds": {
+    "cyclomatic": 15,
+    "duplication_block": 6,
+    "file_lines": 600,
+    "function_lines": 60,
+    "nesting_depth": 5,
+    "opaque_span": 40
+  },
+  "version": 1
+}

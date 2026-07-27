@@ -18,7 +18,7 @@ top-tier-engineer/
 │   └── enforcement-floor.yml ← CI: runs the tools below on every push/PR, blocks the merge on breach
 ├── tools/
 │   ├── verdict-lint.py     ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
-│   ├── structure-report.py ← the spaghetti alarm: measures structural shape, plain-language verdict
+│   ├── structure-report.py ← the spaghetti alarm: structural shape + the debt ratchet (--baseline)
 │   ├── run-trace.py        ← did the run actually execute the stages it should have? — completeness trace
 │   ├── graph-audit.py      ← the no-symptom sweep: dead modules, unused defs, layer-direction breaches (LATENT)
 │   └── test_tools.py       ← the tools gate their own correctness (stdlib unittest, no deps)
@@ -36,7 +36,7 @@ top-tier-engineer/
     ├── threat-model/        ← what can an adversary make it do that it must not?
     ├── senior-review/       ← parallel gate: is it wise?
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
-    ├── structure-gate/      ← service gate (also runs in CI): measured structural shape — is it spaghetti?
+    ├── structure-gate/      ← service gate (also runs in CI): is it spaghetti, and did it get worse?
     ├── latent-audit/        ← no-symptom sweep: what is provably dead, mislayered, or dormantly broken?
     ├── data-evolution/      ← how does stored data change shape without loss, reversibly?
     ├── ship-gate/           ← is releasing it reversible, observable, bounded?
@@ -55,6 +55,7 @@ You don't pick skills. You talk to the engineer:
 - "Is this secure / can this be abused?" → threat-model walks every trust boundary as an adversary
 - "Is this code good?" → senior-review
 - "Is this a mess / spaghetti / maintainable?" → structure-gate measures the structural shape (and is the gate CI runs unattended)
+- "How did this file get to 4,000 lines when every commit looked fine?" → structure-gate's debt ratchet freezes accepted debt in `DEBT_LEDGER.md` so it cannot grow by defensible increments (PROTOCOL §10)
 - "Find dead code / are the layers respected?" (nothing feels wrong) → latent-audit sweeps the import graph for dead weight and layer breaches
 - "Look at this PR / plan before it lands" → scrutinize
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
@@ -112,9 +113,11 @@ This project is governed by the top-tier-engineer suite.
 Route every substantial engineering request through the chief-engineer skill
 (top-tier-engineer:chief-engineer) before acting.
 Project memory lives in the ledgers at the repo root (PROBLEM_BRIEF.md, ASSUMPTIONS.md,
-ARCHITECTURE.md, DECISION_LEDGER.md, TODO_LEDGER.md, CORRECTNESS_VERDICT.md, PERF_BUDGET.md,
-DATA_TIER.md, AUDIT_SPEC.md, THREAT_MODEL.md, REVIEW_LEDGER.md, MIGRATION_PLAN.md,
-RELEASE_PLAN.md, MAINT_LOG.md) — read the ones that exist before writing anything.
+ARCHITECTURE.md, DECISION_LEDGER.md, TODO_LEDGER.md, DEBT_LEDGER.md, CORRECTNESS_VERDICT.md,
+PERF_BUDGET.md, DATA_TIER.md, AUDIT_SPEC.md, THREAT_MODEL.md, REVIEW_LEDGER.md,
+MIGRATION_PLAN.md, RELEASE_PLAN.md, MAINT_LOG.md) — read the ones that exist before writing
+anything. If DEBT_LEDGER.md exists, check it before taking the "smallest diff" — a diff that
+lands in a file listed there is a withdrawal, not a free move (PROTOCOL §10).
 ```
 
 ## The history (diagnosis, decisions, and what real runs proved)
