@@ -3,6 +3,88 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.16.0 — 2026-07-29 — the sense floor: does the delivered thing answer what was asked?
+
+**Earned by a use report from the suite's own director**, who could name the symptom but not the
+mechanism: *"it missed some thing that i always find when using it — like the make sense thing, in
+term of every tools and skills."* Three failures were confirmed as the ones actually felt: **it's
+not what I meant**, **way too much for the job**, and **I can't tell what it did**. Carries no
+audit ID — like §10, it arrived as a report from use, not from an executed run.
+
+### The mechanism (why nineteen skills could not see it)
+
+A director's words are read **once**, by `problem-framing`, and translated into a brief; every
+stage after that consumes a *derived* artifact — brief → architecture → slices → proof lines →
+`GATE`. Grepped across the suite: **no skill anywhere re-reads the original request** (the only
+`verbatim` hits concerned copying ledgers). Drift from intent was therefore structurally invisible:
+`GATE: pass | STRUCTURE: clean | THREAT: clear` is fully compatible with having built the wrong
+thing, at the wrong size, described in a way its director cannot act on.
+
+This is §10's disease along a second axis. §10: defensible *increments* accrue an unmaintainable
+shape. §11: defensible *translations* accrue a result nobody asked for. Both are invisible except
+in aggregate; neither is catchable by any point-in-time check of a single step.
+
+Each of the three felt failures maps to a suite value that was **stated but never gated** — the
+only three such values left, now that evidence has `verdict-lint`, structure has `structure-gate`,
+and debt has the ratchet:
+
+| Felt as | Stated in | Why it never bit |
+|---|---|---|
+| "not what I meant" | `problem-framing` captures intent | captured once, re-checked never |
+| "too much for the job" | §7 scale rule | a *permission* to stay small, never a *check* that you did — no run has ever failed for being oversized |
+| "can't tell what it did" | Law 4, director-readable output | governs the *wording* of conclusions, not their content: "GATE: pass" is plain English that says nothing about what changed for you |
+
+### 1. New PROTOCOL §11 — the sense floor, and the DELIVERY block
+
+Three floors (fit, proportion, legibility) and one artifact: every director-facing report now opens
+with four lines before any verdict — `ASKED` (the director's words, **quoted, never paraphrased** —
+the paraphrase *is* the drift), `DID` (in their vocabulary), `SO` (what they can now do, written
+without engineering vocabulary), `COST` (what they now carry: files, concepts, steps, things that
+can break — never lines written or tests added, which flatter the work).
+
+No threshold for "too much" is defined and none may be: proportion is a judgment (Law 6, constrain
+process never intelligence). The floor is only that **the price is visible next to the job when
+that judgment is made** — disproportion is invisible until it is priced, and a large `COST` obliges
+naming the smaller thing that was declined. A fit failure outranks every green verdict in the same
+report.
+
+### 2. New meta-skills Discipline 8 — Sense
+
+The always-on statement, because the director's report was *"in term of every tools and skills"* —
+the fit/proportion/legibility tests run before any report is emitted, not after. When a test fails
+the run **says so** rather than silently rebuilding to its own read of intent (that is the drift,
+performed twice). Two boundaries keep it from becoming second-guessing: sense is judged against the
+director's request and the subject's evidenced intent (baseline rule, §1), never the reviewer's
+model of what they should have wanted; and a request believed misjudged is Law 3, violation ≠
+deviation — state the concern once, then deliver what was asked.
+
+### 3. Mechanical teeth (`verdict-lint.py`) — and the rule-vintage mechanism it forced
+
+The block is enforced, not exhorted (§8.1: prefer a structural check over a marker you can fake).
+`verdict-lint` now fails a report missing any of the four fields, and fails an `ASKED` that carries
+no quotation marks. Scope guard: it fires only on **director-facing** reports — a `LIFECYCLE` line
+or ≥2 distinct verdict nouns — so an isolated §8.2 gate agent, which reports to the merging skill
+and not to the director, stays exempt and the parallel gates keep working.
+
+Landing it immediately condemned four historical transcripts written before the rule existed. The
+tempting escape — editing old artifacts until they comply — is §10.3's defect (silencing a gate
+rather than satisfying it), so the general fix went in instead: **rule vintage**. A transcript
+declares `PROTOCOL: <version>`; any check younger than that declaration is skipped for that file;
+an undeclared transcript is judged by current rules. The pin rule (§1) applied to the rules
+themselves — versioned artifacts deserve versioned verdicts — and every check added after this one
+inherits the mechanism instead of re-arguing its own history. The four legacy transcripts were
+**annotated, never retouched**.
+
+Eight new tests in `test_tools.py` (54 total, all passing except one pre-existing environment
+assertion about this checkout's directory name, **(proven)** failing identically at `HEAD`
+before these changes): missing block, `LIFECYCLE`-alone, isolated-gate exemption, paraphrased
+`ASKED`, partial block, bold-markdown block, grandfathered vintage, and — the one that keeps the
+escape hatch honest — a current-vintage declaration that is *not* grandfathered.
+
+No new skill; the count stays nineteen. This is a rule and a report shape, not a stage.
+
+---
+
 ## 1.15.0 — 2026-07-27 — the debt ratchet: stopping accumulation by defensible increments
 
 **Earned by `AUDIT_002`, a real miss reported from outside the suite.** A dashboard reached

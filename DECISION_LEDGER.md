@@ -63,3 +63,40 @@ and a reversibility class. Open questions live here as `status: open` until the 
 gaps"). They record gaps the suite does not yet own, per PROTOCOL §4's rule that a missing mandate
 is logged, not silently improvised. `DESIGN: blocked-on-director(one-way doors: none — both D001 and
 D002 are two-way; director may defer both without cost)`.*
+
+---
+
+## D003 — Where does the "sense floor" live: a new gate skill, or the always-on layer?
+
+- **date:** 2026-07-29
+- **decision:** **Always-on layer** — `meta-skills` Discipline 8 (the discipline) + `PROTOCOL.md`
+  §11 (the definition, the DELIVERY block, and the enforcement scope), with `chief-engineer`
+  Phase 4 as the single place the whole run is checked against the request.
+- **forces:** The director reported the gap as present in *"every tools and skills"*, not at one
+  stage — and the mechanism confirms it: the miss is that no stage downstream of `problem-framing`
+  ever re-reads the original request, so a gate placed at the end would inherit the same blindness
+  it is meant to cure (it too would consume derived artifacts). A twentieth skill would also have
+  to be *routed to*, and the failure is precisely that nobody notices there is anything to route.
+  Counter-force: the always-on layer is the most expensive place to add a rule, since it binds
+  inside every phase of every skill — and Discipline 7, simplicity, applies to this suite too.
+- **options:**
+  1. *Discipline 8 + §11 + `chief-engineer` Phase 4* **(chosen)** — binds everywhere the gap was
+     reported, adds no stage to route to, and reuses `verdict-lint` for teeth. Cost: the always-on
+     layer grows a seventh… eighth discipline, and every report pays four lines.
+  2. *A `sense-gate` skill (twentieth mandate)* — a parallel §8.2 gate answering "does this answer
+     the ask?". Rejected: it must be routed to by the same run that cannot see the problem, and it
+     would consume artifacts rather than the request — reproducing the defect inside the fix.
+  3. *Strengthen `problem-framing` only* — re-check the brief against the request at the end.
+     Rejected as too narrow: it addresses fit, and leaves proportion and legibility ungated. It
+     also fires at the wrong end, since `problem-framing` does not run in most sessions.
+- **reversibility class:** two-way for the *placement* (a discipline can be promoted to a skill if
+  a live run proves prose insufficient); one-way-ish for the *DELIVERY block shape*, since once
+  reports carry `ASKED/DID/SO/COST` and `verdict-lint` enforces it, changing the field names
+  invalidates every transcript's vintage baseline. Field names were therefore chosen for a
+  non-coder reader, not for symmetry with the verdict grammar.
+- **evidence tag:** **(proven)** for the mechanism (grepped: no skill re-reads the original
+  request) and for the enforcement (8 tests, exit codes verified). **(suspected)** for the claim
+  that the DELIVERY block actually changes what a director feels — that needs a live run under
+  1.16.0 to settle, and the experiment is: does a report whose `COST` line is honest change any
+  director decision that a 1.15.0-style report did not?
+- **status:** decided — shipped in 1.16.0.

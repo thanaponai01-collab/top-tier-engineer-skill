@@ -61,6 +61,7 @@ You don't pick skills. You talk to the engineer:
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
 - "Change the schema / run a migration" → data-evolution evolves the data shape without loss
 - "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step
+- "Every check passed and it still isn't what I meant / it's way too much for the job / I can't tell what it did" → the sense floor (PROTOCOL §11): every report opens by quoting your own words back, saying what changed in your vocabulary, what you can now do, and what it cost you to have it
 
 `chief-engineer` routes by **artifact state, not by your phrasing** — say "build it" with no brief
 and it will (briefly, proportionally) frame first. Small tasks get the compressed lifecycle, never

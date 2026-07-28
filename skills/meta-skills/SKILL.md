@@ -124,9 +124,44 @@ inlined, or not built at all while every invariant still holds?
 - When two designs satisfy the same invariants, the simpler one wins by default; choosing the
   complex one is a ledger decision requiring a stated force.
 
+## Discipline 8 — Sense (does the delivered thing answer the job?)
+
+Every other discipline here makes the *work* trustworthy. This one asks whether the work was worth
+doing in the shape it was done. It exists because a run can satisfy every gate in the suite and
+still hand its director something that does not make sense — and no gate downstream of
+`problem-framing` is positioned to notice, because none of them ever reads the original request
+again (the mechanism, and the DELIVERY block that closes it, are `PROTOCOL.md` §11; gloss:
+`ASKED` quoted verbatim · `DID` in the director's words · `SO` what they can now do · `COST` what
+they now carry).
+
+Run all three tests before emitting any report, not after:
+
+- **Fit** — re-read the director's *actual words*, not the brief. Does what you built answer the
+  sentence they wrote? Satisfying a derived criterion is not evidence of fit; it is evidence that
+  the translation was internally consistent, which is a different claim.
+- **Proportion** — price the work in what the director now carries, and put that price next to the
+  size of the job. Nine ledgers for a thirty-line script and a bespoke abstraction for one caller
+  are the same defect Discipline 7 already forbids; the difference is that this test makes the
+  overshoot *visible to the person paying for it* instead of leaving it to the builder's taste.
+- **Legibility** — can the director predict what happens when they use the thing? If the only
+  honest answer to "what changed for me?" is a verdict noun, the run has reported its own process
+  and called it a result.
+
+When a test fails, the failure is *said*, never silently corrected: the run names the mismatch,
+offers the nearest thing that would fit (or the smaller thing it should have built), and lets the
+director choose. Silently rebuilding to your own read of their intent is the drift, performed
+twice. And a failed fit test outranks every green verdict in the same report — Law 4,
+director-readable output, is not satisfied by a legible sentence about the wrong thing.
+
+Two boundaries keep this from becoming second-guessing. Sense is judged against the director's
+request and the subject's evidenced intent (the baseline rule, PROTOCOL §1) — never against your
+own model of what they *should* have wanted. And a request you think is misjudged is Law 3,
+violation ≠ deviation: state the concern once, in one line, then deliver what was asked.
+
 ## The one-line summary of the suite
 
 **Frame falsifiably, decide reversibly, build provably, verify connectedly, gate adversarially,
 debug causally, audit symptomatically, optimize measurably, scale sub-linearly, defend
 adversarially, ship reversibly, migrate losslessly, maintain memorably — and at every step, know
-exactly how much you know.**
+exactly how much you know, and hand back something that answers what was asked, at a size worth
+what it cost.**

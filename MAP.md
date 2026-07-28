@@ -85,8 +85,9 @@ time, never from the raw report.
 ## Where the shared rules live
 
 `PROTOCOL.md` — evidence vocabulary, the six Laws, the ledger registry, the handoff chain, the
-verdict-line grammar, and the degradation rule for skills copied out of the suite. Per Law 1 it is
-the only place these are stated; this map is a picture of it, not a second copy.
+verdict-line grammar, the degradation rule for skills copied out of the suite, the debt ratchet
+(§10), and the sense floor (§11) that checks a finished run against the director's own words. Per
+Law 1 it is the only place these are stated; this map is a picture of it, not a second copy.
 
 These directories are not supplementary — they are the evidence base for the suite's founding claim
 that it finds real bugs and ships fixes, not just reports. Any future quality metric ("skill yield")

@@ -147,8 +147,13 @@ becomes production — is the anti-pattern this mode exists to kill.
 
 ## Phase 4 — Report
 
-Lead with three sentences (done / proven / needs-decision), then the routed skills' own verdicts,
-then depth. End with the state line:
+Open with the DELIVERY block (`PROTOCOL.md` §11, the sense floor) — `ASKED` quoted from the
+director's own words, then `DID` / `SO` / `COST` — because this skill owns the one report and is
+therefore the only place the whole run can be checked against the sentence that started it. Then
+the three sentences (done / proven / needs-decision), then the routed skills' own verdicts, then
+depth. A `SO` line that does not answer `ASKED` is reported before any verdict and outranks all of
+them; a `COST` large against `ASKED` names the smaller thing that was declined. End with the state
+line:
 
 `LIFECYCLE: <stage> | next: <skill or "director decision"> | blocked(missing: …) — if blocked`
 
@@ -156,4 +161,5 @@ then depth. End with the state line:
 
 Coding from a verb instead of a state; ten skill reports stapled together instead of one engineer's
 report; bureaucratizing a 20-line script through five ceremonies; skipping framing because the user
-sounded confident; asking the user to pick a skill.
+sounded confident; asking the user to pick a skill; reporting a green run whose result answers a
+question the director never asked.

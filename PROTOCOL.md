@@ -382,3 +382,77 @@ Therefore:
    a generated blob — is invisible to `correctness-gate` *by construction* rather than by
    omission, so `correctness-gate` cannot report its absence and must not be the gate
    expected to catch it. `structure-gate` owns it, via rules 5 and 6.
+
+## 11. The sense floor (fit, proportion, legibility)
+
+*Provenance: reported from outside by the suite's director after use — every gate could return
+green and the delivered thing still not make sense. Carries no audit ID: it arrived as a use
+report, like §10.*
+
+**The mechanism.** A director's words are read *once*, by `problem-framing`, and translated into
+a brief; `arch-design` translates the brief; slices translate the architecture; proof lines
+translate the slices; `correctness-gate` proves the code against those criteria. Every stage
+downstream of the first consumes a **derived** artifact, and no stage in the §4 chain ever reads
+the original request again. Drift from intent is therefore *structurally* invisible to a suite
+that is otherwise saturated with gates: `GATE: pass | STRUCTURE: clean | THREAT: clear` is fully
+compatible with having built the wrong thing, at the wrong size, described in a way its director
+cannot act on. §10 is this failure along the axis of *time* (defensible increments accrue an
+unmaintainable shape); this section is the same failure along the axis of *fit* (defensible
+translations accrue a result nobody asked for). Both are invisible except in aggregate, and
+neither is caught by any point-in-time check of a single step.
+
+Three floors, each a stated suite value that until now had no gate:
+
+1. **Fit.** The run re-reads the director's request *verbatim* before reporting — the request,
+   not the brief derived from it. Precedence (Discipline 1) resolves any conflict between them
+   in the request's favour, because a brief is recollection of intent and the request is the
+   intent. A brief that has drifted is a `problem-framing` defect, reported as one.
+2. **Proportion.** §7 grants permission to stay small; nothing ever *checked* that a run did, so
+   no run has ever failed for being oversized. Disproportion is invisible until it is priced —
+   so the price is stated next to the job, every time. No threshold is defined here and none may
+   be: what is proportionate is a judgment (Law 6, constrain process never intelligence). The
+   floor is only that the number is visible when that judgment is made.
+3. **Legibility.** Law 4, director-readable output, governs the *wording* of conclusions. This
+   governs their *content*: a director must be able to predict what happens when they use the
+   thing. "GATE: pass" is perfectly plain English and tells its reader nothing about what changed
+   for them.
+
+**The DELIVERY block.** Four lines, opening every director-facing report, before any verdict:
+
+```
+ASKED: "<the director's own words, quoted — never paraphrased>"
+DID:   <what changed, in the director's vocabulary — one sentence>
+SO:    <what they can now do that they could not before — or "nothing yet: <what remains>">
+COST:  <what they now carry: files, concepts, steps, things that can break>
+```
+
+- **ASKED is quoted, never summarized.** The paraphrase *is* the drift; quoting is what makes fit
+  checkable by a reader who was not present. When work spans sessions, quote the standing job
+  line from `PROBLEM_BRIEF.md` and mark it as such — a quoted ledger line is honest, a
+  reconstructed one is not.
+- **SO carries no engineering vocabulary.** A `SO` line that cannot be written without jargon is
+  evidence the run does not yet know what it delivered *for the director*; that is a finding, and
+  it is reported before any verdict rather than dressed up.
+- **COST is in units the director pays** — files they now own, concepts they must hold, steps
+  they must run, things that can now break — never in units that flatter the work (lines written,
+  tests added). Disproportion is a *disclosure*, not a defect: when `COST` reads large against
+  `ASKED`, the run names in one line the smaller thing it declined and the force that declined it
+  (Discipline 2, name what you are sacrificing).
+- **A fit failure outranks every passing verdict**, exactly as a Phase-1 drift finding outranks
+  the request that surfaced it. No run closes a green verdict above a `SO` line that does not
+  answer `ASKED`; it states the mismatch plainly and stops.
+
+**Scope.** Director-facing reports only. An isolated §8.2 gate agent reports to the merging skill,
+not to the director, and is exempt. `verdict-lint.py` enforces presence mechanically wherever a
+`LIFECYCLE` line or two or more distinct verdict nouns appear — the §8.1 preference for a
+structural check over a marker you can fake.
+
+**Rule vintage (general, introduced here).** A rule may not condemn an artifact written before it
+existed: re-judging history by today's checks produces violations no one could have avoided, and
+the tempting escape — editing the old artifact until it complies — is the §10.3 defect of
+silencing a gate instead of satisfying it. A transcript therefore declares the rules it was
+written under, `PROTOCOL: <version>`, on its own line; any check younger than that declaration is
+skipped for that file, and a transcript with no declaration is judged by the current rules. This
+is the pin rule (§1) applied to the rules themselves — versioned artifacts deserve versioned
+verdicts — and every check added after this one inherits the mechanism rather than re-arguing its
+own history.

@@ -25,10 +25,18 @@ def run(tool, *args, stdin=None):
     return p.returncode, p.stdout, p.stderr
 
 
+# PROTOCOL §11: the four lines every director-facing report opens with. Kept here as one
+# constant so the multi-noun fixtures below read as reports, not as verdict soup.
+DELIVERY = ('ASKED: "make the login stop dropping people on refresh"\n'
+            "DID: sessions now survive a page reload.\n"
+            "SO: you stay logged in when you refresh; nothing else changed.\n"
+            "COST: one new file you now own; no new steps to run.\n")
+
+
 class VerdictLint(unittest.TestCase):
     def test_clean_transcript_passes(self):
         code, out, _ = run("verdict-lint.py",
-                            stdin="SLICE: proven(x wired)\nGATE: pass(x)\n")
+                            stdin=DELIVERY + "SLICE: proven(x wired)\nGATE: pass(x)\n")
         self.assertEqual(code, 0, out)
         self.assertIn("clean", out)
 
@@ -66,7 +74,7 @@ class VerdictLint(unittest.TestCase):
 
     def test_fix_coherent_with_scrutiny_passes(self):
         code, out, _ = run("verdict-lint.py",
-                            stdin="SCRUTINY: fix-then-ship(top: parity)\n"
+                            stdin=DELIVERY + "SCRUTINY: fix-then-ship(top: parity)\n"
                                   "FIX F1: coherent(surfaces: api, ui, export)\n")
         self.assertEqual(code, 0, out)
 
@@ -91,6 +99,69 @@ class VerdictLint(unittest.TestCase):
         code, out, _ = run("verdict-lint.py",
                             stdin="FIX (single batched IN-clause): 1 DB round trip\n")
         self.assertEqual(code, 0, out)
+
+    # ---- PROTOCOL §11 the sense floor (director report: does it answer the ask?) ----
+
+    def test_multi_stage_report_without_delivery_block_fails(self):
+        # The gap this rule closes: every gate green, and no line in the report is
+        # checkable against the sentence the director actually wrote.
+        code, out, _ = run("verdict-lint.py",
+                            stdin="SLICE: proven(x)\nGATE: pass(x)\n")
+        self.assertEqual(code, 1, out)
+        self.assertIn("ASKED", out)
+
+    def test_lifecycle_line_alone_requires_delivery_block(self):
+        # One noun, but LIFECYCLE means chief-engineer is reporting to the director.
+        code, out, _ = run("verdict-lint.py",
+                            stdin="LIFECYCLE: building | next: correctness-gate\n")
+        self.assertEqual(code, 1, out)
+        self.assertIn("§11", out)
+
+    def test_isolated_gate_agent_is_exempt(self):
+        # A §8.2 subagent reports to the merging skill, not the director. Requiring a
+        # DELIVERY block here would wedge exactly the parallel gates §8.2 enables.
+        code, out, _ = run("verdict-lint.py", stdin="GATE: fail(login accepts empty pw)\n")
+        self.assertEqual(code, 0, out)
+
+    def test_asked_must_quote_the_director(self):
+        # The paraphrase IS the drift — a summarized ASKED cannot be checked by a reader
+        # who was not present, which is the whole point of quoting it.
+        paraphrased = DELIVERY.replace(
+            'ASKED: "make the login stop dropping people on refresh"',
+            "ASKED: user wanted better session handling")
+        code, out, _ = run("verdict-lint.py",
+                            stdin=paraphrased + "SLICE: proven(x)\nGATE: pass(x)\n")
+        self.assertEqual(code, 1, out)
+        self.assertIn("quote", out)
+
+    def test_partial_delivery_block_names_the_missing_field(self):
+        partial = DELIVERY.replace("COST: one new file you now own; no new steps to run.\n", "")
+        code, out, _ = run("verdict-lint.py",
+                            stdin=partial + "SLICE: proven(x)\nGATE: pass(x)\n")
+        self.assertEqual(code, 1, out)
+        self.assertIn("COST", out)
+
+    def test_bold_markdown_delivery_block_is_recognized(self):
+        # Reports are markdown; the fields will be bolded in real use.
+        bolded = "".join(f"- **{l}\n" for l in DELIVERY.strip().splitlines())
+        code, out, _ = run("verdict-lint.py",
+                            stdin=bolded + "\nSLICE: proven(x)\nGATE: pass(x)\n")
+        self.assertEqual(code, 0, out)
+
+    def test_pre_sense_floor_vintage_is_grandfathered(self):
+        # A rule may not condemn an artifact written before it existed (PROTOCOL §11,
+        # rule vintage). The legacy run transcripts in runs/ depend on this.
+        code, out, _ = run("verdict-lint.py",
+                            stdin="PROTOCOL: 1.12.0 — predates the sense floor\n"
+                                  "SLICE: proven(x)\nGATE: pass(x)\n")
+        self.assertEqual(code, 0, out)
+
+    def test_current_vintage_is_not_grandfathered(self):
+        # The escape hatch must not become a way to opt out of today's rules.
+        code, out, _ = run("verdict-lint.py",
+                            stdin="PROTOCOL: 1.16.0\nSLICE: proven(x)\nGATE: pass(x)\n")
+        self.assertEqual(code, 1, out)
+        self.assertIn("ASKED", out)
 
 
 class VerdictLintRelease(unittest.TestCase):

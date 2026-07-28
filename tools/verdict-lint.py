@@ -126,6 +126,57 @@ def _check_fix_scrutiny(noun_events, seen_nouns):
             if noun == "FIX" and state in {"coherent", "incoherent"}]
 
 
+# PROTOCOL §11 (the sense floor): a director-facing report opens with the DELIVERY block.
+# Fields may be bold, quoted, list-item'd, or heading'd in a markdown report.
+DELIVERY_RE = re.compile(r'^[\s`*>#|+-]*\*{0,2}(ASKED|DID|SO|COST)\*{0,2}\s*:', re.M)
+# ASKED must QUOTE the director; the paraphrase is exactly the drift §11 exists to catch.
+ASKED_RE = re.compile(r'^[\s`*>#|+-]*\*{0,2}ASKED\*{0,2}\s*:\s*(.+)$', re.M)
+QUOTE_CHARS = '"“”‘’\'`'
+# A rule may not condemn an artifact written before it existed. A transcript states which
+# PROTOCOL version judged it (`PROTOCOL: 1.15.0`); checks younger than that declaration are
+# skipped for that file. The pin rule (§1) applied to the rules themselves — general, so the
+# next added check reuses it instead of re-litigating its own history.
+PROTOCOL_DECL_RE = re.compile(r'^[\s`*>#|+-]*\*{0,2}PROTOCOL\*{0,2}\s*:\s*v?(\d+)\.(\d+)', re.M)
+SENSE_FLOOR_SINCE = (1, 16)
+
+
+def _declared_protocol(text):
+    m = PROTOCOL_DECL_RE.search(text)
+    return (int(m.group(1)), int(m.group(2))) if m else None
+
+
+def _check_delivery_block(text, seen_nouns, noun_events):
+    """PROTOCOL §11: fit, proportion and legibility have no gate unless the DELIVERY
+    block is mechanically required — §8.1 prefers a structural check over a marker.
+
+    Scope guard: this fires only on DIRECTOR-FACING reports, identified as a LIFECYCLE
+    line (chief-engineer owns the one report) or two-plus distinct verdict nouns (a
+    multi-stage run). An isolated §8.2 gate agent emits one noun and reports to the
+    merging skill, not to the director — requiring a DELIVERY block there would wedge
+    exactly the parallel gates §8.2 exists to enable.
+    """
+    if "LIFECYCLE" not in seen_nouns and len(seen_nouns) < 2:
+        return []
+    declared = _declared_protocol(text)
+    if declared is not None and declared < SENSE_FLOOR_SINCE:
+        return []  # judged by the rules it was written under
+    at = noun_events[0][0] if noun_events else 1
+    present = {m.group(1) for m in DELIVERY_RE.finditer(text)}
+    missing = [f for f in ("ASKED", "DID", "SO", "COST") if f not in present]
+    if missing:
+        return [(at, "DELIVERY",
+                 f"director-facing report is missing DELIVERY field(s) {', '.join(missing)} "
+                 "— PROTOCOL §11 requires ASKED/DID/SO/COST before any verdict, so the run "
+                 "is checkable against the request that started it, not only against the "
+                 "criteria derived from it")]
+    m = ASKED_RE.search(text)
+    if m and not any(c in m.group(1) for c in QUOTE_CHARS):
+        return [(at, "DELIVERY",
+                 "ASKED does not quote the director's own words (PROTOCOL §11: the "
+                 "paraphrase is the drift — quote the request, never summarize it)")]
+    return []
+
+
 def lint(text: str):
     violations = []
     lines = text.splitlines()
@@ -159,6 +210,8 @@ def lint(text: str):
     violations.extend(_check_sequence(noun_events))
     # PROTOCOL §9: FIX adjudication requires a SCRUTINY verdict in the same transcript.
     violations.extend(_check_fix_scrutiny(noun_events, seen_nouns))
+    # PROTOCOL §11: a director-facing report opens with the DELIVERY block.
+    violations.extend(_check_delivery_block(text, seen_nouns, noun_events))
 
     return violations, seen_nouns
 
@@ -230,7 +283,8 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8")
 
     if "--help" in sys.argv or "-h" in sys.argv:
-        print("verdict-lint — check PROTOCOL §5 verdict-line FORM (not merit).\n"
+        print("verdict-lint — check PROTOCOL §5 verdict-line FORM (not merit),\n"
+              "plus the §11 DELIVERY block on director-facing reports.\n"
               "  verdict-lint.py <transcript>   lint a file\n"
               "  verdict-lint.py                lint stdin\n"
               "  verdict-lint.py --release [root]   check manifest vs CHANGELOG\n"
