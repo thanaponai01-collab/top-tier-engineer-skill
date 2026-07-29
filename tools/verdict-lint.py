@@ -256,8 +256,15 @@ def _check_sequence(noun_events):
 
 
 def release_check(root):
-    """Manifest version must equal the top CHANGELOG heading. This drift shipped twice
-    (v1.7.1 router, v1.9.2→1.10.0 manifest) — cheaper to check than to remember."""
+    """Every surface that states the release version must state the SAME one.
+
+    This drift shipped twice (v1.7.1 router, v1.9.2→1.10.0 manifest) — cheaper to check
+    than to remember. v1.16.1: the check covered plugin.json and CHANGELOG.md but not
+    `.claude-plugin/marketplace.json`, which carries its own `version` per plugin entry.
+    v1.16.0 updated the two covered surfaces and left marketplace.json at 1.15.0; the
+    gate reported "release clean" while a third surface disagreed. A drift check that
+    knows about some of the surfaces is a drift check with a blind spot, and the blind
+    spot is where the drift goes."""
     import json
     from pathlib import Path
     root = Path(root)
@@ -272,6 +279,22 @@ def release_check(root):
         return "CHANGELOG.md has no '## <version>' heading"
     if m.group(1) != manifest:
         return f"version drift: plugin.json says {manifest}, CHANGELOG top entry is {m.group(1)}"
+
+    # marketplace.json is optional (a plugin repo need not publish one), but when it
+    # lists THIS plugin it must agree. Keyed on the manifest's own name, never on a
+    # directory name or list position.
+    try:
+        mkt = json.loads((root / ".claude-plugin" / "marketplace.json")
+                         .read_text(encoding="utf-8-sig"))
+        me = json.loads((root / ".claude-plugin" / "plugin.json")
+                        .read_text(encoding="utf-8-sig"))["name"]
+    except (OSError, KeyError, ValueError):
+        return None  # no marketplace, or it is unreadable — nothing further to check
+    for entry in mkt.get("plugins", []):
+        if entry.get("name") == me and "version" in entry:
+            if entry["version"] != manifest:
+                return (f"version drift: plugin.json says {manifest}, "
+                        f"marketplace.json entry '{me}' says {entry['version']}")
     return None
 
 
@@ -287,7 +310,8 @@ def main():
               "plus the §11 DELIVERY block on director-facing reports.\n"
               "  verdict-lint.py <transcript>   lint a file\n"
               "  verdict-lint.py                lint stdin\n"
-              "  verdict-lint.py --release [root]   check manifest vs CHANGELOG\n"
+              "  verdict-lint.py --release [root]   check plugin.json vs CHANGELOG\n"
+              "                                    vs marketplace.json\n"
               "Exit: 0 clean, 1 violations.")
         return 0
 
@@ -298,7 +322,8 @@ def main():
         if err:
             print(f"verdict-lint: {err}")
             return 1
-        print("verdict-lint: release clean — manifest and CHANGELOG agree.")
+        print("verdict-lint: release clean — every surface that states a version agrees "
+              "(plugin.json, CHANGELOG.md, marketplace.json where present).")
         return 0
 
     if len(sys.argv) > 1:

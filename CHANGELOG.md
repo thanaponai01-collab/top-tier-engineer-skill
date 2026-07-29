@@ -3,6 +3,68 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.16.1 — 2026-07-29 — consistency sweep: the seams between artifacts
+
+**Earned by a `chief-engineer` run over the suite's own folder** ("run on the folder see if
+something doesn't make sense"). Every mechanical floor was green — `STRUCTURE: held`,
+`LATENT: clean`, `--release` clean, 54 self-tests — and four real defects were sitting in the
+seams *between* artifacts, where no single gate looks. No new rules; this release makes the
+suite true of itself.
+
+### The release-drift gate had a third surface it never checked
+
+`verdict-lint.py --release` compared `plugin.json` against `CHANGELOG.md` and reported
+"release clean". It did not know about `.claude-plugin/marketplace.json`, which carries its own
+`version` per plugin entry. v1.16.0 bumped the two covered surfaces and left marketplace.json at
+`1.15.0` — so the gate written specifically because *"this drift shipped twice"* was green while
+a third surface disagreed. **A drift check that knows about some of the surfaces is a drift check
+with a blind spot, and the blind spot is where the drift goes.**
+
+`release_check()` now requires all three to agree. The marketplace entry is matched on the
+manifest's own plugin *name*, never on list position or a directory name; an absent
+marketplace.json is still clean (publishing one is optional). Four tests cover agreement, drift,
+name-matching among several listed plugins, and absence.
+
+*Correction to the run that found this:* the report initially claimed this drift was why an
+installed copy was a version behind. It was not — `/plugin update` resolved 1.16.0 correctly
+while marketplace.json still read 1.15.0. The stale install was simply an un-run update. The
+manifest disagreement is a real, previously ungated consistency defect; it was not an
+install-blocker, and the entry above says so.
+
+### A self-test whose result depended on the checkout's directory name
+
+`test_identity_is_the_manifest_name_not_a_directory_name` asserted
+`PLUGIN_ROOT.name != _manifest_name(...)` — a fact about the **checkout directory**, not about
+the code. It passed only because GitHub names the repo `top-tier-engineer-skill` while the plugin
+is named `top-tier-engineer`. In a clone named after the plugin it failed: **green in CI, red on
+the author's machine** — the worst polarity, since the machine that could act on it saw noise and
+CI could never catch a regression here.
+
+Its intent was right ("don't key on a directory name"); its assertion tested a coincidence. It now
+asserts the property directly, in the two cases that actually discriminate: a checkout in a
+directory named nothing like the plugin is still resolved (identity comes from the manifest), and
+a directory merely *named* like the plugin but declaring a different one is **not** adopted —
+the half a dirname check gets wrong. Both hold regardless of what any checkout is called.
+
+### §11 was enforced across nineteen skills and stated in two
+
+`verdict-lint.py` demands the DELIVERY block on any transcript with a `LIFECYCLE` line **or two
+or more distinct verdict nouns**. Only `chief-engineer` and `meta-skills` mentioned §11 at all —
+so a conformant standalone `senior-review` run emitting `REVIEW` plus a §9 `FIX` line was blocked
+by the Stop hook for a rule its own contract never stated. Reproduced before fixing.
+
+The enforcement surface was nineteen skills wide; the instruction surface was two. All seventeen
+remaining skills now carry the §11 pointer at their verdict-line phase, name-plus-clause per §6
+so it survives extraction, including the §8.2 exemption for an isolated gate reporting to a
+merging skill rather than to a director.
+
+### Registry gaps
+
+`STRUCTURE_REPORT.md` appeared in the §4 handoff chain but had no row in the §3 ledger registry —
+the only produced ledger-shaped artifact with no registered owner or schema. Added. And §5's
+recovery grep omitted `TRACE`, which §5 declares a linted tool noun two paragraphs later, so a
+trajectory recovered by that grep silently dropped the run-trace line. Added.
+
 ## 1.16.0 — 2026-07-29 — the sense floor: does the delivered thing answer what was asked?
 
 **Earned by a use report from the suite's own director**, who could name the symptom but not the

@@ -111,6 +111,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | `DATA_TIER.md` | data-tier | Access → cost-class → plan-evidence → verdict, per data-access change |
 | `AUDIT_SPEC.md` | symptom-audit | Pinned symptom, cause→location→cost table, phased prescription, pre-written checks |
 | `LATENT_REPORT.md` | latent-audit | Graph measurements, deletion manifest (with disconnection proofs), watch list, layer-breach table |
+| `STRUCTURE_REPORT.md` | structure-gate | Latest structural measurement: coverage (§10.5), per-signal flags, ratchet result against the baseline |
 | `DEBT_LEDGER.md` | structure-gate | Every **accepted** structural breach: what, why accepted, cost per future change, repayment trigger (§10) |
 | `REVIEW_LEDGER.md` | senior-review | Unresolved novelty: hypothesis + the experiment that would settle it |
 | `THREAT_MODEL.md` | threat-model | Assets, trust boundaries, abuse cases, evidence tag, defense status |
@@ -166,8 +167,9 @@ both fire on the same artifact in the same run:
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|THREAT|SHIP|MIGRATE|MAINT|FIX)( [^:]+)?:`)
-(plus the shared noun `FIX`, see below) recovers any run's trajectory:
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE)( [^:]+)?:`)
+(including the shared noun `FIX` and the tool noun `TRACE`, both below) recovers any run's
+trajectory:
 
 | Noun | Owner | States |
 |---|---|---|

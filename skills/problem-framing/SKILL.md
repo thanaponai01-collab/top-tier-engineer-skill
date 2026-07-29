@@ -102,6 +102,7 @@ framing failure, not a build failure — route it back here.
   never silently honor the newer statement.
 - Never let the brief exceed what's needed to start architecture. Framing that tries to design is
   scope theft from the next skill.
+- **Director-facing report? Open with the DELIVERY block, before any verdict** — `ASKED` (the director's own words, quoted verbatim, never paraphrased), `DID`, `SO`, `COST`. This is `PROTOCOL.md` §11, the sense floor: a run can pass every gate and still have built the wrong thing, at the wrong size, described in a way its director cannot act on. A `SO` line that does not answer `ASKED` is reported first and outranks every passing verdict below it. Exempt when this run is an isolated §8.2 gate reporting to a merging skill rather than to a director. `verdict-lint.py` enforces presence mechanically.
 - End every run with a verdict line: `BRIEF: ready | blocked-on-questions | revised(IDs changed)`.
 
 ## Anti-patterns this skill exists to kill

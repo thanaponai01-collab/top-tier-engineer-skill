@@ -90,6 +90,8 @@ that would promote it.
 
 Produce the **Cause Verdict** (in the report, and as the root-cause input to `evolve-maintain`):
 
+**Director-facing report? Open with the DELIVERY block, before any verdict** — `ASKED` (the director's own words, quoted verbatim, never paraphrased), `DID`, `SO`, `COST`. This is `PROTOCOL.md` §11, the sense floor: a run can pass every gate and still have built the wrong thing, at the wrong size, described in a way its director cannot act on. A `SO` line that does not answer `ASKED` is reported first and outranks every passing verdict below it. Exempt when this run is an isolated §8.2 gate reporting to a merging skill rather than to a director. `verdict-lint.py` enforces presence mechanically.
+
 1. Failure signature and minimal reproduction (the future regression test, pre-written).
 2. Proven cause — the two-way test results, verbatim excerpts.
 3. Why it wasn't caught earlier — missing oracle, unwired guard, false assumption, observability

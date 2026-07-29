@@ -186,6 +186,40 @@ class VerdictLintRelease(unittest.TestCase):
             self.assertEqual(code, 1, out)
             self.assertIn("drift", out)
 
+    def _release_with_marketplace(self, entries):
+        """Build an agreeing plugin.json/CHANGELOG repo, optionally add a marketplace
+        listing `entries` (None = no marketplace file at all), and run --release."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp, "1.2.0", "1.2.0")
+            if entries is not None:
+                with open(os.path.join(tmp, ".claude-plugin", "marketplace.json"), "w",
+                          encoding="utf-8") as f:
+                    json.dump({"name": "m", "plugins": entries}, f)
+            return run("verdict-lint.py", "--release", tmp)
+
+    def test_marketplace_drift_fails(self):
+        """v1.16.0 bumped plugin.json and CHANGELOG and left marketplace.json behind,
+        and the gate said 'release clean' — it only knew about two of the three
+        surfaces that state a version."""
+        code, out, _ = self._release_with_marketplace([{"name": "x", "version": "1.1.0"}])
+        self.assertEqual(code, 1, out)
+        self.assertIn("marketplace.json", out)
+
+    def test_marketplace_agreeing_is_clean(self):
+        code, out, _ = self._release_with_marketplace([{"name": "x", "version": "1.2.0"}])
+        self.assertEqual(code, 0, out)
+
+    def test_marketplace_matches_on_name_not_position(self):
+        """A marketplace may list several plugins; only THIS one's entry binds."""
+        code, out, _ = self._release_with_marketplace(
+            [{"name": "other", "version": "9.9.9"}, {"name": "x", "version": "1.2.0"}])
+        self.assertEqual(code, 0, out)
+
+    def test_absent_marketplace_is_not_a_failure(self):
+        """Publishing a marketplace is optional; its absence must not fail a repo."""
+        code, out, _ = self._release_with_marketplace(None)
+        self.assertEqual(code, 0, out)
+
 
 class RunTrace(unittest.TestCase):
     def _json(self, stdin):
@@ -577,6 +611,21 @@ class StopGate(unittest.TestCase):
         spec.loader.exec_module(mod)
         return mod
 
+    def _fake_checkout(self, parent, dirname, plugin_name):
+        """Materialise the minimum a directory needs to look like a suite checkout:
+        a plugin manifest declaring `plugin_name`, and a tools/verdict-lint.py to load
+        rules from. Returns its path."""
+        fake = os.path.join(parent, dirname)
+        os.makedirs(os.path.join(fake, ".claude-plugin"))
+        os.makedirs(os.path.join(fake, "tools"))
+        with open(os.path.join(fake, ".claude-plugin", "plugin.json"), "w",
+                  encoding="utf-8") as f:
+            json.dump({"name": plugin_name, "version": "0.0.0"}, f)
+        with open(os.path.join(fake, "tools", "verdict-lint.py"), "w",
+                  encoding="utf-8") as f:
+            f.write("REGISTRY = {}\n")
+        return fake
+
     def test_selftest_passes(self):
         code, out, err = run("stop-gate.py", "--selftest")
         self.assertEqual(code, 0, out + err)
@@ -591,17 +640,9 @@ class StopGate(unittest.TestCase):
         v1.14.1 cache blocked the session that introduced `STRUCTURE: regressed`."""
         sg = self._load()
         with tempfile.TemporaryDirectory() as tmp:
-            fake = os.path.join(tmp, "some-checkout")
-            os.makedirs(os.path.join(fake, ".claude-plugin"))
-            os.makedirs(os.path.join(fake, "tools"))
             name = sg._manifest_name(sg.PLUGIN_ROOT)
             self.assertIsNotNone(name, "plugin must declare a name")
-            with open(os.path.join(fake, ".claude-plugin", "plugin.json"), "w",
-                      encoding="utf-8") as f:
-                json.dump({"name": name, "version": "0.0.0"}, f)
-            with open(os.path.join(fake, "tools", "verdict-lint.py"), "w",
-                      encoding="utf-8") as f:
-                f.write("REGISTRY = {}\n")
+            fake = self._fake_checkout(tmp, "some-checkout", name)
             deep = os.path.join(fake, "skills", "x")
             os.makedirs(deep)
             self.assertEqual(str(sg.suite_root(deep)), fake,
@@ -613,11 +654,31 @@ class StopGate(unittest.TestCase):
             self.assertEqual(sg.suite_root(tmp), sg.PLUGIN_ROOT)
 
     def test_identity_is_the_manifest_name_not_a_directory_name(self):
-        """Install path is <plugin>/<version>/ and the checkout is
-        `top-tier-engineer-skill` — neither directory is named what the plugin is
-        named, so keying on a directory name silently never matches."""
+        """Identity must come from the manifest, so a checkout is recognised whatever
+        its directory is called.
+
+        The previous version of this test asserted `PLUGIN_ROOT.name != manifest_name`
+        — a fact about the CHECKOUT DIRECTORY, not about the code. It passed only
+        because GitHub happens to name the repo `top-tier-engineer-skill` while the
+        plugin is named `top-tier-engineer`; in a clone named after the plugin it
+        failed, green in CI and red on the author's machine. So it is rebuilt to assert
+        the property directly, in the case that actually discriminates: a checkout whose
+        directory name matches nothing, resolved purely by what its manifest declares."""
         sg = self._load()
-        self.assertNotEqual(sg.PLUGIN_ROOT.name, sg._manifest_name(sg.PLUGIN_ROOT))
+        name = sg._manifest_name(sg.PLUGIN_ROOT)
+        self.assertIsNotNone(name, "plugin must declare a name")
+        with tempfile.TemporaryDirectory() as tmp:
+            # Deliberately named nothing like the plugin: only the manifest can identify it.
+            fake = self._fake_checkout(tmp, "zzz-unrelated-dirname", name)
+            self.assertEqual(str(sg.suite_root(fake)), fake,
+                             "identity must come from the manifest, not the directory name")
+
+            # And the converse: a directory NAMED like the plugin but declaring a
+            # different plugin must NOT be adopted. This is the half a dirname check
+            # gets wrong, and it holds regardless of what this checkout is called.
+            impostor = self._fake_checkout(tmp, name, "some-other-plugin")
+            self.assertEqual(sg.suite_root(impostor), sg.PLUGIN_ROOT,
+                             "a directory merely NAMED like the plugin is not the plugin")
 
     def test_internal_error_fails_open(self):
         """A lint tool must never wedge a session on its own bug."""
