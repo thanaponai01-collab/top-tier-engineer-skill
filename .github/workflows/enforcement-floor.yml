@@ -154,12 +154,16 @@ jobs:
             exit 0
           fi
           rc=0
+          # Scratch output goes to the runner's temp dir, never the workspace: a scratch
+          # file written next to the source is one `git add -A` away from being committed,
+          # which is exactly how a stray trace.out rode into v1.17.0.
+          out="${RUNNER_TEMP:-/tmp}/run-trace.out"
           mapfile -t files < <(printf '%s\n' "${targets[@]}" | sort -u)
           for f in "${files[@]}"; do
             code=0
-            python3 tools/run-trace.py "$f" > trace.out 2>&1 || code=$?
+            python3 tools/run-trace.py "$f" > "$out" 2>&1 || code=$?
             echo "── run-trace: $f (exit $code)"
-            cat trace.out
+            cat "$out"
             [ "$code" = "2" ] && continue
             [ "$code" = "0" ] || rc=1
           done
