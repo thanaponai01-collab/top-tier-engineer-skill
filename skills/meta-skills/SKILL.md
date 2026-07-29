@@ -16,6 +16,7 @@ description: >
 > session and binding inside every phase of every skill. Where any lifecycle skill is silent,
 > these disciplines decide. Shared vocabulary and laws: `PROTOCOL.md` at the suite root —
 > authoritative when present; this file holds the *disciplines*, that file holds the *definitions*.
+> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 ## Operating contract
 

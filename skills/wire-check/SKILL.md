@@ -11,6 +11,7 @@ description: Verify that a newly built tool, feature, module, or integration is 
 > any connecting code, returned to the invoker. Distinct mandate: this skill asks *"is it
 > connected?"* — `debug-protocol` asks *"why is it wrong?"*, `correctness-gate` asks *"is it
 > right?"*. Shared vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
+> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 Code that exists is not code that runs. This skill verifies the full chain from a system's real entry point to a new component's real effect — and when a link is broken, names *why* it broke so the same wiring failure never recurs. Built for the world where code is increasingly generated: generators are excellent at writing components and notoriously unreliable at connecting them.
 

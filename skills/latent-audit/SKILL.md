@@ -29,7 +29,7 @@ description: >
 > decision); dormant bugs found broken → `debug-protocol`; security-shaped findings →
 > `threat-model`. Shared vocabulary and laws: `PROTOCOL.md` at the suite root —
 > authoritative when present. (Gloss: **(proven)** executed · **(trace-only)** read, chain
-> complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise.)
+> complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 One principle, everything else serves it: **statically unreferenced is not dead — it is
 (suspected) dead. Nothing is deleted until its disconnection is proven, because deleting

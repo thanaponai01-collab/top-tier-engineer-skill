@@ -61,6 +61,8 @@ import re
 import json
 import argparse
 
+import protocol_vintage as vintage
+
 # Verdict-line parser — same shape rule as verdict-lint.py's NOUN_RE, kept local so
 # this tool stands alone. (The shape rule is PROTOCOL §5's, stated there; this is a
 # reader of that grammar, not a second definition of it.)
@@ -77,8 +79,13 @@ SUBJECT_RE = re.compile(r'^[\s`*>]*SUBJECT:\s*\S.*\s@\s\S', re.M)
 KNOWN_NOUNS = {
     "LIFECYCLE", "BRIEF", "DESIGN", "SLICE", "WIRE", "GATE", "CAUSE", "AUDIT",
     "OPTIMIZE", "DATATIER", "REVIEW", "SCRUTINY", "MAINT", "THREAT", "SHIP",
-    "MIGRATE", "STRUCTURE",
+    "MIGRATE", "STRUCTURE", "LATENT", "FIX",
 }
+# Deliberately absent: `TRACE`. It is this tool's OWN output noun (§5, tool-output nouns),
+# so counting it would let a run be judged complete on the strength of having been traced —
+# the instrument reading its own reflection. Every other §5 noun belongs here; one going
+# missing is silent, because an unknown noun is skipped rather than reported (`LATENT` was
+# missing from 1.14.0 until the v1.17.0 design audit, so no latent-audit run was traceable).
 
 # ---- Request-type profiles --------------------------------------------------------
 # Each profile says: for this kind of request, which verdict nouns MUST appear for the
@@ -150,6 +157,15 @@ PROFILES = {
             "AUDIT": "no audit verdict — the symptom was never traced to a prescription or a clean finding",
         },
     },
+    "latent": {
+        "label": "Sweep for latent defects with no symptom (dead code, layer breaches)",
+        "required": ["LATENT"],
+        "conditional": ["SCRUTINY", "SLICE", "REVIEW", "STRUCTURE", "CAUSE", "THREAT"],
+        "plain_missing": {
+            "LATENT": "no latent verdict — the sweep never concluded, so nothing records what "
+                      "was found dead, mislayered, or dormantly broken",
+        },
+    },
     "structure": {
         "label": "Check structural quality / is this spaghetti",
         "required": ["STRUCTURE"],
@@ -184,10 +200,11 @@ NOUN_TO_TYPE = {
     "SLICE": "build", "GATE": "build", "WIRE": "build",
     "STRUCTURE": "structure",
     "THREAT": "threat",
+    "LATENT": "latent",
 }
 # priority when several types are signalled (a ship run contains build verdicts too —
 # classify by the furthest-down-the-lifecycle stage reached).
-TYPE_PRIORITY = ["ship", "fix", "audit", "perf", "scrutinize", "review", "threat", "build", "structure"]
+TYPE_PRIORITY = ["ship", "fix", "audit", "latent", "perf", "scrutinize", "review", "threat", "build", "structure"]
 
 PHRASE_HINTS = [
     (re.compile(r'\b(ship|release|deploy|roll ?out)\b', re.I), "ship"),
@@ -195,6 +212,7 @@ PHRASE_HINTS = [
     (re.compile(r'\b(slow|faster|optimi|perf|latency|throughput)\b', re.I), "perf"),
     (re.compile(r'\b(scrutin|this PR|this diff|this plan|before (it|we) (lands|merge|build))\b', re.I), "scrutinize"),
     (re.compile(r'\b(threat model|can this be abused|is this secure|vulnerab|exploit|attack surface|the auth boundary)\b', re.I), "threat"),
+    (re.compile(r'\b(dead code|unused (code|component|module)|layer breach|are the layers)\b', re.I), "latent"),
     (re.compile(r'\b(review|audit|code quality|is this (good|production))\b', re.I), "review"),
     (re.compile(r'\b(spaghetti|maintainab|messy|is this a mess|structur)\b', re.I), "structure"),
     (re.compile(r'\b(build|implement|add (the|a) feature|make it work|create)\b', re.I), "build"),
@@ -236,7 +254,15 @@ def infer_type(text, present_nouns):
 
 def _apply_pin_rule(text, missing, plain):
     """§1 pin rule — the subject pin is required for every classified run, regardless of type.
-    Mutates `missing`/`plain` in place; returns whether the pin was found."""
+    Mutates `missing`/`plain` in place; returns whether the pin was found, or None when the
+    check did not apply.
+
+    §11 rule vintage binds here: the pin rule arrived in 1.13.0, so a transcript that declares
+    an older vintage is not condemned by it. This is the general mechanism, not a special case
+    — see `protocol_vintage`, which owns it for every dated check in the suite.
+    """
+    if vintage.skips(text, vintage.PIN_RULE):
+        return None
     subject_pinned = bool(SUBJECT_RE.search(text))
     if not subject_pinned:
         missing.append("SUBJECT")
@@ -308,7 +334,11 @@ def _format_stage_result(r):
     out.append("  Required stages for this kind of work:")
     for n in r["all_required"]:
         if n == "SUBJECT":
-            mark = "✅" if r.get("subject_pinned") else "❌"
+            pinned = r.get("subject_pinned")
+            if pinned is None:
+                out.append("      ⏭️   SUBJECT pin — " + vintage.explain(vintage.PIN_RULE))
+                continue
+            mark = "✅" if pinned else "❌"
             out.append(f"      {mark}  SUBJECT pin (which revision was read — PROTOCOL §1)")
             continue
         mark = "✅" if n in r["present"] else "❌"

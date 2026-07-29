@@ -21,6 +21,7 @@ description: >
 > hold; its `AUDIT_SPEC.md` findings enter here as Phase-4 hypotheses — this skill remains the
 > only one that may claim a measured gain. Shared vocabulary and laws: `PROTOCOL.md` at the
 > suite root — authoritative when present.
+> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 ## Operating contract
 

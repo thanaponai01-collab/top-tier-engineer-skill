@@ -97,42 +97,71 @@ jobs:
           exit $code
 
       # ---- GATE 2: verdict-line form on any committed run transcripts ---------
-      # Lints every *_RUN_*.md and anything under run-logs/. A repo with no
-      # transcripts passes this gate vacuously (verdict-lint treats "no verdict
-      # lines" as a soft pass), so this never blocks repos that simply don't keep
-      # run logs in-tree.
+      # Lints everything under runs/ (this suite's own evidence base) and under
+      # run-logs/ (the convention for repos that consume the suite), plus any
+      # *_RUN_*.md elsewhere. A repo with no transcripts passes vacuously —
+      # verdict-lint treats "no verdict lines" as a soft pass — so this never
+      # blocks repos that don't keep run logs in-tree.
+      #
+      # HISTORY, so it is not re-broken: until v1.17.0 these two gates globbed
+      # `run-logs/`, a directory this repo has never had, while the actual evidence
+      # lived in `runs/` — which `.gitignore` also excluded. Both gates therefore
+      # printed "passes vacuously" on every run and *could not fail*, while four
+      # transcripts failed run-trace locally. A gate pointed at a path that cannot
+      # contain anything is not a floor; it is a green light with no bulb.
       - name: Verdict-line form gate
         if: always()
         run: |
           shopt -s nullglob globstar
-          targets=( **/*_RUN_*.md run-logs/**/*.md )
+          targets=( runs/**/*.md run-logs/**/*.md **/*_RUN_*.md )
           if [ ${#targets[@]} -eq 0 ]; then
             echo "No run transcripts found to lint — gate passes vacuously."
             exit 0
           fi
           rc=0
-          for f in "${targets[@]}"; do
+          mapfile -t files < <(printf '%s\n' "${targets[@]}" | sort -u)
+          for f in "${files[@]}"; do
             echo "── verdict-lint: $f"
             python3 tools/verdict-lint.py "$f" || rc=1
           done
           exit $rc
 
       # ---- GATE 3: run-completeness on any committed transcripts ---------------
+      # Exit 2 from run-trace means "no verdict lines at all" — a report, a patch
+      # file, an index. Those legitimately live alongside transcripts, so exit 2 is
+      # SKIPPED, not failed; only exit 1 (a classified run missing a required stage)
+      # blocks. This mirrors verdict-lint's existing soft-pass on the same condition.
+      #
+      # TWO TRAPS, both paid for once (v1.17.0 scrutinize gate):
+      # 1. Actions runs `run:` under `bash -e {0}`. A bare `python3 …; code=$?` ABORTS
+      #    the step on the first non-zero exit, so the skip branch below would never be
+      #    reached and this gate would hard-fail on the commit that un-vacuumed it. The
+      #    `|| code=$?` form puts the call in a condition context, which suppresses -e —
+      #    that is why the older `|| rc=1` shape worked and a "clearer" rewrite did not.
+      # 2. Exit 2 is overloaded: argparse also exits 2 on a USAGE error, so a typo in a
+      #    future flag would read as "not a transcript" and skip everything silently
+      #    while reporting green. Defence: the output is printed on EVERY path, so a
+      #    usage error is visible in the log even when its file is skipped.
       - name: Run-completeness gate
         id: runtrace
         if: always()
         run: |
           shopt -s nullglob globstar
-          targets=( **/*_RUN_*.md run-logs/**/*.md )
+          targets=( runs/**/*.md run-logs/**/*.md **/*_RUN_*.md )
           if [ ${#targets[@]} -eq 0 ]; then
             echo "No run transcripts to trace — gate passes vacuously."
             echo "runtrace_exit=0" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           rc=0
-          for f in "${targets[@]}"; do
-            echo "── run-trace: $f"
-            python3 tools/run-trace.py "$f" || rc=1
+          mapfile -t files < <(printf '%s\n' "${targets[@]}" | sort -u)
+          for f in "${files[@]}"; do
+            code=0
+            python3 tools/run-trace.py "$f" > trace.out 2>&1 || code=$?
+            echo "── run-trace: $f (exit $code)"
+            cat trace.out
+            [ "$code" = "2" ] && continue
+            [ "$code" = "0" ] || rc=1
           done
           echo "runtrace_exit=$rc" >> "$GITHUB_OUTPUT"
           exit $rc

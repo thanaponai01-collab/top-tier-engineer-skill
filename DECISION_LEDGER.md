@@ -100,3 +100,45 @@ D002 are two-way; director may defer both without cost)`.*
   1.16.0 to settle, and the experiment is: does a report whose `COST` line is honest change any
   director decision that a 1.15.0-style report did not?
 - **status:** decided — shipped in 1.16.0.
+
+## D004 — Does the run ledger (`runs/`) ship in the public repo?
+
+- **date:** 2026-07-29
+- **decision:** **Ship it, redacted.** `runs/` is tracked from v1.17.0; subject identities are
+  replaced by stable pseudonyms (`SUBJECT_A/B/C`), local paths removed, and one copy-paste
+  invocation against a live subject with an open finding was reduced to a stated check. Every
+  finding, evidence tag, verdict line and `file:line` reference is the original.
+- **forces:** The v1.17.0 design audit found `runs/` in `.gitignore`, which produced two
+  independent defects. (1) `PROTOCOL.md` cites `AUDIT_001` and `LIVE_RUN_00x` by name six times
+  as the *provenance* of its rules — the pin rule (§1), the baseline rule (§1), all of §9 — and
+  four more times across MAP and the skills; every one was a dead link for any reader who
+  installed the plugin, which is Law 2, artifacts outlive conversations, failing at exactly the
+  point it matters most. (2) The two CI gates that lint transcripts globbed `**/*_RUN_*.md` and
+  `run-logs/`, so with the evidence untracked they printed "passes vacuously" on every run and
+  *could not fail* — while four transcripts failed `run-trace` locally. Counter-force, and it is
+  a real one: the repo is public and the ledger documents security findings in systems the
+  director owns, one of them open at the time of writing. Publishing evidence and protecting a
+  subject pull in opposite directions, and no gate in the suite arbitrates that — it is a
+  director call, and was taken as one.
+- **options:**
+  1. *Ship redacted* **(chosen)** — keeps every citation resolvable and makes both CI gates real,
+     at the cost of one redaction pass and a permanent obligation: every future run added to
+     `runs/` must be redacted before it is committed.
+  2. *Ship as-is* — maximum evidentiary value, strongest reading of Law 2. Rejected: it publishes
+     an actionable description of an unfixed authorization gap in a live system, and git history
+     makes that irreversible.
+  3. *Keep private, delete the citations* — rewrite each rule to justify itself inline. Rejected:
+     it closes the dead-link problem by deleting the evidence rather than by shipping it, and
+     leaves the two transcript gates permanently vacuous, which is the larger defect.
+  4. *Private sibling repo, cite by ID* — evidence intact, but a public reader still cannot follow
+     the citation and the gates here stay vacuous. Rejected as the cost of (3) plus the cost of a
+     second repo.
+- **reversibility class:** **one-way.** Publication cannot be undone — git history and indexing
+  outlive a later deletion. This is why it was escalated rather than decided by the run.
+- **evidence tag:** **(proven)** for the mechanism (`git ls-files runs/` returned 0 of 42 tracked
+  files; the CI globs match nothing in a checkout; `run-trace` exited 1 on four transcripts) and
+  for the redaction (re-scanned: zero remaining subject identifiers or local paths). **(assumed)**
+  that pseudonymisation is sufficient — it defeats identification from the text, not correlation
+  by a reader who already knows the director's projects.
+- **status:** decided — shipped in 1.17.0. The standing obligation it creates (redact before
+  committing a run) belongs with whoever adds the next transcript.

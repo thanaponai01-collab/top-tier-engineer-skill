@@ -31,6 +31,13 @@ Verdict line (noun owned by the latent-audit skill; grammar per PROTOCOL.md):
   LATENT: clean(N modules traced)
         | findings(dead: A, unused: B, layer-breaches: C)
         | blocked(no analyzable source)
+
+`clean` requires that every dimension was actually MEASURED. Without `--layers` the layer
+dimension is not measured, so the verdict reports `layer-breaches: UNMEASURED(...)` rather
+than `0` and never claims `clean` (PROTOCOL §10 rule 5 — a region the analyzer could not
+enter is UNKNOWN, never folded into a clean result). The EXIT CODE stays 0 in that case:
+an unmeasured dimension is a gap in how the tool was invoked, not a defect in the subject,
+and failing by default would make this a permanently-red gate — which is a disabled gate.
 """
 
 import argparse
@@ -257,6 +264,33 @@ def rel(p):
         return p
 
 
+def latent_verdict(n_modules, dead, unused, breaches, layers_measured):
+    """The §5 LATENT line, with §10 rule 5's denominator honoured.
+
+    "A region it could not enter is reported as UNKNOWN — never omitted, and never folded
+    into a clean result." With no --layers file the layer dimension was not measured at all,
+    so `layer-breaches: 0` is not a zero — it is an absence, and a verdict that reports it as
+    a zero is claiming a clean result for ground it never walked. The human report below has
+    always said "this is a gap, not a clean result"; until v1.17.0 the VERDICT LINE — the part
+    a future model greps, and the only part most readers see — said `clean` regardless. The
+    tool told the truth in the paragraph and denied it in the machine-readable line.
+
+    Lives out here rather than inline in main() because main() already carries accepted debt
+    (DEBT_LEDGER D-2): PROTOCOL §10 rule 4 — when the smallest diff lands in a file already on
+    the ledger, "smallest diff" is a withdrawal against it, so extract first, then add.
+    """
+    if not layers_measured:
+        layer_count = "UNMEASURED(no --layers declared)"
+    else:
+        layer_count = str(len(breaches))
+    if dead or unused or breaches:
+        return (f"LATENT: findings(dead: {len(dead)}, unused: {len(unused)}, "
+                f"layer-breaches: {layer_count})")
+    if layers_measured:
+        return f"LATENT: clean({n_modules} modules traced)"
+    return f"LATENT: findings(dead: 0, unused: 0, layer-breaches: {layer_count})"
+
+
 def main():
     # ponytail: real portability bug, one guarded line; no-op where stdout is already UTF-8.
     if hasattr(sys.stdout, "reconfigure"):
@@ -289,10 +323,9 @@ def main():
               "layers_declared": bool(args.layers)}
 
     n_findings = len(breaches) + len(dead) + len(unused)
-    verdict = (f"LATENT: findings(dead: {len(dead)}, unused: {len(unused)}, "
-               f"layer-breaches: {len(breaches)})" if n_findings
-               else f"LATENT: clean({len(modules)} modules traced)")
-    result["verdict"] = verdict
+    result["verdict"] = latent_verdict(len(modules), dead, unused, breaches,
+                                       layers_measured=bool(args.layers))
+    result["layers_measured"] = bool(args.layers)
 
     if args.json:
         print(json.dumps(result, indent=2))
@@ -343,8 +376,8 @@ def main():
               "candidate needs a disconnection proof first.")
         print()
 
-    print(verdict)
-    return 1 if n_findings else 0
+    print(result["verdict"])
+    return 1 if n_findings else 0  # unmeasured ≠ defect; see `latent_verdict` and the docstring
 
 
 if __name__ == "__main__":
