@@ -3,6 +3,97 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.17.0 — 2026-07-29 — the gates that could not fail
+
+**Earned by a `chief-engineer` design audit of the suite's own folder** ("full run on this folder
+design and find what is in not make sense"). Eleven findings, all (proven). The theme is not that
+rules were wrong — it is that several were *declared shared and implemented local*, or *pointed at
+a path that could not contain anything*. A gate that cannot fail is not a floor.
+
+**The two load-bearing ones.**
+
+- **`runs/` was in `.gitignore`, so two of the four CI gates were structurally vacuous.** The
+  verdict-form and run-completeness gates globbed `**/*_RUN_*.md` and `run-logs/` — a directory
+  this repo has never had — while the actual evidence lived in an ignored `runs/`. Both printed
+  "gate passes vacuously" on every run and *could not fail*, while four transcripts failed
+  `run-trace` locally. Meanwhile `PROTOCOL.md` cited `AUDIT_001` / `LIVE_RUN_00x` by name six
+  times as the provenance of its own rules (the pin rule, the baseline rule, all of §9), and four
+  more citations sat in MAP and the skills — every one a dead link for anyone who installed the
+  plugin. Law 2, artifacts outlive conversations, failing exactly where it matters. `runs/` now
+  ships, **redacted** (subject identities pseudonymised, local paths removed, findings and
+  verdicts untouched); the gates now glob `runs/**` and lint five real transcripts. The
+  publication trade-off — a public repo documenting findings in the director's own systems — was
+  escalated as a one-way door and is recorded as `DECISION_LEDGER` **D004**.
+- **§11's rule vintage was declared general and implemented in one tool.** §11 says "every check
+  added after this one inherits the mechanism rather than re-arguing its own history."
+  `verdict-lint.py` implemented it privately; `run-trace.py` had no notion of it, and so enforced
+  the §1 pin rule (1.13.0) against transcripts that explicitly declare `PROTOCOL: 1.12.0` and say
+  in the same line that they are judged by the rules they were written under. The mechanism now
+  lives in one place, `tools/protocol_vintage.py`, with a dated registry a new check extends by
+  one constant. Four regression tests, including both halves of the asymmetry: an undeclared
+  transcript is still judged by today's rules, so the mechanism can never be used to opt out.
+
+**The rest.**
+
+- **`graph-audit.py` folded an unmeasured dimension into a clean verdict.** With no `--layers`
+  file the human report said "this is a gap, not a clean result" and the verdict line said
+  `LATENT: clean(...)` anyway — the tool telling the truth in the paragraph and denying it in the
+  machine-readable half that every grep actually reads. It now reports
+  `layer-breaches: UNMEASURED(no --layers declared)` and never claims `clean` for ground it did
+  not walk (§10 rule 5, the denominator). Exit code stays 0: an unmeasured dimension is a gap in
+  the *invocation*, not a defect in the subject, and a gate red by default is a gate people learn
+  to scroll past.
+- **`LATENT` and `FIX` were not in `run-trace`'s known nouns.** For `LATENT` this meant no
+  `latent-audit` run has ever been checkable for completeness — its verdict was silently discarded
+  as an unknown noun since 1.14.0; it now has a `latent` request profile and a `TYPE_PRIORITY`
+  entry. `FIX` is recognised so it appears in the parsed trace, but it is a §9 shared noun with no
+  owning stage, so it deliberately drives no classification and adding it changes no verdict —
+  stated precisely because the scrutinize gate caught the first draft of this entry claiming
+  otherwise for both nouns. `TRACE` is deliberately still excluded: it is this tool's own output,
+  and counting it would let a run be judged complete on the strength of having been traced.
+- **§6's extraction floor had drifted in ten of nineteen skills** — eight carried no evidence-tag
+  gloss at all, and two carried one missing `— log it.`, the clause that holds the obligation. A
+  skill read alone is a real deployment; without the gloss it keeps its vocabulary and loses its
+  constitution. All nineteen now carry the canonical gloss, and `test_tools.py` checks it against
+  `PROTOCOL.md`'s own copy — the suite's §8.1 lesson ("prefer a structural separation you cannot
+  fake over a marker you can") applied to itself for the first time.
+- **`scrutinize` had no isolation agent.** §8.1 names three review-class skills needing fresh
+  eyes; `agents/` shipped two. §9 rule 1 makes `scrutinize` mandatory on every fix a session
+  delivers, so the skill that most often needs isolation was the one that could not get it —
+  leaving `(same-context review)` as the only available answer, which is the marker §8.1 says to
+  prefer a structure over. `agents/scrutinize.md` added.
+- **`LIVE_RUN_003` carried no vintage declaration** while its three cohort siblings did; annotated
+  to `PROTOCOL: 1.6.1`.
+- **`STRUCTURE_REPORT.md` moved to the project root**, where §3 registers it and where its sibling
+  ledger `DEBT_LEDGER.md` already lived.
+- **`MAP.md`** lost an orphan version scheme ("Skill Map (v6)", at 6 while everything else read
+  1.16.1 and no release check could see it) and gained back the antecedent for "These directories
+  are not supplementary" — a dangling pronoun since v1.14.0 deleted the section that named them.
+
+**The scrutinize gate caught a blocker in its own delta — on its first run.** `agents/scrutinize.md`
+was added by this release and immediately run against this release. It found that GitHub Actions
+executes `run:` blocks under `bash -e`, which aborts a step on the first non-zero command: the new
+"exit 2 = not a transcript, skip" branch in GATE 3 was therefore **unreachable**, and the
+run-completeness gate would have hard-failed on the exact commit that un-vacuumed it. The old
+`|| rc=1` shape had been correct for a reason nobody had written down, and the "clearer" rewrite
+broke it. Now `|| code=$?`, with the reason recorded in the workflow. Reproduced under `bash -e`
+before and after **(proven)**. The gate also found: `STRUCTURE_REPORT.md` was moved to the root
+byte-identical to a version deleted eight releases earlier, asserting a red gate and a finding in
+a function that no longer exists (regenerated from a real run, with its own staleness recorded);
+`sys.modules` caching defeated the `sys.path` guard added to `stop-gate.py` (module now evicted
+around the load); `scrutinize` was claiming §8.2 parallel-gate status the PROTOCOL enumeration did
+not grant it (added — it demonstrably consumes only artifacts); and a `DEBT_LEDGER` row saying 88
+where the baseline said 87. D004's redaction obligation, prose on a one-way door, is now a test.
+
+**The ratchet caught its own author.** The §10.5 verdict fix landed inside `graph-audit.py ::
+main()`, a function already on the debt ledger (D-2), and pushed it 88 → 101 lines. That is §10
+rule 4, carrying capacity: in a file already carrying debt the smallest diff is a withdrawal, not
+the cheap option. The logic was extracted to `latent_verdict()` **before** the new behaviour was
+added, and `main()` returned to its baseline — the first time the ratchet has fired on an
+increment of this suite's own. `test_tools.py` crossed the god-file line at 671 lines and is
+accepted as **D-4** with a cost and an 800-SLoC trigger, not silently re-baselined (§10 rule 2).
+Tools: 58 → 64 tests.
+
 ## 1.16.1 — 2026-07-29 — consistency sweep: the seams between artifacts
 
 **Earned by a `chief-engineer` run over the suite's own folder** ("run on the folder see if

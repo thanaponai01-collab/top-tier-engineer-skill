@@ -72,11 +72,32 @@ def suite_root(cwd):
 
 def _load_lint(root=PLUGIN_ROOT):
     # verdict-lint.py has a dash in its name, so import it by path.
-    spec = importlib.util.spec_from_file_location(
-        "verdict_lint", Path(root) / "tools" / "verdict-lint.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    tools = str(Path(root) / "tools")
+    # verdict-lint imports its sibling `protocol_vintage` (the §11 rule-vintage owner).
+    # `root` may differ from this file's own root — the rules must come from the checkout
+    # being linted — so that checkout's tools/ goes FIRST on sys.path, or the sibling would
+    # resolve to the *running* plugin's copy and mix two versions of the rules.
+    #
+    # sys.path ALONE is not enough: `sys.modules` is consulted before any path search, so a
+    # second load from a different root silently reuses the first root's module. One
+    # `_load_lint` per process makes that unreachable today, but `selftest()` already calls
+    # this five times, so the cache is evicted around the load and restored after. (Proven by
+    # the v1.17.0 scrutinize gate, which reproduced the mix with a synthetic second checkout.)
+    cached = sys.modules.pop("protocol_vintage", None)
+    sys.path.insert(0, tools)
+    try:
+        spec = importlib.util.spec_from_file_location(
+            "verdict_lint", Path(root) / "tools" / "verdict-lint.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    finally:
+        if sys.path and sys.path[0] == tools:
+            sys.path.pop(0)
+        if cached is not None:
+            sys.modules["protocol_vintage"] = cached
+        else:
+            sys.modules.pop("protocol_vintage", None)
 
 
 def transcript_text(path):

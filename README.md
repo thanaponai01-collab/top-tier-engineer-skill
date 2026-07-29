@@ -16,11 +16,17 @@ top-tier-engineer/
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
 ├── .github/workflows/
 │   └── enforcement-floor.yml ← CI: runs the tools below on every push/PR, blocks the merge on breach
+├── runs/                ← the run ledger: transcripts of real runs + the fixes they delivered.
+│                          PROTOCOL cites these by name as the provenance of its rules.
+│                          Published redacted — subjects are SUBJECT_A/B/C (see DECISION_LEDGER D004)
 ├── tools/
 │   ├── verdict-lint.py     ← mechanical enforcement: validates verdict-line form (PROTOCOL §5)
 │   ├── structure-report.py ← the spaghetti alarm: structural shape + the debt ratchet (--baseline)
+│   ├── structure_opacity.py← how much of a file a parser actually entered (§10.5, the denominator)
 │   ├── run-trace.py        ← did the run actually execute the stages it should have? — completeness trace
 │   ├── graph-audit.py      ← the no-symptom sweep: dead modules, unused defs, layer-direction breaches (LATENT)
+│   ├── protocol_vintage.py ← §11 rule vintage: which dated check applies to which artifact (one owner)
+│   ├── stop-gate.py        ← the Stop hook: lints the session transcript before a session may end
 │   └── test_tools.py       ← the tools gate their own correctness (stdlib unittest, no deps)
 └── skills/
     ├── chief-engineer/      ← the router — every request enters here

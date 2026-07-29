@@ -1,4 +1,4 @@
-# The Top-Tier Engineer — Skill Map (v6)
+# The Top-Tier Engineer — Skill Map
 
 Nineteen skills wired into one engineer. A router reads the project's artifact state and dispatches
 every request to the right specialist; every specialist produces a **handoff artifact** the next
@@ -89,6 +89,18 @@ verdict-line grammar, the degradation rule for skills copied out of the suite, t
 (§10), and the sense floor (§11) that checks a finished run against the director's own words. Per
 Law 1 it is the only place these are stated; this map is a picture of it, not a second copy.
 
-These directories are not supplementary — they are the evidence base for the suite's founding claim
-that it finds real bugs and ships fixes, not just reports. Any future quality metric ("skill yield")
-should be computed from the gap between pre-run knowledge and post-run findings recorded here.
+## Where the evidence lives
+
+`runs/` — the run ledger. `LIVE_RUN_001`–`004` are the suite executed against real systems
+(a Flask app, the Tier-Memory system, itself, and TickIt); `AUDIT_001` is an audit *of* those
+runs; `runs/patches/` holds the fixes those runs delivered. `PROTOCOL.md` cites these files by
+name as the provenance of its rules — the pin rule (§1), the baseline rule (§1), and all of §9
+were each *earned* by a specific run, and a reader who cannot open the run cannot check the rule.
+
+This directory is not supplementary — it is the evidence base for the suite's founding claim
+that it finds real bugs and ships fixes, not just reports. Any future quality metric ("skill
+yield") should be computed from the gap between pre-run knowledge and post-run findings recorded
+here. It is kept separate from the skill surface an installer reads, but it **ships**: from
+v1.14.0 to v1.16.1 it was in `.gitignore`, which made every "earned by `AUDIT_001`" citation in
+`PROTOCOL.md` a dead link and left the two CI gates that lint transcripts pointed at an empty
+path (v1.17.0 fixed both).

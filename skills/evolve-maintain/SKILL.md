@@ -17,6 +17,7 @@ description: >
 > this skill's Triage input), `build-discipline` + `correctness-gate` for all treatment, and
 > routes scope growth back to `problem-framing` / `arch-design`. Shared vocabulary and laws:
 > `PROTOCOL.md` at the suite root — authoritative when present.
+> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 ## Operating contract
 

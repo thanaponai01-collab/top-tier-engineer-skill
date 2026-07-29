@@ -29,7 +29,7 @@ description: >
 > different question; layer-direction breaches and deletion manifests are its mandate, not this one's). Shared
 > vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
 > (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
-> **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise.)
+> **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 The director who cannot read code has no instinct for spaghetti. This skill is the
 instrument that gives them one: it measures the few structural signals that

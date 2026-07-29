@@ -18,6 +18,8 @@ Exit code 0 = clean, 1 = violations found. Usage:
 """
 import sys, re
 
+import protocol_vintage as vintage
+
 # PROTOCOL §5 registry: noun -> set of legal state keywords (the word before any '(').
 REGISTRY = {
     "LIFECYCLE":  {"next", "blocked"},                 # state is free-form stage; we check shape loosely
@@ -132,17 +134,11 @@ DELIVERY_RE = re.compile(r'^[\s`*>#|+-]*\*{0,2}(ASKED|DID|SO|COST)\*{0,2}\s*:', 
 # ASKED must QUOTE the director; the paraphrase is exactly the drift §11 exists to catch.
 ASKED_RE = re.compile(r'^[\s`*>#|+-]*\*{0,2}ASKED\*{0,2}\s*:\s*(.+)$', re.M)
 QUOTE_CHARS = '"“”‘’\'`'
-# A rule may not condemn an artifact written before it existed. A transcript states which
-# PROTOCOL version judged it (`PROTOCOL: 1.15.0`); checks younger than that declaration are
-# skipped for that file. The pin rule (§1) applied to the rules themselves — general, so the
-# next added check reuses it instead of re-litigating its own history.
-PROTOCOL_DECL_RE = re.compile(r'^[\s`*>#|+-]*\*{0,2}PROTOCOL\*{0,2}\s*:\s*v?(\d+)\.(\d+)', re.M)
-SENSE_FLOOR_SINCE = (1, 16)
-
-
-def _declared_protocol(text):
-    m = PROTOCOL_DECL_RE.search(text)
-    return (int(m.group(1)), int(m.group(2))) if m else None
+# A rule may not condemn an artifact written before it existed (§11, rule vintage). The
+# mechanism is general and therefore owned in exactly one place — `protocol_vintage` — so a
+# check added tomorrow inherits it instead of re-litigating its own history. It lived privately
+# here until v1.17.0, which is precisely how `run-trace.py` came to enforce a 1.13.0 check
+# against transcripts declaring 1.12.0: a rule stated as shared, implemented as local.
 
 
 def _check_delivery_block(text, seen_nouns, noun_events):
@@ -157,8 +153,7 @@ def _check_delivery_block(text, seen_nouns, noun_events):
     """
     if "LIFECYCLE" not in seen_nouns and len(seen_nouns) < 2:
         return []
-    declared = _declared_protocol(text)
-    if declared is not None and declared < SENSE_FLOOR_SINCE:
+    if vintage.skips(text, vintage.SENSE_FLOOR):
         return []  # judged by the rules it was written under
     at = noun_events[0][0] if noun_events else 1
     present = {m.group(1) for m in DELIVERY_RE.finditer(text)}

@@ -11,7 +11,7 @@ Stdlib only — no pytest, no fixtures framework. Run: `python tools/test_tools.
 Each tool is exercised through its real CLI (exit codes are its contract), so this
 also covers the stdout-encoding path that caused the historical Windows crash.
 """
-import subprocess, sys, os, json, tempfile, unittest
+import subprocess, sys, os, re, json, tempfile, unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -263,6 +263,42 @@ class RunTrace(unittest.TestCase):
                              "REVIEW: shippable-with-findings(top: x)\n")
         self.assertEqual(code, 0)
         self.assertNotIn("SUBJECT", r["missing_required"])
+
+    def test_pre_pin_rule_vintage_is_grandfathered(self):
+        """PROTOCOL §11 rule vintage, which is stated as GENERAL: "every check added after
+        this one inherits the mechanism". The pin rule arrived in 1.13.0, so a transcript
+        declaring 1.12.0 may not be condemned by it. This test exists because that
+        inheritance was prose only — verdict-lint implemented the mechanism privately and
+        run-trace had no notion of it, so three transcripts that correctly declared their
+        vintage were failed by a check younger than they were."""
+        code, r = self._json("PROTOCOL: 1.12.0\n"
+                             "REVIEW: shippable-with-findings(top: x)\n")
+        self.assertEqual(code, 0, r)
+        self.assertNotIn("SUBJECT", r["missing_required"])
+
+    def test_current_vintage_still_owes_a_subject_pin(self):
+        """The other half: grandfathering must not become a way to opt out. A transcript
+        declaring a vintage at or after the check still answers to it."""
+        code, r = self._json("PROTOCOL: 1.16.0\n"
+                             "REVIEW: shippable-with-findings(top: x)\n")
+        self.assertEqual(code, 1)
+        self.assertIn("SUBJECT", r["missing_required"])
+
+    def test_undeclared_vintage_is_judged_by_current_rules(self):
+        """§11: "a transcript with no declaration is judged by the current rules" — so
+        simply omitting the line can never silence a check."""
+        code, r = self._json("REVIEW: shippable-with-findings(top: x)\n")
+        self.assertEqual(code, 1)
+        self.assertIn("SUBJECT", r["missing_required"])
+
+    def test_latent_sweep_is_traceable(self):
+        """LATENT is a §5 registry noun (latent-audit, 1.14.0) that run-trace did not
+        recognise at all, so no latent-audit run could ever be checked for completeness —
+        its verdict was silently discarded as an unknown noun."""
+        code, r = self._json("SUBJECT: repo @ abc1234\n"
+                             "LATENT: findings(dead: 0, unused: 0, layer-breaches: 0)\n")
+        self.assertEqual(code, 0, r)
+        self.assertEqual(r["request_type"], "latent")
 
 
 class StructureReport(unittest.TestCase):
@@ -590,6 +626,24 @@ class GraphAudit(unittest.TestCase):
             lcode, lout, _ = run("verdict-lint.py", stdin=last + "\n")
             self.assertEqual(lcode, 0, lout)
 
+    def test_unmeasured_layers_are_never_folded_into_clean(self):
+        """PROTOCOL §10 rule 5 — the denominator. Without --layers the layer dimension is
+        not measured, so the verdict must say UNMEASURED, not `clean` and not `0`. The
+        human report always said "this is a gap, not a clean result"; the verdict line
+        said `clean` anyway, which is the half most readers and every grep actually see."""
+        with tempfile.TemporaryDirectory() as tmp:
+            open(os.path.join(tmp, "a.py"), "w").write("import b\n")
+            open(os.path.join(tmp, "b.py"), "w").write("def f():\n    return 1\n")
+            code, out, _ = run("graph-audit.py", tmp, "--entry", "a")
+            last = [l for l in out.splitlines() if l.startswith("LATENT:")][-1]
+            self.assertIn("UNMEASURED", last, out)
+            self.assertNotIn("clean(", last)
+            # An unmeasured dimension is a gap in the INVOCATION, not a defect in the
+            # subject: it must not fail by default, or the gate goes permanently red.
+            self.assertEqual(code, 0, out)
+            lcode, lout, _ = run("verdict-lint.py", stdin=last + "\n")
+            self.assertEqual(lcode, 0, lout)
+
     def test_empty_tree_blocks(self):
         with tempfile.TemporaryDirectory() as tmp:
             code, out, _ = run("graph-audit.py", tmp)
@@ -717,6 +771,103 @@ class SuiteConsistency(unittest.TestCase):
             for k in (n - 1, n + 1):
                 self.assertNotIn(self.WORDS[k], text,
                                  f"{rel} names {self.WORDS[k]}; filesystem has {n} skills")
+
+
+class TestExtractionFloor(unittest.TestCase):
+    """PROTOCOL §6 — the degradation rule, mechanically.
+
+    §6 requires every skill to carry the canonical evidence-tag gloss "copied verbatim so
+    glosses cannot drift apart", because a skill read alone — vendored, pasted into a prompt,
+    copied into another suite — is a real deployment, and without the gloss it keeps its
+    vocabulary and loses its constitution.
+
+    Nothing checked this, and it had drifted: at v1.16.1 EIGHT of the nineteen skills carried
+    no gloss at all. That is the suite's own §8.1 lesson unapplied to itself — "prefer a
+    structural separation you cannot fake over a marker you can" — so here is the structure.
+    """
+
+    @staticmethod
+    def _norm(s):
+        """Whitespace-normalized, blockquote-stripped. A gloss line-wrapped across three
+        lines of a markdown blockquote is still verbatim; only the WORDS may not drift."""
+        s = re.sub(r'(?m)^[\s>]*', ' ', s)
+        return re.sub(r'\s+', ' ', s).strip()
+
+    def _canonical(self):
+        root = os.path.dirname(HERE)
+        proto = open(os.path.join(root, "PROTOCOL.md"), encoding="utf-8").read()
+        m = re.search(r'\(Gloss:.*?log it\.\)', proto, re.S)
+        self.assertIsNotNone(m, "PROTOCOL.md §6 no longer contains the canonical gloss")
+        return self._norm(m.group(0))
+
+    def test_every_skill_carries_the_canonical_gloss_verbatim(self):
+        root = os.path.dirname(HERE)
+        canonical = self._canonical()
+        missing, drifted = [], []
+        skills = sorted(e.name for e in os.scandir(os.path.join(root, "skills")) if e.is_dir())
+        self.assertTrue(skills, "no skills found — the check would pass vacuously")
+        for name in skills:
+            text = open(os.path.join(root, "skills", name, "SKILL.md"), encoding="utf-8").read()
+            m = re.search(r'\(Gloss:.*?log it\.\)', text, re.S)
+            if not m:
+                missing.append(name)
+            elif self._norm(m.group(0)) != canonical:
+                drifted.append(name)
+        self.assertEqual([], missing,
+                         "PROTOCOL §6: these skills carry no evidence-tag gloss, so extracting "
+                         "one costs it the vocabulary its own rules are written in: "
+                         + ", ".join(missing))
+        self.assertEqual([], drifted,
+                         "PROTOCOL §6: gloss text differs from PROTOCOL.md's canonical copy "
+                         "(it is copied verbatim precisely so glosses cannot drift apart): "
+                         + ", ".join(drifted))
+
+
+class RunLedgerRedaction(unittest.TestCase):
+    """DECISION_LEDGER D004 — the run ledger ships in a PUBLIC repo, redacted.
+
+    D004 created a standing obligation ("every future run added to `runs/` must be redacted
+    before it is committed") on an explicitly ONE-WAY door: publication cannot be undone.
+    It was prose only, which this suite's own §8.1 calls the weak form — "prefer a structure
+    you cannot fake over a marker you can". This is the structure. It is a floor, not proof
+    of anonymity: it catches the identifiers a past run actually leaked and the shape of a
+    local path, not correlation by a reader who already knows the director's projects.
+    """
+
+    # Subject identities retired by the v1.17.0 redaction. A new run naming one of these has
+    # re-introduced an identity the project decided not to publish.
+    RETIRED = ("tickit", "timetracker", "tier-memory", "tier_memory",
+               "flask_ticket_booking_system")
+    # Absolute local paths: Windows drive-letter or POSIX home. Either one leaks the
+    # director's filesystem layout and often their username.
+    ABS_PATH = re.compile(r'(?:[A-Za-z]:\\\\|[A-Za-z]:\\|/home/|/Users/)')
+
+    def test_run_ledger_carries_no_retired_identity_or_local_path(self):
+        root = os.path.dirname(HERE)
+        runs = os.path.join(root, "runs")
+        if not os.path.isdir(runs):
+            self.skipTest("no runs/ directory in this checkout")
+        offenders = []
+        seen = 0
+        for dirpath, _, files in os.walk(runs):
+            for name in sorted(files):
+                if not name.endswith(".md"):
+                    continue
+                seen += 1
+                p = os.path.join(dirpath, name)
+                text = open(p, encoding="utf-8").read()
+                rel = os.path.relpath(p, root)
+                low = text.lower()
+                for ident in self.RETIRED:
+                    if ident in low:
+                        offenders.append(f"{rel}: retired identity {ident!r}")
+                m = self.ABS_PATH.search(text)
+                if m:
+                    offenders.append(f"{rel}: absolute local path near {m.group(0)!r}")
+        self.assertTrue(seen, "runs/ contains no markdown — the check would pass vacuously")
+        self.assertEqual([], offenders,
+                         "PUBLIC repo (DECISION_LEDGER D004): redact before committing —\n  "
+                         + "\n  ".join(offenders))
 
 
 if __name__ == "__main__":

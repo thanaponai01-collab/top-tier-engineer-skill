@@ -22,6 +22,7 @@ description: Principal-engineer code review that mentors rather than gatekeeps. 
 > A scrutinize run that reads substantial surrounding code is not the signal; shared findings at
 > threshold are. Shared
 > vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
+> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 A review conducted the way a principal engineer at a top-tier organization would conduct it: rigorous on evidence, humble about unfamiliarity, and always ending in mentorship — the developer should leave knowing not just *what* is wrong but *why* it matters and *how* to never write it again.
 

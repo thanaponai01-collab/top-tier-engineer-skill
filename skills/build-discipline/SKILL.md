@@ -18,6 +18,7 @@ description: >
 > `wire-check` as the exit gate of every slice (Phase 3). Downstream: `correctness-gate`;
 > `structure-gate` when a slice touched a host on the debt ledger. Shared vocabulary and laws:
 > `PROTOCOL.md` at the suite root — authoritative when present.
+> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 ## Operating contract
 

@@ -15,6 +15,7 @@ description: >
 > `problem-framing` first if absent). Produces: `ARCHITECTURE.md`, `DECISION_LEDGER.md`.
 > Downstream: `build-discipline`. Routed by `chief-engineer`. Shared vocabulary and laws:
 > `PROTOCOL.md` at the suite root — authoritative when present.
+> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 ## Operating contract
 

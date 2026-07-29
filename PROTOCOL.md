@@ -273,8 +273,9 @@ a defect: the CI gate was the independent reviewer and should have been cited. I
 a structural separation you cannot fake over a marker you can.*
 
 **§8.2 — Independence corollary (parallel gates).** §8's isolation requirement pays a dividend:
-gates that consume only artifacts — `correctness-gate`, `structure-gate`, `threat-model`, and
-`senior-review` run against the same change — share no conversational state by construction, and
+gates that consume only artifacts — `correctness-gate`, `structure-gate`, `threat-model`,
+`senior-review`, and `scrutinize` run against the same change — share no conversational state by
+construction, and
 may therefore run **concurrently** as isolated contexts where the harness supports it (subagents
 in Claude Code; separate sessions otherwise). The §4 sequencing rules still bind where declared
 (`DATATIER` before `OPTIMIZE`; `MAINT` before `MIGRATE`), and however many gates run, their
