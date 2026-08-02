@@ -75,6 +75,12 @@ changes get the most cautious staging the system supports.
 Name the signals that confirm health post-release and the threshold that triggers rollback. Confirm
 each signal exists and is watched. Missing signals → `evolve-maintain` (add the probe) and a stated
 choice: wait for it, or ship blind and say so.
+- **Diagnosability check** (DECISION_LEDGER D001): a named watch signal is not enough if, when it
+  fires, nobody can tell *why*. For each signal, confirm the rollback trigger is actually
+  observable end-to-end — the metric exists, is scoped to this change (not buried in an aggregate),
+  and an on-call reader can trace from "signal fired" to "this release caused it" without new
+  instrumentation. A signal that exists but can't localize the cause is the same as no signal;
+  route the gap to `evolve-maintain` before go/no-go, same as a missing signal.
 
 ### Phase 5 — Go/No-go
 Produce the director-readable call: ship / stage / hold, the single biggest risk, the rollback

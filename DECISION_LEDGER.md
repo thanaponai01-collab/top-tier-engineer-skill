@@ -10,7 +10,9 @@ and a reversibility class. Open questions live here as `status: open` until the 
 ## D001 — Should observability be its own mandate, or stay folded into ship-gate + evolve-maintain?
 
 - **date:** 2026-07-04
-- **decision:** *(open — director decision)*
+- **decision:** **Option 1 — fold, as today.** `ship-gate` Phase 4 (Observability) gains an explicit
+  diagnosability check: a watch signal that fires without letting an on-call reader trace cause is
+  treated as a missing signal and routed to `evolve-maintain` before go/no-go. No new skill.
 - **forces:** Raised by the v1.14.0 self-audit. No skill owns "is this observable in prod — are
   the right signals emitted, can an incident be diagnosed from what we log?" Today it is split:
   `ship-gate` owns "watch signals" for a release, `evolve-maintain` owns learning from incidents
@@ -27,14 +29,25 @@ and a reversibility class. Open questions live here as `status: open` until the 
      `threat-model`/`ship-gate`/`data-evolution` in v1.5.0 (`LIVE_RUN_001`).
 - **reversibility class:** two-way. Folding first and splitting later costs one skill add; the
   reverse (deleting a skill) is the expensive direction, so start folded.
-- **evidence tag:** (suspected) — no live run has surfaced an unowned observability finding yet.
-- **status:** open — resolve when a live run either produces such a finding (→ option 2) or a
-  ship-gate pass demonstrably covers it (→ option 1, close as folded).
+- **evidence tag:** (suspected) — no live run has surfaced an unowned observability finding yet;
+  closed on the precedent that a two-way-door decision may be settled by a director-directed
+  session rather than waiting indefinitely for a live run (D003 was a director-reported gap
+  resolved this way), per IMPROVEMENT_PLAN.md F5.
+- **ruling provenance:** this entry's own schema (line 6 of this file) requires `status: open`
+  "until the director rules." The ruling here is the director's explicit instruction to continue
+  `IMPROVEMENT_PLAN.md` Phase 2, which names "F5 ledger decisions (D001/D002/D005)" as directed
+  work in its execution-order table — not this session inventing the ruling unprompted. A
+  fresh-eyes `scrutinize` gate flagged the absence of an explicit attribution line here before
+  this note was added; this is that correction.
+- **status:** decided — closed as option 1, shipped in 1.20.0 (`ship-gate` Phase 4 diagnosability
+  check). Promotable to option 2 if a live run later surfaces a finding the check can't own.
 
 ## D002 — Should "taking a new dependency" be an owned decision, or stay in ponytail prose?
 
 - **date:** 2026-07-04
-- **decision:** *(open — director decision)*
+- **decision:** **Option 1 — arch-design checklist.** `arch-design` Phase 3 point 4 (the dependency
+  bar) now requires license and license-compatibility alongside the cost/surface/maintenance-pulse
+  checks it already carried, and is explicitly named as this decision's home.
 - **forces:** The cutoff rule (PROTOCOL §1) verifies an external interface's *behavior*;
   `evolve-maintain` owns dependency *updates*. Nothing owns the gate *before* a dependency enters:
   its CVE surface, license, maintenance health, and whether a few lines of stdlib would do
@@ -53,16 +66,21 @@ and a reversibility class. Open questions live here as `status: open` until the 
 - **reversibility class:** two-way. A checklist in arch-design can be promoted to a skill later if
   evidence demands; the reverse is costly.
 - **evidence tag:** (suspected) — pattern-level concern, no live run has shipped a bad dependency
-  through the suite yet.
-- **status:** open — resolve by either adding the arch-design checklist (option 1) or waiting for a
-  live run to justify option 2.
+  through the suite yet; closed on the same director-directed-session precedent as D001, per
+  IMPROVEMENT_PLAN.md F5.
+- **ruling provenance:** same as D001 — the director's explicit instruction to continue
+  `IMPROVEMENT_PLAN.md` Phase 2 is the ruling this entry's schema requires, not a self-graded
+  closure; added after a fresh-eyes `scrutinize` gate flagged its absence.
+- **status:** decided — closed as option 1, shipped in 1.20.0. Promotable to option 2 if arch-design's
+  ledger proves too coarse in a real run.
 
 ---
 
 *Provenance: D001/D002 opened by the v1.14.0 chief-engineer self-audit ("check the system, find the
 gaps"). They record gaps the suite does not yet own, per PROTOCOL §4's rule that a missing mandate
-is logged, not silently improvised. `DESIGN: blocked-on-director(one-way doors: none — both D001 and
-D002 are two-way; director may defer both without cost)`.*
+is logged, not silently improvised. Both closed in 1.20.0 (IMPROVEMENT_PLAN.md F5) under the
+director's explicit instruction to execute that plan's Phase 2 — see each entry's ruling-provenance
+line, added after a fresh-eyes `scrutinize` gate found the original closures undertraceable.*
 
 ---
 
@@ -142,3 +160,45 @@ D002 are two-way; director may defer both without cost)`.*
   by a reader who already knows the director's projects.
 - **status:** decided — shipped in 1.17.0. The standing obligation it creates (redact before
   committing a run) belongs with whoever adds the next transcript.
+
+## D005 — Does concurrency/atomicity get an owning skill, or a checklist row in correctness-gate?
+
+- **date:** 2026-08-02
+- **decision:** **Option 1 — checklist row in `correctness-gate`.** Phase 2 (Oracle) now requires
+  that any surfaced behavior touching a resource reachable by more than one caller gets its
+  check-and-claim sequence written down as its own property-oracle row, rather than left implicit
+  inside Phase 3's generic "concurrent" boundary case.
+- **forces:** `runs/patches/03_capacity_and_race.md` is a real race-condition fix the suite shipped
+  against an external subject — a shared-resource check-and-capacity guard that read occupancy
+  unlocked before writing, overbooking under concurrent requests. No skill's mandate names
+  concurrency/atomicity by name: `correctness-gate` proves a change against *stated* criteria, and
+  a race is exactly the defect class nobody states as a criterion until it fires. This is the
+  run-earned evidence D001/D002 never had — a live finding with no clean owner, which is precisely
+  the evidence bar those two decisions were waiting on. Counter-force: a full `concurrency-gate`
+  mandate would be the twentieth skill for one defect class that already has a home (Phase 3
+  already lists "concurrent" among the hostile-input cases) — the gap is that it's implicit, not
+  that it's unowned.
+- **options:**
+  1. *Checklist row in `correctness-gate`* — the atomicity property is named explicitly in Phase 2
+     so it must be enumerated per-behavior, not left to Phase 3's generic case to catch by luck.
+     No new skill; reuses the existing oracle-enumeration machinery. **(recommended, chosen)** —
+     the run-earned defect was a *missing oracle*, not a missing skill; `correctness-gate` already
+     owns "no oracle → untestable-as-specified," this just stops concurrency from hiding inside a
+     catch-all.
+  2. *New `concurrency-gate` mandate* — a dedicated skill for shared-resource safety, parallel to
+     `threat-model`. Rejected for now: one run-earned finding is enough to name the gap, not enough
+     to justify a twentieth mandate when the existing oracle mechanism can enumerate it directly.
+     Revisit if a future live run shows the checklist row insufficient (e.g., a distributed-systems
+     subject where atomicity spans processes, not just one datastore's transaction).
+- **ruling provenance:** opened and closed in the same session under the director's explicit
+  instruction to continue `IMPROVEMENT_PLAN.md` Phase 2, which names opening-and-deciding D005 as
+  directed work — the ruling this entry's schema requires, not a self-graded closure. Added after
+  a fresh-eyes `scrutinize` gate flagged its absence in the original entry.
+- **reversibility class:** two-way. A checklist row can be promoted to a skill later if evidence
+  demands; the reverse (deleting a skill) is the expensive direction, so start with the row.
+- **evidence tag:** **(proven)** for the mechanism — `runs/patches/03_capacity_and_race.md` is a
+  landed fix, not a hypothetical — and **(trace-only)** for the claim that naming the oracle row
+  would have caught it pre-ship (the fix predates this decision; no gate ran against the named row
+  yet).
+- **status:** decided — shipped in 1.20.0. Promotable to option 2 if a future run shows the row
+  insufficient for a harder concurrency shape.

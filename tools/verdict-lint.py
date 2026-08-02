@@ -50,6 +50,11 @@ REGISTRY = {
     "MIGRATE":    {"planned", "verified", "blocked"},
     # v1.9.0: tool-output noun — emitted by run-trace.py, not owned by any skill
     "TRACE":      {"complete", "incomplete", "blocked"},
+    # v1.20.0 (IMPROVEMENT_PLAN.md B4): tool-output noun — emitted by doctrine-budget.py,
+    # the doctrine-tier analogue of STRUCTURE's ratchet (a "clean" cell may carry an
+    # optional headroom qualifier; parse_states in registry-check.py only needs the
+    # leading keyword, so both forms collapse to one state here).
+    "DOCTRINE":   {"clean", "budget-exceeded", "blocked"},
     # v1.13.0: shared noun (PROTOCOL §9) — emitted by whichever skill delivers a Law-5 fix.
     # coherent/incoherent require a SCRUTINY verdict in the same transcript (a delivered fix
     # is a delta); unscrutinized is the honest weak close and carries the same bold

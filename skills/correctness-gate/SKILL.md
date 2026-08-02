@@ -45,6 +45,14 @@ A behavior with no available oracle is reported as **untestable-as-specified** a
 `problem-framing` — do not invent an oracle that merely matches what the code currently does
 (that tests the implementation against itself, the canonical fake test).
 
+**Concurrency is enumerated, not implied** (DECISION_LEDGER D005): where the surfaced behavior
+touches a resource more than one caller can reach at once (a shared file, row, counter, lock,
+queue slot), the check-and-claim sequence is written down as its own property-oracle row — "claim
+is atomic; a second concurrent claimant observes either the pre- or post-state, never a torn
+read/write" — not folded silently into the generic "concurrent" boundary case in Phase 3. A race
+is exactly the defect class nobody states as a criterion until it fires in production; naming the
+row is what makes Phase 3's hostile tests actually exercise it instead of gesturing at it.
+
 ### Phase 3 — Attack
 
 Build the test suite as an adversary, in this priority order:

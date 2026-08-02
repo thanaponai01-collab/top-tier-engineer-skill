@@ -95,6 +95,19 @@ An imported invariant contradicted by unrebutted subject evidence grounds no sev
    two-tier run measures it (the experiment is specified in `LIVE_RUN_003`); per-skill
    conformance to the substitution test is **(trace-only)** and checkable by reading.
 
+   **The knowledge tier (IMPROVEMENT_PLAN.md B1).** Law 6 bans a load-bearing particular from a
+   *skill body* — it says nothing about `tools/` or reference files, where a sanctioned exception
+   already lived unnamed (`.structure-baseline.json`'s thresholds are exactly this). Naming it:
+   a third artifact tier, **knowledge**, is legal wherever a skill body is not — machine-readable
+   registries, worked-example fixtures, and per-domain checklists — provided every entry is (a)
+   data a tool or a checklist phase *consumes*, never prose a skill's judgment depends on, and (b)
+   labelled illustrative-and-overridable, not contract. The substitution test still binds skill
+   bodies unchanged: a skill that reads a knowledge-tier file for its particulars still fully
+   specifies the *process* of using them, and a stronger model may disregard, extend, or replace
+   the particulars without the skill's contract failing. This is where an earned lesson goes when
+   it is a fact, not a rule — a threshold, a fixture, a catalog entry — so PROTOCOL.md is not the
+   only place learning can land.
+
 ## 3. Ledger registry
 
 One owner per ledger; the owner skill defines the schema, everyone else reads/appends per that schema.
@@ -167,9 +180,9 @@ both fire on the same artifact in the same run:
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE)( [^:]+)?:`)
-(including the shared noun `FIX` and the tool noun `TRACE`, both below) recovers any run's
-trajectory:
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE|DOCTRINE)( [^:]+)?:`)
+(including the shared noun `FIX` and the tool nouns `TRACE`/`DOCTRINE`, both below) recovers any
+run's trajectory:
 
 | Noun | Owner | States |
 |---|---|---|
@@ -193,6 +206,7 @@ trajectory:
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
 | `FIX` | §9 (shared) | `coherent(surfaces: …) \| incoherent(named: …) \| unscrutinized` |
 | `TRACE` | run-trace.py (tool) | `complete \| incomplete(missing: …) \| blocked(unclassifiable)` |
+| `DOCTRINE` | doctrine-budget.py (tool) | `clean(bytes: N) \| clean(bytes: N, headroom: H) \| budget-exceeded(N/threshold) \| blocked(reason)` |
 
 **One table, three classes of owner.** The table above is the registry — *every* noun this suite
 may emit has a row in it, and the Owner column says which class it belongs to. This is what makes
@@ -203,8 +217,10 @@ in it, which is precisely why no reconciler existed; a rule stated in a shape no
 a rule enforced on trust.
 
 **Tool-output nouns.** Some verdict nouns are emitted by suite *tools*, not skills: `TRACE`
-(run-trace.py). They carry a row like any other and are linted for form like any other, but they
-are not part of the §4 skill handoff chain. (Note: `STRUCTURE` is emitted by the tool
+(run-trace.py), `DOCTRINE` (doctrine-budget.py, IMPROVEMENT_PLAN.md B4 — the doctrine-tier
+analogue of `STRUCTURE`'s ratchet, run against `.doctrine-baseline.json`). They carry a row like
+any other and are linted for form like any other, but they are not part of the §4 skill handoff
+chain. (Note: `STRUCTURE` is emitted by the tool
 `structure-report.py` *and* owned by the skill `structure-gate`; likewise `LATENT` is emitted by
 `tools/graph-audit.py` *and* owned by `latent-audit` — the skill's line supersedes the tool's,
 and its finding counts may only shrink, never grow. Both keep their rows above.)

@@ -3,6 +3,68 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.20.0 — 2026-08-02 — decide, delimit, and watch the doctrine itself
+
+**IMPROVEMENT_PLAN.md Phase 2**, closing three open ledger questions and naming two limits the
+suite's own laws had been operating under unnamed.
+
+**F5 — D001/D002 closed, D005 opened and decided.** A fresh-eyes `scrutinize` gate on this diff
+(§8.1) caught that the initial closures set `status: decided` with no traceable ruling event,
+contradicting the ledger's own schema line ("`status: open` until the director rules") and citing
+`D004` as field-report precedent when `D004` was itself introspective, not run-earned — the exact
+self-referential-closure pattern IMPROVEMENT_PLAN.md's own B5 names as the suite's failure mode.
+Corrected: each of D001/D002/D005 now carries an explicit **ruling provenance** line naming the
+director's instruction to continue `IMPROVEMENT_PLAN.md` Phase 2 (which names these three as
+directed work in its own execution-order table) as the ruling — not a self-graded closure — and
+the D004 mischaracterization is removed from the citation. D001 (observability) closed folded into
+`ship-gate`, which gained a Phase
+4 diagnosability check: a watch signal that fires without letting an on-call reader trace cause to
+this release is now treated as a missing signal. D002 (dependency intake) closed into
+`arch-design`'s existing dependency-bar checklist (Phase 3 point 4), which already covered
+cost/surface/maintenance-pulse and now also requires license and license-compatibility. D005
+(concurrency/atomicity) opened and closed the same session — `runs/patches/03_capacity_and_race.md`
+is a landed race-condition fix with no owning mandate, the run-earned evidence D001/D002 never
+had — as a `correctness-gate` Phase 2 requirement: any behavior touching a resource reachable by
+more than one caller gets its check-and-claim sequence written as its own property-oracle row,
+not left implicit inside the generic "concurrent" boundary case.
+
+**B1 — the knowledge tier, named.** Law 6 bans a load-bearing particular from a *skill body*; it
+never said anything about `tools/` or reference files, where a sanctioned exception already lived
+unnamed (`.structure-baseline.json`'s thresholds). PROTOCOL §2 now names a third artifact tier —
+knowledge, legal wherever a skill body is not, provided every entry is data a tool/checklist
+*consumes* and is labelled illustrative-and-overridable. The substitution test still binds skill
+bodies unchanged.
+
+**B3 — repayment gets an owner.** `structure-gate` detected `repayment-due` triggers and nothing
+acted on them — F3/v1.19.0 proved it, repaying D-5's trigger a release after it had silently
+fired. `evolve-maintain` gains intervention class **Repay**, auto-routed on `STRUCTURE:
+repayment-due(...)`: extract/split first (§10 rule 4), re-lock the baseline at the improved
+number, move the row to Repaid. `structure-gate`'s wiring note now names the handoff explicitly.
+
+**B4 — the doctrine budget is measured for the first time.** New `tools/doctrine-budget.py`
+(stdlib-only, kept separate from `structure-report.py` rather than folded in — that file has 17
+lines of headroom left on its own `repay_at`, D-3, and doesn't get to be the file that trips it)
+measures bytes-loaded-per-session: `PROTOCOL.md` (39,398 bytes) + all 18 non-chief-engineer skills'
+frontmatter (5,141 bytes) + `chief-engineer/SKILL.md`'s full body (11,753 bytes) = **56,292 bytes**
+today. The same `scrutinize` gate caught two defects here: (a) the tool's `blocked` state — legally
+registered in PROTOCOL §5 and `verdict-lint.py` — was never actually printed, because `die()` exited
+before any verdict line was written, leaving `blocked` as dead documentation (fixed: `measure()` now
+raises `DoctrineBlocked` and `die()` prints `DOCTRINE: blocked(...)` on every exit path); and (b)
+`.doctrine-baseline.json` and this changelog's own first draft had been frozen mid-edit, before this
+diff's later PROTOCOL.md changes landed, so the tool's self-report disagreed with itself by 322
+bytes — fixed by re-running `--write-baseline` after the diff reached its final state. Frozen in
+`.doctrine-baseline.json` with `repay_at: 65000` (~15% headroom) and a new
+`DOCTRINE` verdict noun (registered in PROTOCOL §5, `verdict-lint.py`'s enforcing copy, and
+`registry-check.py` reconciles clean — 21 nouns, 69 states, no drift). Wired into
+`enforcement-floor.yml` as its own gate. Recorded as `DEBT_LEDGER.md` D-6: this is the first
+freeze, not a repayment, so the trigger is the next release's obligation, not this one's — a
+subtraction pass (any PROTOCOL rule now fully absorbed by a tool compresses to rule + pointer +
+provenance line) is due when `repay_at` is crossed, exactly like any other ledger row.
+
+Full floor green (`test_tools.py` 71/71, `structure-report.py --require-debt-ledger` held,
+`registry-check.py` clean, `doctrine-budget.py` clean with 8,708 bytes headroom,
+`stop-gate.py --selftest` passed). Fresh-eyes `scrutinize` run on the diff before merge per §8.1(a).
+
 ## 1.19.0 — 2026-08-02 — rewire, then repay
 
 **IMPROVEMENT_PLAN.md Phases 0–1**, executed against a live session's own observation that

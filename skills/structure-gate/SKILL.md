@@ -16,7 +16,10 @@ description: >
 > routes every breach to `senior-review`/`scrutinize` for the wisdom call rather than
 > condemning it. Findings route onward: structural flags → `senior-review` or
 > `scrutinize`; an import cycle that reveals a layering error → `arch-design`; a
-> god-file that is really a missing module boundary → `arch-design`. Distinct from
+> god-file that is really a missing module boundary → `arch-design`; a
+> `STRUCTURE: repayment-due(...)` verdict → `evolve-maintain`'s **Repay** intervention class
+> (§10 rule 2, IMPROVEMENT_PLAN.md B3) — a debt row's own trigger firing is a maintenance
+> event, not a fresh finding this skill re-judges. Distinct from
 > `wire-check` (that asks *"is it connected?"*, this asks *"is it tangled?"*) and from
 > `latent-audit` (that asks *"is it dead or pointed the wrong way?"* — same import graph,
 > different question; layer-direction breaches and deletion manifests are its mandate, not this one's). Shared

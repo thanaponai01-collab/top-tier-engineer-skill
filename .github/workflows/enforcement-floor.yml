@@ -22,6 +22,9 @@ name: enforcement-floor
 #                            god-files, import cycles, duplication (the spaghetti alarm).
 #   3. run-trace.py        — run-completeness on committed transcripts (did the stages
 #                            actually execute).
+#   4. doctrine-budget.py  — the suite's own doctrine surface (PROTOCOL.md + skill
+#                            frontmatter + chief-engineer body) ratcheted against a
+#                            frozen byte budget (IMPROVEMENT_PLAN.md B4).
 #
 # Any tool exiting non-zero FAILS the check and blocks the merge. That is the
 # difference between "doctrine I hope the agent followed" and "an engineer plus a CI
@@ -111,6 +114,20 @@ jobs:
           code=0
           python3 tools/registry-check.py || code=$?
           echo "registry_exit=$code" >> "$GITHUB_OUTPUT"
+          exit $code
+
+      # ---- GATE 0.7: doctrine budget (IMPROVEMENT_PLAN.md B4) -----------------
+      # PROTOCOL.md + skill frontmatter + chief-engineer's body is bytes every
+      # session pays before doing any work, and it was unratcheted — no gate ever
+      # watched the total. Same ratchet shape as GATE 1, scoped to doctrine
+      # instead of code: frozen in .doctrine-baseline.json with a repay_at; this
+      # only fails once the frozen number's own trigger is crossed.
+      - name: Doctrine-budget gate
+        id: doctrine
+        run: |
+          code=0
+          python3 tools/doctrine-budget.py --root . --baseline .doctrine-baseline.json || code=$?
+          echo "doctrine_exit=$code" >> "$GITHUB_OUTPUT"
           exit $code
 
       # ---- GATE 2: verdict-line form on any committed run transcripts ---------
@@ -210,6 +227,12 @@ jobs:
               echo "### ✅ Verdict grammar: doctrine and enforcement agree"
             else
               echo "### ⚠️ Verdict grammar: the protocol and the linter no longer declare the same verdicts"
+            fi
+            echo ""
+            if [ "${{ steps.doctrine.outputs.doctrine_exit }}" = "0" ]; then
+              echo "### ✅ Doctrine budget: within the frozen limit"
+            else
+              echo "### ⚠️ Doctrine budget: the frozen repay_at was crossed — a subtraction pass is due (see DEBT_LEDGER.md D-6)"
             fi
             echo ""
             if [ "${{ steps.runtrace.outputs.runtrace_exit }}" = "0" ]; then

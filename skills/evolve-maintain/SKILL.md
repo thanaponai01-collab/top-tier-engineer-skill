@@ -52,6 +52,12 @@ Classify the intervention; the class determines the rules:
 | **Migrate** | Persistent data shape changes (schema, format, backfill) | Routes to `data-evolution` — data has no `git revert`; it owns forward+backward paths, expand-contract, and the point-of-no-return. Never edit a populated schema in place from here |
 | **Improve** | Same behavior, better structure | Behavior frozen by tests *before* the refactor; zero observable change is the success criterion |
 | **Evolve** | New/changed behavior | Routes through `problem-framing` (criteria) and `arch-design` (decisions) — maintenance mode does not grant authority to grow scope |
+| **Repay** | A `DEBT_LEDGER.md` row's own trigger fired | Auto-routed here whenever `structure-gate` reports `STRUCTURE: repayment-due(id-hint, signal, current/threshold)` (PROTOCOL §5, §10 rule 2). Contract is §10 rule 4 exactly: extract/split first — the debt pays down before anything else touches the file — then re-lock the baseline at the improved number and move the row from `DEBT_LEDGER.md`'s open table to its Repaid table, same change. Never re-lock to silence the gate without the extraction (§10 rule 3's forbidden move) |
+
+A `repayment-due` verdict is a detected finding with nobody assigned to act on it until this row
+exists — that gap (IMPROVEMENT_PLAN.md B3/F4) is exactly what `Repay` closes: `structure-gate`
+detects, `evolve-maintain` repays, the ledger records it. No new mandate; the ratchet already
+produces the trigger, this class gives it an owner.
 
 Then estimate **blast radius** — modules touched, contracts crossed, data migrated, callers
 affected — and pick the intervention strategy to match: small radius → direct slice; large radius
