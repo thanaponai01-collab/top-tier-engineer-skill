@@ -191,17 +191,27 @@ trajectory:
 | `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| held(accepted: K, repaid: R) \| regressed(new: A, worse: B, top: <signal>) \| blocked(no analyzable source)` |
 | `LATENT` | latent-audit | `clean(N modules traced) \| findings(dead: A, unused: B, layer-breaches: C) \| blocked(no analyzable source)` |
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
+| `FIX` | §9 (shared) | `coherent(surfaces: …) \| incoherent(named: …) \| unscrutinized` |
+| `TRACE` | run-trace.py (tool) | `complete \| incomplete(missing: …) \| blocked(unclassifiable)` |
 
-**Tool-output nouns.** Some verdict nouns are emitted by suite *tools*, not skills, and so own no row
-in the skill registry above: `TRACE` (run-trace.py). Tool nouns are linted for form like any other
-but are not part of the §4 skill handoff chain. (Note: `STRUCTURE` is emitted by the tool
+**One table, three classes of owner.** The table above is the registry — *every* noun this suite
+may emit has a row in it, and the Owner column says which class it belongs to. This is what makes
+§5 machine-readable as a single structure: `tools/registry-check.py` reconciles it against
+`verdict-lint.py`'s enforcing copy, and a noun declared in one and not the other fails the
+enforcement floor. Before v1.18.0 two nouns were declared in prose beneath the table instead of
+in it, which is precisely why no reconciler existed; a rule stated in a shape no tool can read is
+a rule enforced on trust.
+
+**Tool-output nouns.** Some verdict nouns are emitted by suite *tools*, not skills: `TRACE`
+(run-trace.py). They carry a row like any other and are linted for form like any other, but they
+are not part of the §4 skill handoff chain. (Note: `STRUCTURE` is emitted by the tool
 `structure-report.py` *and* owned by the skill `structure-gate`; likewise `LATENT` is emitted by
 `tools/graph-audit.py` *and* owned by `latent-audit` — the skill's line supersedes the tool's,
 and its finding counts may only shrink, never grow. Both keep their rows above.)
 
-**Shared nouns.** One noun is emitted by *whichever* skill performs the act, so it owns no
-single-skill row: `FIX` (owned by §9, delivered-fix discipline; emitted by any skill delivering a
-fix under Law 5). States: `coherent(surfaces: …) | incoherent(named: …) | unscrutinized`.
+**Shared nouns.** One noun is emitted by *whichever* skill performs the act, so its Owner is a
+protocol section rather than a skill: `FIX` (owned by §9, delivered-fix discipline; emitted by any
+skill delivering a fix under Law 5).
 `verdict-lint.py` lints its form, its SCRUTINY co-occurrence, and its limitation marker per §9.
 
 ## 6. Degradation rule

@@ -96,6 +96,23 @@ jobs:
           echo "structure_exit=$code" >> "$GITHUB_OUTPUT"
           exit $code
 
+      # ---- GATE 0.6: doctrine and enforcement declare the same grammar -------
+      # PROTOCOL §5's registry table is the source of truth; verdict-lint.py holds an
+      # enforcing copy because it must run in repos where PROTOCOL.md is absent. This
+      # step is where the two are reconciled. Exit 2 (cannot compare) fails the step —
+      # a reconciler that cannot find its inputs is a vacuous gate. Placed after the
+      # Stop-hook selftest and Structural-quality gate (not between Tool self-tests
+      # and them) so a registry drift — unrelated to whether those tools themselves
+      # work — cannot skip them and make the summary misreport their result as
+      # REGRESSED when they never ran.
+      - name: Verdict-registry reconciliation
+        id: registry
+        run: |
+          code=0
+          python3 tools/registry-check.py || code=$?
+          echo "registry_exit=$code" >> "$GITHUB_OUTPUT"
+          exit $code
+
       # ---- GATE 2: verdict-line form on any committed run transcripts ---------
       # Lints everything under runs/ (this suite's own evidence base) and under
       # run-logs/ (the convention for repos that consume the suite), plus any
@@ -188,6 +205,12 @@ jobs:
             echo '```'
             cat structure.out 2>/dev/null || echo "(structure report unavailable)"
             echo '```'
+            echo ""
+            if [ "${{ steps.registry.outputs.registry_exit }}" = "0" ]; then
+              echo "### ✅ Verdict grammar: doctrine and enforcement agree"
+            else
+              echo "### ⚠️ Verdict grammar: the protocol and the linter no longer declare the same verdicts"
+            fi
             echo ""
             if [ "${{ steps.runtrace.outputs.runtrace_exit }}" = "0" ]; then
               echo "### ✅ Run completeness: all traced transcripts complete"

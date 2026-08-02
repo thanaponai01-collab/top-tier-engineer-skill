@@ -3,6 +3,27 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.18.0 — 2026-08-02 — the registry that was declared twice
+
+§5's noun→state mapping lived in two places — the doctrine table and `verdict-lint.py`'s
+`REGISTRY` dict — with nothing checking they agreed. The drift surface was real and the
+reconciler was impossible, for the same reason: §5 was not machine-readable as one
+structure. Eighteen nouns had rows; `FIX` and `TRACE` declared their states in prose beneath
+the table, under the claim that they "own no row." A rule stated in a shape no tool can
+read is a rule enforced on trust — §11's diagnosis, one layer up, in the registry itself.
+
+Both nouns now have rows, with their class in the Owner column. `tools/registry-check.py`
+reconciles the table against the linter on every CI run; a noun or state declared on one
+side only fails the floor. Verified by six mutation proofs including two exit-2 cases —
+a reconciler that cannot find its inputs must fail, not pass.
+
+Confirmed clean, recorded as results: `verdict-lint.py` knows all 20 registered nouns, and
+validates states rather than nouns alone. Both were candidate vacuity holes; neither is
+one.
+
+**Open loop.** `registry-check.py` has no `test_tools.py` case yet — the mutation proofs
+above were run by hand and are `(proven)` at this revision only (§1 decay rule applies).
+
 ## 1.17.0 — 2026-07-29 — the gates that could not fail
 
 **Earned by a `chief-engineer` design audit of the suite's own folder** ("full run on this folder
