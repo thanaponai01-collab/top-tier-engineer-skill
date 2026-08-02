@@ -180,9 +180,9 @@ both fire on the same artifact in the same run:
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE|DOCTRINE)( [^:]+)?:`)
-(including the shared noun `FIX` and the tool nouns `TRACE`/`DOCTRINE`, both below) recovers any
-run's trajectory:
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE|DOCTRINE|CADENCE)( [^:]+)?:`)
+(including the shared noun `FIX` and the tool nouns `TRACE`/`DOCTRINE`/`CADENCE`, all below)
+recovers any run's trajectory:
 
 | Noun | Owner | States |
 |---|---|---|
@@ -207,6 +207,7 @@ run's trajectory:
 | `FIX` | §9 (shared) | `coherent(surfaces: …) \| incoherent(named: …) \| unscrutinized` |
 | `TRACE` | run-trace.py (tool) | `complete \| incomplete(missing: …) \| blocked(unclassifiable)` |
 | `DOCTRINE` | doctrine-budget.py (tool) | `clean(bytes: N) \| clean(bytes: N, headroom: H) \| budget-exceeded(N/threshold) \| blocked(reason)` |
+| `CADENCE` | cadence-check.py (tool) | `clean(N releases checked) \| gap(N) \| blocked(reason)` |
 
 **One table, three classes of owner.** The table above is the registry — *every* noun this suite
 may emit has a row in it, and the Owner column says which class it belongs to. This is what makes
@@ -218,7 +219,11 @@ a rule enforced on trust.
 
 **Tool-output nouns.** Some verdict nouns are emitted by suite *tools*, not skills: `TRACE`
 (run-trace.py), `DOCTRINE` (doctrine-budget.py, IMPROVEMENT_PLAN.md B4 — the doctrine-tier
-analogue of `STRUCTURE`'s ratchet, run against `.doctrine-baseline.json`). They carry a row like
+analogue of `STRUCTURE`'s ratchet, run against `.doctrine-baseline.json`), `CADENCE`
+(cadence-check.py, §12 below — walks `CHANGELOG.md` releases from the version §12 was
+introduced in and flags any skill-body-changing release with no matching `runs/LIVE_RUN_*.md`
+commit, so the run-cadence obligation has the same kind of watcher `DOCTRINE` gives B4 rather than
+shipping as a trigger nothing checks). They carry a row like
 any other and are linted for form like any other, but they are not part of the §4 skill handoff
 chain. (Note: `STRUCTURE` is emitted by the tool
 `structure-report.py` *and* owned by the skill `structure-gate`; likewise `LATENT` is emitted by
@@ -496,3 +501,33 @@ skipped for that file, and a transcript with no declaration is judged by the cur
 is the pin rule (§1) applied to the rules themselves — versioned artifacts deserve versioned
 verdicts — and every check added after this one inherits the mechanism rather than re-arguing its
 own history.
+
+## 12. The run-cadence obligation (a learning system needs a teacher)
+
+*Provenance: `IMPROVEMENT_PLAN.md` B2/B5 — five consecutive releases (1.14→1.18) were all
+introspection, the suite auditing itself with itself, while `LIVE_RUN_005` was the first
+external-subject run since `LIVE_RUN_004`. A learning system whose only teacher is experience,
+run on a system that stopped having experiences, stops learning.*
+
+**The rule.** Any minor release that changes a skill *body* (not frontmatter, tools, or docs)
+carries with it, or is preceded within that release cycle by, one live run against a real
+external subject not owned by this suite — logged in `runs/` per §3. A release touching only
+tools, ledgers, or doctrine is exempt; self-audit remains legitimate work, it just does not
+discharge this obligation.
+
+**Field reports satisfy the evidence bar.** §10 and §11 both entered the suite through a
+director's use report, not a scheduled run — that precedent is formal, not incidental: a gap a
+real user names while using the thing is exactly the "a live run surfaces the finding" bar that
+gates like `DECISION_LEDGER.md` D001/D002 required, and requiring a *scheduled* run in addition
+would make the bar stricter for a lesson already earned than for one still speculative.
+
+**Mechanical check, not a future audit's memory.** The failure mode this section exists to
+prevent is quiet — coherence keeps improving while external yield goes unmeasured, and nothing
+*fails* when it happens — which is exactly the shape of IMPROVEMENT_PLAN.md's F4 (a repayment
+trigger nothing watches). `tools/cadence-check.py` is this section's watcher: for every release
+from the version this section was introduced in onward (rule-vintage, §11 — this section does not
+condemn releases before it existed), it maps the release to its commit and checks whether a
+skill-body change landed without a matching `runs/LIVE_RUN_*.md` addition, emitting
+`CADENCE: clean(N) | gap(N) | blocked(reason)`. Wired into the enforcement floor alongside
+`doctrine-budget.py`, so a gap here fails a build the same way a doctrine-budget overrun does,
+rather than waiting on a future audit to notice by hand.

@@ -3,6 +3,63 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.20.1 — 2026-08-02 — prove it still works on the world
+
+**IMPROVEMENT_PLAN.md Phase 3**, the phase that tests whether Phases 0–2 mattered: a live run
+against a real external subject, and the first computation of skill-yield.
+
+**LIVE_RUN_005.** Director-supplied target: an independent F1 telemetry app (FastAPI + Starlette,
+Discord-OAuth-gated, ~21K lines, 725 functions), already touched once informally by a copy of this
+suite (it carried its own `DEBT_LEDGER.md`/`.structure-baseline.json` frozen 2026-07-28, with no
+`runs/` record of that pass). Re-running `structure-report.py` against the subject's own baseline
+found one **(proven)** defect: `static/race-panels.js` breached its own accepted ceiling
+(1365→1422 lines) in the commit immediately after the freeze, and nothing caught it until this run
+— independently confirming IMPROVEMENT_PLAN.md's F4 finding ("repayment triggers are prose nobody
+watches") on a second, unrelated codebase. `threat-model` bound against the subject's Discord OAuth
++ tier-gate boundary — a new boundary shape for the suite (session-cookie + third-party IdP, vs.
+LIVE_RUN_004's RLS) — and cleared it with no defect: tier is recomputed server-side on every
+request from a bare Discord ID never trusted from client state, exactly the property whose absence
+caused LIVE_RUN_004's BOLA. No fix was delivered to the subject repo (a live personal project, not
+this suite's to push to); findings are reported only.
+
+**Skill-yield, computed for the first time (MAP.md).** Defined as the gap between a subject's
+pre-run knowledge (existing docs/ledgers) and post-run findings (proven, run-earned): this run
+yielded one proven defect, one confirmed cross-codebase pattern, and one boundary shape checked
+clean. The size is small because the subject was already well-tended going in — the useful signal
+is that yield on a maintained subject is small-and-mechanical rather than zero; zero would have
+meant either an implausibly flawless subject or a suite that stopped looking.
+
+**PROTOCOL §12 — the run-cadence obligation, closing B2/B5.** Five consecutive releases (1.14→1.18)
+were introspection only, the suite auditing itself with itself — B5's named failure mode. New §12
+requires one live run against a real external subject per minor release that changes a skill body
+(tool/doc/ledger-only releases are exempt), and formally admits field reports as evidence-bar-
+satisfying — a precedent §10 and §11 already set informally, now written down rather than re-argued
+per decision. A self-reference clause states that any future audit finding N skill-body releases
+in a row with zero `LIVE_RUN_*` entries between them must name that count against this section.
+
+**Tested before delivery:** `.venv`-scoped pytest run on the subject (34 files, 1 skip, 0 failures)
+as the proven floor; `run-trace.py`/`verdict-lint.py` run against `LIVE_RUN_005.md` itself
+(required the run's own `SUBJECT: <name> @ <sha>` pin, added after `run-trace` flagged its
+absence — the tool catching its own author's omission, same pattern as v1.14.1's self-audit);
+`doctrine-budget.py` re-run after the §12 addition and its fresh-eyes correction below
+(56,292 → 58,961 bytes, `.doctrine-baseline.json` left at its 1.20.0 value since 58,961 is still
+comfortably under `repay_at` 65,000 — no freeze event to record); full suite floor
+(`test_tools.py` 71/71, `test_cadence_check.py` 7/7, `structure-report.py` held,
+`registry-check.py` clean) green. Both manifests bumped to 1.20.1.
+
+**Fresh-eyes correction (§8.1 `scrutinize`, same session).** The gate that reviewed this diff
+caught §12 shipping as pure prose with no CI or mechanical trigger — the identical "repayment
+triggers are prose nobody watches" failure this release's own `LIVE_RUN_005` had just confirmed on
+a second codebase, reproduced one layer up at the doctrine-governance layer. Fixed: new
+`tools/cadence-check.py` walks `CHANGELOG.md` release headers, flags any skill-body-changing
+release with no `runs/LIVE_RUN_*` file added in the same window, wired into
+`enforcement-floor.yml` alongside `doctrine-budget.py`. The gate also caught an unsupported
+citation in `LIVE_RUN_005.md` (a claimed `chief-engineer` routing rule that does not exist — no
+skill currently stops a run from naming its own subject, now logged as a stated gap rather than a
+false citation) and a 69-vs-71 debt-count mismatch inside the same report (`.structure-baseline.json`
+has 69 open entries; `DEBT_LEDGER.md`'s row count reads higher only because it also carries a
+separate closed-repayments table) — both corrected in place.
+
 ## 1.20.0 — 2026-08-02 — decide, delimit, and watch the doctrine itself
 
 **IMPROVEMENT_PLAN.md Phase 2**, closing three open ledger questions and naming two limits the

@@ -55,6 +55,10 @@ REGISTRY = {
     # optional headroom qualifier; parse_states in registry-check.py only needs the
     # leading keyword, so both forms collapse to one state here).
     "DOCTRINE":   {"clean", "budget-exceeded", "blocked"},
+    # v1.20.1 (PROTOCOL §12 / IMPROVEMENT_PLAN.md Phase 3): tool-output noun — emitted
+    # by cadence-check.py, which watches §12's own trigger so it does not become another
+    # F4 (a repayment/obligation trigger nothing checks).
+    "CADENCE":    {"clean", "gap", "blocked"},
     # v1.13.0: shared noun (PROTOCOL §9) — emitted by whichever skill delivers a Law-5 fix.
     # coherent/incoherent require a SCRUTINY verdict in the same transcript (a delivered fix
     # is a delta); unscrutinized is the honest weak close and carries the same bold

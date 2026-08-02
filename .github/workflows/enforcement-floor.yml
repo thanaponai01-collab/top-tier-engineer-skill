@@ -25,6 +25,9 @@ name: enforcement-floor
 #   4. doctrine-budget.py  — the suite's own doctrine surface (PROTOCOL.md + skill
 #                            frontmatter + chief-engineer body) ratcheted against a
 #                            frozen byte budget (IMPROVEMENT_PLAN.md B4).
+#   5. cadence-check.py    — PROTOCOL §12's run-cadence obligation: every skill-body-
+#                            changing release since §12 existed must ship with a
+#                            matching runs/LIVE_RUN_*.md commit.
 #
 # Any tool exiting non-zero FAILS the check and blocks the merge. That is the
 # difference between "doctrine I hope the agent followed" and "an engineer plus a CI
@@ -51,6 +54,11 @@ jobs:
     steps:
       - name: Check out the code
         uses: actions/checkout@v4
+        with:
+          # cadence-check.py (GATE 0.8) maps CHANGELOG.md releases to their commits and
+          # diffs each against its parent — a shallow (depth-1) clone would make every
+          # release "unmappable" and every diff fail. Full history costs one extra fetch.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -68,6 +76,11 @@ jobs:
       # trusted to judge the repo below.
       - name: Tool self-tests
         run: python3 tools/test_tools.py
+
+      # cadence-check.py's tests live in their own module, not test_tools.py — see
+      # tools/test_cadence_check.py's docstring (DEBT_LEDGER D-4 headroom).
+      - name: Cadence-check self-tests
+        run: python3 tools/test_cadence_check.py
 
       # The Stop hook is a tool too, and it had no CI coverage at all — which is how
       # two root-resolution defects and a stderr-encoding bug survived in it. Its
@@ -128,6 +141,20 @@ jobs:
           code=0
           python3 tools/doctrine-budget.py --root . --baseline .doctrine-baseline.json || code=$?
           echo "doctrine_exit=$code" >> "$GITHUB_OUTPUT"
+          exit $code
+
+      # ---- GATE 0.8: run-cadence obligation (PROTOCOL §12) --------------------
+      # §12 requires one live external run per skill-body-changing minor release; this
+      # is the watcher that keeps that obligation from becoming another F4 (a trigger
+      # nothing checks). Only evaluates releases from the version §12 was introduced in
+      # onward (rule-vintage, §11) — see tools/cadence-check.py's own docstring.
+      - name: Run-cadence gate
+        id: cadence
+        if: always()
+        run: |
+          code=0
+          python3 tools/cadence-check.py --root . || code=$?
+          echo "cadence_exit=$code" >> "$GITHUB_OUTPUT"
           exit $code
 
       # ---- GATE 2: verdict-line form on any committed run transcripts ---------
@@ -233,6 +260,12 @@ jobs:
               echo "### ✅ Doctrine budget: within the frozen limit"
             else
               echo "### ⚠️ Doctrine budget: the frozen repay_at was crossed — a subtraction pass is due (see DEBT_LEDGER.md D-6)"
+            fi
+            echo ""
+            if [ "${{ steps.cadence.outputs.cadence_exit }}" = "0" ]; then
+              echo "### ✅ Run cadence: no skill-body release shipped without a live external run"
+            else
+              echo "### ⚠️ Run cadence: a skill-body-changing release since PROTOCOL §12 has no matching runs/LIVE_RUN_*.md (or a release could not be mapped to a commit)"
             fi
             echo ""
             if [ "${{ steps.runtrace.outputs.runtrace_exit }}" = "0" ]; then

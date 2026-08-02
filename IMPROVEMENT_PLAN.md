@@ -261,6 +261,16 @@ skill. The table exists so the next audit doesn't re-derive it.
 | **2 — Decide & delimit** (a day) | F5 ledger decisions (D001/D002/D005), B1 knowledge-tier paragraph, B3 `Repay` class, B4 doctrine budget + first subtraction pass | Doctrine edits; each needs the director once, batched | 1.20.0 |
 | **3 — Prove it still works on the world** | B2/B5: LIVE_RUN_005 against an external subject, compute skill-yield | The only phase that tests whether any of the above mattered | 1.20.x |
 
+**Phase 3 — executed, 1.20.1.** `runs/LIVE_RUN_005.md` ran the suite against a director-supplied
+external subject (an F1 telemetry app, independent of this suite, already touched once informally
+by a copy of it). Found one **(proven)** defect — a debt-ratchet regression the subject's own
+baseline had silently missed for one commit — that independently confirms F4 on a second codebase,
+plus a clean `threat-model` pass on a Discord-OAuth trust boundary (a new boundary shape for the
+suite). Skill-yield computed for the first time (MAP.md). B2's resolution landed as PROTOCOL §12
+(the run-cadence obligation + field-report admissibility, formalized rather than left as prose in
+this file). B5's self-reference check is the new §12 clause: a future audit states the count if
+skill-body-changing releases resume shipping with zero `LIVE_RUN_*` entries between them.
+
 Every phase closes with: full floor green, fresh-eyes `scrutinize` on the diff
 (§8.1(a) — the agent, not the marker), CHANGELOG entry, and for Phases 0–1 a version
 bump in `.claude-plugin/plugin.json`.
