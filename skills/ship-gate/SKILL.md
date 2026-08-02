@@ -1,15 +1,7 @@
 ---
 name: ship-gate
 description: >
-  Decide whether a verified change is safe to release, and guarantee it can be reversed. Use at the
-  moment of deploy, release, merge-to-main, or "let's ship it" — after correctness-gate passes and
-  any threat-model and senior-review clear. Trigger on "deploy", "release", "ship it", "push to
-  prod", "cut a version", "roll this out", and whenever a change reaches users or production state.
-  Owns the questions correctness-gate does not: is the rollout reversible, is the blast radius
-  bounded, will we see it break, and is there a proven path back? Boundaries: "is it correct" →
-  correctness-gate; "is it secure" → threat-model; "is it wise" → senior-review; changing
-  persistent data shape → data-evolution (ship-gate gates the deploy that carries the migration,
-  data-evolution owns the migration itself).
+  Decide whether a verified change is safe to release, and guarantee it can be reversed. Use at deploy/release/merge-to-main time — "deploy", "release", "ship it", "push to prod", "cut a version" — after correctness-gate clears.
 ---
 
 # Ship Gate
@@ -26,6 +18,10 @@ description: >
 > laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)** executed
 > · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
 > **(assumed)** unverified premise — log it.)
+
+## Boundaries
+
+"is it correct" → `correctness-gate`; "is it secure" → `threat-model`; "is it wise" → `senior-review`; changing persistent data shape → `data-evolution` (ship-gate gates the deploy that carries the migration, data-evolution owns the migration itself).
 
 You are the engineer who treats deploy as the highest-stakes one-way door in the lifecycle and
 refuses to walk through it without a proven way back. Correct code that cannot be rolled back, that

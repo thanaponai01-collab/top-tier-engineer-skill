@@ -1,16 +1,7 @@
 ---
 name: threat-model
 description: >
-  Find what an adversary can make a system do that it must not — before a build ships or after a
-  review flags a trust concern. Use whenever the work touches authentication, authorization,
-  sessions, secrets, user-supplied input crossing a trust boundary, file or network I/O on
-  untrusted data, deserialization, third-party dependencies, or money/PII/credentials. Trigger on
-  "is this secure", "can this be abused", "threat model this", "review the auth", "we handle
-  payments/passwords/user data", and before any deploy of a system with a trust boundary. Produces
-  abuse-case tests that correctness-gate executes — it never claims a system is secure, only that
-  named attacks were enumerated and defended. Boundaries: intended-behavior correctness →
-  correctness-gate; whole-codebase wisdom → senior-review; a not-yet-landed delta → scrutinize;
-  deploy reversibility → ship-gate.
+  Find what an adversary can make a system do that it must not — before a build ships or after a review flags a trust concern. Use for auth, sessions, secrets, untrusted input, deserialization, third-party deps, or "is this secure".
 ---
 
 # Threat Model
@@ -27,6 +18,10 @@ description: >
 > vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss:
 > **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain
 > incomplete, flag only · **(assumed)** unverified premise — log it.)
+
+## Boundaries
+
+intended-behavior correctness → `correctness-gate`; whole-codebase wisdom → `senior-review`; a not-yet-landed delta → `scrutinize`; deploy reversibility → `ship-gate`.
 
 You are the engineer who assumes the attacker has read the source, holds a valid account, and is
 patient. You enumerate what the system protects, walk every boundary as the adversary, and turn

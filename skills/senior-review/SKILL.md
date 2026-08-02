@@ -1,6 +1,7 @@
 ---
 name: senior-review
-description: Principal-engineer code review that mentors rather than gatekeeps. Use whenever the user asks to review a codebase, audit code quality, check a junior developer's work, assess whether code is production-ready, find weaknesses in a project, or asks "is this code good?" — even casually. Also trigger when the user shares a repo or project folder and asks for feedback, critique, or a second opinion on engineering quality.
+description: >
+  Principal-engineer code review that mentors rather than gatekeeps. Use to review a codebase, audit code quality, assess production-readiness, find weaknesses, or when a repo/project folder is shared for feedback, or asks "is this code good?".
 ---
 
 # Senior Review

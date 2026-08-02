@@ -1,12 +1,7 @@
 ---
 name: arch-design
 description: >
-  Shape a system's structure and record every consequential decision before and during the build.
-  Use this skill whenever starting greenfield architecture, choosing between technologies or
-  patterns, designing module boundaries or APIs, restructuring an existing system, or whenever the
-  user asks "how should this be structured / which stack / which approach". Also trigger when a
-  build is underway and a decision arises that would be expensive to reverse. If a choice will
-  still matter in six months, it belongs in this skill's decision ledger.
+  Shape a system's structure and record every consequential decision before and during a build. Use for greenfield architecture, choosing tech/patterns, module or API boundaries, restructuring, or "how should this be structured / which stack".
 ---
 
 # Architecture & Design

@@ -113,15 +113,9 @@ import shutil
 
 import structure_opacity as opacity
 from collections import defaultdict, namedtuple
+from _encoding import utf8_streams
 
-# Windows terminals default to cp1252 and crash on the report's ✅/⚠️ glyphs before the
-# verdict line is ever printed; force UTF-8 so the director's own console can read it.
-# ponytail: real portability bug, one guarded line; no-op where stdout is already UTF-8.
-if hasattr(sys.stdout, "reconfigure"):
-    try:
-        sys.stdout.reconfigure(encoding="utf-8")
-    except (ValueError, OSError):
-        pass
+utf8_streams()
 
 # ----- default thresholds (override with --thresholds f.json) --------------------
 # Tuned to "a reviewer would want to look," not "definitely broken." A breach means
@@ -525,6 +519,62 @@ def _ledger_coverage(findings, ledger_path):
     return sorted(missing)
 
 
+def _entry_value(entry):
+    """A baseline entry is either a bare number (schema v1) or {"value": N,
+    "repay_at": M} (schema v2, F4). Either way, the frozen magnitude."""
+    return entry["value"] if isinstance(entry, dict) else entry
+
+
+def _entry_repay_at(entry):
+    return entry.get("repay_at") if isinstance(entry, dict) else None
+
+
+def _ratchet_diff(current, accepted_raw):
+    """Compare current signature magnitudes against a baseline's accepted ones.
+
+    Returns new/worse/repaid/held (the v1.15.0 ratchet) plus due/headroom (F4: a
+    baseline entry may carry `repay_at`, the point at which its own deferral trigger
+    fires — distinct from `worse`, which only asks whether the freeze was breached).
+    """
+    accepted = {k: _entry_value(v) for k, v in accepted_raw.items()}
+    repay_at = {k: _entry_repay_at(v) for k, v in accepted_raw.items()
+                if _entry_repay_at(v) is not None}
+
+    new = {k: v for k, v in current.items() if k not in accepted}
+    worse = {k: (v, accepted[k]) for k, v in current.items()
+             if k in accepted and v > accepted[k]}
+    repaid = {k: v for k, v in accepted.items() if k not in current}
+    held = {k: v for k, v in current.items() if k in accepted and v <= accepted[k]}
+
+    due = {k: (current[k], repay_at[k]) for k in repay_at
+           if k in current and k not in worse and current[k] >= repay_at[k]}
+    headroom = {k: (current[k], repay_at[k]) for k in repay_at
+                if k in current and k not in due and k not in worse}
+
+    return {"new": new, "worse": worse, "repaid": repaid, "held": held,
+            "due": due, "headroom": headroom, "baseline_entries": len(accepted)}
+
+
+def _ratchet_verdict(rt, ledger_breach):
+    """The verdict noun+state implied by one ratchet diff. Priority: a breach that
+    got strictly worse outranks one that merely expired (F4), which outranks an
+    unledgered-debt finding, which outranks a clean hold."""
+    if rt["new"] or rt["worse"]:
+        kinds = [k.split("|")[0] for k in list(rt["new"]) + list(rt["worse"])]
+        top = min(set(kinds), key=_severity)
+        return (f"STRUCTURE: regressed(new: {len(rt['new'])}, worse: {len(rt['worse'])}, "
+                f"top: {top}) | review-needed", 1)
+    if rt["due"]:
+        k, (now, threshold) = next(iter(rt["due"].items()))
+        kind, path, sym = k.split("|", 2)
+        id_hint = path + (f"::{sym}" if sym else "")
+        return (f"STRUCTURE: repayment-due({id_hint}, {kind}, {now}/{threshold})", 1)
+    if ledger_breach:
+        return ("STRUCTURE: regressed(new: 0, worse: 0, top: unledgered-debt) | "
+                "review-needed", 1)
+    return (f"STRUCTURE: held(accepted: {len(rt['held'])}, repaid: {len(rt['repaid'])})", 0)
+
+
 def apply_ratchet(r, baseline, ledger_path=None, require_ledger=False):
     """Re-decide the verdict against an accepted baseline: direction, not acceptability.
 
@@ -536,46 +586,47 @@ def apply_ratchet(r, baseline, ledger_path=None, require_ledger=False):
         return r  # nothing analyzable — the baseline is irrelevant
 
     current = signature_map(r["findings"])
-    accepted = baseline.get("entries", {})
-    new = {k: v for k, v in current.items() if k not in accepted}
-    worse = {k: (v, accepted[k]) for k, v in current.items()
-             if k in accepted and v > accepted[k]}
-    repaid = {k: v for k, v in accepted.items() if k not in current}
-    held = {k: v for k, v in current.items() if k in accepted and v <= accepted[k]}
+    rt = _ratchet_diff(current, baseline.get("entries", {}))
 
     unledgered = _ledger_coverage(r["findings"], ledger_path) if ledger_path else None
     ledger_breach = require_ledger and (unledgered is None or unledgered)
 
-    r["ratchet"] = {"new": new, "worse": worse, "repaid": repaid, "held": held,
-                    "unledgered": unledgered, "ledger_path": ledger_path,
-                    "require_ledger": require_ledger, "ledger_breach": ledger_breach,
-                    "baseline_entries": len(accepted)}
-
-    if new or worse:
-        kinds = [k.split("|")[0] for k in list(new) + list(worse)]
-        top = min(set(kinds), key=_severity)
-        r["verdict"] = (f"STRUCTURE: regressed(new: {len(new)}, worse: {len(worse)}, "
-                        f"top: {top}) | review-needed")
-        r["exit_code"] = 1
-    elif ledger_breach:
-        r["verdict"] = ("STRUCTURE: regressed(new: 0, worse: 0, "
-                        "top: unledgered-debt) | review-needed")
-        r["exit_code"] = 1
-    else:
-        r["verdict"] = f"STRUCTURE: held(accepted: {len(held)}, repaid: {len(repaid)})"
-        r["exit_code"] = 0
+    rt.update({"unledgered": unledgered, "ledger_path": ledger_path,
+              "require_ledger": require_ledger, "ledger_breach": ledger_breach})
+    r["ratchet"] = rt
+    r["verdict"], r["exit_code"] = _ratchet_verdict(rt, ledger_breach)
     return r
 
 
 def write_baseline(r, path):
+    # F4: a repay_at set on an entry must survive regeneration — the whole point of a
+    # mechanical trigger is that nobody can drop it by accident when the baseline is
+    # next re-locked for an unrelated repayment.
+    old_repay_at = {}
+    try:
+        with open(path, encoding="utf-8-sig") as fh:
+            old_repay_at = {k: _entry_repay_at(v)
+                            for k, v in json.load(fh).get("entries", {}).items()
+                            if _entry_repay_at(v) is not None}
+    except (OSError, ValueError):
+        pass
+
+    values = signature_map(r["findings"])
+    entries = {}
+    for k, v in values.items():
+        ra = old_repay_at.get(k)
+        entries[k] = {"value": v, "repay_at": ra} if ra is not None else v
+
     payload = {"version": BASELINE_VERSION,
                "thresholds": r["thresholds"],
                "note": ("Accepted structural debt. Each entry must have a row in "
                         "DEBT_LEDGER.md naming why it was accepted, what it costs per "
                         "future change, and the trigger that makes repayment due. "
                         "Regenerate only when debt is REPAID — never to silence a "
-                        "regression (that is how the ratchet gets disabled)."),
-               "entries": signature_map(r["findings"])}
+                        "regression (that is how the ratchet gets disabled). An entry "
+                        "may carry \"repay_at\": N — the numeric point at which the "
+                        "deferral's own trigger fires (F4)."),
+               "entries": entries}
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(payload, fh, indent=2, sort_keys=True)
         fh.write("\n")
@@ -592,6 +643,20 @@ def _print_findings_by_kind(findings, by_kind):
         if by_kind[kind] > 5:
             print(f"       … and {by_kind[kind] - 5} more")
         print()
+
+
+def _print_ledger_coverage(rt):
+    un = rt["unledgered"]
+    if un is None:
+        print(f"  ⚠️  No debt ledger at {rt['ledger_path']} — the baseline is currently")
+        print("      permanent amnesty. Every accepted breach needs a repayment trigger.\n")
+    elif un:
+        print(f"  ⚠️  {len(un)} file(s) carry accepted debt with no DEBT_LEDGER.md row:")
+        for p in un[:8]:
+            print(f"       · {p}")
+        print()
+    else:
+        print("  ✅  Every file carrying accepted debt is listed in the debt ledger.\n")
 
 
 def _print_ratchet(rt):
@@ -614,19 +679,23 @@ def _print_ratchet(rt):
     if rt["repaid"]:
         print(f"  ✅  {len(rt['repaid'])} baselined breach(es) REPAID — gone from the source.")
         print("      Re-run --write-baseline to lock the improvement in.\n")
+    if rt.get("due"):
+        print(f"  ⏰  {len(rt['due'])} deferral(s) hit their REPAYMENT TRIGGER:")
+        for k, (now, threshold) in rt["due"].items():
+            kind, path, sym = k.split("|", 2)
+            print(f"       · {kind}: {now}/{threshold}   [{path}{(' :: ' + sym) if sym else ''}]")
+        print()
+    if rt.get("headroom"):
+        print("  Headroom before the next deferral's own trigger fires:")
+        for k, (now, threshold) in rt["headroom"].items():
+            kind, path, sym = k.split("|", 2)
+            room = threshold - now
+            print(f"       · {now}/{threshold} — {room} headroom   "
+                  f"[{path}{(' :: ' + sym) if sym else ''}]")
+        print()
     if rt["ledger_path"]:
-        un = rt["unledgered"]
-        if un is None:
-            print(f"  ⚠️  No debt ledger at {rt['ledger_path']} — the baseline is currently")
-            print("      permanent amnesty. Every accepted breach needs a repayment trigger.\n")
-        elif un:
-            print(f"  ⚠️  {len(un)} file(s) carry accepted debt with no DEBT_LEDGER.md row:")
-            for p in un[:8]:
-                print(f"       · {p}")
-            print()
-        else:
-            print("  ✅  Every file carrying accepted debt is listed in the debt ledger.\n")
-    if not (rt["new"] or rt["worse"] or rt["ledger_breach"]):
+        _print_ledger_coverage(rt)
+    if not (rt["new"] or rt["worse"] or rt["ledger_breach"] or rt.get("due")):
         print("  ✅  HELD — nothing got worse. Known debt did not grow.")
 
 
@@ -703,6 +772,9 @@ def json_report(r):
                                         for k, (n, w) in rt["worse"].items()},
             "repaid": rt["repaid"], "held": len(rt["held"]),
             "unledgered_files": rt["unledgered"], "ledger_breach": rt["ledger_breach"],
+            "due": {k: {"now": n, "threshold": t} for k, (n, t) in rt.get("due", {}).items()},
+            "headroom": {k: {"now": n, "threshold": t}
+                        for k, (n, t) in rt.get("headroom", {}).items()},
         }
     return out
 

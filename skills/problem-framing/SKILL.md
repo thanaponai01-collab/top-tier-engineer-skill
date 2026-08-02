@@ -1,13 +1,7 @@
 ---
 name: problem-framing
 description: >
-  Turn a vague human intent into a buildable, falsifiable problem specification before any
-  architecture or code exists. Use this skill whenever a project is starting, whenever the user
-  describes what they want in plain language ("I want an app that...", "build me something that..."),
-  whenever requirements feel fuzzy, contradictory, or incomplete, or whenever a build has drifted
-  and nobody can state crisply what "done" means. Also trigger before any major new feature on an
-  existing system. If you are about to design or code and cannot point to a PROBLEM_BRIEF.md,
-  run this skill first.
+  Turn a vague human intent into a buildable, falsifiable problem specification before any architecture or code exists. Use when a project starts, requirements feel fuzzy/contradictory, or a build drifted and nobody can state what "done" means.
 ---
 
 # Problem Framing & Requirements

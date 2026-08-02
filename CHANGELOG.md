@@ -3,6 +3,64 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.19.0 — 2026-08-02 — rewire, then repay
+
+**IMPROVEMENT_PLAN.md Phases 0–1**, executed against a live session's own observation that
+nine of nineteen skills surfaced with no trigger description at all in a real Claude Code
+session with the plugin installed — proactive triggering is the whole premise, and half the
+suite was soft-unwired.
+
+**F1 — every skill's frontmatter description compressed to pure trigger text.** All 19
+`skills/*/SKILL.md` descriptions cut to ≤250 chars (chief-engineer ≤400; aggregate 4,517 <
+5,000 budget), with any "Boundaries: X → skill-y" prose moved into the body under a new
+`## Boundaries` heading — frontmatter is read at trigger time, the body only after. A bulk
+edit script that flattened descriptions to plain YAML scalars broke `evolve-maintain`'s
+frontmatter (an unquoted colon-space is a YAML mapping separator, not text) — a fresh-eyes
+`scrutinize` gate caught it before merge. Fixed by moving every description to block-scalar
+form (`description: >`), which is immune to the whole hazard class regardless of what
+punctuation the trigger text needs; `test_tools.py::SkillFrontmatter` now enforces the form
+and the budget with the stdlib only. The same gate caught a real trigger clause on
+`senior-review` misfiled as a boundary and demoted out of the router's view — restored to
+frontmatter.
+
+**F2 — the Stop hook no longer hardcodes one interpreter name.** `hooks/hooks.json` ran
+`python`, which does not exist on stock Debian/Ubuntu/macOS (only `python3`); the suite's own
+CI uses `python3` throughout, so the two halves of the enforcement floor disagreed about the
+interpreter's name and the Stop hook failed silently on every non-Windows install. An initial
+fix (`python3 ... || python ...`) was itself caught by `scrutinize`: falling back on exit
+code re-runs `stop-gate.py` with already-drained stdin whenever python3 exists but the first
+run legitimately detects a real violation, silently turning a block into a fail-open pass.
+Fixed by selecting the interpreter via `command -v` (existence, not execution), so the script
+runs exactly once regardless of which interpreter is present.
+
+**F3 — DEBT_LEDGER D-5 repaid, and the bug its own trigger predicted was real.** Six tools
+carried an inline UTF-8 stdout/stderr guard in two drifted variants — D-5's stated repayment
+trigger ("the fourth tool that needs this guard") had already fired unnoticed, and four of
+the six guarded stdout only, leaving stderr crashable under Windows cp1252 the moment an
+error message carried non-ASCII. Extracted to `tools/_encoding.py::utf8_streams()`; all six
+tools now import it and the standalone-copy guarantee for `tools/` re-scopes to "vendor two
+files, not one," exactly as D-5 pre-authorized. Incidentally repaid half of D-2 (the removed
+branch dropped `graph-audit.py::main`'s cyclomatic complexity from 16 to 15).
+
+**F4 — repayment triggers are now machine-checked, not prose nobody watches.**
+`.structure-baseline.json` entries may carry `"repay_at": N`; `structure-report.py` reports
+`STRUCTURE: repayment-due(...)` and exits non-zero when a debt crosses its own frozen expiry,
+distinct from `regressed` (the debt didn't grow past its freeze, it grew past its deadline).
+D-3 and D-4 both now carry machine-checked `repay_at` values (700 and 800 SLoC). Registered
+as a fourth `STRUCTURE` state in PROTOCOL §5 and `verdict-lint.py`'s registry, reconciled
+clean by `registry-check.py`. D-4's own row had separately pledged "any growth past 709 is a
+regression and must fail" — stricter than PROTOCOL §10 rule 3's general law. Required test
+additions (F2/F3/F4 regression coverage) grew the file to 799 SLoC, 1 line under its own new
+800-line trigger; the pledge is explicitly superseded in the same row, reframed under §10
+rule 1 (legitimate, named acceptance) rather than quietly reinterpreted — §10 itself gained a
+clarifying paragraph distinguishing repayment/deliberate-acceptance (rule 3 permits, if named)
+from silent regeneration (rule 3 forbids).
+
+Every phase closed with the full floor green (`test_tools.py`, `structure-report.py
+--require-debt-ledger`, `registry-check.py`) and two rounds of a fresh-eyes `scrutinize`
+gate on the diff — the second round to verify the first round's findings were actually fixed,
+not just claimed fixed.
+
 ## 1.18.0 — 2026-08-02 — the registry that was declared twice
 
 §5's noun→state mapping lived in two places — the doctrine table and `verdict-lint.py`'s

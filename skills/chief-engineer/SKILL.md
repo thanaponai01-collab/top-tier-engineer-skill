@@ -1,12 +1,7 @@
 ---
 name: chief-engineer
 description: >
-  The dispatcher that turns eighteen specialist engineering skills into one top-tier engineer (nineteen total with the dispatcher). Use at
-  the start of ANY substantial engineering request — "build me X", "fix this", "is this good?",
-  "make it faster", "continue the project" — whenever it is unclear which lifecycle stage applies,
-  whenever a request spans multiple stages ("build and test it"), whenever resuming a project after
-  a gap or in a fresh session, and whenever the user asks "where are we?" or "what's next?". If no
-  other lifecycle skill has clearly and singularly triggered, this skill decides which one governs.
+  Dispatcher routing engineering requests to the right specialist skill(s). Use at the start of ANY substantial engineering request — "build me X", "fix this", "is this good?", "make it faster", "continue the project" — or whenever the lifecycle stage is unclear, spans multiple stages, or resumes after a gap.
 ---
 
 # Chief Engineer

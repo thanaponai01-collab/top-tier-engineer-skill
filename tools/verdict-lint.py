@@ -17,6 +17,7 @@ Exit code 0 = clean, 1 = violations found. Usage:
     cat transcript.md | verdict-lint.py
 """
 import sys, re
+from _encoding import utf8_streams
 
 import protocol_vintage as vintage
 
@@ -37,7 +38,10 @@ REGISTRY = {
     # v1.15.0: `held`/`regressed` are the ratchet states — a run measured against an
     # accepted structural baseline. `held` means known debt did not grow; `regressed`
     # means a NEW breach appeared or an accepted one got worse (PROTOCOL §10).
-    "STRUCTURE":  {"clean", "findings", "blocked", "held", "regressed"},
+    # v1.19.0 (F4): `repayment-due` is a third ratchet state, distinct from
+    # `regressed` — the debt did not grow past its freeze, it grew past its expiry
+    # (a baseline entry's own `repay_at` trigger fired).
+    "STRUCTURE":  {"clean", "findings", "blocked", "held", "regressed", "repayment-due"},
     "LATENT":     {"clean", "findings", "blocked"},
     "MAINT":      {"resolved", "escalated", "reverted"},
     # v1.5.0 additions:
@@ -294,11 +298,7 @@ def release_check(root):
 
 
 def main():
-    # Output carries non-ASCII (the § section mark). On Windows a redirected pipe
-    # defaults to cp1252, so emit valid UTF-8 like run-trace.py / structure-report.py
-    # do — otherwise any UTF-8 consumer (or CI) chokes on the byte.
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
+    utf8_streams()
 
     if "--help" in sys.argv or "-h" in sys.argv:
         print("verdict-lint — check PROTOCOL §5 verdict-line FORM (not merit),\n"

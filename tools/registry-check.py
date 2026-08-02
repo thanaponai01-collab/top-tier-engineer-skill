@@ -37,6 +37,8 @@ import re
 import sys
 from pathlib import Path
 
+from _encoding import utf8_streams
+
 # A §5 table row:  | `NOUN` | owner | state \| state(qualifier) \| ... |
 # The noun may carry a placeholder suffix (`SLICE <n>`, `MAINT <ID>`) which is
 # part of the line grammar, not part of the noun.
@@ -145,15 +147,7 @@ def die(code: int, msg: str) -> None:
 
 
 def main() -> int:
-    # Output carries `§` and em-dashes and goes to both stdout (report) and stderr
-    # (die()). Same fix the suite already made for stdout in structure-report.py and
-    # verdict-lint.py, and for stderr too in stop-gate.py after a prior mojibake bug.
-    for stream in (sys.stdout, sys.stderr):
-        if hasattr(stream, "reconfigure"):
-            try:
-                stream.reconfigure(encoding="utf-8")
-            except (ValueError, OSError):
-                pass
+    utf8_streams()
 
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--protocol", default="PROTOCOL.md", type=Path)

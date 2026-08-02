@@ -1,12 +1,7 @@
 ---
 name: evolve-maintain
 description: >
-  Keep a shipped system healthy and able to change safely over months and years. Use this skill
-  for any work on an existing, running system: bug reports and incidents, dependency updates,
-  refactors, deprecations, adapting to changed external APIs, "the system broke / stopped working",
-  and periodic health checks. Also trigger whenever resuming work on a project after a gap, or
-  when a different model/session inherits a codebase — this skill is how institutional memory
-  survives across time and across AI models.
+  Keep a shipped system healthy and able to change safely over time. Use for work on an existing running system: bug reports, incidents, dependency updates, refactors, deprecations, "the system broke / stopped working", or resuming work after a gap.
 ---
 
 # Maintenance & Evolution

@@ -1,6 +1,7 @@
 ---
 name: scrutinize
-description: Outsider, change-scoped second opinion on a delta — a plan, PR, diff, design doc, or proposed change that has not yet landed. First asks whether the change should exist at all (do nothing, reuse what exists, smaller change, different layer), then traces the real code path end-to-end to verify the change does what it claims. Use whenever the user asks to scrutinize, review, audit, sanity-check, or get a second opinion on a PR, diff, plan, design doc, or proposed change — anything pre-merge or pre-build. For whole-codebase review and author mentorship, use senior-review instead; this skill judges a delta, not a codebase, and owes its author nothing.
+description: >
+  Outsider second opinion on a not-yet-landed delta — plan, PR, diff, design doc. Asks whether the change should exist, then traces the real code path to verify it does what it claims. Use for "scrutinize/review/audit/sanity-check this PR/diff/plan".
 ---
 
 # Scrutinize
@@ -26,6 +27,10 @@ description: Outsider, change-scoped second opinion on a delta — a plan, PR, d
 > and laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)**
 > executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
 > **(assumed)** unverified premise — log it.)
+
+## Boundaries
+
+for whole-codebase review and author mentorship, use `senior-review` instead; this skill judges a delta, not a codebase, and owes its author nothing.
 
 Stand outside the change and ask whether it should exist at all, then verify it actually does
 what it claims, end-to-end. The diff is the entry point, never the scope.

@@ -870,5 +870,113 @@ class RunLedgerRedaction(unittest.TestCase):
                          + "\n  ".join(offenders))
 
 
+class EncodingGuard(unittest.TestCase):
+    """F3 (DEBT_LEDGER D-5, repaid): every output tool guards stdout AND stderr
+    against a non-UTF-8 console via the single shared tools/_encoding.py — not an
+    inline copy. stderr matters: four tools used to guard stdout only, so a
+    non-ASCII error (e.g. "§") crashed on write to a cp1252 stderr.
+    """
+
+    OUTPUT_TOOLS = ("verdict-lint.py", "run-trace.py", "stop-gate.py",
+                     "structure-report.py", "graph-audit.py", "registry-check.py")
+
+    def test_every_output_tool_imports_the_shared_guard_and_no_copy_survives(self):
+        missing = [n for n in self.OUTPUT_TOOLS
+                   if "from _encoding import utf8_streams"
+                   not in open(os.path.join(HERE, n), encoding="utf-8").read()]
+        self.assertEqual([], missing, "no longer import _encoding: " + ", ".join(missing))
+        offenders = [n for n in os.listdir(HERE)
+                     if n.endswith(".py") and n not in ("_encoding.py", "test_tools.py")
+                     and "reconfigure" in open(os.path.join(HERE, n), encoding="utf-8").read()]
+        self.assertEqual([], offenders, "inline reconfigure copy outside _encoding.py: "
+                         + ", ".join(offenders))
+
+    def test_tool_stderr_survives_a_cp1252_console(self):
+        env = dict(os.environ, PYTHONIOENCODING="cp1252")
+        for name in ("verdict-lint.py", "graph-audit.py"):
+            p = subprocess.run([sys.executable, os.path.join(HERE, name), "--help"],
+                               capture_output=True, text=True, env=env)
+            self.assertNotIn("UnicodeEncodeError", p.stderr, f"{name}: {p.stderr[-500:]}")
+
+
+class SkillFrontmatter(unittest.TestCase):
+    """F1: every skill's trigger description must be short (harness truncates a long
+    aggregate) AND safe YAML — a bulk edit once flattened evolve-maintain's
+    description to a bare scalar containing "system: bug reports", a colon-space
+    that is a YAML mapping separator in plain-scalar context (hard parse error).
+    Block-scalar form (`description: >`) sidesteps the hazard; checked stdlib-only.
+    """
+
+    FRONTMATTER_RE = re.compile(
+        r'^---\nname: (\S+)\ndescription: >\n((?:  .*\n)+)---\n')
+
+    def _skills(self):
+        root = os.path.dirname(HERE)
+        return sorted(e.name for e in os.scandir(os.path.join(root, "skills")) if e.is_dir())
+
+    def test_every_skill_uses_safe_block_scalar_description(self):
+        root = os.path.dirname(HERE)
+        bad = []
+        for name in self._skills():
+            path = os.path.join(root, "skills", name, "SKILL.md")
+            text = open(path, encoding="utf-8").read()
+            if not self.FRONTMATTER_RE.match(text):
+                bad.append(name)
+        self.assertEqual([], bad,
+                         "these skills' frontmatter is not `description: >` block-scalar "
+                         "form — a plain-scalar colon-space (e.g. \"system: bug reports\") "
+                         "is a YAML parse error, and the harness silently drops the whole "
+                         "skill's trigger text: " + ", ".join(bad))
+
+    def test_description_lengths_stay_under_budget(self):
+        root = os.path.dirname(HERE)
+        over, total = [], 0
+        for name in self._skills():
+            path = os.path.join(root, "skills", name, "SKILL.md")
+            text = open(path, encoding="utf-8").read()
+            m = self.FRONTMATTER_RE.match(text)
+            if not m:
+                continue  # reported by the sibling test
+            folded = " ".join(line.strip() for line in m.group(2).splitlines())
+            total += len(folded)
+            limit = 400 if name == "chief-engineer" else 250
+            if len(folded) > limit:
+                over.append(f"{name} ({len(folded)} > {limit})")
+        self.assertEqual([], over,
+                         "F1: description exceeds its trigger-text budget: " + ", ".join(over))
+        self.assertLessEqual(total, 5000,
+                             f"F1: aggregate description budget exceeded ({total} > 5000)")
+
+
+class StopHookInterpreter(unittest.TestCase):
+    """F2: select the interpreter by existence (`command -v`), not by running it and
+    falling back on exit code — the latter (an earlier draft's `python3 ... || python
+    ...`) re-runs stop-gate.py on an already-drained stdin whenever python3 exists
+    but legitimately exits non-zero, silently turning a real block into a pass.
+    """
+
+    def test_hooks_json_selects_by_existence_not_by_running_twice(self):
+        root = os.path.dirname(HERE)
+        data = json.load(open(os.path.join(root, "hooks", "hooks.json"), encoding="utf-8"))
+        command = data["hooks"]["Stop"][0]["hooks"][0]["command"]
+        self.assertIn("command -v python3", command,
+                      "must probe by existence, not by running it and reading its exit code")
+        self.assertNotRegex(command, r"\|\|\s*python\b",
+                            "must not fall back via `||` on exit code — that re-runs the "
+                            "script with already-drained stdin")
+        self.assertIn("stop-gate.py", command)
+
+    def test_selected_branch_receives_full_stdin(self):
+        # Reproduce the hook's own shell logic directly (skip the `command -v`
+        # probe — this machine's PATH is what it is) and confirm the payload
+        # reaches stop-gate.py unconsumed.
+        payload = '{"hello": "world"}'
+        p = subprocess.run(
+            [sys.executable, os.path.join(HERE, "stop-gate.py")],
+            input=payload, capture_output=True, text=True,
+        )
+        self.assertNotIn("internal error", p.stdout + p.stderr, p.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

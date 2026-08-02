@@ -1,14 +1,7 @@
 ---
 name: perf-optimize
 description: >
-  Make a working system measurably better along an explicit budget — latency, throughput, memory,
-  monetary cost, or AI inference/token cost — without guessing. Use this skill whenever the user
-  says something is slow, expensive, heavy, or laggy; whenever asked to "optimize", "speed up",
-  "reduce cost", or "make it scale"; whenever an acceptance criterion with a number is being
-  missed; and before any optimization is attempted by intuition. Never optimize without this skill:
-  unmeasured optimization is the most common way working systems get broken. If the system cannot
-  be run or profiled here, or the complaint is a felt symptom spanning speed and cohesion, route
-  to symptom-audit first — its spec's perf phases then execute under this skill's discipline.
+  Make a working system measurably better along an explicit budget — latency, throughput, memory, cost. Use when the user says something is slow/laggy, or asks to "optimize", "speed up", "reduce cost", "make it scale". Never optimize by intuition.
 ---
 
 # Performance & Optimization
@@ -22,6 +15,10 @@ description: >
 > only one that may claim a measured gain. Shared vocabulary and laws: `PROTOCOL.md` at the
 > suite root — authoritative when present.
 > (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+
+## Boundaries
+
+if the system cannot be run or profiled here, or the complaint is a felt symptom spanning speed and cohesion, route to `symptom-audit` first — its spec's perf phases then execute under this skill's discipline.
 
 ## Operating contract
 

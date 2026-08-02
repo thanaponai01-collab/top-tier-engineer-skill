@@ -188,7 +188,7 @@ trajectory:
 | `SHIP` | ship-gate | `go(strategy, rollback tag) \| stage(canary plan) \| hold(blocker) \| escalated(one-way door: …)` |
 | `MIGRATE` | data-evolution | `planned(reversible) \| planned(lossy-after-step-N) \| verified(copy) \| blocked(no safe backward path)` |
 | `SCRUTINY` | scrutinize | `ship \| fix-then-ship(top) \| rework(reason) \| reject(reason) \| blocked(underspecified)` |
-| `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| held(accepted: K, repaid: R) \| regressed(new: A, worse: B, top: <signal>) \| blocked(no analyzable source)` |
+| `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| held(accepted: K, repaid: R) \| regressed(new: A, worse: B, top: <signal>) \| repayment-due(id-hint, signal, current/threshold) \| blocked(no analyzable source)` |
 | `LATENT` | latent-audit | `clean(N modules traced) \| findings(dead: A, unused: B, layer-breaches: C) \| blocked(no analyzable source)` |
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
 | `FIX` | §9 (shared) | `coherent(surfaces: …) \| incoherent(named: …) \| unscrutinized` |
@@ -346,11 +346,22 @@ Therefore:
    baseline carries a `DEBT_LEDGER.md` row: *what was accepted · why · what it costs every
    future change that touches it · the trigger that makes repayment due*. A baseline with
    no ledger is permanent amnesty; the trigger requirement is `TODO_LEDGER.md`'s ("a TODO
-   with no trigger is a wish") applied to structure.
-3. **A baseline is regenerated only when debt is repaid, never to silence a regression.**
-   Re-baselining to make a red gate green is the one move that disables the ratchet, and it
-   is a defect reportable against whoever made it — the same class as weakening a proof line
-   to pass it (`build-discipline`).
+   with no trigger is a wish") applied to structure. A row may also carry a machine-checked
+   `repay_at` (schema v2, F4/v1.19.0) — the numeric point at which its own deferral trigger
+   fires; crossing it is a distinct verdict state (`repayment-due`, §5), not a silent re-lock.
+3. **A baseline is regenerated only when debt is repaid or new debt is deliberately
+   accepted by name — never to silence a regression.** These are different acts with the
+   same mechanical effect (a changed number in the file), which is exactly why the
+   *ledger row*, not the JSON, carries the accountability: repayment shrinks a frozen value
+   and moves the row to Repaid; a new deliberate acceptance grows a frozen value with a
+   *named reason and a new-or-updated trigger* written into the same row, in the same change,
+   by the same person who grew it (rule 1 — a gate whose findings may legitimately be
+   accepted must ratchet on direction, not freeze at a level forever). What rule 3 forbids
+   is the third case: a number changed with no reasoned row alongside it, or a row edited only
+   to relax a prior constraint without saying so. Re-baselining to make a red gate green *and
+   nothing else* is the one move that disables the ratchet, and it is a defect reportable
+   against whoever made it — the same class as weakening a proof line to pass it
+   (`build-discipline`).
 4. **Carrying capacity binds the increment, not the codebase.** When the smallest diff that
    satisfies a slice's proof line lands in a file already carrying accepted debt, "smallest
    diff" has stopped being the cheap option: it is a withdrawal against the ledger. The

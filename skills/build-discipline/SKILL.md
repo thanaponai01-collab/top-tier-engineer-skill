@@ -1,12 +1,7 @@
 ---
 name: build-discipline
 description: >
-  Execute a build in small, provable, fully-wired increments. Use this skill whenever writing or
-  generating code for a feature, tool, or system — greenfield or addition — especially in Claude
-  Code or any agentic build session. Trigger on phrases like "build it", "implement this",
-  "add the feature", "make it work", or whenever code is about to be written against an existing
-  PROBLEM_BRIEF.md or ARCHITECTURE.md. Also trigger when a previous build session left work
-  half-finished and needs to be resumed safely.
+  Execute a build in small, provable, fully-wired increments. Use when writing/generating code for a feature, tool, or system, or resuming a half-finished build. Trigger on "build it", "implement this", "add the feature", "make it work".
 ---
 
 # Build Discipline

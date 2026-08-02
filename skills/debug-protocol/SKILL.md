@@ -1,15 +1,14 @@
 ---
 name: debug-protocol
 description: >
-  Localize an observed failure to its proven root cause before any fix is attempted. Use whenever
-  something is broken and the cause is UNKNOWN — error messages, wrong output, crashes, hangs,
-  flaky or intermittent behavior, "it worked yesterday", "it works on my machine", or any bug
-  report where the first question is "why?". Also trigger when a previous fix didn't hold, which
-  means the original cause was never actually found. Do not use for known-cause fixes (route to
-  evolve-maintain) or for "is it even connected?" questions (route to wire-check).
+  Localize an observed failure to its proven root cause before any fix. Use when something is broken and the cause is UNKNOWN — errors, wrong output, crashes, hangs, flaky behavior, "it worked yesterday" — or when a previous fix didn't hold.
 ---
 
 # Debug Protocol
+
+## Boundaries
+
+known-cause fixes → `evolve-maintain`; "is it even connected?" questions → `wire-check`.
 
 Debugging is not fixing. This skill ends when the cause of an observed failure is **named and
 proven** — the fix itself is a separate act with its own discipline. Mixing the two is how

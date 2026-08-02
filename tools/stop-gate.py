@@ -20,6 +20,8 @@ import json
 import sys
 from pathlib import Path
 
+from _encoding import utf8_streams
+
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -188,17 +190,7 @@ def selftest():
 
 
 def main():
-    # This gate's findings carry the § section mark, and they go to STDERR — which the
-    # other tools' stdout-only reconfigure never covered. On Windows stderr defaults to
-    # cp1252, so the hook's own output reached the user mojibaked ("PROTOCOL §5" as
-    # "PROTOCOL \xa75") and any UTF-8 consumer choked on the byte. Same bug the suite
-    # already fixed for stdout in structure-report.py and verdict-lint.py.
-    for stream in (sys.stdout, sys.stderr):
-        if hasattr(stream, "reconfigure"):
-            try:
-                stream.reconfigure(encoding="utf-8")
-            except (ValueError, OSError):
-                pass
+    utf8_streams()
 
     if "--selftest" in sys.argv:
         return selftest()

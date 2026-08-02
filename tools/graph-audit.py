@@ -46,6 +46,7 @@ import json
 import os
 import sys
 from collections import defaultdict
+from _encoding import utf8_streams
 
 PY_EXT = {".py"}
 # Text files swept for raw-name references (configs, templates, scripts...):
@@ -292,9 +293,7 @@ def latent_verdict(n_modules, dead, unused, breaches, layers_measured):
 
 
 def main():
-    # ponytail: real portability bug, one guarded line; no-op where stdout is already UTF-8.
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
+    utf8_streams()
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("paths", nargs="+")
     ap.add_argument("--layers", help="declared layer order file")

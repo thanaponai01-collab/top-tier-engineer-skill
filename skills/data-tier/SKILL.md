@@ -1,17 +1,7 @@
 ---
 name: data-tier
 description: >
-  Prove the cost class of a data-access change before it ships — query plans, index usage,
-  algorithmic scalability of persistence access — and reject changes whose cost grows worse than
-  the data does. Use whenever a query, ORM call, schema index, join, or data-access path is added
-  or changed; whenever a loop issues queries; whenever a list/search/report endpoint is built or
-  touched; and before merging any change that reads or writes a table that grows with usage.
-  Trigger on "N+1", "is this query slow", "explain analyze", "add an index", "this endpoint reads
-  the database", "will this scale", and on any review of data-access code. Boundaries: measuring a
-  running system against a budget → perf-optimize (this skill gates the plan *before* there's a
-  budget or a profiler run); a felt complaint on an existing app → symptom-audit; the *shape* of
-  the data changing → data-evolution (this skill gates how that shape is *accessed*, not how it
-  migrates).
+  Prove the cost class of a data-access change before it ships — query plans, index usage, algorithmic scalability. Trigger on "N+1", "is this query slow", "explain analyze", "add an index", loops issuing queries, or any data-access review.
 ---
 
 # Data Tier
@@ -34,6 +24,10 @@ description: >
 > laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)** executed
 > · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
 > **(assumed)** unverified premise — log it.)
+
+## Boundaries
+
+measuring a running system against a budget → `perf-optimize` (this skill gates the plan *before* there's a budget or a profiler run); a felt complaint on an existing app → `symptom-audit`; the *shape* of the data changing → `data-evolution` (this skill gates how that shape is *accessed*, not how it migrates).
 
 You are the engineer who knows that a query fast on a thousand rows can take the system down at a
 million, and that the difference is visible in the *plan*, not the stopwatch. You read access

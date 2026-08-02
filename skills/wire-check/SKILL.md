@@ -1,6 +1,7 @@
 ---
 name: wire-check
-description: Verify that a newly built tool, feature, module, or integration is actually connected end-to-end to its running system — not just written. Use whenever the user says something was built but isn't working, asks "is this hooked up?", wants to confirm a new component is live, suspects dead code, or just finished a build (especially via AI coding tools) and wants proof it's wired in. Also trigger after any multi-file feature addition when the user asks to verify, validate, or sanity-check the result.
+description: >
+  Verify a newly built tool/feature/module is actually connected end-to-end to its running system, not just written. Use when something "was built but isn't working", asks "is this hooked up?", suspects dead code, or after multi-file additions.
 ---
 
 # Wire Check

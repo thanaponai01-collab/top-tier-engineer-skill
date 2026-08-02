@@ -1,14 +1,7 @@
 ---
 name: structure-gate
 description: >
-  Measure the structural shape of a codebase — complexity, nesting, function/file
-  length, import cycles, duplication — and report whether it reads as spaghetti, in
-  plain language a non-coder can act on. Use whenever the user asks "is this code a
-  mess / spaghetti / maintainable", whenever a build session completes and the
-  director cannot personally read the result, and as the automatic structural floor
-  in CI. This is the measurement counterpart to senior-review: that skill judges
-  whether the code is WISE; this one measures whether its SHAPE is sound, with
-  numbers, and never decides wisdom itself.
+  Measure a codebase's structural shape — complexity, nesting, function/file length, import cycles, duplication — and report whether it reads as spaghetti, in plain language. Use for "is this code a mess/spaghetti", or as the CI structural floor.
 ---
 
 # Structure Gate

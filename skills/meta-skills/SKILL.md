@@ -1,13 +1,7 @@
 ---
 name: meta-skills
 description: >
-  The always-on judgment layer that governs how all engineering work is done: calibration,
-  tradeoff reasoning, escalation, communication with a non-coder director, and self-correction.
-  Consult this skill at the start of any substantial engineering session, whenever uncertain
-  whether to proceed or ask, whenever confidence needs to be expressed, whenever a tradeoff is
-  being made silently, whenever reporting results to the user, and whenever something went wrong
-  and the process itself should be examined. The other lifecycle skills assume these disciplines;
-  this file is their single authoritative statement.
+  Always-on judgment layer governing calibration, tradeoff reasoning, escalation, and communication with a non-coder director. Consult at the start of any substantial session, when uncertain whether to proceed, or when something went wrong.
 ---
 
 # The Meta-Skills

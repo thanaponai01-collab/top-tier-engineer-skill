@@ -1,17 +1,7 @@
 ---
 name: latent-audit
 description: >
-  Sweep an EXISTING codebase with NO felt symptom for the three latent defect
-  classes a director cannot see: dead weight (modules and functions nothing
-  uses — candidates for deletion), layer breaches (code that imports against
-  the declared architecture direction), and dormant bugs (defects on paths
-  that happen not to hurt yet). Use whenever the user asks to "find dead
-  code", "delete unused components", "check the layers are respected", "clean
-  up the codebase", or "find real bugs" with nothing currently felt as wrong.
-  Boundaries: a felt complaint ("slow", "clunky") → symptom-audit; observed
-  wrong output → debug-protocol; "is this code wise/good?" → senior-review;
-  "is it spaghetti?" (shape metrics) → structure-gate; a not-yet-landed
-  delta → scrutinize. This skill hunts what nobody has felt yet.
+  Sweep an EXISTING codebase with NO felt symptom for dead weight, layer breaches, and dormant bugs. Use for "find dead code", "delete unused components", "check the layers are respected", "clean up the codebase", or "find real bugs".
 ---
 
 # Latent Audit
@@ -30,6 +20,10 @@ description: >
 > `threat-model`. Shared vocabulary and laws: `PROTOCOL.md` at the suite root —
 > authoritative when present. (Gloss: **(proven)** executed · **(trace-only)** read, chain
 > complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+
+## Boundaries
+
+a felt complaint ("slow", "clunky") → `symptom-audit`; observed wrong output → `debug-protocol`; "is this code wise/good?" → `senior-review`; "is it spaghetti?" (shape metrics) → `structure-gate`; a not-yet-landed delta → `scrutinize`.
 
 One principle, everything else serves it: **statically unreferenced is not dead — it is
 (suspected) dead. Nothing is deleted until its disconnection is proven, because deleting

@@ -62,6 +62,7 @@ import json
 import argparse
 
 import protocol_vintage as vintage
+from _encoding import utf8_streams
 
 # Verdict-line parser — same shape rule as verdict-lint.py's NOUN_RE, kept local so
 # this tool stands alone. (The shape rule is PROTOCOL §5's, stated there; this is a
@@ -409,8 +410,7 @@ def human_report(r):
 
 
 def main():
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
+    utf8_streams()
     ap = argparse.ArgumentParser(description="Run-completeness trace (did it actually build?).")
     ap.add_argument("path", nargs="?", help="transcript file; stdin if omitted")
     ap.add_argument("--expect", choices=sorted(PROFILES), help="force request type, skip inference")

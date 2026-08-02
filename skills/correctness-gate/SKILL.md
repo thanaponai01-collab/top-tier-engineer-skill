@@ -1,12 +1,7 @@
 ---
 name: correctness-gate
 description: >
-  Prove that built software is correct — not plausible, not reviewed-and-it-looked-fine, but
-  verified against an explicit definition of correct. Use this skill before any release, merge,
-  or "it's done" declaration; whenever the user asks "is this right / does it actually work /
-  test this"; after any build session completes its slices; and whenever a bug was fixed (to prove
-  the fix and prevent recurrence). This is the verification counterpart to senior-review: that
-  skill judges wisdom and design quality, this one establishes correctness with evidence.
+  Prove built software is correct with evidence, not plausibility. Use before any release/merge/"it's done" declaration, when asked "does this actually work / test this", after build slices, or after a bug fix to prevent recurrence.
 ---
 
 # Correctness Gate

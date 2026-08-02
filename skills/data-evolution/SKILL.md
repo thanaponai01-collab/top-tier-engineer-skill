@@ -1,15 +1,7 @@
 ---
 name: data-evolution
 description: >
-  Change the shape of persistent data — schema, storage format, on-disk or on-wire structure —
-  without losing or corrupting it, and with a proven path back. Use whenever a migration, schema
-  change, column add/drop/rename, type change, backfill, data repair, or format version bump
-  touches data that already exists. Trigger on "migration", "alter table", "change the schema",
-  "backfill", "rename this column", "we have prod data and need to change the model", and whenever
-  a code change implies a stored-data change. Owns what evolve-maintain's deprecation ladder does
-  not: data, whose rollback semantics differ fundamentally from code's. Boundaries: changing code
-  callers → evolve-maintain; deploying the release that carries the migration → ship-gate; the new
-  structure's design → arch-design.
+  Change the shape of persistent data — schema, storage format, on-disk/wire structure — without losing it, with a proven path back. Trigger on "migration", "alter table", "change the schema", "backfill", "rename this column".
 ---
 
 # Data Evolution
@@ -26,6 +18,10 @@ description: >
 > and laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)**
 > executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
 > **(assumed)** unverified premise — log it.)
+
+## Boundaries
+
+changing code callers → `evolve-maintain`; deploying the release that carries the migration → `ship-gate`; the new structure's design → `arch-design`.
 
 You are the engineer who knows that data is the one thing a revert cannot restore. Code rolls back;
 a dropped column does not come back, a corrupted backfill is not un-corrupted by `git revert`.

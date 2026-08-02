@@ -1,15 +1,7 @@
 ---
 name: symptom-audit
 description: >
-  Trace a user's felt complaint about an EXISTING codebase — "navigation takes 2–3 seconds",
-  "saving is slow", "the app feels clunky", "this report takes forever" — to its evidenced causes
-  in the source, and deliver a phased prescription ordered by impact-per-effort. Use whenever a
-  complaint about a working system arrives with a codebase that can be read but not necessarily
-  run, profiled, or gated in this environment; whenever the complaint spans categories (speed AND
-  coherence AND UX); and whenever the deliverable is a spec for someone else to execute rather
-  than an executed change. Boundaries: broken/wrong output → debug-protocol; runnable system with
-  a single measurable budget → perf-optimize directly; "is this codebase good?" with no symptom →
-  senior-review; dead code / unused components / layer breaches with no symptom → latent-audit; "nothing happens at all" → wire-check.
+  Trace a user's felt complaint about an EXISTING codebase — "navigation takes 2–3 seconds", "saving is slow", "the app feels clunky", "this report takes forever" — to evidenced causes, and deliver a phased prescription ordered by impact-per-effort.
 ---
 
 # Symptom Audit
@@ -28,6 +20,10 @@ description: >
 > authoritative when present. (Gloss: **(proven)** executed · **(trace-only)** read, chain
 > complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise —
 > log it.)
+
+## Boundaries
+
+broken/wrong output → `debug-protocol`; runnable system with a single measurable budget → `perf-optimize` directly; "is this codebase good?" with no symptom → `senior-review`; dead code/layer breaches with no symptom → `latent-audit`; "nothing happens at all" → `wire-check`.
 
 One principle, everything else serves it: **diagnose by following the user's actual complaint
 through the system's execution order, prove every claim against the source, and only then
