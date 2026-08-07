@@ -43,6 +43,11 @@ and inside this skill, only **(proven)** closes a slice.
   deleting or reusing over adding; introduce an abstraction on its second concrete use, not its
   first guess; "might need it later" is a `TODO_LEDGER.md` entry with a trigger, never speculative
   structure in the code.
+- **Simple first is a sequence, not a ceiling.** Take the simplest version that satisfies the proof
+  line, then let evidence buy the depth: a known ceiling on it closes as a `TODO_LEDGER.md` row
+  whose trigger is **measured** (`p95 > 300 ms at 10k rows`), not feared. Structure added before
+  that measurement exists is a guess about where the cost lives — the guess `perf-optimize` Phase 3
+  forbids downstream, so do not manufacture it upstream.
 - **Carrying capacity — check the host before taking the smallest diff** (PROTOCOL §10, the
   ratchet rule). "Smallest diff" is measured against the slice, not against the file it lands in,
   so on an already-overloaded host it points the wrong way: the smallest diff into a structure

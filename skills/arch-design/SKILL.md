@@ -49,7 +49,12 @@ Design for AI maintainers explicitly (the **legibility budget**):
 
 Every consequential choice goes through the same frame:
 
-1. **Options** — at least two real ones. A decision with one option is a description, not a decision.
+1. **Options** — at least two real ones, and one of them is the **simplest thing that satisfies
+   every invariant**. A decision with one option is a description, not a decision; two options of
+   the same weight (Postgres vs SQLite) is that same defect wearing a comparison's costume, because
+   the dumb version is the option that reliably goes unconsidered. Adopt it, or name the invariant
+   that kills it. Adopting it is not settling — it is the measured starting point depth is bought
+   from, and `perf-optimize` cannot run without one.
 2. **Forces** — which invariants, constraints, and assumptions push which way.
 3. **Reversibility class**:
    - **Two-way door** — cheap to undo (a library, a folder layout). Decide fast, alone, record briefly.
@@ -64,7 +69,13 @@ Every consequential choice goes through the same frame:
    **(trace-only at minimum)**, (d) its license and whether that license is compatible with this
    project's, and (e) the pin/lock plan. Default: if we would use under ~10% of it or could write
    the needed part in under ~100 lines, write it — owned simple code outlives borrowed complex code.
-5. **Verdict** with evidence tag — "Postgres handles our write volume **(trace-only: vendor docs,
+5. **The complexity bar** — Rule 4 turned inward. Nothing priced *homegrown* complexity, so
+   importing a library needs five pieces of evidence while inventing a registry, a plugin seam, or
+   a layer of indirection needs none — an asymmetry pointing away from where the harm accrues. A
+   new structural element of our own enters the ledger with the callers it has **today** (counted,
+   not imagined) and the invariant that purchases it. Default, mirroring Rule 4: **one caller and
+   an inline version under ~100 lines → inline it.**
+6. **Verdict** with evidence tag — "Postgres handles our write volume **(trace-only: vendor docs,
    not benchmarked)**" is an honest decision; the same sentence without the tag is a future incident.
 
 ### Phase 4 — Stress
