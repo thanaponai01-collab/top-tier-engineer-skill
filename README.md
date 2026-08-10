@@ -21,7 +21,8 @@ top-tier-engineer/
 │   ├── structure-report.py ← the spaghetti alarm: structural shape + the debt ratchet (--baseline)
 │   ├── run-trace.py        ← did the run actually execute the stages it should have? — completeness trace
 │   ├── graph-audit.py      ← the no-symptom sweep: dead modules, unused defs, layer-direction breaches (LATENT)
-│   └── test_tools.py       ← the tools gate their own correctness (stdlib unittest, no deps)
+│   ├── test_tools.py       ← entry point: discovers and runs tools/tests/ (stdlib unittest, no deps)
+│   └── tests/              ← one test_<tool>.py per tool above, sharing tests/_helpers.py
 └── skills/
     ├── chief-engineer/      ← the router — every request enters here
     ├── problem-framing/     ← stage 1: falsifiable spec before any code

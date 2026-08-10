@@ -225,7 +225,7 @@ def contiguous_spans(lines, minimum=1):
 #     length_cv         0.005–0.026  0.021–0.132   0.243–0.774
 #
 # Both separate every fixture with a wide margin, and neither knows a language.
-# Thresholds are illustrative defaults calibrated in tools/test_tools.py, not doctrine.
+# Thresholds are illustrative defaults calibrated in tools/tests/test_structure_report.py, not doctrine.
 import statistics
 
 MINIFIED_LINE = 500     # one machine-generated line: a tree flattened, still code
