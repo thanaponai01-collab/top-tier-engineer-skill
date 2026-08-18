@@ -27,7 +27,8 @@ top-tier-engineer/
 │   ├── graph-audit.py      ← the no-symptom sweep: dead modules, unused defs, layer-direction breaches (LATENT)
 │   ├── protocol_vintage.py ← §11 rule vintage: which dated check applies to which artifact (one owner)
 │   ├── stop-gate.py        ← the Stop hook: lints the session transcript before a session may end
-│   └── test_tools.py       ← the tools gate their own correctness (stdlib unittest, no deps)
+│   ├── test_tools.py       ← the tools gate their own correctness (stdlib unittest, no deps)
+│   └── tests/              ← one test module per tool, discovered by test_tools.py (D-4 repayment)
 └── skills/
     ├── chief-engineer/      ← the router — every request enters here
     ├── problem-framing/     ← stage 1: falsifiable spec before any code
