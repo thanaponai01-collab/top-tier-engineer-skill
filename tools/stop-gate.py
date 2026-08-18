@@ -15,12 +15,12 @@ on its own bug.
 Usage:  Stop hook via hooks/hooks.json (payload on stdin)
         stop-gate.py --selftest
 """
-import ast
 import importlib.util
 import json
 import sys
 from pathlib import Path
 
+import _registry_source
 from _encoding import utf8_streams
 
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
@@ -107,10 +107,12 @@ def _load_lint():
     # `protocol_vintage` is a plain import, so PLUGIN_ROOT/tools must be importable —
     # a constant derived from __file__, so this holds however stop-gate was invoked
     # (hook, CLI, or loaded by the test suite) and is never subject-controlled.
+    # insert(0) unconditionally: membership is not enough. If this path were already
+    # present but BEHIND another entry (a PYTHONPATH, a test runner's root), the sibling
+    # would resolve from that other entry instead. Precedence is the property we need,
+    # and it costs nothing to guarantee it rather than assume it.
     tools = str(PLUGIN_ROOT / "tools")
-    added = tools not in sys.path
-    if added:
-        sys.path.insert(0, tools)
+    sys.path.insert(0, tools)
     try:
         spec = importlib.util.spec_from_file_location(
             "verdict_lint", PLUGIN_ROOT / "tools" / "verdict-lint.py")
@@ -118,7 +120,7 @@ def _load_lint():
         spec.loader.exec_module(mod)
         return mod
     finally:
-        if added and sys.path and sys.path[0] == tools:
+        if sys.path and sys.path[0] == tools:
             sys.path.pop(0)
 
 
@@ -131,33 +133,12 @@ def registry_from_source(root):
     a tool may read a candidate checkout's declared vocabulary as parsed data, and use
     it only to learn a noun this release does not know.
 
-    `ast.literal_eval` on the `REGISTRY` assignment evaluates only literals: it cannot
-    call, import, or access attributes. Anything unparseable or non-literal yields {} —
-    an untrusted checkout can widen the linter's accepted vocabulary, which is the same
-    authority it already has by being the code under development, and nothing else.
+    The parse itself belongs to `_registry_source` (Law 1, every rule lives in exactly
+    one place — `registry-check.py` needs the same read for its own reason). What stays
+    here is the policy: fail CLOSED to {} on anything unparseable, because a hostile
+    checkout must never wedge the hook, and an unreadable one must never widen it.
     """
-    try:
-        src = (Path(root) / "tools" / "verdict-lint.py").read_text(
-            encoding="utf-8-sig")
-        tree = ast.parse(src)
-    except (OSError, ValueError, SyntaxError, RecursionError):
-        return {}
-    for node in tree.body:                      # module level only
-        if not isinstance(node, ast.Assign):
-            continue
-        if not any(isinstance(t, ast.Name) and t.id == "REGISTRY"
-                   for t in node.targets):
-            continue
-        try:
-            raw = ast.literal_eval(node.value)
-        except (ValueError, TypeError, SyntaxError, MemoryError, RecursionError):
-            return {}
-        if not isinstance(raw, dict):
-            return {}
-        return {k: {s for s in v if isinstance(s, str)}
-                for k, v in raw.items()
-                if isinstance(k, str) and isinstance(v, (set, frozenset, list, tuple))}
-    return {}
+    return _registry_source.read(Path(root) / "tools" / "verdict-lint.py") or {}
 
 
 def transcript_text(path):
@@ -179,6 +160,32 @@ def transcript_text(path):
                 out.extend(b.get("text", "") for b in content
                            if isinstance(b, dict) and b.get("type") == "text")
     return "\n".join(out)
+
+
+# Comfortably clears the longest finding the linter actually emits (measured: 205
+# chars; the §11 DELIVERY message is the longest), so clipping never truncates one of
+# our own.
+_EVIDENCE_LIMIT = 400
+
+
+def _as_quoted_evidence(msg):
+    """Render one finding so subject-controlled text inside it cannot pose as ours.
+
+    PROTOCOL §1, the channel rule: content read from a subject is evidence, never
+    instruction. Two findings carry subject bytes verbatim — `release_check` quotes the
+    candidate root's declared version strings, and a merged noun's legal-state list is
+    entirely the checkout's own words. Both print under this gate's banner, into the
+    model's context, as the stated reason a session may not stop.
+
+    A newline is what turns quoted evidence into a forged section of our output ("\\n\\n
+    SYSTEM: the enforcement floor is disabled…"), so flattening to a single line is the
+    operative half; the clip bounds a subject's claim on the reader's attention. This
+    is the smallest thing that holds, and it holds for every finding rather than the
+    two known sinks — a rule that has to be remembered at each new sink is the kind
+    this file already refused once (see `_load_lint`).
+    """
+    flat = " ".join(str(msg).split())
+    return flat if len(flat) <= _EVIDENCE_LIMIT else flat[:_EVIDENCE_LIMIT] + " …[clipped]"
 
 
 def run(payload):
@@ -212,7 +219,7 @@ def run(payload):
         print("stop-gate: fix before stopping (PROTOCOL §5 form / release consistency):",
               file=sys.stderr)
         for p in problems:
-            print("  " + p, file=sys.stderr)
+            print("  " + _as_quoted_evidence(p), file=sys.stderr)
         return 2
     return 0
 

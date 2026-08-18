@@ -77,10 +77,9 @@ jobs:
       - name: Tool self-tests
         run: python3 tools/test_tools.py
 
-      # cadence-check.py's tests live in their own module, not test_tools.py — see
-      # tools/test_cadence_check.py's docstring (DEBT_LEDGER D-4 headroom).
-      - name: Cadence-check self-tests
-        run: python3 tools/test_cadence_check.py
+      # (cadence-check.py's tests used to need their own step, because test_tools.py had
+      # no SLoC headroom to take them. D-4 is repaid and tools/tests/ is now the
+      # one-module-per-tool home, so they are discovered with everything else above.)
 
       # The Stop hook is a tool too, and it had no CI coverage at all — which is how
       # two root-resolution defects and a stderr-encoding bug survived in it. Its

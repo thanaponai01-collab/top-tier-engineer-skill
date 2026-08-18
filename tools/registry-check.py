@@ -37,15 +37,13 @@ import re
 import sys
 from pathlib import Path
 
+import _registry_source
 from _encoding import utf8_streams
 
 # A §5 table row:  | `NOUN` | owner | state \| state(qualifier) \| ... |
 # The noun may carry a placeholder suffix (`SLICE <n>`, `MAINT <ID>`) which is
 # part of the line grammar, not part of the noun.
 ROW_RE = re.compile(r"^\|\s*`([A-Z][A-Z-]+)(?:\s+<[^>]+>)?`\s*\|([^|]*)\|\s*(.+?)\s*\|\s*$")
-
-# The linter's dict literal:  "NOUN": {"state", "state"},
-DICT_ENTRY_RE = re.compile(r'"([A-Z][A-Z-]+)":\s*\{([^}]*)\}')
 
 PLACEHOLDER_RE = re.compile(r"^<.*>$")
 STATE_RE = re.compile(r"^[a-z][a-z-]*$")
@@ -101,18 +99,22 @@ def load_doctrine(path: Path) -> dict[str, set[str]]:
 def load_tool(path: Path) -> dict[str, set[str]]:
     """Read the REGISTRY dict out of verdict-lint.py without importing it.
 
-    Parsed as text rather than imported: importing would execute the module and
-    couple this check to the linter's CLI, and a syntax error there should be
-    reported by the linter's own tests, not swallowed here.
+    Parsed rather than imported: importing would execute the module and couple this
+    check to the linter's CLI, and a syntax error there should be reported by the
+    linter's own tests, not swallowed here.
+
+    The parse lives in `_registry_source` (Law 1, every rule lives in exactly one
+    place). It used to live here as a regex — `^REGISTRY = \{(.*?)^\}` plus a
+    comma-split of each body — while `stop-gate.py` grew a second, AST-based reader of
+    the same declaration for PROTOCOL §1's carve-out. Two readers of one declaration
+    can disagree about what a file declares, which is D-5's duplication rot one
+    instance later; the AST reader was the better of the two, so it became the owner.
+    This function keeps only its own error policy: a missing block is fatal here,
+    where the whole job is reconciliation.
     """
-    text = path.read_text(encoding="utf-8")
-    m = re.search(r"^REGISTRY = \{(.*?)^\}", text, re.S | re.M)
-    if not m:
-        die(2, f"{path}: no 'REGISTRY = {{...}}' block found")
-    registry: dict[str, set[str]] = {}
-    for noun, body in DICT_ENTRY_RE.findall(m.group(1)):
-        states = {s.strip().strip('"') for s in body.split(",")}
-        registry[noun] = {s for s in states if s}
+    registry = _registry_source.read(path)
+    if registry is None:
+        die(2, f"{path}: no parseable module-level 'REGISTRY = {{...}}' found")
     return registry
 
 

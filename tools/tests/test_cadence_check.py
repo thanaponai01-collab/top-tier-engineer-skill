@@ -1,29 +1,14 @@
 #!/usr/bin/env python3
 """
-test_cadence_check — tests for cadence-check.py (PROTOCOL §12's watcher).
+cadence-check.py — PROTOCOL §12's watcher: does a skill-body-changing release ship
+without a live run against an external subject?
 
-Kept as its own module rather than added to test_tools.py on purpose:
-DEBT_LEDGER.md D-4 already flags test_tools.py at 799/800 SLoC with "no headroom
-left to re-lock into ... the next test added to this file MUST pay down first
-(extract, then add)". cadence-check.py is a brand-new tool with no existing tests
-to extract, so its tests start here instead of pushing that file over its own
-repay_at trigger. Run: `python tools/test_cadence_check.py` (stdlib unittest,
-matching test_tools.py's convention); wired into the enforcement floor alongside it.
+Part of the suite's own test floor; run them all with `python3 tools/test_tools.py`.
 """
 import os
-import subprocess
-import sys
 import unittest
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-
-
-def run(tool, *args, stdin=None):
-    p = subprocess.run(
-        [sys.executable, os.path.join(HERE, tool), *args],
-        input=stdin, capture_output=True, text=True, encoding="utf-8",
-    )
-    return p.returncode, p.stdout, p.stderr
+from _helpers import HERE, run
 
 
 def _load():
