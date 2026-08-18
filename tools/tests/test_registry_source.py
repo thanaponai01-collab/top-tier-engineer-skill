@@ -83,9 +83,13 @@ class RegistrySource(unittest.TestCase):
         """Law 1 is only kept if nobody re-grows a private copy."""
         for tool in ("registry-check.py", "stop-gate.py"):
             src = open(os.path.join(HERE, tool), encoding="utf-8").read()
-            self.assertIn("_registry_source", src, f"{tool} must use the shared owner")
-            self.assertNotIn("ast.literal_eval", src,
-                             f"{tool} re-grew its own parse — Law 1 broken")
+            # assertTrue, not assertIn: assertIn's failure message pastes the whole
+            # file, which buries the one sentence a reader needs.
+            self.assertTrue("_registry_source" in src,
+                            f"{tool} must read REGISTRY through the shared owner")
+            self.assertTrue("ast.literal_eval" not in src,
+                            f"{tool} re-grew its own parse of REGISTRY — Law 1, every "
+                            f"rule lives in exactly one place, is broken")
         # …and the policies stay different: fatal vs fail-closed.
         code, out, err = run("registry-check.py")
         self.assertEqual(code, 0, out + err)
