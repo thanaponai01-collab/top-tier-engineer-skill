@@ -12,11 +12,13 @@ description: >
 > skill asks **"did the finding survive the crossing into a tracker intact, and did the close
 > carry evidence?"** Consumes: findings already produced and ranked by their owning skill
 > (`AUDIT_SPEC.md`, `LATENT_REPORT.md`, `REVIEW_LEDGER.md`, `STRUCTURE_REPORT.md`,
-> `THREAT_MODEL.md`, `DATA_TIER.md`, a scrutiny report) + the tracker of record. Produces:
-> tracked issues — the tracker is the ledger; `BACKLOG.md` materializes only when no tracker
-> exists (scale rule, one pointer line otherwise). Hands off: each picked issue re-enters
-> `chief-engineer` for routing, exactly like a fresh request; a finding that arrives incomplete
-> goes back to the skill that produced it. Shared vocabulary and laws: `PROTOCOL.md` at the
+> `THREAT_MODEL.md`, `DATA_TIER.md`, a scrutiny report) — **or emitted by a tool or CI gate as a
+> bare verdict line**, which has no prescription phase and is governed by contract rule 2's tool
+> clause — plus the tracker of record. Produces: tracked issues — the tracker is the ledger;
+> `BACKLOG.md` materializes only when no tracker exists (scale rule, one pointer line otherwise).
+> Hands off: each picked issue re-enters `chief-engineer` for routing, exactly like a fresh
+> request; a finding that arrives incomplete goes back to the skill that produced it, or — having
+> no skill to return to — is completed per rule 2's tool clause or held. Shared vocabulary and laws: `PROTOCOL.md` at the
 > suite root — authoritative when present. (Gloss: **(proven)** executed · **(trace-only)** read,
 > chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise
 > — log it.)
@@ -52,10 +54,26 @@ close must carry the evidence that it happened.**
    the finding's rank. This skill's work is the crossing — that each arrives intact, attributed
    to the artifact that produced it. Restating an upstream rule here would put it in two places;
    checking that its output survived is the job.
-2. **Incomplete in, nothing out.** A finding missing its check is not filed — it goes back to its
-   producer, named. "Investigate X" with no observable before/after is homework, and an issue is
-   the wrong container for homework: it stays a watch-list line in the producing ledger until
-   someone can say what would settle it.
+2. **Incomplete in, nothing out.** A finding missing its acceptance check is not filed — it goes
+   back to its producer, named. "Investigate X" with no observable before/after is homework, and
+   an issue is the wrong container for homework: it stays a watch-list line in the producing
+   ledger until someone can say what would settle it.
+
+   **A tool is a producer with no prescription phase, and rule 1 alone would strand its
+   findings.** A CI gate, an analyzer, a linter, a cadence watcher — each emits a measurement and
+   a verdict line, never a ranked prescription, so there is no producer to send an incomplete
+   finding back to. Two consequences, and neither is a licence to start authoring: (a) the check
+   is not authored but **derived — re-run the tool, the verdict line flips.** The tool is its own
+   oracle, so deriving its check substitutes no judgment and does not breach rule 1. (b) The
+   crossing must additionally name **any other gate the fix could flip**, because a tool reports
+   its own signal and is blind to its neighbours, and no upstream artifact exists to catch that.
+   Couplings the artifacts actually show are carried as checks; couplings merely suspected are
+   carried as open questions in the issue, tagged as such — never as checks, which would dress a
+   guess in a proof's costume. *Worked example, illustrative and overridable, not contract:
+   bumping a CI action pin to clear a deprecation is checked by the annotation disappearing —
+   and by `CADENCE: clean(N)` still holding, because that workflow's own comments record
+   `fetch-depth: 0` as load-bearing for the release-mapping gate. The second check is the one
+   that would otherwise fail silently.*
 3. **The tag crosses unchanged.** An issue title stating a **(suspected)** concern as fact is a
    defect of this skill, not of the producer — the tracker is where a hedge is most likely to be
    lost, because a title is read alone. Titles are director-readable (Law 4, director-readable

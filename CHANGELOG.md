@@ -62,6 +62,30 @@ enforcing copy (+ 2 tests), two `chief-engineer` routing rows ("find improvement
 fans out the audits then files; "file these as issues / implement issue #N" routes here), MAP,
 README, both manifests (nineteen → twenty).
 
+**The first real use found a hole in the skill, one commit old** (follow-up commit, same release
+entry — the 1.21.0 precedent). Filing the `enforcement-floor` run's own Node-20 deprecation
+annotation as issue #3 exercised contract rule 2 and it did not fit: rule 2 sends a finding
+missing its acceptance check *back to its producer*, but the producer here was a CI gate, which
+emits a measurement and a verdict line and has no prescription phase to send anything back to.
+Filing it required authoring the check — the one thing rule 1 says this skill does not do — so
+the first crossing through the skill broke its own contract to succeed.
+
+Rule 2 gains a **tool clause**, and the resolution is a distinction rather than an exception:
+a tool-produced finding's check is not authored but **derived — re-run the tool, the verdict line
+flips**. The tool is its own oracle, so deriving the check substitutes no judgment and rule 1
+holds. What the crossing must genuinely add is any *other* gate the fix could flip, since a tool
+sees only its own signal and no upstream artifact exists to catch the coupling; couplings the
+artifacts show are carried as checks, couplings merely suspected are carried as tagged open
+questions, never dressed as checks. The worked example is the case that earned it: bumping a CI
+action pin is checked by the annotation disappearing **and** by `CADENCE: clean(N)` still holding,
+because that workflow's comments record `fetch-depth: 0` as load-bearing for release mapping —
+the second check being the one that would otherwise fail silently. Wiring block updated to admit
+tool/CI producers explicitly.
+
+Worth recording as evidence about the suite rather than the change: the gap surfaced on the
+skill's **first** use, from using it rather than reviewing it, which is the §12 field-report
+premise reproduced at one commit's distance instead of one release's.
+
 **Also in this release**
 
 - **D-6 withdrawal, named not silent** (§10 rule 4): **1,441 bytes** of doctrine
