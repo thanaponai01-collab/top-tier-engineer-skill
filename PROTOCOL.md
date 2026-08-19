@@ -1,6 +1,6 @@
 # PROTOCOL.md — The Shared Layer
 
-This file is the **single authoritative statement** of everything the nineteen skills share.
+This file is the **single authoritative statement** of everything the twenty skills share.
 Per Law 1 below, no skill restates what is written here; skills carry at most a one-line gloss
 for graceful degradation (see §6). When a skill and this file appear to disagree, this file wins
 and the disagreement is reported as a defect in the skill.
@@ -165,6 +165,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | `RELEASE_PLAN.md` | ship-gate | Rollout strategy, reversibility class, rollback steps, watch signals, go/no-go |
 | `MIGRATION_PLAN.md` | data-evolution | Forward + backward paths, point-of-no-return, verification evidence, cutover |
 | `MAINT_LOG.md` | evolve-maintain | Append-only intervention history: symptom → root cause → treatment |
+| `BACKLOG.md` | improvement-backlog | Fallback backlog when no issue tracker exists; else one pointer line naming the tracker of record |
 
 ## 4. The handoff chain
 
@@ -187,6 +188,7 @@ One owner per ledger; the owner skill defines the schema, everyone else reads/ap
 | data-evolution | a structural data change + existing data | MIGRATION_PLAN.md + migration/rollback code | build-discipline + correctness-gate (execute); ship-gate (carry down-path) |
 | scrutinize | a delta (plan/PR/diff/design doc) + host system | scrutiny report; REVIEW_LEDGER.md appends | director + the owning lifecycle skill per finding |
 | structure-gate | a codebase or a slice's changed files (+ the accepted baseline) | STRUCTURE_REPORT.md, DEBT_LEDGER.md, structural baseline | senior-review / scrutinize (wisdom call on each flag); arch-design (cycle ⇒ layering error, god-file ⇒ missing boundary); build-discipline (§10 carrying capacity) |
+| improvement-backlog | findings already ranked by their producing skill (+ the tracker of record) | issues carrying the producers' output intact; evidence-carrying closes | chief-engineer (routes each picked issue); the producing skill (incomplete or disputed finding) |
 | evolve-maintain | incident/change + all ledgers | MAINT_LOG.md, strengthened invariants | build-discipline / problem-framing as classified |
 | meta-skills | (always on) | discipline, not artifacts | every phase of every skill |
 
@@ -214,7 +216,7 @@ both fire on the same artifact in the same run:
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. Verdict lines are how a future model
 reading a transcript or log knows where the lifecycle stopped. The registry — one noun per skill,
-so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE|DOCTRINE|CADENCE)( [^:]+)?:`)
+so a single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|BACKLOG|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE|DOCTRINE|CADENCE)( [^:]+)?:`)
 (including the shared noun `FIX` and the tool nouns `TRACE`/`DOCTRINE`/`CADENCE`, all below)
 recovers any run's trajectory:
 
@@ -238,6 +240,7 @@ recovers any run's trajectory:
 | `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| held(accepted: K, repaid: R) \| regressed(new: A, worse: B, top: <signal>) \| repayment-due(id-hint, signal, current/threshold) \| blocked(no analyzable source)` |
 | `LATENT` | latent-audit | `clean(N modules traced) \| findings(dead: A, unused: B, layer-breaches: C) \| blocked(no analyzable source)` |
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
+| `BACKLOG` | improvement-backlog | `filed(N, top: …) \| picked(#id → skill) \| closed(#id, tag) \| clean(bar unmet) \| blocked(no tracker: …)` |
 | `FIX` | §9 (shared) | `coherent(surfaces: …) \| incoherent(named: …) \| unscrutinized` |
 | `TRACE` | run-trace.py (tool) | `complete \| incomplete(missing: …) \| blocked(unclassifiable)` |
 | `DOCTRINE` | doctrine-budget.py (tool) | `clean(bytes: N) \| clean(bytes: N, headroom: H) \| budget-exceeded(N/threshold) \| blocked(reason)` |

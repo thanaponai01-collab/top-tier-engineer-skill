@@ -202,3 +202,74 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   yet).
 - **status:** decided — shipped in 1.20.0. Promotable to option 2 if a future run shows the row
   insufficient for a harder concurrency shape.
+
+## D006 — Findings → issue tracker → implement-one-by-one: an owning skill, or a fold?
+
+- **date:** 2026-08-19
+- **decision:** **Option 1 — new skill `improvement-backlog`**, owning the previously unowned
+  question *"did a finding survive the crossing into a tracker intact, and did the close carry
+  evidence?"* — **resized mid-decision by the fresh-eyes gate**, see the rescope note below.
+- **forces:** A director field report (§12 field-report admissibility — the same door §10 and §11
+  entered through) describes a recurring real workflow: *"ive been trying to find improvement in
+  any area codebase. architechtual codebase. ui and ux. try to make things work. and all those
+  will be output to issue on repo where i can start implement one by one from there GitHub
+  issue."* The suite's audit skills produce findings into ledger files; **(proven)** — grep of
+  `skills/`, `PROTOCOL.md`, `MAP.md` for `issue tracker|github issue|backlog|gh issue` returns
+  zero hits — nothing owns externalizing findings to a tracker, and nothing owns the pickup/close
+  loop (an issue closed with no verdict evidence is invisible to every gate). Counter-force, the
+  D001/D002 precedent: fold first, split later. But those folds worked because the gap was a
+  *checklist row inside an existing mandate*; here the gap is an artifact schema + a loop, and
+  §3's own pattern requires every ledger one owner skill — the tracker used as a ledger is a
+  ledger.
+- **options:**
+  1. *New skill `improvement-backlog`* **(chosen)** — owns the finding→issue schema (evidence tag,
+     pin, pre-written acceptance check carried into every issue), the impact-per-effort ranking,
+     and the close-with-evidence discipline. Distinct trigger vocabulary the director actually
+     uses ("output to issues", "implement one by one"). Generation of findings stays with the
+     audit skills; routing stays with chief-engineer.
+  2. *Fold: chief-engineer routing rows + a PROTOCOL externalization paragraph* — rejected:
+     chief-engineer's mandate is routing, not artifact schemas; a schema stated in PROTOCOL with
+     no owner skill breaks the §3 one-owner pattern, and PROTOCOL bytes are the D-6 budget's
+     scarcest resource.
+  3. *Fold into `evolve-maintain`* — rejected on mandate: its subject is interventions on a live
+     system and `MAINT_LOG.md` is append-only history, while audits also run pre-maintenance.
+     But the *shape* it demonstrates was the strongest counter-argument here and the first draft
+     never engaged it: `IMPROVEMENT_PLAN.md` B3 closed a comparable gap with "one new class in an
+     existing skill; no new mandate" (the `Repay` class), against the director's own complaint
+     that the suite adds gates rather than improving what it has. What defeats it for this gap is
+     that the residue is not an intervention class at all — it is an artifact leaving the suite's
+     custody for a tracker, and returning later with no session attached.
+  4. *Fold into `symptom-audit`* (Phase 6/7 gain a delivery target: emit the prescription as
+     issues) — **the nearest neighbour, and the option the first draft of this entry omitted.**
+     Rejected only after the skill was resized: a producing skill can emit its own findings, but
+     the close-with-evidence loop runs *after every producer has closed*, and findings from two
+     different producers naming one cause can only be merged by something downstream of both.
+     Had the skill kept its first draft's scope — where it restated collapse, ranking, and
+     pre-written checks — this option would have been correct and the skill wrong.
+  5. *Fold into `TODO_LEDGER.md`* (owned by `build-discipline`) — rejected: that ledger holds work
+     deferred *inside* a build, each row carrying a trigger that makes it due, and it is
+     in-repo memory for the same team's next slice. An externalized backlog is the opposite
+     direction — findings leaving the artifacts for a tracker a human drains. The two are linked
+     from each other, never merged; the new skill names duplicating those rows as an anti-pattern.
+- **ruling provenance:** the director's own request in this session — "can we make them a skill
+  to improve this skill?" — is the ruling, per the D001 precedent that a director-directed
+  session may settle a two-way-door decision.
+- **rescope (§8.1(a) fresh-eyes gate, same session, no build context):** the gate returned
+  `SCRUTINY: rework` against the first draft and was right on the load-bearing count — five of six
+  contract rules restated `symptom-audit`'s (collapse, impact-per-effort ranking, pre-written
+  checks, the Law-3 question, the evidence-tag row), which is Law 1, every rule lives in exactly
+  one place, violated inside a skill written to serve Law 2. The skill was cut to the residue no
+  upstream skill owns — the crossing into a tracker, and the close after every producer has
+  closed — with the upstream rules now carried by reference rather than restated (its contract
+  rule 1, *carry, never re-author*). It also ships the falsifiable merge signal the gate asked
+  for: a boundary watch naming `symptom-audit` and the observation that would settle it. Recorded
+  because a decision that changed shape under review is archaeology a future model needs; the
+  first draft's scope is described here, not erased.
+- **reversibility class:** two-way for the contract (a skill can be demoted to prose; the
+  `BACKLOG` noun stays registered either way, and an unused noun costs one registry row).
+  Deleting the skill outright is the expensive direction, but the mandate is field-evidenced,
+  not speculative.
+- **evidence tag:** **(proven)** for the ownership gap (the grep above); **(trace-only)** for the
+  workflow description (the director's report, taken at its word per §12); **(suspected)** for
+  the claim the skill will change outcomes — the next real backlog run settles it.
+- **status:** decided — shipped in 1.22.0 with `runs/LIVE_RUN_006.md` as the §12 evidence.

@@ -195,7 +195,8 @@ LIVE_RUN_005 against a real external codebase, and compute skill-yield for it.
 
 ### B3 — Gate-heavy, improvement-light: the suite judges better than it repairs
 
-Of nineteen mandates, roughly twelve are judgment/gates; only `build-discipline` and
+Of nineteen mandates *at the time of this audit* (twenty since 1.22.0), roughly twelve are
+judgment/gates; only `build-discipline` and
 `evolve-maintain` change code, and **nothing owns repayment as a proactive act**.
 `structure-gate` detects, `DEBT_LEDGER.md` freezes, and then the ledger waits for a
 human to notice a trigger fired — which F3 proves does not happen. This is the

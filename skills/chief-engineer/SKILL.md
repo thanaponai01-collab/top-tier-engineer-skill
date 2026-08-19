@@ -82,13 +82,15 @@ Census the project root before classifying anything:
 | "Slow / expensive / heavy / optimize" — runnable system, single measurable dimension | perf-optimize (only past a passed gate; else gate first) |
 | "N+1 / will this query scale / add an index / does this endpoint hit the DB hard" — a data-access change | data-tier (gates cost class from the plan, before a budget exists) |
 | "Feels slow / clunky / takes forever" — an existing codebase + a felt complaint; unrunnable here, or spanning speed + cohesion + UX | symptom-audit → its spec executes via build-discipline / perf-optimize |
-| "Review / audit this codebase / is this code good" | senior-review |
+| "Review / audit this codebase / is this code good" — one lens, one report, no durable backlog asked for | senior-review |
 | "Find dead code / delete unused components / are the layers respected / find bugs" — existing codebase, nothing felt wrong | latent-audit (mechanical floor: `tools/graph-audit.py`; deletions land via scrutinize → build-discipline) |
 | "Is this a mess / spaghetti / maintainable" — or a completed build whose director cannot read the result | structure-gate (measures shape; runs parallel to senior-review — shape vs. wisdom — exactly as correctness-gate ⫫ senior-review is proof vs. wisdom) |
 | "Is this secure / can this be abused / review the auth / we handle passwords/payments/PII" | threat-model (parallel security gate; mandatory before ship if a trust boundary exists) |
 | "Deploy / release / ship it / push to prod / cut a version" | ship-gate (after correctness-gate, and threat-model if a trust boundary is touched) |
 | "Migration / alter schema / rename column / backfill / change the model with prod data" | data-evolution (invoked by evolve-maintain or ship-gate) |
 | "Second opinion / scrutinize this PR, diff, plan, design doc" — a delta, not a codebase | scrutinize |
+| "Find improvements in every area / give me a backlog" — **several lenses at once, and the findings must outlive this session** (the discriminator against the three rows above, each of which is one lens reported once) | the owning audits per area (§8.2-parallel where isolated) → improvement-backlog carries the merged findings out |
+| "File these as issues / output findings to the tracker / implement issue #N / work the backlog" | improvement-backlog (it authors no findings; a picked issue re-enters here for routing) |
 | "Where are we / what's next / resume" | this skill alone: state report + recommended next stage |
 | Question / explanation only — nothing will be built or changed | no lifecycle skill: answer directly, evidence-tagged; meta-skills still bind; no ledgers |
 | "Explore / try / prototype / is X even possible?" | spike mode (below): timeboxed, quarantined, knowledge-only output |

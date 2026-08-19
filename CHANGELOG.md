@@ -3,6 +3,77 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 1.22.0 — 2026-08-19 — the twentieth skill: improvement-backlog, where findings become work
+
+A director field report (PROTOCOL §12's field-report clause — the same door §10 and §11 entered
+through, logged as `runs/LIVE_RUN_006.md`) described a workflow the director already runs by hand:
+sweep a codebase for improvements across several lenses at once (code, architecture, UI/UX,
+correctness), write every finding as an issue on the repo's tracker, then implement the issues one
+by one, each pickup starting from the issue text alone. The hunt half was owned (the audit skills
++ §8.2 parallel fan-out). The externalize-and-drain half was not — **(proven)**, a grep of
+`skills/`, `PROTOCOL.md`, and `MAP.md` for `issue tracker|github issue|backlog|gh issue` returned
+zero hits. Findings landed in ledger files and stopped; nothing governed what an issue must
+contain for a future session to implement it alone, or what a close must prove.
+
+**`DECISION_LEDGER.md` D006** weighs a new skill against the D001/D002 fold-first precedent and
+chooses the skill: those folds worked because each gap was a checklist row inside an existing
+mandate; this gap is an artifact schema plus a loop, and §3's own pattern gives every ledger one
+owner — a tracker used as a ledger is a ledger. Ruling provenance: the director's request in the
+originating session.
+
+**The skill** (`skills/improvement-backlog/`) owns *"did the finding survive the crossing into a
+tracker intact, and did the close carry evidence?"*:
+
+- **Carry, never re-author** (Law 1, every rule lives in exactly one place) — the tag, the
+  `file:line` pin, the cost, the acceptance check, and the rank were all authored upstream. This
+  skill's work is the crossing: that each arrives intact and attributed. It restates none of
+  those rules and re-ranks nothing.
+- **Incomplete in, nothing out** — a finding missing its check goes back to its producer, named;
+  an issue is the wrong container for homework.
+- **The tag crosses unchanged** — a title stating a (suspected) concern as fact is a defect of
+  *this* skill, because a title is read alone and a hedge is likeliest to be lost there.
+- **One issue per finding** — a producer's collapse is preserved; findings from *different*
+  producers naming one cause are filed once and cross-linked, since neither could see the other.
+- **The close discipline** — the half no upstream skill owns, because it happens after they have
+  all closed: an issue closes only with verdict evidence and the executed acceptance check. A
+  commit that mentions an issue is a citation, not a close.
+- **Tracker-agnostic** (Law 6, constrain process never intelligence): `gh issue create` is a
+  worked example; `BACKLOG.md` is the no-tracker fallback (§3 row).
+
+**The fresh-eyes gate resized this skill before it shipped** (§8.1(a) — the agent, not the
+marker). A `scrutinize` run with no access to the authoring session returned `rework` and was
+right on the load-bearing count: five of the first draft's six contract rules restated
+`symptom-audit`'s (root-cause collapse, impact-per-effort ranking, pre-written checks, the Law-3
+question, the evidence-tag row) — Law 1 violated inside a skill written to serve Law 2, and the
+draft's own Wiring named `AUDIT_SPEC.md` as an input while re-specifying how to produce one. The
+skill was cut to the residue no upstream skill owns, and now ships the falsifiable **merge
+signal** the gate asked for: a boundary watch naming `symptom-audit` and the observation that
+would settle the split (if filing ever requires re-deciding a rank or rewriting a check, the
+residue belongs in `symptom-audit` Phase 6/7 and this mandate is the wrong shape). D006 gained
+the two options the first draft omitted — the `symptom-audit` fold and `TODO_LEDGER.md` — plus an
+engagement with `IMPROVEMENT_PLAN.md` B3's "one new class in an existing skill; no new mandate"
+precedent. The gate's other findings landed too: the D-6 byte errors above, routing-row
+discriminators in `chief-engineer`, and a stale nineteen-mandate count in `IMPROVEMENT_PLAN.md`
+that no CI surface covers.
+
+**Registered everywhere a noun must live:** PROTOCOL §3 (`BACKLOG.md`), §4 (handoff row), §5
+(`BACKLOG: filed | picked | closed | clean | blocked` + the recovery grep), `verdict-lint.py`'s
+enforcing copy (+ 2 tests), two `chief-engineer` routing rows ("find improvements in every area"
+fans out the audits then files; "file these as issues / implement issue #N" routes here), MAP,
+README, both manifests (nineteen → twenty).
+
+**Also in this release**
+
+- **D-6 withdrawal, named not silent** (§10 rule 4): **1,441 bytes** of doctrine
+  (62,078 → 63,519 against `repay_at` 65,000 — **1,481 headroom left**; the D-6 row now warns the
+  next doctrine-touching release to *open* with the subtraction pass). The gate also caught two
+  errors in the ledger's own arithmetic: v1.21.0's recorded figure overstated its commit by 46
+  bytes, and the 613 bytes spent by its follow-up commit were never named as a withdrawal at all.
+  Both are corrected in D-6's row, and the numbers there are now measured at both ends rather
+  than chained off the previous row's claim.
+- `doctrine-budget.py`'s hardcoded "skill frontmatter (18 others)" label now derives from the
+  filesystem — it would have silently stated 18 while measuring 19.
+
 ## 1.21.0 — 2026-08-18 — the channel rule: subject content is evidence, never instruction
 
 The suite's own Stop hook executed code from any repository a session happened to sit under.

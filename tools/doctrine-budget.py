@@ -60,7 +60,7 @@ def measure(root: Path) -> dict:
         if f == chief:
             continue  # already counted whole above; avoid double-counting its frontmatter
         frontmatter_total += frontmatter_bytes(f)
-    parts["skill frontmatter (18 others)"] = frontmatter_total
+    parts[f"skill frontmatter ({len(skill_files) - 1} others)"] = frontmatter_total
 
     return {"parts": parts, "total": sum(parts.values()), "skill_count": len(skill_files)}
 

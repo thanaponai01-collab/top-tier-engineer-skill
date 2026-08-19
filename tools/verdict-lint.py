@@ -44,6 +44,9 @@ REGISTRY = {
     "STRUCTURE":  {"clean", "findings", "blocked", "held", "regressed", "repayment-due"},
     "LATENT":     {"clean", "findings", "blocked"},
     "MAINT":      {"resolved", "escalated", "reverted"},
+    # v1.22.0 (DECISION_LEDGER D006): owned by improvement-backlog — findings externalized
+    # to a tracked, ranked backlog (the tracker is the ledger); a close must carry evidence.
+    "BACKLOG":    {"filed", "picked", "closed", "clean", "blocked"},
     # v1.5.0 additions:
     "THREAT":     {"clear", "findings", "blocked"},
     "SHIP":       {"go", "stage", "hold", "escalated"},

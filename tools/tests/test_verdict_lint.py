@@ -46,6 +46,18 @@ class VerdictLint(unittest.TestCase):
         code, out, _ = run("verdict-lint.py", stdin="just some prose, no verdicts\n")
         self.assertEqual(code, 0, out)
 
+    # ---- BACKLOG (v1.22.0, DECISION_LEDGER D006) ----
+
+    def test_backlog_legal_states_pass(self):
+        code, out, _ = run("verdict-lint.py",
+                            stdin="BACKLOG: filed(7, top: N+1 on the roster read)\n")
+        self.assertEqual(code, 0, out)
+
+    def test_backlog_illegal_state_fails(self):
+        code, out, _ = run("verdict-lint.py", stdin="BACKLOG: done(all of it)\n")
+        self.assertEqual(code, 1, out)
+        self.assertIn("BACKLOG", out)
+
     # ---- PROTOCOL §9 delivered-fix discipline (AUDIT_001) ----
 
     def test_fix_coherent_without_scrutiny_fails(self):

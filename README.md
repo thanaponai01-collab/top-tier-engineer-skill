@@ -9,7 +9,7 @@ running it.
 ```
 top-tier-engineer/
 ├── README.md            ← you are here
-├── MAP.md               ← the picture: how the nineteen skills connect
+├── MAP.md               ← the picture: how the twenty skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once)
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
 ├── agents/              ← §8.2 parallel gates as isolated, artifacts-only subagents (fresh eyes, reproducible)
@@ -45,6 +45,7 @@ top-tier-engineer/
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
     ├── structure-gate/      ← service gate (also runs in CI): is it spaghetti, and did it get worse?
     ├── latent-audit/        ← no-symptom sweep: what is provably dead, mislayered, or dormantly broken?
+    ├── improvement-backlog/ ← the crossing: findings → tracked issues intact, drained one by one, closed with evidence
     ├── data-evolution/      ← how does stored data change shape without loss, reversibly?
     ├── ship-gate/           ← is releasing it reversible, observable, bounded?
     ├── evolve-maintain/     ← stage 6: years-long health, incidents → invariants
@@ -65,6 +66,7 @@ You don't pick skills. You talk to the engineer:
 - "How did this file get to 4,000 lines when every commit looked fine?" → structure-gate's debt ratchet freezes accepted debt in `DEBT_LEDGER.md` so it cannot grow by defensible increments (PROTOCOL §10)
 - "Find dead code / are the layers respected?" (nothing feels wrong) → latent-audit sweeps the import graph for dead weight and layer breaches
 - "Look at this PR / plan before it lands" → scrutinize
+- "File the findings as issues / work through the backlog / implement issue #N" → improvement-backlog carries the audits' findings out to your tracker intact, hands each back for implementation one at a time, and closes it only with evidence
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
 - "Change the schema / run a migration" → data-evolution evolves the data shape without loss
 - "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step

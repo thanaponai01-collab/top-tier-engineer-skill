@@ -1,6 +1,6 @@
 # The Top-Tier Engineer — Skill Map
 
-Nineteen skills wired into one engineer. A router reads the project's artifact state and dispatches
+Twenty skills wired into one engineer. A router reads the project's artifact state and dispatches
 every request to the right specialist; every specialist produces a **handoff artifact** the next
 stage consumes — so any future model, with zero conversation history, resumes from artifacts alone.
 The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, in `PROTOCOL.md`.
@@ -53,7 +53,15 @@ defs **(suspected — deletion only after a disconnection proof)** and layer-dir
 against the declared architecture **(proven)**; deletions land one scrutinized commit at a
 time, never from the raw report.
 
-## The nineteen, in one line each
+`improvement-backlog` is the crossing where findings leave the suite's custody: any audit's
+findings carried out to the project's issue tracker (or `BACKLOG.md` when none exists) — one
+issue per finding, with the tag, pin, cost, acceptance check and rank the *producing* skill
+authored arriving intact — then picked back up one at a time through `chief-engineer`, each
+issue closing only with verdict evidence. It authors no findings and re-ranks nothing; the half
+nobody upstream can own is the close, which happens after every producer has closed
+(DECISION_LEDGER D006, entered via a director field report per PROTOCOL §12).
+
+## The twenty, in one line each
 
 | Skill | Question it owns |
 |---|---|
@@ -72,6 +80,7 @@ time, never from the raw report.
 | `scrutinize` | Should this change exist, and does it do what it claims? |
 | `structure-gate` | What is its measured shape — does it read as spaghetti, and did it get worse? |
 | `latent-audit` | What is provably dead, mislayered, or dormantly broken — with no symptom to guide the search? |
+| `improvement-backlog` | Did the finding survive the crossing into a tracker intact, and did the close carry evidence? |
 | `data-evolution` | How does stored data change shape without loss, reversibly? |
 | `ship-gate` | Is releasing it reversible, observable, and bounded? |
 | `evolve-maintain` | Does it stay healthy, and does every incident teach it? |
