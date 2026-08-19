@@ -273,3 +273,43 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   workflow description (the director's report, taken at its word per §12); **(suspected)** for
   the claim the skill will change outcomes — the next real backlog run settles it.
 - **status:** decided — shipped in 1.22.0 with `runs/LIVE_RUN_006.md` as the §12 evidence.
+
+## D007 — §12 says "minor release"; `cadence-check.py` enforces it on every release — which is right?
+
+- **date:** 2026-08-19
+- **decision:** **Option 3 — a skill-body change is semantically minor and must never ship as a
+  patch.** `cadence-check.py`'s `evaluate()` was already correct: it applies the run-cadence check
+  to any release ≥ `CADENCE_INTRODUCED_AT` that changed a skill body, with no minor/patch split,
+  because a body change is a behavior change and is therefore never patch-level in its own right —
+  the defect was that §12 never said so. No change to the tool's logic; §12's prose and the tool's
+  docstring both gain the explicit statement (this commit).
+- **forces:** Issue #4 — §12's text scopes the obligation to "minor release[s]"; the code compares
+  the whole version tuple with no such split. **(proven)** — executed against the pure
+  `evaluate()` (no git/IO): a synthetic patch release `(1,22,1)` with `body_changed=True,
+  live_run_added=False` returns the same gap shape as an equivalent minor release. Commit
+  `6a79d4b` (a skill-body fix) shipped with *no* version bump rather than a patch bump — a
+  deliberate dodge of this exact gate, and itself weak evidence for which reading is right: the
+  author's instinct under pressure was that the change didn't fit a patch number, not that the
+  gate was wrong to apply.
+- **options:**
+  1. *The tool is too strict* — exempt patch releases in `evaluate()` to match §12's literal
+     wording. Rejected: cheapest, but legalizes shipping skill-body changes under patch numbers
+     indefinitely, which is what §12 exists to prevent (IMPROVEMENT_PLAN.md F4).
+  2. *The doctrine is too lax* — reword §12 to "any release," keep the tool as-is. Rejected as
+     disproportionate: it reads the minor/patch split as a granularity knob when it was always
+     meant to gate substance, and would make a one-line skill typo fix owe a live run.
+  3. *A skill-body change is semantically minor* **(chosen)** — the gate's uniform treatment was
+     already right; the gap was §12 never saying so. SemVer's own rule (a behavior-changing
+     release is never a patch) applies unmodified, since a skill body is this suite's behavior.
+- **reversibility class:** two-way — a prose amendment and a docstring correction, no data
+  migration; reversible by a future entry if a live run surfaces a genuinely patch-sized skill fix
+  disproportionately blocked by this reading.
+- **evidence tag:** **(proven)** for the tool/doctrine mismatch (executed against `evaluate()`,
+  above); **(trace-only)** for which of the three readings is correct — the judgment call issue #4
+  named as needing a ruling, not a code-derivable fact.
+- **ruling provenance:** the director, asked directly which of the three readings to rule for,
+  during this session's implementation of issue #4.
+- **status:** decided — closed as option 3. `PROTOCOL.md` §12 and `cadence-check.py`'s docstring
+  both restate "skill-body change ⇒ never a patch"; `tools/tests/test_cadence_check.py` gains a
+  test pinning a patch-version skill-body change with no live run as a gap, so the ruling is
+  enforced in code, not left for a reader to notice drift a second time.

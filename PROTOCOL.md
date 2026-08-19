@@ -546,11 +546,14 @@ introspection, the suite auditing itself with itself, while `LIVE_RUN_005` was t
 external-subject run since `LIVE_RUN_004`. A learning system whose only teacher is experience,
 run on a system that stopped having experiences, stops learning.*
 
-**The rule.** Any minor release that changes a skill *body* (not frontmatter, tools, or docs)
-carries with it, or is preceded within that release cycle by, one live run against a real
-external subject not owned by this suite — logged in `runs/` per §3. A release touching only
-tools, ledgers, or doctrine is exempt; self-audit remains legitimate work, it just does not
-discharge this obligation.
+**The rule.** Any release that changes a skill *body* (not frontmatter, tools, or docs) carries
+with it, or is preceded within that release cycle by, one live run against a real external subject
+not owned by this suite — logged in `runs/` per §3. A release touching only tools, ledgers, or
+doctrine is exempt; self-audit remains legitimate work, it just does not discharge this
+obligation. A skill-body change is a behavior change, so it is never patch-level in its own right
+— always minor-or-above whatever its number turns out to be (D007) — which is why the rule above
+says "release," not "minor release": `cadence-check.py` applies it to every release it can map,
+not only ones numbered `x.y.0`.
 
 **Field reports satisfy the evidence bar.** §10 and §11 both entered the suite through a
 director's use report, not a scheduled run — that precedent is formal, not incidental: a gap a

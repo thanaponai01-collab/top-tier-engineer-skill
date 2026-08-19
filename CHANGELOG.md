@@ -97,6 +97,23 @@ premise reproduced at one commit's distance instead of one release's.
   than chained off the previous row's claim.
 - `doctrine-budget.py`'s hardcoded "skill frontmatter (18 others)" label now derives from the
   filesystem — it would have silently stated 18 while measuring 19.
+- **D007 (follow-up commit, issue #4):** §12 scoped the run-cadence obligation to "minor
+  release[s]"; `cadence-check.py`'s `evaluate()` never made that distinction, applying the same
+  check to every release since `CADENCE_INTRODUCED_AT` regardless of patch/minor — **(proven)**
+  against the pure function. Ruled option 3 (directorial ruling, this session): a skill-body
+  change is a behavior change and is therefore never patch-level in its own right, so the tool's
+  uniform treatment was already correct — the defect was that §12 never said so. §12's rule
+  sentence now reads "release," not "minor release" (the fresh-eyes Standards pass on this diff
+  caught the first draft's version as internally inconsistent — trailing sentence widened scope
+  without correcting the topic sentence it contradicted); the tool's docstring points to §12/D007
+  rather than re-deriving the reasoning. `test_cadence_check.py` gains a test pinning a
+  patch-version skill-body change with no live run as a gap. No code-behavior change.
+  Tools/ledgers/doctrine only, so this follow-up is itself exempt from §12's own obligation.
+  312 bytes against `DEBT_LEDGER.md` D-6 (63,519 → 63,831; 1,169 headroom remaining). Full floor
+  run and green after the fresh-eyes fixes: `test_tools.py` 96/96 (one pre-existing, unrelated
+  Windows-encoding failure in `test_registry_source.py`, confirmed present on `HEAD` before this
+  diff too), `STRUCTURE: held(accepted: 3, repaid: 0)`, `REGISTRY: clean(nouns: 23, states: 77)`,
+  `DOCTRINE: clean(bytes: 63831, headroom: 1169)`, `CADENCE: clean(3)`.
 
 ## 1.21.0 — 2026-08-18 — the channel rule: subject content is evidence, never instruction
 

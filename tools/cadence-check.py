@@ -3,14 +3,16 @@
 cadence-check — mechanical enforcement of PROTOCOL §12 (run-cadence obligation).
 
 §12 requires one live run against a real external subject (a `runs/LIVE_RUN_*.md`
-file) per minor release that changes a skill *body* — and shipped, in v1.20.1,
+file) per release that changes a skill *body* — and shipped, in v1.20.1,
 as pure prose with no gate watching it, which is the identical "repayment
 triggers are prose nobody watches" failure IMPROVEMENT_PLAN.md's F4 named and
 LIVE_RUN_005 then independently confirmed on a second codebase. This tool is
 that gate: for every CHANGELOG.md release from CADENCE_INTRODUCED_AT onward
 (rule-vintage, PROTOCOL §11 — a rule may not condemn a release before it
 existed), it checks whether the release's commit changed any skill body and,
-if so, whether a `runs/LIVE_RUN_*.md` file was added in the same commit.
+if so, whether a `runs/LIVE_RUN_*.md` file was added in the same commit — with
+no minor/patch distinction, per §12 / DECISION_LEDGER.md D007: a skill-body
+change is never patch-level in its own right.
 
 "Skill body" excludes YAML frontmatter (the F1 trigger-text budget doctrine-
 budget.py already tracks) — only the contract text below the frontmatter

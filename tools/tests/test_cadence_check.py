@@ -41,6 +41,17 @@ class CadenceCheck(unittest.TestCase):
         self.assertEqual(len(gaps), 1)
         self.assertEqual(gaps[0]["version"], (1, 21, 0))
 
+    def test_patch_release_skill_body_change_without_live_run_is_still_a_gap(self):
+        """DECISION_LEDGER.md D007: a skill-body change is never patch-level in its own
+        right (a body change is a behavior change), so the obligation applies uniformly —
+        `evaluate()` must not carve out an exemption for releases numbered `x.y.z` with
+        `z != 0`. Pins the ruling in code so the next drift fails a build."""
+        cc = _load()
+        releases = [{"version": (1, 21, 1), "body_changed": True, "live_run_added": False}]
+        gaps = cc.evaluate(releases, introduced_at=(1, 20, 1))
+        self.assertEqual(len(gaps), 1)
+        self.assertEqual(gaps[0]["version"], (1, 21, 1))
+
     def test_skill_body_change_with_live_run_is_clean(self):
         cc = _load()
         releases = [{"version": (1, 20, 1), "body_changed": True, "live_run_added": True}]
