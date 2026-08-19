@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # cadence-check.py (GATE 0.8) maps CHANGELOG.md releases to their commits and
           # diffs each against its parent — a shallow (depth-1) clone would make every
@@ -61,7 +61,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
