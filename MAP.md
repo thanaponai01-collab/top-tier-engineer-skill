@@ -98,6 +98,18 @@ verdict-line grammar, the degradation rule for skills copied out of the suite, t
 (§10), and the sense floor (§11) that checks a finished run against the director's own words. Per
 Law 1 it is the only place these are stated; this map is a picture of it, not a second copy.
 
+`PROTOCOL.md` states rules and nothing else. **Why** each rule exists — the failure that earned it,
+its provenance, the argument — lives in `PROTOCOL_RATIONALE.md`, which no run loads and which is
+read only when a rule is being questioned, amended, or removed. That split is Law 1 applied to the
+suite's own doctrine, and it is also §11's terse rule at the source: prose a run reads is prose a
+run imitates.
+
+`GATE_DOCTRINE.md` is the third doctrine file: the scoped subset an isolated §8.2 gate agent loads
+*instead of* `PROTOCOL.md`. A gate does not route, build, or own ledgers, so it needs the evidence
+vocabulary and the verdict grammar and nothing else — and because §8.2 gates run in parallel
+isolated contexts, each one that loaded full doctrine multiplied the session's largest fixed cost by
+the number of gates. `tools/doctrine-budget.py` prints the per-gate figure on every run.
+
 ## Where the evidence lives
 
 `runs/` — the run ledger. `LIVE_RUN_001`–`004` are the suite executed against real systems

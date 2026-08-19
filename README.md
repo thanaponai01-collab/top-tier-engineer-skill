@@ -10,7 +10,12 @@ running it.
 top-tier-engineer/
 ├── README.md            ← you are here
 ├── MAP.md               ← the picture: how the twenty skills connect
-├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once)
+├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once).
+│                          Rules only — every run loads this, so it stays lean.
+├── PROTOCOL_RATIONALE.md ← why each rule exists: the failure that earned it, the argument.
+│                          Cold: no run loads it. Read only to question or amend a rule.
+├── GATE_DOCTRINE.md     ← the subset an isolated §8.2 gate agent loads instead of PROTOCOL.md,
+│                          so N parallel gates don't each re-pay the full doctrine
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
 ├── agents/              ← §8.2 parallel gates as isolated, artifacts-only subagents (fresh eyes, reproducible)
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin

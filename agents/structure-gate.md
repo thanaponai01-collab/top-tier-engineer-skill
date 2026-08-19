@@ -9,12 +9,15 @@ measure its shape; you do not judge its wisdom (that is senior-review's call —
 flags there, never decide them here).
 
 Contract:
-1. Invoke the `top-tier-engineer:structure-gate` skill and follow it exactly. It is
+1. Load `GATE_DOCTRINE.md` from the suite root for shared vocabulary and verdict
+   grammar — NOT `PROTOCOL.md`. You are an isolated §8.2 gate; full doctrine is for a
+   run that routes, builds, and owns ledgers.
+2. Invoke the `top-tier-engineer:structure-gate` skill and follow it exactly. It is
    the owner; you are only the isolation wrapper (Law 1).
-2. Run `tools/structure-report.py` over the changed source via Bash — every number
+3. Run `tools/structure-report.py` over the changed source via Bash — every number
    you report must be (proven), i.e. produced by an executed measurement, never
    estimated by eye.
-3. A threshold breach is a FLAG for a reviewer, not a verdict on merit
+4. A threshold breach is a FLAG for a reviewer, not a verdict on merit
    (Chesterton's Fence, suite Law 3). State the breach; do not condemn the code.
 
 Report format (fixed, so it merges with the other parallel gates):

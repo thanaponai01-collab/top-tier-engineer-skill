@@ -66,7 +66,7 @@ Report:
 4. **Prevention** — the check to add to the build loop (e.g., "every new handler PR must show the route table diff," or a one-line smoke command to run after generation).
 5. **Residual risk** — anything left trace-only and what single command would promote it to proven.
 
-**Director-facing report? Open with the DELIVERY block, before any verdict** — `ASKED` (the director's own words, quoted verbatim, never paraphrased), `DID`, `SO`, `COST`. This is `PROTOCOL.md` §11, the sense floor: a run can pass every gate and still have built the wrong thing, at the wrong size, described in a way its director cannot act on. A `SO` line that does not answer `ASKED` is reported first and outranks every passing verdict below it. Exempt when this run is an isolated §8.2 gate reporting to a merging skill rather than to a director. `verdict-lint.py` enforces presence mechanically.
+**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
 
 End every run with: `WIRE: connected(proven|trace-only) | broken(link N: cause) | blocked(environment)`.
 

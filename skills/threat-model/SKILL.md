@@ -114,7 +114,7 @@ this file; an unmodelled top-asset boundary blocks the deploy.
 Director-readable lead (Law 4): the worst thing an attacker can do today, in one sentence, with its
 evidence tag; then the asset table, the findings ordered by blast radius, the clean boundaries, and:
 
-**Director-facing report? Open with the DELIVERY block, before any verdict** — `ASKED` (the director's own words, quoted verbatim, never paraphrased), `DID`, `SO`, `COST`. This is `PROTOCOL.md` §11, the sense floor: a run can pass every gate and still have built the wrong thing, at the wrong size, described in a way its director cannot act on. A `SO` line that does not answer `ASKED` is reported first and outranks every passing verdict below it. Exempt when this run is an isolated §8.2 gate reporting to a merging skill rather than to a director. `verdict-lint.py` enforces presence mechanically.
+**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
 
 `THREAT: clear(N boundaries modelled, M defended) | findings(top: <attack>) | blocked(boundary unmappable: …)`
 

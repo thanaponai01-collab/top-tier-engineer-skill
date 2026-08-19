@@ -11,7 +11,8 @@ through the right specialist skill(s) in the right order, and enforces the hando
 talks to an engineer and the lifecycle happens underneath.
 
 Shared rules, vocabulary, ledger registry, and the handoff chain live in `PROTOCOL.md` at the
-suite root — read it once per session. (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
+suite root — read it once per session. Why those rules exist lives in `PROTOCOL_RATIONALE.md`; a run
+never loads it. (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
 **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
 
 ## Operating contract
@@ -102,30 +103,27 @@ cheaply — never ask which skill to use; that is this skill's job.
 
 ### The fast path (Rule 3, made concrete)
 
-A request qualifies when it is single-session, single-slice, and touches no existing ledger.
-**Carve-out (LIVE_RUN_001 process fix):** the fast path is *forbidden* — regardless of size —
-when the slice touches a **trust boundary** (auth, authorization, sessions, secrets, untrusted
-input crossing into a privileged sink) or **persistent data shape** (schema, migration, stored
-format). A 40-line diff can bypass authentication or corrupt stored data; such a slice routes
-through `threat-model` and/or `data-evolution` even when it would otherwise qualify as fast-path.
+Qualifies when single-session, single-slice, and touching no existing ledger. **Forbidden
+regardless of size** when the slice touches a **trust boundary** (auth, authorization, sessions,
+secrets, untrusted input reaching a privileged sink) or **persistent data shape** (schema,
+migration, stored format) — such a slice routes through `threat-model` and/or `data-evolution`
+anyway.
+
 Fast path = one pass, one report: a ≤5-line **inline** brief (job, invariant(s), proof line);
-inline decisions recorded only for one-way doors; build per `build-discipline` with `wire-check`'s
-five links walked inline; the proof line executed; one combined verdict block at the end. No
-ledger files are created (scale rule, PROTOCOL §7) — the report carries the inline equivalents so
-any future session can promote them to files verbatim. The fast path compresses ceremony, never
-evidence: a proof line still executes, and every claim still carries its tag.
+inline decisions only for one-way doors; build per `build-discipline` with `wire-check`'s five
+links walked inline; the proof line executed; one combined verdict block. No ledger files (scale
+rule, PROTOCOL §7) — the report carries the inline equivalents verbatim for promotion later. The
+fast path compresses ceremony, never evidence.
 
 ### Spike mode (legal throwaway)
 
-A spike answers a question, not a requirement — and the suite makes it legal so it never has to
-happen illegally. Contract: declared at the start (`SPIKE: <question> | timebox`); quarantined in
-a separate directory or branch and never wired into the system (wire-check on a spike should
-*fail*, by design); exempt from build-discipline's ceremony but not from evidence tags. Its only
-durable output is knowledge: the answer lands in `DECISION_LEDGER.md` or `ASSUMPTIONS.md` (or
-inline, per the scale rule), and the code is then deleted or kept only as a labeled reference.
-Spike code never graduates by merge — if the answer is "build it," it is rebuilt under
-build-discipline with the spike as a crib sheet. The undeclared spike — a prototype that quietly
-becomes production — is the anti-pattern this mode exists to kill.
+A spike answers a question, not a requirement. Contract: declared at the start
+(`SPIKE: <question> | timebox`); quarantined in a separate directory or branch and never wired in
+(wire-check on a spike should *fail*, by design); exempt from build-discipline's ceremony but not
+from evidence tags. Its only durable output is knowledge — the answer lands in `DECISION_LEDGER.md`
+or `ASSUMPTIONS.md` (or inline, per the scale rule); the code is deleted or kept as a labeled
+reference. Spike code never graduates by merge: if the answer is "build it," it is rebuilt under
+build-discipline with the spike as a crib sheet.
 
 ## Phase 3 — Execute the route
 
@@ -144,13 +142,17 @@ becomes production — is the anti-pattern this mode exists to kill.
 
 ## Phase 4 — Report
 
-Open with the DELIVERY block (`PROTOCOL.md` §11, the sense floor) — `ASKED` quoted from the
-director's own words, then `DID` / `SO` / `COST` — because this skill owns the one report and is
-therefore the only place the whole run can be checked against the sentence that started it. Then
-the three sentences (done / proven / needs-decision), then the routed skills' own verdicts, then
-depth. A `SO` line that does not answer `ASKED` is reported before any verdict and outranks all of
-them; a `COST` large against `ASKED` names the smaller thing that was declined. End with the state
-line:
+Open with the DELIVERY block (`PROTOCOL.md` §11) — `ASKED` quoted verbatim, then `DID` / `SO` /
+`COST`, one sentence each. This skill owns the one report, so it is the only place the whole run
+can be checked against the sentence that started it. Then the three sentences (done / proven /
+needs-decision), then the routed skills' verdicts, then depth. A `SO` that does not answer `ASKED`
+is reported before any verdict and outranks all of them; a `COST` large against `ASKED` names the
+smaller thing declined.
+
+**Terse by default (PROTOCOL §11, the terse rule).** The report states what happened, what it
+proves, and what it costs — it never explains the suite's own rules back to the director. Cite a
+rule by number and move on. Depth is available on request; length is not evidence of rigor. End
+with the state line:
 
 `LIFECYCLE: <stage> | next: <skill or "director decision"> | blocked(missing: …) — if blocked`
 

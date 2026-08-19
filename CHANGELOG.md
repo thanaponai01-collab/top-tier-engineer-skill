@@ -114,6 +114,50 @@ premise reproduced at one commit's distance instead of one release's.
   Windows-encoding failure in `test_registry_source.py`, confirmed present on `HEAD` before this
   diff too), `STRUCTURE: held(accepted: 3, repaid: 0)`, `REGISTRY: clean(nouns: 23, states: 77)`,
   `DOCTRINE: clean(bytes: 63831, headroom: 1169)`, `CADENCE: clean(3)`.
+- **The subtraction pass D-6 has been owing since v1.22.0 (follow-up commit).** Provenance: a
+  director field report — the suite's reports read as over-explained, and the director asked
+  whether a run's context cost could be profiled at all. It could, and the profile named the
+  cause. **(proven)** by measurement at both ends: the per-session doctrine floor was 16,030
+  tokens before any work, and — because each isolated §8.2 gate re-read all of `PROTOCOL.md` in
+  its own fresh context — a four-gate change paid that doctrine roughly five times over, ~76,600
+  tokens of overhead per gated build run. The single charged `DOCTRINE` number never showed the
+  multiplier, because it measures one session and gates are per-change.
+
+  Three subtractions, each a deletion of *explanation* and never of law, exactly as D-6's trigger
+  specified. (a) **`PROTOCOL.md` 45,908 → 30,536 bytes** — every provenance note, earned-by
+  narrative, and justifying argument moved to a new `PROTOCOL_RATIONALE.md`, read only when a rule
+  is questioned, amended, or removed. (b) **The §11 DELIVERY paragraph, ~120 words duplicated
+  verbatim into 18 skill bodies** — a Law 1 violation the suite had been committing against itself
+  18 times — collapsed to one pointer line each (−10,318 bytes). This was the actual cause of the
+  reported symptom: a model that reads a 120-word justification for a four-line format writes a
+  four-paragraph version of it. Prose a run reads is prose a run imitates, which is now stated as
+  §11's **terse rule** (each DELIVERY line one sentence; no report restates a rule's rationale)
+  and binds every skill's prose, not just the block. (c) `chief-engineer/SKILL.md` 12,500 →
+  12,280, fast-path and spike-mode prose compressed to their rules.
+
+  **New `GATE_DOCTRINE.md`** (4,610 bytes): the scoped subset an isolated §8.2 gate loads *instead
+  of* `PROTOCOL.md`, since a gate neither routes, builds, nor owns ledgers. All five `agents/*.md`
+  now load it. Per-gate doctrine falls ~14,000 → 3,932 tokens; the session floor falls 16,030 →
+  12,052; a gated build run falls ~76,600 → ~31,800.
+
+  `doctrine-budget.py` learns the shape it is now measuring: the **hot** surface is charged, the
+  **cold** surface is measured and printed but not charged (a budget that only counts what someone
+  declares cold is a budget anyone satisfies by relabelling), and the **per-gate** figure is
+  printed so the multiplier the charged number hides is visible. Its `main()` crossed both
+  structural thresholds under those four new print branches and the suite's own gate caught it —
+  `print_human_report`/`write_baseline`/`verdict` extracted *before* the feature landed, per §10
+  rule 4 rather than piled onto the ledger.
+
+  **D-6 re-locked at the repaid number**, 63,831 → **52,849**, with `repay_at` tightened 65,000 →
+  58,000 — a repaid row does not keep the ceiling its debt was granted, or the repayment buys only
+  room to regrow. `GATE_DOCTRINE.md`'s 4,610 bytes are charged as a named withdrawal despite being
+  a net saving: the budget charges what a session loads, and a new loaded file is new load whatever
+  it displaces elsewhere. No rule was deleted anywhere in this pass. Doctrine, skill bodies, and
+  one tool — **19 skill bodies changed, so the next release owes §12 a live external run**; this
+  commit cuts no release, which is the only reason `CADENCE` is still clean. Full floor green:
+  `test_tools.py` 96/96, `STRUCTURE: held(accepted: 3, repaid: 0)`,
+  `REGISTRY: clean(nouns: 23, states: 77)`, `DOCTRINE: clean(bytes: 52849, headroom: 5151)`,
+  `CADENCE: clean(3)`, verdict-lint and run-trace clean over `runs/`.
 
 ## 1.21.0 — 2026-08-18 — the channel rule: subject content is evidence, never instruction
 

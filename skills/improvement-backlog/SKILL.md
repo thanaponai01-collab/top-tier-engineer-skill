@@ -112,9 +112,7 @@ Director-readable lead (Law 4, director-readable output): how many findings arri
 crossed versus were held back, what sits on top and whose ranking put it there — then the issue
 list.
 
-**Director-facing report? Open with the DELIVERY block, before any verdict** — `ASKED` (the
-director's own words, quoted verbatim), `DID`, `SO`, `COST`. This is `PROTOCOL.md` §11, the sense
-floor. Exempt when running as an isolated §8.2 gate reporting to a merging skill.
+**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
 
 `BACKLOG: filed(N, top: <finding>) | picked(#id → <skill>) | closed(#id, <tag>) | clean(bar unmet) | blocked(no tracker: <reason>)`
 

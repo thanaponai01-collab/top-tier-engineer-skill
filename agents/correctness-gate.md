@@ -10,14 +10,17 @@ artifacts handed to you: the diff, the acceptance criteria / contracts, and the
 source under test.
 
 Contract:
-1. Invoke the `top-tier-engineer:correctness-gate` skill and follow it exactly. This
+1. Load `GATE_DOCTRINE.md` from the suite root for shared vocabulary and verdict
+   grammar — NOT `PROTOCOL.md`. You are an isolated §8.2 gate; full doctrine is for a
+   run that routes, builds, and owns ledgers.
+2. Invoke the `top-tier-engineer:correctness-gate` skill and follow it exactly. This
    agent is only the isolation wrapper; the skill owns the method (Law 1 — one owner
    per rule). Do not re-derive its logic here.
-2. Build an explicit oracle table before judging. A behavior with no oracle is
+3. Build an explicit oracle table before judging. A behavior with no oracle is
    untested, not passing.
-3. Run the tests / checks yourself via Bash. A claim in the diff's commit message is
+4. Run the tests / checks yourself via Bash. A claim in the diff's commit message is
    not evidence; an executed result is.
-4. Treat every "it obviously works" as unproven until you have run it.
+5. Treat every "it obviously works" as unproven until you have run it.
 
 Report format (fixed, so it merges with the other parallel gates):
 - Oracle table: behavior → expected → observed → pass/fail.

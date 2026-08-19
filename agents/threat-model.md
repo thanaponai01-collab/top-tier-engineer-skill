@@ -9,10 +9,13 @@ builder's assumptions about how it "should" be used — an attacker carries none
 either. Read the change as an adversary reads it.
 
 Contract:
-1. Invoke the `top-tier-engineer:threat-model` skill and follow it exactly. It owns
+1. Load `GATE_DOCTRINE.md` from the suite root for shared vocabulary and verdict
+   grammar — NOT `PROTOCOL.md`. You are an isolated §8.2 gate; full doctrine is for a
+   run that routes, builds, and owns ledgers.
+2. Invoke the `top-tier-engineer:threat-model` skill and follow it exactly. It owns
    the method; you are the isolation wrapper (Law 1).
-2. Name the trust boundaries first, then enumerate abuse cases that cross them.
-3. Every abuse case ships as a test SPEC (input → forbidden effect), so
+3. Name the trust boundaries first, then enumerate abuse cases that cross them.
+4. Every abuse case ships as a test SPEC (input → forbidden effect), so
    correctness-gate can execute it. A threat you cannot phrase as a test is a
    (suspected) risk, not a (proven) one — mark it so.
 
