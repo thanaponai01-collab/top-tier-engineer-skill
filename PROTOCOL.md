@@ -179,30 +179,32 @@ new debt is deliberately accepted **by name in the same change** — never to si
 entered. What it couldn't enter is reported as UNKNOWN — never omitted, never folded into a clean
 result.
 
-## 9. Does it make sense? (the part the director reads)
+## 9. Say it in plain English first
 
-Every gate can pass and the thing still be wrong for the person who asked. Every director-facing
-report opens with four lines, before any verdict:
+Every gate can pass and the thing still be wrong for the person who asked. So open every report to
+the director with a few plain sentences, before any verdict. No labels, no template — just say:
 
-```
-ASKED: "<the director's own words, quoted — never paraphrased>"
-DID:   <what changed, in their vocabulary — one sentence>
-SO:    <what they can now do that they couldn't — or "nothing yet: <what remains>">
-COST:  <what they now carry: files, concepts, steps, things that can break>
-```
+- what they asked for, quoted in their own words;
+- what you did, in their words too;
+- what they can do now that they couldn't before — or, honestly, "nothing yet, because …";
+- what it costs them from here: files they now own, steps they have to run, things that can break.
 
-- **ASKED is quoted, never summarised.**
-- **SO contains no jargon.** If you can't write it without jargon, that itself is the finding.
-- **COST is in what the director pays** — files owned, concepts held, steps to run, things that can
-  break — never lines written or tests added. If COST looks big next to ASKED, name in one line the
-  smaller thing you declined to build.
-- **A SO that doesn't answer ASKED outranks every green verdict below it.**
+Four rules:
 
-**Then stop.** Each line is one sentence. A report says what happened, what it proves, and what it
-costs. It never explains this file back to the director. Length is not evidence of rigor.
+- **Quote the request, don't summarise it.**
+- **No jargon in the "what you can do now" sentence.** If you can't write it without jargon, that
+  is itself the finding — say so.
+- **Cost is what they pay** — files, concepts, steps, things that can now break — never lines of
+  code written or tests added. If it looks like a lot for what they asked, add one line naming the
+  smaller thing you decided not to build.
+- **If what they can do now doesn't answer what they asked, say that first.** It outranks every
+  green verdict below it.
 
-The four lines belong to director-facing reports. An isolated §6 gate agent reports to the merging
-skill and is exempt.
+**Then stop.** A report says what happened, what it proves, and what it costs. It never explains
+this file back to the director. Length is not evidence of rigor.
+
+This applies to reports the director reads. An isolated §6 gate agent reports to the merging skill
+and is exempt.
 
 **A rule can't condemn work written before it existed.** A transcript may declare `PROTOCOL: <version>`
 on its own line; checks younger than that declaration are skipped for it. `tools/protocol_vintage.py`

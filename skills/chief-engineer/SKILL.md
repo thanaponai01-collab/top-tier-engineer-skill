@@ -143,17 +143,13 @@ build-discipline with the spike as a crib sheet.
 
 ## Phase 4 — Report
 
-Open with the DELIVERY block (`PROTOCOL.md` §9) — `ASKED` quoted verbatim, then `DID` / `SO` /
-`COST`, one sentence each. This skill owns the one report, so it is the only place the whole run
-can be checked against the sentence that started it. Then the three sentences (done / proven /
-needs-decision), then the routed skills' verdicts, then depth. A `SO` that does not answer `ASKED`
-is reported before any verdict and outranks all of them; a `COST` large against `ASKED` names the
-smaller thing declined.
+Open in plain English, per `PROTOCOL.md` §9: quote what the director asked for, say what you did
+in their words, say what they can do now that they couldn't, and say what it costs them. This skill
+owns the one report, so it is the only place the whole run gets checked against the sentence that
+started it. Then done / proven / needs-decision, then the routed skills' verdicts, then depth. If
+what they can now do doesn't answer what they asked, lead with that — it outranks every verdict.
 
-**Terse by default (§9, the terse rule).** The report states what happened, what it
-proves, and what it costs — it never explains the suite's own rules back to the director. Cite a
-rule by number and move on. Depth is available on request; length is not evidence of rigor. End
-with the state line:
+Depth is available on request. End with the state line:
 
 `LIFECYCLE: <stage> | next: <skill or "director decision"> | blocked(missing: …) — if blocked`
 

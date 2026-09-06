@@ -121,9 +121,7 @@ Every other discipline here makes the *work* trustworthy. This one asks whether 
 doing in the shape it was done. It exists because a run can satisfy every gate in the suite and
 still hand its director something that does not make sense — and no gate downstream of
 `problem-framing` is positioned to notice, because none of them ever reads the original request
-again (the mechanism, and the DELIVERY block that closes it, are `PROTOCOL.md` §9; gloss:
-`ASKED` quoted verbatim · `DID` in the director's words · `SO` what they can now do · `COST` what
-they now carry).
+again (`PROTOCOL.md` §9 owns the mechanism and the plain-English opening that closes it).
 
 Run all three tests before emitting any report, not after:
 

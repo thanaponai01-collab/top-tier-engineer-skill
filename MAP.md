@@ -93,7 +93,7 @@ nobody upstream can own is the close, which happens after every producer has clo
 ## Where the shared rules live
 
 `PROTOCOL.md` — the evidence tags, the six rules, where things get written down, the handoff
-chain, the verdict grammar, the debt ratchet (§8), and the DELIVERY block (§9) that checks a
+chain, the verdict grammar, the debt ratchet (§8), and the plain-English report opening (§9) that checks a
 finished run against the director's own words. It is the only place these are stated; this map
 is a picture of it, not a second copy. Isolated gate agents in `agents/` load it too — §1 and
 §5 are all a gate needs.

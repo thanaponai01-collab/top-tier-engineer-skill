@@ -91,7 +91,6 @@ framing failure, not a build failure — route it back here.
   never silently honor the newer statement.
 - Never let the brief exceed what's needed to start architecture. Framing that tries to design is
   scope theft from the next skill.
-- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §9): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §6 gates.
 - End every run with a verdict line: `BRIEF: ready | blocked-on-questions | revised(IDs changed)`.
 
 ## Anti-patterns this skill exists to kill

@@ -123,7 +123,6 @@ uncommitted work. Re-prove the last claimed-working slice before stacking on it
 - A slice that grew a file already on the debt ledger says so in its report, with the before/after
   measured value. Silent growth of known debt is the failure §8 exists to catch, and a
   proven slice is not a licence for it.
-- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §9): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §6 gates.
 - End every slice with: `SLICE <name>: proven | trace-only(reason) | failed(at link/phase)`.
 
 ## Anti-patterns this skill exists to kill

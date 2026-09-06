@@ -109,7 +109,6 @@ settled questions or repeating reverted mistakes.
   entry first — the ledger leads, the document follows.
 - Technology names appear only inside decisions; boundaries and contracts are described
   technology-free so they survive stack changes.
-- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §9): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §6 gates.
 - End every run with: `DESIGN: ready | blocked-on-director(one-way doors: IDs) | revised(IDs)`.
 
 ## Anti-patterns this skill exists to kill

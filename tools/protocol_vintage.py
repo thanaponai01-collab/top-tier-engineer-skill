@@ -52,14 +52,13 @@ PROTOCOL_DECL_RE = re.compile(
 # which is correct for checks that predate the mechanism itself (§5 verdict form,
 # §4 ordering), because no artifact could have been written before them.
 # ---------------------------------------------------------------------------
-PIN_RULE = (1, 13)     # §1 subject pin  — `SUBJECT: <name> @ <revision>` (1.13.0)
-SENSE_FLOOR = (1, 16)  # §11 DELIVERY block — ASKED/DID/SO/COST (1.16.0)
+PIN_RULE = (1, 13)     # §1 subject pin — `SUBJECT: <name> @ <revision>` (1.13.0)
 
 
 def declared(text):
     """The PROTOCOL version this artifact declares, as (major, minor), or None.
 
-    None means "no declaration" — and §11 is explicit that such an artifact "is judged
+    None means "no declaration" — and §9 is explicit that such an artifact "is judged
     by the current rules". Absence is not grandfathering; a writer who wants the older
     rules must say so.
     """

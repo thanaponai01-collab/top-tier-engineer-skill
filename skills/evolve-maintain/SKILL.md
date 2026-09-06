@@ -101,7 +101,6 @@ that model can pattern-match a new symptom against past root causes in one read.
 - No intervention proceeds unclassified; no Fix closes without root cause and regression test.
 - Reverting is always a respectable treatment — a clean revert plus a ledger entry beats a clever
   forward-fix under uncertainty.
-- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §9): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §6 gates.
 - End every run with: `MAINT <ID>: resolved(class, proven) | resolved(trace-only: reason) | escalated(to skill/director) | reverted`.
 
 ## Anti-patterns this skill exists to kill

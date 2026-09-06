@@ -102,7 +102,6 @@ cleverness exhibit.
 - Never optimize unprofiled code; never report unre-measured gains.
 - Readability is purchased back: any optimization that obscures intent must leave a one-line
   comment naming the hypothesis ID that justifies it.
-- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §9): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §6 gates.
 - End every run with: `OPTIMIZE: budgets-met | improved(metric: before→after, guarded) | stopped(condition N) | reverted(reason)`.
 
 ## Anti-patterns this skill exists to kill
