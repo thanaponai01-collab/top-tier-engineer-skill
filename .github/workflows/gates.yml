@@ -28,12 +28,12 @@ jobs:
       - name: references
         run: bash tools/check-references.sh
 
-      # Three files state the version and only habit kept them equal, until 2.5.1 bumped
-      # one of them. A fact duplicated across files needs a gate, not a habit.
+      # plugin.json owns the version; the marketplace entry's copy was deleted in 2.6.1 (D010).
+      # CHANGELOG.md's newest heading is the one remaining copy and cannot be deleted — it is the
+      # human record — so it is gated. A fact duplicated across files needs a gate, not a habit.
       - name: version
         run: |
           a=$(python3 -c "import json;print(json.load(open('.claude-plugin/plugin.json'))['version'])")
-          b=$(python3 -c "import json;print(json.load(open('.claude-plugin/marketplace.json'))['plugins'][0]['version'])")
           c=$(grep -m1 -oE '^## [0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | cut -d' ' -f2)
-          [ "$a" = "$b" ] || { echo "version drift: plugin.json $a != marketplace.json $b"; exit 1; }
           [ "$a" = "$c" ] || { echo "version drift: plugin.json $a != CHANGELOG.md $c"; exit 1; }
+          python3 -c "import json,sys; e=json.load(open('.claude-plugin/marketplace.json'))['plugins'][0]; sys.exit('marketplace.json re-added the version key (D010)') if 'version' in e else None"

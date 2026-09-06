@@ -7,6 +7,24 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.6.1 — 2026-09-06 — one fact, one file
+
+D010, opened in 2.6.0 behind an `(assumed)` about the marketplace schema, is settled and closed.
+
+- **The marketplace entry's `version` key is deleted.** It duplicated `plugin.json`, and duplication
+  is what let 2.5.1 ship the two a patch apart. **(proven)**, from the installed marketplaces on
+  this machine: Anthropic's own `claude-plugins-official` carries 291 plugin entries under the same
+  `$schema`, and 277 of them have no `version` key at all — including `vercel`, which is installed
+  here at 0.48.0 resolved from its own `plugin.json`. The key is optional and it is not what the
+  installer reads. `2.5.1` in this repo's own plugin cache path, while the marketplace file said
+  `2.5.0`, is the same fact observed from the other side.
+- **The gate follows the fact.** The `version` CI step no longer compares three copies; it compares
+  `plugin.json` to `CHANGELOG.md`'s newest heading — the one copy that cannot be deleted, because it
+  is the human record — and fails if anything re-adds the key to `marketplace.json`. A gate that
+  outlives the duplication it was written for should guard the deletion instead.
+- The `$schema` URL both files cite, `https://anthropic.com/claude-code/marketplace.schema.json`,
+  returns 404 **(proven)**. Nothing validates these manifests but this gate.
+
 ## 2.6.0 — 2026-09-06 — the fix that removed the word, not the knowledge
 
 A `senior-review` pass over `toptier-lens` found that 2.5.1's own headline fix landed on the

@@ -393,6 +393,11 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
 
 ## D010 — the plugin version is stated in two files: gate it, or delete one?
 
+> **Closed in 2.6.1: option 3 was taken.** The schema question below is answered — `version` is
+> optional in a marketplace entry and is not what the installer reads. The duplicate is deleted and
+> the gate now guards its absence. The reasoning is kept because the *order* was the point: gate
+> first, delete once the evidence is in.
+
 - **decision:** gate it now, and leave the deletion open. `.github/workflows/gates.yml` gains a
   `version` step comparing `plugin.json`, the `marketplace.json` entry and `CHANGELOG.md`'s newest
   heading; all three read 2.6.0.
@@ -408,4 +413,8 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
 - **reversibility class:** two-way. The gate is one CI step; option 3 subsumes it whenever the
   schema question is settled.
 - **evidence tag:** **(proven)** for the drift and its history; **(assumed)** for the schema.
-- **status:** decided — shipped in 2.6.0. Option 3 remains open.
+- **status:** superseded by its own option 3 in 2.6.1. Evidence that settled the `(assumed)`:
+  of 291 entries in `claude-plugins-official/.claude-plugin/marketplace.json`, 277 carry no
+  `version` key under the same `$schema`; `vercel` is one of them and is installed at 0.48.0 from
+  its own `plugin.json` **(proven)**. The `$schema` URL itself 404s, so nothing validates either
+  manifest but the CI step.
