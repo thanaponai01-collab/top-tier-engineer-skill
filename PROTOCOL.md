@@ -42,7 +42,7 @@ Four rules about them:
 usually promise. If the subject's own docs, schema, or policies contradict your assumption,
 reconcile that before citing severity.
 
-## 2. The rules
+## 2. The rules (the Laws)
 
 1. **Say it once.** One place per rule, one source of truth per project.
 2. **Artifacts outlive conversations.** A future session with no chat history must be able to

@@ -7,6 +7,38 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.6.0 — 2026-09-06 — the fix that removed the word, not the knowledge
+
+A `senior-review` pass over `toptier-lens` found that 2.5.1's own headline fix landed on the
+sentence that confessed and not on the paragraph that did the same thing. All four findings are
+rules this suite already owns and had not executed on itself.
+
+- **`toptier-lens` Phase 3 part 4 no longer prescribes what to look for.** 2.5.1 deleted the words
+  "*usually an observability surface*" and kept the four questions around them — explainability,
+  agency, what connects it outward, whether it waits to be asked. Re-phrased as questions, they were
+  still one archetype's property list: four candidate gaps that skipped all five Phase-2 gates, in
+  a report whose `findings` state is *defined* as "survived all five gates", and which the old part 4's
+  closing clause let outrank the gated winner. They fail §2 Rule 6's substitution test — replace them with their rule
+  and a hole opens, which is the definition of load-bearing knowledge in a skill. Part 4 is now
+  "what only the director can settle": at most two questions the gates could not close, each
+  derived from the subject's own North Star, and an imported one dies at gate 3 like any other.
+- **The lens reports its coverage when it finds something, not only when it doesn't.** `clean`
+  carried `<what was read>` and `findings` carried nothing, so a lens that read three files and one
+  that read the tree were indistinguishable — in the one case where the director spends a build on
+  the answer. §8's coverage rule qualifies the measurement, not the empty result. `findings` now
+  carries `read: <fraction of the subject entered>`.
+- **Gate 2 no longer passes for free on a subject with no history.** "Already tried" reads the
+  decision ledger, the changelog and `git log`; where none exists the gate was silently satisfied.
+  Absence of a record is not evidence a move was never tried — the gate now says so and drops to
+  `(assumed)`.
+- **`PROTOCOL.md` §2 names the Laws.** The heading said "The rules" while the lens, the
+  `structure-gate` agent, both ledgers and six runs cite "Law 3". A session reading only the canon
+  file — the resumption contract of Law 2 — could not resolve the citation.
+- **CI gates the version.** `.claude-plugin/marketplace.json` still advertised 2.5.0 after 2.5.1
+  bumped `plugin.json` alone; every release before it moved both by habit. `check-references.sh`
+  verifies that named files exist, not that duplicated facts agree. A fourth CI step now compares
+  the two. Whether the duplicate can simply be deleted is D010, open.
+
 ## 2.5.1 — 2026-09-06 — the lens said it three times
 
 `toptier-lens` shipped in 2.5.0 exactly as it was written outside the suite, and it read like it:

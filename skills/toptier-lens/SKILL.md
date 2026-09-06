@@ -44,7 +44,9 @@ Generate candidates, then put each through five gates. Only what survives all fi
    and `(assumed)` never becomes the answer.
 2. **Already tried.** A cold read sees the system at one revision; it cannot see what the team
    built, hated, and reverted. Before recommending, read the history — decision ledger, changelog,
-   `git log` on the paths in question. A move the record already adjudicated is not a gap: either
+   `git log` on the paths in question. A subject carrying no such record does not pass this gate
+   by default: the gap stays live, but Phase 3 part 1 carries the gate as `(assumed)` with the cost
+   of being wrong. A move the record already adjudicated is not a gap: either
    the forces that killed it have changed, and you say which, or it stays dead. Per Law 3, an
    absence with a recorded reason is a fence, not an oversight.
 3. **Real scale.** Is this a constraint for THIS system at its actual size, or one imported from
@@ -70,10 +72,10 @@ Four parts, in order, each grounded in named files.
 3. **The move.** The single next thing, as outcome and cost, never implementation: what it gets
    you, what it costs (rough effort, dependencies, reversibility), and what it is a precondition
    for. If a second move only proves the first worked, name it and give the order — two, not ten.
-4. **What it cannot yet answer for itself.** Ask, do not prescribe: can the director see *why*
-   the system produced what it did? Can the system act, or only describe? What connects it
-   outward, and does it wait to be asked? Report which of these are unanswered — the answer is
-   the director's to choose, and often outranks the move above.
+4. **What only the director can settle.** At most two questions the gates could not close — each
+   derived from *this* system's North Star, never from a general picture of what systems become.
+   For each: what is unknown, and what would change if it were answered. A question naming a
+   capability the North Star does not ask for is imported, and dies at gate 3 like any other.
 
 A system already at the ceiling its own North Star asks for gets told so, with reasons. Invented
 praise and invented criticism cost the same.
@@ -82,8 +84,8 @@ praise and invented criticism cost the same.
 
 One line, per `PROTOCOL.md` §5:
 
-- `LENS: findings(gap: <phrase>, move: <phrase>)` — a gap survived all five Phase-2 gates and is grounded in named files.
-- `LENS: clean(<what was read>)` — the system is at its own ceiling and no move outranks doing nothing.
+- `LENS: findings(gap: <phrase>, move: <phrase>, read: <fraction of the subject entered>)` — a gap survived all five Phase-2 gates and is grounded in named files.
+- `LENS: clean(read: <fraction of the subject entered>)` — the system is at its own ceiling and no move outranks doing nothing.
 - `LENS: blocked(<what would unblock it>)` — the source could not be read, or the North Star could not be established and the director has not stated one.
 
 Never `done`. This skill measures and recommends; it makes nothing.

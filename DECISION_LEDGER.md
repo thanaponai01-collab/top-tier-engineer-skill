@@ -390,3 +390,22 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   the claim that routing improves now that `chief-engineer` can name it — the next "what should I
   build next" request settles it.
 - **status:** decided — shipped in 2.5.0.
+
+## D010 — the plugin version is stated in two files: gate it, or delete one?
+
+- **decision:** gate it now, and leave the deletion open. `.github/workflows/gates.yml` gains a
+  `version` step comparing `plugin.json`, the `marketplace.json` entry and `CHANGELOG.md`'s newest
+  heading; all three read 2.6.0.
+- **forces:** the version is stated three times, and 2.5.1 bumped only `plugin.json` **(proven** — `git log -p
+  .claude-plugin/` shows every release from 2.1.0 to 2.5.0 moving both in one commit, and `6ad9222`
+  moving one**)**. Law 1 says a fact lives in one place; the honest reading is that the second copy
+  should not exist. Whether the marketplace schema permits a `source: "./"` entry with no `version`
+  is **(assumed)** — unverified, and a broken listing is the wrong place to find out.
+- **options:** 1. *Bump and move on* — rejected, that is the habit that just failed. 2. *Gate it*
+  **(chosen)** — three lines of CI, and it fails loudly on the next release rather than quietly in
+  the marketplace. 3. *Delete the duplicate* — correct if the schema allows it; blocked on the
+  schema question, and the gate makes it safe to answer later rather than now.
+- **reversibility class:** two-way. The gate is one CI step; option 3 subsumes it whenever the
+  schema question is settled.
+- **evidence tag:** **(proven)** for the drift and its history; **(assumed)** for the schema.
+- **status:** decided — shipped in 2.6.0. Option 3 remains open.
