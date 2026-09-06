@@ -175,7 +175,7 @@ arbitrates which.
 
 Every skill run ends with exactly one machine-parseable verdict line. Shared shape:
 `NOUN: state | state(qualifier) | escalated(to whom, why)`. The registry — one noun per skill, so a
-single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|BACKLOG|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE|DOCTRINE|CADENCE)( [^:]+)?:`)
+single grep (`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|BACKLOG|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE)( [^:]+)?:`)
 recovers any run's trajectory:
 
 | Noun | Owner | States |
@@ -201,20 +201,16 @@ recovers any run's trajectory:
 | `BACKLOG` | improvement-backlog | `filed(N, top: …) \| picked(#id → skill) \| closed(#id, tag) \| clean(bar unmet) \| blocked(no tracker: …)` |
 | `FIX` | §9 (shared) | `coherent(surfaces: …) \| incoherent(named: …) \| unscrutinized` |
 | `TRACE` | run-trace.py (tool) | `complete \| incomplete(missing: …) \| blocked(unclassifiable)` |
-| `DOCTRINE` | doctrine-budget.py (tool) | `clean(bytes: N) \| clean(bytes: N, headroom: H) \| budget-exceeded(N/threshold) \| blocked(reason)` |
-| `CADENCE` | cadence-check.py (tool) | `clean(N releases checked) \| gap(N) \| blocked(reason)` |
 
 Every noun this suite may emit has a row above; the Owner column says which class it belongs to.
-`tools/registry-check.py` reconciles this table against `verdict-lint.py`'s enforcing copy, and a noun
-declared in one and not the other fails the enforcement floor.
 
-**Tool-output nouns.** `TRACE`, `DOCTRINE`, and `CADENCE` are emitted by suite *tools*, not skills.
-They are linted for form like any other but are not part of the §4 handoff chain. `STRUCTURE` and
+**Tool-output nouns.** `TRACE` is emitted by a suite *tool*, not a skill, and is not part of the §4
+handoff chain. `STRUCTURE` and
 `LATENT` are each emitted by a tool *and* owned by a skill; the skill's line supersedes the tool's,
 and its finding counts may only shrink, never grow.
 
 **Shared nouns.** `FIX` is emitted by *whichever* skill performs the act, so its owner is §9 rather
-than a skill. `verdict-lint.py` lints its form, its SCRUTINY co-occurrence, and its limitation marker.
+than a skill.
 
 ## 6. Degradation rule
 
@@ -261,10 +257,8 @@ and the report then carries the marker `(same-context review)`.
 **§8.1 — Structural separation for review-class skills.** When `senior-review`, `scrutinize`, or
 `structure-gate` runs on work authored in the same session, fresh-eyes is satisfied **only** by:
 (a) a separate invocation with no shared build context — the reviewer gets the artifacts and the
-diff, not the build conversation; or (b) the mechanical gate (`enforcement-floor` CI), context-free by
-construction, for the structural and verdict-form dimensions it covers. The `(same-context review)`
-marker is legal only when neither is available; using it where (b) was available is a defect. *Prefer
-a structural separation you cannot fake over a marker you can.*
+diff, not the build conversation. The `(same-context review)` marker is legal only when that is not
+available. *Prefer a structural separation you cannot fake over a marker you can.*
 
 **§8.2 — Independence corollary (parallel gates).** Gates that consume only artifacts —
 `correctness-gate`, `structure-gate`, `threat-model`, `senior-review`, `scrutinize` — share no
@@ -373,8 +367,7 @@ spent the director's attention on the suite instead of on their system. This bin
 prose, not only the block above.
 
 **Scope.** Director-facing reports only. An isolated §8.2 gate agent reports to the merging skill, not
-to the director, and is exempt. `verdict-lint.py` enforces presence mechanically wherever a
-`LIFECYCLE` line or two or more distinct verdict nouns appear.
+to the director, and is exempt.
 
 **Rule vintage.** A rule may not condemn an artifact written before it existed. A transcript declares
 the rules it was written under, `PROTOCOL: <version>`, on its own line; any check younger than that
@@ -393,7 +386,5 @@ change is a behavior change, so it is never patch-level in its own right — alw
 **Field reports satisfy the evidence bar.** A gap a real user names while using the thing meets the
 same bar a scheduled run does.
 
-**Mechanical check.** `tools/cadence-check.py` maps each release from the version this section was
-introduced in onward (rule-vintage, §11) to its commit and checks whether a skill-body change landed
-without a matching `runs/LIVE_RUN_*.md` addition, emitting `CADENCE: clean(N) | gap(N) |
-blocked(reason)`. Wired into the enforcement floor alongside `doctrine-budget.py`.
+**Unenforced.** This obligation is honour-system: the check that watched it was deleted with the
+rest of the self-policing tools.

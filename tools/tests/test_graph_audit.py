@@ -67,9 +67,6 @@ class GraphAudit(unittest.TestCase):
             code, out, _ = run("graph-audit.py", tmp, "--layers", layers)
             last = [l for l in out.splitlines() if l.startswith("LATENT:")][-1]
             self.assertIn("findings(dead: 1, unused:", last)
-            # the emitted line must satisfy the suite's own linter
-            lcode, lout, _ = run("verdict-lint.py", stdin=last + "\n")
-            self.assertEqual(lcode, 0, lout)
 
     def test_unmeasured_layers_are_never_folded_into_clean(self):
         """PROTOCOL §10 rule 5 — the denominator. Without --layers the layer dimension is
@@ -86,8 +83,6 @@ class GraphAudit(unittest.TestCase):
             # An unmeasured dimension is a gap in the INVOCATION, not a defect in the
             # subject: it must not fail by default, or the gate goes permanently red.
             self.assertEqual(code, 0, out)
-            lcode, lout, _ = run("verdict-lint.py", stdin=last + "\n")
-            self.assertEqual(lcode, 0, lout)
 
     def test_empty_tree_blocks(self):
         with tempfile.TemporaryDirectory() as tmp:

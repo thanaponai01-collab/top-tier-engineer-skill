@@ -39,8 +39,8 @@ The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, 
 not-yet-landed delta — plan, design doc, PR, or diff — answering "should this change exist, and
 does it do what it claims?" before the change costs a build.
 
-`structure-gate` sits beside `wire-check` and `scrutinize` as a callable-any-stage service gate
-— and the one that runs unattended in CI (`enforcement-floor`). It answers **"measured
+`structure-gate` sits beside `wire-check` and `scrutinize` as a callable-any-stage service gate.
+It answers **"measured
 structural shape — is it spaghetti?"** with numbers, then routes every flag to
 `senior-review`/`scrutinize` for the wisdom call; it never decides wisdom itself. Once a
 codebase has accepted debt it also asks the question no point-in-time gate can — **"did it get
@@ -88,8 +88,7 @@ nobody upstream can own is the close, which happens after every producer has clo
 
 > The three skills added in v1.5.0 (`threat-model`, `ship-gate`, `data-evolution`) each closed a
 > mandate gap exposed by the first real run (LIVE_RUN_001): security findings with no pipeline, the
-> unowned act of shipping, and data-shape change whose rollback semantics differ from code's. The
-> `tools/verdict-lint.py` validator added the suite's first mechanical enforcement.
+> unowned act of shipping, and data-shape change whose rollback semantics differ from code's.
 
 ## Where the shared rules live
 
@@ -108,7 +107,7 @@ run imitates.
 *instead of* `PROTOCOL.md`. A gate does not route, build, or own ledgers, so it needs the evidence
 vocabulary and the verdict grammar and nothing else — and because §8.2 gates run in parallel
 isolated contexts, each one that loaded full doctrine multiplied the session's largest fixed cost by
-the number of gates. `tools/doctrine-budget.py` prints the per-gate figure on every run.
+the number of gates.
 
 ## Where the evidence lives
 

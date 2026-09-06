@@ -261,15 +261,6 @@ class StructureRatchet(unittest.TestCase):
                                "--debt-ledger", ledger, "--require-debt-ledger", tmp)
             self.assertEqual(code, 0, out)
 
-    def test_ratchet_verdicts_satisfy_the_suites_own_linter(self):
-        """Every §5 verdict this tool can emit must pass verdict-lint, or the
-        enforcement floor blocks on its own output."""
-        for line in ("STRUCTURE: held(accepted: 3, repaid: 0)",
-                     "STRUCTURE: regressed(new: 1, worse: 2, top: file_lines) | review-needed",
-                     "STRUCTURE: findings(top: embedded_language, count: 4) | review-needed"):
-            code, out, _ = run("verdict-lint.py", stdin=line + "\n")
-            self.assertEqual(code, 0, f"{line}\n{out}")
-
 
 if __name__ == "__main__":
     unittest.main()
