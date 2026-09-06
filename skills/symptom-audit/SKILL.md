@@ -49,7 +49,7 @@ prescribe — ordered by what the user will feel soonest.**
 Extract the precise complaint in one sentence: the operation, the felt cost, the conditions. If
 it cannot be pinned to an operation ("everything is just bad"), ask one narrowing question or
 audit the single most-used flow, stating that choice **(assumed)**. This sentence heads
-`AUDIT_SPEC.md`; everything below must trace back to it.
+the audit; everything below must trace back to it.
 
 ### Phase 2 — Map
 Orient before tracing: read the manifest for the stack, the project's own docs/ledgers for its

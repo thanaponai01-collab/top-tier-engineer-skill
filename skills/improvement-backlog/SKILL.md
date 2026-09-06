@@ -17,7 +17,7 @@ and its siblings' — this skill carries what they produced and refuses what arr
 with nothing in hand, `chief-engineer` fans out the audits first (§6, parallel gates)
 and this skill files the merged result. Implementing → `build-discipline` and peers, via
 `chief-engineer`. Deferred work *inside* a build, with a trigger that makes it due →
-`TODO_LEDGER.md`, owned by `build-discipline`; accepted structural debt → `DEBT_LEDGER.md`, owned
+a deferral row, owned by `build-discipline`; accepted structural debt → `DEBT_LEDGER.md`, owned
 by `structure-gate`. Both are linked from an issue, never re-typed as one. "Where are we?" →
 `chief-engineer`.
 
@@ -76,8 +76,8 @@ close must carry the evidence that it happened.**
    it records why, so the finding is adjudicated once rather than re-discovered every audit.
 6. **Tracker-agnostic** (Law 6, constrain process never intelligence): any tracker satisfies this
    contract, and `gh issue create --title … --body … --label …` is a worked example, not the
-   rule. The tracker of record is declared once — in `BACKLOG.md` as a pointer line, or inline
-   per the scale rule (§3). No tracker and no repo? `BACKLOG.md` holds the same rows.
+   rule. The tracker of record is declared once, per §3 — a pointer line wherever the project
+   keeps its notes, or inline. No tracker and no repo? The report holds the same rows.
 
 ## Pipeline
 
@@ -104,5 +104,5 @@ list.
 The issue dump (forty issues nobody implements); homework issues with no acceptance check; a
 **(suspected)** flag laundered into a factual title; the evidence-free close ("done" with no
 verdict line); re-auditing instead of filing what the audits already found; re-ranking a
-producer's prescription by this skill's own taste; duplicating `DEBT_LEDGER.md` or
-`TODO_LEDGER.md` rows as issues instead of linking them.
+producer's prescription by this skill's own taste; duplicating `DEBT_LEDGER.md` or deferral
+rows as issues instead of linking them.

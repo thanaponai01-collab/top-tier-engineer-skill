@@ -104,9 +104,12 @@ Own and maintain `DEBT_LEDGER.md`. One row per accepted breach:
 
 `ID | file/symbol | signal + measured value | why accepted | cost per future change that touches it | repayment trigger | date`
 
-The **repayment trigger** is mandatory and follows `TODO_LEDGER.md`'s rule — a deferral
-with no trigger is a wish. A trigger must be an *observable event*, not a date or an
-intention, so that whether it has fired is a matter of fact rather than of will.
+The **repayment trigger** is mandatory and follows build-discipline's deferral rule — a
+deferral with no trigger is a wish. A trigger must be an *observable event*, not a date or
+an intention, so that whether it has fired is a matter of fact rather than of will.
+Where the event is a measurable threshold, put it in the baseline as `repay_at` rather
+than in prose: `structure-report.py` then fires the row itself, and the trigger stops
+depending on someone re-reading this table at the right moment.
 
 The **cost** column is what makes debt legible to a director who cannot read the
 source. State it as a price paid per future change, in the units that director already

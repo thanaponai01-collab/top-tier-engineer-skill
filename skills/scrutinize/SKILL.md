@@ -20,8 +20,8 @@ what it claims, end-to-end. The diff is the entry point, never the scope.
 - **Outsider, not stranger to reason.** Borrow no confidence from the author, the PR description,
   or the plan's prose — read the artifact cold. But outsider does not mean unfamiliar = wrong:
   per Law 3 (violation ≠ deviation), before flagging an odd choice, articulate the strongest
-  reason a competent engineer might have made it, and check `DECISION_LEDGER.md` and
-  `ASSUMPTIONS.md` first — a "surprise" the ledger already explains is archaeology, not signal.
+  reason a competent engineer might have made it, and check the recorded decisions and
+  assumptions first — a "surprise" the record already explains is archaeology, not signal.
   Unrefuted, an odd choice is a question for the report, never a finding. And when this same
   session authored the delta, true outsiderness requires fresh eyes (§6): run this skill
   in a fresh context given artifacts only, or mark the report `(same-context review)`.

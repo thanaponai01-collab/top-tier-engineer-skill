@@ -11,7 +11,7 @@ breach in the baseline but absent from this table is amnesty, not acceptance, an
 
 **What this file is not.** A backlog of things that would be nice to clean up. Every row
 must name what it costs *every future change that touches it* and the **trigger** that makes
-repayment due — a deferral with no trigger is a wish (`TODO_LEDGER.md`'s rule, applied to
+repayment due — a deferral with no trigger is a wish (build-discipline's rule, applied to
 structure).
 
 **The one forbidden move.** Regenerating the baseline to turn a red gate green. A baseline

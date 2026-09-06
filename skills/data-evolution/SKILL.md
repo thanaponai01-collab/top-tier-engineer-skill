@@ -76,7 +76,8 @@ never in the same deploy as the read-switch. This is the point of no return; `sh
 with full knowledge that rollback past here is lossy.
 
 ### Phase 7 — Record
-Write **`MIGRATION_PLAN.md`**: inventory, both paths, the point of no return and its loss profile,
+Record the migration plan — inline, or as a file when §3 warrants one: inventory, both
+paths, the point of no return and its loss profile,
 batch/idempotency design, the verification evidence, and the cutover sequence. `evolve-maintain`
 logs the intervention; `ship-gate` carries the down-path as reversibility evidence.
 

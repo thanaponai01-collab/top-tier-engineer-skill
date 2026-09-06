@@ -40,7 +40,7 @@ ask top-down, batched in one message, never more than five:
 3. **Boundary-setters** — answers that define out-of-scope ("is offline mode required ever?")
 4. ~~Preference questions~~ — colors, names, nice-to-haves. Do not ask; propose defaults and mark them **(assumed)**.
 
-If the user can't answer, don't stall: record the unknown in `ASSUMPTIONS.md` with your chosen
+If the user can't answer, don't stall: record the unknown (§3) with your chosen
 default and the cost of being wrong.
 
 ### Phase 3 — Constrain
@@ -78,7 +78,7 @@ Produce two artifacts in the project root:
 5. Anti-scope
 6. Open questions (only ones the director must eventually answer)
 
-**`ASSUMPTIONS.md`** — a living ledger, one row per assumption:
+**Assumptions** — a living ledger, one row per assumption, inline or in the project's notes per §3:
 `ID | assumption | default chosen | cost if wrong | status (open / confirmed / falsified) | date`
 
 Later lifecycle skills must check this ledger; an **(assumed)** entry that turns out false is a

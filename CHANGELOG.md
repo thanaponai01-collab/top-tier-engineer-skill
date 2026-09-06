@@ -7,6 +7,39 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.2.0 — 2026-09-06 — the files nobody ever wrote
+
+2.1.0 added `check-references.sh` and called it "the one thing that cannot recur silently." It
+exempted every ALL_CAPS `.md` name, because a subject project's artifact cannot be checked for
+existence from here. Under that exemption the suite had accumulated mandates for **14 artifact
+files, 11 of which appear in zero of the eight runs in `runs/`** — `TODO_LEDGER.md` was ordered by
+name 11 times across the skills and has never once been created.
+
+- **The 11 unwritten mandates are gone**, the discipline kept: `TODO_LEDGER.md` → "a deferral
+  row", `PERF_BUDGET.md` → "the budget", `MAINT_LOG.md` → "the intervention, append-only, per
+  §3". PROTOCOL §3 already said *default to writing nothing to disk*; 2.0.0 simplified §3 and left
+  19 skills still naming filenames it no longer wanted. The skills now route to §3 instead.
+  Survivors are the five with a reader: `DEBT_LEDGER.md` (a tool parses it), `ARCHITECTURE.md`,
+  `DECISION_LEDGER.md`, `PROBLEM_BRIEF.md`, `REVIEW_LEDGER.md`.
+- **`repay_at` is documented.** `structure-report.py` has fired machine-checked repayment triggers
+  since v1.19.0 and no skill mentioned the mechanism, so no agent could use it. `structure-gate`
+  rule 4 now names it, and `build-discipline`'s deferral rule states the principle that makes it
+  matter: **prefer a trigger a machine checks over one a human must remember to re-read** — a
+  prose trigger fires only if someone re-reads the row at the right moment, which is why the prose
+  rows rotted and the one machine-checked row worked.
+- **The residue outside `skills/`**: README's paste-into-`CLAUDE.md` block listed 13 artifact names
+  as "project memory" — the first surface a fresh agent reads, contradicting §3 outright. MAP's
+  lifecycle diagram hardcoded six more; `DEBT_LEDGER.md` cited `TODO_LEDGER.md`'s rule for a file
+  that no longer existed.
+- **The exemption is now counted, not just skipped.** `check-references.sh` accumulates the
+  exempted names and caps them (`subject_max=9`, locked at the measured number, not an aspiration).
+  A mandate for a tenth artifact fails CI and names the offender. Verified by reintroducing
+  `PERF_BUDGET.md` and watching it go red — the existence of a subject's artifact cannot be checked
+  from here, but the suite's appetite for inventing them can.
+
+Mandated artifact filenames 14 → 9, all nine with a reader. Gates green: `test_tools.py` 21 pass,
+`STRUCTURE: held(accepted: 3, repaid: 0)`, references clean at 9/9 subject artifacts.
+
 ## 2.1.0 — 2026-09-06 — a gate for the residue, and the residue removed
 
 2.0.0 deleted the suite's self-policing tools and the CI that ran them. The documents describing

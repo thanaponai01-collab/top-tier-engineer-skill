@@ -20,12 +20,12 @@ The shared layer (vocabulary, laws, ledger registry, handoff chain) lives once, 
     framing  →     design  →     discipline   →     gate        →    optimize
         │             │             │  └─ invokes      │   └─ parallel:  │
   PROBLEM_      ARCHITECTURE   commits +  wire-check   │   senior-review │
-  BRIEF.md      .md +          TODO_      (5 links     │   (REVIEW_      │
-  ASSUMPTIONS   DECISION       LEDGER.md  per slice)   │   LEDGER.md)    │
-  .md           _LEDGER.md                CORRECTNESS_VERDICT.md   PERF_BUDGET.md
+  BRIEF.md      .md +          deferrals  (5 links     │   (REVIEW_      │
+                DECISION                  per slice)   │   LEDGER.md)    │
+                _LEDGER.md                the gate verdict      budgets + guards
         ▲                                                              │
         └────────────────── 6. evolve-maintain ◄───────────────────────┘
-                            │        (MAINT_LOG.md; feeds incidents
+                            │        (the maintenance log; feeds incidents
                             ▼         back into invariants)
                       debug-protocol
                   (unknown cause → proven Cause Verdict → back to evolve-maintain)
@@ -54,7 +54,7 @@ against the declared architecture **(proven)**; deletions land one scrutinized c
 time, never from the raw report.
 
 `improvement-backlog` is the crossing where findings leave the suite's custody: any audit's
-findings carried out to the project's issue tracker (or `BACKLOG.md` when none exists) — one
+findings carried out to the project's issue tracker (or the report, when none exists) — one
 issue per finding, with the tag, pin, cost, acceptance check and rank the *producing* skill
 authored arriving intact — then picked back up one at a time through `chief-engineer`, each
 issue closing only with verdict evidence. It authors no findings and re-ranks nothing; the half

@@ -26,7 +26,7 @@ hypotheses, never results.
 
 ### Phase 1 — Budget
 
-Optimization without a target never terminates. Establish or read **`PERF_BUDGET.md`**:
+Optimization without a target never terminates. Establish or read the budget (inline per §3):
 
 `dimension | metric | current | budget | source of budget | guard (test/alert) | status`
 
@@ -83,7 +83,7 @@ commit referencing the hypothesis.
 ### Phase 7 — Guard
 
 Every accepted optimization gets a guard before the run ends: a performance test, budget assertion,
-or alert that fails when the metric regresses past budget. Update `PERF_BUDGET.md` (new current,
+or alert that fails when the metric regresses past budget. Update the budget (new current,
 guard reference). An unguarded gain is a temporary gain.
 
 ## Stop conditions (the diminishing-returns ladder)

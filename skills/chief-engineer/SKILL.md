@@ -119,8 +119,8 @@ fast path compresses ceremony, never evidence.
 A spike answers a question, not a requirement. Contract: declared at the start
 (`SPIKE: <question> | timebox`); quarantined in a separate directory or branch and never wired in
 (wire-check on a spike should *fail*, by design); exempt from build-discipline's ceremony but not
-from evidence tags. Its only durable output is knowledge — the answer lands in `DECISION_LEDGER.md`
-or `ASSUMPTIONS.md` (or inline, per the scale rule); the code is deleted or kept as a labeled
+from evidence tags. Its only durable output is knowledge — the answer is recorded per §3
+(inline by default); the code is deleted or kept as a labeled
 reference. Spike code never graduates by merge: if the answer is "build it," it is rebuilt under
 build-discipline with the spike as a crib sheet.
 

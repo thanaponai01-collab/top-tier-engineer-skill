@@ -77,7 +77,8 @@ trigger, and what the director is approving if it's a one-way door. At most thre
 recommendation, and the cost of being wrong (meta-skills Discipline 3).
 
 ### Phase 6 — Record
-Write **`RELEASE_PLAN.md`**: precondition verdicts, reversibility class + rollback steps, rollout
+Record the release plan — inline, or as a file when §3 warrants one: precondition verdicts,
+reversibility class + rollback steps, rollout
 strategy, watch signals + rollback trigger, and the go/no-go decision with its date. After release,
 incidents route to `evolve-maintain`, which reads this file to know what was expected.
 

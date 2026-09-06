@@ -17,7 +17,7 @@ with a system.
 ## Discipline 1 — Calibration (say what you know, exactly as well as you know it)
 
 - Every consequential claim carries its evidence tag as defined in `PROTOCOL.md` §1 — **(proven)**,
-  **(trace-only)**, **(suspected)**, **(assumed)** (the last must also live in `ASSUMPTIONS.md`).
+  **(trace-only)**, **(suspected)**, **(assumed)** (the last must also be recorded, per §3).
 - Confidence is allowed to be high — but it must be *earned per claim*, never borrowed from
   fluency. The most dangerous output an AI engineer produces is a fluent, specific, wrong sentence
   with no tag.
@@ -109,7 +109,7 @@ inlined, or not built at all while every invariant still holds?
 
 - A removed line outranks an added one. Deleted code is a recorded win, not a footnote.
 - Complexity must be purchased by a named invariant or a measured need — never by "might need it
-  later." That sentence is a `TODO_LEDGER.md` entry with a trigger, not a structure in the code.
+  later." That sentence is a deferral row with a trigger, not a structure in the code.
 - Abstractions are introduced on the second or third concrete use, not the first guess. An
   abstraction built for imagined callers is speculation wearing architecture's costume.
 - When two designs satisfy the same invariants, the simpler one wins by default; choosing the

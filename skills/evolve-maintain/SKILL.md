@@ -28,8 +28,8 @@ Establish what is actually true before touching anything:
 - If the behavior reproduces but its cause is unknown, invoke `debug-protocol` now — diagnosis is
   its mandate, and its proven Cause Verdict is what Phase 2 classifies. Treating an unproven cause
   is symptom-whacking with ceremony.
-- Read the inherited memory: `ARCHITECTURE.md`, `DECISION_LEDGER.md`, `ASSUMPTIONS.md`,
-  `TODO_LEDGER.md`, `PERF_BUDGET.md`, `MAINT_LOG.md`, recent commits. Symptoms frequently map to
+- Read the inherited memory: whatever the project records per §3 — architecture, decisions,
+  assumptions, deferrals, budgets, past interventions — and recent commits. Symptoms frequently map to
   an assumption that quietly became false or a TODO whose trigger fired unnoticed.
 - **Drift check**: do the documents still describe the code? Document/code divergence is a
   first-class finding — a future model misled by a stale `ARCHITECTURE.md` will confidently build
@@ -89,7 +89,7 @@ Every incident makes the system harder to hurt the same way twice:
 
 ### Phase 5 — Record
 
-Append to **`MAINT_LOG.md`** — append-only, one entry per intervention:
+Record the intervention — append-only, one entry each, inline or in the project's log per §3:
 
 `ID | date | class | symptom | root cause (evidence tag) | treatment | blast radius | strengthened-by (test/invariant/probe IDs) | follow-ups (TODO IDs)`
 

@@ -27,17 +27,17 @@ and inside this skill, only **(proven)** closes a slice.
 - State the slice's **proof line** before writing code: the exact command, request, or interaction
   that will demonstrate it works, and what output counts as success. If you can't state the proof
   line, the slice is too vague to build.
-- Check `ASSUMPTIONS.md` and the decision ledger for anything this slice touches. Building on an
+- Check the recorded assumptions and decisions (§3) for anything this slice touches. Building on an
   open assumption is allowed; building on one without noticing is not.
 
 ### Phase 2 — Build
 
 - **Smallest diff that satisfies the proof line** (meta-skills Discipline 7, simplicity): prefer
   deleting or reusing over adding; introduce an abstraction on its second concrete use, not its
-  first guess; "might need it later" is a `TODO_LEDGER.md` entry with a trigger, never speculative
+  first guess; "might need it later" is a deferral with a trigger (§3), never speculative
   structure in the code.
 - **Simple first is a sequence, not a ceiling.** Take the simplest version that satisfies the proof
-  line, then let evidence buy the depth: a known ceiling on it closes as a `TODO_LEDGER.md` row
+  line, then let evidence buy the depth: a known ceiling on it closes as a deferral row
   whose trigger is **measured** (`p95 > 300 ms at 10k rows`), not feared. Structure added before
   that measurement exists is a guess about where the cost lives — the guess `perf-optimize` Phase 3
   forbids downstream, so do not manufacture it upstream.
@@ -74,9 +74,12 @@ and inside this skill, only **(proven)** closes a slice.
 - New conventions are forbidden mid-slice. If the architecture's conventions don't cover a case,
   stop, propose the convention as a ledger decision, then continue — otherwise every slice invents
   a dialect and the codebase becomes untranslatable to future models.
-- Deferred work is legal only as a ledger entry, never as a bare code comment:
-  **`TODO_LEDGER.md`**: `ID | what was deferred | why | trigger that makes it due | date`.
-  A TODO with no trigger is a wish; refuse to record it until it has one.
+- Deferred work is legal only as a recorded row, never as a bare code comment:
+  `ID | what was deferred | why | trigger that makes it due | date`, inline or in the
+  project's notes per §3. Prefer a trigger a machine checks (an assert, a test, a gate
+  threshold) over one a human must remember to re-read — a prose trigger fires only if
+  someone happens to re-read the row at the right moment, which is why prose rows rot.
+  A deferral with no trigger is a wish; refuse to record it until it has one.
 
 ### Phase 3 — Wire
 
@@ -108,7 +111,7 @@ inward. New code that exists but is unreachable is the slice's failure, not a fo
 
 ## Resuming an interrupted build
 
-Before writing anything: read `TODO_LEDGER.md`, the last slice's proof line, and `git log`/diff of
+Before writing anything: read the open deferrals, the last slice's proof line, and `git log`/diff of
 uncommitted work. Re-prove the last claimed-working slice before stacking on it
 (decay rule, PROTOCOL §1: a **(proven)** from a changed environment or code state is **(trace-only)** now).
 

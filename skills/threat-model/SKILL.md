@@ -95,8 +95,8 @@ never smuggled inline.
 ### Phase 6 — Hand off
 For each defended threat, write the **abuse-case test spec** — input, expected rejection,
 structured-failure shape — and hand it to `correctness-gate` to execute and own as a regression.
-Append the asset/boundary/abuse table to `THREAT_MODEL.md`. Before any ship, `ship-gate` reads
-this file; an unmodelled top-asset boundary blocks the deploy.
+Append the asset/boundary/abuse table to the report — a file only when §3 warrants one.
+Before any ship, `ship-gate` reads it; an unmodelled top-asset boundary blocks the deploy.
 
 ## Report
 

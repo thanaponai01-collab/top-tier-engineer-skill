@@ -117,11 +117,9 @@ Add this block to each governed project's `CLAUDE.md` so every fresh session lan
 This project is governed by the top-tier-engineer suite.
 Route every substantial engineering request through the chief-engineer skill
 (top-tier-engineer:chief-engineer) before acting.
-Project memory lives in the ledgers at the repo root (PROBLEM_BRIEF.md, ASSUMPTIONS.md,
-ARCHITECTURE.md, DECISION_LEDGER.md, TODO_LEDGER.md, DEBT_LEDGER.md, CORRECTNESS_VERDICT.md,
-PERF_BUDGET.md, DATA_TIER.md, AUDIT_SPEC.md, THREAT_MODEL.md, REVIEW_LEDGER.md,
-MIGRATION_PLAN.md, RELEASE_PLAN.md, MAINT_LOG.md) — read the ones that exist before writing
-anything. If DEBT_LEDGER.md exists, check it before taking the "smallest diff" — a diff that
+Default to writing nothing to disk: the report is the deliverable (PROTOCOL §3).
+Where this project does keep notes at the repo root, read them before writing anything.
+If DEBT_LEDGER.md exists, check it before taking the "smallest diff" — a diff that
 lands in a file listed there is a withdrawal, not a free move (§8).
 ```
 

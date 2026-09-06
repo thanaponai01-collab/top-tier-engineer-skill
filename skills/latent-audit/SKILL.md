@@ -54,8 +54,8 @@ diagnose after.**
 
 ## Procedure
 
-1. **Ground.** Read ledgers if present (`ARCHITECTURE.md`, `TODO_LEDGER.md`, `MAINT_LOG.md`
-   — a "dead" module may be a documented deferment). Executability census sets the ceiling:
+1. **Ground.** Read what the project already records (§3 — architecture, deferrals, past
+   interventions): a "dead" module may be a documented deferment. Executability census sets the ceiling:
    no runtime → deletion proofs cap at **(trace-only)** and the report's first lines say so.
 2. **Measure.** Run `graph-audit.py`; transcribe the declared layers if `ARCHITECTURE.md`
    states them. Paste the tool's verdict line into the report verbatim.
@@ -63,7 +63,7 @@ diagnose after.**
    sort survivors into the deletion manifest, the rest into the watch list.
 4. **Trace breaches.** For each layer breach, read the offending edge in execution order and
    state what it couples; frame the two remedies for the director.
-5. **Report.** Write `LATENT_REPORT.md`: tool output, manifest (with proofs), watch list,
+5. **Report.** Report inline — a file only when §3 warrants one: tool output, manifest (with proofs), watch list,
    breach table, ride-along findings with routes, clean checks. End with the verdict line.
 
 ## Verdict

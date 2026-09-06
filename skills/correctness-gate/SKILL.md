@@ -82,11 +82,12 @@ Tests passing is necessary, not sufficient — measure whether the suite can act
   wrongness that tests encode around, because tests only check what someone thought to check.
   Paste one representative input→output pair into the verdict as evidence this was done.
 - **Flake quarantine**: a test that passes and fails without code changes is removed from the gate,
-  logged in `TODO_LEDGER.md` with trigger "before next gate", and never silently retried-until-green.
+  logged as a deferral with trigger "before next gate", and never silently retried-until-green.
 
 ### Phase 5 — Verdict
 
-Produce **`CORRECTNESS_VERDICT.md`** (overwritten each gate; history is in version control):
+The verdict goes inline in the report — a file only when §3 warrants one, overwritten
+each gate (history is in version control):
 
 1. Verdict line — `GATE: pass (proven) | pass (trace-only: reasons) | fail (behaviors, evidence)`.
 2. Director summary — three sentences, plain language: what was proven, what was only reasoned,
