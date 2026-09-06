@@ -87,7 +87,7 @@ ordered by consequence (blocker → major → nit; consequence scale per `senior
 - **Change** — concrete and minimal; per Law 5 (diagnosis ships with the artifact), when the fix
   is small, ship the corrected lines here, not as homework.
 
-End every run with: `SCRUTINY: ship | fix-then-ship(top finding) | rework(reason) | reject(reason) | blocked(underspecified: what's missing)`.
+End every run with a `SCRUTINY` line (PROTOCOL §5).
 
 ## Rules
 

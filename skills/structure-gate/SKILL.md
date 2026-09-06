@@ -122,25 +122,26 @@ decision they can actually make.
 Emit the plain-language report and exactly one `STRUCTURE` verdict line. For each
 breach, name the owning skill for the wisdom call (rule 4). Write `STRUCTURE_REPORT.md`
 only when PROTOCOL §3 warrants a file — otherwise the report is the handoff trail. A
-`regressed` verdict routes to
+`regressed` finding routes to
 `build-discipline` (carrying capacity, §8 rule 4) as well as to the wisdom reviewers.
 
 ## Verdict line (PROTOCOL §5)
 
 ```
 STRUCTURE: clean(N files, M functions scanned)
-STRUCTURE: findings(top: <worst signal>, count: K) | review-needed
-STRUCTURE: held(accepted: K, repaid: R)
-STRUCTURE: regressed(new: A, worse: B, top: <signal>) | review-needed
+STRUCTURE: clean(held: K accepted, R repaid)              [ratchet mode]
+STRUCTURE: findings(top: <worst signal>, count: K)
+STRUCTURE: findings(regressed: new A, worse B, top: <signal>)
+STRUCTURE: findings(repayment-due: <id-hint>, <signal>, <current>/<threshold>)
 STRUCTURE: blocked(no analyzable source found)
 ```
 
 A `findings` verdict is **not** a fail of the author — it is a routed request for a
 wisdom review. Only `senior-review`/`scrutinize` turn a structural flag into a
 defect, and only after refuting the Chesterton's-Fence case for it. A `regressed`
-verdict is different in kind and needs no wisdom call to stand: it reports that a
+finding is different in kind and needs no wisdom call to stand: it reports that a
 number the project already agreed to freeze has moved, which is a fact, not a
-judgement. `held` is the healthy steady state on a codebase with known debt — it does
+judgement. `clean(held: …)` is the healthy steady state on a codebase with known debt — it does
 not claim the codebase is clean, only that it did not get worse.
 
 ## Boundary

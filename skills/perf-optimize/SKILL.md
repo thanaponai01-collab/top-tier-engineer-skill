@@ -102,7 +102,6 @@ cleverness exhibit.
 - Never optimize unprofiled code; never report unre-measured gains.
 - Readability is purchased back: any optimization that obscures intent must leave a one-line
   comment naming the hypothesis ID that justifies it.
-- End every run with: `OPTIMIZE: budgets-met | improved(metric: before→after, guarded) | stopped(condition N) | reverted(reason)`.
 
 ## Anti-patterns this skill exists to kill
 

@@ -86,7 +86,7 @@ logs the intervention; `ship-gate` carries the down-path as reversibility eviden
 Director-readable lead: what shape changes, whether any rollback loses data and at which step, and
 the cutover in plain sequence. Then the plan, the verification evidence, and:
 
-`MIGRATE: planned(reversible) | planned(lossy-after-step-N: …) | verified(copy, proven) | blocked(no safe backward path: director)`
+a `MIGRATE` line (PROTOCOL §5) — `done` states reversible or lossy-after-step-N and carries the §1 tag; no safe backward path is `blocked(one-way door: …)`.
 
 ## Anti-patterns this skill exists to kill
 

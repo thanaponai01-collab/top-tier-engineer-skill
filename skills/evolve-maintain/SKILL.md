@@ -46,7 +46,7 @@ Classify the intervention; the class determines the rules:
 | **Migrate** | Persistent data shape changes (schema, format, backfill) | Routes to `data-evolution` — data has no `git revert`; it owns forward+backward paths, expand-contract, and the point-of-no-return. Never edit a populated schema in place from here |
 | **Improve** | Same behavior, better structure | Behavior frozen by tests *before* the refactor; zero observable change is the success criterion |
 | **Evolve** | New/changed behavior | Routes through `problem-framing` (criteria) and `arch-design` (decisions) — maintenance mode does not grant authority to grow scope |
-| **Repay** | A `DEBT_LEDGER.md` row's own trigger fired | Auto-routed here whenever `structure-gate` reports `STRUCTURE: repayment-due(id-hint, signal, current/threshold)` (PROTOCOL §5, §8 rule 2). Contract is §8 rule 4 exactly: extract/split first — the debt pays down before anything else touches the file — then re-lock the baseline at the improved number and move the row from `DEBT_LEDGER.md`'s open table to its Repaid table, same change. Never re-lock to silence the gate without the extraction (§8 rule 3's forbidden move) |
+| **Repay** | A `DEBT_LEDGER.md` row's own trigger fired | Auto-routed here whenever `structure-gate` reports `STRUCTURE: findings(repayment-due: id-hint, signal, current/threshold)` (PROTOCOL §5, §8 rule 2). Contract is §8 rule 4 exactly: extract/split first — the debt pays down before anything else touches the file — then re-lock the baseline at the improved number and move the row from `DEBT_LEDGER.md`'s open table to its Repaid table, same change. Never re-lock to silence the gate without the extraction (§8 rule 3's forbidden move) |
 
 A `repayment-due` verdict is a detected finding with nobody assigned to act on it until this row
 exists — that gap is exactly what `Repay` closes: `structure-gate`
@@ -101,7 +101,6 @@ that model can pattern-match a new symptom against past root causes in one read.
 - No intervention proceeds unclassified; no Fix closes without root cause and regression test.
 - Reverting is always a respectable treatment — a clean revert plus a ledger entry beats a clever
   forward-fix under uncertainty.
-- End every run with: `MAINT <ID>: resolved(class, proven) | resolved(trace-only: reason) | escalated(to skill/director) | reverted`.
 
 ## Anti-patterns this skill exists to kill
 

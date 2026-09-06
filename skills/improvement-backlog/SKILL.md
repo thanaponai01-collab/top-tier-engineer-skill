@@ -97,7 +97,7 @@ Director-readable lead (Law 4, director-readable output): how many findings arri
 crossed versus were held back, what sits on top and whose ranking put it there — then the issue
 list.
 
-`BACKLOG: filed(N, top: <finding>) | picked(#id → <skill>) | closed(#id, <tag>) | clean(bar unmet) | blocked(no tracker: <reason>)`
+a `BACKLOG` line (PROTOCOL §5) — `done(filed: N, top: …)`, `done(picked: #id → <skill>)`, `done(closed: #id, <tag>)`, `clean(bar unmet)`, or `blocked(no tracker: …)`.
 
 ## Anti-patterns this skill exists to kill
 

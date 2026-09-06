@@ -60,4 +60,4 @@ Report:
 4. **Prevention** — the check to add to the build loop (e.g., "every new handler PR must show the route table diff," or a one-line smoke command to run after generation).
 5. **Residual risk** — anything left trace-only and what single command would promote it to proven.
 
-End every run with: `WIRE: connected(proven|trace-only) | broken(link N: cause) | blocked(environment)`.
+End every run with a `WIRE` line (PROTOCOL §5); `clean` carries the §1 tag, a dead link is `findings(link N: cause)`.

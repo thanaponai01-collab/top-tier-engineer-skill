@@ -101,7 +101,7 @@ Director-readable lead (Law 4): the symptom in their words, the one-sentence roo
 first thing they'll feel and after which phase. Then the diagnosis table, the phased spec, the
 clean checks, and the verdict line:
 
-`AUDIT: prescribed(N phases, top: <fix>) | clean(traced path healthy) | rerouted(to <skill>: <reason>) | blocked(symptom unpinnable)`
+an `AUDIT` line (PROTOCOL §5) — a prescription is `findings(N phases, top: <fix>)`; a reroute is `blocked(rerouted to <skill>: <reason>)`.
 
 ## Anti-patterns this skill exists to kill
 

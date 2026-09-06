@@ -152,7 +152,7 @@ what they can now do doesn't answer what they asked, lead with that — it outra
 
 Depth is available on request. End with the state line:
 
-`LIFECYCLE: <stage> | next: <skill or "director decision"> | blocked(missing: …) — if blocked`
+`LIFECYCLE: done(stage: <stage>, next: <skill or director decision>)` — or `blocked(missing: …)`, per PROTOCOL §5.
 
 ## Anti-patterns this skill exists to kill
 

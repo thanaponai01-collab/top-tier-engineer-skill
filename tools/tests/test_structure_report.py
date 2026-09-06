@@ -192,7 +192,7 @@ class StructureRatchet(unittest.TestCase):
             code, out, err = run("structure-report.py", "--baseline", b, tmp)
             self.assertNotIn("Traceback", err)
             self.assertEqual(code, 0, out)
-            self.assertIn("STRUCTURE: held(", out)
+            self.assertIn("STRUCTURE: clean(held:", out)
 
     def test_growing_an_accepted_breach_fails(self):
         """The whole point: +80 lines on a god-file is individually defensible and
@@ -203,8 +203,8 @@ class StructureRatchet(unittest.TestCase):
             self._repo(tmp, extra_lines=80)
             code, out, _ = run("structure-report.py", "--baseline", b, tmp)
             self.assertEqual(code, 1, out)
-            self.assertIn("STRUCTURE: regressed(", out)
-            self.assertIn("worse: 1", out)
+            self.assertIn("STRUCTURE: findings(regressed:", out)
+            self.assertIn("worse 1", out)
 
     def test_new_breach_elsewhere_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -216,7 +216,7 @@ class StructureRatchet(unittest.TestCase):
             self._repo(tmp, extra_file="\n".join(nested) + "\n")
             code, out, _ = run("structure-report.py", "--baseline", b, tmp)
             self.assertEqual(code, 1, out)
-            self.assertIn("new: 1", out)
+            self.assertIn("new 1", out)
 
     def test_baseline_key_survives_unrelated_edits(self):
         """The ratchet key must not be a line number, or every unrelated edit shows
@@ -240,7 +240,7 @@ class StructureRatchet(unittest.TestCase):
                 f.write("CONST = 1\n")
             code, out, _ = run("structure-report.py", "--baseline", b, tmp)
             self.assertEqual(code, 0, out)
-            self.assertIn("repaid: 1", out)
+            self.assertIn("1 repaid", out)
 
     def test_require_debt_ledger_fails_when_debt_is_unrecorded(self):
         """§8 rule 2: a baseline with no ledger is permanent amnesty. You may only

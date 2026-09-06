@@ -89,7 +89,7 @@ Tests passing is necessary, not sufficient — measure whether the suite can act
 The verdict goes inline in the report — a file only when §3 warrants one, overwritten
 each gate (history is in version control):
 
-1. Verdict line — `GATE: pass (proven) | pass (trace-only: reasons) | fail (behaviors, evidence)`.
+1. Verdict line — a `GATE` line per PROTOCOL §5, its state carrying the §1 tag.
 2. Director summary — three sentences, plain language: what was proven, what was only reasoned,
    what risk remains.
 3. Behavior table — `behavior | oracle class | result | evidence tag`.

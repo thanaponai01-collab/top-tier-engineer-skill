@@ -93,7 +93,7 @@ Director-readable lead (Law 4): the access that scales worst, in one sentence, w
 and the row count at which it becomes a problem; then the access → cost-class → plan-evidence →
 verdict table, the clean paths, and:
 
-`DATATIER: clean(N accesses, all bounded) | findings(top: <access>, class: <O(...)>) | blocked(no plan available: <reason>)`
+a `DATATIER` line (PROTOCOL §5) — `clean` names how many accesses are bounded; `findings` names the worst access and its cost class.
 
 ## Anti-patterns this skill exists to kill
 

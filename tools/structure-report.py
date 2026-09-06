@@ -75,9 +75,9 @@ VERDICT LINE (PROTOCOL §5)
 -------------------------
 Ends with exactly one machine-parseable line, noun STRUCTURE:
     STRUCTURE: clean(N files, M functions scanned)
-    STRUCTURE: findings(top: <worst signal>, count: K) | review-needed
-    STRUCTURE: held(accepted: K, repaid: R)                        [ratchet mode]
-    STRUCTURE: regressed(new: A, worse: B, top: <signal>) | review-needed
+    STRUCTURE: findings(top: <worst signal>, count: K)
+    STRUCTURE: clean(held: K accepted, R repaid)                   [ratchet mode]
+    STRUCTURE: findings(regressed: new A, worse B, top: <signal>)
     STRUCTURE: blocked(no analyzable source found)
 
 EXIT CODES
@@ -469,7 +469,7 @@ def analyze(paths, thresholds):
         exit_code = 0
     else:
         top = min(by_kind, key=_severity)
-        verdict = f"STRUCTURE: findings(top: {top}, count: {len(findings)}) | review-needed"
+        verdict = f"STRUCTURE: findings(top: {top}, count: {len(findings)})"
         exit_code = 1
 
     return {"findings": findings, "by_kind": by_kind, "all_code": all_code,
@@ -562,17 +562,16 @@ def _ratchet_verdict(rt, ledger_breach):
     if rt["new"] or rt["worse"]:
         kinds = [k.split("|")[0] for k in list(rt["new"]) + list(rt["worse"])]
         top = min(set(kinds), key=_severity)
-        return (f"STRUCTURE: regressed(new: {len(rt['new'])}, worse: {len(rt['worse'])}, "
-                f"top: {top}) | review-needed", 1)
+        return (f"STRUCTURE: findings(regressed: new {len(rt['new'])}, worse {len(rt['worse'])}, "
+                f"top: {top})", 1)
     if rt["due"]:
         k, (now, threshold) = next(iter(rt["due"].items()))
         kind, path, sym = k.split("|", 2)
         id_hint = path + (f"::{sym}" if sym else "")
-        return (f"STRUCTURE: repayment-due({id_hint}, {kind}, {now}/{threshold})", 1)
+        return (f"STRUCTURE: findings(repayment-due: {id_hint}, {kind}, {now}/{threshold})", 1)
     if ledger_breach:
-        return ("STRUCTURE: regressed(new: 0, worse: 0, top: unledgered-debt) | "
-                "review-needed", 1)
-    return (f"STRUCTURE: held(accepted: {len(rt['held'])}, repaid: {len(rt['repaid'])})", 0)
+        return ("STRUCTURE: findings(regressed: unledgered-debt)", 1)
+    return (f"STRUCTURE: clean(held: {len(rt['held'])} accepted, {len(rt['repaid'])} repaid)", 0)
 
 
 def apply_ratchet(r, baseline, ledger_path=None, require_ledger=False):
@@ -805,7 +804,7 @@ def main():
         print("Next: give every file listed there a DEBT_LEDGER.md row (what, why "
               "accepted,\ncost per future change, trigger that makes repayment due), "
               "then run with\n--baseline so the debt is frozen where it stands.")
-        print("\n" + f"STRUCTURE: held(accepted: {len(payload['entries'])}, repaid: 0)")
+        print("\n" + f"STRUCTURE: clean(held: {len(payload['entries'])} accepted, 0 repaid)")
         return 0
 
     if args.baseline:

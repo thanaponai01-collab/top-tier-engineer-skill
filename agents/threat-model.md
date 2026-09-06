@@ -17,5 +17,5 @@ Shared gate rules (isolation, method ownership, evidence, the verdict line):
    (suspected) risk, not a (proven) one — mark it so.
 
 Report: trust boundaries, then abuse cases (adversary goal → vector → defended? →
-test spec). Close with `THREAT: clear(<boundaries covered>)` |
+test spec). Close with `THREAT: clean(<boundaries covered>)` |
 `THREAT: findings(<top abuse case>, count: K)` | `THREAT: blocked(<why>)`.

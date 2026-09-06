@@ -91,7 +91,6 @@ framing failure, not a build failure — route it back here.
   never silently honor the newer statement.
 - Never let the brief exceed what's needed to start architecture. Framing that tries to design is
   scope theft from the next skill.
-- End every run with a verdict line: `BRIEF: ready | blocked-on-questions | revised(IDs changed)`.
 
 ## Anti-patterns this skill exists to kill
 

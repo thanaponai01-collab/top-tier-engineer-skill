@@ -22,11 +22,10 @@ Shared gate rules (isolation, method ownership, evidence, the verdict line):
    surface exposing the same data or operation and say whether the fix leaves them
    mutually coherent, and show from the subject's own evidence that the predicate it
    gates on is the real authority model. Your adjudication is what licenses the
-   author's `FIX: coherent(...)` line; without it that line may only say
-   `unscrutinized`.
+   author's `FIX: done(...)` line; without it that line may only say
+   `blocked(unscrutinized)`.
 
 Report: the existence verdict first, in one line — should this delta exist, and if not,
 what smaller or different thing should. Then findings, most-significant first, each
-anchored to `path:line` with its evidence tag. Close with `SCRUTINY: ship` |
-`SCRUTINY: fix-then-ship(<top finding>)` | `SCRUTINY: rework(<reason>)` |
-`SCRUTINY: reject(<reason>)` | `SCRUTINY: blocked(underspecified: <what is missing>)`.
+anchored to `path:line` with its evidence tag. Close with `SCRUTINY: clean` | `SCRUTINY: findings(top: <finding>, count: K)` |
+`SCRUTINY: blocked(underspecified: <what is missing>)`.

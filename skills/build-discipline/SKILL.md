@@ -126,7 +126,8 @@ uncommitted work. Re-prove the last claimed-working slice before stacking on it
 - A slice that grew a file already on the debt ledger says so in its report, with the before/after
   measured value. Silent growth of known debt is the failure §8 exists to catch, and a
   proven slice is not a licence for it.
-- End every slice with: `SLICE <name>: proven | trace-only(reason) | failed(at link/phase)`.
+- End every slice with a `SLICE <name>` line (PROTOCOL §5): `done` carries the §1 tag, a slice that
+  did not hold is `findings(at link/phase)`.
 
 ## Anti-patterns this skill exists to kill
 

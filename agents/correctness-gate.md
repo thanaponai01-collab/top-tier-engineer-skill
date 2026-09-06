@@ -19,4 +19,4 @@ Shared gate rules (isolation, method ownership, evidence, the verdict line):
 
 Report: the oracle table (behavior → expected → observed → pass/fail), then the
 residual risk — what you could NOT prove and why. Close with
-`GATE: pass(<tag>)` or `GATE: fail(<behaviors>, <evidence>)`.
+`GATE: clean(<tag>)` or `GATE: findings(<behaviors>, <evidence>)`.

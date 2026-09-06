@@ -109,7 +109,6 @@ settled questions or repeating reverted mistakes.
   entry first — the ledger leads, the document follows.
 - Technology names appear only inside decisions; boundaries and contracts are described
   technology-free so they survive stack changes.
-- End every run with: `DESIGN: ready | blocked-on-director(one-way doors: IDs) | revised(IDs)`.
 
 ## Anti-patterns this skill exists to kill
 

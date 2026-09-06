@@ -110,36 +110,30 @@ before `data-evolution` produces its plan.
 
 ## 5. Verdict lines
 
-Every run ends with exactly one machine-readable line: `NOUN: state`. One noun per skill, so a
-single grep recovers what happened:
+Every run ends with exactly one machine-readable line: `NOUN: state`. The noun is the skill's own,
+from §4's first column, upper-cased — `SLICE <name>` and `MAINT <ID>` carry their subject; §7 owns
+`FIX <id>`. One grep recovers every run:
 
-`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|BACKLOG|THREAT|SHIP|MIGRATE|MAINT|FIX)( [^:]+)?:`
+`^[A-Z]+( [^:]+)?: (done|clean|findings|blocked)`
 
-| Noun | Owner | States |
-|---|---|---|
-| `LIFECYCLE` | chief-engineer | `<stage> \| next: <skill/director> \| blocked(missing: …)` |
-| `BRIEF` | problem-framing | `ready \| blocked-on-questions \| revised(IDs)` |
-| `DESIGN` | arch-design | `ready \| blocked-on-director(IDs) \| revised(IDs)` |
-| `SLICE <name>` | build-discipline | `proven \| trace-only(reason) \| failed(at link/phase)` |
-| `WIRE` | wire-check | `connected(tag) \| broken(link N: cause) \| blocked(environment)` |
-| `GATE` | correctness-gate | `pass(tag) \| fail(behaviors, evidence)` |
-| `CAUSE` | debug-protocol | `proven(cause) \| trace-only(reason) \| unreproduced` |
-| `AUDIT` | symptom-audit | `prescribed(N phases, top: …) \| clean(path healthy) \| rerouted(to skill: reason) \| blocked(symptom unpinnable)` |
-| `OPTIMIZE` | perf-optimize | `budgets-met \| improved(…) \| stopped(N) \| reverted(reason)` |
-| `DATATIER` | data-tier | `clean(N bounded) \| findings(top: …, class: O(…)) \| blocked(no plan: …)` |
-| `REVIEW` | senior-review | `shippable \| shippable-with-findings(top) \| not-shippable(blocker)` |
-| `SCRUTINY` | scrutinize | `ship \| fix-then-ship(top) \| rework(reason) \| reject(reason) \| blocked(underspecified)` |
-| `STRUCTURE` | structure-gate | `clean(N files, M functions) \| findings(top: <signal>, count: K) \| held(accepted: K, repaid: R) \| regressed(new: A, worse: B, top: <signal>) \| repayment-due(id-hint, signal, current/threshold) \| blocked(no analyzable source)` |
-| `LATENT` | latent-audit | `clean(N modules traced) \| findings(dead: A, unused: B, layer-breaches: C) \| blocked(no analyzable source)` |
-| `THREAT` | threat-model | `clear(N modelled, M defended) \| findings(top: …) \| blocked(boundary unmappable: …)` |
-| `SHIP` | ship-gate | `go(strategy, rollback tag) \| stage(canary plan) \| hold(blocker) \| escalated(one-way door: …)` |
-| `MIGRATE` | data-evolution | `planned(reversible) \| planned(lossy-after-step-N) \| verified(copy) \| blocked(no safe backward path)` |
-| `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
-| `BACKLOG` | improvement-backlog | `filed(N, top: …) \| picked(#id → skill) \| closed(#id, tag) \| clean(bar unmet) \| blocked(no tracker: …)` |
-| `FIX` | §7 (shared) | `coherent(surfaces: …) \| incoherent(named: …) \| unscrutinized` |
+There are four states and no others:
 
-`STRUCTURE` and `LATENT` are emitted by both a tool and its skill; the skill's line wins, and its
-counts may only shrink.
+| State | Means |
+|---|---|
+| `done` | You made the thing you were asked for. |
+| `clean` | You measured and found nothing wrong. |
+| `findings` | You found something wrong — in the subject, or in your own work. |
+| `blocked` | You could not finish. Say what would unblock it. |
+
+Everything else the line needs to carry goes in one parenthesis after the state, free-form and
+specific: `done(3 slices, proven)`, `clean(412 files, 1,880 functions)`, `findings(top: 180-line
+function, count: 7)`, `blocked(no tracker configured)`. §1's tag goes there too wherever proof is
+in question. A skill that both makes and measures ends `done` and still owes a gate's own line.
+
+Two parentheticals are routing, not prose, and appear exactly as written when they apply:
+`findings(repayment-due: id-hint, signal, current/threshold)` (§8 — routes to evolve-maintain) and
+`blocked(one-way door: …)` (routes to the director). Where a tool and its skill both emit a line,
+the skill's wins, and its counts may only shrink.
 
 ## 6. Fresh eyes
 
@@ -169,9 +163,9 @@ A fix is a change like any other, even uncommitted. Three rules:
 2. **Gate on something real.** Show from the subject's own code that the thing you check
    (membership, role, ownership) is actually how it decides who may do what — not a decorative
    field anyone can write.
-3. **Close with a FIX line.** `FIX <id>: coherent(surfaces: …) | incoherent(named: …) |
-   unscrutinized`. `coherent` may only be claimed after rules 1–2 ran under a scrutiny pass in the
-   same transcript. `unscrutinized` is the honest weak close.
+3. **Close with a FIX line.** `FIX <id>: done(surfaces: …)` — claimable only after rules 1–2 ran
+   under a scrutiny pass in the same transcript. Otherwise `findings(inconsistent: …)`, or the
+   honest weak close, `blocked(unscrutinized)`.
 
 ## 8. Don't let known problems grow
 

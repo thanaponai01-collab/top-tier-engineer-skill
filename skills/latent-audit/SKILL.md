@@ -68,8 +68,7 @@ diagnose after.**
 
 ## Verdict
 
-`LATENT: clean(N modules traced) | findings(dead: A, unused: B, layer-breaches: C) |
-blocked(no analyzable source)` — one line, machine-parseable, per PROTOCOL §5. The noun is
+One `LATENT` line per PROTOCOL §5 — `findings(dead: A, unused: B, layer-breaches: C)`. The noun is
 also emitted by `tools/graph-audit.py`; the skill's line supersedes the tool's when the
 disconnection ritual demotes candidates (counts may only shrink from tool to skill, never
 grow — a growing count means judgment was substituted for measurement).

@@ -84,7 +84,7 @@ incidents route to `evolve-maintain`, which reads this file to know what was exp
 
 ## Report
 
-`SHIP: go(strategy, rollback proven|trace-only) | stage(canary plan) | hold(blocker) | escalated(one-way door: …)`
+a `SHIP` line (PROTOCOL §5) — a go is `done(<strategy>, rollback <tag>)`, a hold is `findings(<blocker>)`, and an undecidable one-way door is `blocked(one-way door: …)`.
 
 ## Anti-patterns this skill exists to kill
 

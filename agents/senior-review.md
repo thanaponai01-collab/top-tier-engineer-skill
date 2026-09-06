@@ -16,5 +16,4 @@ Shared gate rules (isolation, method ownership, evidence, the verdict line):
 2. Deduplicate by root cause; cap the list so signal survives.
 
 Report: findings, most-significant first, each anchored to `path:line` with the reason.
-Close with `REVIEW: shippable` | `REVIEW: shippable-with-findings(count: K)` |
-`REVIEW: not-shippable(<blocker>)`.
+Close with `REVIEW: clean` | `REVIEW: findings(top: <finding>, count: K)`.

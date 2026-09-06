@@ -41,7 +41,7 @@ Shared vocabulary and laws: `PROTOCOL.md` at the suite root.
 
 Make the failure happen on demand, under recorded conditions (input, environment, state, timing).
 Capture the exact failure signature — message, wrong value, stack, observable difference from
-expected. If reproduction fails after honest effort: stop, report **`CAUSE: unreproduced`**, and
+expected. If reproduction fails after honest effort: stop, report **`CAUSE: blocked(unreproduced)`**, and
 hand to `evolve-maintain` to add the log/metric/probe that would make it reproducible. Debugging
 an unreproduced complaint is guessing with a debugger attached.
 
@@ -95,7 +95,7 @@ Produce the **Cause Verdict** (in the report, and as the root-cause input to `ev
 3. Why it wasn't caught earlier — missing oracle, unwired guard, false assumption, observability
    gap. This line decides which lifecycle skill receives the prevention work.
 4. Experiment log — every hypothesis tried, including the dead ones.
-5. Verdict line: `CAUSE: proven(<one-line cause>) | trace-only(<reason>) | unreproduced`.
+5. Verdict line: a `CAUSE` line per PROTOCOL §5 — `findings(<cause>, <tag>)`, or `blocked` when unreproduced.
 
 The fix routes to `evolve-maintain` (which classifies it and executes via `build-discipline` +
 `correctness-gate`). This skill never ships the fix alone — but per Law 5 (diagnosis ships with the artifact), when the fix is obvious

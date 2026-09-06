@@ -7,6 +7,26 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.3.0 — 2026-09-06 — four words instead of seventy
+
+§5 taught twenty nouns with their own hand-written state vocabularies — `ready`, `shippable`,
+`budgets-met`, `fix-then-ship`, `held`, `prescribed`, `unreproduced`, seventy strings in all — and
+then every skill restated its own row, violating §2 rule 1 in the one section that exists to be
+grepped. Nothing parsed them; the states were prose wearing a machine-readable costume.
+
+- **Four states, no others: `done | clean | findings | blocked`.** `done` for skills that make
+  something, `clean`/`findings` for skills that measure, `blocked` for either. Everything the old
+  state word carried moves into the one parenthesis after it, free-form, where it was always more
+  specific anyway (`findings(top: 180-line function, count: 7)`). §1's tag rides there too.
+- **The per-skill copies are gone.** Twenty "End every run with: …" lines shrank to a pointer at
+  §5 or vanished; the noun now comes from §4's first column, upper-cased.
+- **Two parentheticals stay verbatim because they route**, not because they read well:
+  `findings(repayment-due: …)` (§8 → evolve-maintain) and `blocked(one-way door: …)` (→ director).
+- **`structure-report.py` speaks the same four words.** `held(accepted: K, repaid: R)` →
+  `clean(held: K accepted, R repaid)`; `regressed(…)` and `repayment-due(…)` are now `findings(…)`;
+  the trailing `| review-needed` is dropped — §5 allows one parenthesis, and the routing is the
+  skill's job. Exit codes unchanged. `graph-audit.py` already conformed.
+
 ## 2.2.0 — 2026-09-06 — the files nobody ever wrote
 
 2.1.0 added `check-references.sh` and called it "the one thing that cannot recur silently." It

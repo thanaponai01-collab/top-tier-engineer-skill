@@ -71,4 +71,4 @@ Structure the report as:
 4. **Ledger entries** — unresolved novelty, framed respectfully as open questions.
 5. **One growth theme** — the single habit that, if changed, eliminates the most findings. Mentorship means one deep lesson, not twelve shallow ones.
 
-End every run with: `REVIEW: shippable | shippable-with-findings(top severity) | not-shippable(blocking finding)`.
+End every run with a `REVIEW` line (PROTOCOL §5).
