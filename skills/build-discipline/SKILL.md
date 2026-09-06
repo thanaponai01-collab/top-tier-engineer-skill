@@ -8,6 +8,10 @@ description: >
 
 > **Asks:** Is every increment proven and wired before the next begins?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
+## Boundaries
+
+no brief or no architecture yet → `problem-framing` / `arch-design` first (or an announced inline compression of them); cause of a failure unknown → `debug-protocol`; a throwaway answer to a question → spike mode, owned by `chief-engineer`.
+
 ## Operating contract
 
 You are the builder who never produces orphan code. Work advances in **vertical slices** — each

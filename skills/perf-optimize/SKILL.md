@@ -1,7 +1,7 @@
 ---
 name: perf-optimize
 description: >
-  Make a working system measurably better along an explicit budget — latency, throughput, memory, cost. Use when the user says something is slow/laggy, or asks to "optimize", "speed up", "reduce cost", "make it scale". Never optimize by intuition.
+  Make a working system measurably better along an explicit budget — latency, throughput, memory, cost — and gate the cost class of data access before it ships. Use when the user says something is slow/laggy, asks to "optimize", "speed up", "reduce cost", "make it scale", or asks "is this an N+1 / will this query scale / should I add an index". Never optimize by intuition.
 ---
 
 # Performance & Optimization
@@ -10,7 +10,7 @@ description: >
 
 ## Boundaries
 
-if the system cannot be run or profiled here, or the complaint is a felt symptom spanning speed and cohesion, route to `symptom-audit` first — its spec's perf phases then execute under this skill's discipline.
+if the system cannot be run or profiled here, or the complaint is a felt symptom spanning speed and cohesion, route to `symptom-audit` first — its spec's perf phases then execute under this skill's discipline. The *shape* of stored data changing → `data-evolution` (Phase 3b gates how that shape is accessed, not how it migrates).
 
 ## Operating contract
 
@@ -50,11 +50,39 @@ least measured. Budgets trace to acceptance criteria where possible; otherwise m
 Measure where the cost actually lives before forming any opinion about where it lives. Use the
 cheapest adequate instrument (profiler, query analyzer, timing instrumentation, token logging) and
 record the top contributors. The profile is the only legitimate source of optimization targets —
-intuition is admissible only for generating *hypotheses to test*, never targets to change. When the
-top contributor is a database access, its *cost class* (does it scale worse than the data?) is
-owned by `data-tier`, which judges the execution plan before a budget exists; its findings arrive
-here as Phase-4 hypotheses with a wall-clock budget to attach. This skill measures the millisecond
-gain; that skill proves the growth class.
+intuition is admissible only for generating *hypotheses to test*, never targets to change.
+
+### Phase 3b — Cost class (data access)
+
+A query fast on a thousand rows takes the system down at a million, and the difference is visible
+in the *plan*, not the stopwatch — so data access is judged by how its cost **grows**, before any
+millisecond is measured. This phase runs on its own, ahead of Phase 1, whenever the request is a
+data-access change with no budget yet ("N+1?", "add an index", "will this query scale"); it then
+reports its own findings and hands the ones needing a wall-clock number back to Phase 4.
+
+1. **Surface** every query, ORM call, join and index the change adds or alters, plus every loop or
+   collection path that *could* issue a query per item — from the diff and the access layer, never
+   from memory. Note which tables grow with usage; on a fixed-size lookup table cost class is moot.
+2. **Classify** each access as **flat** (indexed point lookup), **result-bounded** (index range
+   scan), **table-bounded** (sequential scan) or **unbounded/product** (N+1 across a collection, or
+   a join with no selective index). Table-bounded or unbounded on a growing table is a candidate
+   finding *even if it is fast today* — today's row count is not tomorrow's. A query inside a loop
+   is N+1 until proven otherwise; the fix is a join, a batch fetch, or an eager-load — name it.
+3. **Plan, don't time.** The execution plan is the oracle: obtain it from the database's own
+   facility (`EXPLAIN`, `EXPLAIN ANALYZE`, or this engine's equivalent — derive it, carry no
+   engine-specific tuning folklore) and read it for sequential scans where an index should serve,
+   confirmation that the intended index is used, estimate-vs-actual row gaps, and nested loops over
+   large inputs. Never assert an index is used — cite the plan line. Reading the SQL alone is
+   **(trace-only)**; an executed plan is **(proven)**.
+4. **Representative distribution, not seed data.** A plan over ten rows lies — the optimizer picks a
+   sequential scan when the table is tiny. Where a transient instance can be stood up, load a
+   representative distribution (cardinality, skew, null density), re-plan, and say which
+   distribution; otherwise the finding caps at **(trace-only)** with the one `EXPLAIN` that would
+   promote it. A clean access path is a finding too: it says where *not* to spend effort.
+5. **Prescribe** per finding: the access, its cost class, the plan evidence and its tag, the root
+   cause (missing index, query-in-loop, non-selective predicate, unbounded result set), and the
+   bounded fix in the project's conventions (Law 5). An index added to a *populated* table is a
+   schema change — hand the migration to `data-evolution`; this phase specifies which index and why.
 
 ### Phase 4 — Hypothesize
 
@@ -107,4 +135,6 @@ cleverness exhibit.
 
 Optimizing by vibes; averages hiding tail pain; stacked changes with unattributable results;
 unguarded gains that regress in a month; micro-optimizing before algorithm-level wins; treating
-token/inference cost as invisible; sacrificing correctness for speed.
+token/inference cost as invisible; sacrificing correctness for speed; judging a query by its
+milliseconds on seed data instead of its cost class; missing the query-in-a-loop because each
+individual query looks cheap.

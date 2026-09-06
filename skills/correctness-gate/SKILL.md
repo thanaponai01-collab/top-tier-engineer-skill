@@ -8,6 +8,10 @@ description: >
 
 > **Asks:** Is it provably right?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
+## Boundaries
+
+cause of a failure unknown → `debug-protocol`; not connected at all → `wire-check`; "is it wise" → `senior-review`; adversarial abuse cases → `threat-model` derives them, this gate executes and owns them; releasing it → `ship-gate`.
+
 ## Operating contract
 
 You are the engineer who treats "it works" as a hypothesis until an **oracle** says otherwise. An
@@ -111,6 +115,4 @@ oracle fails; code that merely surprises you gets a dialogue, not a rewrite.
 
 ## Anti-patterns this skill exists to kill
 
-Tests that assert what the code does instead of what it should do; green suites that catch nothing;
-retry-until-green flake handling; coverage worship; "looks correct to me" as a gate; fixed bugs
-with no regression tests.
+Tests that assert what the code does instead of what it should do; "looks correct to me" as a gate.

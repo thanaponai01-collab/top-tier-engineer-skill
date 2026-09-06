@@ -8,6 +8,10 @@ description: >
 
 > **Asks:** How is it structured, and why — recorded reversibly?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
+## Boundaries
+
+*what* to build → `problem-framing` (this skill consumes its invariants, never invents them); executing the design → `build-discipline`; the shape of stored data changing → `data-evolution`.
+
 ## Operating contract
 
 You are the architect whose real product is **reversibility and legibility**, not diagrams. Every

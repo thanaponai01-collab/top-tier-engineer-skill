@@ -38,7 +38,7 @@ never loads it.
 ## Phase 0 — Locate and load
 
 - Find the suite root per `PROTOCOL.md` §0 — plugin install: two directories above this file.
-  Read `PROTOCOL.md` once per session; `MAP.md` only when orienting a human to the suite itself.
+  Read `PROTOCOL.md` once per session.
 - To run a routed skill, open `<root>/skills/<name>/SKILL.md` and execute its contract in this
   session — skills are contracts to read, not functions to call. If the file is missing, perform
   the procedure from PROTOCOL §4's registry and say the contract file was unavailable.
@@ -80,7 +80,7 @@ Census the project root before classifying anything:
 | "It's broken / wrong output / crashes / worked yesterday" — cause unknown | debug-protocol → evolve-maintain |
 | Bug with known cause, dependency update, refactor, incident | evolve-maintain |
 | "Slow / expensive / heavy / optimize" — runnable system, single measurable dimension | perf-optimize (only past a passed gate; else gate first) |
-| "N+1 / will this query scale / add an index / does this endpoint hit the DB hard" — a data-access change | data-tier (gates cost class from the plan, before a budget exists) |
+| "N+1 / will this query scale / add an index / does this endpoint hit the DB hard" — a data-access change | perf-optimize, Phase 3b alone (gates cost class from the plan, before a budget exists) |
 | "Feels slow / clunky / takes forever" — an existing codebase + a felt complaint; unrunnable here, or spanning speed + cohesion + UX | symptom-audit → its spec executes via build-discipline / perf-optimize |
 | "Review / audit this codebase / is this code good" — one lens, one report, no durable backlog asked for | senior-review |
 | "Find dead code / delete unused components / are the layers respected / find bugs" — existing codebase, nothing felt wrong | latent-audit (mechanical floor: `tools/graph-audit.py`; deletions land via scrutinize → build-discipline) |
@@ -89,8 +89,8 @@ Census the project root before classifying anything:
 | "Deploy / release / ship it / push to prod / cut a version" | ship-gate (after correctness-gate, and threat-model if a trust boundary is touched) |
 | "Migration / alter schema / rename column / backfill / change the model with prod data" | data-evolution (invoked by evolve-maintain or ship-gate) |
 | "Second opinion / scrutinize this PR, diff, plan, design doc" — a delta, not a codebase | scrutinize |
-| "Find improvements in every area / give me a backlog" — **several lenses at once, and the findings must outlive this session** (the discriminator against the three rows above, each of which is one lens reported once) | the owning audits per area (§6-parallel where isolated) → improvement-backlog carries the merged findings out |
-| "File these as issues / output findings to the tracker / implement issue #N / work the backlog" | improvement-backlog (it authors no findings; a picked issue re-enters here for routing) |
+| "Find improvements in every area / give me a backlog" — **several lenses at once, and the findings must outlive this session** (the discriminator against the three rows above, each of which is one lens reported once) | the owning audits per area (§6-parallel where isolated), then this skill carries the merged findings to the tracker per §3 |
+| "File these as issues / output findings to the tracker / implement issue #N / work the backlog" | this skill: file per §3's carry-never-re-author rules (findings come from the owning audits, never from here), then route each picked issue as its own request and close it with the verdict line + executed acceptance check |
 | "Where are we / what's next / resume" | this skill alone: state report + recommended next stage |
 | Question / explanation only — nothing will be built or changed | no lifecycle skill: answer directly, evidence-tagged; meta-skills still bind; no ledgers |
 | "Explore / try / prototype / is X even possible?" | spike mode (below): timeboxed, quarantined, knowledge-only output |

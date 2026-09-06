@@ -10,7 +10,7 @@ description: >
 
 ## Boundaries
 
-known-cause fixes → `evolve-maintain`; "is it even connected?" questions → `wire-check`.
+known-cause fixes → `evolve-maintain`; "is it even connected?" questions → `wire-check`; working-but-slow → `symptom-audit` or `perf-optimize`. Where the environment also carries a skill specialised in *constructing* a fast, deterministic pass/fail repro loop, Phase 1 may delegate to it and return here — the loop is a tactic, and this skill still owns the two-way proof that names the cause.
 
 Debugging is not fixing. This skill ends when the cause of an observed failure is **named and
 proven** — the fix itself is a separate act with its own discipline. Mixing the two is how
@@ -103,7 +103,5 @@ and small, hand off and fix in the same response, with the two acts clearly sepa
 
 ## Anti-patterns this skill exists to kill
 
-Shotgun debugging (change things until the symptom hides); fixing the symptom at the layer where it
-*appears* instead of where it *originates*; "cannot reproduce, closed"; debugging by re-reading the
-same code harder instead of running an experiment; stacked changes; causes asserted from one-way
-evidence; diagnosis that evaporates instead of becoming a regression test.
+Fixing the symptom at the layer where it *appears* instead of where it *originates*; "cannot
+reproduce, closed"; re-reading the same code harder instead of running an experiment.

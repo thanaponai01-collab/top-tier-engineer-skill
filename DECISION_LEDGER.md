@@ -321,3 +321,40 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   both restate "skill-body change ⇒ never a patch"; `tools/tests/test_cadence_check.py` gains a
   test pinning a patch-version skill-body change with no live run as a gap, so the ruling is
   enforced in code, not left for a reader to notice drift a second time.
+
+## D008 — `improvement-backlog` and `data-tier`: owning skills, or folds? (supersedes D006)
+
+- **date:** 2026-09-06
+- **decision:** **Fold both.** `improvement-backlog` becomes three sentences in `PROTOCOL.md` §3
+  (carry-never-re-author, no-acceptance-check-no-issue, close-with-evidence) plus one routing row in
+  `chief-engineer`; `data-tier` becomes `perf-optimize` **Phase 3b — Cost class (data access)**,
+  runnable on its own ahead of Phase 1 when there is no budget yet. Both skill directories are
+  deleted; the `BACKLOG` and `DATATIER` nouns leave §5 with them.
+- **forces:** an over-engineering review of the whole suite, run at the director's request with the
+  explicit goal *"make all the skills get used more and fuller."* Two skills were the least-fired in
+  the suite and for the same structural reason: neither owns a decision. `improvement-backlog`'s own
+  contract opens *"this skill authors no findings and re-ranks nothing"* — a 108-line clerk between
+  a producer that ranked the finding and a tracker that stores it, which cannot fire at all without
+  a tracker configured. `data-tier` is one leverage class of `perf-optimize`'s own Phase-4 ladder
+  ("do less work"), and `perf-optimize` already handed off to it by name. **(proven)** — both
+  handoffs are single edges in §4 with exactly one upstream caller each.
+- **options:**
+  1. *Keep both, sharpen the descriptions* — cheapest, reversible. Rejected: it treats a
+     discoverability symptom, and D006's own boundary watch predicted this outcome ("if a run ever
+     finds that filing an issue requires re-deciding a finding's rank, this mandate is the wrong
+     shape"). What a run found instead is the mirror image: filing required *no* decision at all.
+  2. *Fold both* **(chosen)** — the residue each owns is real and is kept verbatim; what goes is the
+     dispatch hop, the second registry row, and the ceremony of naming a skill to do a paragraph's
+     work. `perf-optimize` gains the data-access triggers in its own description, so the questions
+     that used to reach `data-tier` now reach a skill that fires on them.
+  3. *Delete the residue too* — rejected: the close-with-evidence rule and the plan-not-the-stopwatch
+     rule are both field-earned (D006's own evidence, and the cost-class runs), and neither survives
+     anywhere else in the suite.
+- **reversibility class:** two-way. Both folds are prose moves in git; re-promoting either to a skill
+  is a directory and two registry rows. The expensive direction is neither — it is the drift where
+  a fold quietly loses the rule it absorbed, which is why the residues are quoted, not summarised.
+- **evidence tag:** **(proven)** for the structural claims (§4 edges, the contracts' own words);
+  **(suspected)** for the claim that folding raises how often the rules actually fire — the next
+  backlog and N+1 runs settle it.
+- **status:** decided — shipped in 2.4.0. D006 is superseded, not erased: its reasoning about the
+  unowned crossing stands, and §3 now carries what it earned.

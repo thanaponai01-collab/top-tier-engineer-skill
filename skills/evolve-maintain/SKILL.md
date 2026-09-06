@@ -104,6 +104,5 @@ that model can pattern-match a new symptom against past root causes in one read.
 
 ## Anti-patterns this skill exists to kill
 
-Symptom-whacking without root cause; quick fixes exempt from build discipline; deleting code that
-something still calls; stale docs that gaslight future maintainers; incidents that teach nothing;
-scope growth disguised as maintenance.
+Deleting code that something still calls; stale docs that gaslight future maintainers; scope growth
+disguised as maintenance.

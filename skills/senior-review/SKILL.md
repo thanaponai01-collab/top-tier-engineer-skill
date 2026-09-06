@@ -8,6 +8,10 @@ description: >
 
 > **Asks:** Is it wise?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
+## Boundaries
+
+a not-yet-landed delta (PR, diff, plan) → `scrutinize`; measured structural shape → `structure-gate`; proof of correctness → `correctness-gate`; a felt complaint → `symptom-audit`; dead code and layer breaches → `latent-audit`. This skill judges a whole codebase and mentors its author.
+
 A review conducted the way a principal engineer at a top-tier organization would conduct it: rigorous on evidence, humble about unfamiliarity, and always ending in mentorship — the developer should leave knowing not just *what* is wrong but *why* it matters and *how* to never write it again.
 
 ## Operating Contract

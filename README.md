@@ -9,8 +9,8 @@ running it.
 ```
 top-tier-engineer/
 ├── README.md            ← you are here
-├── MAP.md               ← the picture: how the twenty skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once).
+│                          §4 is the picture too: who consumes what, and who runs next.
 │                          Rules only — every run loads this, so it stays lean.
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
 ├── agents/              ← §6 parallel gates as isolated, artifacts-only subagents (fresh eyes, reproducible)
@@ -33,14 +33,12 @@ top-tier-engineer/
     ├── correctness-gate/    ← stage 4: is it provably right?
     ├── debug-protocol/      ← why is it wrong? (proven cause before any fix)
     ├── symptom-audit/       ← where does the felt complaint live? (trace → prescribe)
-    ├── perf-optimize/       ← stage 5: measured, guarded improvement
-    ├── data-tier/           ← does this query scale better than the data grows? (cost class)
+    ├── perf-optimize/       ← stage 5: measured, guarded improvement + the cost class of data access
     ├── threat-model/        ← what can an adversary make it do that it must not?
     ├── senior-review/       ← parallel gate: is it wise?
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
     ├── structure-gate/      ← service gate (also runs in CI): is it spaghetti, and did it get worse?
     ├── latent-audit/        ← no-symptom sweep: what is provably dead, mislayered, or dormantly broken?
-    ├── improvement-backlog/ ← the crossing: findings → tracked issues intact, drained one by one, closed with evidence
     ├── data-evolution/      ← how does stored data change shape without loss, reversibly?
     ├── ship-gate/           ← is releasing it reversible, observable, bounded?
     ├── evolve-maintain/     ← stage 6: years-long health, incidents → invariants
@@ -54,14 +52,14 @@ You don't pick skills. You talk to the engineer:
 - "I want an app that..." → routed through framing → design → build → gate
 - "It's broken and I don't know why" → debug-protocol proves the cause, evolve-maintain fixes it
 - "The app feels slow/clunky" → symptom-audit traces the complaint and prescribes a phased spec
-- "Will this query scale / is this an N+1?" → data-tier judges cost class from the execution plan
+- "Will this query scale / is this an N+1?" → perf-optimize's cost-class phase judges it from the execution plan, before a stopwatch exists
 - "Is this secure / can this be abused?" → threat-model walks every trust boundary as an adversary
 - "Is this code good?" → senior-review
 - "Is this a mess / spaghetti / maintainable?" → structure-gate measures the structural shape (and is the gate CI runs unattended)
 - "How did this file get to 4,000 lines when every commit looked fine?" → structure-gate's debt ratchet freezes accepted debt in `DEBT_LEDGER.md` so it cannot grow by defensible increments (§8)
 - "Find dead code / are the layers respected?" (nothing feels wrong) → latent-audit sweeps the import graph for dead weight and layer breaches
 - "Look at this PR / plan before it lands" → scrutinize
-- "File the findings as issues / work through the backlog / implement issue #N" → improvement-backlog carries the audits' findings out to your tracker intact, hands each back for implementation one at a time, and closes it only with evidence
+- "File the findings as issues / work through the backlog / implement issue #N" → chief-engineer carries the audits' findings out to your tracker intact (PROTOCOL §3), hands each back for implementation one at a time, and closes it only with evidence
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
 - "Change the schema / run a migration" → data-evolution evolves the data shape without loss
 - "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step
@@ -86,7 +84,7 @@ install the plugin:
 (Use the absolute path to wherever this folder lives.) Installed this way, the skills are
 namespaced — `top-tier-engineer:chief-engineer`, `top-tier-engineer:senior-review`, etc. — so they
 never collide with similarly named standalone skills, and the folder stays intact so every skill
-can read `PROTOCOL.md` + `MAP.md` at the suite root.
+can read `PROTOCOL.md` at the suite root.
 
 **From GitHub (any machine):** the same marketplace lives in this repo, so on a machine with `gh`/git
 authenticated to the account, install straight from GitHub:
@@ -99,7 +97,7 @@ authenticated to the account, install straight from GitHub:
 (The repo is private, so the machine must have access to it.)
 
 **Fallback (loose skills):** copy each folder under `skills/` into `~/.claude/skills/` and keep
-`PROTOCOL.md` + `MAP.md` at a stable path the skills can read (e.g. `~/.claude/skills/`). Note this
+`PROTOCOL.md` at a stable path the skills can read (e.g. `~/.claude/skills/`). Note this
 forfeits namespacing, so it will clash with any existing `senior-review` / `wire-check` skills.
 
 **Cursor:** add the `SKILL.md` files as project rules, or paste `PROTOCOL.md` + the relevant

@@ -1,7 +1,7 @@
 ---
 name: scrutinize
 description: >
-  Outsider second opinion on a not-yet-landed delta — plan, PR, diff, design doc. Asks whether the change should exist, then traces the real code path to verify it does what it claims. Use for "scrutinize/review/audit/sanity-check this PR/diff/plan".
+  Outsider second opinion on a delta that has NOT landed yet — a PR, a diff, a plan, a design doc. Asks whether the change should exist, then traces the real code path to verify it does what it claims. Use for "scrutinize / sanity-check / second opinion on this PR, diff, or plan", or before a change costs a build. For a whole codebase, use senior-review instead.
 ---
 
 # Scrutinize

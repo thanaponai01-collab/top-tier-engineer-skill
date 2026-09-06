@@ -1,6 +1,6 @@
 # PROTOCOL.md — the shared rules
 
-Everything the twenty skills share, stated once. A skill never repeats what is written here.
+Everything the eighteen skills share, stated once. A skill never repeats what is written here.
 If a skill and this file disagree, this file wins.
 
 ## 0. Where this lives, and how a skill runs
@@ -73,6 +73,17 @@ When files are warranted, two cover most projects:
 | `NOTES.md` | What we're building, what we decided and why, what we assumed, what's deferred |
 | `MAINT_LOG.md` | Append-only: symptom → root cause → what was done |
 
+**A tracker issue is one of these rows, written somewhere else.** When findings must outlive the
+session that found them, they cross into the project's issue tracker (or, with no tracker, the
+report) under three rules: every field was already authored upstream and is *carried, never
+re-authored* — the evidence tag, the `file:line` and its subject pin, the cost, the acceptance
+check, and the producer's ranking; a finding with no observable acceptance check is homework, and
+stays a watch-list line rather than becoming an issue; and an issue closes only with evidence in
+the closing comment — the verdict line(s) of the work that resolved it and the executed result of
+the check it carried. A commit that mentions an issue is a citation, not a close. Closing as
+*won't-do* is a legal close: it adjudicates the finding once instead of re-discovering it every
+audit.
+
 Bigger or longer-lived projects may split these out — one file per skill's output, named for what
 it holds (`ARCHITECTURE.md`, `THREAT_MODEL.md`, `MIGRATION_PLAN.md`, and so on). The skill that
 produces a file owns its shape; everyone else reads and appends to it.
@@ -91,22 +102,19 @@ produces a file owns its shape; everyone else reads and appends to it.
 | symptom-audit | existing code + a felt complaint | diagnosis + phased prescription | build-discipline; perf-optimize for speed phases |
 | latent-audit | existing code, no symptom | dead code, layer breaches, deletion manifest | scrutinize → build-discipline; arch-design for breaches |
 | perf-optimize | a passed gate + a budget | budgets, currents, guards | correctness-gate (re-gate), evolve-maintain |
-| data-tier | a data-access change + its schema | cost class + the corrected query/index | perf-optimize; data-evolution; arch-design |
 | senior-review | any codebase | mentorship report | director + the relevant lifecycle skill |
 | scrutinize | a delta not yet landed | scrutiny report | director + the owning skill per finding |
 | structure-gate | a codebase or a slice's changed files | structural measurement + debt rows | senior-review / scrutinize; arch-design |
 | threat-model | a system + its trust boundaries | threat model + abuse-case tests | correctness-gate (run them); ship-gate |
 | ship-gate | a gated change + a deploy target | release plan, go/no-go | data-evolution; evolve-maintain |
 | data-evolution | a data-shape change + existing data | forward path, backward path, migration code | build-discipline + correctness-gate; ship-gate |
-| improvement-backlog | findings already ranked by their producer | issues in the tracker | chief-engineer routes each picked issue |
 | evolve-maintain | an incident or change | maintenance log, strengthened invariants | build-discipline / problem-framing |
 | meta-skills | (always on) | discipline, not files | every phase of every skill |
 
 A skill whose input is missing does not invent it: either run the producing skill, or log the gap
 as (assumed) with the cost of being wrong. chief-engineer decides which.
 
-Two orderings are fixed: `data-tier` closes before `perf-optimize` starts; `evolve-maintain` closes
-before `data-evolution` produces its plan.
+One ordering is fixed: `evolve-maintain` closes before `data-evolution` produces its plan.
 
 ## 5. Verdict lines
 

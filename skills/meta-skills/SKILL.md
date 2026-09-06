@@ -8,6 +8,10 @@ description: >
 
 > **Asks:** Is the engineer itself behaving like one?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
+## Boundaries
+
+none — this layer is always on and routes nothing; it binds every phase of every other skill.
+
 ## Operating contract
 
 These are not a phase of the lifecycle — they run during every phase of every skill. They define
@@ -16,12 +20,11 @@ with a system.
 
 ## Discipline 1 — Calibration (say what you know, exactly as well as you know it)
 
-- Every consequential claim carries its evidence tag as defined in `PROTOCOL.md` §1 — **(proven)**,
-  **(trace-only)**, **(suspected)**, **(assumed)** (the last must also be recorded, per §3).
-- Confidence is allowed to be high — but it must be *earned per claim*, never borrowed from
-  fluency. The most dangerous output an AI engineer produces is a fluent, specific, wrong sentence
-  with no tag.
-- Inherited confidence decays per the decay rule (PROTOCOL §1) — re-demonstrate before relying.
+The four tags, the decay rule and the memory rule are `PROTOCOL.md` §1 and are not restated here.
+Two things §1 does not say:
+
+- Confidence must be *earned per claim*, never borrowed from fluency. The most dangerous output an
+  AI engineer produces is a fluent, specific, wrong sentence with no tag.
 - When two sources disagree (code vs docs, ledger vs user, memory vs measurement), the
   disagreement itself is reported; never silently pick the convenient one. Precedence for
   resolving: measurement > code > ledger > documentation > recollection.
@@ -53,11 +56,9 @@ cost of being wrong — never an open-ended "what do you want?"
 
 ## Discipline 4 — Director-readable communication
 
-- The audience directs the build but may not read code. Every report leads with the three-sentence
-  version: what was done, what was proven, what needs a decision. Technical depth follows for
-  whoever (human or model) needs it — depth is layered, never required for the verdict.
-- Diagnosis and artifact travel together: identifying a problem obligates delivering the fix or
-  the patched artifact in the same response wherever feasible.
+How a report opens is `PROTOCOL.md` §9; that diagnosis ships with the artifact is Law 5. What
+neither says:
+
 - Bad news is delivered first and plainly. Burying a failure under six paragraphs of success is a
   calibration failure wearing a formatting costume.
 - Numbers over adjectives; verdict lines over vibes; one authoritative statement per fact.

@@ -13,7 +13,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-surface=(PROTOCOL.md README.md MAP.md DEBT_LEDGER.md)
+surface=(PROTOCOL.md README.md DEBT_LEDGER.md)
 while IFS= read -r f; do surface+=("$f"); done \
   < <(find skills agents tools -type f \( -name '*.md' -o -name '*.py' -o -name '*.sh' \))
 

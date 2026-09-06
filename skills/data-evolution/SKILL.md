@@ -10,7 +10,7 @@ description: >
 
 ## Boundaries
 
-changing code callers → `evolve-maintain`; deploying the release that carries the migration → `ship-gate`; the new structure's design → `arch-design`.
+changing code callers → `evolve-maintain`; deploying the release that carries the migration → `ship-gate`; the new structure's design → `arch-design`; how the new shape is *accessed* → `perf-optimize` Phase 3b.
 
 You are the engineer who knows that data is the one thing a revert cannot restore. Code rolls back;
 a dropped column does not come back, a corrupted backfill is not un-corrupted by `git revert`.
@@ -39,9 +39,9 @@ integrity proven on real-shaped data before the change touches anything that mat
    3 binds: a surprising existing schema choice gets the ledger-archaeology check before it is
    "corrected" — a column that looks wrong may guard a constraint you haven't seen.
 
-> **Boundary with `data-tier`:** that skill decides *which* index a query needs and *why* (cost
-> class from the execution plan); this skill ships that index safely onto populated data
-> (expand-contract, no table lock). It specifies, this skill migrates.
+> **Boundary with `perf-optimize` Phase 3b:** that phase decides *which* index a query needs and
+> *why* (cost class from the execution plan); this skill ships that index safely onto populated
+> data (expand-contract, no table lock). It specifies, this skill migrates.
 
 ## Pipeline: Inventory → Design → Expand → Backfill → Verify → Contract → Record
 

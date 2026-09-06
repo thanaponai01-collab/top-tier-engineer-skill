@@ -7,6 +7,36 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.4.0 — 2026-09-06 — two skills fewer, the same rules
+
+An over-engineering review of all twenty skills, asked for with one goal: make the skills fire more
+often, and fuller. Two of them never fired, for the same reason — neither owned a decision.
+
+- **`improvement-backlog` is gone; its rules are `PROTOCOL.md` §3.** The skill's own contract began
+  "this skill authors no findings and re-ranks nothing," which is a clerk, not a mandate. What it
+  earned is kept verbatim: an issue is a ledger row written elsewhere, every field is *carried, never
+  re-authored*, a finding with no observable acceptance check stays a watch-list line, and an issue
+  closes only with the verdict line plus the executed check. `chief-engineer` files and closes.
+  (DECISION_LEDGER D008, superseding D006.)
+- **`data-tier` is gone; it is `perf-optimize` Phase 3b — Cost class (data access).** Cost class
+  before cost number, the plan as the oracle, N+1-until-proven-otherwise, representative
+  distribution, and the index-to-`data-evolution` handoff all survive as a phase that runs on its own
+  ahead of Phase 1 when there is no budget yet. `perf-optimize`'s description now fires on
+  "N+1 / will this query scale / add an index" — the questions that used to need a second skill.
+- **`MAP.md` is gone.** It described itself as "a picture of PROTOCOL §4, not a second copy" and was
+  a second copy: the chart re-drew §4's table and the prose re-stated each skill's Boundaries line.
+  §4 is the picture. `check-references.sh`'s surface list loses it.
+- **Seven skills gain the `## Boundaries` line the other eleven already had** — problem-framing,
+  arch-design, build-discipline, correctness-gate, senior-review, wire-check, meta-skills. A skill
+  that cannot say what it is *not* is a skill the router mis-fires.
+- **`scrutinize`'s description stops claiming "review" and "audit"** — the two words
+  `senior-review`'s description claims — and says PR/diff/plan instead. Two skills advertising the
+  same trigger is a coin flip, not a choice.
+- **Prose the PROTOCOL already owned is gone from the skills**: meta-skills Disciplines 1 and 4 keep
+  only what §1 and §9 do not say; four anti-pattern lists stop restating the contract above them.
+
+Net: −238 lines of live surface (what a run actually loads), no rule removed.
+
 ## 2.3.0 — 2026-09-06 — four words instead of seventy
 
 §5 taught twenty nouns with their own hand-written state vocabularies — `ready`, `shippable`,

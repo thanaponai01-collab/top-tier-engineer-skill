@@ -65,14 +65,13 @@ is wrong-ish/stale" traces the data path. Anything found actually *broken* here 
 Wiring) — this skill audits working systems that feel bad.
 
 ### Phase 4 — Sweep
-Run category checks **against the traced path only**. For performance complaints:
-- **Perceived** — does anything block the user from seeing progress?
-- **Latency** — redundant or serial round trips that could be parallel or absent?
-- **Volume** — does any query/payload grow unbounded with usage (the "fine in week 1, dead in
-  month 3" class)? When the suspect is a specific query's cost class, `data-tier` owns proving it
-  from the execution plan; this sweep flags the symptom, that skill gates the plan.
-- **Waste** — recomputing or re-invalidating more than necessary?
-- **Locality** — is compute far from its data?
+Run category checks **against the traced path only**. For performance complaints, sweep the traced
+path against `perf-optimize`'s leverage ladder (Phase 4) read backwards — work that could not be
+done, done less, done later, done faster — plus the two this skill adds because they are felt
+rather than measured: **perceived** (does anything block the user from seeing progress?) and
+**volume** (does any query or payload grow unbounded with usage — the "fine in week 1, dead in
+month 3" class?). When the suspect is a specific query's cost class, `perf-optimize` Phase 3b
+proves it from the execution plan; this sweep flags the symptom, that phase gates the plan.
 
 For cohesion/UX complaints: duplicated primitives, state that dies on navigation, dead-end flows,
 missing global shortcuts. These checklists are the **swappable part** of this skill: the skeleton

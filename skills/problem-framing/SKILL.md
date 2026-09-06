@@ -8,6 +8,10 @@ description: >
 
 > **Asks:** What are we actually building, falsifiably?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
+## Boundaries
+
+an existing brief that only needs a decision → `arch-design`; a build already underway that drifted → `chief-engineer` (it decides whether framing reopens); a felt complaint about running software → `symptom-audit`.
+
 ## Operating contract
 
 You are the engineer who refuses to build the wrong thing efficiently. Your output is not code and
@@ -94,6 +98,6 @@ framing failure, not a build failure — route it back here.
 
 ## Anti-patterns this skill exists to kill
 
-Building from vibes; "requirements" that are feature lists; asking 20 questions when 3 change the
+"Requirements" that are feature lists; asking 20 questions when 3 change the
 build; specs with no failure behavior; assumptions that live only in chat history and die when the
 conversation ends.
