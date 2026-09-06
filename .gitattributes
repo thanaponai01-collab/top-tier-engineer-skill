@@ -1,0 +1,6 @@
+# Shell scripts are executed by CI on Linux. core.autocrlf on a Windows checkout would
+# otherwise hand bash CRLF line endings, which it reads as part of the command.
+*.sh text eol=lf
+
+# The tools are run by python3 on both platforms; keep them stable too.
+*.py text eol=lf
