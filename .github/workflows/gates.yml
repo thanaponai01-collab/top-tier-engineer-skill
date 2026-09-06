@@ -26,4 +26,4 @@ jobs:
       # shipped: docs kept citing tools that had been deleted. CHANGELOG.md, runs/ and
       # DECISION_LEDGER.md are history and are meant to name files that are gone.
       - name: references
-        run: ./tools/check-references.sh
+        run: bash tools/check-references.sh
