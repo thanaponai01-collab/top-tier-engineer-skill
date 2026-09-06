@@ -49,7 +49,7 @@ Classify the intervention; the class determines the rules:
 | **Repay** | A `DEBT_LEDGER.md` row's own trigger fired | Auto-routed here whenever `structure-gate` reports `STRUCTURE: repayment-due(id-hint, signal, current/threshold)` (PROTOCOL §5, §8 rule 2). Contract is §8 rule 4 exactly: extract/split first — the debt pays down before anything else touches the file — then re-lock the baseline at the improved number and move the row from `DEBT_LEDGER.md`'s open table to its Repaid table, same change. Never re-lock to silence the gate without the extraction (§8 rule 3's forbidden move) |
 
 A `repayment-due` verdict is a detected finding with nobody assigned to act on it until this row
-exists — that gap (IMPROVEMENT_PLAN.md B3/F4) is exactly what `Repay` closes: `structure-gate`
+exists — that gap is exactly what `Repay` closes: `structure-gate`
 detects, `evolve-maintain` repays, the ledger records it. No new mandate; the ratchet already
 produces the trigger, this class gives it an owner.
 

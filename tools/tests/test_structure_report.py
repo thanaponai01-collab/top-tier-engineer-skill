@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-structure-report.py — structural shape, coverage honesty, and the §10 debt ratchet.
+structure-report.py — structural shape, coverage honesty, and the §8 debt ratchet.
 
 Part of the suite's own test floor; run them all with `python3 tools/test_tools.py`.
 """
@@ -156,7 +156,7 @@ class StructureReport(unittest.TestCase):
         self.assertEqual(r["coverage"]["pct_entered"], 100.0, r["coverage"])
 
     def test_coverage_is_always_reported(self):
-        """PROTOCOL §10 rule 5: a finding count without its denominator lets an
+        """PROTOCOL §8: a finding count without its denominator lets an
         unmeasured region read as clean. Coverage is not optional output."""
         tmp = self._dir("ok.py", "def add(a, b):\n    return a + b\n")
         code, out, _ = run("structure-report.py", tmp)
@@ -164,7 +164,7 @@ class StructureReport(unittest.TestCase):
         self.assertEqual(code, 0, out)
 
 class StructureRatchet(unittest.TestCase):
-    """PROTOCOL §10: debt accrues through defensible increments, so the gate must
+    """PROTOCOL §8: debt accrues through defensible increments, so the gate must
     measure DIRECTION, not level. These tests are the mechanical statement of that
     rule — without them the ratchet is prose and prose drifts."""
 
@@ -243,7 +243,7 @@ class StructureRatchet(unittest.TestCase):
             self.assertIn("repaid: 1", out)
 
     def test_require_debt_ledger_fails_when_debt_is_unrecorded(self):
-        """§10 rule 2: a baseline with no ledger is permanent amnesty. You may only
+        """§8 rule 2: a baseline with no ledger is permanent amnesty. You may only
         accept debt you wrote down, with the trigger that makes repaying it due."""
         with tempfile.TemporaryDirectory() as tmp:
             self._repo(tmp)

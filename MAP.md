@@ -61,61 +61,22 @@ issue closing only with verdict evidence. It authors no findings and re-ranks no
 nobody upstream can own is the close, which happens after every producer has closed
 (DECISION_LEDGER D006, entered via a director field report per §9).
 
-## The twenty, in one line each
-
-| Skill | Question it owns |
-|---|---|
-| `chief-engineer` | Which stage are we in, and who runs next? |
-| `problem-framing` | What are we actually building, falsifiably? |
-| `arch-design` | How is it structured, and why — recorded reversibly? |
-| `build-discipline` | Is every increment proven and wired before the next begins? |
-| `wire-check` | Is it connected? |
-| `correctness-gate` | Is it provably right? |
-| `debug-protocol` | Why is it wrong? |
-| `symptom-audit` | Where does the felt complaint live, and what's the cheapest path to relief? |
-| `perf-optimize` | Is it measurably within budget, and guarded there? |
-| `data-tier` | Does this query scale better than the data grows? |
-| `threat-model` | What can an adversary make it do that it must not? |
-| `senior-review` | Is it wise? |
-| `scrutinize` | Should this change exist, and does it do what it claims? |
-| `structure-gate` | What is its measured shape — does it read as spaghetti, and did it get worse? |
-| `latent-audit` | What is provably dead, mislayered, or dormantly broken — with no symptom to guide the search? |
-| `improvement-backlog` | Did the finding survive the crossing into a tracker intact, and did the close carry evidence? |
-| `data-evolution` | How does stored data change shape without loss, reversibly? |
-| `ship-gate` | Is releasing it reversible, observable, and bounded? |
-| `evolve-maintain` | Does it stay healthy, and does every incident teach it? |
-| `meta-skills` | Is the engineer itself behaving like one? |
-
-> The three skills added in v1.5.0 (`threat-model`, `ship-gate`, `data-evolution`) each closed a
-> mandate gap exposed by the first real run (LIVE_RUN_001): security findings with no pipeline, the
-> unowned act of shipping, and data-shape change whose rollback semantics differ from code's.
-
 ## Where the shared rules live
 
 `PROTOCOL.md` — the evidence tags, the six rules, where things get written down, the handoff
-chain, the verdict grammar, the debt ratchet (§8), and the plain-English report opening (§9) that checks a
-finished run against the director's own words. It is the only place these are stated; this map
-is a picture of it, not a second copy. Isolated gate agents in `agents/` load it too — §1 and
-§5 are all a gate needs.
+chain (§4, which is the table this picture draws), the verdict grammar, the debt ratchet (§8), and
+the plain-English report opening (§9). It is the only place these are stated; this map is a picture
+of it, not a second copy. Isolated gate agents in `agents/` load it too — §1, §5 and §6 are all a
+gate needs.
 
 ## Where the evidence lives
 
-`runs/` — the run ledger. `LIVE_RUN_001`–`004` are the suite executed against real systems
-(a Flask app, the Tier-Memory system, itself, and TickIt); `LIVE_RUN_005` is the first run under
-the §9 cadence obligation, against an independent F1 telemetry app that had already been
-touched by an earlier, un-logged copy of the suite; `AUDIT_001` is an audit *of* those runs;
-`runs/patches/` holds the fixes those runs delivered. `PROTOCOL.md` cites these files by name as
-the provenance of its rules — the pin rule (§1), the baseline rule (§1), and all of §7 were each
-*earned* by a specific run, and a reader who cannot open the run cannot check the rule.
+`runs/` — the run ledger: the suite executed against real systems (a Flask app, the Tier-Memory
+system, itself, TickIt, an F1 telemetry app), plus `AUDIT_001`, an audit *of* those runs, and
+`runs/patches/`, the fixes they delivered. `PROTOCOL.md` cites these by name as the provenance of
+its rules — the pin rule (§1), the baseline rule (§1), and all of §7 were each earned by a specific
+run, and a reader who cannot open the run cannot check the rule.
 
-This directory is not supplementary — it is the evidence base for the suite's founding claim
-that it finds real bugs and ships fixes, not just reports. **Skill-yield, computed for the first
-time in `LIVE_RUN_005`:** the gap between pre-run knowledge (a subject's existing docs/ledgers) and
-post-run findings (proven, run-earned) — LIVE_RUN_005 yielded one proven defect (a debt-ratchet
-regression the subject's own baseline had already silently missed for one commit), one confirmed
-cross-codebase pattern (independently reproducing IMPROVEMENT_PLAN.md's F4 on a second codebase),
-and one boundary shape checked clean (Discord OAuth + tier gate, threat-model's first bind against
-a session-cookie + third-party-IdP trust boundary rather than LIVE_RUN_004's RLS boundary). It is
-kept separate from the skill surface an installer reads, but it **ships**: from v1.14.0 to v1.16.1
-it was in `.gitignore`, which made every "earned by `AUDIT_001`" citation in `PROTOCOL.md` a dead
-link and left the two CI gates that lint transcripts pointed at an empty path (v1.17.0 fixed both).
+This directory is not supplementary — it is the evidence base for the suite's founding claim that
+it finds real bugs and ships fixes, not just reports. It is published redacted (subjects are
+SUBJECT_A/B/C, DECISION_LEDGER D004).

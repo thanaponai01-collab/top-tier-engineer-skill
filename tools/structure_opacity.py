@@ -1,52 +1,31 @@
 #!/usr/bin/env python3
 """
-structure_opacity — how much of a file did the analyzer never enter, and was the
-part it skipped actually code?
+structure_opacity — how much of a file did the analyzer never enter, and was the part
+it skipped actually code?
 
-THE PRINCIPLE (PROTOCOL §10 rule 5)
------------------------------------
-A measurement's denominator is part of the measurement. Every structural analyzer
-enters some of the source and skips the rest; the skipped part is not clean, it is
-UNMEASURED — and in a report that does not state coverage, unmeasured reads exactly
-like clean. That is how an entire second language can hide inside one string literal
-while every complexity, nesting, and function-length number in the report says zero —
-and every one of those zeros is correct.
+A measurement's denominator is part of the measurement (PROTOCOL §8). Every structural
+analyzer enters some of the source and skips the rest; the skipped part is not clean,
+it is UNMEASURED — and in a report that does not state coverage, unmeasured reads
+exactly like clean. That is how a second language hides inside one string literal while
+every complexity and nesting number says zero, correctly.
 
-The first version of this detector matched markers — `<script`, `function `,
-`SELECT`. That is hard-coded knowledge of four languages, so it is wrong by
-construction: it dates, and the fifth language walks straight past it (suite Law 6,
-constrain process never intelligence). This module replaces the vocabulary question
-with two questions that have the same answer in every language, including one
-invented tomorrow:
+Two questions, both answerable without knowing any language:
 
-  1. OPACITY — which lines does the file's own lexer classify as string/comment
-     rather than code? That is not a heuristic; it is the language's own tokenizer
-     telling you exactly where the analysis stopped. No marker list can be wrong
-     about it because no marker list is consulted.
+  1. OPACITY — which lines does the file's own lexer classify as string/comment rather
+     than code? The language's tokenizer says exactly where analysis stopped.
+  2. SHAPE — is the opaque region structured like code, data, or prose? Answerable from
+     content-free statistics, because code is a tree of varied statements while prose is
+     a uniform stream and tabular data is uniform rows.
 
-  2. SHAPE — is the opaque region structured like code, like data, or like prose?
-     Answerable from content-free statistics, because CODE IS A TREE OF VARIED
-     STATEMENTS while prose is a uniform stream and tabular data is uniform rows.
-     Which statistics, and why the obvious first choices were wrong, is documented
-     where they are implemented (section 2 below) rather than restated here.
+Opaque + structured = code no linter, test, or complexity metric can reach.
 
-Opaque + structured = code no linter, test harness, or complexity metric can reach —
-untestable by construction rather than by omission.
+It does not name the language: the finding ("1,400 lines of structured code your tools
+cannot see") is the same whichever it is. `looks_like()` is a hint for the human report
+and is never consulted when deciding whether to flag.
 
-WHAT THIS DELIBERATELY DOES NOT DO
-----------------------------------
-It does not name the language. Naming requires vocabulary, vocabulary dates, and the
-name is decoration: the finding ("1,400 lines of structured code your tools cannot
-see") is identical whether it turns out to be JSX, Handlebars, or something with no
-name yet. `looks_like()` offers a non-load-bearing hint for the human report and is
-never consulted when deciding whether to flag.
-
-EXTENDING TO ANOTHER LANGUAGE
------------------------------
-Add a lexer to `LEXERS`. It needs one capability: report which source lines are
-string-or-comment. Everything downstream is language-independent and needs no edit.
-A language with no lexer here is reported as coverage UNKNOWN, never as clean —
-silence about a region must never be presented as a result for that region.
+To support another language, add a lexer to `LEXERS` reporting which lines are
+string-or-comment; everything downstream is language-independent. A language with no
+lexer is reported as coverage UNKNOWN, never as clean.
 """
 import io
 import re
@@ -56,14 +35,12 @@ import tokenize
 
 
 def _python_doc_lines(src):
-    """Lines belonging to a docstring — Python's own declared documentation slot.
+    """Lines belonging to a docstring — prose in the slot the language reserves for it.
 
-    Documentation is not a blind spot; it is prose in the place prose belongs, and
-    counting it as unmeasured source makes every well-documented file look opaque.
-    (Measured: the suite's own tools produced three false positives on their module
-    docstrings before this exclusion existed.) Note this is a *structural* fact the
-    language defines — first statement of a module/class/function — not a vocabulary
-    guess about what the text says, so it costs none of the generality above.
+    Counting these as unmeasured source makes every well-documented file look opaque
+    (measured: three false positives on this suite's own module docstrings). Excluding
+    them costs no generality — "first statement of a module/class/function" is a
+    structural fact the language defines, not a guess about what the text says.
     """
     import ast
     try:
@@ -133,17 +110,10 @@ def contiguous_spans(lines, minimum=1):
 
 
 # ---- 2. SHAPE: is the opaque region code, data, or prose? -----------------------
-# The first cut of this scored bracket-nesting depth, `;`/`}` line terminators, and
-# symbol density. Measured against fixtures, those three describe the C FAMILY, not
-# code: Lua scored 1/4 and was classified as prose because it nests with do/end and
-# ends lines in words. That is the same vocabulary bug as the marker list, one level
-# up and harder to see — a "content-free" statistic that silently assumed a syntax.
-#
-# What survived measurement is what is true of code in every syntax family: CODE IS A
-# TREE OF VARIED STATEMENTS. Prose is a uniform stream; tabular data is uniform rows;
-# only code is both nested and irregular. Measured separations across prose (English,
-# wrapped), flat data (CSV, JSON), and code (HTML/CSS/JS, Lua, Python, SQL, and an
-# invented syntax matching no marker anywhere in this suite):
+# Code is a tree of varied statements; prose is a uniform stream; tabular data is
+# uniform rows. Only code is both nested and irregular. Measured separations across
+# prose (English, wrapped), flat data (CSV, JSON), and code (HTML/CSS/JS, Lua, Python,
+# SQL, and an invented syntax matching no marker anywhere in this suite):
 #
 #     signal            prose        flat data     code
 #     indent_levels     1            1–2           3–4
@@ -187,7 +157,7 @@ def is_code_shaped(stats):
     return stats["score"] >= 2 or stats["max_line"] >= MINIFIED_LINE
 
 
-# ---- 3. A HINT ONLY. Never consulted when deciding to flag. ---------------------
+# ---- 3. A hint for the human report only. Never consulted when deciding to flag. --
 _HINTS = {
     "markup": re.compile(r"<\w+[^>]*>|</\w+>|<!doctype", re.I),
     "css":    re.compile(r"^\s*[.#]?[\w-]+[^\n{]*\{[^}]*:[^}]*;", re.M),
@@ -198,11 +168,7 @@ _HINTS = {
 
 
 def looks_like(text):
-    """Best-guess label for the human report. Decoration, never a trigger.
-
-    The finding is identical whether this returns 'js/markup' or nothing at all, which
-    is the point: a detector that needed this to work would inherit its blind spots.
-    """
+    """Best-guess label for the human report. Decoration, never a trigger."""
     return sorted(n for n, rx in _HINTS.items() if rx.search(text)) or ["unrecognized"]
 
 

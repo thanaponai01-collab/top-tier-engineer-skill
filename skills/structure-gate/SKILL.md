@@ -117,8 +117,9 @@ decision they can actually make.
 
 ### 5. Verdict and route
 Emit the plain-language report and exactly one `STRUCTURE` verdict line. For each
-breach, name the owning skill for the wisdom call (rule 4). Write
-`STRUCTURE_REPORT.md` for the handoff trail. A `regressed` verdict routes to
+breach, name the owning skill for the wisdom call (rule 4). Write `STRUCTURE_REPORT.md`
+only when PROTOCOL §3 warrants a file — otherwise the report is the handoff trail. A
+`regressed` verdict routes to
 `build-discipline` (carrying capacity, §8 rule 4) as well as to the wisdom reviewers.
 
 ## Verdict line (PROTOCOL §5)

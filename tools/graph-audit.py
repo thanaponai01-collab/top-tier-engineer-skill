@@ -34,7 +34,7 @@ Verdict line (noun owned by the latent-audit skill; grammar per PROTOCOL.md):
 
 `clean` requires that every dimension was actually MEASURED. Without `--layers` the layer
 dimension is not measured, so the verdict reports `layer-breaches: UNMEASURED(...)` rather
-than `0` and never claims `clean` (PROTOCOL §10 rule 5 — a region the analyzer could not
+than `0` and never claims `clean` (PROTOCOL §8 — a region the analyzer could not
 enter is UNKNOWN, never folded into a clean result). The EXIT CODE stays 0 in that case:
 an unmeasured dimension is a gap in how the tool was invoked, not a defect in the subject,
 and failing by default would make this a permanently-red gate — which is a disabled gate.
@@ -266,7 +266,7 @@ def rel(p):
 
 
 def latent_verdict(n_modules, dead, unused, breaches, layers_measured):
-    """The §5 LATENT line, with §10 rule 5's denominator honoured.
+    """The §5 LATENT line, with §8's denominator honoured.
 
     "A region it could not enter is reported as UNKNOWN — never omitted, and never folded
     into a clean result." With no --layers file the layer dimension was not measured at all,
@@ -277,7 +277,7 @@ def latent_verdict(n_modules, dead, unused, breaches, layers_measured):
     tool told the truth in the paragraph and denied it in the machine-readable line.
 
     Lives out here rather than inline in main() because main() already carries accepted debt
-    (DEBT_LEDGER D-2): PROTOCOL §10 rule 4 — when the smallest diff lands in a file already on
+    (DEBT_LEDGER D-2): PROTOCOL §8 rule 4 — when the smallest diff lands in a file already on
     the ledger, "smallest diff" is a withdrawal against it, so extract first, then add.
     """
     if not layers_measured:

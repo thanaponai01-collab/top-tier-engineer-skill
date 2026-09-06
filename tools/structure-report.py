@@ -50,7 +50,7 @@ shaped like code? See `structure_opacity` for the measurement and its calibratio
 The consequence is reported on EVERY run as the Coverage line, because a finding count
 without its denominator lets unmeasured regions read as clean.
 
-The rule, its rationale, and the debt-ledger obligation live in PROTOCOL §10 (the
+The rule, its rationale, and the debt-ledger obligation live in PROTOCOL §8 (the
 ratchet rule) and `skills/structure-gate/SKILL.md` — Law 1, every rule lives in
 exactly one place. This tool is the mechanism, not the doctrine:
 
@@ -208,7 +208,7 @@ def find_opaque_code(path, src, thresholds, findings):
     """Flag large regions the file's own lexer classified as string/comment, when
     those regions are shaped like code. Returns the file's coverage record.
 
-    See `structure_opacity` for the principle and PROTOCOL §10 rule 5 for the rule.
+    See `structure_opacity` for the principle and PROTOCOL §8 for the rule.
     In one line: every other signal in this tool measures ZERO over a string literal,
     so the only honest question is how much of the file the parser refused to enter —
     and that question needs no knowledge of what language is in there.
@@ -432,7 +432,7 @@ def analyze(paths, thresholds):
         analyze_file_length(path, thresholds, findings)
 
     # Coverage accounting. A finding count is not a result without the denominator it
-    # was measured over (PROTOCOL §10 rule 5): a region the analyzer never entered is
+    # was measured over (PROTOCOL §8): a region the analyzer never entered is
     # UNMEASURED, and in a report that omits coverage, unmeasured reads as clean.
     fn_count, entered, opaque, documented = 0, 0, 0, 0
     for path in py_files:                                      # deep signals (python)
@@ -784,7 +784,6 @@ def main():
         description="Structural-quality reporter (spaghetti alarm) with a debt ratchet.")
     ap.add_argument("paths", nargs="*", default=["."])
     ap.add_argument("--json", action="store_true", help="machine-readable output")
-    ap.add_argument("--thresholds", help="JSON file overriding default thresholds")
     ap.add_argument("--baseline", metavar="FILE",
                     help="ratchet against accepted debt: fail only on new or worsened breaches")
     ap.add_argument("--write-baseline", metavar="FILE",
@@ -795,10 +794,7 @@ def main():
                     help="fail when baselined debt is not listed in the debt ledger")
     args = ap.parse_args()
 
-    thresholds = dict(DEFAULT_THRESHOLDS)
-    if args.thresholds:
-        with open(args.thresholds, encoding="utf-8") as fh:
-            thresholds.update(json.load(fh))
+    thresholds = DEFAULT_THRESHOLDS
 
     r = analyze(args.paths or ["."], thresholds)
 

@@ -69,7 +69,7 @@ class GraphAudit(unittest.TestCase):
             self.assertIn("findings(dead: 1, unused:", last)
 
     def test_unmeasured_layers_are_never_folded_into_clean(self):
-        """PROTOCOL §10 rule 5 — the denominator. Without --layers the layer dimension is
+        """PROTOCOL §8 — the denominator. Without --layers the layer dimension is
         not measured, so the verdict must say UNMEASURED, not `clean` and not `0`. The
         human report always said "this is a gap, not a clean result"; the verdict line
         said `clean` anyway, which is the half most readers and every grep actually see."""

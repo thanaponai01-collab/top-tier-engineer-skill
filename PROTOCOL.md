@@ -113,7 +113,7 @@ before `data-evolution` produces its plan.
 Every run ends with exactly one machine-readable line: `NOUN: state`. One noun per skill, so a
 single grep recovers what happened:
 
-`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|BACKLOG|THREAT|SHIP|MIGRATE|MAINT|FIX|TRACE)( [^:]+)?:`
+`^(LIFECYCLE|BRIEF|DESIGN|SLICE|WIRE|GATE|CAUSE|AUDIT|OPTIMIZE|DATATIER|REVIEW|SCRUTINY|STRUCTURE|LATENT|BACKLOG|THREAT|SHIP|MIGRATE|MAINT|FIX)( [^:]+)?:`
 
 | Noun | Owner | States |
 |---|---|---|
@@ -137,10 +137,9 @@ single grep recovers what happened:
 | `MAINT <ID>` | evolve-maintain | `resolved(class, tag) \| escalated(to) \| reverted` |
 | `BACKLOG` | improvement-backlog | `filed(N, top: …) \| picked(#id → skill) \| closed(#id, tag) \| clean(bar unmet) \| blocked(no tracker: …)` |
 | `FIX` | §7 (shared) | `coherent(surfaces: …) \| incoherent(named: …) \| unscrutinized` |
-| `TRACE` | run-trace.py (tool) | `complete \| incomplete(missing: …) \| blocked(unclassifiable)` |
 
-`TRACE` comes from a tool, not a skill, and is not part of §4. `STRUCTURE` and `LATENT` are emitted
-by both a tool and its skill; the skill's line wins, and its counts may only shrink.
+`STRUCTURE` and `LATENT` are emitted by both a tool and its skill; the skill's line wins, and its
+counts may only shrink.
 
 ## 6. Fresh eyes
 
@@ -153,6 +152,12 @@ Gates that consume only artifacts — correctness-gate, structure-gate, threat-m
 scrutinize — share no state and may run **at the same time** in isolated contexts. However many
 run, their verdicts merge into the one report chief-engineer owes. `agents/` holds these as
 ready-made subagents.
+
+Every gate agent obeys the same three rules, stated here so its own file need only state what
+makes it different: load this file for §1 and §5 and nothing else; invoke the skill of the same
+name and follow it exactly — the skill owns the method, the agent is only the isolation wrapper;
+verify every finding against a real line in the artifacts, never from memory. End with the one
+verdict line the skill owns, and emit nothing after it.
 
 ## 7. Delivering a fix
 
@@ -205,7 +210,3 @@ this file back to the director. Length is not evidence of rigor.
 
 This applies to reports the director reads. An isolated §6 gate agent reports to the merging skill
 and is exempt.
-
-**A rule can't condemn work written before it existed.** A transcript may declare `PROTOCOL: <version>`
-on its own line; checks younger than that declaration are skipped for it. `tools/protocol_vintage.py`
-is the one implementation.

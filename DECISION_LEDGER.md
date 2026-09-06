@@ -86,6 +86,11 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
 
 ## D003 — Where does the "sense floor" live: a new gate skill, or the always-on layer?
 
+> **Superseded in 2.0.0.** The placement (always-on layer) holds. The mechanism does not: §11 is
+> now §9, the `ASKED/DID/SO/COST` block is four plain sentences, and `verdict-lint` — the "teeth"
+> this entry reuses — was deleted with the rest of the suite's self-policing machinery. The floor
+> is now instruction, not enforcement; that is the cost this reversal accepted.
+
 - **date:** 2026-07-29
 - **decision:** **Always-on layer** — `meta-skills` Discipline 8 (the discipline) + `PROTOCOL.md`
   §11 (the definition, the DELIVERY block, and the enforcement scope), with `chief-engineer`
@@ -275,6 +280,9 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
 - **status:** decided — shipped in 1.22.0 with `runs/LIVE_RUN_006.md` as the §12 evidence.
 
 ## D007 — §12 says "minor release"; `cadence-check.py` enforces it on every release — which is right?
+
+> **Moot in 2.0.0.** Both sides of this decision are gone: §12 and `cadence-check.py` were removed.
+> Kept because the reasoning about semantic weight vs. mechanical scope outlives its subject.
 
 - **date:** 2026-08-19
 - **decision:** **Option 3 — a skill-body change is semantically minor and must never ship as a

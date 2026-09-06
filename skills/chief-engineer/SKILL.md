@@ -30,12 +30,10 @@ never loads it.
    (a three-line brief is still a brief) rather than refusing or bureaucratizing. The lifecycle
    scales down; it never disappears.
 4. **One report.** However many skills run, the user receives one director-readable report: what
-   was done, what was proven, what needs a decision — then depth. When a run completes, the report
-   must cite the run-trace result: state the inferred request type and whether every required stage
-   reported a verdict ("this was a build request; SLICE and GATE both present; run complete"). On
-   `incomplete`, the report names the missing stage and either runs it or logs why it was skipped
-   (assumption + cost, per Rule 2). Run `tools/run-trace.py` on the transcript to produce this
-   — do not self-report completeness without it.
+   was done, what was proven, what needs a decision — then depth. Close it by naming the stages the
+   request required and the verdict line each one actually emitted ("this was a build request;
+   SLICE and GATE both present"). A required stage with no verdict line is named as missing, and
+   either run or logged with why it was skipped (assumption + cost, per Rule 2).
 
 ## Phase 0 — Locate and load
 
