@@ -135,7 +135,10 @@ build-discipline with the spike as a crib sheet.
   `threat-model` when a trust boundary is touched (does it resist abuse?), and, when the user
   signals stakes, senior-review (is it wise?). None substitutes for another. These gates consume
   artifacts, not the build conversation — where the harness supports isolated contexts they run
-  concurrently (independence corollary, §6), their verdicts merged into the one report.
+  concurrently (independence corollary, §6), their verdicts merged into the one report. To run one
+  isolated, spawn `<plugin>:<gate-name>` from `agents/` in a single parallel batch, handing it the
+  artifacts and nothing else; where the harness has no subagents, run it here and say
+  `(same-context review)`.
   The act of shipping itself — reversibility, blast radius, rollback — is owned by `ship-gate`,
   the last door. For a
   delta that hasn't landed yet, the cheap pre-gate is scrutinize — kill bad changes before they
