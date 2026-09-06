@@ -1,0 +1,29 @@
+name: gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # The suite's tools gate their own correctness.
+      - name: tests
+        run: python3 tools/test_tools.py
+
+      # The debt ratchet: fail on new or worsened breaches, never on accepted ones.
+      - name: structure
+        run: python3 tools/structure-report.py --baseline .structure-baseline.json --require-debt-ledger .
+
+      # Every file the live surface names must exist. This is the defect class 2.0.0
+      # shipped: docs kept citing tools that had been deleted. CHANGELOG.md, runs/ and
+      # DECISION_LEDGER.md are history and are meant to name files that are gone.
+      - name: references
+        run: ./tools/check-references.sh
