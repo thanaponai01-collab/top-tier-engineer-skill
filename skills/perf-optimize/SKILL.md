@@ -6,15 +6,7 @@ description: >
 
 # Performance & Optimization
 
-> **Wiring** — Stage 5 of the lifecycle. Consumes: a system that has passed `correctness-gate`
-> (gate first if it hasn't). Produces: `PERF_BUDGET.md` + guards. Hands back to:
-> `correctness-gate` after every accepted change (re-gate), and to `evolve-maintain` for
-> unreproducible slowness (observability gap). Upstream diagnostic: `symptom-audit` traces felt
-> complaints from source when this skill's preconditions (runnable, gated, measurable) don't
-> hold; its `AUDIT_SPEC.md` findings enter here as Phase-4 hypotheses — this skill remains the
-> only one that may claim a measured gain. Shared vocabulary and laws: `PROTOCOL.md` at the
-> suite root — authoritative when present.
-> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** Is it measurably within budget, and guarded there?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -110,7 +102,7 @@ cleverness exhibit.
 - Never optimize unprofiled code; never report unre-measured gains.
 - Readability is purchased back: any optimization that obscures intent must leave a one-line
   comment naming the hypothesis ID that justifies it.
-- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
+- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §9): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §6 gates.
 - End every run with: `OPTIMIZE: budgets-met | improved(metric: before→after, guarded) | stopped(condition N) | reverted(reason)`.
 
 ## Anti-patterns this skill exists to kill

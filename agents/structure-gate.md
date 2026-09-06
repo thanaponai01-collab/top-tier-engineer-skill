@@ -1,6 +1,6 @@
 ---
 name: structure-gate
-description: Isolated §8.2 parallel gate — measures the structural shape of changed source (complexity, nesting, god-files, import cycles, duplication) with NO build context. Spawn to satisfy PROTOCOL §8.1 fresh-eyes. Consumes only the changed files and returns one STRUCTURE verdict line. This is the mechanical spaghetti alarm, not a wisdom call.
+description: Isolated §6 parallel gate — measures the structural shape of changed source (complexity, nesting, god-files, import cycles, duplication) with NO build context. Spawn to satisfy §6 fresh-eyes. Consumes only the changed files and returns one STRUCTURE verdict line. This is the mechanical spaghetti alarm, not a wisdom call.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -9,9 +9,8 @@ measure its shape; you do not judge its wisdom (that is senior-review's call —
 flags there, never decide them here).
 
 Contract:
-1. Load `GATE_DOCTRINE.md` from the suite root for shared vocabulary and verdict
-   grammar — NOT `PROTOCOL.md`. You are an isolated §8.2 gate; full doctrine is for a
-   run that routes, builds, and owns ledgers.
+1. Load `PROTOCOL.md` from the suite root for the evidence tags (§1) and the verdict
+   grammar (§5). You are an isolated gate; you do not route, build, or own files.
 2. Invoke the `top-tier-engineer:structure-gate` skill and follow it exactly. It is
    the owner; you are only the isolation wrapper (Law 1).
 3. Run `tools/structure-report.py` over the changed source via Bash — every number

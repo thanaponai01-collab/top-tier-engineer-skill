@@ -6,24 +6,7 @@ description: >
 
 # Senior Review
 
-> **Wiring** — Judgment counterpart to `correctness-gate`: that skill asks *"is it provably
-> right?"*, this one asks *"is it wise?"* — at ship time they run in parallel and neither
-> substitutes for the other. Consumes: any codebase (+ existing ledgers, read first); when reviewing work this same
-> session authored, the fresh-eyes rule applies (PROTOCOL §8). Produces:
-> the mentorship report + `REVIEW_LEDGER.md`. Findings route onward: framing flaws to
-> `problem-framing`, structural flaws to `arch-design`, wiring gaps to `wire-check`. Change-scoped
-> second opinions on a not-yet-landed delta (plan, PR, diff) belong to `scrutinize`; a specific
-> felt complaint ("navigation is slow") belongs to `symptom-audit`; this skill judges whole
-> codebases without a symptom, and mentors authors. **Boundary watch (v1.6.2):** this skill and
-> `scrutinize` share ~60% of their method (outsider stance, Chesterton's Fence, severity-by-
-> consequence, the novelty ledger); the split is load-bearing only while *codebase-without-symptom*
-> (here) stays distinct from *not-yet-landed-delta* (there). **Merge signal (falsifiable, v1.7.0):** if senior-review and scrutinize, run on the same codebase
-> at the same version within the same engagement, produce finding sets where >70% of file:symptom
-> pairs overlap, the boundary has collapsed — collapse the skills (Discipline 7, subtraction).
-> A scrutinize run that reads substantial surrounding code is not the signal; shared findings at
-> threshold are. Shared
-> vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
-> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** Is it wise?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 A review conducted the way a principal engineer at a top-tier organization would conduct it: rigorous on evidence, humble about unfamiliarity, and always ending in mentorship — the developer should leave knowing not just *what* is wrong but *why* it matters and *how* to never write it again.
 
@@ -35,7 +18,7 @@ These rules bind every phase. Each is stated exactly once; nothing below repeats
 2. **Evidence or downgrade.** Every claim carries a confidence tag per `PROTOCOL.md`: **(proven)** — you executed code, a test, or a reproduction that demonstrates it; **(trace-only)** — you followed the logic statically and the chain is complete; **(suspected)** — pattern-level concern whose chain you could not complete. Never present a suspicion in the costume of a proof. If you *can* cheaply prove a claim, you must — an unexecuted proof you had the means to run is a review defect.
 3. **Violation ≠ deviation.** A *violation* breaks an invariant you can name (corrupts data, races, leaks, lies to its caller). A *deviation* is merely unfamiliar to you. Chesterton's Fence applies: before flagging a deviation, articulate the strongest reason a competent engineer might have chosen it. If you can't refute that reason with evidence, it is not a finding — it enters the novelty ladder (Phase 4), never the defect list.
 4. **Root cause, not symptom.** Every finding names the decision or missing constraint that *produced* the defect, so the same class of bug cannot recur. "This function is wrong" is a symptom; "nothing in this codebase owns input validation, so it happens ad-hoc and inconsistently" is a cause.
-5. **Diagnosis ships with the artifact.** Findings that warrant code changes include the corrected code, in the same response. A review that ends in homework is half a review. The delivered fix is itself a delta and closes under delivered-fix discipline (PROTOCOL §9): scrutinized, surface-parity-checked, authority-evidenced, ending in a `FIX` line — never handed over unadjudicated.
+5. **Diagnosis ships with the artifact.** Findings that warrant code changes include the corrected code, in the same response. A review that ends in homework is half a review. The delivered fix is itself a delta and closes under delivered-fix discipline (§7): scrutinized, surface-parity-checked, authority-evidenced, ending in a `FIX` line — never handed over unadjudicated.
 6. **Severity is consequence, not aesthetics.** Rank by blast radius if shipped: data loss/corruption > security exposure > silent wrong results > availability > maintainability > style. Style alone never rises above the lowest tier. Consequence is measured per the baseline rule (PROTOCOL §1): the *delta* over what the subject already deliberately grants the same principal — never the reviewer's imported model of what such a system should promise.
 
 ## Phase 1 — Orient
@@ -88,10 +71,4 @@ Structure the report as:
 4. **Ledger entries** — unresolved novelty, framed respectfully as open questions.
 5. **One growth theme** — the single habit that, if changed, eliminates the most findings. Mentorship means one deep lesson, not twelve shallow ones.
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 End every run with: `REVIEW: shippable | shippable-with-findings(top severity) | not-shippable(blocking finding)`.
-
-## Why this skill improves as models improve
-
-Nothing here encodes 2026 knowledge. The contract demands *derivation* (bounded by model insight), *proof* (bounded by model rigor), and *falsifiable resolution of uncertainty* (bounded by model experimental skill). A stronger model derives sharper invariants, runs deeper probes, and resolves more ledger entries — using this exact file, unmodified.

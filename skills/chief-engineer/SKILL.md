@@ -6,14 +6,15 @@ description: >
 
 # Chief Engineer
 
+> **Asks:** Which stage are we in, and who runs next?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+
 One engineer, not ten tools. This skill reads the ground truth, classifies the request, routes it
 through the right specialist skill(s) in the right order, and enforces the handoffs — so the user
 talks to an engineer and the lifecycle happens underneath.
 
 Shared rules, vocabulary, ledger registry, and the handoff chain live in `PROTOCOL.md` at the
-suite root — read it once per session. Why those rules exist lives in `PROTOCOL_RATIONALE.md`; a run
-never loads it. (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
-**(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+suite root — read it once per session. Why those rules exist lives in `PROTOCOL.md`; a run
+never loads it.
 
 ## Operating contract
 
@@ -90,7 +91,7 @@ Census the project root before classifying anything:
 | "Deploy / release / ship it / push to prod / cut a version" | ship-gate (after correctness-gate, and threat-model if a trust boundary is touched) |
 | "Migration / alter schema / rename column / backfill / change the model with prod data" | data-evolution (invoked by evolve-maintain or ship-gate) |
 | "Second opinion / scrutinize this PR, diff, plan, design doc" — a delta, not a codebase | scrutinize |
-| "Find improvements in every area / give me a backlog" — **several lenses at once, and the findings must outlive this session** (the discriminator against the three rows above, each of which is one lens reported once) | the owning audits per area (§8.2-parallel where isolated) → improvement-backlog carries the merged findings out |
+| "Find improvements in every area / give me a backlog" — **several lenses at once, and the findings must outlive this session** (the discriminator against the three rows above, each of which is one lens reported once) | the owning audits per area (§6-parallel where isolated) → improvement-backlog carries the merged findings out |
 | "File these as issues / output findings to the tracker / implement issue #N / work the backlog" | improvement-backlog (it authors no findings; a picked issue re-enters here for routing) |
 | "Where are we / what's next / resume" | this skill alone: state report + recommended next stage |
 | Question / explanation only — nothing will be built or changed | no lifecycle skill: answer directly, evidence-tagged; meta-skills still bind; no ledgers |
@@ -112,7 +113,7 @@ anyway.
 Fast path = one pass, one report: a ≤5-line **inline** brief (job, invariant(s), proof line);
 inline decisions only for one-way doors; build per `build-discipline` with `wire-check`'s five
 links walked inline; the proof line executed; one combined verdict block. No ledger files (scale
-rule, PROTOCOL §7) — the report carries the inline equivalents verbatim for promotion later. The
+rule, §3) — the report carries the inline equivalents verbatim for promotion later. The
 fast path compresses ceremony, never evidence.
 
 ### Spike mode (legal throwaway)
@@ -134,7 +135,7 @@ build-discipline with the spike as a crib sheet.
   `threat-model` when a trust boundary is touched (does it resist abuse?), and, when the user
   signals stakes, senior-review (is it wise?). None substitutes for another. These gates consume
   artifacts, not the build conversation — where the harness supports isolated contexts they run
-  concurrently (independence corollary, PROTOCOL §8.2), their verdicts merged into the one report.
+  concurrently (independence corollary, §6), their verdicts merged into the one report.
   The act of shipping itself — reversibility, blast radius, rollback — is owned by `ship-gate`,
   the last door. For a
   delta that hasn't landed yet, the cheap pre-gate is scrutinize — kill bad changes before they
@@ -142,14 +143,14 @@ build-discipline with the spike as a crib sheet.
 
 ## Phase 4 — Report
 
-Open with the DELIVERY block (`PROTOCOL.md` §11) — `ASKED` quoted verbatim, then `DID` / `SO` /
+Open with the DELIVERY block (`PROTOCOL.md` §9) — `ASKED` quoted verbatim, then `DID` / `SO` /
 `COST`, one sentence each. This skill owns the one report, so it is the only place the whole run
 can be checked against the sentence that started it. Then the three sentences (done / proven /
 needs-decision), then the routed skills' verdicts, then depth. A `SO` that does not answer `ASKED`
 is reported before any verdict and outranks all of them; a `COST` large against `ASKED` names the
 smaller thing declined.
 
-**Terse by default (PROTOCOL §11, the terse rule).** The report states what happened, what it
+**Terse by default (§9, the terse rule).** The report states what happened, what it
 proves, and what it costs — it never explains the suite's own rules back to the director. Cite a
 rule by number and move on. Depth is available on request; length is not evidence of rigor. End
 with the state line:

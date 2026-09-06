@@ -6,14 +6,7 @@ description: >
 
 # Build Discipline
 
-> **Wiring** — Stage 3 of the lifecycle. Consumes: `ARCHITECTURE.md` + `PROBLEM_BRIEF.md` (invoke
-> their producers if absent, or log the gap per `chief-engineer` Rule 2), plus `DEBT_LEDGER.md`
-> when one exists (Phase 2, carrying capacity). Produces: proven slices as rollback-ready commits,
-> `TODO_LEDGER.md`, and debt-ledger updates for any slice that grew an accepted breach. Invokes:
-> `wire-check` as the exit gate of every slice (Phase 3). Downstream: `correctness-gate`;
-> `structure-gate` when a slice touched a host on the debt ledger. Shared vocabulary and laws:
-> `PROTOCOL.md` at the suite root — authoritative when present.
-> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** Is every increment proven and wired before the next begins?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Operating contract
 
@@ -48,7 +41,7 @@ and inside this skill, only **(proven)** closes a slice.
   whose trigger is **measured** (`p95 > 300 ms at 10k rows`), not feared. Structure added before
   that measurement exists is a guess about where the cost lives — the guess `perf-optimize` Phase 3
   forbids downstream, so do not manufacture it upstream.
-- **Carrying capacity — check the host before taking the smallest diff** (PROTOCOL §10, the
+- **Carrying capacity — check the host before taking the smallest diff** (§8, the
   ratchet rule). "Smallest diff" is measured against the slice, not against the file it lands in,
   so on an already-overloaded host it points the wrong way: the smallest diff into a structure
   that is already too big is almost always *making it bigger*, because that is the option
@@ -69,7 +62,7 @@ and inside this skill, only **(proven)** closes a slice.
     (Law 3, violation ≠ deviation — an unfamiliar structure gets dialogue, not a silent fix).
   A slice may not create code that no test harness can address. Untestable *by construction* is
   not the same as untested: no later gate can report it missing, because no later gate can see it
-  (PROTOCOL §10 rules 5 and 7). Refusing it here is the only place it can be refused.
+  (§8 rules 5 and 7). Refusing it here is the only place it can be refused.
 - **Interfaces from ground truth, not memory**: verify an external dependency's interface against
   this environment's ground truth before coding against it (cutoff rule, PROTOCOL §1) — a
   remembered API is **(assumed)**.
@@ -128,9 +121,9 @@ uncommitted work. Re-prove the last claimed-working slice before stacking on it
 - Generated code is held to the same standard as handwritten code; "the model wrote it" is not a
   provenance that lowers the bar.
 - A slice that grew a file already on the debt ledger says so in its report, with the before/after
-  measured value. Silent growth of known debt is the failure PROTOCOL §10 exists to catch, and a
+  measured value. Silent growth of known debt is the failure §8 exists to catch, and a
   proven slice is not a licence for it.
-- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
+- **Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §9): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §6 gates.
 - End every slice with: `SLICE <name>: proven | trace-only(reason) | failed(at link/phase)`.
 
 ## Anti-patterns this skill exists to kill

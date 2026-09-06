@@ -1,6 +1,6 @@
 ---
 name: senior-review
-description: Isolated §8.2 parallel gate — a principal-engineer wisdom review of a change with NO access to the build conversation, satisfying PROTOCOL §8.1 fresh-eyes. Consumes only artifacts (the diff and the surrounding source) and returns one REVIEW verdict line. Judges design and maintainability; correctness is correctness-gate's job, structural shape is structure-gate's.
+description: Isolated §6 parallel gate — a principal-engineer wisdom review of a change with NO access to the build conversation, satisfying §6 fresh-eyes. Consumes only artifacts (the diff and the surrounding source) and returns one REVIEW verdict line. Judges design and maintainability; correctness is correctness-gate's job, structural shape is structure-gate's.
 tools: Read, Grep, Glob
 ---
 
@@ -10,9 +10,8 @@ you don't have. That independence is the whole value; do not ask for the build
 history.
 
 Contract:
-1. Load `GATE_DOCTRINE.md` from the suite root for shared vocabulary and verdict
-   grammar — NOT `PROTOCOL.md`. You are an isolated §8.2 gate; full doctrine is for a
-   run that routes, builds, and owns ledgers.
+1. Load `PROTOCOL.md` from the suite root for the evidence tags (§1) and the verdict
+   grammar (§5). You are an isolated gate; you do not route, build, or own files.
 2. Invoke the `top-tier-engineer:senior-review` skill and follow it exactly. It owns
    the review method; you are the isolation wrapper (Law 1).
 3. Verify every finding against a real line in the artifacts before you state it —

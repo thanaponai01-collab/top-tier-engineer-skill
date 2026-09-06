@@ -6,20 +6,7 @@ description: >
 
 # Symptom Audit
 
-> **Wiring** — Diagnostic front-end for complaints about existing systems. Mandate within the
-> suite: `debug-protocol` asks *"why is it wrong?"*; `perf-optimize` asks *"is it measurably
-> within budget?"* and is the **only** skill that may claim a measured gain; this skill asks
-> **"where does the felt complaint live, and what is the cheapest ranked path to relief?"** —
-> and it may answer from source alone. Consumes: an existing codebase + a felt complaint
-> (+ ledgers, read first). Produces: `AUDIT_SPEC.md` — the diagnosis table and phased
-> prescription. Hands off: prescription phases → `build-discipline` to execute; perf phases run
-> under `perf-optimize` discipline (this skill's findings become its Phase-4 hypotheses, its
-> budgets land in `PERF_BUDGET.md`); anything found *broken* mid-trace → `debug-protocol`;
-> missing connections → `wire-check`; rewrite-scale causes → director via `arch-design`, never
-> smuggled into the spec. Shared vocabulary and laws: `PROTOCOL.md` at the suite root —
-> authoritative when present. (Gloss: **(proven)** executed · **(trace-only)** read, chain
-> complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise —
-> log it.)
+> **Asks:** Where does the felt complaint live, and what's the cheapest path to relief?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -114,8 +101,6 @@ Director-readable lead (Law 4): the symptom in their words, the one-sentence roo
 first thing they'll feel and after which phase. Then the diagnosis table, the phased spec, the
 clean checks, and the verdict line:
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 `AUDIT: prescribed(N phases, top: <fix>) | clean(traced path healthy) | rerouted(to <skill>: <reason>) | blocked(symptom unpinnable)`
 
 ## Anti-patterns this skill exists to kill
@@ -124,11 +109,3 @@ The vague grand tour (reading the file tree instead of the execution path); audi
 complained about; findings without file:line; reporting only problems and never the clean checks;
 prescriptions ordered by where code lives instead of what the user feels; the smuggled rewrite;
 specs with no observable success condition; claiming measured gains from a read-only trace.
-
-## Why this skill improves as models improve
-
-Nothing here encodes a stack: symptom-sets-scope, trace-in-run-order, evidence-or-silence,
-rank-by-felt-impact are method. Phase 2 deliberately learns the stack and lifecycle fresh each
-time, so the same reasoning machine runs against a Rails app, a Go service, or a React SPA — a
-stronger model pins sharper symptoms, traces deeper paths, and writes tighter bounded diffs,
-through this same file, unchanged.

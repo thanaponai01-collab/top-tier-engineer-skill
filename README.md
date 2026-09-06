@@ -12,22 +12,18 @@ top-tier-engineer/
 ├── MAP.md               ← the picture: how the twenty skills connect
 ├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once).
 │                          Rules only — every run loads this, so it stays lean.
-├── PROTOCOL_RATIONALE.md ← why each rule exists: the failure that earned it, the argument.
-│                          Cold: no run loads it. Read only to question or amend a rule.
-├── GATE_DOCTRINE.md     ← the subset an isolated §8.2 gate agent loads instead of PROTOCOL.md,
-│                          so N parallel gates don't each re-pay the full doctrine
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
-├── agents/              ← §8.2 parallel gates as isolated, artifacts-only subagents (fresh eyes, reproducible)
+├── agents/              ← §6 parallel gates as isolated, artifacts-only subagents (fresh eyes, reproducible)
 ├── .claude-plugin/      ← manifest, so the folder installs as one Claude Code plugin
 ├── runs/                ← the run ledger: transcripts of real runs + the fixes they delivered.
 │                          PROTOCOL cites these by name as the provenance of its rules.
 │                          Published redacted — subjects are SUBJECT_A/B/C (see DECISION_LEDGER D004)
 ├── tools/
 │   ├── structure-report.py ← the spaghetti alarm: structural shape + the debt ratchet (--baseline)
-│   ├── structure_opacity.py← how much of a file a parser actually entered (§10.5, the denominator)
+│   ├── structure_opacity.py← how much of a file a parser actually entered (§8, the denominator)
 │   ├── run-trace.py        ← did the run actually execute the stages it should have? — completeness trace
 │   ├── graph-audit.py      ← the no-symptom sweep: dead modules, unused defs, layer-direction breaches (LATENT)
-│   ├── protocol_vintage.py ← §11 rule vintage: which dated check applies to which artifact (one owner)
+│   ├── protocol_vintage.py ← §9 rule vintage: which dated check applies to which artifact (one owner)
 │   ├── test_tools.py       ← runs tools/tests/ (stdlib unittest, no deps)
 │   └── tests/              ← one test module per tool
 └── skills/
@@ -64,14 +60,14 @@ You don't pick skills. You talk to the engineer:
 - "Is this secure / can this be abused?" → threat-model walks every trust boundary as an adversary
 - "Is this code good?" → senior-review
 - "Is this a mess / spaghetti / maintainable?" → structure-gate measures the structural shape (and is the gate CI runs unattended)
-- "How did this file get to 4,000 lines when every commit looked fine?" → structure-gate's debt ratchet freezes accepted debt in `DEBT_LEDGER.md` so it cannot grow by defensible increments (PROTOCOL §10)
+- "How did this file get to 4,000 lines when every commit looked fine?" → structure-gate's debt ratchet freezes accepted debt in `DEBT_LEDGER.md` so it cannot grow by defensible increments (§8)
 - "Find dead code / are the layers respected?" (nothing feels wrong) → latent-audit sweeps the import graph for dead weight and layer breaches
 - "Look at this PR / plan before it lands" → scrutinize
 - "File the findings as issues / work through the backlog / implement issue #N" → improvement-backlog carries the audits' findings out to your tracker intact, hands each back for implementation one at a time, and closes it only with evidence
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
 - "Change the schema / run a migration" → data-evolution evolves the data shape without loss
 - "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step
-- "Every check passed and it still isn't what I meant / it's way too much for the job / I can't tell what it did" → the sense floor (PROTOCOL §11): every report opens by quoting your own words back, saying what changed in your vocabulary, what you can now do, and what it cost you to have it
+- "Every check passed and it still isn't what I meant / it's way too much for the job / I can't tell what it did" → the sense floor (§9): every report opens by quoting your own words back, saying what changed in your vocabulary, what you can now do, and what it cost you to have it
 
 `chief-engineer` routes by **artifact state, not by your phrasing** — say "build it" with no brief
 and it will (briefly, proportionally) frame first. Small tasks get the compressed lifecycle, never
@@ -109,7 +105,7 @@ authenticated to the account, install straight from GitHub:
 forfeits namespacing, so it will clash with any existing `senior-review` / `wire-check` skills.
 
 **Cursor:** add the `SKILL.md` files as project rules, or paste `PROTOCOL.md` + the relevant
-skill into context. Every skill degrades gracefully when used alone (see PROTOCOL §6).
+skill into context. Every skill degrades gracefully when used alone (see §1).
 
 **Any other agent:** the files are plain markdown contracts — paste and go. Nothing here depends
 on a vendor, a framework, or a model version. That is the point.
@@ -128,7 +124,7 @@ ARCHITECTURE.md, DECISION_LEDGER.md, TODO_LEDGER.md, DEBT_LEDGER.md, CORRECTNESS
 PERF_BUDGET.md, DATA_TIER.md, AUDIT_SPEC.md, THREAT_MODEL.md, REVIEW_LEDGER.md,
 MIGRATION_PLAN.md, RELEASE_PLAN.md, MAINT_LOG.md) — read the ones that exist before writing
 anything. If DEBT_LEDGER.md exists, check it before taking the "smallest diff" — a diff that
-lands in a file listed there is a withdrawal, not a free move (PROTOCOL §10).
+lands in a file listed there is a withdrawal, not a free move (§8).
 ```
 
 ## The history (diagnosis, decisions, and what real runs proved)
@@ -136,7 +132,7 @@ lands in a file listed there is a withdrawal, not a free move (PROTOCOL §10).
 1. **Vocabulary was duplicated and had drifted.** Every skill restated the evidence tags, and
    `senior-review` had drifted to **(traced)** where the suite standard is **(trace-only)** — a
    violation of Law 1 ("every rule lives in exactly one place"). Fix: `PROTOCOL.md` is now the
-   single authority; skills carry a one-line gloss only for standalone survival (PROTOCOL §6), and
+   single authority; skills carry a one-line gloss only for standalone survival (§1), and
    senior-review is conformed. **(suspected)** was promoted into the shared vocabulary as the
    fourth tier — it was useful in senior-review and is now legal everywhere.
 2. **Nothing routed.** Ten contracts with no dispatcher means the user does the wiring by hand.
@@ -159,7 +155,7 @@ lands in a file listed there is a withdrawal, not a free move (PROTOCOL §10).
    existed but were not Routed. Fix: PROTOCOL §0 (resolution order + invocation semantics),
    chief-engineer Phase 0, and the CLAUDE.md bootstrap block above.
 7. **Scaling down was a promise, not a mechanism.** "Lightweight by default" had no definition, so
-   a thirty-line script could legally spawn nine ledger files. Fix: the scale rule (PROTOCOL §7 —
+   a thirty-line script could legally spawn nine ledger files. Fix: the scale rule (§3 —
    ledgers materialize as files only when memory must outlive the session, else inline) and the
    concrete fast path in chief-engineer. The escape hatch is now also explicit: questions and
    explanations route to no lifecycle skill at all, and requests with no owning mandate are named
@@ -232,7 +228,7 @@ lands in a file listed there is a withdrawal, not a free move (PROTOCOL §10).
    there would break Law 3). The same root cause — *the laws bind only a cooperative model* —
    surfaced from five independent lenses, stronger evidence than one reviewer asserting it once.
    Four findings were fixed: a degradation floor so an extracted skill keeps its constitution
-   (PROTOCOL §6); a falsifiable acceptance criterion for Law 6, the suite's previously-untestable
+   (§1); a falsifiable acceptance criterion for Law 6, the suite's previously-untestable
    central invariant; the model-agnostic thesis honestly downgraded to `(suspected)` with a
    two-tier experiment written to settle it; and a both-sides boundary watch on the suite's
    thinnest mandate split. What it pointedly did **not** fix — the absence of a mechanical

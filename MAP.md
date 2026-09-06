@@ -44,7 +44,7 @@ It answers **"measured
 structural shape — is it spaghetti?"** with numbers, then routes every flag to
 `senior-review`/`scrutinize` for the wisdom call; it never decides wisdom itself. Once a
 codebase has accepted debt it also asks the question no point-in-time gate can — **"did it get
-worse?"** — against a frozen baseline and `DEBT_LEDGER.md` (PROTOCOL §10, the ratchet rule),
+worse?"** — against a frozen baseline and `DEBT_LEDGER.md` (§8, the ratchet rule),
 because debt is accrued by defensible increments and only accumulation is visible.
 
 `latent-audit` is `symptom-audit`'s sibling for the *unfelt*: given no complaint at all, it
@@ -59,7 +59,7 @@ issue per finding, with the tag, pin, cost, acceptance check and rank the *produ
 authored arriving intact — then picked back up one at a time through `chief-engineer`, each
 issue closing only with verdict evidence. It authors no findings and re-ranks nothing; the half
 nobody upstream can own is the close, which happens after every producer has closed
-(DECISION_LEDGER D006, entered via a director field report per PROTOCOL §12).
+(DECISION_LEDGER D006, entered via a director field report per §9).
 
 ## The twenty, in one line each
 
@@ -92,31 +92,20 @@ nobody upstream can own is the close, which happens after every producer has clo
 
 ## Where the shared rules live
 
-`PROTOCOL.md` — evidence vocabulary, the six Laws, the ledger registry, the handoff chain, the
-verdict-line grammar, the degradation rule for skills copied out of the suite, the debt ratchet
-(§10), and the sense floor (§11) that checks a finished run against the director's own words. Per
-Law 1 it is the only place these are stated; this map is a picture of it, not a second copy.
-
-`PROTOCOL.md` states rules and nothing else. **Why** each rule exists — the failure that earned it,
-its provenance, the argument — lives in `PROTOCOL_RATIONALE.md`, which no run loads and which is
-read only when a rule is being questioned, amended, or removed. That split is Law 1 applied to the
-suite's own doctrine, and it is also §11's terse rule at the source: prose a run reads is prose a
-run imitates.
-
-`GATE_DOCTRINE.md` is the third doctrine file: the scoped subset an isolated §8.2 gate agent loads
-*instead of* `PROTOCOL.md`. A gate does not route, build, or own ledgers, so it needs the evidence
-vocabulary and the verdict grammar and nothing else — and because §8.2 gates run in parallel
-isolated contexts, each one that loaded full doctrine multiplied the session's largest fixed cost by
-the number of gates.
+`PROTOCOL.md` — the evidence tags, the six rules, where things get written down, the handoff
+chain, the verdict grammar, the debt ratchet (§8), and the DELIVERY block (§9) that checks a
+finished run against the director's own words. It is the only place these are stated; this map
+is a picture of it, not a second copy. Isolated gate agents in `agents/` load it too — §1 and
+§5 are all a gate needs.
 
 ## Where the evidence lives
 
 `runs/` — the run ledger. `LIVE_RUN_001`–`004` are the suite executed against real systems
 (a Flask app, the Tier-Memory system, itself, and TickIt); `LIVE_RUN_005` is the first run under
-the PROTOCOL §12 cadence obligation, against an independent F1 telemetry app that had already been
+the §9 cadence obligation, against an independent F1 telemetry app that had already been
 touched by an earlier, un-logged copy of the suite; `AUDIT_001` is an audit *of* those runs;
 `runs/patches/` holds the fixes those runs delivered. `PROTOCOL.md` cites these files by name as
-the provenance of its rules — the pin rule (§1), the baseline rule (§1), and all of §9 were each
+the provenance of its rules — the pin rule (§1), the baseline rule (§1), and all of §7 were each
 *earned* by a specific run, and a reader who cannot open the run cannot check the rule.
 
 This directory is not supplementary — it is the evidence base for the suite's founding claim

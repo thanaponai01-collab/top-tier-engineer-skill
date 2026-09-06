@@ -6,26 +6,7 @@ description: >
 
 # Structure Gate
 
-> **Wiring** — Service skill, callable from any stage and runnable unattended in CI.
-> Consumes: a codebase (or a slice's changed files), plus the accepted baseline when one
-> exists. Produces: the structural report + `STRUCTURE_REPORT.md`, the structural baseline,
-> `DEBT_LEDGER.md` (this skill owns it), and a `STRUCTURE` verdict line. Mandate within the suite:
-> `senior-review` asks *"is this codebase wise?"* and mentors; `correctness-gate`
-> asks *"is it provably right?"*; this skill asks **"what is its measured shape, and
-> does that shape read as spaghetti?"** — it produces numbers, not judgement, and
-> routes every breach to `senior-review`/`scrutinize` for the wisdom call rather than
-> condemning it. Findings route onward: structural flags → `senior-review` or
-> `scrutinize`; an import cycle that reveals a layering error → `arch-design`; a
-> god-file that is really a missing module boundary → `arch-design`; a
-> `STRUCTURE: repayment-due(...)` verdict → `evolve-maintain`'s **Repay** intervention class
-> (§10 rule 2, IMPROVEMENT_PLAN.md B3) — a debt row's own trigger firing is a maintenance
-> event, not a fresh finding this skill re-judges. Distinct from
-> `wire-check` (that asks *"is it connected?"*, this asks *"is it tangled?"*) and from
-> `latent-audit` (that asks *"is it dead or pointed the wrong way?"* — same import graph,
-> different question; layer-direction breaches and deletion manifests are its mandate, not this one's). Shared
-> vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
-> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
-> **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** What is its measured shape — does it read as spaghetti, and did it get worse?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 The director who cannot read code has no instinct for spaghetti. This skill is the
 instrument that gives them one: it measures the few structural signals that
@@ -53,7 +34,7 @@ code got tangled" stops being invisible.
 4. **A breach gets a category, a location, and a route.** Report *which* signal
    tripped, *where*, and *which skill owns the follow-up* — never a bare number with
    no next step.
-5. **Measure direction, not only level** (PROTOCOL §10, the ratchet rule). A gate that
+5. **Measure direction, not only level** (§8, the ratchet rule). A gate that
    re-asks "is this file too long?" every run gets the same defensible "justified" every
    run and converges on permanent acceptance while the file triples. Once a codebase has
    accepted debt, this skill's operative question changes from *"is this bad?"* to
@@ -82,16 +63,16 @@ files for a fast inner-loop check). The signals and why each is a spaghetti tell
 | File length | god-files concentrate risk and merge pain |
 | Import cycles | circular deps — a graph you can't reason about in isolation |
 | Duplication | copy-paste blocks drift apart and rot independently |
-| Opaque code | a large region the parser never entered that is shaped like code — invisible to every signal above, and **untestable by construction** (PROTOCOL §10 rules 5–7) |
+| Opaque code | a large region the parser never entered that is shaped like code — invisible to every signal above, and **untestable by construction** (§8 rules 5–7) |
 
-**Report coverage before findings, always** (§10 rule 5). A finding count is not a
+**Report coverage before findings, always** (§8 rule 5). A finding count is not a
 result without the denominator it was measured over. A region the analyzer never
 entered contributes zero to every signal, and every one of those zeros is correct — so
 the more of a subject is invisible, the cleaner its report looks. State on every run
 what fraction was actually entered, and report what you could not enter as UNKNOWN
 rather than omitting it, because an omitted region reads exactly like a clean one.
 
-**Find the unentered regions by structure, never by vocabulary** (§10 rule 6). Do not
+**Find the unentered regions by structure, never by vocabulary** (§8 rule 6). Do not
 ask which known language a region contains — that is knowledge of the languages you
 happen to know, and it dates on contact with the next one. Ask the language's own
 lexer which tokens it classified as non-code (exact, free, and true in every language),
@@ -114,7 +95,7 @@ never able to see, which is why this skill owns it.
   un-baselined legacy run is red forever, and a permanently-red gate is a disabled gate.
 - **Baseline present.** Run `--baseline` (add `--require-debt-ledger` in CI). Report
   only what is *new*, *worse*, or *repaid*; accepted-and-unchanged debt is noise.
-- **Never re-baseline to clear a regression** (§10 rule 3) — that is the single move
+- **Never re-baseline to clear a regression** (§8 rule 3) — that is the single move
   that disables the ratchet, and it is the structural analogue of weakening a proof
   line to pass it. A baseline is regenerated when debt is **repaid**.
 
@@ -138,9 +119,7 @@ decision they can actually make.
 Emit the plain-language report and exactly one `STRUCTURE` verdict line. For each
 breach, name the owning skill for the wisdom call (rule 4). Write
 `STRUCTURE_REPORT.md` for the handoff trail. A `regressed` verdict routes to
-`build-discipline` (carrying capacity, §10 rule 4) as well as to the wisdom reviewers.
-
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
+`build-discipline` (carrying capacity, §8 rule 4) as well as to the wisdom reviewers.
 
 ## Verdict line (PROTOCOL §5)
 

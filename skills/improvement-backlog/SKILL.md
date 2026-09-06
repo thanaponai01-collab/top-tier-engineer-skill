@@ -6,22 +6,7 @@ description: >
 
 # Improvement Backlog
 
-> **Wiring** — The crossing between a finding and a tracker, and the loop back. Mandate within
-> the suite: the audit and review skills answer *"what is wrong or improvable?"* and rank their
-> own prescriptions; `build-discipline` answers *"how does an increment land proven?"*; this
-> skill asks **"did the finding survive the crossing into a tracker intact, and did the close
-> carry evidence?"** Consumes: findings already produced and ranked by their owning skill
-> (`AUDIT_SPEC.md`, `LATENT_REPORT.md`, `REVIEW_LEDGER.md`, `STRUCTURE_REPORT.md`,
-> `THREAT_MODEL.md`, `DATA_TIER.md`, a scrutiny report) — **or emitted by a tool or CI gate as a
-> bare verdict line**, which has no prescription phase and is governed by contract rule 2's tool
-> clause — plus the tracker of record. Produces: tracked issues — the tracker is the ledger;
-> `BACKLOG.md` materializes only when no tracker exists (scale rule, one pointer line otherwise).
-> Hands off: each picked issue re-enters `chief-engineer` for routing, exactly like a fresh
-> request; a finding that arrives incomplete goes back to the skill that produced it, or — having
-> no skill to return to — is completed per rule 2's tool clause or held. Shared vocabulary and laws: `PROTOCOL.md` at the
-> suite root — authoritative when present. (Gloss: **(proven)** executed · **(trace-only)** read,
-> chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise
-> — log it.)
+> **Asks:** Did the finding survive the crossing into a tracker intact, and did the close carry evidence?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -29,7 +14,7 @@ description: >
 impact-per-effort ordering, and the pre-written acceptance check are `symptom-audit`'s contract
 and its siblings' — this skill carries what they produced and refuses what arrives without it
 (see *Carry, never re-author*). Generating findings → the owning audit skills; if asked to hunt
-with nothing in hand, `chief-engineer` fans out the audits first (PROTOCOL §8.2, parallel gates)
+with nothing in hand, `chief-engineer` fans out the audits first (§6, parallel gates)
 and this skill files the merged result. Implementing → `build-discipline` and peers, via
 `chief-engineer`. Deferred work *inside* a build, with a trigger that makes it due →
 `TODO_LEDGER.md`, owned by `build-discipline`; accepted structural debt → `DEBT_LEDGER.md`, owned
@@ -85,14 +70,14 @@ close must carry the evidence that it happened.**
    it used, rather than substituting a judgment of its own.
 5. **The close discipline** — the half no upstream skill owns, because it happens after they have
    all closed. An issue closes only with evidence in the closing comment: the verdict line(s) of
-   the work that resolved it (`SLICE`/`GATE`, plus `FIX` per PROTOCOL §9 when the work was a
+   the work that resolved it (`SLICE`/`GATE`, plus `FIX` per §7 when the work was a
    delivered fix) and the executed result of the acceptance check the issue carried. A commit
    that mentions an issue is a citation, not a close. Closing as *won't-do* is legal and honest:
    it records why, so the finding is adjudicated once rather than re-discovered every audit.
 6. **Tracker-agnostic** (Law 6, constrain process never intelligence): any tracker satisfies this
    contract, and `gh issue create --title … --body … --label …` is a worked example, not the
    rule. The tracker of record is declared once — in `BACKLOG.md` as a pointer line, or inline
-   per the scale rule (PROTOCOL §7). No tracker and no repo? `BACKLOG.md` holds the same rows.
+   per the scale rule (§3). No tracker and no repo? `BACKLOG.md` holds the same rows.
 
 ## Pipeline
 
@@ -112,8 +97,6 @@ Director-readable lead (Law 4, director-readable output): how many findings arri
 crossed versus were held back, what sits on top and whose ranking put it there — then the issue
 list.
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 `BACKLOG: filed(N, top: <finding>) | picked(#id → <skill>) | closed(#id, <tag>) | clean(bar unmet) | blocked(no tracker: <reason>)`
 
 ## Anti-patterns this skill exists to kill
@@ -123,10 +106,3 @@ The issue dump (forty issues nobody implements); homework issues with no accepta
 verdict line); re-auditing instead of filing what the audits already found; re-ranking a
 producer's prescription by this skill's own taste; duplicating `DEBT_LEDGER.md` or
 `TODO_LEDGER.md` rows as issues instead of linking them.
-
-## Why this skill improves as models improve
-
-Nothing here encodes a tracker, a stack, or a taxonomy: carry-don't-re-author, incomplete-in
-nothing-out, close-with-evidence are method. A stronger model catches subtler losses in the
-crossing, merges two producers' rankings more honestly, and writes closes a future reader can
-audit — through this same file, unchanged.

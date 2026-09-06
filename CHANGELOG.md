@@ -3,6 +3,46 @@
 Skill files are versioned artifacts (meta-skills Discipline 5). Changes are recorded here;
 superseded behavior is described, never erased.
 
+## 2.0.0 — 2026-09-06 — the subtraction release: half the doctrine, none of the self-policing
+
+A director field report: "when using, it over explained, sometimes it gives me the structure 2
+times in the chat... the doctrine I don't know if it's over-complicated words. This must be a skill
+that helps me, not drag me." A ponytail-audit found two separate causes and one theme.
+
+**The doubled output was an install problem, not a doctrine problem.** The suite was installed
+three times at once — the plugin, twenty symlinks in `~/.claude/skills` pointing at a second
+checkout, and two frozen May copies of `senior-review` and `wire-check` (13 KB each) that were not
+symlinks and shadowed the current 4 KB versions. Every skill was registered twice, so its structure
+could be emitted twice. Both loose installs and the second checkout are gone; the plugin is the
+only registered copy.
+
+**Seven of ten tools existed only to audit the auditor.** `verdict-lint`, `registry-check`,
+`doctrine-budget`, `cadence-check`, `stop-gate`, `_registry_source`, their tests, the 250-line CI
+workflow, and the Stop hook that could refuse to end a session over a malformed verdict line — all
+deleted. Only three tools were ever invoked during real work (`graph-audit`, `structure-report`,
+`run-trace`); those and their tests remain, 31 tests green. The enforcement floor was real
+engineering, and it was engineering aimed at this repo rather than at the director's systems.
+
+**The doctrine surface halved.** `PROTOCOL.md` 399 lines → 209, rewritten in plain words:
+"don't let known problems grow" for the ratchet rule, "how sure are you?" for the evidence
+vocabulary, "does it make sense?" for the sense floor. `PROTOCOL_RATIONALE.md` (314 lines) and
+`GATE_DOCTRINE.md` (74) are deleted — a 209-line protocol needs no scoped subset, so the `agents/`
+gates now load §1 and §5 of the real file. Sections renumbered: old §8 fresh-eyes → §6, §9 fix →
+§7, §10 ratchet → §8, §11 sense floor → §9, §7 scale → §3. Old §6 (degradation) and §12 (run
+cadence) are gone: the gloss was pasted into 19 skills for a scenario that never occurred, and §12's
+only enforcement was `cadence-check.py`.
+
+**Every skill lost its boilerplate.** The 20 KB of per-skill "Wiring" blockquotes restated
+PROTOCOL §4's table, in violation of the suite's own first rule; each is now one line naming the
+question that skill owns. The DELIVERY-block paragraph was copied into all 20 skills, so a routed
+skill printed ASKED/DID/SO/COST and then chief-engineer printed it again — it now lives only in
+chief-engineer, which owns the one report. The evidence gloss (19 copies) and the "Why this skill
+improves as models improve" sections (10 copies, inconsistently present) are deleted: prose a run
+reads is prose a run imitates.
+
+Net: −25 KB of skill text, −2,567 lines of tooling, −40 KB of doctrine. No skill lost a phase, a
+rule, or its verdict line.
+
 ## 1.22.0 — 2026-08-19 — the twentieth skill: improvement-backlog, where findings become work
 
 A director field report (PROTOCOL §12's field-report clause — the same door §10 and §11 entered

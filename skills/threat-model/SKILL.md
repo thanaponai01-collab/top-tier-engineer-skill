@@ -6,18 +6,7 @@ description: >
 
 # Threat Model
 
-> **Wiring** — Parallel security gate, callable at any stage and mandatory before any ship of a
-> system with a trust boundary. Mandate within the suite: `correctness-gate` proves the system
-> does what it *should* (intended behavior); this skill proves the system resists what it *must
-> not* do (adversarial behavior) — a different oracle class, which is why it has its own pipeline
-> rather than living as a `senior-review` dimension. Consumes: a system or design + its trust
-> boundaries (+ ledgers, read first). Produces: `THREAT_MODEL.md` (asset/boundary/abuse-case
-> table) and abuse-case **test specs** handed to `correctness-gate` to execute. Hands off:
-> abuse-case tests → `correctness-gate`; structural trust-placement flaws → `arch-design`;
-> secret/config remediation → `evolve-maintain`; pre-deploy clearance → `ship-gate`. Shared
-> vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss:
-> **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain
-> incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** What can an adversary make it do that it must not?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -52,7 +41,7 @@ specific attacks were modelled and specific defenses were proven.
 6. Law 3 (violation ≠ deviation) and Law 5 (diagnosis ships with the artifact) bind: an unfamiliar
    security pattern gets the strongest-competent-reason check before it is flagged, and a real
    finding ships its remediation in the same response — the remediation itself closing under
-   delivered-fix discipline (PROTOCOL §9: a fix is a delta — scrutinized, surface-parity-checked,
+   delivered-fix discipline (§7: a fix is a delta — scrutinized, surface-parity-checked,
    authority-evidenced, ending in a `FIX` line).
 7. **Openness by design is baseline, not finding.** Per the baseline rule (PROTOCOL §1), a
    boundary the subject deliberately leaves open — evidenced by its own policies, schema comments,
@@ -114,8 +103,6 @@ this file; an unmodelled top-asset boundary blocks the deploy.
 Director-readable lead (Law 4): the worst thing an attacker can do today, in one sentence, with its
 evidence tag; then the asset table, the findings ordered by blast radius, the clean boundaries, and:
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 `THREAT: clear(N boundaries modelled, M defended) | findings(top: <attack>) | blocked(boundary unmappable: …)`
 
 ## Anti-patterns this skill exists to kill
@@ -124,10 +111,3 @@ Security-as-checklist with no asset behind each check; trusting the happy path a
 findings that ship as prose and evaporate; claiming "secure" instead of "these named attacks are
 defended"; treating secrets-in-source and debug-on as too obvious to enumerate; flagging an
 unfamiliar pattern as a hole without the Law 3 check.
-
-## Why this skill improves as models improve
-
-Assets-first, trust-placement analysis, adversarial boundary-walking, and abuse-case-as-test are
-method, not a CVE list. A stronger model maps subtler boundaries, derives abuse cases no checklist
-contains, and executes deeper exploits — through this same file, unchanged. A skill that hard-coded
-2026's vulnerability catalogue would be tomorrow's ceiling; this one has none.

@@ -6,27 +6,7 @@ description: >
 
 # Scrutinize
 
-> **Wiring** — Parallel gate, callable at any stage on any delta (plan, design doc, PR, diff,
-> proposed change — **including a fix delivered under Law 5, diagnosis ships with the artifact,
-> inside a review-class run**: per PROTOCOL §9, "delivered, not committed" is still a delta and
-> is adjudicated here, never waved through as "no delta"). Mandate within the suite: `senior-review` asks *"is this codebase wise?"* and
-> mentors its author; this skill asks **"should this change exist, and does it do what it
-> claims?"** — it serves the change's consumers, not its author. Consumes: the delta + its host
-> system (+ ledgers, read first). Produces: the scrutiny report; unresolved novelty appended to
-> `REVIEW_LEDGER.md` per its owner's schema. Findings route onward: intent/scope flaws →
-> `problem-framing` or `arch-design`, wiring gaps → `wire-check`, unknown-cause breakage →
-> `debug-protocol`, post-merge concerns → `senior-review` or `evolve-maintain`. **Boundary watch
-> (v1.6.2):** this skill and `senior-review` share most of their method (outsider stance,
-> Chesterton's Fence, severity-by-consequence, the novelty ledger); the split holds only while
-> *delta-not-yet-landed* (here) stays distinct from *whole-codebase-without-symptom* (there).
-> Stated from both sides per mandate-boundary discipline. **Merge signal (falsifiable, v1.7.0):**
-> if scrutinize and senior-review, run on the same codebase at the same version within the same
-> engagement, produce finding sets where >70% of file:symptom pairs overlap, the boundary has
-> collapsed — collapse the skills (Discipline 7, subtraction). Reading substantial surrounding
-> code on a non-trivial PR is not the signal; shared findings at threshold are. Shared vocabulary
-> and laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)**
-> executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
-> **(assumed)** unverified premise — log it.)
+> **Asks:** Should this change exist, and does it do what it claims?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -43,7 +23,7 @@ what it claims, end-to-end. The diff is the entry point, never the scope.
   reason a competent engineer might have made it, and check `DECISION_LEDGER.md` and
   `ASSUMPTIONS.md` first — a "surprise" the ledger already explains is archaeology, not signal.
   Unrefuted, an odd choice is a question for the report, never a finding. And when this same
-  session authored the delta, true outsiderness requires fresh eyes (PROTOCOL §8): run this skill
+  session authored the delta, true outsiderness requires fresh eyes (§6): run this skill
   in a fresh context given artifacts only, or mark the report `(same-context review)`.
 - **End-to-end, not diff-local.** Follow the call graph through real code paths, including the
   unchanged code on either side of the diff — bugs hide at the seams.
@@ -107,8 +87,6 @@ ordered by consequence (blocker → major → nit; consequence scale per `senior
 - **Change** — concrete and minimal; per Law 5 (diagnosis ships with the artifact), when the fix
   is small, ship the corrected lines here, not as homework.
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 End every run with: `SCRUTINY: ship | fix-then-ship(top finding) | rework(reason) | reject(reason) | blocked(underspecified: what's missing)`.
 
 ## Rules
@@ -123,10 +101,3 @@ End every run with: `SCRUTINY: ship | fix-then-ship(top finding) | rework(reason
   drop the nits; polishing a change that shouldn't exist is the anti-pattern.
 - **No flattery, no hedging.** Mentorship and earned praise live in `senior-review`; this report
   serves whoever must live with the change.
-
-## Why this skill improves as models improve
-
-Nothing here encodes a stack or an era: intent restatement, the subtraction ladder, end-to-end
-tracing, and claim-by-claim verification are method. A stronger model restates intent more
-sharply, finds smaller equivalent changes, traces deeper seams, and executes more of the
-verification — through this same file, unchanged.

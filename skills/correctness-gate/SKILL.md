@@ -6,13 +6,7 @@ description: >
 
 # Correctness Gate
 
-> **Wiring** — Stage 4 of the lifecycle. Consumes: acceptance criteria from `PROBLEM_BRIEF.md`,
-> contracts from `ARCHITECTURE.md`, slice proof lines from `build-discipline`. Produces:
-> `CORRECTNESS_VERDICT.md` + the test suite. Downstream: `perf-optimize` and ship; runs in
-> parallel with `senior-review` at ship time — proof and wisdom are different gates and neither
-> substitutes for the other. Shared vocabulary and laws: `PROTOCOL.md` at the suite root —
-> authoritative when present.
-> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** Is it provably right?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Operating contract
 
@@ -93,8 +87,6 @@ Tests passing is necessary, not sufficient — measure whether the suite can act
 ### Phase 5 — Verdict
 
 Produce **`CORRECTNESS_VERDICT.md`** (overwritten each gate; history is in version control):
-
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
 
 1. Verdict line — `GATE: pass (proven) | pass (trace-only: reasons) | fail (behaviors, evidence)`.
 2. Director summary — three sentences, plain language: what was proven, what was only reasoned,

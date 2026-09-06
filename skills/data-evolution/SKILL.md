@@ -6,18 +6,7 @@ description: >
 
 # Data Evolution
 
-> **Wiring** — Specialist for persistent-state change, invoked by `evolve-maintain` (and by
-> `ship-gate` when a release carries a migration) whenever an intervention changes data shape.
-> Mandate within the suite: `evolve-maintain`'s deprecation ladder retires *code* with callers;
-> this skill evolves *data* — and data cannot be reverted by reverting a commit, which is why it
-> owns a distinct pipeline. Consumes: a desired structural change + the existing data + its
-> contracts (`ARCHITECTURE.md`, ledgers, read first). Produces: `MIGRATION_PLAN.md` (forward path,
-> backward path, integrity checks, cutover) and the migration code. Hands off: the new structure's
-> design → `arch-design`; the deploy that carries it → `ship-gate` (its down-path is ship-gate's
-> reversibility evidence); execution → `build-discipline` + `correctness-gate`. Shared vocabulary
-> and laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)**
-> executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
-> **(assumed)** unverified premise — log it.)
+> **Asks:** How does stored data change shape without loss, reversibly?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -96,8 +85,6 @@ logs the intervention; `ship-gate` carries the down-path as reversibility eviden
 Director-readable lead: what shape changes, whether any rollback loses data and at which step, and
 the cutover in plain sequence. Then the plan, the verification evidence, and:
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 `MIGRATE: planned(reversible) | planned(lossy-after-step-N: …) | verified(copy, proven) | blocked(no safe backward path: director)`
 
 ## Anti-patterns this skill exists to kill
@@ -106,10 +93,3 @@ the cutover in plain sequence. Then the plan, the verification evidence, and:
 that "succeed" without anyone reading the resulting values; unbatched backfills that lock a table;
 dropping the old column in the same deploy that switches reads; discovering a migration is lossy at
 the moment rollback is needed.
-
-## Why this skill improves as models improve
-
-Expand-contract, dual-write, verify-on-a-copy, and the named point-of-no-return are method, not a
-database manual. A stronger model designs tighter idempotent backfills, finds non-lossy backward
-paths where a weaker one would give up, and verifies more thoroughly — through this same file,
-unchanged. Nothing here names a database engine or a migration tool.

@@ -6,6 +6,8 @@ description: >
 
 # Debug Protocol
 
+> **Asks:** Why is it wrong?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+
 ## Boundaries
 
 known-cause fixes → `evolve-maintain`; "is it even connected?" questions → `wire-check`.
@@ -16,8 +18,7 @@ symptoms get patched while causes survive.
 
 Distinct mandate within the suite: `wire-check` asks *"is it connected?"*, `correctness-gate` asks
 *"is it right?"*, `senior-review` asks *"is it wise?"* — `symptom-audit` asks *"where does the felt slow/clunky live?"* — this skill asks *"why is it wrong?"*; working-but-slow is not wrong
-Shared vocabulary and laws: `PROTOCOL.md` at the suite root. (Gloss: **(proven)** executed · **(trace-only)** read, chain complete ·
-**(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+Shared vocabulary and laws: `PROTOCOL.md` at the suite root.
 
 ## Operating contract
 
@@ -89,8 +90,6 @@ that would promote it.
 
 Produce the **Cause Verdict** (in the report, and as the root-cause input to `evolve-maintain`):
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 1. Failure signature and minimal reproduction (the future regression test, pre-written).
 2. Proven cause — the two-way test results, verbatim excerpts.
 3. Why it wasn't caught earlier — missing oracle, unwired guard, false assumption, observability
@@ -108,9 +107,3 @@ Shotgun debugging (change things until the symptom hides); fixing the symptom at
 *appears* instead of where it *originates*; "cannot reproduce, closed"; debugging by re-reading the
 same code harder instead of running an experiment; stacked changes; causes asserted from one-way
 evidence; diagnosis that evaporates instead of becoming a regression test.
-
-## Why this skill improves as models improve
-
-Bisection, falsifiable hypotheses, and the two-way test are method, not knowledge. A stronger model
-forms sharper hypotheses, designs cheaper decisive experiments, and localizes in fewer cuts —
-through this same file, unchanged.

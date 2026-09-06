@@ -6,13 +6,7 @@ description: >
 
 # Wire Check
 
-> **Wiring** — Service skill, callable from any stage. Invoked by `build-discipline` as the exit
-> gate of every slice (its Phase 3), by `chief-engineer` on "is it hooked up?" requests, or
-> standalone. Consumes: a component or slice plus its host system. Produces: the chain table and
-> any connecting code, returned to the invoker. Distinct mandate: this skill asks *"is it
-> connected?"* — `debug-protocol` asks *"why is it wrong?"*, `correctness-gate` asks *"is it
-> right?"*. Shared vocabulary and laws: `PROTOCOL.md` at the suite root — authoritative when present.
-> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** Is it connected?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 Code that exists is not code that runs. This skill verifies the full chain from a system's real entry point to a new component's real effect — and when a link is broken, names *why* it broke so the same wiring failure never recurs. Built for the world where code is increasingly generated: generators are excellent at writing components and notoriously unreliable at connecting them.
 
@@ -66,10 +60,4 @@ Report:
 4. **Prevention** — the check to add to the build loop (e.g., "every new handler PR must show the route table diff," or a one-line smoke command to run after generation).
 5. **Residual risk** — anything left trace-only and what single command would promote it to proven.
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 End every run with: `WIRE: connected(proven|trace-only) | broken(link N: cause) | blocked(environment)`.
-
-## Why this skill improves as models improve
-
-The five links are invariants of connectedness, not facts about frameworks. The contract demands deriving each system's mechanisms fresh and climbing the reproduce ladder as far as the environment allows. A stronger model reads stranger codebases, derives more exotic wiring mechanisms, and executes deeper reproductions — through this same file, unchanged.

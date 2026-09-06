@@ -6,20 +6,7 @@ description: >
 
 # Latent Audit
 
-> **Wiring** — Diagnostic sibling of `symptom-audit`: that skill traces a *felt* complaint;
-> this one hunts *unfelt* defects. Mandate within the suite: `structure-gate` asks *"what is
-> its measured shape?"*; `senior-review` asks *"is it wise?"*; this skill asks **"what in
-> this codebase is provably dead, mislayered, or dormantly broken — with no symptom to guide
-> the search?"** Consumes: an existing codebase (+ `ARCHITECTURE.md` and ledgers, read
-> first). Mechanical invoker: `tools/graph-audit.py` (Law: prose enforcement is not
-> enforcement — the graph pass is never skipped, never hand-simulated). Produces:
-> `LATENT_REPORT.md` — findings plus the **deletion manifest**. Hands off: each deletion →
-> `scrutinize` (a deletion is a delta) then `build-discipline`; layer breaches →
-> `arch-design` (fix the code to the declaration, or the declaration to reality — a director
-> decision); dormant bugs found broken → `debug-protocol`; security-shaped findings →
-> `threat-model`. Shared vocabulary and laws: `PROTOCOL.md` at the suite root —
-> authoritative when present. (Gloss: **(proven)** executed · **(trace-only)** read, chain
-> complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** What is provably dead, mislayered, or dormantly broken — with no symptom to guide the search?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -57,7 +44,7 @@ diagnose after.**
    bounded diff — the component, its dead tests, its dead config — with the disconnection
    proof attached, routed through `scrutinize` before `build-discipline` lands it in its
    own commit (one candidate per commit, so any mistake reverts in one step). Author ≠
-   reviewer (PROTOCOL §8) applies: the scrutiny of a same-session manifest is fresh-context.
+   reviewer (§6) applies: the scrutiny of a same-session manifest is fresh-context.
 5. **Dormant bugs ride the sweep; they do not steer it.** While tracing candidates and
    breaches, defects encountered on the way (resource leaks, unhandled error paths, race
    patterns, injection-shaped string building) are recorded with file:line and an evidence
@@ -80,8 +67,6 @@ diagnose after.**
    breach table, ride-along findings with routes, clean checks. End with the verdict line.
 
 ## Verdict
-
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
 
 `LATENT: clean(N modules traced) | findings(dead: A, unused: B, layer-breaches: C) |
 blocked(no analyzable source)` — one line, machine-parseable, per PROTOCOL §5. The noun is

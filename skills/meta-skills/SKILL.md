@@ -6,11 +6,7 @@ description: >
 
 # The Meta-Skills
 
-> **Wiring** — Always-on layer, not a stage. Loaded by `chief-engineer` at the start of every
-> session and binding inside every phase of every skill. Where any lifecycle skill is silent,
-> these disciplines decide. Shared vocabulary and laws: `PROTOCOL.md` at the suite root —
-> authoritative when present; this file holds the *disciplines*, that file holds the *definitions*.
-> (Gloss: **(proven)** executed · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only · **(assumed)** unverified premise — log it.)
+> **Asks:** Is the engineer itself behaving like one?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Operating contract
 
@@ -74,7 +70,7 @@ cost of being wrong — never an open-ended "what do you want?"
   versioned artifacts, expected to evolve, governed by the same rules they impose (single
   authoritative statement, decisions superseded not erased).
 - **Skill-edit validation (v1.7.0)**: the session that proposes a skill edit cannot also approve
-  it — this is the fresh-eyes rule (Law 4, PROTOCOL §8) applied to the suite itself. Before a
+  it — this is the fresh-eyes rule (Law 4, §6) applied to the suite itself. Before a
   level-2 edit enters the suite, pass the proposed change to a fresh context given only the target
   skill file and `PROTOCOL.md`, and have it confirm the edit closes the stated gap without
   introducing new violations. If a fresh context is unavailable, accept the edit provisionally and
@@ -125,7 +121,7 @@ Every other discipline here makes the *work* trustworthy. This one asks whether 
 doing in the shape it was done. It exists because a run can satisfy every gate in the suite and
 still hand its director something that does not make sense — and no gate downstream of
 `problem-framing` is positioned to notice, because none of them ever reads the original request
-again (the mechanism, and the DELIVERY block that closes it, are `PROTOCOL.md` §11; gloss:
+again (the mechanism, and the DELIVERY block that closes it, are `PROTOCOL.md` §9; gloss:
 `ASKED` quoted verbatim · `DID` in the director's words · `SO` what they can now do · `COST` what
 they now carry).
 

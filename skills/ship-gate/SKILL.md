@@ -6,18 +6,7 @@ description: >
 
 # Ship Gate
 
-> **Wiring** — The release gate; the lifecycle's last door before users. Mandate within the suite:
-> `correctness-gate` proves the change is right and `threat-model` proves it resists attack; this
-> skill asks **"is releasing it reversible, observable, and bounded in blast radius?"** — the act
-> of shipping, which no other skill owned. Consumes: a change that has passed correctness-gate
-> (and threat-model where a trust boundary is touched) + its deploy target. Produces:
-> `RELEASE_PLAN.md` (rollout strategy, rollback procedure, observability checks, go/no-go).
-> Invokes: `data-evolution` when the release carries a schema/data change (its migration plan
-> becomes this gate's reversibility evidence). Hands off: post-release incidents → `evolve-maintain`;
-> a failed rollback or one-way-door rollout → director via `arch-design`. Shared vocabulary and
-> laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)** executed
-> · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
-> **(assumed)** unverified premise — log it.)
+> **Asks:** Is releasing it reversible, observable, and bounded?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -94,8 +83,6 @@ incidents route to `evolve-maintain`, which reads this file to know what was exp
 
 ## Report
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 `SHIP: go(strategy, rollback proven|trace-only) | stage(canary plan) | hold(blocker) | escalated(one-way door: …)`
 
 ## Anti-patterns this skill exists to kill
@@ -104,10 +91,3 @@ Treating a green correctness gate as a deploy clearance; "we'll just revert" wit
 big-bang rollout of a reversible-only-in-theory change; shipping blind with no health signal;
 migrations that ride along unplanned; walking through an irreversible release without a director
 decision.
-
-## Why this skill improves as models improve
-
-Reversibility-first, bounded blast radius, observability-before-release, and the go/no-go frame are
-method, not a deploy-tool manual. A stronger model designs cheaper staged rollouts, proves more
-rollbacks, and picks sharper health signals — through this same file, unchanged. Nothing here names
-a cloud, a CI system, or a year.

@@ -6,24 +6,7 @@ description: >
 
 # Data Tier
 
-> **Wiring** — Specialist gate for data-access cost, callable from `build-discipline` (when a slice
-> adds a query), `correctness-gate` (as a cost oracle on data-access behaviors), `scrutinize` /
-> `senior-review` (when a delta touches persistence), and standalone. Mandate within the suite:
-> `perf-optimize` measures a *running, gated* system against a *budget* with a profiler and is the
-> only skill that may claim a measured wall-clock gain; this skill asks a different, earlier
-> question — **"what is this query's cost *class*, and does it grow worse than the data?"** — and
-> answers it from the execution plan *before* a budget or a profiler exists. `symptom-audit` traces
-> a *felt* complaint and caps at (trace-only); this skill targets data-access cost specifically and
-> may reach (proven) by executing a plan against representative data. `data-evolution` changes data
-> *shape*; this skill gates how that shape is *accessed*. Consumes: a data-access change (query,
-> ORM call, index, join) + the schema it runs against (+ ledgers, read first). Produces:
-> `DATA_TIER.md` (access → cost-class → plan-evidence → verdict table) and, where a fix is needed,
-> the corrected query/index. Hands off: a measured wall-clock budget → `perf-optimize` (its
-> findings become that skill's Phase-4 hypotheses); an index/schema change that touches populated
-> data → `data-evolution`; a structural data-model flaw → `arch-design`. Shared vocabulary and
-> laws: `PROTOCOL.md` at the suite root — authoritative when present. (Gloss: **(proven)** executed
-> · **(trace-only)** read, chain complete · **(suspected)** chain incomplete, flag only ·
-> **(assumed)** unverified premise — log it.)
+> **Asks:** Does this query scale better than the data grows?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
 ## Boundaries
 
@@ -110,8 +93,6 @@ Director-readable lead (Law 4): the access that scales worst, in one sentence, w
 and the row count at which it becomes a problem; then the access → cost-class → plan-evidence →
 verdict table, the clean paths, and:
 
-**Director-facing report? Open with the DELIVERY block** (`PROTOCOL.md` §11): `ASKED` (quoted verbatim), `DID`, `SO`, `COST` — one sentence each. A `SO` that does not answer `ASKED` is reported first and outranks every verdict below it. Exempt for isolated §8.2 gates.
-
 `DATATIER: clean(N accesses, all bounded) | findings(top: <access>, class: <O(...)>) | blocked(no plan available: <reason>)`
 
 ## Anti-patterns this skill exists to kill
@@ -120,10 +101,3 @@ Judging a query by its millisecond timing on seed data instead of its cost class
 index is used without reading the plan; missing the query-in-a-loop because each individual query
 looks cheap; planning over ten rows and calling it proven; adding an index to a live table as if it
 were a code edit; reciting one database's tuning folklore instead of reasoning about cost class.
-
-## Why this skill improves as models improve
-
-Cost-class reasoning, plan-as-oracle, N+1-in-loops, and representative-distribution proof are
-method, not an index-tuning manual. A stronger model reads stranger plans, reasons about cost class
-on databases it has never seen, and constructs sharper representative distributions — through this
-same file, unchanged. Nothing here names an engine version or a query optimizer's internals.
