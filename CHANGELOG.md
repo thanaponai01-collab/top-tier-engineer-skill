@@ -7,6 +7,37 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.5.1 — 2026-09-06 — the lens said it three times
+
+`toptier-lens` shipped in 2.5.0 exactly as it was written outside the suite, and it read like it:
+178 lines, the longest skill in the suite, against a median of 107. Three of those sections were
+the same three rules stated three times — as prose ("Three rules that bind every claim"), as
+operational gates (Phase 2), and inverted as anti-patterns. The gates were the only copy that did
+anything.
+
+- **178 → 89 lines, no rule lost.** The "Why this skill exists" essay, the three claim-binding
+  rules, five of the six anti-patterns and the `## Tone` section are gone; each was a restatement
+  of a Phase-2 gate. Grounding now cites PROTOCOL §1's `(assumed)` tag instead of privately
+  re-deriving it, and Phase 4 folded into the report — it re-costed the move Phase 3 had already
+  ranked and costed.
+- **The contract now matches §4.** PROTOCOL §4 promises "the one load-bearing gap + the one move"
+  and the skill's own Boundaries said "never returns a list", while its body asked for four
+  questions and a three-move roadmap. The report is one gap, one move, and at most one follow-on
+  when the second only proves the first worked.
+- **Phase 3's third question stopped prescribing its answer.** "The feature that makes it more
+  usable — *usually an observability surface*" is knowledge, not process, and §2 Rule 6 forbids a
+  skill from shipping the solution. It is now a question the director answers.
+- **New gate: already tried.** The already-built gate stops a lens recommending what exists. Its
+  sibling failure — recommending what a team built, hated and reverted — passed every gate, because
+  a cold read sees one revision and no history. Gate 2 now reads the decision ledger, the changelog
+  and `git log` on the paths in question: a move the record already adjudicated is dead unless the
+  forces that killed it have changed and the report says which. Law 3, applied to time.
+- **New rule: name the runner-up.** A skill that returns exactly one answer and never says what it
+  beat cannot distinguish a judgment from a rationalization. The report now names the gap that came
+  second and the gate or blast radius that beat it.
+- **`PROTOCOL.md` no longer says "the eighteen skills".** It has been nineteen since 2.5.0;
+  `check-references.sh` verifies filenames, not counts.
+
 ## 2.5.0 — 2026-09-06 — the nineteenth skill was already written
 
 `toptier-lens` has existed and worked for months — as a loose personal skill in `~/.claude/skills`,

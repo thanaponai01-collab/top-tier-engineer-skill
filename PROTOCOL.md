@@ -1,6 +1,6 @@
 # PROTOCOL.md — the shared rules
 
-Everything the eighteen skills share, stated once. A skill never repeats what is written here.
+Everything the skills share, stated once. A skill never repeats what is written here.
 If a skill and this file disagree, this file wins.
 
 ## 0. Where this lives, and how a skill runs
