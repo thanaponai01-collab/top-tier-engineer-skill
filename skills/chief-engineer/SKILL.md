@@ -89,6 +89,7 @@ Census the project root before classifying anything:
 | "Deploy / release / ship it / push to prod / cut a version" | ship-gate (after correctness-gate, and threat-model if a trust boundary is touched) |
 | "Migration / alter schema / rename column / backfill / change the model with prod data" | data-evolution (invoked by evolve-maintain or ship-gate) |
 | "Second opinion / scrutinize this PR, diff, plan, design doc" — a delta, not a codebase | scrutinize |
+| "What's the biggest gap / what would a top lab build next / where's the ceiling / what do I build from here" — a working system, direction wanted, not defects | toptier-lens (returns exactly one gap and one move; the move enters the lifecycle at problem-framing) |
 | "Find improvements in every area / give me a backlog" — **several lenses at once, and the findings must outlive this session** (the discriminator against the three rows above, each of which is one lens reported once) | the owning audits per area (§6-parallel where isolated), then this skill carries the merged findings to the tracker per §3 |
 | "File these as issues / output findings to the tracker / implement issue #N / work the backlog" | this skill: file per §3's carry-never-re-author rules (findings come from the owning audits, never from here), then route each picked issue as its own request and close it with the verdict line + executed acceptance check |
 | "Where are we / what's next / resume" | this skill alone: state report + recommended next stage |

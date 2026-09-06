@@ -358,3 +358,35 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   backlog and N+1 runs settle it.
 - **status:** decided — shipped in 2.4.0. D006 is superseded, not erased: its reasoning about the
   unowned crossing stands, and §3 now carries what it earned.
+
+## D009 — `toptier-lens`: a loose personal skill, or the nineteenth suite skill?
+
+- **decision:** promote it. `~/.claude/skills/toptier-lens/` moves to `skills/toptier-lens/`, gains
+  the `Asks:`/`Boundaries`/`Verdict` scaffolding every suite skill carries, takes the `LENS` noun in
+  §5, and takes rows in §4, the README and `chief-engineer`'s dispatch table. The personal copy is
+  retired to `~/.claude/skills-disabled/`, 2.4.0's reversible convention.
+- **forces:** the director asked what the suite's own audit chain covers and found five skills
+  already covering it — and one skill, `toptier-lens`, sitting outside the plugin doing something
+  none of the five do. `senior-review` finds defects, `structure-gate` measures shape,
+  `latent-audit` finds dead weight, `scrutinize` judges a delta, `correctness-gate` proves. None of
+  them answers *where is the ceiling and what one move raises it*. **(proven)** — the four
+  Boundaries lines are mutually exclusive and none claims direction; the gap is structural, not a
+  matter of phrasing.
+- **options:**
+  1. *Leave it personal* — free, and it already works. Rejected: unversioned, outside CI's reference
+     and structure gates, and unreachable by `chief-engineer`, which routes only what §4 lists. A
+     skill the router cannot name is a skill that fires by luck.
+  2. *Promote it* **(chosen)** — one directory, four registry rows, one ledger entry. The suite gains
+     the one lens it did not have, and the skill gains the gates.
+  3. *Fold it into `senior-review`* — rejected on D008's own test, inverted: D008 folded skills that
+     **owned no decision**. This one owns the sharpest decision in the suite — *which single move
+     next* — and folding it into a defect review is how the leverage question becomes a bullet in a
+     findings list, which is exactly its own "the flood" anti-pattern.
+- **reversibility class:** two-way throughout. Demotion is a directory move and the same four rows
+  deleted; the retired personal copy is one `mv` from live. Nothing here is deleted, because the
+  plugin resolves from the marketplace cache — until this release is pushed and pulled, the retired
+  copy is the only thing that still answers a ceiling question.
+- **evidence tag:** **(proven)** for the coverage gap and the registry wiring; **(suspected)** for
+  the claim that routing improves now that `chief-engineer` can name it — the next "what should I
+  build next" request settles it.
+- **status:** decided — shipped in 2.5.0.

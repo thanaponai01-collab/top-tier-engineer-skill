@@ -7,6 +7,29 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.5.0 — 2026-09-06 — the nineteenth skill was already written
+
+`toptier-lens` has existed and worked for months — as a loose personal skill in `~/.claude/skills`,
+outside the suite, unversioned, and invisible to `chief-engineer`. It is now the nineteenth skill.
+
+- **`toptier-lens` joins the suite.** It reads a working system against *its own ambition* and
+  returns exactly one load-bearing gap and one move, each grounded in named files. It is the only
+  skill in the suite whose output is direction rather than a defect, a measurement, or a patch —
+  the discriminator against `senior-review` (defects, mentorship), `structure-gate` (shape),
+  `latent-audit` (dead weight) and `scrutinize` (a delta). Its four phases, three claim-binding
+  rules and six anti-patterns are unchanged from the personal version.
+- **It gains what every suite skill has and it lacked**: the `Asks:` header pointing at §4, a
+  `## Boundaries` line naming the five skills it is *not*, and a `## Verdict` section. Its §5 noun
+  is `LENS`, with `findings` / `clean` / `blocked` and no `done` — it recommends, it makes nothing.
+- **Registry rows**: `PROTOCOL.md` §4, the `README.md` tree and question list, and
+  `chief-engineer`'s dispatch table. `senior-review`'s Boundaries line now routes ceiling questions
+  out to it.
+- **The source copy is retired to `~/.claude/skills-disabled/`, not left live.** A personal skill and
+  a plugin skill competing for the same trigger words is the collision 2.4.0 spent its second half
+  clearing. It stays retired-not-deleted for the same reason 2.4.0's were: the plugin loads from the
+  marketplace cache, so the personal copy is the fallback until this release is pushed and pulled.
+  (DECISION_LEDGER D009.)
+
 ## 2.4.0 — 2026-09-06 — two skills fewer, the same rules
 
 An over-engineering review of all twenty skills, asked for with one goal: make the skills fire more

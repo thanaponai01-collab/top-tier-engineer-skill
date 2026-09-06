@@ -103,6 +103,7 @@ produces a file owns its shape; everyone else reads and appends to it.
 | latent-audit | existing code, no symptom | dead code, layer breaches, deletion manifest | scrutinize → build-discipline; arch-design for breaches |
 | perf-optimize | a passed gate + a budget | budgets, currents, guards | correctness-gate (re-gate), evolve-maintain |
 | senior-review | any codebase | mentorship report | director + the relevant lifecycle skill |
+| toptier-lens | a working system + its own ambition | the one load-bearing gap + the one move | director → problem-framing for the chosen move |
 | scrutinize | a delta not yet landed | scrutiny report | director + the owning skill per finding |
 | structure-gate | a codebase or a slice's changed files | structural measurement + debt rows | senior-review / scrutinize; arch-design |
 | threat-model | a system + its trust boundaries | threat model + abuse-case tests | correctness-gate (run them); ship-gate |

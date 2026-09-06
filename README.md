@@ -36,6 +36,7 @@ top-tier-engineer/
     ├── perf-optimize/       ← stage 5: measured, guarded improvement + the cost class of data access
     ├── threat-model/        ← what can an adversary make it do that it must not?
     ├── senior-review/       ← parallel gate: is it wise?
+    ├── toptier-lens/        ← where is the ceiling, and what one move raises it?
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
     ├── structure-gate/      ← service gate (also runs in CI): is it spaghetti, and did it get worse?
     ├── latent-audit/        ← no-symptom sweep: what is provably dead, mislayered, or dormantly broken?
@@ -58,6 +59,7 @@ You don't pick skills. You talk to the engineer:
 - "Is this a mess / spaghetti / maintainable?" → structure-gate measures the structural shape (and is the gate CI runs unattended)
 - "How did this file get to 4,000 lines when every commit looked fine?" → structure-gate's debt ratchet freezes accepted debt in `DEBT_LEDGER.md` so it cannot grow by defensible increments (§8)
 - "Find dead code / are the layers respected?" (nothing feels wrong) → latent-audit sweeps the import graph for dead weight and layer breaches
+- "What's the biggest gap / what would a top lab build next / where's the ceiling?" → toptier-lens reads the system against its own ambition and returns one gap and one move, not a backlog
 - "Look at this PR / plan before it lands" → scrutinize
 - "File the findings as issues / work through the backlog / implement issue #N" → chief-engineer carries the audits' findings out to your tracker intact (PROTOCOL §3), hands each back for implementation one at a time, and closes it only with evidence
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
