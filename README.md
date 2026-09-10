@@ -40,6 +40,7 @@ top-tier-engineer/
     ├── scrutinize/          ← parallel gate: should this change exist, does it do what it claims?
     ├── structure-gate/      ← service gate (also runs in CI): is it spaghetti, and did it get worse?
     ├── latent-audit/        ← no-symptom sweep: what is provably dead, mislayered, or dormantly broken?
+    ├── reach-audit/         ← the census: what do we have, what do we serve, what does nothing reach?
     ├── data-evolution/      ← how does stored data change shape without loss, reversibly?
     ├── ship-gate/           ← is releasing it reversible, observable, bounded?
     ├── evolve-maintain/     ← stage 6: years-long health, incidents → invariants
@@ -59,6 +60,7 @@ You don't pick skills. You talk to the engineer:
 - "Is this a mess / spaghetti / maintainable?" → structure-gate measures the structural shape (and is the gate CI runs unattended)
 - "How did this file get to 4,000 lines when every commit looked fine?" → structure-gate's debt ratchet freezes accepted debt in `DEBT_LEDGER.md` so it cannot grow by defensible increments (§8)
 - "Find dead code / are the layers respected?" (nothing feels wrong) → latent-audit sweeps the import graph for dead weight and layer breaches
+- "What do we actually have / what do we serve / what did I build that's never been used?" → reach-audit walks every entry point outward, sets what it can actually reach against an inventory built independently of that walk, and hands each orphan to its owner. It answers *unreached*, which is not latent-audit's *unreferenced*: a route registered but linked from nowhere, or a component behind a flag nobody sets, has plenty of in-edges and still never runs
 - "What's the biggest gap / what would a top lab build next / where's the ceiling?" → toptier-lens reads the system against its own ambition and returns one gap and one move, not a backlog
 - "Look at this PR / plan before it lands" → scrutinize
 - "File the findings as issues / work through the backlog / implement issue #N" → chief-engineer carries the audits' findings out to your tracker intact (PROTOCOL §3), hands each back for implementation one at a time, and closes it only with evidence

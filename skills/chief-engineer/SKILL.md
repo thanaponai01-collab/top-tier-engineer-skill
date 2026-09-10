@@ -75,7 +75,8 @@ Census the project root before classifying anything:
 | New project / new feature / vague intent | problem-framing → arch-design → build-discipline → correctness-gate |
 | Structural or technology choice | arch-design |
 | "Build / implement / add / make it work" | build-discipline (after Rule 2 check on brief + architecture) |
-| "Is it connected / hooked up / why is nothing happening" | wire-check |
+| "Is it connected / hooked up / why is nothing happening" — a named component | wire-check |
+| "What do we actually have / what do we serve / what did I build that nothing calls / what's never been used" — a whole system, nothing named; also the fast first read of an unfamiliar codebase | reach-audit (runs wire-check's method as a census). Not `latent-audit`: that answers *unreferenced*, this answers *unreached*, and the two lists differ |
 | "Is it correct / test it / it's done?" | correctness-gate |
 | "It's broken / wrong output / crashes / worked yesterday" — cause unknown | debug-protocol → evolve-maintain |
 | Bug with known cause, dependency update, refactor, incident | evolve-maintain |

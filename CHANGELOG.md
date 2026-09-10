@@ -7,6 +7,53 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.7.0 — 2026-09-10 — unreferenced is not unreached
+
+The director asked to read a codebase quickly for *"what we have, what we serve, and what never
+reaches"*, from a symptom every builder knows: *"i feel like i build things, but sometime its there
+but never been used."* Nineteen skills, and the question belonged to none of them.
+
+- **`reach-audit` is the twentieth skill.** Given no component, it reads a whole system and returns
+  an inventory with every surface marked **served**, **orphaned**, or **unknown**, then hands each
+  orphan to whoever owns it. It ends `REACH: findings(entries: E, surfaces: N, served: M, orphaned:
+  K, unknown: U)`.
+- **Why it is not `latent-audit`.** That skill measures **unreferenced** — its mechanical floor
+  defines dead as *zero in-edges* — and is therefore structurally blind to the director's actual
+  failure class: a route registered but linked from nowhere, a component behind a flag nobody sets, a
+  command in the module but not in the dispatch table. Each has in-edges. None ever runs. The new
+  skill measures **unreached**: no live path from a real entry point. Neither list contains the other,
+  and both contracts now say so in both directions. `latent-audit` keeps the deletion monopoly — a
+  reach audit classifies and never condemns.
+- **Why it is not a second mode of `wire-check`.** The fold was built first and reversed by the
+  director. `wire-check` is `build-discipline`'s per-slice exit gate, run constantly in the inner
+  loop; widening the file every slice loads to carry a whole-system census taxes the hot path for a
+  question it never asks. `wire-check` is unchanged in this release but for one Boundaries clause
+  naming its new sibling. (DECISION_LEDGER D011.)
+- **The new skill borrows a method instead of copying one (Law 1).** It restates none of
+  `wire-check`'s contract: the Five Links, entry-point-first tracing and the reproduce ladder are
+  *cited*, and what is new is only the subject and the direction — `wire-check` has a destination and
+  asks whether a path reaches it; this asks what all the paths reach, and what is left over. Read
+  against an orphan the same Five Links table becomes a **classifier**: the first unsatisfied link
+  names both what you have and who owns it next — unregistered to `latent-audit` or
+  `build-discipline`, unrouted to `build-discipline`, uninvoked to the **director** (a flag nobody
+  sets is a decision, not a bug), and effect-lands-nowhere to `debug-protocol`, because a thing that
+  runs and does nothing is a live defect wearing dead weight's costume.
+- **Five contract rules, each killing a specific worthless result.** *The entry-point census is the
+  ceiling* — a missed way in doesn't return a smaller answer, it returns a wrong one, converting
+  served surfaces into orphans, which is the row the director acts on. *Enumerate twice and subtract*
+  — an inventory derived from the walk makes orphans unfindable by construction. *The unit is the
+  surface, and you stop at the first unsatisfied link* — the bound that keeps a whole-system read
+  cheap, and the line past which this skill has become `senior-review`. *Unreached is not unused* —
+  dynamic dispatch, cron, another service, a human at a terminal are **UNKNOWN**, and §8 forbids
+  folding UNKNOWN into a clean result, so `REACH: clean` is claimable only at `unknown: 0`.
+  *Classify, never condemn* — three outcomes, of which **accept it, with the reason written down** is
+  a real answer, frozen per §8 so the next audit does not re-litigate it.
+- **Registry:** a `PROTOCOL.md` §4 row placed beside `latent-audit` so the two Consumes columns are
+  read together; a `chief-engineer` dispatch row pointed away from `latent-audit` by name; reciprocal
+  Boundaries in both neighbours; README tree and usage list; `plugin.json` to twenty skills. §5 needs
+  no exception — `REACH` comes from the skill's own name exactly as `LATENT` does. No new mandated
+  artifact: `check-references.sh` stays at 9/9.
+
 ## 2.6.1 — 2026-09-06 — one fact, one file
 
 D010, opened in 2.6.0 behind an `(assumed)` about the marketplace schema, is settled and closed.

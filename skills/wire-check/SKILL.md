@@ -10,7 +10,7 @@ description: >
 
 ## Boundaries
 
-"is it right?" → `correctness-gate`; "why is it wrong?" → `debug-protocol`; dead code with no new build behind it → `latent-audit`. This skill answers one question only: is it connected?
+"is it right?" → `correctness-gate`; "why is it wrong?" → `debug-protocol`; dead code with no new build behind it → `latent-audit`; a whole system with no component named → `reach-audit` (it runs this skill's method as a census). This skill answers one question only: is it connected?
 
 Code that exists is not code that runs. This skill verifies the full chain from a system's real entry point to a new component's real effect — and when a link is broken, names *why* it broke so the same wiring failure never recurs. Built for the world where code is increasingly generated: generators are excellent at writing components and notoriously unreliable at connecting them.
 

@@ -101,6 +101,7 @@ produces a file owns its shape; everyone else reads and appends to it.
 | debug-protocol | an observed failure | a proven root cause | evolve-maintain (the fix) |
 | symptom-audit | existing code + a felt complaint | diagnosis + phased prescription | build-discipline; perf-optimize for speed phases |
 | latent-audit | existing code, no symptom | dead code, layer breaches, deletion manifest | scrutinize → build-discipline; arch-design for breaches |
+| reach-audit | existing code, no component named | the surface inventory: served, orphaned, unknown | per orphan: build-discipline (wire), latent-audit (prove dead), debug-protocol (effect lost), or the director |
 | perf-optimize | a passed gate + a budget | budgets, currents, guards | correctness-gate (re-gate), evolve-maintain |
 | senior-review | any codebase | mentorship report | director + the relevant lifecycle skill |
 | toptier-lens | a working system + its own ambition | the one load-bearing gap + the one move | director → problem-framing for the chosen move |

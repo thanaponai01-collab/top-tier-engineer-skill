@@ -418,3 +418,55 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   `version` key under the same `$schema`; `vercel` is one of them and is installed at 0.48.0 from
   its own `plugin.json` **(proven)**. The `$schema` URL itself 404s, so nothing validates either
   manifest but the CI step.
+
+## D011 — "what do we serve, and what never reaches?": a twentieth skill, or a second mode of `wire-check`?
+
+- **date:** 2026-09-10
+- **decision:** **The twentieth skill.** `skills/reach-audit/` takes the `Asks:`/`Boundaries`/`Verdict`
+  scaffolding every suite skill carries, the `REACH` noun in §5, and rows in §4, `chief-engineer`,
+  the README and `plugin.json`. It **cites** `wire-check`'s method rather than restating it (Law 1).
+  `wire-check` itself is unchanged but for one Boundaries clause naming its sibling.
+- **forces:** the director's own symptom, quoted: *"i feel like i build things, but sometime its
+  there but never been used."* A census of the nineteen found the question owned by nobody.
+  **(proven)** — `wire-check` walks entry-point-first but requires its subject to be named, so it
+  answers *is this hooked up?* and never *what isn't?*; `latent-audit`'s mechanical floor defines dead
+  as zero in-edges (`tools/graph-audit.py`, check 2), structurally blind to the director's actual
+  failure class — a route linked from nowhere, a component behind an unset flag, a command missing
+  from the dispatch table, each with in-edges and none of which runs; `toptier-lens` refuses to return
+  a list by contract; `chief-engineer` Phase 1 censuses ledgers, not surfaces.
+- **options:**
+  1. *A twentieth skill* **(chosen)** — passes D009's test: it owns a decision none of the nineteen
+     own, and `REACH` falls out of its own name exactly as `LATENT` does, so §5 needs no new
+     exception. The objection that killed it on the first pass — that it would have to re-derive
+     `wire-check`'s method — dissolved once the method was **cited instead of copied**: PROTOCOL §0
+     already defines invoking a skill as opening its file and following it, so the Five Links,
+     entry-point-first tracing and the reproduce ladder are named and not restated. What is genuinely
+     new is the classifier — read against an orphan, *first unsatisfied link* names the owner — and
+     that belongs here, because `wire-check` has no use for it.
+  2. *A second mode of `wire-check`* — **built first, then reversed by the director.** Attractive
+     because it adds no vocabulary. Rejected on the cost recorded when it was built: `wire-check` is
+     `build-discipline`'s per-slice exit gate, loaded constantly in the inner loop, and a file every
+     slice reads should not carry a whole-system census it never asks for. The mitigation drafted at
+     the time — put the mode table above the contract so a slice run stops early — was a layout
+     convention guarding a hot path, which is the weakest kind of guarantee this suite accepts.
+     Two nouns on one skill was a second, smaller cost: §5's grammar would have gained a fourth
+     exception to describe one file.
+  3. *A phase of `latent-audit`* — rejected. That contract opens with the disconnection-proof ritual
+     and exists to produce a deletion manifest; a census inheriting that weight is no longer the quick
+     read that was asked for, and the census's most common honest outcome is *wire it* or *accept it,
+     with the reason written down*, not *delete it*.
+- **the boundary this creates, stated so it cannot drift:** `reach-audit` answers **unreached** (no
+  live path from an entry point); `latent-audit` answers **unreferenced** (no in-edge) and alone may
+  promote either to a deletion. Neither list is a subset of the other. `wire-check` answers the same
+  question as `reach-audit` about one named component. All three contracts carry the distinction.
+- **reversibility class:** two-way. Demotion into `wire-check` is the reverse of what was already
+  built and reverted once in the authoring session — the patch is recoverable from that session's
+  history, and the registry rows are the same rows. The expensive direction is neither: it is the
+  drift where the two audits' definitions of "unused" quietly merge, which is why the boundary above
+  is written into three contracts and here.
+- **evidence tag:** **(proven)** for the coverage gap and for graph-audit's in-edge definition, both
+  read at this revision; **(assumed)** for the claim that a cited method is followed as reliably as a
+  restated one — the suite has no other skill that borrows a peer's contract, so this is the first.
+  **Boundary watch:** if a `reach-audit` run is ever observed walking without having opened
+  `wire-check`, the citation is decoration and the method must be inlined after all.
+- **status:** decided — shipped in 2.7.0.

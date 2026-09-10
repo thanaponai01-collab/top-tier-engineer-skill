@@ -10,7 +10,7 @@ description: >
 
 ## Boundaries
 
-a felt complaint ("slow", "clunky") → `symptom-audit`; observed wrong output → `debug-protocol`; "is this code wise/good?" → `senior-review`; "is it spaghetti?" (shape metrics) → `structure-gate`; a not-yet-landed delta → `scrutinize`.
+a felt complaint ("slow", "clunky") → `symptom-audit`; observed wrong output → `debug-protocol`; "is this code wise/good?" → `senior-review`; "is it spaghetti?" (shape metrics) → `structure-gate`; a not-yet-landed delta → `scrutinize`; "what do we serve / what did I build that nothing ever calls" → `reach-audit`.
 
 One principle, everything else serves it: **statically unreferenced is not dead — it is
 (suspected) dead. Nothing is deleted until its disconnection is proven, because deleting
@@ -79,7 +79,10 @@ A felt symptom arrives mid-audit → the symptom outranks the sweep; reroute to
 `symptom-audit`. Asked "is this good code?" → `senior-review`. Asked for shape metrics →
 `structure-gate` (its cycles and this skill's layer check share the import graph but answer
 different questions: *tangled* vs *pointed the wrong way*). Asked to judge a PR →
-`scrutinize`. And it never deletes anything itself — it produces the manifest; the deletion
+`scrutinize`. Asked what the system serves and what nothing reaches → `reach-audit` (its orphans and
+this skill's dead list share neither definition nor membership: *unreferenced* is an in-edge count,
+*unreached* is the absence of a live path from an entry point — a module can be either without being
+the other, and only this skill may promote either to a deletion). And it never deletes anything itself — it produces the manifest; the deletion
 is a scrutinized, built, gated change like any other.
 
 ## Failure modes this contract exists to prevent
