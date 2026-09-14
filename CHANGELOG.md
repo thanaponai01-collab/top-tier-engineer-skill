@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.1.0 — 2026-09-14 — one of each
+
+- `arch-design` gains **One of each**: every concept has one owner everyone calls; merge only what
+  changes for the same reason. Stress adds a duplicate count.
+- `arch-design` gains **Audit mode** for existing codebases: map the concepts, hunt the slop (same job
+  in many places, built for "gonna need", one place doing everything, half-built, noise, no shared
+  way), rank by leverage, fix in small proven moves.
+
 ## 4.0.0 — 2026-09-14 — philosophy out, skills clean
 
 - The `How to work` section leaves all 13 skills and lives once in `PHILOSOPHY.md` (~560 lines gone).
