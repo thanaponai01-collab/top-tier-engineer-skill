@@ -97,6 +97,8 @@ Tests passing is necessary, not sufficient — measure whether the suite can act
 
 ### Phase 5 — Verdict
 
+**Verdict noun:** `GATE`
+
 The verdict goes inline in the report — a file only when §3 warrants one, overwritten
 each gate (history is in version control):
 

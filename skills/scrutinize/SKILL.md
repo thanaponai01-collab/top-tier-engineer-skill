@@ -88,6 +88,8 @@ not the principle; the evidence — the trace step, input, or command that showe
 and the change, specific and as small as possible. Per Law 5, a small fix ships as corrected lines
 under `Detail`, never as an exercise for the reader.
 
+**Verdict noun:** `SCRUTINY`
+
 End every run with a `SCRUTINY` line (PROTOCOL §5).
 
 ## Rules

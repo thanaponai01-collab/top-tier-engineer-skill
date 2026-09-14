@@ -105,6 +105,8 @@ cause in one sentence, and the first thing they will notice — and after which 
 The rows are the phases, one each: phase, the cause it removes, the evidence, what the user feels
 once it lands. The full spec per phase and the checks that came back clean go under `Detail`.
 
+**Verdict noun:** `AUDIT`
+
 an `AUDIT` line (PROTOCOL §5) — a prescription is `findings(N phases, top: <fix>)`; a reroute is `blocked(rerouted to <skill>: <reason>)`.
 
 ## Common mistakes

@@ -70,6 +70,8 @@ coming nor work out afterwards.**
 
 ## Verdict
 
+**Verdict noun:** `LATENT`
+
 One `LATENT` line per PROTOCOL §5 — `findings(dead: A, unused: B, layer-breaches: C)`. The noun is
 also emitted by `tools/graph-audit.py`; the skill's line supersedes the tool's when the
 three checks drop candidates (the count may only shrink from tool to skill, never grow — a count

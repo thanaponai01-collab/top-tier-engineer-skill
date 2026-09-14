@@ -7,6 +7,34 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.13.0 — 2026-09-14 — the rule 2.12.0 wrote, now held by a gate
+
+The director: *"fix it"* — the four findings a fresh-eyes `scrutinize` pass returned on 2.12.0,
+which fixed six instances of one defect class and left the class unguarded.
+
+- **A gate for the noun rule (D017).** 2.12.0 made the verdict noun each skill's own to declare and
+  called naming none *a defect in that skill* — then left that rule readable only by a human
+  opening nineteen files. `tools/check-verdict-nouns.sh` now runs in CI: one declaration per skill
+  in a fixed shape, ALL-CAPS and hyphen-free so §5's own grep recovers it, and the declared noun
+  must also appear in the skill's §5 sentence so the two cannot drift. `meta-skills` ends no run
+  and must declare none. Running it found two more skills stating the noun where no grep could
+  reach it: `structure-gate`'s was only inside a code fence, `toptier-lens`'s only in its bullets.
+- **`build-discipline` still ordered the two files 2.12.0 had just made optional.** It built
+  *against `ARCHITECTURE.md` and `PROBLEM_BRIEF.md`* and committed updates to one of them — the
+  direct §4 consumer of both converted skills, told to read files that by default are never
+  written. It now builds against the brief and the architecture *as this run received them*.
+- **`arch-design` Phase 5 got half of what `problem-framing` got.** Its heading offered inline, but
+  *always overwritten*, *append-only* and the rule about *a change to `ARCHITECTURE.md`* describe
+  operations on a file and nothing else, so the inline branch had no stated behavior. Reworded to
+  hold either way.
+- **The census and the router disagreed about a missing `GATE` line.** Phase 1 says a missing file
+  is not evidence of a missing stage and allows an **(assumed)** stage; the routing table required
+  *a `GATE` line at `done` or `clean`* before `perf-optimize`, which in the default write-nothing
+  project never survives the session. The router now also accepts the criteria proven green here.
+- **§6 gate agents still could not open the layer D016 loaded.** *Load this file for §1 and §5 and
+  nothing else* forbids `meta-skills`, while `scrutinize` sends the agent to its Discipline 7 and
+  `ship-gate` to Discipline 3. §6 now permits the Disciplines a skill cites by number.
+
 ## 2.12.0 — 2026-09-14 — six places where following one file broke another
 
 The director: *"find potential improvement from this skill"*, then *"fix all of them, and also the

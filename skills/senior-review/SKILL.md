@@ -77,4 +77,6 @@ the cause, and the *rule* that prevents this whole kind of bug ("check input at 
 it inside", not "fix line 42"). Corrected code goes under `Detail`, and so do the unfamiliar
 choices you could not settle, written respectfully as open questions.
 
+**Verdict noun:** `REVIEW`
+
 End every run with a `REVIEW` line (PROTOCOL §5).

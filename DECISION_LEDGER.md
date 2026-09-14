@@ -626,3 +626,37 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
 - **status:** decided — shipped in 2.12.0. A direct entry into a specialist skill still does not
   load it: the always-on claim holds only through the dispatcher. Revisit if a live run shows a
   non-routed skill making the call Discipline 3 owns.
+
+
+---
+
+## D017 — the verdict-noun rule: held by a reader, or held by a gate?
+
+- **date:** 2026-09-14
+- **decision:** **Option 2 — one declaration line per skill plus a CI gate.** Each `SKILL.md` that
+  ends a run carries exactly one line reading ``**Verdict noun:** `NOUN` ``, and
+  `tools/check-verdict-nouns.sh` checks three things: every run-ending skill declares one, the noun
+  matches §5's own recovery grep (ALL-CAPS, no hyphens), and the same noun appears in the skill's
+  §5 sentence so the declaration and the prose cannot drift apart. `meta-skills` ends no run (§4)
+  and must declare none.
+- **forces:** D015 moved the noun from a derivation in §5 to a declaration in each skill and wrote
+  *a skill that ends a run and names no noun is a defect in that skill* — a rule nothing could
+  check. It also closed by saying a list *"needs a gate before it needs a list"*, and shipped
+  neither. The four missing nouns had been found by a human reading nineteen files; the twenty-first
+  skill would not be. Against that: the declaration restates a noun the §5 sentence already carries,
+  which is the Law 1 objection that sank D015 Option 3. The third check answers it — a copy a gate
+  holds to its original is not a second source of truth.
+- **options:**
+  1. *Infer the noun from the §5 sentence* — no new prose, but the phrasing varies six ways across
+     nineteen files. Tried first: a first-match extractor returned the wrong noun for four skills
+     (`GATE` for `chief-engineer`, `STRUCTURE` for `evolve-maintain`, `FIX` for `senior-review` and
+     `threat-model`). A gate that guesses is worse than no gate.
+  2. *Declare once in a fixed shape and gate all three properties* — nineteen one-line additions,
+     a fifteen-line script, one CI step. **(chosen)**
+  3. *List the nouns in §5* — D015 Option 3, rejected again for the same reason: twenty facts in a
+     twentieth-first place, and the gate is what was actually missing.
+- **reversibility class:** two-way and cheap. Delete the CI step and nineteen lines.
+- **evidence tag:** **(proven)** — the gate passes at 2.13.0 and was run against three injected
+  defects: a deleted declaration, a hyphenated noun, and the two real cases it found unaided
+  (`structure-gate`, `toptier-lens` stated their noun where no grep citing §5 could reach it).
+- **status:** decided — shipped in 2.13.0.

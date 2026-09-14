@@ -92,6 +92,8 @@ per §3:
 Later skills have to check this list. An **(assumed)** entry that turns out to be false is a
 failure of the framing, not of the build — send it back here.
 
+**Verdict noun:** `BRIEF`
+
 End every run with a `BRIEF` line (PROTOCOL §5): `done(<N> invariants, <M> open questions)`, or
 `blocked(contradictory: …)` when the request contradicts itself and only the director can settle
 it.

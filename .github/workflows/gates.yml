@@ -28,6 +28,11 @@ jobs:
       - name: references
         run: bash tools/check-references.sh
 
+      # §5 makes the verdict noun the skill's own to declare (D015). Before D017 nothing
+      # held that: a skill could end a run with no line, and four did.
+      - name: verdict nouns
+        run: bash tools/check-verdict-nouns.sh
+
       # plugin.json owns the version; the marketplace entry's copy was deleted in 2.6.1 (D010).
       # CHANGELOG.md's newest heading is the one remaining copy and cannot be deleted — it is the
       # human record — so it is gated. A fact duplicated across files needs a gate, not a habit.

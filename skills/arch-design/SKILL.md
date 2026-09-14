@@ -98,15 +98,17 @@ Before declaring the design ready, attack it:
 
 Two artifacts — inline in the report under their own headings, or as files when §3 warrants:
 
-**`ARCHITECTURE.md`** — the current truth, always overwritten to stay current (history lives in the
-ledger, not here): system sketch, module table (responsibility / owns / forbidden knowledge),
-contracts, conventions, and the invariant→structure mapping from Phase 4.
+**`ARCHITECTURE.md`** — the current truth, restated in full each time rather than patched (history
+lives in the ledger, not here): system sketch, module table (responsibility / owns / forbidden
+knowledge), contracts, conventions, and the invariant→structure mapping from Phase 4.
 
-**`DECISION_LEDGER.md`** — append-only, one entry per consequential decision:
+**`DECISION_LEDGER.md`** — one entry per consequential decision, never edited once written:
 `ID | date | decision | options considered | forces | reversibility class | evidence tag | status (active / superseded-by-ID)`
 
 Replacing a decision never deletes it — later readers need the history so they do not re-argue
 settled questions or repeat a mistake that was already undone.
+
+**Verdict noun:** `DESIGN`
 
 End every run with a `DESIGN` line (PROTOCOL §5): `done(<N> decisions, <M> one-way doors)` carrying
 the §1 tag; a one-way door the director must rule on is `blocked(one-way door: …)`.
@@ -114,7 +116,7 @@ the §1 tag; a one-way door the director must rule on is `blocked(one-way door: 
 ## Rules
 
 - No decision enters the ledger without at least two options and a reversibility class.
-- A change to `ARCHITECTURE.md` that contradicts an active ledger entry requires a superseding
+- A restatement of the architecture that contradicts an active ledger entry requires a superseding
   entry first — the ledger leads, the document follows.
 - Technology names appear only inside decisions; boundaries and contracts are described
   technology-free so they survive stack changes.

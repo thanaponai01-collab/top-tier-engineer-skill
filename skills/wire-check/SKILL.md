@@ -64,4 +64,6 @@ Report:
 4. **Prevention** — the check to add to the build loop (e.g., "every new handler PR must show the route table diff," or a one-line smoke command to run after generation).
 5. **What's left uncertain** — anything still trace-only, and the one command that would make it proven.
 
+**Verdict noun:** `WIRE`
+
 End every run with a `WIRE` line (PROTOCOL §5); `clean` carries the §1 tag, a dead link is `findings(link N: cause)`.

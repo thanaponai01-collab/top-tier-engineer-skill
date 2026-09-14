@@ -189,8 +189,9 @@ run, their verdicts merge into the one report chief-engineer owes. `agents/` hol
 ready-made subagents.
 
 Every gate agent obeys the same three rules, stated here so its own file need only state what
-makes it different: load this file for §1 and §5 and nothing else; invoke the skill of the same
-name and follow it exactly — the skill owns the method, the agent is only the isolation wrapper;
+makes it different: load this file for §1 and §5, and `skills/meta-skills/SKILL.md` for any
+Discipline your skill cites by number, and nothing else; invoke the skill of the same name and
+follow it exactly — the skill owns the method, the agent is only the isolation wrapper;
 verify every finding against a real line in the artifacts, never from memory. End with the one
 verdict line the skill owns, and emit nothing after it.
 

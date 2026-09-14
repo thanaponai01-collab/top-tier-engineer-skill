@@ -118,6 +118,8 @@ Every optimization you keep gets a guard before the run ends: a performance test
 assertion, or an alert that fails when the number slips back past budget. Update the budget with
 the new current value and a pointer to the guard. A gain with no guard is a temporary gain.
 
+**Verdict noun:** `PERF`
+
 End every run with a `PERF` line (PROTOCOL §5): `done(<budget>: <before> → <after>, guarded)`
 carrying the §1 tag — a re-measured gain is the only `done`; `clean(<budget> already met)` when the
 baseline was inside budget and nothing changed; `findings(<cost class>: <what grows with what>)`

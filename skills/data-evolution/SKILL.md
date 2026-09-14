@@ -93,6 +93,8 @@ loses data and at which step, and the cutover in plain sequence.
 The rows are the migration steps, one each: step, forward action, backward action, lossy from here.
 The plan and the verification evidence go under `Detail`.
 
+**Verdict noun:** `MIGRATE`
+
 a `MIGRATE` line (PROTOCOL §5) — `done` states reversible or lossy-after-step-N and carries the §1 tag; no safe backward path is `blocked(one-way door: …)`.
 
 ## Common mistakes

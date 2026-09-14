@@ -98,6 +98,8 @@ Produce the **Cause Verdict** (in the report, and as the root-cause input to `ev
 4. Experiment log — every hypothesis tried, including the ones that led nowhere.
 5. Verdict line: a `CAUSE` line per PROTOCOL §5 — `findings(<cause>, <tag>)`, or `blocked` when unreproduced.
 
+**Verdict noun:** `CAUSE`
+
 The fix routes to `evolve-maintain` (which classifies it and executes via `build-discipline` +
 `correctness-gate`). This skill never ships the fix on its own — but per Law 5 (the diagnosis ships with the fix), when
 the fix is small and obvious, hand off and fix in the same response, keeping the two clearly

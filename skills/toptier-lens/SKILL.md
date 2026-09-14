@@ -87,7 +87,9 @@ praise and invented criticism cost the same.
 
 ## Verdict
 
-One line, per `PROTOCOL.md` §5:
+**Verdict noun:** `LENS`
+
+One `LENS` line, per `PROTOCOL.md` §5:
 
 - `LENS: findings(gap: <phrase>, move: <phrase>, read: <fraction of the subject entered>)` — a gap survived all five Phase-2 gates and is grounded in named files.
 - `LENS: clean(read: <fraction of the subject entered>)` — the system is at its own ceiling and no move outranks doing nothing.

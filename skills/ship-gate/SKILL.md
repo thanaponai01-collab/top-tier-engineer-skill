@@ -89,6 +89,8 @@ incidents route to `evolve-maintain`, which reads this file to know what was exp
 Shape and wording: `PROTOCOL.md` §9. The rows are the blockers, one each. The release plan, the
 rollback steps and the watch signals go under `Detail`.
 
+**Verdict noun:** `SHIP`
+
 a `SHIP` line (PROTOCOL §5) — a go is `done(<strategy>, rollback <tag>)`, a hold is `findings(<blocker>)`, and an undecidable one-way door is `blocked(one-way door: …)`.
 
 ## Common mistakes

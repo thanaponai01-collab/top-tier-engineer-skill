@@ -100,6 +100,8 @@ Link 1 needs no row: anything the inventory found obviously exists.
 
 ## Verdict
 
+**Verdict noun:** `REACH`
+
 One `REACH` line per `PROTOCOL.md` §5:
 
 `findings(entries: E, surfaces: N, served: M, orphaned: K, unknown: U)` — the entry count leads

@@ -16,10 +16,11 @@ no brief or no architecture yet → `problem-framing` / `arch-design` first (or 
 
 You are the builder who never leaves code nothing calls. Work moves in **slices** — a slice is the
 smallest piece that can be proven working end to end — and a slice is not done until it is
-connected, run, and committed in a state the system could ship from. You build against
-`ARCHITECTURE.md` and `PROBLEM_BRIEF.md`; anywhere you depart from either, say so rather than
-slipping it in quietly. Every "it works" claim carries **(proven)** or **(trace-only)** per `PROTOCOL.md` —
-and inside this skill, only **(proven)** closes a slice.
+connected, run, and committed in a state the system could ship from. You build against the brief
+and the architecture as this run received them — inline in the report, or as files where §3
+warranted them; anywhere you depart from either, say so rather than slipping it in quietly. Every
+"it works" claim carries **(proven)** or **(trace-only)** per `PROTOCOL.md` — and inside this
+skill, only **(proven)** closes a slice.
 
 ## Steps per slice: Plan → Build → Wire → Prove → Commit
 
@@ -111,8 +112,8 @@ footnote. If
   and the proof line result, not the file list.
 - The committed state must be **rollback-ready**: reverting this commit alone returns the system
   to its previous working state. Slices that entangle with uncommitted neighbors violate this.
-- Update `ARCHITECTURE.md` only if the slice changed structure; update it in the same commit so
-  document and code never diverge.
+- If the architecture was written to a file, update it only when the slice changed structure, in
+  the same commit, so document and code never diverge.
 
 ## Resuming an interrupted build
 
@@ -133,6 +134,8 @@ uncommitted work. Re-prove the last claimed-working slice before stacking on it
   proven slice is not a licence for it.
 - End every slice with a `SLICE <name>` line (PROTOCOL §5): `done` carries the §1 tag, a slice that
   did not hold is `findings(at link/phase)`.
+
+**Verdict noun:** `SLICE <name>`
 
 ## Common mistakes
 

@@ -89,7 +89,7 @@ history, and name what a file would have settled.
 | "Is it correct / test it / it's done?" | correctness-gate |
 | "It's broken / wrong output / crashes / worked yesterday" — cause unknown | debug-protocol → evolve-maintain |
 | Bug with known cause, dependency update, refactor, incident | evolve-maintain |
-| "Slow / expensive / heavy / optimize" — runnable system, single measurable dimension | perf-optimize (only past a `GATE` line at `done` or `clean`; else gate first) |
+| "Slow / expensive / heavy / optimize" — runnable system, single measurable dimension | perf-optimize (only past a passed gate — a `GATE` line at `done` or `clean`, or the criteria proven green here; else gate first) |
 | "N+1 / will this query scale / add an index / does this endpoint hit the DB hard" — a data-access change | perf-optimize, Phase 3b alone (gates cost class from the plan, before a budget exists) |
 | "Feels slow / clunky / takes forever" — an existing codebase + a felt complaint; unrunnable here, or spanning speed + cohesion + UX | symptom-audit → its spec executes via build-discipline / perf-optimize |
 | "Review / audit this codebase / is this code good" — one lens, one report, no durable backlog asked for | senior-review |
@@ -159,6 +159,8 @@ director can now do doesn't answer what they asked, say that first — above eve
 
 One row per skill that ran: the skill, its verdict line, and what that means for the director.
 Detail goes under `Detail`, or is left out and offered.
+
+**Verdict noun:** `LIFECYCLE`
 
 One `LIFECYCLE` line per PROTOCOL §5: `done(stage: <stage>, next: <skill or director decision>)`
 when the run made something; `clean(stage: <stage>)` when it only measured or reported state and

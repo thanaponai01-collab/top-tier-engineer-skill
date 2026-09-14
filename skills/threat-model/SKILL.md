@@ -109,6 +109,8 @@ One row per finding, ordered by blast radius: the boundary, what the attacker ge
 the fix. The asset table and the boundaries that came back clean go under `Detail` — clean
 boundaries are counted in the verdict line, never dropped.
 
+**Verdict noun:** `THREAT`
+
 a `THREAT` line (PROTOCOL §5) — `clean` names how many boundaries were modelled and how many are defended.
 
 ## Common mistakes
