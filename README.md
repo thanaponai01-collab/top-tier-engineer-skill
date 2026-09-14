@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Fourteen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to do
+Fifteen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to do
 for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 ## Install (Claude Code)
@@ -28,6 +28,7 @@ Claude picks the right skill from what you ask. You can also call one by name, e
 |---|---|
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |
+| `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
 | `build-discipline` | "Build it": small, proven, wired increments |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |
@@ -59,6 +60,7 @@ Skills don't hand off to each other; you pick the next one. Every flow has the s
 
 Along the way:
 - **Not sure where to start?** `senior-review` tells you the biggest gap, and so which flow.
+- **Want to see it?** `arch-map` draws the structure, a change's before → after, or where the problems sit.
 - **Built but not working?** `wire-check`.
 - **Want numbers or proof on a cleanup?** `structure-gate` for messy shape, `latent-audit` before
   deleting anything.

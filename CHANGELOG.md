@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.2.0 — 2026-09-14 — see it
+
+- New skill `arch-map`: draws the codebase as Mermaid traced from real imports and calls, in three
+  views (as-is, before → after, problems overlaid), with one legend (`+` added, `−` removed, `~` changed,
+  `!N` problem) in color and text, and a `file:line` behind every arrow.
+
 ## 4.1.0 — 2026-09-14 — one of each
 
 - `arch-design` gains **One of each**: every concept has one owner everyone calls; merge only what
