@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
 """
-structure-report — the structural-quality instrument for the top-tier-engineer suite.
+structure-report — measures the structural shape of a codebase (used by the structure-gate skill).
 
-WHY THIS EXISTS
----------------
-The suite tells the engineer how to write clean code (build-discipline's slice
-rules, senior-review's maintainability dimension) but nothing MEASURES the result.
-A director who cannot read code has no instrument that screams when the code got
-dirty anyway. This tool is that instrument. It computes the few structural signals
-that correlate with "spaghetti" and emits a plain-language verdict a non-coder can
-act on without reading a line of source.
+It computes the few structural signals that correlate with "spaghetti" and emits a
+plain-language verdict a non-coder can act on without reading a line of source.
 
 WHAT IT MEASURES (and why each one is a spaghetti signal)
 ---------------------------------------------------------
@@ -43,16 +37,13 @@ keeps earning the same correct "justified", so only ACCUMULATION is visible and 
 was measuring it.
 
 Signal 7 does NOT look for JavaScript, or for any named language — a marker list is
-hard-coded knowledge that dates the moment the next language appears (Law 6, constrain
-process never intelligence). It asks the two questions that have the same answer
+hard-coded knowledge that dates the moment the next language appears. It asks the two questions that have the same answer
 everywhere: how much of this file did the parser refuse to enter, and is that region
 shaped like code? See `structure_opacity` for the measurement and its calibration.
 The consequence is reported on EVERY run as the Coverage line, because a finding count
 without its denominator lets unmeasured regions read as clean.
 
-The rule, its rationale, and the debt-ledger obligation live in PROTOCOL §8 (the
-ratchet rule) and `skills/structure-gate/SKILL.md` — Law 1, every rule lives in
-exactly one place. This tool is the mechanism, not the doctrine:
+How to use the ratchet is described in the structure-gate SKILL.md:
 
     structure-report.py --write-baseline .structure-baseline.json .   # accept
     structure-report.py --baseline .structure-baseline.json .         # ratchet
@@ -64,16 +55,15 @@ forever — a permanently-red gate is a disabled gate. `--require-debt-ledger` r
 baseline whose files have no `DEBT_LEDGER.md` row: debt you did not write down is
 amnesty, not acceptance.
 
-EVIDENCE DISCIPLINE (PROTOCOL §1)
---------------------------------
-Every number this tool prints is (proven) — it executed a measurement over real
-source. It never reports (suspected): a threshold breach is a measured fact, though
-whether that breach MATTERS is a judgement this tool routes to senior-review, never
-decides itself. A breach is a flag for a human/reviewer, not a verdict on wisdom.
+EVIDENCE
+--------
+Every number this tool prints is a real measurement over real source. A threshold
+breach is a measured fact; whether it MATTERS is a judgement for a reviewer, not
+something this tool decides.
 
-VERDICT LINE (PROTOCOL §5)
--------------------------
-Ends with exactly one machine-parseable line, noun STRUCTURE:
+SUMMARY LINE
+------------
+Ends with exactly one machine-parseable line:
     STRUCTURE: clean(N files, M functions scanned)
     STRUCTURE: findings(top: <worst signal>, count: K)
     STRUCTURE: clean(held: K accepted, R repaid)                   [ratchet mode]
@@ -90,7 +80,6 @@ USAGE
 -----
     structure-report.py [PATH ...]                  # defaults to "."
     structure-report.py --json                      # machine-readable
-    structure-report.py --thresholds f.json         # override default thresholds
     structure-report.py --write-baseline b.json .   # accept today's shape
     structure-report.py --baseline b.json .         # ratchet against it
     structure-report.py --baseline b.json --require-debt-ledger .
@@ -100,9 +89,8 @@ SCOPE / HONESTY
 Full depth (complexity, nesting, cycles, opacity) is implemented for Python via the
 stdlib `ast` + `tokenize`. For other languages the tool falls back to file-length
 and duplication signals and SAYS SO in its output rather than pretending to a depth
-it does not have — derive, never fake (suite Law: evidence or downgrade). If richer
-linters are installed (radon, ruff, eslint, madge) the tool notes they are available
-so a future version / the harness can escalate; it never silently depends on them.
+it does not have. If richer linters are installed (radon, ruff, eslint, madge) the
+tool notes they are available; it never silently depends on them.
 """
 import ast
 import sys
@@ -117,9 +105,9 @@ from _encoding import utf8_streams
 
 utf8_streams()
 
-# ----- default thresholds (override with --thresholds f.json) --------------------
+# ----- default thresholds ---------------------------------------------------------
 # Tuned to "a reviewer would want to look," not "definitely broken." A breach means
-# review-needed, never condemned. Chesterton's Fence (Law 3): an odd long function
+# review-needed, never condemned. Chesterton's Fence: an odd long function
 # may be justified — this tool flags it for a human, it does not fail the author.
 DEFAULT_THRESHOLDS = {
     "function_lines":      60,   # SLoC in one function body
@@ -208,7 +196,7 @@ def find_opaque_code(path, src, thresholds, findings):
     """Flag large regions the file's own lexer classified as string/comment, when
     those regions are shaped like code. Returns the file's coverage record.
 
-    See `structure_opacity` for the principle and PROTOCOL §8 for the rule.
+    See `structure_opacity` for the principle.
     In one line: every other signal in this tool measures ZERO over a string literal,
     so the only honest question is how much of the file the parser refused to enter —
     and that question needs no knowledge of what language is in there.
@@ -432,7 +420,7 @@ def analyze(paths, thresholds):
         analyze_file_length(path, thresholds, findings)
 
     # Coverage accounting. A finding count is not a result without the denominator it
-    # was measured over (PROTOCOL §8): a region the analyzer never entered is
+    # was measured over: a region the analyzer never entered is
     # UNMEASURED, and in a report that omits coverage, unmeasured reads as clean.
     fn_count, entered, opaque, documented = 0, 0, 0, 0
     for path in py_files:                                      # deep signals (python)
@@ -504,7 +492,7 @@ def _ledger_coverage(findings, ledger_path):
     """Files carrying baselined debt that DEBT_LEDGER.md does not mention.
 
     A baseline with no repayment plan is permanent amnesty; the ledger is what turns
-    an accepted breach into a debt with a trigger (PROTOCOL §3, owner structure-gate).
+    an accepted breach into a debt with a trigger.
     """
     try:
         with open(ledger_path, encoding="utf-8-sig") as fh:
@@ -578,7 +566,7 @@ def apply_ratchet(r, baseline, ledger_path=None, require_ledger=False):
     """Re-decide the verdict against an accepted baseline: direction, not acceptability.
 
     This stays inside the skill's 'measure, never judge' contract. The ratchet never
-    claims a baselined breach is wrong — Chesterton's Fence (Law 3) still protects it.
+    claims a baselined breach is wrong — Chesterton's Fence still protects it.
     It asserts only that the number went UP, which is a measurement.
     """
     if r["exit_code"] == 2:
@@ -736,9 +724,8 @@ def print_human_report(r):
         _print_findings_by_kind(r["findings"], r["by_kind"])
         print("  What to do with this: a flag means 'a reviewer should look,' NOT")
         print("  'this is definitely wrong' — an odd long function may be justified")
-        print("  (Chesterton's Fence, suite Law 3). Hand these to senior-review or")
-        print("  scrutinize for the wisdom call. This tool measures shape; it never")
-        print("  decides wisdom.")
+        print("  (Chesterton's Fence). Hand these to a reviewer for the judgement")
+        print("  call. This tool measures shape; it never decides wisdom.")
         print()
         print("  On an existing codebase this list is a starting position, not a")
         print("  sentence: record it with --write-baseline, give every entry a row in")

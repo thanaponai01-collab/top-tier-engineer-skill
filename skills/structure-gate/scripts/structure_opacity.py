@@ -3,7 +3,7 @@
 structure_opacity — how much of a file did the analyzer never enter, and was the part
 it skipped actually code?
 
-A measurement's denominator is part of the measurement (PROTOCOL §8). Every structural
+A measurement's denominator is part of the measurement. Every structural
 analyzer enters some of the source and skips the rest; the skipped part is not clean,
 it is UNMEASURED — and in a report that does not state coverage, unmeasured reads
 exactly like clean. That is how a second language hides inside one string literal while
@@ -38,7 +38,7 @@ def _python_doc_lines(src):
     """Lines belonging to a docstring — prose in the slot the language reserves for it.
 
     Counting these as unmeasured source makes every well-documented file look opaque
-    (measured: three false positives on this suite's own module docstrings). Excluding
+    (measured: three false positives on this project's own module docstrings). Excluding
     them costs no generality — "first statement of a module/class/function" is a
     structural fact the language defines, not a guess about what the text says.
     """
@@ -113,14 +113,14 @@ def contiguous_spans(lines, minimum=1):
 # Code is a tree of varied statements; prose is a uniform stream; tabular data is
 # uniform rows. Only code is both nested and irregular. Measured separations across
 # prose (English, wrapped), flat data (CSV, JSON), and code (HTML/CSS/JS, Lua, Python,
-# SQL, and an invented syntax matching no marker anywhere in this suite):
+# SQL, and an invented syntax matching no known language):
 #
 #     signal            prose        flat data     code
 #     indent_levels     1            1–2           3–4
 #     length_cv         0.005–0.026  0.021–0.132   0.243–0.774
 #
 # Both separate every fixture with a wide margin, and neither knows a language.
-# Thresholds are illustrative defaults calibrated in tools/test_tools.py, not doctrine.
+# Thresholds are illustrative defaults calibrated in tests/test_structure_report.py.
 import statistics
 
 MINIFIED_LINE = 500     # one machine-generated line: a tree flattened, still code

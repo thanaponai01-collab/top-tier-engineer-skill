@@ -1,123 +1,74 @@
 ---
 name: problem-framing
 description: >
-  Turn a vague human intent into a buildable, falsifiable problem specification before any architecture or code exists. Use when a project starts, requirements feel fuzzy/contradictory, or a build drifted and nobody can state what "done" means.
+  Turn a vague idea into a buildable, testable problem brief before any architecture or code exists. Use when a project starts, requirements feel fuzzy or contradictory, or a build drifted and nobody can say what "done" means.
 ---
 
-# Problem Framing & Requirements
+# Problem Framing
 
-> **The question:** What are we actually building, stated so it can be proven wrong?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+You refuse to build the wrong thing efficiently. The output is not code or architecture. It is a
+**problem brief** precise enough that someone who never saw this conversation could build from it.
 
-## When not to use this
+## Phases
 
-an existing brief that only needs a decision → `arch-design`; a build already underway that drifted → `boss` (it decides whether framing reopens); a felt complaint about running software → `symptom-audit`.
+### 1. Extract
+From the user's words and any existing code or docs:
+- **The job:** what should be true afterwards, as a change in the world, not a feature. ("Sales
+  staff stop re-typing orders", not "build an order form.")
+- **Who touches it:** people, other systems, AI agents. Machine users need parseable errors and
+  stable formats.
+- **What already exists:** read it before asking. A question the files answer is wasted.
 
-## The job
+### 2. Settle unknowns (ask at most one question)
+Rank each unknown by how much its answer changes the build:
+1. Changes direction ("one user, or many organizations?")
+2. Removes the biggest unknown nobody can settle by reading
+3. Sets the edges (what's out of scope)
+4. Preference (names, colours)
 
-You are the engineer who refuses to build the wrong thing efficiently. What you produce is not code
-and not architecture — it is a **problem brief** precise enough that someone who never saw this
-conversation could build from it. You ask the smallest number of questions that would change what
-gets built, you turn every vague wish into a criterion that can be proven wrong, and you write down
-what you will deliberately NOT build. Evidence tags per `PROTOCOL.md`.
+Rank 4: pick a default, mark it *assumed*, move on. Ranks 2–3: state the reading you took and the
+one you didn't, and continue. Only rank 1 becomes a question, and only when guessing wrong costs more
+than asking. **One question, not five**, and frame everything it doesn't block in the same response.
+A list of questions with nothing framed is this skill failing.
 
-## Steps: Extract → Interrogate → Constrain → Specify → Contract
+### 3. Constrain
+- **Invariants:** if broken, the project failed. Each must be testable. Changing one needs the
+  owner's explicit agreement.
+- **Preferences:** everything else; tradeable during the build.
+- **Not building:** a short list of plausible things deliberately left out. It stops scope creep
+  later.
 
-### Phase 1 — Extract
-
-Pull from the user's words (and any existing code, docs, or ledgers):
-
-- **The job**: what the person actually wants to be true afterwards, stated as a change in the
-  world rather than a feature. ("Sales staff stop re-typing orders" — not "build an order form.")
-- **Who touches it**: people, other systems, AI agents. Where an AI is one of them (it calls the
-  APIs, reads the logs, writes the code), say so — those interfaces have requirements of their own:
-  errors a machine can parse, formats that don't vary.
-- **What already exists**: if there is a codebase or an earlier record, read it before asking
-  anything. A question the files already answer is a wasted question.
-
-### Phase 2 — Settle the unknowns (ask at most one)
-
-Rank every unknown by how much of the build its answer changes:
-
-1. **Changes direction** — flips the architecture or the scope ("one user, or many organizations?")
-2. **Removes the biggest unknown** — something nobody here can settle by reading ("does the old API
-   let us write to it?")
-3. **Sets the edges** — what is out of scope ("will offline mode ever be needed?")
-4. **Preference** — colours, names, nice-to-haves.
-
-Then settle them without a questionnaire (§0; meta-skills Discipline 3). Rank 4 is never asked:
-take the default, mark it **(assumed)**, carry on. Ranks 2 and 3 get the fork line — the reading you
-took, the reading you did not, what changes if you took the wrong one — and the framing continues on
-the reading you took. Only rank 1 may become a real question, and only when it clears Discipline 3's
-asymmetry test: guessing wrong costs more than asking. **One question, not five**, and everything it
-does not block is framed in the same response.
-
-A brief that comes back as a list of questions with nothing framed is this skill failing, not this
-skill being careful. If the director cannot answer, that is not a stall either: record the unknown
-(§3) with the default you chose and the cost of being wrong.
-
-### Phase 3 — Constrain
-
-Split the spec into two lists, with a strict rule for what goes where:
-
-- **Invariants** — things that, if broken, mean the project failed. Each one must be testable.
-- **Preferences** — everything else. Preferences can be traded away during the build; invariants
-  cannot, and changing one takes the director's explicit agreement.
-
-Then write **what we will not build**: a short list of plausible things this project deliberately
-leaves out. That list is what stops the scope creeping six months from now, when someone else is
-maintaining the system.
-
-### Phase 4 — Specify
-
-Turn every invariant into an **acceptance criterion that could be proven wrong** — a sentence a
-machine could check. Words banned from criteria: *fast, clean, intuitive, robust, scalable,
-user-friendly*. Each one names a measurement and a threshold, or a behavior you can observe:
+### 4. Specify
+Turn every invariant into an acceptance criterion a machine could check. Banned words: *fast, clean,
+intuitive, robust, scalable, user-friendly*. Name a measurement and threshold, or an observable
+behavior:
 
 > ❌ "Search should be fast."
-> ✅ "Search over 10k records returns first results in under 300 ms on the target hardware. **(assumed: 10k is realistic ceiling — confirm)**"
+> ✅ "Search over 10k records returns first results in under 300 ms on target hardware. (assumed: 10k is the realistic ceiling)"
 
-Include criteria for the things that go wrong: what must happen on bad input, on partial failure,
-and when there is nothing to show. A spec that only describes success is half a spec.
+Include what happens on bad input, partial failure, and empty states. A spec that only describes
+success is half a spec.
 
-### Phase 5 — Contract
+### 5. Deliver the brief
+Inline in the response unless the user wants a file:
 
-Two artifacts — inline in the report under their own headings, or as files when §3 warrants:
-
-**`PROBLEM_BRIEF.md`** — sections in this order:
-1. The job, in one plain paragraph the director can read
+1. The job, one plain paragraph
 2. Who touches it
-3. Invariants (numbered, each with its acceptance criterion)
-4. Preferences (numbered, marked as tradeable)
-5. What we will not build
-6. Open questions — only the ones the director must eventually answer
+3. Invariants, numbered, each with its acceptance criterion
+4. Preferences, numbered, marked tradeable
+5. Not building
+6. Open questions the owner must eventually answer
+7. Assumptions: `assumption | default chosen | cost if wrong`
 
-**Assumptions** — kept up to date, one row per assumption, in the report or in the project's notes
-per §3:
-`ID | assumption | default chosen | cost if wrong | status (open / confirmed / disproved) | date`
-
-Later skills have to check this list. An **(assumed)** entry that turns out to be false is a
-failure of the framing, not of the build — send it back here.
-
-Shape and wording: `PROTOCOL.md` §9. The opening is the job in one plain paragraph and the
-assumption that costs most if it is wrong. The rows are the invariants, one each, with the
-acceptance criterion that settles it. Where the two artifacts stay inline, they go under `Detail`.
-
-**Verdict noun:** `BRIEF`
-
-End every run with a `BRIEF` line (PROTOCOL §5): `done(<N> invariants, <M> open questions)`, or
-`blocked(contradictory: …)` when the request contradicts itself and only the director can settle
-it.
+Open with the job and the assumption that costs most if wrong.
 
 ## Rules
 
-- A requirement said twice in different words is one requirement; merge it and keep one ID.
-- If the user's request contradicts an invariant already in the brief, say so — never quietly go
-  with whichever they said most recently.
-- Never let the brief grow past what is needed to start the architecture. Framing that starts
-  designing is doing the next skill's job.
+- A requirement said twice in different words is one requirement.
+- If a new request contradicts an existing invariant, say so; don't silently take the latest one.
+- Stop when there's enough to start designing. Framing that starts designing has gone too far.
 
 ## Common mistakes
 
-"Requirements" that are really feature lists; asking 20 questions when 3 would change the build;
-specs that say nothing about what happens when things fail; assumptions that live only in the chat
-and disappear when the conversation ends.
+Feature lists posing as requirements; twenty questions when three would change the build; specs
+silent on failure; assumptions that live only in the chat.

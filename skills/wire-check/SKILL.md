@@ -1,69 +1,77 @@
 ---
 name: wire-check
 description: >
-  Verify a newly built tool/feature/module is actually connected end-to-end to its running system, not just written. Use when something "was built but isn't working", asks "is this hooked up?", suspects dead code, or after multi-file additions.
+  Check that code is actually connected to the running system, not just written. Use when something "was built but isn't working", "is this hooked up?", after multi-file additions, or for "what do we actually serve / what did I build that nothing calls?" across a whole system.
 ---
 
 # Wire Check
 
-> **The question:** Is it connected?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+Code that exists is not code that runs. Generators are very good at writing components and very
+unreliable at connecting them. This skill checks the whole chain, from where the system really
+starts to where the component really has an effect, and when a link is broken, says why.
 
-## When not to use this
+## Rules
 
-"is it right?" → `correctness-gate`; "why is it wrong?" → `debug-protocol`; dead code with no new build behind it → `latent-audit`; a whole system with no component named → `reach-audit` (it runs this skill's method as a census). This skill answers one question only: is it connected?
+1. **Trace from the entry point inward.** Start where the system starts (process launch, route
+   table, event loop, CLI dispatcher) and walk towards the code. Tracing outward from the new code
+   only shows what it *could* connect to, and misses the most common failure: a complete component
+   nothing imports.
+2. **Work the chain out from this codebase.** Find how *this* system registers components, routes
+   requests and calls things by reading its code. Don't apply a remembered framework recipe.
+3. **Say whether you ran it or read it.** Every link is either *proven* (you ran something that
+   showed it working) or *traced* (you followed it by reading). If running it is cheap, traced is
+   not a final answer.
+4. **A broken link gets a cause, a fix, and a prevention.** Which link failed, why it was missed,
+   the code that connects it, and the habit or check that stops it happening again.
 
-Code that exists is not code that runs. This skill checks the whole chain, from where the system really starts to where the new component really has an effect — and when a link is broken, says *why* it broke, so the same kind of gap does not happen again. It exists because more and more code is generated, and generators are very good at writing components and very unreliable at connecting them.
+## The five links
 
-## The job
+| # | Link | Holds when | Typical break |
+|---|------|------------|---------------|
+| 1 | **Exists** | The file is there, complete, loadable | Stub bodies, half-written files, syntax errors |
+| 2 | **Registered** | Whatever finds components knows about it | Missing import/export, absent from manifest, config or container |
+| 3 | **Routed** | Some external trigger maps to it | Route or handler never declared; name doesn't match convention |
+| 4 | **Invoked** | Real execution reaches it with real arguments | Branch nothing takes, flag left off, wrong argument shape |
+| 5 | **Reachable** | Its effect lands (response, DB, file, event) | Result discarded, error swallowed, wrong target |
 
-Stated once; binding everywhere.
-
-1. **Trace from the entry point inward.** Start where the system actually starts — the process launch, the route table, the event loop, the CLI dispatcher — and walk *towards* the new code. Never trace outwards from the new code: that only shows what the code *could* connect to, and misses the most common failure of all — a component that is complete, convincing, and never imported by anything.
-2. **Work the chain out; never assume it.** You carry no recipe for any particular framework. Find out how *this* system registers components, routes requests, and calls things, by reading its code — whatever the language, framework, or year. A recipe written for today's frameworks dies with them; working it out yourself holds for frameworks that don't exist yet, and works better the smarter you are.
-3. **Proven always beats traced.** Every verdict on every link carries a tag per `PROTOCOL.md`: **(proven)** — you ran something that showed the link working; **(trace-only)** — you followed it by reading. State the tag explicitly, and never let confidence from reading pass as something you observed. If running it is cheap and possible, trace-only is not an acceptable final answer.
-4. **A broken link gets a cause, a fix, and a way to prevent it.** Report *which* link failed, *why* it was missed (the generator stopped early; the registration file was never edited; the naming convention quietly drifted), ship the code that connects it, and name the habit or check that stops this happening again.
-
-## The Five Links
-
-Every component in every system, whatever the stack, has to pass through these five states. They are what "being connected" means, not features of any one framework — which is why they don't go out of date:
-
-| # | Link | Invariant | Typical break |
-|---|------|-----------|---------------|
-| 1 | **Exists** | The file is there, complete, and can be loaded | Empty stub bodies, half-written files, syntax errors |
-| 2 | **Registered** | Whatever the system uses to find components knows about it | Missing import or export, absent from the manifest, config, or container |
-| 3 | **Routed** | Some external trigger maps to it | Route, handler, or subscription never declared; name doesn't match the convention |
-| 4 | **Invoked** | Real execution reaches it, with real arguments | A branch nothing takes, a feature flag left off, a caller passing the wrong shape |
-| 5 | **Reachable** | Its effects land where they should (response, DB, file, event) | Result thrown away, error swallowed, side effect pointed at the wrong target |
-
-Walk them **in order** and report the **first** broken link as the main finding — the later links cannot be checked until the earlier ones hold (mark those *blocked*, not *failed*).
+Walk them in order. The first broken link is the finding; later links are *blocked*, not failed.
 
 ## Procedure
 
-### 1. Map the system
+1. **Map.** Find the real entry points and how this system does each link. Build a small table:
+   each component against where each of its five links should be declared.
+2. **Walk.** For each link, use the cheapest evidence that settles it, stopping at the first step
+   this environment can actually run:
+   1. Read the connecting code end to end (traced).
+   2. Load it: import, compile or boot the relevant part.
+   3. Call it through the system, not by importing it directly (that skips the wiring under test).
+   4. Fire the real trigger (request, CLI command, event) and watch the effect.
+3. **Repair.** Ship the connecting code in the same response.
 
-Find the real entry points and how this system does each link: how does *this* codebase find components, declare routes, dispatch calls, and produce effects? Build a small table — each component against where each of its five links should be declared — before checking anything. That table is the backbone of the report.
+## Whole-system mode
 
-### 2. Walk the chain
+When no single component is named ("what do we serve, what does nothing reach?"):
 
-For each link, get the cheapest evidence that settles it, working up this **ladder** and stopping at the first step this environment can actually run:
+1. **Count the ways in first.** List every kind of entry (request, schedule, message, CLI, other
+   service, build step) and its instances. A missed entry point turns everything it serves into a
+   false orphan.
+2. **Build two lists separately, then subtract.** An *inventory* of everything built, from the
+   source. A *served set*, by walking forward from the entry points. Orphans = inventory − served.
+   Building the inventory from the walk guarantees an empty, wrong answer.
+3. **Unfollowable is unknown, not orphaned.** Calls by name in strings, dynamic lookups, cron jobs,
+   external callers: mark UNKNOWN and count them separately. Never report "all served" while
+   anything is unknown.
+4. **Classify each orphan by its first broken link:** not registered (wire it, or prove it dead
+   and delete it), not routed (wire it), never invoked (a flag or branch nobody takes: a decision
+   for the owner), effect lost (a live bug that looks like dead weight). Delete nothing and connect
+   nothing unasked.
 
-1. **Read it through** — follow the connecting code end to end (gives trace-only).
-2. **Load it** — import, compile, or boot the relevant part; many breaks show up on load.
-3. **Call it through the system** — invoke the component the way the system does, not by importing it directly, which skips the very wiring you are testing.
-4. **Trigger it for real** — fire the actual external trigger (request, CLI command, event) and watch the real effect.
+## Report
 
-The rule is *the cheapest step you can actually run*, not *the highest one*: if step 4 is one command away, take it; if the environment cannot run the system, say so plainly and give the best read-only verdict, honestly tagged.
-
-### 3. Verdict and repair
-
-Shape and wording: `PROTOCOL.md` §9. The opening carries the first break, in plain words, and
-anything still trace-only with the one command that would make it proven.
-
-The rows are the checked components, one each: the component, its five links as ✅/❌/⛔(blocked),
-the §1 tag, and the exact missing declaration where the chain first breaks. The connecting code
-ships in the same response, under `Detail`. The one recommendation is the check that stops the gap
-coming back — what the generator or the person did that left it, written as a step in the build loop.
-
-**Verdict noun:** `WIRE`
-
-End every run with a `WIRE` line (PROTOCOL §5); `clean` carries the §1 tag, a dead link is `findings(link N: cause)`.
+- The first break, in plain words, and anything still only traced with the one command that would
+  prove it.
+- A table: component, links 1–5 as ✅ / ❌ / ⛔ blocked, proven or traced, the exact missing
+  declaration. In whole-system mode: surface, served / orphaned / unknown, first broken link,
+  proposed outcome.
+- The connecting code.
+- One recommendation: the check that stops this kind of gap coming back.

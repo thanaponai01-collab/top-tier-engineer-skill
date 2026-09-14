@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-structure-report.py — structural shape, coverage honesty, and the §8 debt ratchet.
+structure-report.py — structural shape, coverage honesty, and the debt ratchet.
 
-Part of the suite's own test floor; run them all with `python3 tools/test_tools.py`.
+Run them all with `python -m unittest discover tests`.
 """
 import json, os, tempfile, unittest
 
@@ -90,9 +90,8 @@ class StructureReport(unittest.TestCase):
         """The generality claim, made falsifiable.
 
         The first cut of this detector matched `<script`/`function `/`SELECT` — literal
-        knowledge of four languages, so the fifth walks past it (Law 6, constrain
-        process never intelligence). These two bodies match NO marker anywhere in this
-        suite: one is Lua (nests with do/end, ends lines in words, so every C-family
+        knowledge of four languages, so the fifth walks past it. These two bodies match
+        NO known marker: one is Lua (nests with do/end, ends lines in words, so every C-family
         assumption fails on it) and one is a syntax that does not exist. Both must be
         caught on shape alone. If this test ever needs a vocabulary added to pass, the
         detector has regressed to the version this replaced."""
@@ -140,7 +139,7 @@ class StructureReport(unittest.TestCase):
             self.assertEqual(hits, [], f"{name} misclassified as code: {hits}")
 
     def test_docstrings_are_documentation_not_a_blind_spot(self):
-        """Regression: before docstrings were excluded, the suite's own tools produced
+        """Regression: before docstrings were excluded, the project's own tools produced
         three false positives on their module docstrings — prose in the slot the
         language defines for prose is not an unmeasured region."""
         doc = "\n".join([
@@ -156,7 +155,7 @@ class StructureReport(unittest.TestCase):
         self.assertEqual(r["coverage"]["pct_entered"], 100.0, r["coverage"])
 
     def test_coverage_is_always_reported(self):
-        """PROTOCOL §8: a finding count without its denominator lets an
+        """A finding count without its denominator lets an
         unmeasured region read as clean. Coverage is not optional output."""
         tmp = self._dir("ok.py", "def add(a, b):\n    return a + b\n")
         code, out, _ = run("structure-report.py", tmp)
@@ -164,7 +163,7 @@ class StructureReport(unittest.TestCase):
         self.assertEqual(code, 0, out)
 
 class StructureRatchet(unittest.TestCase):
-    """PROTOCOL §8: debt accrues through defensible increments, so the gate must
+    """Debt accrues through defensible increments, so the gate must
     measure DIRECTION, not level. These tests are the mechanical statement of that
     rule — without them the ratchet is prose and prose drifts."""
 
@@ -243,7 +242,7 @@ class StructureRatchet(unittest.TestCase):
             self.assertIn("1 repaid", out)
 
     def test_require_debt_ledger_fails_when_debt_is_unrecorded(self):
-        """§8 rule 2: a baseline with no ledger is permanent amnesty. You may only
+        """A baseline with no ledger is permanent amnesty. You may only
         accept debt you wrote down, with the trigger that makes repaying it due."""
         with tempfile.TemporaryDirectory() as tmp:
             self._repo(tmp)

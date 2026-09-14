@@ -13,11 +13,11 @@ three questions from it, each with its honest evidence ceiling:
   3. UNUSED DEFS     (suspected) — which top-level functions/classes are
                                    defined but never referenced in-tree?
 
-Stdlib only, mirroring tools/structure-report.py.  Python-deep; the report
-says exactly where depth stops rather than dressing shallow up as uniform.
+Stdlib only.  Python-deep; the report says exactly where depth stops rather
+than dressing shallow up as uniform.
 
 Usage:
-  python3 tools/graph-audit.py <path> [<path> ...]
+  python3 scripts/graph-audit.py <path> [<path> ...]
         [--layers LAYERS_FILE] [--entry MODULE ...] [--json]
 
 Layers file format (top layer first; a module may import SAME or LOWER
@@ -27,15 +27,15 @@ layers, never a HIGHER one), '#' comments allowed:
     domain:    app/services/
     data:      app/models/, app/db/
 
-Verdict line (noun owned by the latent-audit skill; grammar per PROTOCOL.md):
+Summary line:
   LATENT: clean(N modules traced)
         | findings(dead: A, unused: B, layer-breaches: C)
         | blocked(no analyzable source)
 
 `clean` requires that every dimension was actually MEASURED. Without `--layers` the layer
 dimension is not measured, so the verdict reports `layer-breaches: UNMEASURED(...)` rather
-than `0` and never claims `clean` (PROTOCOL §8 — a region the analyzer could not
-enter is UNKNOWN, never folded into a clean result). The EXIT CODE stays 0 in that case:
+than `0` and never claims `clean` (a region the analyzer could not enter is
+UNKNOWN, never folded into a clean result). The EXIT CODE stays 0 in that case:
 an unmeasured dimension is a gap in how the tool was invoked, not a defect in the subject,
 and failing by default would make this a permanently-red gate — which is a disabled gate.
 """
@@ -266,19 +266,10 @@ def rel(p):
 
 
 def latent_verdict(n_modules, dead, unused, breaches, layers_measured):
-    """The §5 LATENT line, with §8's denominator honoured.
+    """The LATENT summary line.
 
-    "A region it could not enter is reported as UNKNOWN — never omitted, and never folded
-    into a clean result." With no --layers file the layer dimension was not measured at all,
-    so `layer-breaches: 0` is not a zero — it is an absence, and a verdict that reports it as
-    a zero is claiming a clean result for ground it never walked. The human report below has
-    always said "this is a gap, not a clean result"; until v1.17.0 the VERDICT LINE — the part
-    a future model greps, and the only part most readers see — said `clean` regardless. The
-    tool told the truth in the paragraph and denied it in the machine-readable line.
-
-    Lives out here rather than inline in main() because main() already carries accepted debt
-    (DEBT_LEDGER D-2): PROTOCOL §8 rule 4 — when the smallest diff lands in a file already on
-    the ledger, "smallest diff" is a withdrawal against it, so extract first, then add.
+    With no --layers file the layer dimension was not measured at all, so `layer-breaches: 0`
+    would claim a clean result for ground never walked. Report it as UNMEASURED instead.
     """
     if not layers_measured:
         layer_count = "UNMEASURED(no --layers declared)"

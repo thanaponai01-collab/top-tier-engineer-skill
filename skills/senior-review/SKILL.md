@@ -1,87 +1,106 @@
 ---
 name: senior-review
 description: >
-  Principal-engineer code review that mentors rather than gatekeeps. Use to review a codebase, audit code quality, assess production-readiness, find weaknesses, or when a repo/project folder is shared for feedback, or asks "is this code good?".
+  Principal-engineer review. Three modes: a whole codebase ("is this code good?", production-readiness, a repo shared for feedback), a change that hasn't landed (PR, diff, plan, design doc: "second opinion", "sanity-check"), or strategic ("where's the ceiling?", "what's the biggest gap / what should I build next?").
 ---
 
 # Senior Review
 
-> **The question:** Is this a good design, and will it hold up?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+Strict about evidence, honest about what you don't know, and always ending in something useful: the
+author should learn *why* something matters and how not to repeat it.
 
-## When not to use this
+Pick the mode:
+- **Codebase mode:** judge a whole system and teach its author.
+- **Change mode:** an outsider's opinion on one PR, diff or plan before it lands.
+- **Ceiling mode:** where the working system's ceiling is and the one move that raises it.
 
-a change that hasn't landed yet (PR, diff, plan) → `scrutinize`; measured structural shape → `structure-gate`; proof of correctness → `correctness-gate`; a felt complaint → `symptom-audit`; dead code and layer breaches → `latent-audit`; "where is the ceiling / what should I build next" → `toptier-lens`. This skill judges a whole codebase and teaches its author.
+## Rules (all modes)
 
-A review done the way a principal engineer would do it: strict about evidence, honest about what you don't know, and always ending in something the author learns — they should come away knowing not just *what* is wrong, but *why* it matters and *how* not to write it again.
+1. **Work it out; don't recite a checklist.** Every check comes from this codebase's real
+   architecture, data flows and stated purpose.
+2. **Tag every claim:** *proven* (you ran something that shows it), *traced* (you followed the
+   whole chain by reading), *suspected* (looks wrong, chain incomplete). Never dress a suspicion as
+   proof. If a claim is cheap to prove, prove it.
+3. **Broken is not unfamiliar.** Broken breaks something nameable: corrupts data, races, leaks, lies
+   to its caller. Unfamiliar is just not how you'd do it. Before flagging the second kind, state the
+   best reason a competent engineer might have had and check git history. Unrefuted → a question,
+   not a finding.
+4. **Cause, not symptom.** "This function is wrong" is a symptom. "Nothing owns input validation, so
+   it's scattered and inconsistent" is a cause.
+5. **Ship the fix with the finding.** Findings needing code include the corrected code.
+6. **Severity is consequence:** data loss > security exposure > silently wrong results > downtime >
+   maintainability > style. Measure against what the system already deliberately allows, not what
+   you assume systems like it promise.
+7. **Cite it or it didn't happen.** Every claim names a file, line, path or command.
 
-## The job
+## Codebase mode
 
-These rules bind every phase. Each is stated exactly once; nothing below repeats them.
+1. **Orient.** Purpose, architecture as actually built (entry points, trust boundaries, state
+   ownership, concurrency, failure handling; note where docs and code disagree), and the
+   **invariants** this system must hold ("a payment is never recorded twice"). Say where each came
+   from: the project's own docs, evidence in its code, or your assumption about systems like it.
+   If the system's own evidence contradicts an assumed invariant, settle that before citing
+   severity.
+2. **Check yourself.** Which parts of this stack are you least sure of? Claims there drop a level.
+   What would this look like if it were right and you were wrong?
+3. **Examine** against the invariants, cheapest evidence first (read → trace → run the tests, write
+   small probes):
+   - **Correctness:** can any input, ordering or timing break an invariant?
+   - **Design:** does each concern have one owner? Where would the next requirement land?
+   - **Trust:** what does it take on faith at each boundary?
+   - **Operations:** when it fails at 3 a.m., what evidence exists? Can it be spotted and undone?
+   - **Change:** will a competent stranger understand it in a year?
+4. **Consolidate.** Merge findings into causes (ten findings, one cause = one finding). Settle
+   unfamiliar choices: ask, test, or list as open questions. Attack your own top findings; drop
+   what doesn't survive.
+5. **Report.** Open with: can it ship and the single biggest issue; what's genuinely good (specific
+   and earned); the one habit that would remove the most findings. Then one row per finding by
+   severity: invariant broken, tag, evidence, cause, and the *rule* that prevents the whole class.
+   Corrected code and open questions after.
 
-1. **Work it out; don't recite a list.** You carry no checklist. Every check comes from *this* codebase's real architecture, dependencies, data flows, and stated purpose. A memorized list of "common bugs" limits the review to whatever its author knew; working it out yourself scales with what you know. The smarter you are, the deeper this review goes — that is deliberate.
-2. **Evidence, or drop a level.** Every claim carries a confidence tag per `PROTOCOL.md`: **(proven)** — you ran code, a test, or a reproduction that shows it; **(trace-only)** — you followed the logic by reading and the chain is complete; **(suspected)** — something looks wrong but you could not complete the chain. Never dress a suspicion up as a proof. If you *can* prove a claim cheaply, you must — leaving a proof unrun that you could have run is a defect in the review.
-3. **Broken is not the same as unfamiliar.** Something is *broken* when it breaks an invariant you can name (corrupts data, races, leaks, lies to its caller). Something is merely *unfamiliar* when you just haven't seen it done that way. Before flagging the second kind, state the best reason a competent engineer might have had for it. If you cannot disprove that reason with evidence, it is not a finding — it goes to the unfamiliar-choices steps in Phase 4, never onto the defect list.
-4. **Cause, not symptom.** Every finding names the decision or the missing constraint that *produced* the defect, so the same kind of bug cannot come back. "This function is wrong" is a symptom; "nothing in this codebase owns input validation, so it happens in scattered, inconsistent ways" is a cause.
-5. **The fix ships with the diagnosis.** Findings that call for code changes include the corrected code, in the same response. A review that ends in homework is half a review. That fix is a change like any other and closes under §7: reviewed, checked against every other surface with the same exposure, shown to gate on the system's real authority check, and ending in a `FIX` line — never handed over unchecked.
-6. **Severity is consequence, not taste.** Rank by what happens if it ships: data loss or corruption > security exposure > silently wrong results > downtime > maintainability > style. Style alone never rises above the bottom. Measure consequence per PROTOCOL §1: how much worse this is than what the system *already deliberately allows the same caller* — never against your own idea of what a system like this ought to promise.
+## Change mode
 
-## Phase 1 — Orient
+Read the change cold. Take no confidence from the author, the description or how polished it is.
+The diff is where you start, not where you stop.
 
-Before judging anything, build the model you will judge against:
+1. **Should this exist?** State the goal in one sentence. Can't? It's underspecified: say what's
+   missing and stop. Then subtract, top-down:
+   1. **Do nothing:** is the problem real? Does anything depend on it?
+   2. **Reuse:** does something here already do this?
+   3. **Shrink:** is there a change giving 90% of the goal at 10% of the risk?
+   4. **Move:** config instead of code, framework instead of app, build time instead of run time?
+   A better alternative, argued, leads the report. Skip this only if the user says not to question
+   scope, and say it was skipped.
+2. **Trace the real path** for each claimed behavior: entry → call sites → branches → state changed
+   → effect, including unchanged code on both sides of the diff. For a plan, trace the proposed
+   flow against the existing system; every assumption the code doesn't support is a finding.
+3. **Verify** each claim: *"Claims X. Path: A → B → C. At C, [observation] (tag). Holds / doesn't."*
+   Then attack: breaking inputs (empty, huge, unicode, concurrent, retries, partial failure); things
+   it changes without saying so (performance, error meaning, logs, contracts other callers rely on,
+   stored formats); and **the tests**: do they run the path you traced, or mock around it? Run
+   things wherever cheap.
+4. **Report.** One row per finding, blocker → major → minor: finding with `file:line`, consequence,
+   evidence with tag, the smallest change. Small fixes as corrected lines. A clean pass lists what
+   you traced and ran. "LGTM" is not an answer. Structural problems lead; drop nitpicks when there
+   are any.
 
-- **Purpose**: What is this system *for*? What does correct behavior mean for its users?
-- **The architecture as actually built**: entry points, trust boundaries, who owns which state, how concurrency works, how failures are handled. Read enough real code to describe these from evidence, not from what the README claims — and note every place the documents and the code disagree.
-- **Invariants**: Write down the properties that must hold for this specific system (e.g., "a payment is never recorded twice," "user A's data is never readable in user B's session"). If a `PROBLEM_BRIEF.md` exists, inherit its invariants and extend them; derived invariants — not generic best practices — are what Phase 3 tests against. Say where each invariant came from: **inherited** (from a ledger or a brief), **evidenced** (this system's own code, policies, comments, or existing surfaces show it is trying to hold it), or **imported** (what systems like this usually promise — an (assumed) claim about intent, not a fact about this system). PROTOCOL §1 applies: when the system's own evidence contradicts an invariant (a permissive policy, a comment saying it is open on purpose, a surface that already exposes the data), settle that *before* Phase 3 cites it — either the system's intent contradicts itself, and that is the finding, or the invariant is narrowed. An imported invariant that the system's own evidence contradicts, unanswered, supports no severity at all.
-- **Who wrote it and under what conditions**: apparent experience level, the conventions in use, what the developer was probably optimizing for. This sets the tone of your teaching, never the evidence standard.
+## Ceiling mode
 
-## Phase 2 — Check yourself first
+You're a founding engineer looking at a working system. Deliver direction, not a patch, and put a
+cost on every claim.
 
-Before examining anything, ask:
-
-- Which parts of this stack, domain, or style am I least sure about? Mark them — claims there drop one confidence level by default.
-- What would this codebase look like if it were *right* and I were *wrong*? Keep that picture in mind while reviewing; it is what stops you filing competence as error.
-- Am I about to penalise the author for not writing it the way I would have? A style preference is not a finding.
-
-## Phase 3 — Examine
-
-Test the codebase against the invariants from Phase 1, across five areas. The areas hold for any language, framework, or era — what changes each time is the *specific checks*, which you work out fresh:
-
-1. **Correctness** — can any input, ordering, or timing make the system break a Phase 1 invariant? Look where state changes hands: boundaries, conversions, concurrency, error paths.
-2. **Design** — does each concern have exactly one owner? Where would the next requirement land, and would it land cleanly or need surgery?
-3. **Safety and trust** — walk every trust boundary the way an attacker would. What does the system
-   take on faith without checking? This dimension *surfaces* trust concerns; a system whose security is the
-   actual question — auth, sessions, secrets, money, PII, untrusted input to a privileged sink —
-   routes to `threat-model`, which owns the adversarial pipeline (assets → boundaries → abuse-case
-   tests). A flagged trust concern here that warrants systematic treatment is handed there, not
-   resolved as a single review line.
-4. **Running it in production** — when this fails at 3 a.m. (and it will), what evidence will exist? Can the failure be spotted, diagnosed, and undone?
-5. **Changing it later** — will a competent stranger understand this in a year? What knowledge exists only in the original author's head?
-
-In each area, use the cheapest evidence that settles it: read → trace → run. Prefer running the system's own tests and writing small probes that would prove you wrong, over speculating.
-
-## Phase 4 — Consolidate
-
-- **Merge findings down to their causes.** Ten findings with one cause are one finding with ten examples.
-- **Settle the unfamiliar choices** parked by Rule 3, in this order: (a) *ask* — put the question to the author, if you can talk to them; (b) *test* — design the cheapest experiment that would tell "clever" apart from "broken", and run it if you can; (c) *record* — carry the unsettled ones forward with the question, the experiment that would settle it, and the date: in this report by default, and in `REVIEW_LEDGER.md` at the repo root when §3 warrants a file. A question that has to survive to the next review is §3 clause (b) — it spans more than one session — so on any codebase reviewed twice, the file is warranted. Later reviews read that file first, so each one is settled once instead of argued forever. A flag that fades into a vague note is a failed review.
-- **Check your own findings again.** Before delivering, attack your highest-severity claims the way you attacked the code. Drop the ones that don't survive.
-
-## Phase 5 — Deliver
-
-Shape and wording: `PROTOCOL.md` §9. The opening carries three things no other skill owes: whether
-it can ship and what the single biggest issue is; what is genuinely good — specific and earned,
-never padding, because engineers grow by having their best instincts named; and the one habit that,
-if changed, would remove the most findings. One lesson that goes deep, not twelve shallow ones.
-
-One row per finding, ordered by severity. Columns: the invariant broken, the tag, the evidence,
-the cause, and the *rule* that prevents this whole kind of bug ("check input at the boundary, trust
-it inside", not "fix line 42"). Corrected code goes under `Detail`, and so do the unfamiliar
-choices you could not settle, written respectfully as open questions.
-
-**Verdict noun:** `REVIEW`
-
-End every run with a `REVIEW` line (PROTOCOL §5). This skill judges and teaches; it makes nothing
-of its own, so it never says `done` — a fix it ships under Rule 5 closes separately, with its own
-`FIX` line (§7). `clean(areas: 5, read: <fraction of the subject entered>)` when nothing broke a
-Phase 1 invariant; `findings(top: <finding>, count: K)` otherwise;
-`blocked(<what would unblock it>)` when the source could not be read, or the system’s purpose
-could not be established and the director has not stated one.
+1. **Orient on intent.** Map entry points, data flows, module layout; read the config, where real
+   goals hide. Name the **North Star** in one sentence (the user's, or yours marked as inferred) and
+   the constraints everything rests on (single user, local-first, latency or token budget, privacy).
+2. **Find the gap.** Generate candidates; keep only what passes all five:
+   1. **Not already built:** search first. If partly there, the gap is "X exists but is thin or
+      wired wrong".
+   2. **Not already tried:** read git log and any changelog or decision notes. A move killed for a
+      reason stays dead unless you name what changed.
+   3. **Real at this scale:** O(n²) over 500 items is not a finding.
+   4. **Leverage:** how much else improves if this is fixed?
+   5. **Serves the North Star**, not works against it.
+3. **Report one gap and one move.** The gap: what it is, `file:line` evidence, what else it
+   controls. The move: outcome, rough effort, dependencies, reversibility. Then the runner-up gap
+   and why it lost, and at most two questions only the owner can settle. If the system is already at
+   its own ceiling, say so with reasons. Five gaps means you found none.

@@ -1,121 +1,80 @@
 ---
 name: threat-model
 description: >
-  Find what an adversary can make a system do that it must not — before a build ships or after a review flags a trust concern. Use for auth, sessions, secrets, untrusted input, deserialization, third-party deps, or "is this secure".
+  Find what an attacker can make a system do that it must not, and turn each abuse into a test. Use for auth, sessions, secrets, untrusted input, deserialization, third-party dependencies, or "is this secure / can this be abused?".
 ---
 
 # Threat Model
 
-> **The question:** What can an attacker make it do that it must not?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+Assume the attacker has read the source, has a valid account, and is patient. List what the system
+protects, walk every boundary as the attacker, and turn each plausible abuse into a **failing test
+that must pass**. Never claim a system is secure. Claim that specific attacks were modelled and
+specific defenses were proven.
 
-## When not to use this
+## Rules
 
-intended-behavior correctness → `correctness-gate`; whole-codebase wisdom → `senior-review`; a not-yet-landed delta → `scrutinize`; deploy reversibility → `ship-gate`.
+1. **Assets before attacks.** Name what's worth stealing or breaking first: credentials, sessions,
+   money, personal data, shared resources (seats, balances), availability. An attack with no asset
+   is noise.
+2. **Ask where the system decides to believe each input.** Permission taken from client-supplied
+   data (a role in a cookie, a price in a form, an id in a URL) is the most common critical
+   finding. Name it as trusting the wrong source.
+3. **Walk the boundary as the attacker.** Forged tokens, replayed requests, other users' ids,
+   oversized, empty, encoded or unicode payloads, wildcards, duplicate simultaneous requests. The
+   honest path working proves nothing.
+4. **Every finding becomes a test spec**, not a sentence: input, expected rejection, error shape.
+   A defense you only read about is traced, not proven, until the test runs.
+5. **Config and dependencies count.** Secrets in source or git history, debug modes on, default
+   keys, permissive CORS, unpinned or abandoned dependencies, over-broad permissions. These need no
+   cleverness to exploit.
+6. **Judge against the system's intent.** If the system deliberately leaves something open (its own
+   policies, docs, or an existing surface already serving that data), that's the baseline. The
+   finding is what's *newly* possible on top of it: the same data reachable with a more widely
+   exposed credential, or a contradiction between stated and enforced policy.
+7. **Unfamiliar isn't broken.** Before flagging an odd security pattern, state the best reason a
+   competent engineer might have for it.
 
-You assume the attacker has read the source, has a valid account, and is patient. You list what the
-system protects, walk every boundary the way an attacker would, and turn each plausible abuse into
-a **failing test the gate has to make pass** — so "secure" is never a feeling, always a list of
-named attacks that are now defended. You never claim a system is secure; you claim that specific
-attacks were modelled and specific defenses were proven.
+## Phases
 
-## The job
+### 1. Assets
+`asset | who wants it | what they gain | worst case`. Rank by worst case; top rows get the effort.
 
-1. **Assets before attacks.** Name what is worth stealing or breaking first — credentials,
-   sessions, money, PII, integrity of a shared resource (seats, balances), availability. An attack
-   with no asset behind it is noise; an asset with no attack modelled is a blind spot.
-2. **Trust is something the system gives, and giving it to the wrong place is the usual cause.**
-   For every input, ask *where does the system decide to believe this?* Permission taken from data
-   the client supplied — a role in a cookie, a price in a form, an id in a URL — is the single most
-   common critical finding. Name it as trusting the wrong source, not as a coding slip.
-3. **Walk the boundary as the attacker, not as the user.** At each trust boundary, the attacker
-   sends what an honest user never would: forged tokens, replayed requests, other users' ids,
-   oversized, empty, unicode or encoded payloads, wildcards, duplicate requests sent at once. The
-   honest path working proves nothing here.
-4. **Every finding becomes a test, not a sentence.** A threat written as prose fades away; a threat
-   written as a failing test the gate runs stays defended. This skill *writes the test spec*;
-   `correctness-gate` *runs it* — proof that a defense works stops at **(trace-only)** until the
-   gate executes it, and the report says so.
-5. **Dependencies and configuration count too.** Secrets in the source, debug modes left on,
-   unpinned or abandoned dependencies, and permissions that are too broad are all threats that need
-   no cleverness from an attacker at all. List them in the same pass; they are usually the easiest
-   to exploit.
-6. Law 3 and Law 5 apply: a security pattern you don't recognise gets the "what is the best reason
-   a competent engineer would do this?" check before you flag it, and Law 5 means a real finding
-   ships its fix in the same response — with that fix closing under §7 (reviewed, checked against every other
-   surface with the same exposure, shown to gate on the system's real authority check, ending in a
-   `FIX` line).
-7. **Something left open on purpose is the baseline, not a finding.** Per PROTOCOL §1, a boundary
-   the system deliberately leaves open — shown by its own policies, schema comments, docs, or an
-   existing surface already serving the same data — is the baseline you measure an attack against.
-   The finding, if there is one, is what is *newly* possible on top of that: the same data now
-   reachable with a different kind of credential whose exposure is wider (for example, an API token
-   that sits in scripts and shared documents, versus a browser session), or a contradiction between
-   what the system says it allows and what it actually enforces. Phase 1 always works out exposure
-   against this baseline.
+### 2. Boundaries
+Map every place data or control crosses from less to more trusted: network → app, user → admin,
+client → server, uploaded file → parser, third party → core. For each, note what's taken on faith.
+Most critical findings are a boundary trusting the wrong side.
 
-## Steps: Assets → Boundaries → Abuse → Prove → Prescribe → Hand off
+### 3. Abuse
+For each top asset at each boundary, work out the attacks *this* system allows. Starting points,
+not a limit:
+- **Identity & permission:** forge, replay, escalate. Is permission ever read from client data?
+- **Input → sink:** SQL, command, template, path injection; unescaped wildcards; untrusted
+  deserialization; SSRF.
+- **Object access:** can user A reach user B's resource by changing an id?
+- **Shared resources:** can a counter be raced or pushed below zero between check and update?
+- **Secrets & config**, **supply chain.**
 
-### Phase 1 — Assets
-List what this system protects and what an attacker gains from each, in one table:
-`asset | who wants it | what they gain | worst case if it goes wrong`. Rank by that worst case;
-the top rows decide where the rest of the audit spends its effort.
+### 4. Prove
+For attacks on the most valuable assets, run them: forge the token, send the crafted input, fire
+the concurrent requests. Executed = proven; read-only = traced, with the command that would settle
+it. A boundary that holds is a finding too.
 
-### Phase 2 — Boundaries
-Map every trust boundary: where data or control crosses from less-trusted to more-trusted
-(network → app, user → admin, client → server, untrusted file → parser, third-party → core). For
-each, record *what the system currently takes on faith without checking*. This is the phase
-everything else rests on — most critical findings are a boundary trusting the wrong side.
-
-### Phase 3 — Abuse (work the attacks out; don't recite a list)
-For each top asset at each boundary, work out the attacks this *particular* system allows. The
-categories below are a **replaceable checklist**, not a limit — go past them:
-- **Identity and permission** — forge, replay, escalate: can a client grant itself more permission
-  than it has? Is permission ever read from data the client supplied?
-- **Input → sink** — injection (SQL/command/template/path), unescaped wildcards, deserialization
-  of untrusted bytes, SSRF.
-- **Object access** — can actor A reach actor B's resource by changing an id (IDOR)?
-- **Shared resources** — can a shared counter (seats, stock, balance) be raced, or pushed below
-  zero, by two requests arriving between the check and the update?
-- **Secrets & config** — secrets in source/history, debug modes, default keys, permissive CORS.
-- **Supply chain** — unpinned, abandoned, or over-privileged dependencies.
-A stronger model will come up with sharper and stranger attacks here — which is exactly why this
-is worked out rather than recited.
-
-### Phase 4 — Prove
-Move from reading to running on the attacks against the most valuable assets: actually forge the
-token, send the crafted input, fire the duplicate requests at once. An attack you executed is
-**(proven)**; a complete chain you only read is **(trace-only)**, named with the one command that
-would settle it. A boundary that survives the attack is **also a finding** — it tells the director
-where not to spend.
-
-### Phase 5 — Prescribe
-For each finding: the asset, the boundary, the attack, the evidence tag, which misplaced trust
-caused it, and the **contained fix, written in the project's conventions** (Law 5). Fixes that
-change the structure of who is trusted (move the permission check to the server, change the
-session format) go to `arch-design` as decisions, never slipped in here.
-
-### Phase 6 — Hand off
-For each defended threat, write the **abuse-case test spec** — input, expected rejection,
-structured-failure shape — and hand it to `correctness-gate` to execute and own as a regression.
-Append the asset/boundary/abuse table to the report — a file only when §3 warrants one.
-Before any ship, `ship-gate` reads it; an unmodelled top-asset boundary blocks the deploy.
+### 5. Fix
+For each finding: asset, boundary, attack, proven or traced, the misplaced trust, and a contained
+fix in the project's conventions. Before calling a permission fix complete, list **every** surface
+exposing the same data or operation (pages, API routes, exports, background jobs, webhooks) and
+leave them consistent or name the gap. Show the check you gate on (membership, role, ownership) is
+how the system really decides access, not a field anyone can write. Fixes that change who is
+trusted (moving a check server-side, changing the session format) are design decisions: raise them.
 
 ## Report
 
-Shape and wording: `PROTOCOL.md` §9. The opening is the worst thing an attacker can do today, in
-one sentence, with its evidence tag.
-
-One row per finding, ordered by blast radius: the boundary, what the attacker gets, the evidence,
-the fix. The asset table and the boundaries that came back clean go under `Detail` — clean
-boundaries are counted in the verdict line, never dropped.
-
-**Verdict noun:** `THREAT`
-
-a `THREAT` line (PROTOCOL §5) — `clean` names how many boundaries were modelled and how many are defended.
+Open with the worst thing an attacker can do today, in one sentence, proven or traced. Then one row
+per finding by blast radius: boundary, what the attacker gets, evidence, fix. Then the abuse-case
+test specs, the asset table, and how many boundaries were modelled and held.
 
 ## Common mistakes
 
-Running a security checklist with no asset behind each check; treating the happy path as evidence;
-findings written as prose that then fade away; claiming "secure" instead of "these named attacks
-are defended"; skipping secrets-in-source and debug-left-on as too obvious to bother listing;
-flagging a pattern you don't recognise as a hole without the Law 3 check.
+Checklists with no asset behind them; the happy path as evidence; findings as prose that fades;
+claiming "secure"; skipping secrets-in-source as too obvious; fixing one door and leaving the others
+open.

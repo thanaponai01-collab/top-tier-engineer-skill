@@ -2,7 +2,7 @@
 """
 graph-audit.py — the import/reference graph behind latent-audit.
 
-Part of the suite's own test floor; run them all with `python3 tools/test_tools.py`.
+Run them all with `python -m unittest discover tests`.
 """
 import json, os, tempfile, unittest
 
@@ -69,7 +69,7 @@ class GraphAudit(unittest.TestCase):
             self.assertIn("findings(dead: 1, unused:", last)
 
     def test_unmeasured_layers_are_never_folded_into_clean(self):
-        """PROTOCOL §8 — the denominator. Without --layers the layer dimension is
+        """The denominator. Without --layers the layer dimension is
         not measured, so the verdict must say UNMEASURED, not `clean` and not `0`. The
         human report always said "this is a gap, not a clean result"; the verdict line
         said `clean` anyway, which is the half most readers and every grep actually see."""

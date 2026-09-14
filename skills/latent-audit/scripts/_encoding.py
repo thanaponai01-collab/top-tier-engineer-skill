@@ -1,8 +1,4 @@
-"""Force UTF-8 on stdout/stderr so § and em-dashes survive a cp1252 console.
-
-Shared by every tools/*.py that prints to a terminal. Copying a tool out of this
-suite means vendoring this file with it.
-"""
+"""Force UTF-8 on stdout/stderr so em-dashes survive a cp1252 console."""
 import sys
 
 
