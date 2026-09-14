@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.2.0 — 2026-09-14 — the philosophy, applied to itself
+
+- `How to answer` gains **Answer first** (every skill's report already opened with its verdict; two didn't)
+  and **Say how you know** (proven / traced / suspected, defined once instead of in four skills).
+- **Disagree in one line** no longer contradicts the skills that must stop: ask instead when a step
+  can't be undone or would fake the result.
+- `correctness-gate` and `structure-gate` reports now open with the verdict; `senior-review` ceiling
+  mode asks at most one question.
+- `structure-report.py` no longer names other skills. Removed `--debt-ledger` / `--require-debt-ledger`:
+  the baseline and `repay_at` are the parts that catch regressions; the ledger was prose that drifted,
+  and its default path made every `--baseline` run warn projects that never kept one.
+
 ## 3.1.0 — 2026-09-14 — the philosophy, back in every skill
 
 - Each skill now opens with a `How to answer` section: the busy-senior-engineer stance from the old

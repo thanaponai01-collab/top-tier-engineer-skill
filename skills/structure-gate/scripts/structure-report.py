@@ -51,9 +51,7 @@ How to use the ratchet is described in the structure-gate SKILL.md:
 Baselined breaches are ACCEPTED; the run then fails only on a breach that is NEW or an
 accepted one that got WORSE. That is still measurement (a number moved), never a wisdom
 call, and it makes the gate usable on legacy code where an un-baselined run is red
-forever — a permanently-red gate is a disabled gate. `--require-debt-ledger` refuses a
-baseline whose files have no `DEBT_LEDGER.md` row: debt you did not write down is
-amnesty, not acceptance.
+forever — a permanently-red gate is a disabled gate.
 
 EVIDENCE
 --------
@@ -82,7 +80,6 @@ USAGE
     structure-report.py --json                      # machine-readable
     structure-report.py --write-baseline b.json .   # accept today's shape
     structure-report.py --baseline b.json .         # ratchet against it
-    structure-report.py --baseline b.json --require-debt-ledger .
 
 SCOPE / HONESTY
 ---------------
@@ -488,25 +485,6 @@ def signature_map(findings):
     return agg
 
 
-def _ledger_coverage(findings, ledger_path):
-    """Files carrying baselined debt that DEBT_LEDGER.md does not mention.
-
-    A baseline with no repayment plan is permanent amnesty; the ledger is what turns
-    an accepted breach into a debt with a trigger.
-    """
-    try:
-        with open(ledger_path, encoding="utf-8-sig") as fh:
-            text = fh.read()
-    except OSError:
-        return None  # no ledger present — caller decides whether that is fatal
-    missing = set()
-    for f in findings:
-        rel = _safe_relpath(f.path).replace(os.sep, '/')
-        if rel not in text and os.path.basename(rel) not in text:
-            missing.add(rel)
-    return sorted(missing)
-
-
 def _entry_value(entry):
     """A baseline entry is either a bare number (schema v1) or {"value": N,
     "repay_at": M} (schema v2, F4). Either way, the frozen magnitude."""
@@ -543,10 +521,9 @@ def _ratchet_diff(current, accepted_raw):
             "due": due, "headroom": headroom, "baseline_entries": len(accepted)}
 
 
-def _ratchet_verdict(rt, ledger_breach):
+def _ratchet_verdict(rt):
     """The verdict noun+state implied by one ratchet diff. Priority: a breach that
-    got strictly worse outranks one that merely expired (F4), which outranks an
-    unledgered-debt finding, which outranks a clean hold."""
+    got strictly worse outranks one that merely expired (F4), which outranks a clean hold."""
     if rt["new"] or rt["worse"]:
         kinds = [k.split("|")[0] for k in list(rt["new"]) + list(rt["worse"])]
         top = min(set(kinds), key=_severity)
@@ -557,12 +534,10 @@ def _ratchet_verdict(rt, ledger_breach):
         kind, path, sym = k.split("|", 2)
         id_hint = path + (f"::{sym}" if sym else "")
         return (f"STRUCTURE: findings(repayment-due: {id_hint}, {kind}, {now}/{threshold})", 1)
-    if ledger_breach:
-        return ("STRUCTURE: findings(regressed: unledgered-debt)", 1)
     return (f"STRUCTURE: clean(held: {len(rt['held'])} accepted, {len(rt['repaid'])} repaid)", 0)
 
 
-def apply_ratchet(r, baseline, ledger_path=None, require_ledger=False):
+def apply_ratchet(r, baseline):
     """Re-decide the verdict against an accepted baseline: direction, not acceptability.
 
     This stays inside the skill's 'measure, never judge' contract. The ratchet never
@@ -574,14 +549,8 @@ def apply_ratchet(r, baseline, ledger_path=None, require_ledger=False):
 
     current = signature_map(r["findings"])
     rt = _ratchet_diff(current, baseline.get("entries", {}))
-
-    unledgered = _ledger_coverage(r["findings"], ledger_path) if ledger_path else None
-    ledger_breach = require_ledger and (unledgered is None or unledgered)
-
-    rt.update({"unledgered": unledgered, "ledger_path": ledger_path,
-              "require_ledger": require_ledger, "ledger_breach": ledger_breach})
     r["ratchet"] = rt
-    r["verdict"], r["exit_code"] = _ratchet_verdict(rt, ledger_breach)
+    r["verdict"], r["exit_code"] = _ratchet_verdict(rt)
     return r
 
 
@@ -606,9 +575,7 @@ def write_baseline(r, path):
 
     payload = {"version": BASELINE_VERSION,
                "thresholds": r["thresholds"],
-               "note": ("Accepted structural debt. Each entry must have a row in "
-                        "DEBT_LEDGER.md naming why it was accepted, what it costs per "
-                        "future change, and the trigger that makes repayment due. "
+               "note": ("Accepted structural debt. "
                         "Regenerate only when debt is REPAID — never to silence a "
                         "regression (that is how the ratchet gets disabled). An entry "
                         "may carry \"repay_at\": N — the numeric point at which the "
@@ -630,20 +597,6 @@ def _print_findings_by_kind(findings, by_kind):
         if by_kind[kind] > 5:
             print(f"       … and {by_kind[kind] - 5} more")
         print()
-
-
-def _print_ledger_coverage(rt):
-    un = rt["unledgered"]
-    if un is None:
-        print(f"  ⚠️  No debt ledger at {rt['ledger_path']} — the baseline is currently")
-        print("      permanent amnesty. Every accepted breach needs a repayment trigger.\n")
-    elif un:
-        print(f"  ⚠️  {len(un)} file(s) carry accepted debt with no DEBT_LEDGER.md row:")
-        for p in un[:8]:
-            print(f"       · {p}")
-        print()
-    else:
-        print("  ✅  Every file carrying accepted debt is listed in the debt ledger.\n")
 
 
 def _print_ratchet(rt):
@@ -680,9 +633,7 @@ def _print_ratchet(rt):
             print(f"       · {now}/{threshold} — {room} headroom   "
                   f"[{path}{(' :: ' + sym) if sym else ''}]")
         print()
-    if rt["ledger_path"]:
-        _print_ledger_coverage(rt)
-    if not (rt["new"] or rt["worse"] or rt["ledger_breach"] or rt.get("due")):
+    if not (rt["new"] or rt["worse"] or rt.get("due")):
         print("  ✅  HELD — nothing got worse. Known debt did not grow.")
 
 
@@ -717,8 +668,7 @@ def print_human_report(r):
         print("  ✅  CLEAN — no structural threshold breached.")
         print("      No god-files, no tangled functions, no circular imports, no")
         print("      copy-paste blocks, no foreign language hidden in a string.")
-        print("      (This is a STRUCTURE verdict, not a correctness or wisdom verdict —")
-        print("       senior-review and correctness-gate still own those.)")
+        print("      (This is a STRUCTURE verdict, not a correctness or wisdom verdict.)")
     else:
         print(f"  ⚠️  REVIEW NEEDED — {len(r['findings'])} structural flag(s), by category:\n")
         _print_findings_by_kind(r["findings"], r["by_kind"])
@@ -728,9 +678,8 @@ def print_human_report(r):
         print("  call. This tool measures shape; it never decides wisdom.")
         print()
         print("  On an existing codebase this list is a starting position, not a")
-        print("  sentence: record it with --write-baseline, give every entry a row in")
-        print("  DEBT_LEDGER.md, and run --baseline from then on so the debt is frozen")
-        print("  where it stands and cannot grow by defensible increments.")
+        print("  sentence: record it with --write-baseline and run --baseline from then")
+        print("  on so the debt is frozen where it stands and cannot grow.")
     print()
     print("-" * 70)
     print(r["verdict"])
@@ -757,7 +706,6 @@ def json_report(r):
             "new": rt["new"], "worse": {k: {"now": n, "was": w}
                                         for k, (n, w) in rt["worse"].items()},
             "repaid": rt["repaid"], "held": len(rt["held"]),
-            "unledgered_files": rt["unledgered"], "ledger_breach": rt["ledger_breach"],
             "due": {k: {"now": n, "threshold": t} for k, (n, t) in rt.get("due", {}).items()},
             "headroom": {k: {"now": n, "threshold": t}
                         for k, (n, t) in rt.get("headroom", {}).items()},
@@ -774,10 +722,6 @@ def main():
                     help="ratchet against accepted debt: fail only on new or worsened breaches")
     ap.add_argument("--write-baseline", metavar="FILE",
                     help="record today's breaches as accepted debt, then exit 0")
-    ap.add_argument("--debt-ledger", metavar="FILE", default="DEBT_LEDGER.md",
-                    help="ledger that must account for baselined debt (default: DEBT_LEDGER.md)")
-    ap.add_argument("--require-debt-ledger", action="store_true",
-                    help="fail when baselined debt is not listed in the debt ledger")
     args = ap.parse_args()
 
     thresholds = DEFAULT_THRESHOLDS
@@ -788,9 +732,7 @@ def main():
         payload = write_baseline(r, args.write_baseline)
         print(f"structure-report: wrote {len(payload['entries'])} accepted breach(es) "
               f"to {args.write_baseline}")
-        print("Next: give every file listed there a DEBT_LEDGER.md row (what, why "
-              "accepted,\ncost per future change, trigger that makes repayment due), "
-              "then run with\n--baseline so the debt is frozen where it stands.")
+        print("Next: run with --baseline so the debt is frozen where it stands.")
         print("\n" + f"STRUCTURE: clean(held: {len(payload['entries'])} accepted, 0 repaid)")
         return 0
 
@@ -802,8 +744,7 @@ def main():
             print(f"structure-report: cannot read baseline {args.baseline}: {e}")
             print("STRUCTURE: blocked(no analyzable source found)")
             return 2
-        r = apply_ratchet(r, baseline, ledger_path=args.debt_ledger,
-                          require_ledger=args.require_debt_ledger)
+        r = apply_ratchet(r, baseline)
 
     if args.json:
         print(json.dumps(json_report(r), indent=2))

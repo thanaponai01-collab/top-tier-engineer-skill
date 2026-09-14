@@ -241,25 +241,6 @@ class StructureRatchet(unittest.TestCase):
             self.assertEqual(code, 0, out)
             self.assertIn("1 repaid", out)
 
-    def test_require_debt_ledger_fails_when_debt_is_unrecorded(self):
-        """A baseline with no ledger is permanent amnesty. You may only
-        accept debt you wrote down, with the trigger that makes repaying it due."""
-        with tempfile.TemporaryDirectory() as tmp:
-            self._repo(tmp)
-            b = self._baseline(tmp)
-            ledger = os.path.join(tmp, "DEBT_LEDGER.md")
-            code, out, _ = run("structure-report.py", "--baseline", b,
-                               "--debt-ledger", ledger, "--require-debt-ledger", tmp)
-            self.assertEqual(code, 1, out)
-            self.assertIn("unledgered-debt", out)
-
-            with open(ledger, "w", encoding="utf-8") as f:
-                f.write("| D-1 | god.py | file_lines 700 | legacy | 2x cost | "
-                        "3rd edit | 2026-07-27 |\n")
-            code, out, _ = run("structure-report.py", "--baseline", b,
-                               "--debt-ledger", ledger, "--require-debt-ledger", tmp)
-            self.assertEqual(code, 0, out)
-
 
 if __name__ == "__main__":
     unittest.main()

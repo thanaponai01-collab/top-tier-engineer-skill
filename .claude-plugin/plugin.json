@@ -1,7 +1,7 @@
 {
   "name": "top-tier-engineer",
   "description": "Thirteen independent engineering skills: framing, architecture, building, wiring, correctness, debugging, performance, security, review, structure, dead code, safe releases and maintenance. Install and go.",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "author": {
     "name": "Thanaponai01"
   },
