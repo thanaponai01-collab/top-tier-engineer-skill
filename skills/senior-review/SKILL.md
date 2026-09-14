@@ -67,12 +67,15 @@ For each dimension, escalate the cheapest sufficient evidence: read → trace �
 
 ## Phase 5 — Deliver
 
-Structure the report as:
+Shape and wording: `PROTOCOL.md` §9. The opening carries three things this skill owes and no
+other does: whether it is shippable and what the single most consequential issue is; what is
+genuinely good, specific and earned and never padding, because engineers grow by having their best
+instincts named; and the one growth theme, the single habit that, changed, kills the most findings.
+One deep lesson, not twelve shallow ones.
 
-1. **Verdict** — one paragraph: is this shippable, and what is the single most consequential issue?
-2. **What's genuinely good** — specific and earned, never padding. Engineers grow by having their best instincts named.
-3. **Findings** — ordered by severity. Each: the invariant violated, confidence tag, evidence, root cause, corrected code, and the *principle* that prevents the class ("validate at the boundary, trust internally" — not "fix line 42").
-4. **Ledger entries** — unresolved novelty, framed respectfully as open questions.
-5. **One growth theme** — the single habit that, if changed, eliminates the most findings. Mentorship means one deep lesson, not twelve shallow ones.
+One row per finding, ordered by severity. Columns: the invariant violated, the tag, the evidence,
+the root cause, and the *principle* that prevents the class ("validate at the boundary, trust
+internally", not "fix line 42"). Corrected code goes under `Detail`, and so does unresolved
+novelty, framed respectfully as open questions.
 
 End every run with a `REVIEW` line (PROTOCOL §5).

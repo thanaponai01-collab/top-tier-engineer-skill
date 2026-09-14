@@ -100,8 +100,12 @@ Before any ship, `ship-gate` reads it; an unmodelled top-asset boundary blocks t
 
 ## Report
 
-Director-readable lead (Law 4): the worst thing an attacker can do today, in one sentence, with its
-evidence tag; then the asset table, the findings ordered by blast radius, the clean boundaries, and:
+Shape and wording: `PROTOCOL.md` §9. The opening is the worst thing an attacker can do today, in
+one sentence, with its evidence tag.
+
+One row per finding, ordered by blast radius: the boundary, what the attacker gets, the evidence,
+the fix. The asset table and the boundaries that came back clean go under `Detail` — clean
+boundaries are counted in the verdict line, never dropped.
 
 a `THREAT` line (PROTOCOL §5) — `clean` names how many boundaries were modelled and how many are defended.
 

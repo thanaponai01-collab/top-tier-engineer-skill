@@ -470,3 +470,57 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   **Boundary watch:** if a `reach-audit` run is ever observed walking without having opened
   `wire-check`, the citation is decoration and the method must be inlined after all.
 - **status:** decided — shipped in 2.7.0.
+
+## D012 — the Karpathy guidelines: a twenty-first skill, or laws in `PROTOCOL.md`?
+
+- **date:** 2026-09-14
+- **decision:** **Option 2 — two laws in `PROTOCOL.md` §2, plus six rules on §9.** No new skill.
+- **forces:** The director asked for the `karpathy-guidelines` skill to go into the doctrine. Read
+  against what the suite already says, two of its four principles are already owned: *Simplicity
+  First* is meta-skills Discipline 7, and *Goal-Driven Execution* is `build-discipline`'s proof
+  line plus `correctness-gate`'s oracle. Copying them in would break Law 1 in the file that states
+  Law 1. The other two are owned by nobody: nothing in the suite says *don't touch code you weren't
+  asked to touch*, and nothing says *don't silently pick one reading of an ambiguous request*.
+  **(proven** — grepped for the rule across `PROTOCOL.md` and all twenty skills at this revision;
+  `build-discipline` Phase 2 bounds diff *size*, never diff *scope*.**)**
+- **options:**
+  1. *A twenty-first skill* — rejected. D009's test asks whether it owns a decision none of the
+     twenty own. Half of it does not, and the half that does is a rule that must bind every skill
+     at once, which is what §2 is for. A skill would also have to be invoked to apply; a law
+     applies because every run loads `PROTOCOL.md`.
+  2. *Laws in §2* **(chosen)** — cheapest, binds everywhere, and the two new laws are each three
+     lines. The cost is that §2 grew from six laws to eight, and §2 is loaded on every run.
+  3. *A `CLAUDE.md` block in governed projects* — rejected as a duplicate governance channel: the
+     README bootstrap block already points every project at this suite, so a rule living in both
+     places drifts.
+- **reversibility class:** two-way. Both laws are self-contained blocks; removing either leaves the
+  numbering of 1–6 untouched.
+- **evidence tag:** **(proven)** for the coverage gap; **(assumed)** that two more laws in a file
+  read on every run is affordable — no run has yet been observed skipping a law for length.
+- **status:** decided — shipped in 2.8.0.
+
+## D013 — the suite's own prose is written the way the director asked the output not to be
+
+- **date:** 2026-09-14
+- **decision:** open. The director rules.
+- **forces:** §9 now tells every report to use short words, drop self-grading and cut lines that
+  lose nothing. The suite's own files do the opposite — metaphors ("wearing a formatting costume",
+  "speculation wearing architecture's costume"), long sentences, flourishes. A model writes in the
+  voice of what it just read, so the instruction file and the rule it carries pull opposite ways.
+  **(suspected)** — the pull is plausible and unmeasured; no run has been observed producing dense
+  prose *because* the contract was dense.
+- **options:**
+  1. *Leave it* — the rule is explicit and may hold on its own. Zero cost, and preserves a voice
+     that has carried real meaning (`unreferenced is not unreached` is a title that taught).
+  2. *Rewrite the prose across `PROTOCOL.md` and all twenty skills* — expensive, touches every
+     file, and risks deleting load-bearing distinctions along with the flourishes.
+  3. *Rewrite `PROTOCOL.md` only* — the file every run loads, so the highest-leverage third of the
+     effect for a fraction of the blast radius.
+- **reversibility class:** two-way, but noisy: a prose sweep makes every file's history unreadable
+  for one commit.
+- **evidence tag:** **(suspected)**. Settle it by measuring, not by taste: run one report under the
+  current prose and one under a rewritten `PROTOCOL.md`, same subject, and compare against §9's six
+  rules.
+- **status:** open — raised in 2.8.0. The director then directed the report sections of eight
+  skills into §9's shape in the same release, which is option 3 applied to reports only. What stays
+  open is the rest: the contract prose every skill loads before it produces anything.

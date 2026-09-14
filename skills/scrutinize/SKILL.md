@@ -78,14 +78,13 @@ Therefore holds / does not hold."* Then attack:
 
 ### 4. Report
 
-Lead with the simpler alternative if one survived step 1. Then one tight block per finding,
-ordered by consequence (blocker → major → nit; consequence scale per `senior-review` Rule 6):
+Shape and wording: `PROTOCOL.md` §9. If a simpler alternative survived step 1, it leads.
 
-- **Finding** — one sentence, specific, with `file:line` where applicable.
-- **Why it matters** — the consequence, not the principle.
-- **Evidence** — the trace step, input, or executed command that exposed it, with its tag.
-- **Change** — concrete and minimal; per Law 5 (diagnosis ships with the artifact), when the fix
-  is small, ship the corrected lines here, not as homework.
+One row per finding, ordered by consequence (blocker → major → nit; scale per `senior-review`
+Rule 6). Columns: the finding, one sentence, with `file:line`; why it matters, meaning the
+consequence and not the principle; the evidence, meaning the trace step, input or command that
+exposed it, with its tag; and the change, concrete and minimal. Per Law 5 a small fix ships as
+corrected lines under `Detail`, never as homework.
 
 End every run with a `SCRUTINY` line (PROTOCOL §5).
 

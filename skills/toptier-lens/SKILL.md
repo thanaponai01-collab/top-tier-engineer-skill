@@ -61,21 +61,24 @@ Pick **one**. If you name five gaps you have found none.
 
 ## Phase 3 — Report: one gap, one move
 
-Four parts, in order, each grounded in named files.
+Shape and wording: `PROTOCOL.md` §9, with one exception this skill is allowed: the findings block
+is a single row, because the contract returns one gap and not a list. Everything below is grounded
+in named files.
 
-1. **The gap.** One paragraph: what it is, the `file:line` evidence that it is real, and the
-   downstream behavior it silently steers. If your diagnosis differs from the obvious or
-   previously-stated one, say why — the difference is usually the insight.
-2. **The stage, and the runner-up.** Name where the system is now in one phrase, and the stage
-   the move unlocks. Then name the gap that came second and the gate or the blast radius that
-   beat it — one sentence. A single answer with nothing behind it is a guess wearing a verdict.
-3. **The move.** The single next thing, as outcome and cost, never implementation: what it gets
-   you, what it costs (rough effort, dependencies, reversibility), and what it is a precondition
-   for. If a second move only proves the first worked, name it and give the order — two, not ten.
-4. **What only the director can settle.** At most two questions the gates could not close — each
-   derived from *this* system's North Star, never from a general picture of what systems become.
-   For each: what is unknown, and what would change if it were answered. A question naming a
-   capability the North Star does not ask for is imported, and dies at gate 3 like any other.
+The opening carries the gap and the move. The gap: what it is, the `file:line` evidence that it is
+real, and the downstream behavior it silently steers — and if your diagnosis differs from the
+obvious or previously-stated one, say why, because the difference is usually the insight. The move:
+the single next thing as outcome and cost, never implementation — what it gets you, what it costs
+in rough effort, dependencies and reversibility, and what it is a precondition for. If a second
+move only proves the first worked, name it and give the order. Two, not ten.
+
+`Detail` carries two things and nothing else. The stage and the runner-up: where the system is now
+in one phrase, the stage the move unlocks, then the gap that came second and the gate or blast
+radius that beat it, in one sentence — a single answer with nothing behind it is a guess wearing a
+verdict. And what only the director can settle: at most two questions the gates could not close,
+each derived from *this* system's North Star and never from a general picture of what systems
+become, each saying what is unknown and what would change if it were answered. A question naming a
+capability the North Star does not ask for is imported, and dies at gate 3 like any other.
 
 A system already at the ceiling its own North Star asks for gets told so, with reasons. Invented
 praise and invented criticism cost the same.

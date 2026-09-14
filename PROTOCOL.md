@@ -57,6 +57,14 @@ reconcile that before citing severity.
    conditions — never solutions. Test: replace every example in a skill with the rule it
    illustrates; if the skill still works, it constrains process. If a hole opens, that example was
    secretly load-bearing knowledge, and that is a defect.
+7. **Change only what you were asked to change.** Every changed line traces back to the request.
+   Don't fix, rename, reformat or refactor things you pass on the way, and match the code's
+   existing style even if you'd write it differently. Clean up the leftovers your own change made
+   — the import nothing uses now, the helper nothing calls now — and nothing else. Other dead code
+   you spot gets named in the report, not deleted.
+8. **Don't guess which reading is right.** If the request can be read two ways and the two lead to
+   different work, say both and say which one you took. If you don't understand the code you're
+   about to change, say that instead of writing a sentence that sounds sure.
 
 ## 3. Where things get written down
 
@@ -188,7 +196,7 @@ new debt is deliberately accepted **by name in the same change** — never to si
 entered. What it couldn't enter is reported as UNKNOWN — never omitted, never folded into a clean
 result.
 
-## 9. Say it in plain English first
+## 9. Plain words, all the way down
 
 Every gate can pass and the thing still be wrong for the person who asked. So open every report to
 the director with a few plain sentences, before any verdict. No labels, no template — just say:
@@ -208,6 +216,42 @@ Four rules:
   smaller thing you decided not to build.
 - **If what they can do now doesn't answer what they asked, say that first.** It outranks every
   green verdict below it.
+
+The rest of the report is written the same way. Six more rules, and they bind every line, not just
+the opening:
+
+- **Use the short word.** If a plain word says it, the clever one is wrong. No metaphors, no
+  flourishes, no words that are there to sound senior.
+- **Say it once.** No recap, no restating the ask at the end, no summary of the summary.
+- **Don't grade your own work.** "Comprehensive", "rigorous", "carefully", "production-grade" —
+  cut them. The evidence is the grade.
+- **Numbers, not adjectives.** "3 of 40 files" beats "a small portion".
+- **Cut any sentence that only says how hard you worked.**
+- **Shortest version that still carries the evidence.** If a line can go and nothing is lost, it
+  goes.
+
+### The shape
+
+Every report is three blocks in this order, and nothing else at the top level:
+
+1. **The opening** — the plain sentences above. One screen, about 200 words. If it doesn't fit, it
+   is carrying detail that belongs lower down.
+2. **The findings** — one row per finding, in a table. The columns are the skill's own; the same
+   columns for every row. The only prose here is the one recommendation.
+3. **The verdict line** — §5. Last. Nothing after it.
+
+Anything the reader can skip goes under one `Detail` heading between blocks 2 and 3 — code, diffs,
+traces, the long evidence. One heading, not a second report.
+
+Four rules on the format itself:
+
+- **Flat.** No heading below those three. No bullet inside a bullet. No bullet longer than two lines.
+- **Repeats go in a table.** Findings, slices, surfaces, boundaries, phases. A list of things that
+  all carry the same fields is a table nobody wrote yet.
+- **No decoration.** Not every bullet needs a bold lead. No chains of em-dashes, no parenthesis
+  inside a parenthesis.
+- **A skill fills this shape. It does not design its own.** What the columns hold is the skill's
+  call. How many blocks there are is not.
 
 **Then stop.** A report says what happened, what it proves, and what it costs. It never explains
 this file back to the director. Length is not evidence of rigor.

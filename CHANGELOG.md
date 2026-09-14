@@ -7,6 +7,48 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.8.0 — 2026-09-14 — plain words, and only the lines you were asked to change
+
+The director asked for the Karpathy guidelines in the doctrine, and for plain output: *"i want the
+output to be simplest and the most concise, i dont want the high intelligent, engineering words.
+remove all the over state and explained."*
+
+They went into `PROTOCOL.md` as law, not in as a twenty-first skill (DECISION_LEDGER D012). Two of
+the four principles were already covered — simplicity is meta-skills Discipline 7, and "state the
+check before you build" is `build-discipline`'s proof line. The other two were covered nowhere:
+
+- **Law 7 — change only what you were asked to change.** Every changed line traces to the request.
+  No fixing, renaming or reformatting things you pass on the way; match the existing style. Clean
+  up the leftovers your own change made, and nothing else. Other dead code gets named in the
+  report, not deleted — `latent-audit` keeps the deletion monopoly.
+- **Law 8 — don't guess which reading is right.** If a request reads two ways and the two lead to
+  different work, both get stated, and so does the one you took. Code you don't understand gets
+  said out loud, not covered with a confident sentence.
+- **§9 now binds every line of a report, not just its opening.** Six rules on the words: short
+  words, say it once, don't grade your own work, numbers instead of adjectives, cut any sentence
+  that only says how hard you worked, cut any line whose removal loses nothing.
+- **§9 also owns the shape now.** Three top-level blocks and nothing else: the opening (one screen,
+  about 200 words), the findings as one row each in a table, the §5 verdict line. Anything the
+  reader can skip — code, diffs, traces, long evidence — goes under one `Detail` heading between
+  them. Plus four format rules: flat (no heading below those three, no nested bullets, no bullet
+  over two lines), repeats go in a table, no decoration, and a skill fills the shape rather than
+  designing its own.
+- **Eight skills were designing their own report shape; they now fill §9's.** `chief-engineer`,
+  `data-evolution`, `scrutinize`, `senior-review`, `ship-gate`, `symptom-audit`, `threat-model`,
+  `toptier-lens`. Nothing each skill *says* was dropped — it moved: what only that skill can judge
+  stays in the opening, the repeated fields became table columns, and the rest went under `Detail`.
+  `senior-review` lost a five-section template, `scrutinize` a four-bullet block per finding,
+  `toptier-lens` a four-part outline, and `chief-engineer` a restatement of §9 itself (Law 1).
+  `toptier-lens` carries the one stated exception: its findings block is a single row, because its
+  contract returns one gap and not a list. The other twelve skills were checked and mandate no
+  competing shape **(proven** — grepped at this revision**)**.
+- **Deduped per Law 1.** meta-skills Discipline 4 dropped "numbers over adjectives" — §9 owns it
+  now — and Discipline 7 gained one clause: no feature nobody asked for, no setting nobody
+  requested, no handling for a case that cannot happen.
+
+Not done: the suite's own prose still reads the way the director asked the output not to. Law 7,
+added in this change, forbids reformatting it here. Open as D013.
+
 ## 2.7.0 — 2026-09-10 — unreferenced is not unreached
 
 The director asked to read a codebase quickly for *"what we have, what we serve, and what never

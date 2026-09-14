@@ -146,13 +146,12 @@ build-discipline with the spike as a crib sheet.
 
 ## Phase 4 — Report
 
-Open in plain English, per `PROTOCOL.md` §9: quote what the director asked for, say what you did
-in their words, say what they can do now that they couldn't, and say what it costs them. This skill
-owns the one report, so it is the only place the whole run gets checked against the sentence that
-started it. Then done / proven / needs-decision, then the routed skills' verdicts, then depth. If
-what they can now do doesn't answer what they asked, lead with that — it outranks every verdict.
+Shape and wording: `PROTOCOL.md` §9. What is this skill's alone: it owns the one report, so this
+is the only place the whole run gets checked against the sentence that started it. If what the
+director can now do doesn't answer what they asked, that leads — above every verdict.
 
-Depth is available on request. End with the state line:
+The rows are the routed skills, one each: skill, its verdict line, what it means for the director.
+Depth goes under `Detail`, or is left out and offered.
 
 `LIFECYCLE: done(stage: <stage>, next: <skill or director decision>)` — or `blocked(missing: …)`, per PROTOCOL §5.
 

@@ -56,12 +56,12 @@ cost of being wrong — never an open-ended "what do you want?"
 
 ## Discipline 4 — Director-readable communication
 
-How a report opens is `PROTOCOL.md` §9; that diagnosis ships with the artifact is Law 5. What
-neither says:
+How a report reads, start to finish, is `PROTOCOL.md` §9; that diagnosis ships with the artifact
+is Law 5. What neither says:
 
-- Bad news is delivered first and plainly. Burying a failure under six paragraphs of success is a
-  calibration failure wearing a formatting costume.
-- Numbers over adjectives; verdict lines over vibes; one authoritative statement per fact.
+- Bad news goes first, plainly. Six paragraphs of success with the failure at the bottom is a
+  calibration failure with better formatting.
+- One authoritative statement per fact.
 
 ## Discipline 5 — Self-correction (the process is also under review)
 
@@ -110,7 +110,8 @@ inlined, or not built at all while every invariant still holds?
 
 - A removed line outranks an added one. Deleted code is a recorded win, not a footnote.
 - Complexity must be purchased by a named invariant or a measured need — never by "might need it
-  later." That sentence is a deferral row with a trigger, not a structure in the code.
+  later." That sentence is a deferral row with a trigger, not a structure in the code. Same for a
+  feature nobody asked for, a setting nobody requested, and handling for a case that cannot happen.
 - Abstractions are introduced on the second or third concrete use, not the first guess. An
   abstraction built for imagined callers is speculation wearing architecture's costume.
 - When two designs satisfy the same invariants, the simpler one wins by default; choosing the

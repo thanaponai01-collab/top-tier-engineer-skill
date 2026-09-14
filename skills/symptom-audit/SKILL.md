@@ -96,9 +96,11 @@ can't be observed is an opinion with formatting.
 
 ## Report
 
-Director-readable lead (Law 4): the symptom in their words, the one-sentence root story, the
-first thing they'll feel and after which phase. Then the diagnosis table, the phased spec, the
-clean checks, and the verdict line:
+Shape and wording: `PROTOCOL.md` §9. The opening carries the symptom in their words, the
+one-sentence root story, and the first thing they'll feel and after which phase.
+
+The rows are the phases, one each: phase, the cause it removes, the evidence, what the user feels
+once it lands. The full spec per phase and the checks that came back clean go under `Detail`.
 
 an `AUDIT` line (PROTOCOL §5) — a prescription is `findings(N phases, top: <fix>)`; a reroute is `blocked(rerouted to <skill>: <reason>)`.
 
