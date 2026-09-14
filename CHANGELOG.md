@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0 — 2026-09-14 — the philosophy, back in every skill
+
+- Each skill now opens with a `How to answer` section: the busy-senior-engineer stance from the old
+  `PROTOCOL.md` §0, copied into every skill so each still stands alone.
+- `tests/test_philosophy.py` fails if the copies drift apart.
+
 ## 3.0.0 — 2026-09-14 — independent skills, no governance
 
 - Every skill now stands alone: no `PROTOCOL.md`, verdict lines, evidence-tag law, or hand-offs between skills.
