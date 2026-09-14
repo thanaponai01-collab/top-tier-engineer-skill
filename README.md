@@ -44,6 +44,26 @@ Claude picks the right skill from what you ask. You can also call one by name, e
 `structure-gate` and `latent-audit` include stdlib-only Python scripts in their `scripts/` folders.
 Nothing to install.
 
+## Flows
+
+Skills don't hand off to each other; you pick the next one. Every flow has the same shape:
+**find → change → prove → ship**.
+
+| Goal | Find | Change | Prove | Ship |
+|---|---|---|---|---|
+| Build something new | `problem-framing` → `arch-design` | `build-discipline` | `correctness-gate` | `safe-release` |
+| Improve a messy codebase | `arch-design` (audit) | `evolve-maintain` | `correctness-gate` | `safe-release` |
+| Fix a bug | `debug-protocol` | `evolve-maintain` | `correctness-gate` | `safe-release` |
+| Make it faster | `perf-optimize` | `perf-optimize` | `correctness-gate` | `safe-release` |
+| Make it secure | `threat-model` | `threat-model` | `correctness-gate` | `safe-release` |
+
+Along the way:
+- **Not sure where to start?** `senior-review` tells you the biggest gap, and so which flow.
+- **Built but not working?** `wire-check`.
+- **Want numbers or proof on a cleanup?** `structure-gate` for messy shape, `latent-audit` before
+  deleting anything.
+- **About to merge?** `scrutinize` for an outside opinion.
+
 ## Developing
 
 ```
