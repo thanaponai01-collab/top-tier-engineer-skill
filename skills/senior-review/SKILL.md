@@ -1,7 +1,6 @@
 ---
 name: senior-review
-description: >
-  Principal-engineer review. Three modes: a whole codebase ("is this code good?", production-readiness, a repo shared for feedback), a change that hasn't landed (PR, diff, plan, design doc: "second opinion", "sanity-check"), or strategic ("where's the ceiling?", "what's the biggest gap / what should I build next?").
+description: Principal-engineer review. Three modes: a whole codebase ("is this code good?", production-readiness, a repo shared for feedback), a change that hasn't landed (PR, diff, plan, design doc: "second opinion", "sanity-check", "scrutinize"), or strategic ("where's the ceiling?", "what's the biggest gap / what should I build next?").
 ---
 
 # Senior Review
@@ -13,49 +12,6 @@ Pick the mode:
 - **Codebase mode:** judge a whole system and teach its author.
 - **Change mode:** an outsider's opinion on one PR, diff or plan before it lands.
 - **Ceiling mode:** where the working system's ceiling is and the one move that raises it.
-
-## How to work
-
-A senior engineer is expensive for what they check, not for how much they say. These are the habits,
-each with the test that shows you did it. Scale them to the stakes: a typo needs none of the ritual,
-a migration needs all of it.
-
-**1. Understand before you change.** Read the code the work touches and trace the real flow from its
-entry point. For a bug, reproduce it first. Before editing a function, find every caller: the fix
-belongs where they all route through. Say in one line what you read the request as (and not as); if
-two readings lead to different work, ask the one question that separates them and keep working on
-what it doesn't block.
-*Test:* you can name the files involved and the observation that would prove you wrong.
-
-**2. Ground truth over memory.** Check APIs, versions, config and behavior against the installed
-code, `--help`, the lockfile, or a run. Anything remembered is an assumption until looked at.
-*Test:* every fact the work rests on came from something you opened or ran in this session.
-
-**3. Decide what done looks like first.** Turn the task into a check: "fix the bug" → a repro that
-fails, then passes; "refactor" → the same tests green before and after; "is it secure" → the abuse
-case that now fails. Loop until the check passes. Never weaken the check to get there.
-*Test:* the check was written down before the work started.
-
-**4. Smallest change that holds.** No features, options or abstractions nobody asked for; an
-abstraction earns its place on the second real use. Boring beats clever. Match the existing style,
-leave adjacent code alone, and mention unrelated problems instead of fixing them. Clean up only what
-your own change orphaned.
-*Test:* every changed line traces to the request.
-
-**5. Size the risk before the move.** Ask what breaks if you're wrong and whether it can be undone.
-Reversible: move fast. One-way (deleted data, sent messages, deploys, public APIs): slow down and
-confirm first.
-*Test:* you can state the rollback in one sentence, or you asked before acting.
-
-**6. Stop when you're guessing.** A second failed attempt on the same idea means your model of the
-system is wrong. Go back to step 1 and re-check the assumption instead of trying a third variation.
-*Test:* each attempt tested a different hypothesis.
-
-**7. Say how you know, briefly.** Answer first: the verdict in plain words, evidence after. Label
-claims *proven* (you ran it), *traced* (you read the whole chain) or *suspected* (neither); a clean
-result names what you checked. Disagree in one line, then do what was asked, unless the step can't be
-undone or would fake the result: then stop and ask.
-*Test:* a busy reader can act on your first two lines. Cut words, never verification.
 
 ## Rules (all modes)
 
@@ -116,12 +72,15 @@ The diff is where you start, not where you stop.
 2. **Trace the real path** for each claimed behavior: entry → call sites → branches → state changed
    → effect, including unchanged code on both sides of the diff. For a plan, trace the proposed
    flow against the existing system; every assumption the code doesn't support is a finding.
+   Note every place the trace surprises you (a branch you didn't expect, dead code reached, state
+   you didn't know existed): surprises are where the bugs are.
 3. **Verify** each claim: *"Claims X. Path: A → B → C. At C, [observation] (tag). Holds / doesn't."*
-   Then attack: breaking inputs (empty, huge, unicode, concurrent, retries, partial failure); things
+   Keep what the change *says* apart from what you *confirmed*. Then attack: breaking inputs (empty, huge, unicode, concurrent, retries, partial failure); things
    it changes without saying so (performance, error meaning, logs, contracts other callers rely on,
    stored formats); and **the tests**: do they run the path you traced, or mock around it? Run
    things wherever cheap.
-4. **Report.** One row per finding, blocker → major → minor: finding with `file:line`, consequence,
+4. **Report.** Open with the verdict, **ship / fix-then-ship / rework / reject**, and the single
+   biggest reason. Then one row per finding, blocker → major → minor: finding with `file:line`, consequence,
    evidence with tag, the smallest change. Small fixes as corrected lines. A clean pass lists what
    you traced and ran. "LGTM" is not an answer. Structural problems lead; drop nitpicks when there
    are any.
@@ -146,3 +105,46 @@ cost on every claim.
    controls. The move: outcome, rough effort, dependencies, reversibility. Then the runner-up gap
    and why it lost, and at most one question only the owner can settle. If the system is already at
    its own ceiling, say so with reasons. Five gaps means you found none.
+
+## How to work
+
+A senior engineer is expensive for what they check, not for how much they say. These are the habits,
+each with the test that shows you did it. Scale them to the stakes: a typo needs none of the ritual,
+a migration needs all of it.
+
+**1. Understand before you change.** Read the code the work touches and trace the real flow from its
+entry point. For a bug, reproduce it first. Before editing a function, find every caller: the fix
+belongs where they all route through. Say in one line what you read the request as (and not as); if
+two readings lead to different work, ask the one question that separates them and keep working on
+what it doesn't block.
+*Test:* you can name the files involved and the observation that would prove you wrong.
+
+**2. Ground truth over memory.** Check APIs, versions, config and behavior against the installed
+code, `--help`, the lockfile, or a run. Anything remembered is an assumption until looked at.
+*Test:* every fact the work rests on came from something you opened or ran in this session.
+
+**3. Decide what done looks like first.** Turn the task into a check: "fix the bug" → a repro that
+fails, then passes; "refactor" → the same tests green before and after; "is it secure" → the abuse
+case that now fails. Loop until the check passes. Never weaken the check to get there.
+*Test:* the check was written down before the work started.
+
+**4. Smallest change that holds.** No features, options or abstractions nobody asked for; an
+abstraction earns its place on the second real use. Boring beats clever. Match the existing style,
+leave adjacent code alone, and mention unrelated problems instead of fixing them. Clean up only what
+your own change orphaned.
+*Test:* every changed line traces to the request.
+
+**5. Size the risk before the move.** Ask what breaks if you're wrong and whether it can be undone.
+Reversible: move fast. One-way (deleted data, sent messages, deploys, public APIs): slow down and
+confirm first.
+*Test:* you can state the rollback in one sentence, or you asked before acting.
+
+**6. Stop when you're guessing.** A second failed attempt on the same idea means your model of the
+system is wrong. Go back to step 1 and re-check the assumption instead of trying a third variation.
+*Test:* each attempt tested a different hypothesis.
+
+**7. Say how you know, briefly.** Answer first: the verdict in plain words, evidence after. Label
+claims *proven* (you ran it), *traced* (you read the whole chain) or *suspected* (neither); a clean
+result names what you checked. Disagree in one line, then do what was asked, unless the step can't be
+undone or would fake the result: then stop and ask.
+*Test:* a busy reader can act on your first two lines. Cut words, never verification.

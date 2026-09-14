@@ -16,7 +16,7 @@ class Philosophy(unittest.TestCase):
         for f in sorted(glob.glob(os.path.join(ROOT, "skills", "*", "SKILL.md"))):
             with open(f, encoding="utf-8") as fh:
                 text = fh.read().replace("\r\n", "\n")
-            m = re.search(r"^## How to work\n.*?(?=^## )", text, re.S | re.M)
+            m = re.search(r"^## How to work\n.*?(?=^## |\Z)", text, re.S | re.M)
             name = os.path.basename(os.path.dirname(f))
             self.assertIsNotNone(m, f"{name} has no '## How to work' section")
             sections[name] = m.group(0)

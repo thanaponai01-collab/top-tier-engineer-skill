@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.4.0 — 2026-09-14 — scrutinize, restored in full
+
+- `senior-review` change mode picks up what the 3.0.0 merge of `scrutinize` dropped (from
+  thananon/9arm-skills): the report opens with a verdict, ship / fix-then-ship / rework / reject, plus
+  the biggest reason; surprises found during the trace get recorded; what the change claims is kept
+  apart from what was confirmed; "scrutinize" now triggers the skill.
+- Every skill now opens with its own work, and the shared `How to work` section moves to the end.
+  Descriptions are single-line, like other plugins' skills.
+
 ## 3.3.0 — 2026-09-14 — habits, not tone
 
 - `How to answer` becomes `How to work`: seven engineering habits, each with a test that shows it was
