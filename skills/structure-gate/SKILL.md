@@ -124,8 +124,10 @@ change to it will cost, and what can no longer be verified afterwards, is someth
 can actually decide about.
 
 ### 5. Verdict and route
-Write the plain-language report and exactly one `STRUCTURE` verdict line (PROTOCOL §5). For each
-finding, name the skill that owns the judgment call (rule 4). Write
+Shape and wording: `PROTOCOL.md` §9, ending in exactly one `STRUCTURE` verdict line (PROTOCOL §5).
+The opening says what fraction of the codebase the tool could enter and whether the shape is getting
+better or worse. The rows are the findings, one each, and each names the skill that owns the
+judgment call (rule 4). Raw tool output goes under `Detail`. Write
 `STRUCTURE_REPORT.md` only when PROTOCOL §3 calls for a file — otherwise the report
 itself is the trail. A `regressed` finding goes to `build-discipline` (§8 rule 4) as
 well as to the reviewers.

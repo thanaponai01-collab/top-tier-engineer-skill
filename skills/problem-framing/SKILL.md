@@ -92,6 +92,10 @@ per §3:
 Later skills have to check this list. An **(assumed)** entry that turns out to be false is a
 failure of the framing, not of the build — send it back here.
 
+Shape and wording: `PROTOCOL.md` §9. The opening is the job in one plain paragraph and the
+assumption that costs most if it is wrong. The rows are the invariants, one each, with the
+acceptance criterion that settles it. Where the two artifacts stay inline, they go under `Detail`.
+
 **Verdict noun:** `BRIEF`
 
 End every run with a `BRIEF` line (PROTOCOL §5): `done(<N> invariants, <M> open questions)`, or

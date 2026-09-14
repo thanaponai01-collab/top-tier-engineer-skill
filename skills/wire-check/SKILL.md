@@ -56,13 +56,13 @@ The rule is *the cheapest step you can actually run*, not *the highest one*: if 
 
 ### 3. Verdict and repair
 
-Report:
+Shape and wording: `PROTOCOL.md` §9. The opening carries the first break, in plain words, and
+anything still trace-only with the one command that would make it proven.
 
-1. **Chain table** — the five links for each checked component, each with ✅/❌/⛔(blocked) and its (proven)/(trace-only) tag.
-2. **First break** — the exact missing declaration, with the connecting code shipped in the same response.
-3. **Why it was missed** — what the generator or the person did that left the gap. This is the line that makes the *next* build better.
-4. **Prevention** — the check to add to the build loop (e.g., "every new handler PR must show the route table diff," or a one-line smoke command to run after generation).
-5. **What's left uncertain** — anything still trace-only, and the one command that would make it proven.
+The rows are the checked components, one each: the component, its five links as ✅/❌/⛔(blocked),
+the §1 tag, and the exact missing declaration where the chain first breaks. The connecting code
+ships in the same response, under `Detail`. The one recommendation is the check that stops the gap
+coming back — what the generator or the person did that left it, written as a step in the build loop.
 
 **Verdict noun:** `WIRE`
 

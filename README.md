@@ -69,7 +69,7 @@ You don't pick skills. You talk to the engineer:
 - "Change the schema / run a migration" → data-evolution evolves the data shape without loss
 - "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step
 - "Every check passed and it still isn't what I meant / it's way too much for the job / I can't tell what it did" → the sense floor (§9): every report opens by quoting your own words back, saying what changed in your vocabulary, what you can now do, and what it cost you to have it
-- "Too long / stop using the big words / just say it" → §9 owns every line of a report, not only its opening. The shape is three blocks: the opening (one screen), the findings one row each, the verdict line — and everything skippable under one `Detail` heading. The words are short ones, said once, with numbers instead of adjectives and no grading your own work
+- "Too long / stop using the big words / just say it" → §9 owns every line of a report, not only its opening. Three blocks: the opening, the findings one row each, the verdict line — everything skippable under one `Detail` heading. It is a budget you count, not a style you aim at: 120 words of opening, 400 of prose outside tables, two lines per bullet. Nine named constructions are banned outright, and every skill's Deliver phase now points at it
 - "Don't touch anything I didn't ask you to touch" → Law 7: every changed line traces back to the request, only your own change's leftovers get cleaned up, and dead code you spot gets named in the report instead of deleted
 
 `chief-engineer` routes by **artifact state, not by your phrasing** — say "build it" with no brief

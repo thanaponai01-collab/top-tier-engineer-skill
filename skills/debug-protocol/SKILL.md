@@ -89,14 +89,19 @@ that would promote it.
 
 ### Phase 6 — Hand off
 
-Produce the **Cause Verdict** (in the report, and as the root-cause input to `evolve-maintain`):
+Produce the **Cause Verdict** — the report, and the root-cause input to `evolve-maintain`.
 
-1. Failure signature and minimal reproduction (the future regression test, pre-written).
-2. Proven cause — the two-way test results, verbatim excerpts.
-3. Why it wasn't caught earlier — no oracle, a guard that was never connected, an assumption that
-   turned out false, missing logging. This line decides which skill gets the prevention work.
-4. Experiment log — every hypothesis tried, including the ones that led nowhere.
-5. Verdict line: a `CAUSE` line per PROTOCOL §5 — `findings(<cause>, <tag>)`, or `blocked` when unreproduced.
+Shape and wording: `PROTOCOL.md` §9. The opening carries the failure signature, the proven cause in
+one sentence with its §1 tag, and why it wasn't caught earlier: no oracle, a guard never connected,
+an assumption that turned out false, missing logging. That last line decides which skill gets the
+prevention work.
+
+The rows are the hypotheses, one each, including the ones that led nowhere: hypothesis, the
+experiment, the result, verdict. The minimal reproduction — the future regression test, pre-written
+— and the two-way test excerpts go under `Detail`.
+
+End every run with a `CAUSE` line (PROTOCOL §5): `findings(<cause>, <tag>)`, or `blocked` when
+unreproduced.
 
 **Verdict noun:** `CAUSE`
 

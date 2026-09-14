@@ -118,6 +118,10 @@ Every optimization you keep gets a guard before the run ends: a performance test
 assertion, or an alert that fails when the number slips back past budget. Update the budget with
 the new current value and a pointer to the guard. A gain with no guard is a temporary gain.
 
+Shape and wording: `PROTOCOL.md` §9. The opening is the budget, the number before, the number now,
+and what was traded to get it. The rows are the optimizations kept, one each: the change, before
+and after as measured, the guard holding it. Profiles and the dead ends go under `Detail`.
+
 **Verdict noun:** `PERF`
 
 End every run with a `PERF` line (PROTOCOL §5): `done(<budget>: <before> → <after>, guarded)`

@@ -108,6 +108,10 @@ knowledge), contracts, conventions, and the invariant→structure mapping from P
 Replacing a decision never deletes it — later readers need the history so they do not re-argue
 settled questions or repeat a mistake that was already undone.
 
+Shape and wording: `PROTOCOL.md` §9. The opening says what the structure is in the director's own
+words and names the decision here that is most expensive to reverse. The rows are the consequential
+decisions, in the ledger's columns. Where the two artifacts stay inline, they go under `Detail`.
+
 **Verdict noun:** `DESIGN`
 
 End every run with a `DESIGN` line (PROTOCOL §5): `done(<N> decisions, <M> one-way doors)` carrying

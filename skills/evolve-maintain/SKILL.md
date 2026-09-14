@@ -95,6 +95,10 @@ Record the intervention — append-only, one entry each, inline or in the projec
 The log is written for the next maintainer, who will probably be an AI model. Write entries so a
 new symptom can be matched against past causes in one read.
 
+Shape and wording: `PROTOCOL.md` §9. The opening is the symptom in the reporter's own words, the
+root cause in one sentence with its §1 tag, and what now stops it coming back. The rows are the log
+entry's own columns.
+
 **Verdict noun:** `MAINT <ID>`
 
 End every intervention with a `MAINT <ID>` line (PROTOCOL §5), the ID being the entry's own:

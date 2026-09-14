@@ -230,7 +230,7 @@ the director with a few plain sentences, before any verdict. No labels, no templ
 - what they can do now that they couldn't before — or, honestly, "nothing yet, because …";
 - what it costs them from here: files they now own, steps they have to run, things that can break.
 
-Four rules:
+Four rules on the opening:
 
 - **Quote the request, don't summarise it.** Where it was vague, §0's fork line is the quote-back:
   their words, the reading you took, the reading you did not.
@@ -242,26 +242,11 @@ Four rules:
 - **If what they can do now doesn't answer what they asked, say that first.** It outranks every
   green verdict below it.
 
-The rest of the report is written the same way. Six more rules, and they bind every line, not just
-the opening:
-
-- **Use the short word.** If a plain word says it, the clever one is wrong. No metaphors, no
-  flourishes, no words that are there to sound senior.
-- **Say it once.** No recap, no restating the ask at the end, no summary of the summary.
-- **Don't grade your own work.** "Comprehensive", "rigorous", "carefully", "production-grade" —
-  cut them. The evidence is the grade.
-- **Numbers, not adjectives.** "3 of 40 files" beats "a small portion".
-- **Cut any sentence that only says how hard you worked.**
-- **Shortest version that still carries the evidence.** If a line can go and nothing is lost, it
-  goes.
-
 ### The shape
 
-Every report is three blocks in this order, and nothing else at the top level:
+Three blocks in this order, and nothing else at the top level:
 
-1. **The opening** — the plain sentences above, as short as those four things go. Four lines is a
-   good opening; 200 words is the ceiling, not the target. Past that it is carrying detail that
-   belongs lower down.
+1. **The opening** — the four things above.
 2. **The findings** — one row per finding, in a table. The columns are the skill's own; the same
    columns for every row. The only prose here is the one recommendation.
 3. **The verdict line** — §5. Last. Nothing after it.
@@ -269,15 +254,46 @@ Every report is three blocks in this order, and nothing else at the top level:
 Anything the reader can skip goes under one `Detail` heading between blocks 2 and 3 — code, diffs,
 traces, the long evidence. One heading, not a second report.
 
-Four rules on the format itself:
+No heading below those three. No bullet inside a bullet. A list of things that all carry the same
+fields is a table nobody wrote yet. A skill fills this shape and does not design its own: what the
+columns hold is the skill's call, how many blocks there are is not.
 
-- **Flat.** No heading below those three. No bullet inside a bullet. No bullet longer than two lines.
-- **Repeats go in a table.** Findings, slices, surfaces, boundaries, phases. A list of things that
-  all carry the same fields is a table nobody wrote yet.
-- **No decoration.** Not every bullet needs a bold lead. No chains of em-dashes, no parenthesis
-  inside a parenthesis.
-- **A skill fills this shape. It does not design its own.** What the columns hold is the skill's
-  call. How many blocks there are is not.
+### The budget
+
+Count it before you send. Tables and `Detail` are exempt from the word counts; nothing else is.
+
+| Block | Limit |
+|---|---|
+| Opening | 120 words, plus 25 for each item the skill's own Deliver phase adds |
+| Any bullet | two lines |
+| The recommendation | one sentence |
+| All prose outside tables and `Detail` | 400 words |
+| `Detail` | evidence only: no rule, no finding, no sentence already written above |
+
+Over budget is not a style problem to sand down at the end. It means the report is carrying
+something that belongs in a table, in `Detail`, or nowhere.
+
+### Nine constructions, banned
+
+This is what "sounds senior" looks like when it has nothing to say. Read the draft once looking
+only for these:
+
+1. **The em-dash aside.** One pair per report, none inside a table cell.
+2. **The inversion.** "Not a question to answer, but a reading to reject." Write the second half.
+3. **The echo.** A sentence that restates the one before it, shorter. Keep one of them.
+4. **The bolded lead on every bullet.** Bold marks the exception, never the pattern.
+5. **The nested parenthesis**, and any parenthesis holding a whole clause.
+6. **Self-grading words**: comprehensive, rigorous, thorough, careful, robust, production-grade.
+7. **Effort words**: any sentence whose content is how much you looked at.
+8. **Stacked hedges**: "may potentially", "appears to possibly", "could arguably".
+9. **The recap.** No restating the ask at the end, no summary of the summary.
+
+Two rules that are not constructions: use the short word wherever one exists, and give numbers
+instead of adjectives ("3 of 40 files", not "a small portion").
+
+**These files are not the model for a report.** `PROTOCOL.md` and the skills are rules, written
+once to be read many times, and they use nearly every construction above. A report is read once, by
+someone with no time. Their register does not transfer to it.
 
 **Then stop.** A report says what happened, what it proves, and what it costs. It never explains
 this file back to the director. Length is not evidence of rigor.

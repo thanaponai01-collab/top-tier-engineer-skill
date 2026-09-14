@@ -660,3 +660,47 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   defects: a deleted declaration, a hyphenated noun, and the two real cases it found unaided
   (`structure-gate`, `toptier-lens` stated their noun where no grep citing §5 could reach it).
 - **status:** decided — shipped in 2.13.0.
+
+---
+
+## D018 — §9 asked for brevity in rules nobody could count
+
+- **date:** 2026-09-14
+- **decision:** option 3 — keep §9's stance, replace its unmeasurable style rules with a word
+  budget and a closed list of nine banned constructions, and add the §9 pointer to the eleven
+  skills whose Deliver phase never had one. Directed by the director: *"i feel like the plugin
+  skill still, output like messy words, make it like a really busy senior engineer like i have no
+  time."*
+- **forces:** This is the third pass at the same complaint. 2.8.0 put eight skills' report sections
+  into §9's shape, 2.9.0 rewrote the suite's prose (D013), 2.10.0 added the §0 stance (D014). Both
+  ledger entries close with the same unrun experiment — *run the same subject before and after and
+  compare report length* — so neither was ever confirmed. The director's report is that evidence,
+  arriving late and negative: the output is still long. What all three passes shipped was prose
+  about prose. "Use the short word", "no flourishes", "shortest version that still carries the
+  evidence" cannot be checked by the model writing the draft, so they read as encouragement. A
+  budget and a named-construction list can be checked in one pass over the draft. Second force,
+  found while doing it: eleven of twenty skills never cited §9 in their Deliver phase, and four of
+  those (`wire-check`, `reach-audit`, `debug-protocol`, `correctness-gate`) designed their own
+  multi-section report shape, which §9 forbids. The rule was right and eleven skills were not
+  reading it. **(trace-only)** — read from the files; the director's complaint is the only
+  measurement.
+- **options:**
+  1. *Leave it and lean harder on §0's stance* — the fix already tried twice. Zero cost, and the
+     director has now reported it failing twice.
+  2. *A CI gate on report prose* — a script counting em-dashes and banned words in emitted reports.
+     Rejected: reports are not files in this repo, so there is nothing for CI to read. The check
+     has to live in the contract, run by the model on its own draft.
+  3. *Countable budget + closed ban list in §9, and the pointer added to the eleven skills missing
+     it* — **(chosen)**. The rule stops being a taste to aim at and becomes a number to count.
+  4. *Rewrite all twenty skills' prose again, shorter* — D013 option 2 a second time. Rejected: the
+     first one cost every file's history and did not hold, and the register of a rules file is not
+     the register of a report. §9 now says that in one line instead of trying to erase the
+     difference.
+- **reversibility class:** two-way and cheap. §9 is one section; the eleven pointers are one
+  paragraph each.
+- **evidence tag:** **(trace-only)**. The same experiment D013 and D014 both named is still owed,
+  and it is now owed twice over: run one report under 2.13.0 and one under 2.14.0 on the same
+  subject and count opening words, total prose words, and the nine constructions. Until that runs,
+  this is the third bet, not a measurement. Its one advantage over the first two: the thing to count
+  is now defined.
+- **status:** decided — shipped in 2.14.0. `(same-context review)` under meta-skills Discipline 5.

@@ -64,9 +64,17 @@ coming nor work out afterwards.**
    whatever passes goes on the deletion list, the rest go on the watch list.
 4. **Trace breaches.** For each layer breach, read the offending edge in execution order and
    state what it couples; frame the two remedies for the director.
-5. **Report.** In the report itself — a file only when §3 warrants one: tool output, the deletion
-   list with its proofs, the watch list, the breach table, anything found along the way with where
-   it was sent, and the checks that came back clean. End with the verdict line.
+5. **Report.** In the report itself — a file only when §3 warrants one.
+
+## Report
+
+Shape and wording: `PROTOCOL.md` §9. The opening says how much of the codebase the sweep entered,
+what is safe to delete, and what it buys.
+
+One row per candidate: the symbol or file, dead / unused / breach / watch, the proof or the
+unsatisfied check, its §1 tag, and the proposed action. Tool output, the deletion proofs in full,
+the checks that came back clean, and anything found along the way with where it was sent go under
+`Detail`.
 
 ## Verdict
 

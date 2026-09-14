@@ -91,12 +91,17 @@ Link 1 needs no row: anything the inventory found obviously exists.
    Anything you find on the way that is not a reach question — a bug, a security issue, a judgment
    call — is recorded with its `file:line` and an evidence tag and sent to whoever owns it; this
    skill never grows into a full review.
-5. **Report.** Inline; a file only when §3 warrants one. In the director's own questions, in their
-   words, not in link names:
-   - **What we have** — the inventory, one line each.
-   - **What we serve** — the served set: what someone outside can actually cause to happen.
-   - **What never reaches** — each orphan, its first unsatisfied link in plain words, its proposed outcome.
-   - **What we couldn't settle** — the UNKNOWN set, and for each, the one command or fact that settles it.
+5. **Report.** Inline; a file only when §3 warrants one.
+
+## Report
+
+Shape and wording: `PROTOCOL.md` §9. The opening answers the director's own question in their
+words, not in link names: what we have, what of it someone outside can actually cause to happen,
+and what never reaches.
+
+One row per surface: the surface in the director's units, served / orphaned / UNKNOWN, the first
+unsatisfied link in plain words, and the outcome proposed for it — for an UNKNOWN, the one command
+or fact that settles it. The walk itself goes under `Detail`.
 
 ## Verdict
 

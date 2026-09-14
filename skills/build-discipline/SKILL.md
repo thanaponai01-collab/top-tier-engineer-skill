@@ -135,6 +135,10 @@ uncommitted work. Re-prove the last claimed-working slice before stacking on it
 - End every slice with a `SLICE <name>` line (PROTOCOL §5): `done` carries the §1 tag, a slice that
   did not hold is `findings(at link/phase)`.
 
+Shape and wording: `PROTOCOL.md` §9. The opening says what now runs that did not before, and what
+was deferred. The rows are the slices, one each: slice, its proof line, the §1 tag, what the
+director can now do. Diffs and proof output go under `Detail`.
+
 **Verdict noun:** `SLICE <name>`
 
 ## Common mistakes

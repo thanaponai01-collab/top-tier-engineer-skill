@@ -7,6 +7,40 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.14.0 — 2026-09-14 — a budget you count, not a style you aim at
+
+The director, on the output of a suite that had already been told twice to be shorter: *"i feel
+like the plugin skill still, output like messy words, make it like a really busy senior engineer
+like i have no time."* 2.8.0, 2.9.0 and 2.10.0 each answered the same complaint with more prose
+about prose — and D013 and D014 both closed naming an experiment nobody ran. This is that
+experiment's result, arriving as a complaint.
+
+- **§9's style rules are now a budget (D018).** "Use the short word", "no flourishes", "shortest
+  version that still carries the evidence" cannot be checked by the model writing the draft. They
+  are replaced by numbers: 120 words of opening (plus 25 per item a skill's own Deliver phase
+  adds), two lines per bullet, one sentence of recommendation, 400 words of prose outside tables
+  and `Detail`. Over budget is not a style problem to sand down at the end — it means the report is
+  carrying something that belongs in a table, in `Detail`, or nowhere.
+- **Nine constructions, banned by name.** The em-dash aside, the inversion, the echo, the bolded
+  lead on every bullet, the nested parenthesis, self-grading words, effort words, stacked hedges,
+  the recap. A closed list can be read for in one pass; "no flourishes" cannot.
+- **The suite's own register is now explicitly not the model.** D013 rewrote every file's prose to
+  stop the voice leaking into reports, and the leak is still reported. §9 says the difference out
+  loud instead: these files are rules, read many times, and they use nearly every construction on
+  the list; a report is read once, by someone with no time.
+- **Eleven skills never pointed at §9 at all.** `arch-design`, `build-discipline`,
+  `correctness-gate`, `debug-protocol`, `evolve-maintain`, `latent-audit`, `perf-optimize`,
+  `problem-framing`, `reach-audit`, `structure-gate` and `wire-check` ended a run with a verdict
+  noun and no report shape. Each now names what its opening carries and what its rows hold.
+- **Four of those eleven had designed their own shape**, which §9 forbids in the same breath as it
+  defines one. `wire-check`'s five-part report, `reach-audit`'s four questions,
+  `debug-protocol`'s five-item Cause Verdict and `correctness-gate`'s five-item verdict are now
+  openings, rows and `Detail` — nothing dropped, the parts re-homed.
+
+No routing row, phase order, gate, tool, agent or verdict noun changed. Four gates match their
+pre-change output **(proven)**: tests 21/21, `STRUCTURE: clean(held: 3 accepted, 0 repaid)`,
+references 9/9, verdict nouns 19/19. `(same-context review)` under Discipline 5.
+
 ## 2.13.0 — 2026-09-14 — the rule 2.12.0 wrote, now held by a gate
 
 The director: *"fix it"* — the four findings a fresh-eyes `scrutinize` pass returned on 2.12.0,

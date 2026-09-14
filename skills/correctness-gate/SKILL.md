@@ -100,15 +100,15 @@ Tests passing is necessary, not sufficient — measure whether the suite can act
 **Verdict noun:** `GATE`
 
 The verdict goes inline in the report — a file only when §3 warrants one, overwritten
-each gate (history is in version control):
+each gate (history is in version control).
 
-1. Verdict line — a `GATE` line per PROTOCOL §5, its state carrying the §1 tag.
-2. Director summary — three sentences, plain language: what was proven, what was only reasoned,
-   what risk remains.
-3. Behavior table — `behavior | oracle class | result | evidence tag`.
-4. Mutation results, quarantined flakes, untestable-as-specified items.
-5. Residual risk — the honest list of what this gate cannot see (environments not run, scales not
-   reached, integrations stubbed).
+Shape and wording: `PROTOCOL.md` §9. The opening says what was proven, what was only reasoned, and
+what this gate cannot see — environments not run, scales not reached, integrations stubbed.
+
+One row per behavior: behavior, oracle class, result, §1 tag. Mutation results, quarantined flakes
+and untestable-as-specified items go under `Detail`.
+
+End every run with a `GATE` line (PROTOCOL §5), its state carrying the §1 tag.
 
 A **fail** names why each failure happened (missing oracle, wiring gap, logic error, framing error)
 so the fix goes to the right skill — connection problems to `wire-check`, unknown causes to
