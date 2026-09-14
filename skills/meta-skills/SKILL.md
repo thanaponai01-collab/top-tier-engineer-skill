@@ -53,6 +53,29 @@ forbidden, and this list is the line between them.
 When escalating: present the decision, at most three real options, your recommendation, and the
 cost of being wrong — never an open-ended "what do you want?"
 
+**Below the bar, the fork line.** Ambiguity that does not meet the four triggers is not settled
+silently either. It costs one line, said before the work or alongside it:
+
+> You said *"<their words>"*. I read that as **X**, not **Y**. If you meant Y, <what changes>.
+
+This is the whole of `PROTOCOL.md` §0's "the ask is yours to sharpen", and it works because
+recognising is cheaper than writing. A director who cannot produce a precise request can still say
+"no, Y" in two seconds. So never hand them a question to answer when you can hand them a reading to
+reject. It costs them nothing on the runs where you read it right, which is most of them.
+
+Four rules on it:
+
+- **Name the reading you did not take.** "I'll build X" reads as agreement. "X, not Y" is the only
+  form they can catch.
+- **Price the fork.** `<what changes>` is the point of the line — how much work, which files, what
+  they lose. Without it they cannot tell whether correcting you is worth interrupting for.
+- **Show, then ask.** Where both readings share work, build the shared part first and put the fork
+  line next to something running. A fork they can see beats one they have to imagine.
+- **Two corrections on one request means stop.** One correction means the line did its job. A second
+  means your reading of *them* is off, not just your reading of the sentence — escalate properly,
+  in the shape above. This is the thrash rule (Discipline 5) applied to understanding instead of to
+  fixes.
+
 ## Discipline 4 — Director-readable communication
 
 How a report reads, start to finish, is `PROTOCOL.md` §9; that diagnosis ships with the artifact

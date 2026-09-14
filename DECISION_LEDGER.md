@@ -531,3 +531,41 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   were restored **(proven** — the diff of those counts shows gains only**)**. The `(suspected)` tag on
   the forces above stands: no run has yet been measured under the new prose, which is the experiment
   the evidence line names.
+
+---
+
+## D014 — the suite states how a report reads, but never who is writing it
+
+- **date:** 2026-09-14
+- **decision:** option 2 — a stance section at the top of `PROTOCOL.md`, keeping the number `§0` and
+  folding the old §0 content (suite root, what "invoking" means) inside it. Directed by the director,
+  who named the placement: *"yeah 0 go to the top, i mostly call chief engineer skill first."*
+- **forces:** §9 governs the shape and words of a report; nothing governs the posture that produces
+  it. With no stated identity, the contract's own density is the only signal available, and the
+  default read is the thorough auditor — every rule a checklist to complete rather than a cost to
+  spend. The director's own framing carried a contradiction worth recording: "lean on the asker for
+  a precise question" against Law 4, *the director is not an engineer*, who often cannot produce one.
+  **(trace-only)** — read from the files, not measured against a run.
+- **options:**
+  1. *`meta-skills` Discipline 0* — the file that already owns judgment and posture. Rejected on
+     reach: `meta-skills` is "always on" by contract but is not the file a run loads first, and the
+     director enters through `chief-engineer`, which loads `PROTOCOL.md` at Phase 0.
+  2. *`PROTOCOL.md` §0* — read before any other rule by every run, in the one file guaranteed loaded.
+     Cost: `PROTOCOL.md` is meant to stay lean, and this is stance, not a checkable rule.
+  3. *`README.md` only* — zero cost to the contract, zero reach into a run. A human-facing frame that
+     no run ever reads is decoration.
+  4. *Renumber, making the frame §0 and shifting §0–§9 down* — rejected outright: it breaks every
+     `§N` citation across twenty skills and five agents for a cosmetic gain.
+- **reversibility class:** two-way and cheap. One section in one file; deleting it restores 2.9.0
+  behavior exactly, and no skill file was touched.
+- **evidence tag:** **(trace-only)**. The claim that a stated identity changes output length is
+  untested. Settle it the way D013 named: run the same subject under 2.9.0 and 2.10.0 and compare
+  report length and §9 compliance. Until then the frame is a bet, not a measurement.
+- **status:** decided — shipped in 2.10.0 as option 2. The Law 4 contradiction is resolved inside §0
+  as *sharpen the ask; do not send it back*: the burden of precision stays with the engineer, and the
+  speed comes from asking once while working, not from refusing to start. Authored and accepted in
+  one session — `(same-context review)` under meta-skills Discipline 5; a fresh-eyes pass over §0
+  against `PROTOCOL.md` is still owed. Refined in 2.11.0, same decision: the stance stayed in §0 and
+  its method moved to `meta-skills` Discipline 3 as the fork line, because §0 shipped a rule whose
+  method was the skill the director had said they lack. Split by Law 1 — the stance is read every
+  run, the shape is read when judgment is in question.

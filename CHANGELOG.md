@@ -7,6 +7,61 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.11.0 — 2026-09-14 — a reading to reject, not a question to answer
+
+2.10.0 told the engineer to sharpen a vague ask instead of sending it back, and stopped there — a
+rule whose method was the exact skill the director said they lack. The director, on why the suite
+exists at all: *"im just build this skill to solve this problem for me."*
+
+- **The fork line, in `meta-skills` Discipline 3.** Ambiguity below the four escalation triggers is
+  no longer settled silently. It costs one line: *You said "<their words>". I read that as X, not Y.
+  If you meant Y, <what changes>.* Four rules bind it — name the reading you did not take, price the
+  fork, build the shared part first and show the fork next to something running, and stop after a
+  second correction on the same request (the thrash rule, applied to understanding).
+- **Why a line and not a question.** Recognising is cheaper than writing. A director who cannot
+  produce a precise request can still reject a wrong reading in seconds, so a question they must
+  answer is replaced by a reading they can reject. On the runs where the reading is right — most of
+  them — it costs them nothing.
+- **`PROTOCOL.md` §0 carries the stance, Discipline 3 carries the shape.** The §0 bullet is now
+  `The ask is yours to sharpen` and points at Discipline 3 rather than restating it (Law 1). §9's
+  quote-back rule names the fork line's three parts instead of "what you took them to mean".
+
+Nothing else changed: no phase, table, verdict line, gate or routing. Four gates match their
+pre-change output **(proven)**: tests 21/21, `STRUCTURE: clean(held: 3 accepted, 0 repaid)`,
+references 9/9, version consistent. `(same-context review)` under Discipline 5, as 2.10.0 was.
+
+## 2.10.0 — 2026-09-14 — the engineer is busy, and that is the whole frame
+
+The director: *"i want to lean more like the senior engineering that always busy, like they always
+answer with less words and simple and its always works better, and it leans more to the asker that
+need a precise question."* The suite had rules for how a report reads (§9) and none for who is
+writing it. Without that, the default voice is the thorough auditor, and every rule gets read as a
+checklist to complete rather than a cost to spend.
+
+- **`PROTOCOL.md` §0 is now `Who is answering`** — seven lines of stance, read before any other
+  rule, since this is the file every run loads first. Short by default; the boring answer first;
+  one question, never a questionnaire; sharpen the ask instead of sending it back; no narration;
+  disagree in one line; busy is not careless. Three failure modes are named so they can be caught:
+  four hundred explained lines, five questions and no delivery, long words to sound senior.
+- **§0's old content is kept inside it, unmoved and unrenumbered.** Where the suite root is and
+  what "invoking a skill" means now sit under the frame as `Where this lives`. Every `§0` citation
+  — `chief-engineer` Phase 0 is the live one — still resolves. No section was renumbered.
+- **One correction to the director's framing, recorded rather than silently applied.** "Lean on the
+  asker for a precise question" contradicts Law 4: the director is not an engineer and often cannot
+  produce one. §0 resolves it as *sharpen the ask; do not send it back* — restate the vague request
+  precisely in one line, say you took it that way, and act. The burden of precision stays with the
+  engineer; the speed comes from asking once, not from refusing to start.
+- **§9 pulled into line, two rules only.** The opening was "one screen, about 200 words"; 200 words
+  is now the ceiling, not the target, and four lines is named as a good opening. The quote-back rule
+  now points at §0's one-line restatement as the way to quote a vague request.
+- **`README.md`'s one-line summary was the last thirteen-adverb chant.** 2.9.0 cut that construction
+  from `meta-skills` and missed this copy. Replaced with the frame in plain words.
+
+No skill file, phase, table, verdict line or gate changed. Four gates match their pre-change output
+**(proven)**: tests 21/21, `STRUCTURE: clean(held: 3 accepted, 0 repaid)`, references 9/9, version
+consistent. This edit was authored and accepted in one session, so it is `(same-context review)`
+under meta-skills Discipline 5.
+
 ## 2.9.0 — 2026-09-14 — the contract prose, in the words it demands
 
 D013, raised in 2.8.0 and open since, closed as option 2. The director: *"i put my own words in

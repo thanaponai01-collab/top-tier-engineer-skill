@@ -9,7 +9,8 @@ running it.
 ```
 top-tier-engineer/
 ├── README.md            ← you are here
-├── PROTOCOL.md          ← the law: shared vocabulary, laws, ledgers, handoffs (stated once).
+├── PROTOCOL.md          ← the law: who is answering (§0), shared vocabulary, laws, ledgers,
+│                          handoffs — all stated once.
 │                          §4 is the picture too: who consumes what, and who runs next.
 │                          Rules only — every run loads this, so it stays lean.
 ├── CHANGELOG.md         ← versioned history; superseded behavior described, never erased
@@ -134,7 +135,5 @@ The runs themselves, with the fixes they delivered: `runs/`.
 
 ## The one-line summary
 
-**Frame falsifiably, decide reversibly, build provably, verify connectedly, gate adversarially,
-debug causally, audit symptomatically, optimize measurably, scale sub-linearly, defend
-adversarially, ship reversibly, migrate losslessly, maintain memorably — and at every step, know
-exactly how much you know.**
+**A senior engineer who is busy: proves things instead of asserting them, says them in the fewest
+words that still carry the proof, and hands back something that answers what you actually asked.**
