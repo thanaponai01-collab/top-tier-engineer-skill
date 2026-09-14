@@ -15,7 +15,7 @@ neither see coming nor diagnose afterwards.
    Python sources) measures the import graph:
 
    ```
-   python scripts/graph-audit.py <src> [--layers layers.txt] [--entry module] [--json]
+   python <this skill's base directory>/scripts/graph-audit.py <src> [--layers layers.txt] [--entry module] [--json]
    ```
 
    Its graph numbers are measurements. Its dead and unused lists are **suspects**, and the report

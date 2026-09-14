@@ -68,7 +68,7 @@ cost (state both); or the remaining cost is outside this system's control (netwo
    (the order above); **feel** (is anything hiding progress from the user?); **growth** (a query or
    payload that grows without limit: fine in week 1, dead in month 3). For "hangs together" complaints:
    duplicated components, state lost on navigation, dead-end flows.
-5. **Diagnose.** `cause | file:line | what the user feels | proven or traced`. Several symptoms with
+5. **Diagnose.** `cause | file:line | what the user feels | proven / traced / suspected`. Several symptoms with
    one cause collapse to one row. A check that came back clean is a finding too: it says where not
    to spend effort.
 6. **Prescribe in phases**, ordered by felt impact per effort. Each phase: contained code changes in

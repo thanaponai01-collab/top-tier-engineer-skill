@@ -60,7 +60,7 @@ Write it so a future symptom can be matched to past causes in one read.
 
 ## Report
 
-The symptom in the reporter's words, the root cause in one sentence (proven or traced), what now
+The symptom in the reporter's words, the root cause in one sentence (proven, traced or suspected), what now
 stops it coming back, and anything left for later.
 
 ## Common mistakes

@@ -19,8 +19,7 @@ system could ship from. Only a result you actually ran closes a slice.
   what output counts as success. Can't state it? The slice is too vague.
 
 ### 2. Build
-- **Smallest change that satisfies the proof line.** Delete or reuse before adding. Add an
-  abstraction on its second real use, not its first guess.
+- **Smallest change that satisfies the proof line.** Delete or reuse before adding.
 - **Simple first, then let measurements pay for more.** A known limit becomes a written note with a
   measured trigger (`p95 > 300 ms at 10k rows`), not structure built on fear.
 - **Check where the change lands.** Smallest-change is measured against the slice, not the file.

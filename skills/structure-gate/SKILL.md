@@ -30,8 +30,8 @@ Find the languages and pick the deepest analysis for each.
 Run the bundled script (in this skill's `scripts/` folder; stdlib Python, no install):
 
 ```
-python scripts/structure-report.py <paths>          # human report
-python scripts/structure-report.py --json <paths>   # machine-readable
+python <this skill's base directory>/scripts/structure-report.py <paths>          # human report
+python <this skill's base directory>/scripts/structure-report.py --json <paths>   # machine-readable
 ```
 
 | Signal | Why it matters |

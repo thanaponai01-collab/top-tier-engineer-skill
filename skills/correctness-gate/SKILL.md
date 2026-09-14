@@ -8,7 +8,7 @@ description: Prove built software is correct with evidence, not plausibility. Us
 "It works" is a guess until an **oracle** says otherwise. An oracle is a written, checkable
 statement of correct behavior. Without one, tests only prove the code agrees with itself. Attack the
 code like someone who knows it well, measure whether the tests would actually catch breakage, and
-mark every claim proven or traced.
+mark every claim proven, traced or suspected.
 
 ## Phases
 
@@ -58,7 +58,7 @@ For every error path the code claims to handle: trigger it and assert the struct
 - Open with pass or fail and the one reason that decided it.
 - What was proven, what was only reasoned, and what this gate can't see (environments not run,
   scale not reached, integrations stubbed).
-- A table: behavior, oracle type, result, proven or traced.
+- A table: behavior, oracle type, result, proven / traced / suspected.
 - Mutation results and anything untestable as specified.
 
 A failure names why: missing oracle, not wired, logic error, or wrong requirement. Code that breaks

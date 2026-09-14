@@ -17,8 +17,7 @@ Pick the mode:
 
 1. **Work it out; don't recite a checklist.** Every check comes from this codebase's real
    architecture, data flows and stated purpose.
-2. **Tag every claim** proven, traced or suspected. Never dress a suspicion as proof. If a claim is
-   cheap to prove, prove it.
+2. **Never dress a suspicion as proof.** If a claim is cheap to prove, prove it.
 3. **Broken is not unfamiliar.** Broken breaks something nameable: corrupts data, races, leaks, lies
    to its caller. Unfamiliar is just not how you'd do it. Before flagging the second kind, state the
    best reason a competent engineer might have had and check git history. Unrefuted → a question,

@@ -58,7 +58,7 @@ For attacks on the most valuable assets, run them: forge the token, send the cra
 the concurrent requests. An attack you only read is traced: give the command that would settle it.
 
 ### 5. Fix
-For each finding: asset, boundary, attack, proven or traced, the misplaced trust, and a contained
+For each finding: asset, boundary, attack, proven / traced / suspected, the misplaced trust, and a contained
 fix in the project's conventions. Before calling a permission fix complete, list **every** surface
 exposing the same data or operation (pages, API routes, exports, background jobs, webhooks) and
 leave them consistent or name the gap. Show the check you gate on (membership, role, ownership) is
@@ -67,7 +67,7 @@ trusted (moving a check server-side, changing the session format) are design dec
 
 ## Report
 
-Open with the worst thing an attacker can do today, in one sentence, proven or traced. Then one row
+Open with the worst thing an attacker can do today, in one sentence, proven, traced or suspected. Then one row
 per finding by blast radius: boundary, what the attacker gets, evidence, fix. Then the abuse-case
 test specs, the asset table, and how many boundaries were modelled and held.
 

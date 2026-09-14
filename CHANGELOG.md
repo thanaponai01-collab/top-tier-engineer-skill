@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.4.1 — 2026-09-14 — one label set, and a test for the other rules
+
+- `debug-protocol` Rule 4: a failure you can't reproduce is still real. Add the probe that captures
+  it next time instead of refusing to debug it.
+- Report templates in `correctness-gate`, `evolve-maintain`, `perf-optimize`, `threat-model` and
+  `wire-check` accept proven / traced / suspected, the set `How to work` defines. Before, a suspicion
+  had no slot and got inflated to "traced".
+- Script commands in `latent-audit` and `structure-gate` name the skill's base directory; the
+  cwd-relative form failed from a project folder.
+- `build-discipline` and `senior-review` drop lines that repeated their own `How to work`.
+- `tests/test_standalone.py`: frontmatter names its folder, no skill mentions another, `How to work`
+  comes last.
+
 ## 3.4.0 — 2026-09-14 — scrutinize, restored in full
 
 - `senior-review` change mode picks up what the 3.0.0 merge of `scrutinize` dropped (from

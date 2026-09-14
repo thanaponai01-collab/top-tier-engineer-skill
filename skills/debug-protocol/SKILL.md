@@ -18,8 +18,9 @@ and fixing is how symptoms get patched while the cause survives.
    coincidence.
 3. **One change per experiment.** Write down every experiment, including dead ends, so nobody walks
    into them again.
-4. **No bug is real until reproduced.** A report you cannot reproduce is a finding about missing
-   logging, not something to debug.
+4. **Reproduce before you theorize.** A failure you can't reproduce is still real: don't close it
+   and don't guess a fix. Add the log, metric or probe that captures it next time, and treat that
+   capture as the reproduction.
 
 ## Phases
 

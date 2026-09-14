@@ -67,7 +67,7 @@ When no single component is named ("what do we serve, what does nothing reach?")
 
 - The first break, in plain words, and anything still only traced with the one command that would
   prove it.
-- A table: component, links 1–5 as ✅ / ❌ / ⛔ blocked, proven or traced, the exact missing
+- A table: component, links 1–5 as ✅ / ❌ / ⛔ blocked, proven / traced / suspected, the exact missing
   declaration. In whole-system mode: surface, served / orphaned / unknown, first broken link,
   proposed outcome.
 - The connecting code.
