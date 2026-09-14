@@ -95,6 +95,11 @@ Record the intervention — append-only, one entry each, inline or in the projec
 The log is written for the next maintainer, who will probably be an AI model. Write entries so a
 new symptom can be matched against past causes in one read.
 
+End every intervention with a `MAINT <ID>` line (PROTOCOL §5), the ID being the entry's own:
+`done(<class>, root cause <tag>, guarded by <test/invariant>)`; `findings(…)` when the treatment is
+specified but not landed; `blocked(…)` when it cannot proceed — an unproven root cause is
+`blocked(cause unproven: routed to debug-protocol)`.
+
 ## Rules
 
 - No intervention proceeds unclassified; no Fix closes without root cause and regression test.

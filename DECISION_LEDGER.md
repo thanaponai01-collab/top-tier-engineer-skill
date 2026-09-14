@@ -569,3 +569,60 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   its method moved to `meta-skills` Discipline 3 as the fork line, because §0 shipped a rule whose
   method was the skill the director had said they lack. Split by Law 1 — the stance is read every
   run, the shape is read when judgment is in question.
+
+
+---
+
+## D015 — the verdict noun: derived from the skill's name, or declared in the skill?
+
+- **date:** 2026-09-14
+- **decision:** **Option 2 — each skill declares its own noun.** §5 no longer derives it. The rule
+  is now: one ALL-CAPS word, named by the skill in its own contract, never the skill's name; a skill
+  that ends a run and names no noun is a defect in that skill. The four skills that named none
+  (`problem-framing`, `arch-design`, `perf-optimize`, `evolve-maintain`) now name `BRIEF`, `DESIGN`,
+  `PERF` and `MAINT <ID>`.
+- **forces:** §5 said the noun was "the skill's own, from §4's first column, upper-cased". That was
+  false for eight of the sixteen skills that declared one — `CAUSE` is not `DEBUG-PROTOCOL`, `LENS`
+  is not `TOPTIER-LENS`, `GATE` is not `CORRECTNESS-GATE` — and the derived names it produces
+  contain hyphens, which §5's own recovery grep (`^[A-Z]+`) does not match. A twenty-first skill
+  written to that rule would have emitted a line nothing greps. The counter-force is Law 1: a list
+  of nouns in §5 would duplicate nineteen facts already stated in nineteen files.
+- **options:**
+  1. *Rename the nouns to match the skill names* — `DEBUG-PROTOCOL: findings(...)`. Makes the rule
+     true by changing nineteen contracts and every run record in `runs/`, and breaks the grep.
+  2. *Declare in the skill, delete the derivation* — one file changes, the nouns in use stay valid,
+     and the rule becomes checkable per skill. **(chosen)**
+  3. *List all twenty nouns in §5* — discoverable in one place, but duplicates a fact across twenty
+     files with no gate holding them together, which is the defect D010 was opened about.
+- **reversibility class:** two-way and cheap. One paragraph in §5 plus four appended lines.
+- **evidence tag:** **(proven)** for the defect — the eight mismatches were enumerated by grep over
+  `skills/`. **(trace-only)** for the fix: no run has yet emitted `BRIEF`, `DESIGN` or `PERF`.
+- **status:** decided — shipped in 2.12.0. Option 3 stays available if a run shows the nouns are
+  hard to find, but it needs a gate before it needs a list.
+
+---
+
+## D016 — `meta-skills` is always-on: who loads it?
+
+- **date:** 2026-09-14
+- **decision:** **Option 1 — `chief-engineer` Phase 0 loads it alongside `PROTOCOL.md`.**
+- **forces:** §4 lists `meta-skills` as `(always on)` and `chief-engineer` Rule 2 routes a decision
+  into its Discipline 3 by name — but Phase 0 loaded `PROTOCOL.md` alone, and the skill's own header
+  said a run never needs to load anything else. Fifteen of the nineteen other skills never mention
+  it. An always-on layer that nothing opens is a rule with no reader; the counter-force is cost, the
+  file is 183 lines on every session, and §0's whole stance is that words are spent, not free.
+- **options:**
+  1. *`chief-engineer` Phase 0 loads both* — the dispatcher is the suite's entry point, so one line
+     in one file makes the layer real for every routed run. Costs one file read per session.
+     **(chosen)**
+  2. *Every skill loads it* — nineteen edits, nineteen re-reads, same effect. Rejected on Law 1 and
+     on cost.
+  3. *Fold the disciplines into `PROTOCOL.md`* — guarantees the read, but merges an 183-line
+     judgment layer into the file that is meant to stay lean, and loses the skill boundary D003
+     settled.
+- **reversibility class:** two-way and cheap. Two lines in one file.
+- **evidence tag:** **(trace-only)**. That loading it changes a run's judgment is untested; what is
+  proven is that a rule cited a file no run was told to open.
+- **status:** decided — shipped in 2.12.0. A direct entry into a specialist skill still does not
+  load it: the always-on claim holds only through the dispatcher. Revisit if a live run shows a
+  non-routed skill making the call Discipline 3 owns.

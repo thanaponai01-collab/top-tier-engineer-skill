@@ -13,8 +13,8 @@ request it is, sends it through the right specialist skills in the right order, 
 their handoffs — so the user talks to one engineer and the process happens underneath.
 
 The shared rules, the vocabulary, the list of files, and the handoff chain all live in
-`PROTOCOL.md` at the suite root — read it once per session. Why those rules exist lives in
-`PROTOCOL.md` too; a run never needs to load anything else.
+`PROTOCOL.md` at the suite root; the judgment that governs every phase lives in `meta-skills`.
+Read both once per session. Beyond them, a run loads only the skills it routes to.
 
 ## The job
 
@@ -39,27 +39,35 @@ The shared rules, the vocabulary, the list of files, and the handoff chain all l
 ## Phase 0 — Locate and load
 
 - Find the suite root per `PROTOCOL.md` §0 — plugin install: two directories above this file.
-  Read `PROTOCOL.md` once per session.
+  Read `PROTOCOL.md` once per session, and `<root>/skills/meta-skills/SKILL.md` with it: §4 calls
+  it always-on, and always-on binds nothing if nobody opens it.
 - To run a routed skill, open `<root>/skills/<name>/SKILL.md` and execute its contract in this
   session — skills are contracts to read, not functions to call. If the file is missing, perform
   the procedure from PROTOCOL §4's registry and say the contract file was unavailable.
 
 ## Phase 1 — Read the ground
 
-Census the project root before classifying anything:
+Census before classifying anything. §3 defaults to writing nothing to disk, so most projects hold
+no ledgers at all: read the code and the history first, and take files as confirmation of what
+those already say.
 
-- Which ledgers from the PROTOCOL registry exist? Read the ones that exist (briefs and
-  architecture fully; append-only ledgers from the tail).
-- From the census, infer the lifecycle state:
+- What is there: source, tests, commits, a runtime. Then which of §3's files exist (`NOTES.md`,
+  `MAINT_LOG.md`, and any per-skill file this project split out). Read the short ones fully,
+  append-only ones from the tail.
+- From that, infer the lifecycle state:
 
-| Artifacts present | Inferred state |
+| What you found | Inferred state |
 |---|---|
-| none | pre-framing |
-| brief + assumptions only | framed, undesigned |
-| + architecture + decision ledger | designed, unbuilt (or mid-build: check commits/TODO ledger) |
-| + slices/commits + TODO ledger | building |
-| + correctness verdict (pass) | gated — eligible for perf, review, ship |
-| + maint log | live system — maintenance mode is the default lens |
+| no source that runs | pre-framing |
+| a stated job and invariants — in a file or in the request — no structure yet | framed, undesigned |
+| structure and decisions, no commits building on them | designed, unbuilt |
+| commits landing, proof uneven, deferred work named anywhere | building |
+| a `GATE` line at `done` or `clean` against stated criteria | gated — eligible for perf, review, ship |
+| a maintenance record, or a system with users | live system — maintenance mode is the default lens |
+
+A missing file is not evidence of a missing stage. A built and gated system that wrote nothing
+down is the ordinary case, not pre-framing: tag the stage **(assumed)**, say it came from code and
+history, and name what a file would have settled.
 
 - Check what can actually run here: is there a runtime, do the dependencies resolve, is there a
   command that executes? This sets the best evidence the whole run can reach — if nothing can be
@@ -81,7 +89,7 @@ Census the project root before classifying anything:
 | "Is it correct / test it / it's done?" | correctness-gate |
 | "It's broken / wrong output / crashes / worked yesterday" — cause unknown | debug-protocol → evolve-maintain |
 | Bug with known cause, dependency update, refactor, incident | evolve-maintain |
-| "Slow / expensive / heavy / optimize" — runnable system, single measurable dimension | perf-optimize (only past a passed gate; else gate first) |
+| "Slow / expensive / heavy / optimize" — runnable system, single measurable dimension | perf-optimize (only past a `GATE` line at `done` or `clean`; else gate first) |
 | "N+1 / will this query scale / add an index / does this endpoint hit the DB hard" — a data-access change | perf-optimize, Phase 3b alone (gates cost class from the plan, before a budget exists) |
 | "Feels slow / clunky / takes forever" — an existing codebase + a felt complaint; unrunnable here, or spanning speed + cohesion + UX | symptom-audit → its spec executes via build-discipline / perf-optimize |
 | "Review / audit this codebase / is this code good" — one lens, one report, no durable backlog asked for | senior-review |
@@ -152,7 +160,11 @@ director can now do doesn't answer what they asked, say that first — above eve
 One row per skill that ran: the skill, its verdict line, and what that means for the director.
 Detail goes under `Detail`, or is left out and offered.
 
-`LIFECYCLE: done(stage: <stage>, next: <skill or director decision>)` — or `blocked(missing: …)`, per PROTOCOL §5.
+One `LIFECYCLE` line per PROTOCOL §5: `done(stage: <stage>, next: <skill or director decision>)`
+when the run made something; `clean(stage: <stage>)` when it only measured or reported state and
+nothing needs doing; `findings(…)` when Phase 1's drift check fired or findings were filed —
+drift is `findings(drift: <what contradicts what>)`; `blocked(missing: …)` when a required stage
+could not run.
 
 ## Common mistakes
 

@@ -75,7 +75,7 @@ and when there is nothing to show. A spec that only describes success is half a 
 
 ### Phase 5 — Contract
 
-Produce two artifacts in the project root:
+Two artifacts — inline in the report under their own headings, or as files when §3 warrants:
 
 **`PROBLEM_BRIEF.md`** — sections in this order:
 1. The job, in one plain paragraph the director can read
@@ -91,6 +91,10 @@ per §3:
 
 Later skills have to check this list. An **(assumed)** entry that turns out to be false is a
 failure of the framing, not of the build — send it back here.
+
+End every run with a `BRIEF` line (PROTOCOL §5): `done(<N> invariants, <M> open questions)`, or
+`blocked(contradictory: …)` when the request contradicts itself and only the director can settle
+it.
 
 ## Rules
 

@@ -7,6 +7,42 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.12.0 — 2026-09-14 — six places where following one file broke another
+
+The director: *"find potential improvement from this skill"*, then *"fix all of them, and also the
+plugin."* A `chief-engineer` audit of the suite's own contracts, run against the suite. All three
+CI gates were green before it and after it: they check filenames and Python, never whether two
+contracts agree with each other.
+
+- **§3 was contradicted by the two skills that run first.** `problem-framing` Phase 5 ordered
+  *"Produce two artifacts in the project root"* and `arch-design` Phase 5 *"Two artifacts in the
+  project root"*, unconditionally — while §3 defaults to writing nothing to disk, and §3 wins by
+  its own rule. Both now read *inline in the report, or as files when §3 warrants*: the wording the
+  other nine file-producing skills already carried.
+- **`chief-engineer` Phase 1 inferred the stage from files §3 says most projects never write.** A
+  project built down the fast path leaves no ledger, so the census read `none → pre-framing` and
+  would re-frame a finished system. The table now keys on source, commits, proof and a `GATE` line,
+  with files as confirmation of what those already say, and says so: a missing file is not evidence
+  of a missing stage. `TODO ledger` — a name the suite used nowhere else — is gone, and so are
+  `correctness verdict (pass)` and `a passed gate`: `pass` was never one of §5's four states.
+- **Four skills ended a run with no line to end it with.** `problem-framing` → `BRIEF`,
+  `arch-design` → `DESIGN`, `perf-optimize` → `PERF`, `evolve-maintain` → `MAINT <ID>`, which §5
+  had already assumed existed. Nineteen skills, nineteen nouns. `chief-engineer` Rule 4 asks for
+  the verdict line each stage emitted; on a new-project route, two of the four stages had none.
+- **§5's rule for deriving the noun was false for half the suite (D015).** "From §4's first column,
+  upper-cased" gives `DEBUG-PROTOCOL`, not `CAUSE`, and a hyphen does not even match §5's own grep.
+  The noun is now declared by each skill in its own contract; naming none is a defect in that skill.
+- **`LIFECYCLE` had two states for four jobs.** Phase 1's drift check outranks the director's
+  request and had no state to carry it; a "where are we" run that makes nothing had no `clean`.
+  Both added, drift with its own parenthetical.
+- **The always-on layer had no load point (D016).** §4 calls `meta-skills` always-on and
+  `chief-engineer` Rule 2 sends the run into its Discipline 3 — but Phase 0 loaded `PROTOCOL.md`
+  alone, and the header said a run never needs to load anything else. Phase 0 now loads both.
+
+No routing row, phase order, gate, tool or agent changed. Three gates match their pre-change output
+**(proven)**: tests 21/21, `STRUCTURE: clean(held: 3 accepted, 0 repaid)`, references 9/9.
+`(same-context review)` under Discipline 5 — the audit and the fix were the same session.
+
 ## 2.11.0 — 2026-09-14 — a reading to reject, not a question to answer
 
 2.10.0 told the engineer to sharpen a vague ask instead of sending it back, and stopped there — a

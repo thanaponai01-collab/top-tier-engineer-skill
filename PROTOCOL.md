@@ -150,9 +150,10 @@ One ordering is fixed: `evolve-maintain` closes before `data-evolution` produces
 
 ## 5. Verdict lines
 
-Every run ends with exactly one machine-readable line: `NOUN: state`. The noun is the skill's own,
-from §4's first column, upper-cased — `SLICE <name>` and `MAINT <ID>` carry their subject; §7 owns
-`FIX <id>`. One grep recovers every run:
+Every run ends with exactly one machine-readable line: `NOUN: state`. The noun is one ALL-CAPS
+word the skill names in its own contract — never the skill's name, so §4's first column is not it.
+A skill that ends a run and names no noun is a defect in that skill. `SLICE <name>` and
+`MAINT <ID>` carry their subject; §7 owns `FIX <id>`. One grep recovers every run:
 
 `^[A-Z]+( [^:]+)?: (done|clean|findings|blocked)`
 
