@@ -70,7 +70,7 @@ Every consequential choice goes through this frame:
 ### 5. Deliver
 Inline unless the user wants files:
 
-- **Architecture:** sketch, module table (responsibility / owns / must not know), contracts,
+- **Architecture:** sketch (a Mermaid flowchart: renders on GitHub, diffs as text), module table (responsibility / owns / must not know), contracts,
   conventions, requirement → structure mapping.
 - **Decisions:** `decision | options considered | forces | reversibility | evidence`.
 
@@ -105,7 +105,8 @@ prove it, rank the fixes.
    after). Moves land one at a time. A rewrite is its own decision, raised with the user.
 
 Report: the plain verdict (clean / messy in places / tangled) and the one move that pays most. Then
-the concept map, then `sign | where | what it costs today | move | effort`.
+the concept map, drawn as a Mermaid flowchart with each finding's number (`!1`, `!2`) on the box where
+it lives, then `# | sign | where | what it costs today | move | effort`.
 
 ## Common mistakes
 

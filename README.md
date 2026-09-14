@@ -53,7 +53,7 @@ Skills don't hand off to each other; you pick the next one. Every flow has the s
 | Goal | Find | Change | Prove | Ship |
 |---|---|---|---|---|
 | Build something new | `problem-framing` → `arch-design` | `build-discipline` | `correctness-gate` | `safe-release` |
-| Improve a messy codebase | `arch-design` (audit) | `evolve-maintain` | `correctness-gate` | `safe-release` |
+| Improve a messy codebase | `arch-design` (audit) → `arch-map` (problems) | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Fix a bug | `debug-protocol` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Make it faster | `perf-optimize` | `perf-optimize` | `correctness-gate` | `safe-release` |
 | Make it secure | `threat-model` | `threat-model` | `correctness-gate` | `safe-release` |

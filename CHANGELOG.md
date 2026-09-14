@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.2.1 — 2026-09-14 — same picture
+
+- `arch-design` draws its sketch and audit concept map as Mermaid, with audit findings numbered on
+  the diagram. Still standalone: it doesn't name another skill. README flow: audit → problems map.
+
 ## 4.2.0 — 2026-09-14 — see it
 
 - New skill `arch-map`: draws the codebase as Mermaid traced from real imports and calls, in three
