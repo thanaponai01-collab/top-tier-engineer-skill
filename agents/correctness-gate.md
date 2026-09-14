@@ -1,6 +1,6 @@
 ---
 name: correctness-gate
-description: Isolated §6 parallel gate — proves a change correct against an explicit oracle, with NO access to the build conversation. Spawn to satisfy §6 fresh-eyes when the change was authored in the same session. Consumes only artifacts (the diff, the criteria, CORRECTNESS_VERDICT.md inputs) and returns one GATE verdict line.
+description: Isolated §6 parallel gate — proves a change correct against an explicit oracle, with NO access to the build conversation. Spawn to satisfy §6 fresh-eyes when the change was authored in the same session. Consumes only artifacts (the diff, the acceptance criteria and contracts, and the source under test) and returns one GATE verdict line.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -19,5 +19,5 @@ Shared gate rules (isolation, method ownership, evidence, the verdict line):
    until you have run it.
 
 Report: the oracle table (behavior → expected → observed → pass/fail), then the
-residual risk — what you could NOT prove and why. Close with
-`GATE: clean(<tag>)` or `GATE: findings(<behaviors>, <evidence>)`.
+residual risk — what you could NOT prove and why. Close with the one `GATE` line
+the skill defines — it owns the states, this file does not restate them.

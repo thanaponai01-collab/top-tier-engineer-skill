@@ -122,7 +122,7 @@ produces a file owns its shape; everyone else reads and appends to it.
 
 | Skill | Consumes | Produces | Hands off to |
 |---|---|---|---|
-| chief-engineer | any request + what already exists | routing decision, state report | the routed skill(s) |
+| boss | any request + what already exists | routing decision, state report | the routed skill(s) |
 | problem-framing | human intent | the job, invariants, acceptance criteria, assumptions | arch-design |
 | arch-design | the brief | structure + the decisions behind it | build-discipline |
 | build-discipline | architecture + brief | proven slices, commits, deferred work | correctness-gate (runs wire-check per slice) |
@@ -144,7 +144,7 @@ produces a file owns its shape; everyone else reads and appends to it.
 | meta-skills | (always on) | discipline, not files | every phase of every skill |
 
 A skill whose input is missing does not invent it: either run the producing skill, or log the gap
-as (assumed) with the cost of being wrong. chief-engineer decides which.
+as (assumed) with the cost of being wrong. `boss` decides which.
 
 One ordering is fixed: `evolve-maintain` closes before `data-evolution` produces its plan.
 
@@ -185,7 +185,7 @@ says `(same-context review)`.
 
 Gates that consume only artifacts — correctness-gate, structure-gate, threat-model, senior-review,
 scrutinize — share no state and may run **at the same time** in isolated contexts. However many
-run, their verdicts merge into the one report chief-engineer owes. `agents/` holds these as
+run, their verdicts merge into the one report `boss` owes. `agents/` holds these as
 ready-made subagents.
 
 Every gate agent obeys the same three rules, stated here so its own file need only state what

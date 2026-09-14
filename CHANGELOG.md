@@ -7,6 +7,67 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.15.0 — 2026-09-14 — the router is `boss`, and six contracts that argued with the law
+
+The director: *"i want you to check all skills which needs to improve to be more logical like real
+busy engineering like the philosophy, and i want to change the name chief-engineer to /boss."*
+Read as: rename the router, and sweep all twenty skills for places where a contract contradicts
+`PROTOCOL.md` — not a prose pass, which 2.8.0 through 2.14.0 already ran four times.
+
+- **`chief-engineer` is now `boss`.** Directory, frontmatter name, and heading. Invoked as
+  `top-tier-engineer:boss`. Every cross-reference moved with it: §4's registry row, §4's
+  missing-input rule, §6's merged-verdict rule, `build-discipline`'s spike-mode owner,
+  `problem-framing`'s drift route, and six places in `README.md` including the `CLAUDE.md`
+  bootstrap block every governed project pastes. `runs/` keeps the old name — those are transcripts
+  of what actually ran, and rewriting them would be the one thing Law 2 forbids. The verdict noun
+  is still `LIFECYCLE` (§5 forbids naming it after the skill), so nothing machine-readable moved.
+- **`problem-framing` told you to do the thing §0 names as a failure mode.** Phase 2 read *"ask from
+  the top, all in one message, never more than five"*; §0 reads *"One question, never a
+  questionnaire"* and lists *"asking five questions and delivering nothing"* as one of the three
+  ways the busy engineer goes wrong. The entry point to every new project was instructing the
+  failure. Phase 2 keeps the four-rank ordering — that carries knowledge a rule cannot state (Law 6)
+  — and replaces what to do with it: rank 4 takes a default, ranks 2 and 3 get the fork line, rank 1
+  becomes a question only when Discipline 3's asymmetry test clears it, and everything the question
+  does not block is framed in the same response.
+- **Two skills and one agent ran tools from a path the subject controls (§1).** `latent-audit`,
+  `structure-gate`, `agents/structure-gate.md` and the router's own routing row all wrote
+  `tools/graph-audit.py` / `tools/structure-report.py` with no prefix. A skill runs in the
+  *subject's* working directory, so that path names the subject's file — exactly what §1's
+  *"tools resolve their own code from their install path, never from a path the subject controls"*
+  forbids. All six now read `<root>/tools/…`, and `tools/check-references.sh` holds the rule:
+  it resolves the `<root>/` prefix (restoring coverage the prefix would otherwise have cost) and
+  fails any bare `tools/` path under `skills/` or `agents/` **(proven: the negative test fails, the
+  restored file passes)**.
+- **Three skills never said which verdict states they may emit — and their agents did.**
+  `correctness-gate`, `senior-review` and `scrutinize` ended with *"end every run with an X line"*
+  and nothing else, while `agents/*.md` enumerated the states for them. That is backwards under §6
+  (*"the skill owns the method, the agent is only the isolation wrapper"*) and a Law 1 duplication
+  besides — and the two had already drifted: the senior-review agent omitted `blocked`. Each skill
+  now states its own map, all three noting that a skill which measures and makes nothing never says
+  `done`; the three agents point at the skill instead of restating it.
+- **`agents/correctness-gate.md` asked to be handed a file no skill writes.** Its description named
+  `CORRECTNESS_VERDICT.md` as an input; the string appears nowhere else in the suite, and
+  `correctness-gate` Phase 5 puts the verdict inline. `check-references.sh` missed it because the
+  name sits unbackticked in frontmatter. It now names the real inputs: the diff, the criteria and
+  contracts, the source under test.
+- **`evolve-maintain` had the widest description in the suite and the only missing boundary
+  section.** Nineteen of twenty skills open with *When not to use this*; the one claiming *"the
+  system broke"* and *"resuming work after a gap"* — both also claimed by `debug-protocol` and the
+  router — did not. It has one now.
+- **`senior-review` ordered a file §3 says not to write.** *"write the unsettled ones into
+  `REVIEW_LEDGER.md` … (create it if it is missing)"* is unconditional; §3 defaults to writing
+  nothing to disk. The rule is right and the licence was missing: an unsettled question that must
+  survive to the next review *is* §3 clause (b), work spanning more than one session, and the text
+  now says so instead of overriding §3 silently.
+- **`perf-optimize` forbade its own Phase 3b.** The job section says the skill *"runs only on code
+  that has passed `correctness-gate`"*, while Phase 3b judges a plan or a diff before any code runs
+  — and the router routes *"is this an N+1"* straight to it. The exception is now stated where the
+  precondition is.
+
+No phase order, routing target, gate, verdict noun or tool behavior changed beyond the above. Four
+gates match their pre-change output **(proven)**: tests 21/21, `STRUCTURE: clean(held: 3 accepted,
+0 repaid)`, references 9/9, verdict nouns 19/19. `(same-context review)` under Discipline 5.
+
 ## 2.14.0 — 2026-09-14 — a budget you count, not a style you aim at
 
 The director, on the output of a suite that had already been told twice to be shorter: *"i feel

@@ -18,7 +18,9 @@ You optimize with a profiler, not an opinion. Nothing changes until the cost is 
 is claimed until the improvement is measured again under the same conditions, and every gain gets
 a guard so it cannot quietly slip back. Correctness comes first: this skill runs only on code that
 has passed `correctness-gate`, and every optimization runs the gate again — a fast wrong answer is
-worth less than a slow right one. Evidence rules (per `PROTOCOL.md`) are strict here: a
+worth less than a slow right one. Phase 3b is the one exception, and says so: it judges a plan or a
+diff by how its cost *grows*, before there is a budget or a running change to gate, so it precedes
+the gate instead of following it and changes nothing while it runs. Evidence rules (per `PROTOCOL.md`) are strict here: a
 **(trace-only)** performance claim is a hypothesis, never a result.
 
 ## Steps: Budget → Baseline → Profile → Hypothesize → Change-one-thing → Verify → Guard

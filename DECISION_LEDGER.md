@@ -704,3 +704,63 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
   this is the third bet, not a measurement. Its one advantage over the first two: the thing to count
   is now defined.
 - **status:** decided — shipped in 2.14.0. `(same-context review)` under meta-skills Discipline 5.
+
+## D019 — the router's name: a title, or a word the director actually uses?
+
+- **date:** 2026-09-14
+- **decision:** **Option 2 — `boss`.** `skills/chief-engineer/` becomes `skills/boss/`, invoked as
+  `top-tier-engineer:boss`. The verdict noun stays `LIFECYCLE`; §5 already forbids naming a noun
+  after its skill, so nothing machine-readable depends on the directory name.
+- **forces:** The director asked for it by name. Behind the ask is the thing §0 is about: the
+  director is not an engineer (Law 4) and types what they would say out loud. `chief-engineer` is a
+  job title inside the suite's own vocabulary — it describes what the skill *is* to the other
+  skills, not what it is to the person typing. `boss` is the word for the one you bring the problem
+  to. Against it: nineteen `runs/` transcripts and every prior CHANGELOG entry name the old skill,
+  and any governed project's `CLAUDE.md` bootstrap block points at it.
+- **options:**
+  1. *Keep `chief-engineer`* — zero migration, and the name is accurate to §4's registry. Rejected:
+     accuracy to the registry is not the test; the director's own vocabulary is (§0, Law 4).
+  2. *Rename to `boss`* — **taken**. One directory, one frontmatter field, one heading, eleven
+     cross-references. History is not rewritten: `runs/` and `CHANGELOG.md` keep the old name,
+     because they record what actually ran (Law 2), and `check-references.sh` excludes both by
+     design.
+  3. *Alias — ship both names* — rejected outright. Two names for one contract is the exact
+     failure Law 1 exists to stop, and a suite that cannot hold Law 1 on itself cannot impose it.
+- **reversibility class:** two-way, and cheap — one `git mv` plus eleven references, all of them
+  found by grep because the name is a literal string. The expensive half is outside this repo:
+  every governed project's `CLAUDE.md` block names the skill, and those are edited by hand.
+  Cost of being wrong is therefore paid by the director, once, in each project they govern.
+- **evidence tag:** (proven) — the four CI gates return their pre-rename values after the move:
+  tests 21/21, `STRUCTURE: clean(held: 3 accepted, 0 repaid)`, references 9/9, nouns 19/19.
+- **status:** decided — shipped in 2.15.0.
+
+## D020 — a skill's tool path: bare, or rooted at the install?
+
+- **date:** 2026-09-14
+- **decision:** **Option 2 — `<root>/tools/…`, held by the reference gate.** Every tool invocation
+  written inside `skills/` or `agents/` carries the `<root>/` prefix §0 defines, and
+  `tools/check-references.sh` fails a bare `tools/` path in those directories.
+- **forces:** §1 already states the rule — *tools resolve their own code from their install path,
+  never from a path the subject controls* — and four files broke it: `latent-audit`,
+  `structure-gate`, `agents/structure-gate.md`, and the router's routing row. The break is not
+  cosmetic: a skill executes inside the *subject's* working directory, so `python3
+  tools/graph-audit.py` either fails, or runs a file the subject wrote. The second outcome is the
+  channel violation 1.21.0 shipped a whole rule for. Against a gate: this is one defect class with
+  four instances, and D017 is the precedent for when that earns a check — the noun rule had the
+  same shape and the same answer.
+- **options:**
+  1. *Fix the four files, rule held by reading* — rejected on D017's precedent: a rule readable
+    only by a human opening twenty files is a rule nobody holds, and this one regresses every time
+    somebody adds a tool, which is the direction the suite grows.
+  2. *Prefix plus a gate* — **taken**. The gate does two things: strips `<root>/` so prefixed
+    references are still checked for existence (without it, the prefix would have *bought* the
+    correctness by *costing* the coverage), and rejects a bare `tools/` path under `skills/` or
+    `agents/`. Nine lines.
+  3. *Make each tool resolve its own root at runtime* (`Path(__file__).parent`) — rejected for now.
+    It fixes the tool's internal imports, which are already fine, and does nothing about the
+    invocation line a skill tells the model to type. Reopen if a tool ever grows sibling data files.
+- **reversibility class:** two-way. The gate is nine lines in one script; reverting is deleting
+  them.
+- **evidence tag:** (proven) — negative test run in the same session: reverting one reference to
+  its bare form fails the gate with the path named; restoring it passes.
+- **status:** decided — shipped in 2.15.0.

@@ -26,7 +26,7 @@ top-tier-engineer/
 │   ├── test_tools.py       ← runs tools/tests/ (stdlib unittest, no deps)
 │   └── tests/              ← one test module per tool
 └── skills/
-    ├── chief-engineer/      ← the router — every request enters here
+    ├── boss/                ← the router — every request enters here
     ├── problem-framing/     ← stage 1: falsifiable spec before any code
     ├── arch-design/         ← stage 2: reversible, recorded decisions
     ├── build-discipline/    ← stage 3: proven vertical slices
@@ -64,15 +64,15 @@ You don't pick skills. You talk to the engineer:
 - "What do we actually have / what do we serve / what did I build that's never been used?" → reach-audit walks every entry point outward, sets what it can actually reach against an inventory built independently of that walk, and hands each orphan to its owner. It answers *unreached*, which is not latent-audit's *unreferenced*: a route registered but linked from nowhere, or a component behind a flag nobody sets, has plenty of in-edges and still never runs
 - "What's the biggest gap / what would a top lab build next / where's the ceiling?" → toptier-lens reads the system against its own ambition and returns one gap and one move, not a backlog
 - "Look at this PR / plan before it lands" → scrutinize
-- "File the findings as issues / work through the backlog / implement issue #N" → chief-engineer carries the audits' findings out to your tracker intact (PROTOCOL §3), hands each back for implementation one at a time, and closes it only with evidence
+- "File the findings as issues / work through the backlog / implement issue #N" → `boss` carries the audits' findings out to your tracker intact (PROTOCOL §3), hands each back for implementation one at a time, and closes it only with evidence
 - "Deploy it / ship it" → ship-gate proves it's reversible and bounded before it reaches users
 - "Change the schema / run a migration" → data-evolution evolves the data shape without loss
-- "Where are we?" → chief-engineer reads the project's ledgers and tells you the state and the next step
+- "Where are we?" → `boss` reads the project's ledgers and tells you the state and the next step
 - "Every check passed and it still isn't what I meant / it's way too much for the job / I can't tell what it did" → the sense floor (§9): every report opens by quoting your own words back, saying what changed in your vocabulary, what you can now do, and what it cost you to have it
 - "Too long / stop using the big words / just say it" → §9 owns every line of a report, not only its opening. Three blocks: the opening, the findings one row each, the verdict line — everything skippable under one `Detail` heading. It is a budget you count, not a style you aim at: 120 words of opening, 400 of prose outside tables, two lines per bullet. Nine named constructions are banned outright, and every skill's Deliver phase now points at it
 - "Don't touch anything I didn't ask you to touch" → Law 7: every changed line traces back to the request, only your own change's leftovers get cleaned up, and dead code you spot gets named in the report instead of deleted
 
-`chief-engineer` routes by **artifact state, not by your phrasing** — say "build it" with no brief
+`boss` routes by **artifact state, not by your phrasing** — say "build it" with no brief
 and it will (briefly, proportionally) frame first. Small tasks get the compressed lifecycle, never
 bureaucracy. Slices that touch a trust boundary or persistent data never take the fast path,
 regardless of size.
@@ -89,7 +89,7 @@ install the plugin:
 ```
 
 (Use the absolute path to wherever this folder lives.) Installed this way, the skills are
-namespaced — `top-tier-engineer:chief-engineer`, `top-tier-engineer:senior-review`, etc. — so they
+namespaced — `top-tier-engineer:boss`, `top-tier-engineer:senior-review`, etc. — so they
 never collide with similarly named standalone skills, and the folder stays intact so every skill
 can read `PROTOCOL.md` at the suite root.
 
@@ -120,8 +120,8 @@ Add this block to each governed project's `CLAUDE.md` so every fresh session lan
 
 ```
 This project is governed by the top-tier-engineer suite.
-Route every substantial engineering request through the chief-engineer skill
-(top-tier-engineer:chief-engineer) before acting.
+Route every substantial engineering request through the boss skill
+(top-tier-engineer:boss) before acting.
 Default to writing nothing to disk: the report is the deliverable (PROTOCOL §3).
 Where this project does keep notes at the repo root, read them before writing anything.
 If DEBT_LEDGER.md exists, check it before taking the "smallest diff" — a diff that

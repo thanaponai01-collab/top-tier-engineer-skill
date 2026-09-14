@@ -21,7 +21,17 @@ missing=0
 subject_artifacts=""
 for f in "${surface[@]}"; do
   # Backtick-quoted paths only: prose names plenty of things that are not files.
-  while IFS= read -r ref; do
+  while IFS= read -r raw; do
+    # A skill runs inside the SUBJECT's working directory, so a tools/ path with no
+    # prefix names the subject's file, not ours -- PROTOCOL §1: tools resolve their own
+    # code from their install path, never from a path the subject controls. The
+    # suite root is `<root>` (§0); strip it here so the file still gets checked.
+    ref="${raw#<root>/}"
+    case "$f:$raw" in
+      skills/*:tools/*|agents/*:tools/*)
+        echo "$f: names '$raw' -- write '<root>/$raw' (PROTOCOL §1: a bare path resolves against the subject)"
+        missing=1; continue ;;
+    esac
     [ -e "$ref" ] && continue                                    # named in full
     [ -n "$(find . -name "$(basename "$ref")" -not -path './.git/*' -print -quit)" ] \
       && continue                                                # named by basename
@@ -31,7 +41,7 @@ for f in "${surface[@]}"; do
     fi
     echo "$f: names '$ref', which does not exist"
     missing=1
-  done < <(grep -oE '`[A-Za-z0-9_./-]+\.(py|md|json|sh|yml)`' "$f" | tr -d '`' | sort -u)
+  done < <(grep -oE '`(<root>/)?[A-Za-z0-9_./-]+\.(py|md|json|sh|yml)`' "$f" | tr -d '`' | sort -u)
 done
 
 subject_max=9   # locked at the measured number, never at an aspiration (§8 ratchet)

@@ -8,6 +8,10 @@ description: >
 
 > **The question:** Does it stay healthy, and does it learn from every failure?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
+## When not to use this
+
+cause of a failure unknown → `debug-protocol` first (Phase 2 classifies a cause somebody proved; this skill does not find one); a felt complaint about software that works → `symptom-audit`; nothing reported and nothing felt wrong → `latent-audit` / `reach-audit` / `senior-review`; the shape of stored data changing → `data-evolution`; new or changed behavior → `problem-framing` (being in maintenance is not permission to grow the scope); "where are we / what’s next" after a gap → `boss`, which decides whether this is maintenance at all.
+
 ## The job
 
 You are the engineer who treats a running system as something with a history and a future, not a

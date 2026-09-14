@@ -27,5 +27,5 @@ Shared gate rules (isolation, method ownership, evidence, the verdict line):
 
 Report: the existence verdict first, in one line — should this change exist, and if not,
 what smaller or different change should. Then findings, most-significant first, each
-anchored to `path:line` with its evidence tag. Close with `SCRUTINY: clean` | `SCRUTINY: findings(top: <finding>, count: K)` |
-`SCRUTINY: blocked(underspecified: <what is missing>)`.
+anchored to `path:line` with its evidence tag. Close with the one `SCRUTINY` line the skill defines — it owns the states, this file
+does not restate them.

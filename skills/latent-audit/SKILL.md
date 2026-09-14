@@ -19,7 +19,7 @@ coming nor work out afterwards.**
 
 ## The job
 
-1. **The graph runs first, always.** `python3 tools/graph-audit.py <src> [--layers <spec>]`
+1. **The graph runs first, always.** `python3 <root>/tools/graph-audit.py <src> [--layers <spec>]`
    is the minimum for every audit. Its numbers are **(proven)** measurements of the import
    graph; its dead and unused lists are **(suspected)**, and the report says so in those words.
    An audit with no tool run in the transcript is not an audit — a rule nobody runs is not a rule,
@@ -58,7 +58,7 @@ coming nor work out afterwards.**
    past changes): a "dead" module may be work that was deliberately postponed. Check what can be
    run here, because that sets the limit: with no runtime, deletion proofs cap at **(trace-only)**,
    and the report says so in its first lines.
-2. **Measure.** Run `graph-audit.py`; transcribe the declared layers if `ARCHITECTURE.md`
+2. **Measure.** Run `<root>/tools/graph-audit.py`; transcribe the declared layers if `ARCHITECTURE.md`
    states them. Paste the tool's verdict line into the report verbatim.
 3. **Prove it or drop it.** Run the three checks from Rule 3 on every dead or unused candidate;
    whatever passes goes on the deletion list, the rest go on the watch list.
@@ -81,7 +81,7 @@ the checks that came back clean, and anything found along the way with where it 
 **Verdict noun:** `LATENT`
 
 One `LATENT` line per PROTOCOL §5 — `findings(dead: A, unused: B, layer-breaches: C)`. The noun is
-also emitted by `tools/graph-audit.py`; the skill's line supersedes the tool's when the
+also emitted by `<root>/tools/graph-audit.py`; the skill's line supersedes the tool's when the
 three checks drop candidates (the count may only shrink from tool to skill, never grow — a count
 that grew means somebody's judgment replaced a measurement).
 

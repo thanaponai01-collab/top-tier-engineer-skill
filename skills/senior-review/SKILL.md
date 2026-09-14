@@ -62,7 +62,7 @@ In each area, use the cheapest evidence that settles it: read → trace → run.
 ## Phase 4 — Consolidate
 
 - **Merge findings down to their causes.** Ten findings with one cause are one finding with ten examples.
-- **Settle the unfamiliar choices** parked by Rule 3, in this order: (a) *ask* — put the question to the author, if you can talk to them; (b) *test* — design the cheapest experiment that would tell "clever" apart from "broken", and run it if you can; (c) *record* — write the unsettled ones into `REVIEW_LEDGER.md` at the repo root (create it if it is missing) with the question, the experiment that would settle it, and the date. Later reviews read that file first, so each one is settled once instead of argued forever. A flag that fades into a vague note is a failed review.
+- **Settle the unfamiliar choices** parked by Rule 3, in this order: (a) *ask* — put the question to the author, if you can talk to them; (b) *test* — design the cheapest experiment that would tell "clever" apart from "broken", and run it if you can; (c) *record* — carry the unsettled ones forward with the question, the experiment that would settle it, and the date: in this report by default, and in `REVIEW_LEDGER.md` at the repo root when §3 warrants a file. A question that has to survive to the next review is §3 clause (b) — it spans more than one session — so on any codebase reviewed twice, the file is warranted. Later reviews read that file first, so each one is settled once instead of argued forever. A flag that fades into a vague note is a failed review.
 - **Check your own findings again.** Before delivering, attack your highest-severity claims the way you attacked the code. Drop the ones that don't survive.
 
 ## Phase 5 — Deliver
@@ -79,4 +79,9 @@ choices you could not settle, written respectfully as open questions.
 
 **Verdict noun:** `REVIEW`
 
-End every run with a `REVIEW` line (PROTOCOL §5).
+End every run with a `REVIEW` line (PROTOCOL §5). This skill judges and teaches; it makes nothing
+of its own, so it never says `done` — a fix it ships under Rule 5 closes separately, with its own
+`FIX` line (§7). `clean(areas: 5, read: <fraction of the subject entered>)` when nothing broke a
+Phase 1 invariant; `findings(top: <finding>, count: K)` otherwise;
+`blocked(<what would unblock it>)` when the source could not be read, or the system’s purpose
+could not be established and the director has not stated one.

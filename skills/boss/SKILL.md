@@ -1,10 +1,10 @@
 ---
-name: chief-engineer
+name: boss
 description: >
   Dispatcher routing engineering requests to the right specialist skill(s). Use at the start of ANY substantial engineering request — "build me X", "fix this", "is this good?", "make it faster", "continue the project" — or whenever the lifecycle stage is unclear, spans multiple stages, or resumes after a gap.
 ---
 
-# Chief Engineer
+# Boss
 
 > **The question:** Which stage are we in, and who runs next?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
@@ -93,7 +93,7 @@ history, and name what a file would have settled.
 | "N+1 / will this query scale / add an index / does this endpoint hit the DB hard" — a data-access change | perf-optimize, Phase 3b alone (gates cost class from the plan, before a budget exists) |
 | "Feels slow / clunky / takes forever" — an existing codebase + a felt complaint; unrunnable here, or spanning speed + cohesion + UX | symptom-audit → its spec executes via build-discipline / perf-optimize |
 | "Review / audit this codebase / is this code good" — one lens, one report, no durable backlog asked for | senior-review |
-| "Find dead code / delete unused components / are the layers respected / find bugs" — existing codebase, nothing felt wrong | latent-audit (mechanical floor: `tools/graph-audit.py`; deletions land via scrutinize → build-discipline) |
+| "Find dead code / delete unused components / are the layers respected / find bugs" — existing codebase, nothing felt wrong | latent-audit (mechanical floor: `<root>/tools/graph-audit.py`; deletions land via scrutinize → build-discipline) |
 | "Is this a mess / spaghetti / maintainable" — or a finished build whose director cannot read the result | structure-gate (measures shape; runs alongside senior-review — shape vs. judgment — the same way correctness-gate and senior-review run alongside each other as proof vs. judgment) |
 | "Is this secure / can this be abused / review the auth / we handle passwords/payments/PII" | threat-model (parallel security gate; mandatory before ship if a trust boundary exists) |
 | "Deploy / release / ship it / push to prod / cut a version" | ship-gate (after correctness-gate, and threat-model if a trust boundary is touched) |

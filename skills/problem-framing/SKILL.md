@@ -10,7 +10,7 @@ description: >
 
 ## When not to use this
 
-an existing brief that only needs a decision → `arch-design`; a build already underway that drifted → `chief-engineer` (it decides whether framing reopens); a felt complaint about running software → `symptom-audit`.
+an existing brief that only needs a decision → `arch-design`; a build already underway that drifted → `boss` (it decides whether framing reopens); a felt complaint about running software → `symptom-audit`.
 
 ## The job
 
@@ -34,20 +34,26 @@ Pull from the user's words (and any existing code, docs, or ledgers):
 - **What already exists**: if there is a codebase or an earlier record, read it before asking
   anything. A question the files already answer is a wasted question.
 
-### Phase 2 — Ask (which questions, and in what order)
+### Phase 2 — Settle the unknowns (ask at most one)
 
-Only ask questions whose answers would change what gets built. Rank them in this order and ask from
-the top, all in one message, never more than five:
+Rank every unknown by how much of the build its answer changes:
 
-1. **Questions that change direction** — answers that flip the architecture or the scope ("one user
-   or many organizations?")
-2. **Questions that remove the biggest unknown** ("does the old API let us write to it?")
-3. **Questions that set the edges** — what is out of scope ("will offline mode ever be needed?")
-4. ~~Preference questions~~ — colours, names, nice-to-haves. Don't ask; propose a default and mark
-   it **(assumed)**.
+1. **Changes direction** — flips the architecture or the scope ("one user, or many organizations?")
+2. **Removes the biggest unknown** — something nobody here can settle by reading ("does the old API
+   let us write to it?")
+3. **Sets the edges** — what is out of scope ("will offline mode ever be needed?")
+4. **Preference** — colours, names, nice-to-haves.
 
-If the user can't answer, don't stall: record the unknown (§3) with the default you chose and the
-cost of being wrong.
+Then settle them without a questionnaire (§0; meta-skills Discipline 3). Rank 4 is never asked:
+take the default, mark it **(assumed)**, carry on. Ranks 2 and 3 get the fork line — the reading you
+took, the reading you did not, what changes if you took the wrong one — and the framing continues on
+the reading you took. Only rank 1 may become a real question, and only when it clears Discipline 3's
+asymmetry test: guessing wrong costs more than asking. **One question, not five**, and everything it
+does not block is framed in the same response.
+
+A brief that comes back as a list of questions with nothing framed is this skill failing, not this
+skill being careful. If the director cannot answer, that is not a stall either: record the unknown
+(§3) with the default you chose and the cost of being wrong.
 
 ### Phase 3 — Constrain
 

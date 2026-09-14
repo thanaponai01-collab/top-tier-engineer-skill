@@ -10,7 +10,7 @@ description: >
 
 ## When not to use this
 
-no brief or no architecture yet → `problem-framing` / `arch-design` first (or an announced inline compression of them); cause of a failure unknown → `debug-protocol`; a throwaway answer to a question → spike mode, owned by `chief-engineer`.
+no brief or no architecture yet → `problem-framing` / `arch-design` first (or an announced inline compression of them); cause of a failure unknown → `debug-protocol`; a throwaway answer to a question → spike mode, owned by `boss`.
 
 ## The job
 

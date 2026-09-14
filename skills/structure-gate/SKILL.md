@@ -27,7 +27,7 @@ code got tangled" stops being invisible.
    look" is. The numbers back up the words; the words are the product.
 3. **Pick the tools from the codebase, don't bring your own.** Find which languages
    are present and run the deepest analysis available for each: this suite ships
-   `tools/structure-report.py` (standard library only — deep on Python, plus line and
+   `<root>/tools/structure-report.py` (standard library only — deep on Python, plus line and
    duplication signals that work on any language). If better linters are installed
    (radon, ruff, eslint, madge), note them and use them. Say honestly where the depth
    runs out — a report that is deep on Python and shallow on JS says exactly that, and
@@ -53,7 +53,7 @@ whether a baseline (`.structure-baseline.json`) and a `DEBT_LEDGER.md` already e
 that decides whether step 3 measures the level or measures the change.
 
 ### 2. Measure
-Run `tools/structure-report.py` over the target (whole repo, or a slice's changed
+Run `<root>/tools/structure-report.py` over the target (whole repo, or a slice's changed
 files for a fast inner-loop check). The signals and why each is a spaghetti tell:
 
 | Signal | Spaghetti meaning |

@@ -90,7 +90,11 @@ under `Detail`, never as an exercise for the reader.
 
 **Verdict noun:** `SCRUTINY`
 
-End every run with a `SCRUTINY` line (PROTOCOL §5).
+End every run with a `SCRUTINY` line (PROTOCOL §5). This skill judges one delta and makes nothing,
+so it never says `done` — a fix it ships under Law 5 closes separately, with its own `FIX` line
+(§7). `clean(traced: <what you followed>, ran: <what you executed>)` — never a bare `clean`, per
+the no-rubber-stamps rule below; `findings(top: <finding>, count: K)`;
+`blocked(underspecified: <what is missing>)` when step 1 could not state the goal.
 
 ## Rules
 

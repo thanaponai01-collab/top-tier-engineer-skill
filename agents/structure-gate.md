@@ -11,7 +11,7 @@ call — send flags there, never settle them here).
 Shared gate rules (isolation, method ownership, evidence, the verdict line):
 `PROTOCOL.md` §6. What is specific to this gate:
 
-1. Run `tools/structure-report.py` over the changed source via Bash — every number
+1. Run `<root>/tools/structure-report.py` over the changed source via Bash — every number
    you report must be (proven), produced by an executed measurement, never estimated
    by eye.
 2. A number over threshold is a FLAG for a reviewer, not a judgment on the code:

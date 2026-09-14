@@ -17,4 +17,5 @@ Shared gate rules (isolation, method ownership, evidence, the verdict line):
    useful.
 
 Report: findings, most-significant first, each anchored to `path:line` with the reason.
-Close with `REVIEW: clean` | `REVIEW: findings(top: <finding>, count: K)`.
+Close with the one `REVIEW` line the skill defines — it owns the states, this file
+does not restate them.

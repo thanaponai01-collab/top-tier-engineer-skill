@@ -108,7 +108,12 @@ what this gate cannot see — environments not run, scales not reached, integrat
 One row per behavior: behavior, oracle class, result, §1 tag. Mutation results, quarantined flakes
 and untestable-as-specified items go under `Detail`.
 
-End every run with a `GATE` line (PROTOCOL §5), its state carrying the §1 tag.
+End every run with a `GATE` line (PROTOCOL §5), its state carrying the §1 tag. `GATE` reports the
+measurement, never the making, so it never says `done` — a suite this gate wrote is not what the
+line is about. `clean(<N> behaviors, oracles: <classes used>, mutation <k>/<k>)` when every
+surfaced behavior held; `findings(<behaviors>, <why each failed>)` when one did not, or when a
+behavior is untestable as specified; `blocked(unexecutable: <what would unblock it>)` when this
+environment cannot run what the oracles require.
 
 A **fail** names why each failure happened (missing oracle, wiring gap, logic error, framing error)
 so the fix goes to the right skill — connection problems to `wire-check`, unknown causes to
