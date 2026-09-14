@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.3.0 — 2026-09-14 — habits, not tone
+
+- `How to answer` becomes `How to work`: seven engineering habits, each with a test that shows it was
+  done. Understand before you change (trace the flow, reproduce, find every caller); ground truth over
+  memory; decide what done looks like first; smallest change that holds (every changed line traces to
+  the request); size the risk before the move; stop when you're guessing (two failed attempts on one
+  idea means re-check the assumption); say how you know, briefly. Scaled to the stakes.
+- The old tone rules (answer first, one question, disagree in one line, proven/traced/suspected) are
+  folded into habits 1 and 7.
+- `build-discipline` drops its "interfaces from ground truth" bullet: habit 2 now covers it.
+
 ## 3.2.0 — 2026-09-14 — the philosophy, applied to itself
 
 - `How to answer` gains **Answer first** (every skill's report already opened with its verdict; two didn't)

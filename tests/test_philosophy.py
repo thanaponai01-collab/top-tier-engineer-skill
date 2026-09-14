@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The "How to answer" section is copied into every skill so each stands alone.
+The "How to work" section is copied into every skill so each stands alone.
 This keeps the copies identical: edit one, edit all.
 
 Run them all with `python -m unittest discover tests`.
@@ -16,14 +16,14 @@ class Philosophy(unittest.TestCase):
         for f in sorted(glob.glob(os.path.join(ROOT, "skills", "*", "SKILL.md"))):
             with open(f, encoding="utf-8") as fh:
                 text = fh.read().replace("\r\n", "\n")
-            m = re.search(r"^## How to answer\n.*?(?=^## )", text, re.S | re.M)
+            m = re.search(r"^## How to work\n.*?(?=^## )", text, re.S | re.M)
             name = os.path.basename(os.path.dirname(f))
-            self.assertIsNotNone(m, f"{name} has no '## How to answer' section")
+            self.assertIsNotNone(m, f"{name} has no '## How to work' section")
             sections[name] = m.group(0)
         self.assertTrue(sections, "no skills found")
         first = next(iter(sections.values()))
         drifted = [n for n, s in sections.items() if s != first]
-        self.assertEqual(drifted, [], "How to answer differs in these skills")
+        self.assertEqual(drifted, [], "How to work differs in these skills")
 
 
 if __name__ == "__main__":
