@@ -6,115 +6,119 @@ description: >
 
 # Performance & Optimization
 
-> **Asks:** Is it measurably within budget, and guarded there?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+> **The question:** Is it measurably inside budget, with a guard to keep it there?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
-## Boundaries
+## When not to use this
 
 if the system cannot be run or profiled here, or the complaint is a felt symptom spanning speed and cohesion, route to `symptom-audit` first — its spec's perf phases then execute under this skill's discipline. The *shape* of stored data changing → `data-evolution` (Phase 3b gates how that shape is accessed, not how it migrates).
 
-## Operating contract
+## The job
 
-You are the engineer who optimizes with a profiler, not an opinion. Nothing is changed until the
-cost is measured, nothing is claimed until the improvement is re-measured under the same
-conditions, and every gain is locked in with a guard so it can't silently regress. Correctness is
-the precondition: this skill runs only on code that has passed `correctness-gate`, and every
-optimization re-runs the gate — a fast wrong answer is worth less than a slow right one. Evidence
-discipline (per `PROTOCOL.md`) is strict: in this skill, **(trace-only)** performance claims are
-hypotheses, never results.
+You optimize with a profiler, not an opinion. Nothing changes until the cost is measured, nothing
+is claimed until the improvement is measured again under the same conditions, and every gain gets
+a guard so it cannot quietly slip back. Correctness comes first: this skill runs only on code that
+has passed `correctness-gate`, and every optimization runs the gate again — a fast wrong answer is
+worth less than a slow right one. Evidence rules (per `PROTOCOL.md`) are strict here: a
+**(trace-only)** performance claim is a hypothesis, never a result.
 
-## Pipeline: Budget → Baseline → Profile → Hypothesize → Change-one-thing → Verify → Guard
+## Steps: Budget → Baseline → Profile → Hypothesize → Change-one-thing → Verify → Guard
 
 ### Phase 1 — Budget
 
-Optimization without a target never terminates. Establish or read the budget (inline per §3):
+Optimization with no target never ends. Set or read the budget (in the report, per §3):
 
 `dimension | metric | current | budget | source of budget | guard (test/alert) | status`
 
-Dimensions are first-class and include the modern ones: wall latency (p50/p95, not averages —
-averages hide the users who suffer), throughput, memory, startup time, binary/bundle size,
-monetary cost per operation, and **AI cost** (tokens per task, inference calls per task, context
-size per call) — for AI-native systems this last row is frequently the dominant expense and the
-least measured. Budgets trace to acceptance criteria where possible; otherwise mark the budget
-**(assumed)** and log it.
+Which dimensions count: time as the user experiences it (p50/p95, not averages — an average hides
+the users having the worst time), throughput, memory, startup time, binary or bundle size, money
+per operation, and **AI cost** (tokens per task, model calls per task, context size per call). On
+AI-based systems that last row is often the biggest expense and the least measured. Tie budgets to
+acceptance criteria where you can; otherwise mark the budget **(assumed)** and write it down.
 
 ### Phase 2 — Baseline
 
 - Reproduce the problem under controlled, recorded conditions: input size, hardware/environment,
   warm vs cold, concurrency. An unrecorded baseline cannot be honestly compared against later.
 - Run enough iterations to see variance; report median and spread, never a single run.
-- If the "slowness" can't be reproduced, stop — route to `evolve-maintain` as an observability
-  gap. Optimizing an unreproduced complaint is guessing with extra steps.
+- If you can't reproduce the slowness, stop — send it to `evolve-maintain` as missing visibility.
+  Optimizing a complaint you cannot reproduce is guessing with extra steps.
 
 ### Phase 3 — Profile
 
-Measure where the cost actually lives before forming any opinion about where it lives. Use the
-cheapest adequate instrument (profiler, query analyzer, timing instrumentation, token logging) and
-record the top contributors. The profile is the only legitimate source of optimization targets —
-intuition is admissible only for generating *hypotheses to test*, never targets to change.
+Measure where the cost actually is before forming any opinion about where it is. Use the cheapest
+tool that will do (a profiler, a query analyzer, timing code, token logging) and record the
+biggest contributors. The profile is the only valid source of things to optimize — a hunch may
+suggest a *hypothesis to test*, never a target to change.
 
 ### Phase 3b — Cost class (data access)
 
-A query fast on a thousand rows takes the system down at a million, and the difference is visible
-in the *plan*, not the stopwatch — so data access is judged by how its cost **grows**, before any
-millisecond is measured. This phase runs on its own, ahead of Phase 1, whenever the request is a
+A query that is fast on a thousand rows takes the system down at a million, and you see that in
+the query *plan*, not on a stopwatch — so data access is judged by how its cost **grows**, before
+any milliseconds are measured. This phase runs on its own, ahead of Phase 1, whenever the request is a
 data-access change with no budget yet ("N+1?", "add an index", "will this query scale"); it then
 reports its own findings and hands the ones needing a wall-clock number back to Phase 4.
 
-1. **Surface** every query, ORM call, join and index the change adds or alters, plus every loop or
-   collection path that *could* issue a query per item — from the diff and the access layer, never
-   from memory. Note which tables grow with usage; on a fixed-size lookup table cost class is moot.
-2. **Classify** each access as **flat** (indexed point lookup), **result-bounded** (index range
-   scan), **table-bounded** (sequential scan) or **unbounded/product** (N+1 across a collection, or
-   a join with no selective index). Table-bounded or unbounded on a growing table is a candidate
-   finding *even if it is fast today* — today's row count is not tomorrow's. A query inside a loop
-   is N+1 until proven otherwise; the fix is a join, a batch fetch, or an eager-load — name it.
-3. **Plan, don't time.** The execution plan is the oracle: obtain it from the database's own
-   facility (`EXPLAIN`, `EXPLAIN ANALYZE`, or this engine's equivalent — derive it, carry no
-   engine-specific tuning folklore) and read it for sequential scans where an index should serve,
-   confirmation that the intended index is used, estimate-vs-actual row gaps, and nested loops over
-   large inputs. Never assert an index is used — cite the plan line. Reading the SQL alone is
-   **(trace-only)**; an executed plan is **(proven)**.
-4. **Representative distribution, not seed data.** A plan over ten rows lies — the optimizer picks a
-   sequential scan when the table is tiny. Where a transient instance can be stood up, load a
-   representative distribution (cardinality, skew, null density), re-plan, and say which
-   distribution; otherwise the finding caps at **(trace-only)** with the one `EXPLAIN` that would
-   promote it. A clean access path is a finding too: it says where *not* to spend effort.
-5. **Prescribe** per finding: the access, its cost class, the plan evidence and its tag, the root
-   cause (missing index, query-in-loop, non-selective predicate, unbounded result set), and the
-   bounded fix in the project's conventions (Law 5). An index added to a *populated* table is a
-   schema change — hand the migration to `data-evolution`; this phase specifies which index and why.
+1. **List** every query, ORM call, join and index the change adds or alters, plus every loop or
+   collection that *could* run one query per item — taken from the diff and the data-access code,
+   never from memory. Note which tables grow as the system is used; on a small fixed lookup table
+   none of this matters.
+2. **Classify** each access by how its cost grows: **flat** (an indexed lookup of one row), **grows
+   with the result** (an index range scan), **grows with the table** (a full scan), or **unbounded**
+   (one query per item across a collection, or a join with no selective index). Anything that grows
+   with the table, or is unbounded, on a table that keeps growing is a finding *even if it is fast
+   today* — today's row count is not tomorrow's. A query inside a loop is one-query-per-item until
+   proven otherwise; the fix is a join, a batch fetch, or loading it all up front — say which.
+3. **Read the plan, don't time it.** The execution plan decides this: get it from the database
+   itself (`EXPLAIN`, `EXPLAIN ANALYZE`, or whatever this engine offers — look it up, don't carry
+   tuning habits from another engine) and read it for full scans where an index should have been
+   used, confirmation that the index you meant is actually used, large gaps between estimated and
+   actual row counts, and nested loops over big inputs. Never claim an index is used — quote the
+   plan line. Reading the SQL alone is **(trace-only)**; running the plan is **(proven)**.
+4. **Use realistic data, not seed data.** A plan over ten rows tells you nothing — the database
+   picks a full scan when the table is tiny. Where you can spin up a throwaway instance, load data
+   shaped like the real thing (how many distinct values, how skewed, how many nulls), run the plan
+   again, and say what data you used; otherwise the finding caps at **(trace-only)**, naming the
+   one `EXPLAIN` that would settle it. An access path that comes back clean is a finding too: it
+   says where *not* to spend effort.
+5. **Prescribe** for each finding: the access, how its cost grows, the plan evidence and its tag,
+   the cause (no index, a query inside a loop, a condition that filters almost nothing, a result
+   set with no limit), and a contained fix written in the project's own conventions (Law 5). Adding
+   an index to a *populated* table is a schema change — hand that migration to `data-evolution`;
+   this phase says which index and why.
 
 ### Phase 4 — Hypothesize
 
-For the top contributor, state: *"I believe X costs Y because Z; changing it to X′ should reduce
-the metric by roughly W."* A hypothesis without a predicted magnitude can't be judged afterward.
-Prefer hypotheses by leverage class, highest first:
-1. **Don't do the work** (cache, dedupe, skip, precompute, smaller context window)
-2. **Do less work** (better algorithm/query/data structure, prune the prompt, batch the calls)
-3. **Do the work elsewhere/later** (async, queue, lazy)
-4. **Do the work faster** (micro-optimization — last resort, highest complexity cost per unit gained)
+For the biggest contributor, state: *"I believe X costs Y because Z; changing it to X′ should cut
+the number by roughly W."* A hypothesis with no predicted size cannot be judged afterwards. Try
+them in this order, most effective first:
+1. **Don't do the work at all** (cache it, skip it, deduplicate it, compute it ahead of time, send
+   less context)
+2. **Do less work** (a better algorithm, query or data structure; a shorter prompt; batch the calls)
+3. **Do the work somewhere else, or later** (async, a queue, load it lazily)
+4. **Do the same work faster** (micro-optimization — last resort, and the most complexity added per
+   unit gained)
 
 ### Phase 5 — Change one thing
 
-One variable per measurement cycle. Stacked changes produce unattributable results, and
-unattributable results poison the ledger for future models. Each change is its own rollback-ready
-commit referencing the hypothesis.
+One change per measurement. Change two things and you cannot tell which one worked, and a result
+nobody can attribute is worse than no result in the record. Each change is its own commit, ready
+to revert, naming the hypothesis it tests.
 
 ### Phase 6 — Verify
 
 - Re-measure under the *recorded baseline conditions*. Report: predicted vs actual, with spread.
 - Re-run `correctness-gate`. An optimization that fails the gate is reverted, not patched in place.
-- Failed hypotheses are recorded, not deleted — *"tried X′, expected −40%, observed −2%, reverted"*
-  is among the most valuable lines in the ledger, because it stops every future model from
-  re-trying the same dead end.
+- Record the hypotheses that failed, don't delete them — *"tried X′, expected −40%, got −2%,
+  reverted"* is one of the most valuable lines in the record, because it stops the next person
+  trying the same dead end.
 
 ### Phase 7 — Guard
 
-Every accepted optimization gets a guard before the run ends: a performance test, budget assertion,
-or alert that fails when the metric regresses past budget. Update the budget (new current,
-guard reference). An unguarded gain is a temporary gain.
+Every optimization you keep gets a guard before the run ends: a performance test, a budget
+assertion, or an alert that fails when the number slips back past budget. Update the budget with
+the new current value and a pointer to the guard. A gain with no guard is a temporary gain.
 
-## Stop conditions (the diminishing-returns ladder)
+## When to stop
 
 Stop optimizing — and say so explicitly — when the first of these is true:
 1. All budgets are met **(proven)**.
@@ -122,19 +126,19 @@ Stop optimizing — and say so explicitly — when the first of these is true:
 3. The remaining cost is outside this system's control (network, vendor, physics) — record it as
    a constraint in the architecture decision ledger.
 
-Continuing past a stop condition is not diligence; it is converting a working system into a
-cleverness exhibit.
+Carrying on past a stop condition is not thoroughness; it is making a working system clever at the
+expense of everyone who reads it next.
 
 ## Rules
 
 - Never optimize unprofiled code; never report unre-measured gains.
-- Readability is purchased back: any optimization that obscures intent must leave a one-line
-  comment naming the hypothesis ID that justifies it.
+- Pay readability back: any optimization that makes the intent harder to see leaves a one-line
+  comment naming the hypothesis that justifies it.
 
-## Anti-patterns this skill exists to kill
+## Common mistakes
 
-Optimizing by vibes; averages hiding tail pain; stacked changes with unattributable results;
-unguarded gains that regress in a month; micro-optimizing before algorithm-level wins; treating
-token/inference cost as invisible; sacrificing correctness for speed; judging a query by its
-milliseconds on seed data instead of its cost class; missing the query-in-a-loop because each
-individual query looks cheap.
+Optimizing on a hunch; averages hiding the users having the worst time; several changes at once,
+so nothing can be attributed; gains with no guard that slip back within a month; micro-optimizing
+before fixing the algorithm; treating token and model-call cost as if it were free; trading
+correctness for speed; judging a query by its milliseconds on seed data instead of by how its cost
+grows; missing a query inside a loop because each single query looks cheap.

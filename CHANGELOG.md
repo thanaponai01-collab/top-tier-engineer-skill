@@ -7,6 +7,45 @@ Entries below 2.0.0 were compressed in 2.1.0 to what each release *changed*. The
 change is not here and never was: design decisions live in `DECISION_LEDGER.md`, and the runs that
 earned the rules live in `runs/`.
 
+## 2.9.0 — 2026-09-14 — the contract prose, in the words it demands
+
+D013, raised in 2.8.0 and open since, closed as option 2. The director: *"i put my own words in
+like a person who doesnt know about coding … basically to make all the word simple, concise and
+resonable."* §9 already told every report to use the short word and cut the flourishes; the files
+carrying that rule did the opposite.
+
+- **Wording only, across `PROTOCOL.md`, all twenty skills and the five gate agents.** No rule,
+  phase, table, verdict line or section was added, removed or reordered. 26 files, 1,216 lines
+  changed.
+- **Section names are plain.** `Operating contract` → `The job`; `Boundaries` → `When not to use
+  this`; `Anti-patterns this skill exists to kill` and `Failure modes this contract exists to
+  prevent` → `Common mistakes`; `Pipeline:` → `Steps:`; `Asks:` → `The question:`. `latent-audit`
+  had two sections that both became `When not to use this`; the second is now `What this skill will
+  not do`.
+- **Coined terms and metaphors carry their meaning instead of pointing at it.** "Chesterton's
+  Fence" is gone from all four skills that cited it — each now states the rule and keeps the `Law 3`
+  pointer. "Speculation wearing architecture's costume", "a bug on layaway", "symptom-whacking with
+  ceremony", "a correlation wearing a cause's badge", "guessing with a debugger attached", "blast
+  radius", "the question ladder", "anti-scope", "scope theft", "legibility budget", "the short
+  leash", "obituaries", "archaeology", and the thirteen-adverb chant closing meta-skills all read as
+  what they meant.
+- **Jargon says what it is on first use.** `oracle` (correctness-gate), `TOCTOU` (data-evolution),
+  `N+1`/`cost class` (perf-optimize, symptom-audit) and the five-link table's break column
+  (wire-check).
+- **One paragraph moved.** `data-evolution`'s opening stance sat under its boundary heading; it now
+  sits under `The job`. No words of it changed beyond the pass.
+
+Gated mechanically, not by taste: every cross-reference token (`§N`, `Phase N`, `Law N`,
+`Discipline N`, `Rule N`, verdict nouns, backticked paths) was counted per file before and after.
+Four were dropped by the rewrite — `ship-gate`'s `Law 4`/`Law 5`, `threat-model`'s `Law 3`/`Law 5`,
+`toptier-lens`'s `Phase 1` — and all four were restored; the remaining differences are gains, where
+a metaphor became an explicit citation. All four CI gates match their pre-change output **(proven)**:
+tests 21/21, `STRUCTURE: clean(held: 3 accepted, 0 repaid)`, references 9/9, version consistent.
+
+The cost, stated because the director asked for concise as well as simple: the suite is ~8% longer
+(27,176 → 29,288 words). Plain English costs words that compressed jargon did not — "blast radius"
+is two words, "how far the change reaches" is five. Simple won where the two pulled apart.
+
 ## 2.8.0 — 2026-09-14 — plain words, and only the lines you were asked to change
 
 The director asked for the Karpathy guidelines in the doctrine, and for plain output: *"i want the

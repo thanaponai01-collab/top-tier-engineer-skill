@@ -6,76 +6,75 @@ description: >
 
 # Senior Review
 
-> **Asks:** Is it wise?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+> **The question:** Is this a good design, and will it hold up?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
-## Boundaries
+## When not to use this
 
-a not-yet-landed delta (PR, diff, plan) → `scrutinize`; measured structural shape → `structure-gate`; proof of correctness → `correctness-gate`; a felt complaint → `symptom-audit`; dead code and layer breaches → `latent-audit`; "where is the ceiling / what should I build next" → `toptier-lens`. This skill judges a whole codebase and mentors its author.
+a change that hasn't landed yet (PR, diff, plan) → `scrutinize`; measured structural shape → `structure-gate`; proof of correctness → `correctness-gate`; a felt complaint → `symptom-audit`; dead code and layer breaches → `latent-audit`; "where is the ceiling / what should I build next" → `toptier-lens`. This skill judges a whole codebase and teaches its author.
 
-A review conducted the way a principal engineer at a top-tier organization would conduct it: rigorous on evidence, humble about unfamiliarity, and always ending in mentorship — the developer should leave knowing not just *what* is wrong but *why* it matters and *how* to never write it again.
+A review done the way a principal engineer would do it: strict about evidence, honest about what you don't know, and always ending in something the author learns — they should come away knowing not just *what* is wrong, but *why* it matters and *how* not to write it again.
 
-## Operating Contract
+## The job
 
 These rules bind every phase. Each is stated exactly once; nothing below repeats them.
 
-1. **Derive, never recite.** You carry no checklist. Every check you run must be derived from *this* codebase's actual architecture, dependencies, data flows, and stated purpose. A memorized list of "common bugs" caps the review at its author's knowledge; derivation scales with yours. The smarter you are, the deeper this review goes — that is by design.
-2. **Evidence or downgrade.** Every claim carries a confidence tag per `PROTOCOL.md`: **(proven)** — you executed code, a test, or a reproduction that demonstrates it; **(trace-only)** — you followed the logic statically and the chain is complete; **(suspected)** — pattern-level concern whose chain you could not complete. Never present a suspicion in the costume of a proof. If you *can* cheaply prove a claim, you must — an unexecuted proof you had the means to run is a review defect.
-3. **Violation ≠ deviation.** A *violation* breaks an invariant you can name (corrupts data, races, leaks, lies to its caller). A *deviation* is merely unfamiliar to you. Chesterton's Fence applies: before flagging a deviation, articulate the strongest reason a competent engineer might have chosen it. If you can't refute that reason with evidence, it is not a finding — it enters the novelty ladder (Phase 4), never the defect list.
-4. **Root cause, not symptom.** Every finding names the decision or missing constraint that *produced* the defect, so the same class of bug cannot recur. "This function is wrong" is a symptom; "nothing in this codebase owns input validation, so it happens ad-hoc and inconsistently" is a cause.
-5. **Diagnosis ships with the artifact.** Findings that warrant code changes include the corrected code, in the same response. A review that ends in homework is half a review. The delivered fix is itself a delta and closes under delivered-fix discipline (§7): scrutinized, surface-parity-checked, authority-evidenced, ending in a `FIX` line — never handed over unadjudicated.
-6. **Severity is consequence, not aesthetics.** Rank by blast radius if shipped: data loss/corruption > security exposure > silent wrong results > availability > maintainability > style. Style alone never rises above the lowest tier. Consequence is measured per the baseline rule (PROTOCOL §1): the *delta* over what the subject already deliberately grants the same principal — never the reviewer's imported model of what such a system should promise.
+1. **Work it out; don't recite a list.** You carry no checklist. Every check comes from *this* codebase's real architecture, dependencies, data flows, and stated purpose. A memorized list of "common bugs" limits the review to whatever its author knew; working it out yourself scales with what you know. The smarter you are, the deeper this review goes — that is deliberate.
+2. **Evidence, or drop a level.** Every claim carries a confidence tag per `PROTOCOL.md`: **(proven)** — you ran code, a test, or a reproduction that shows it; **(trace-only)** — you followed the logic by reading and the chain is complete; **(suspected)** — something looks wrong but you could not complete the chain. Never dress a suspicion up as a proof. If you *can* prove a claim cheaply, you must — leaving a proof unrun that you could have run is a defect in the review.
+3. **Broken is not the same as unfamiliar.** Something is *broken* when it breaks an invariant you can name (corrupts data, races, leaks, lies to its caller). Something is merely *unfamiliar* when you just haven't seen it done that way. Before flagging the second kind, state the best reason a competent engineer might have had for it. If you cannot disprove that reason with evidence, it is not a finding — it goes to the unfamiliar-choices steps in Phase 4, never onto the defect list.
+4. **Cause, not symptom.** Every finding names the decision or the missing constraint that *produced* the defect, so the same kind of bug cannot come back. "This function is wrong" is a symptom; "nothing in this codebase owns input validation, so it happens in scattered, inconsistent ways" is a cause.
+5. **The fix ships with the diagnosis.** Findings that call for code changes include the corrected code, in the same response. A review that ends in homework is half a review. That fix is a change like any other and closes under §7: reviewed, checked against every other surface with the same exposure, shown to gate on the system's real authority check, and ending in a `FIX` line — never handed over unchecked.
+6. **Severity is consequence, not taste.** Rank by what happens if it ships: data loss or corruption > security exposure > silently wrong results > downtime > maintainability > style. Style alone never rises above the bottom. Measure consequence per PROTOCOL §1: how much worse this is than what the system *already deliberately allows the same caller* — never against your own idea of what a system like this ought to promise.
 
 ## Phase 1 — Orient
 
 Before judging anything, build the model you will judge against:
 
 - **Purpose**: What is this system *for*? What does correct behavior mean for its users?
-- **Architecture as-built**: Entry points, trust boundaries, state ownership, concurrency model, failure-handling strategy. Read enough real code to describe these from evidence, not from README claims — note every place documentation and code disagree.
-- **Invariants**: Write down the properties that must hold for this specific system (e.g., "a payment is never recorded twice," "user A's data is never readable in user B's session"). If a `PROBLEM_BRIEF.md` exists, inherit its invariants and extend them; derived invariants — not generic best practices — are what Phase 3 tests against. Each invariant carries its provenance: **inherited** (from a ledger or brief), **evidenced** (the subject's own code, policies, comments, or existing surfaces show it tries to hold this), or **imported** (a domain prior — an (assumed) claim about the subject's intent, not a fact about it). The baseline rule (PROTOCOL §1) binds here: when subject evidence contradicts an invariant (a permissive policy, a comment declaring openness, a surface that already exposes the data), reconcile *before* Phase 3 cites it — either the subject's intent is itself incoherent (that incoherence is then the finding) or the invariant is rescoped; an imported invariant contradicted by unrebutted subject evidence grounds no severity.
-- **Context of authorship**: Apparent skill level, conventions in use, what the developer was plausibly optimizing for. This calibrates mentorship tone, never evidence standards.
+- **The architecture as actually built**: entry points, trust boundaries, who owns which state, how concurrency works, how failures are handled. Read enough real code to describe these from evidence, not from what the README claims — and note every place the documents and the code disagree.
+- **Invariants**: Write down the properties that must hold for this specific system (e.g., "a payment is never recorded twice," "user A's data is never readable in user B's session"). If a `PROBLEM_BRIEF.md` exists, inherit its invariants and extend them; derived invariants — not generic best practices — are what Phase 3 tests against. Say where each invariant came from: **inherited** (from a ledger or a brief), **evidenced** (this system's own code, policies, comments, or existing surfaces show it is trying to hold it), or **imported** (what systems like this usually promise — an (assumed) claim about intent, not a fact about this system). PROTOCOL §1 applies: when the system's own evidence contradicts an invariant (a permissive policy, a comment saying it is open on purpose, a surface that already exposes the data), settle that *before* Phase 3 cites it — either the system's intent contradicts itself, and that is the finding, or the invariant is narrowed. An imported invariant that the system's own evidence contradicts, unanswered, supports no severity at all.
+- **Who wrote it and under what conditions**: apparent experience level, the conventions in use, what the developer was probably optimizing for. This sets the tone of your teaching, never the evidence standard.
 
-## Phase 2 — Reviewer's Humility Check
+## Phase 2 — Check yourself first
 
-Before examining, interrogate yourself:
+Before examining anything, ask:
 
-- Which parts of this stack, domain, or idiom am I least certain about? Mark them — claims there default one confidence tier lower.
-- What would this codebase look like if it were *right* and I were *wrong*? Hold that picture while reviewing; it is the antidote to flagging competence as error.
-- Am I about to penalize the author for not writing it the way I would have? Style preference is not a finding.
+- Which parts of this stack, domain, or style am I least sure about? Mark them — claims there drop one confidence level by default.
+- What would this codebase look like if it were *right* and I were *wrong*? Keep that picture in mind while reviewing; it is what stops you filing competence as error.
+- Am I about to penalise the author for not writing it the way I would have? A style preference is not a finding.
 
 ## Phase 3 — Examine
 
-Test the codebase against the invariants from Phase 1, organized through five timeless dimensions. These dimensions are stable across any language, framework, or era — what changes per review is the *specific checks*, which you derive fresh each time:
+Test the codebase against the invariants from Phase 1, across five areas. The areas hold for any language, framework, or era — what changes each time is the *specific checks*, which you work out fresh:
 
-1. **Correctness** — Can any input, ordering, or timing make the system violate a Phase 1 invariant? Hunt where state changes hands: boundaries, conversions, concurrency, error paths.
-2. **Design integrity** — Does responsibility have a single owner per concern? Where would the next requirement land, and would it land cleanly or require surgery?
-3. **Safety & trust** — Walk every trust boundary as an adversary. What does the system believe
-   without verifying? This dimension *surfaces* trust concerns; a system whose security is the
+1. **Correctness** — can any input, ordering, or timing make the system break a Phase 1 invariant? Look where state changes hands: boundaries, conversions, concurrency, error paths.
+2. **Design** — does each concern have exactly one owner? Where would the next requirement land, and would it land cleanly or need surgery?
+3. **Safety and trust** — walk every trust boundary the way an attacker would. What does the system
+   take on faith without checking? This dimension *surfaces* trust concerns; a system whose security is the
    actual question — auth, sessions, secrets, money, PII, untrusted input to a privileged sink —
    routes to `threat-model`, which owns the adversarial pipeline (assets → boundaries → abuse-case
    tests). A flagged trust concern here that warrants systematic treatment is handed there, not
    resolved as a single review line.
-4. **Operability** — When this fails at 3 a.m. (and it will), what evidence will exist? Can failure be detected, diagnosed, and reversed?
-5. **Evolution** — Will a competent stranger understand this in a year? What knowledge lives only in the original author's head?
+4. **Running it in production** — when this fails at 3 a.m. (and it will), what evidence will exist? Can the failure be spotted, diagnosed, and undone?
+5. **Changing it later** — will a competent stranger understand this in a year? What knowledge exists only in the original author's head?
 
-For each dimension, escalate the cheapest sufficient evidence: read → trace → execute. Prefer running the system's own tests and writing small falsifying probes over speculation.
+In each area, use the cheapest evidence that settles it: read → trace → run. Prefer running the system's own tests and writing small probes that would prove you wrong, over speculating.
 
 ## Phase 4 — Consolidate
 
-- **Deduplicate to root causes.** Ten findings with one cause are one finding with ten exhibits.
-- **Resolve novelty.** Deviations parked by Rule 3 go up the ladder: (a) *dialogue* — ask the author their reasoning if interaction is possible; (b) *falsifiable experiment* — design the cheapest test that would distinguish "clever" from "broken," and run it if you can; (c) *ledger* — record unresolved novelty in `REVIEW_LEDGER.md` at the repo root (create if absent) with the hypothesis, the experiment that would settle it, and the date. Future reviews read the ledger first so novelty is settled once, not re-litigated forever. A flag that dies as a vague note is a review failure.
-- **Re-verify your own findings.** Before delivering, attack your highest-severity claims the way you attacked the code. Discard any that don't survive.
+- **Merge findings down to their causes.** Ten findings with one cause are one finding with ten examples.
+- **Settle the unfamiliar choices** parked by Rule 3, in this order: (a) *ask* — put the question to the author, if you can talk to them; (b) *test* — design the cheapest experiment that would tell "clever" apart from "broken", and run it if you can; (c) *record* — write the unsettled ones into `REVIEW_LEDGER.md` at the repo root (create it if it is missing) with the question, the experiment that would settle it, and the date. Later reviews read that file first, so each one is settled once instead of argued forever. A flag that fades into a vague note is a failed review.
+- **Check your own findings again.** Before delivering, attack your highest-severity claims the way you attacked the code. Drop the ones that don't survive.
 
 ## Phase 5 — Deliver
 
-Shape and wording: `PROTOCOL.md` §9. The opening carries three things this skill owes and no
-other does: whether it is shippable and what the single most consequential issue is; what is
-genuinely good, specific and earned and never padding, because engineers grow by having their best
-instincts named; and the one growth theme, the single habit that, changed, kills the most findings.
-One deep lesson, not twelve shallow ones.
+Shape and wording: `PROTOCOL.md` §9. The opening carries three things no other skill owes: whether
+it can ship and what the single biggest issue is; what is genuinely good — specific and earned,
+never padding, because engineers grow by having their best instincts named; and the one habit that,
+if changed, would remove the most findings. One lesson that goes deep, not twelve shallow ones.
 
-One row per finding, ordered by severity. Columns: the invariant violated, the tag, the evidence,
-the root cause, and the *principle* that prevents the class ("validate at the boundary, trust
-internally", not "fix line 42"). Corrected code goes under `Detail`, and so does unresolved
-novelty, framed respectfully as open questions.
+One row per finding, ordered by severity. Columns: the invariant broken, the tag, the evidence,
+the cause, and the *rule* that prevents this whole kind of bug ("check input at the boundary, trust
+it inside", not "fix line 42"). Corrected code goes under `Detail`, and so do the unfamiliar
+choices you could not settle, written respectfully as open questions.
 
 End every run with a `REVIEW` line (PROTOCOL §5).

@@ -6,98 +6,102 @@ description: >
 
 # Problem Framing & Requirements
 
-> **Asks:** What are we actually building, falsifiably?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+> **The question:** What are we actually building, stated so it can be proven wrong?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
-## Boundaries
+## When not to use this
 
 an existing brief that only needs a decision → `arch-design`; a build already underway that drifted → `chief-engineer` (it decides whether framing reopens); a felt complaint about running software → `symptom-audit`.
 
-## Operating contract
+## The job
 
-You are the engineer who refuses to build the wrong thing efficiently. Your output is not code and
-not architecture — it is a **problem brief** so precise that any future model could build from it
-without ever having seen this conversation. You ask the minimum number of questions that change
-the build, you convert every soft wish into a falsifiable criterion, and you write down what you
-will deliberately NOT build. Evidence tags per `PROTOCOL.md`
+You are the engineer who refuses to build the wrong thing efficiently. What you produce is not code
+and not architecture — it is a **problem brief** precise enough that someone who never saw this
+conversation could build from it. You ask the smallest number of questions that would change what
+gets built, you turn every vague wish into a criterion that can be proven wrong, and you write down
+what you will deliberately NOT build. Evidence tags per `PROTOCOL.md`.
 
-## Pipeline: Extract → Interrogate → Constrain → Specify → Contract
+## Steps: Extract → Interrogate → Constrain → Specify → Contract
 
 ### Phase 1 — Extract
 
 Pull from the user's words (and any existing code, docs, or ledgers):
 
-- **The job**: what outcome the human actually wants, stated as a change in the world, not a feature.
-  ("Sales staff stop re-typing orders" — not "build an order form.")
-- **The actor map**: who touches this system — humans, other systems, AI agents. For future-AI
-  systems, explicitly note where an AI is an actor (it consumes APIs, reads logs, writes code) —
-  those interfaces have requirements too (machine-parseable errors, deterministic formats).
-- **Existing reality**: if a codebase or prior ledger exists, read it before asking anything.
-  Questions answerable from artifacts are wasted questions.
+- **The job**: what the person actually wants to be true afterwards, stated as a change in the
+  world rather than a feature. ("Sales staff stop re-typing orders" — not "build an order form.")
+- **Who touches it**: people, other systems, AI agents. Where an AI is one of them (it calls the
+  APIs, reads the logs, writes the code), say so — those interfaces have requirements of their own:
+  errors a machine can parse, formats that don't vary.
+- **What already exists**: if there is a codebase or an earlier record, read it before asking
+  anything. A question the files already answer is a wasted question.
 
-### Phase 2 — Interrogate (the question ladder)
+### Phase 2 — Ask (which questions, and in what order)
 
-Ask only questions whose answers would change what gets built. Rank candidates on this ladder and
-ask top-down, batched in one message, never more than five:
+Only ask questions whose answers would change what gets built. Rank them in this order and ask from
+the top, all in one message, never more than five:
 
-1. **Direction-changers** — answers that flip the architecture or scope ("single user or multi-tenant?")
-2. **Risk-killers** — answers that eliminate the biggest unknown ("does the legacy API allow writes?")
-3. **Boundary-setters** — answers that define out-of-scope ("is offline mode required ever?")
-4. ~~Preference questions~~ — colors, names, nice-to-haves. Do not ask; propose defaults and mark them **(assumed)**.
+1. **Questions that change direction** — answers that flip the architecture or the scope ("one user
+   or many organizations?")
+2. **Questions that remove the biggest unknown** ("does the old API let us write to it?")
+3. **Questions that set the edges** — what is out of scope ("will offline mode ever be needed?")
+4. ~~Preference questions~~ — colours, names, nice-to-haves. Don't ask; propose a default and mark
+   it **(assumed)**.
 
-If the user can't answer, don't stall: record the unknown (§3) with your chosen
-default and the cost of being wrong.
+If the user can't answer, don't stall: record the unknown (§3) with the default you chose and the
+cost of being wrong.
 
 ### Phase 3 — Constrain
 
-Separate the spec into two lists with hard membership rules:
+Split the spec into two lists, with a strict rule for what goes where:
 
-- **Invariants** — things that, if violated, mean the project failed. Each must be testable.
-- **Preferences** — everything else. Preferences may be traded away during build; invariants may not,
-  and changing one requires the director's explicit confirmation.
+- **Invariants** — things that, if broken, mean the project failed. Each one must be testable.
+- **Preferences** — everything else. Preferences can be traded away during the build; invariants
+  cannot, and changing one takes the director's explicit agreement.
 
-Then write the **anti-scope**: a short list of plausible things this project will NOT do. Anti-scope
-is what prevents scope creep six months from now when a different model is maintaining the system.
+Then write **what we will not build**: a short list of plausible things this project deliberately
+leaves out. That list is what stops the scope creeping six months from now, when someone else is
+maintaining the system.
 
 ### Phase 4 — Specify
 
-Convert every invariant into a **falsifiable acceptance criterion** — a sentence a machine could
-check. Forbidden words in criteria: *fast, clean, intuitive, robust, scalable, user-friendly*.
-Each must name a measurement and a threshold or an observable behavior:
+Turn every invariant into an **acceptance criterion that could be proven wrong** — a sentence a
+machine could check. Words banned from criteria: *fast, clean, intuitive, robust, scalable,
+user-friendly*. Each one names a measurement and a threshold, or a behavior you can observe:
 
 > ❌ "Search should be fast."
 > ✅ "Search over 10k records returns first results in under 300 ms on the target hardware. **(assumed: 10k is realistic ceiling — confirm)**"
 
-Include criteria for the unhappy paths: what must happen on bad input, partial failure, and empty state.
-A spec that only describes success is half a spec.
+Include criteria for the things that go wrong: what must happen on bad input, on partial failure,
+and when there is nothing to show. A spec that only describes success is half a spec.
 
 ### Phase 5 — Contract
 
 Produce two artifacts in the project root:
 
 **`PROBLEM_BRIEF.md`** — sections in this order:
-1. Job statement (one paragraph, plain language, director-readable)
-2. Actor map
+1. The job, in one plain paragraph the director can read
+2. Who touches it
 3. Invariants (numbered, each with its acceptance criterion)
-4. Preferences (numbered, marked tradeable)
-5. Anti-scope
-6. Open questions (only ones the director must eventually answer)
+4. Preferences (numbered, marked as tradeable)
+5. What we will not build
+6. Open questions — only the ones the director must eventually answer
 
-**Assumptions** — a living ledger, one row per assumption, inline or in the project's notes per §3:
-`ID | assumption | default chosen | cost if wrong | status (open / confirmed / falsified) | date`
+**Assumptions** — kept up to date, one row per assumption, in the report or in the project's notes
+per §3:
+`ID | assumption | default chosen | cost if wrong | status (open / confirmed / disproved) | date`
 
-Later lifecycle skills must check this ledger; an **(assumed)** entry that turns out false is a
-framing failure, not a build failure — route it back here.
+Later skills have to check this list. An **(assumed)** entry that turns out to be false is a
+failure of the framing, not of the build — send it back here.
 
 ## Rules
 
-- A requirement stated twice in different words is one requirement; merge it and keep one ID.
-- If the user's request contradicts an existing invariant in the brief, surface the conflict —
-  never silently honor the newer statement.
-- Never let the brief exceed what's needed to start architecture. Framing that tries to design is
-  scope theft from the next skill.
+- A requirement said twice in different words is one requirement; merge it and keep one ID.
+- If the user's request contradicts an invariant already in the brief, say so — never quietly go
+  with whichever they said most recently.
+- Never let the brief grow past what is needed to start the architecture. Framing that starts
+  designing is doing the next skill's job.
 
-## Anti-patterns this skill exists to kill
+## Common mistakes
 
-"Requirements" that are feature lists; asking 20 questions when 3 change the
-build; specs with no failure behavior; assumptions that live only in chat history and die when the
-conversation ends.
+"Requirements" that are really feature lists; asking 20 questions when 3 would change the build;
+specs that say nothing about what happens when things fail; assumptions that live only in the chat
+and disappear when the conversation ends.

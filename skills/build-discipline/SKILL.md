@@ -6,22 +6,22 @@ description: >
 
 # Build Discipline
 
-> **Asks:** Is every increment proven and wired before the next begins?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+> **The question:** Is each piece proven and connected before the next one starts?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
-## Boundaries
+## When not to use this
 
 no brief or no architecture yet → `problem-framing` / `arch-design` first (or an announced inline compression of them); cause of a failure unknown → `debug-protocol`; a throwaway answer to a question → spike mode, owned by `chief-engineer`.
 
-## Operating contract
+## The job
 
-You are the builder who never produces orphan code. Work advances in **vertical slices** — each
-slice is the smallest increment that can be proven working end-to-end — and a slice is not done
-until it is wired, exercised, and committed in a state the system could ship from. You build
-against `ARCHITECTURE.md` and `PROBLEM_BRIEF.md`; departures from either are surfaced, never
-smuggled in. Every "it works" claim carries **(proven)** or **(trace-only)** per `PROTOCOL.md` —
+You are the builder who never leaves code nothing calls. Work moves in **slices** — a slice is the
+smallest piece that can be proven working end to end — and a slice is not done until it is
+connected, run, and committed in a state the system could ship from. You build against
+`ARCHITECTURE.md` and `PROBLEM_BRIEF.md`; anywhere you depart from either, say so rather than
+slipping it in quietly. Every "it works" claim carries **(proven)** or **(trace-only)** per `PROTOCOL.md` —
 and inside this skill, only **(proven)** closes a slice.
 
-## Pipeline per slice: Plan → Build → Wire → Prove → Commit
+## Steps per slice: Plan → Build → Wire → Prove → Commit
 
 ### Phase 1 — Plan the slice
 
@@ -36,49 +36,48 @@ and inside this skill, only **(proven)** closes a slice.
 
 ### Phase 2 — Build
 
-- **Smallest diff that satisfies the proof line** (meta-skills Discipline 7, simplicity): prefer
-  deleting or reusing over adding; introduce an abstraction on its second concrete use, not its
-  first guess; "might need it later" is a deferral with a trigger (§3), never speculative
-  structure in the code.
-- **Simple first is a sequence, not a ceiling.** Take the simplest version that satisfies the proof
-  line, then let evidence buy the depth: a known ceiling on it closes as a deferral row
+- **Smallest change that satisfies the proof line** (meta-skills Discipline 7, simplicity): delete
+  or reuse before you add; add an abstraction on its second real use, not its first guess; "might
+  need it later" is a deferred row with a trigger (§3), never structure written on a guess.
+- **Simple first is an order, not a limit.** Take the simplest version that satisfies the proof
+  line, then let evidence pay for anything deeper: a known limit on it closes as a deferred row
   whose trigger is **measured** (`p95 > 300 ms at 10k rows`), not feared. Structure added before
-  that measurement exists is a guess about where the cost lives — the guess `perf-optimize` Phase 3
-  forbids downstream, so do not manufacture it upstream.
-- **Carrying capacity — check the host before taking the smallest diff** (§8, the
-  ratchet rule). "Smallest diff" is measured against the slice, not against the file it lands in,
-  so on an already-overloaded host it points the wrong way: the smallest diff into a structure
-  that is already too big is almost always *making it bigger*, because that is the option
-  requiring no new seam. Each such increment is individually defensible and collectively fatal —
-  it is how a codebase becomes unmaintainable with every slice proven. So before taking the
-  smallest diff, ask where it lands:
-  - **Host is clean** → smallest diff, unchanged. This is the normal case; do not manufacture
+  that measurement exists is a guess about where the cost is — the same guess `perf-optimize`
+  Phase 3 forbids later, so do not create it here.
+- **Check where the change lands before taking the smallest one** (§8, the ratchet rule).
+  "Smallest change" is measured against the slice, not against the file it goes into, so when that
+  file is already overloaded the rule points the wrong way: the smallest change into a structure
+  that is already too big is almost always *making it bigger*, because that is the option that
+  needs no new seam. Each one looks fine on its own and together they are fatal — this is how a
+  codebase becomes unmaintainable with every slice proven. So before taking the smallest change,
+  ask where it lands:
+  - **The file is clean** → smallest change, unchanged. This is the normal case; do not invent
     refactors to satisfy a rule.
-  - **Host carries accepted debt** (`DEBT_LEDGER.md` / the structural baseline) → the smallest
-    diff is a withdrawal against that ledger, not a free move. Prefer paying down first: extract
-    the seam this slice needs, prove the extraction, *then* add the behavior — often two slices,
-    and the first one has a real proof line, since an extraction that changes no behavior is
-    exactly the kind of change that can be proven. If you extend the host anyway, the slice does
-    not close silently: it names the withdrawal and its new measured value, and the debt ledger
-    row is updated in the same commit.
-  - **Host would newly breach because of this slice** → this is not debt, it is a fresh structural
-    decision made mid-slice. Route it as one: a new module boundary is `arch-design`'s call
-    (Law 3, violation ≠ deviation — an unfamiliar structure gets dialogue, not a silent fix).
-  A slice may not create code that no test harness can address. Untestable *by construction* is
-  not the same as untested: no later gate can report it missing, because no later gate can see it
-  (§8 rules 5 and 7). Refusing it here is the only place it can be refused.
+  - **The file already carries accepted debt** (`DEBT_LEDGER.md` / the structural baseline) → the
+    smallest change borrows against that debt, it is not free. Pay it down first where you can:
+    pull out the seam this slice needs, prove that, *then* add the behavior — often two slices,
+    and the first has a real proof line, since a change that moves code without changing behavior
+    is exactly the kind you can prove. If you grow the file anyway, the slice does not close
+    quietly: it says what it added and the new measured number, and the debt ledger row is updated
+    in the same commit.
+  - **The file would cross a threshold because of this slice** → that is not debt, it is a new
+    structural decision made mid-slice. Treat it as one: a new module boundary is `arch-design`'s
+    call (Law 3 — a structure you don't recognise gets a question, not a silent fix).
+  A slice may not create code no test can reach. Code that is impossible to test is not the same
+  as code that is merely untested: no later gate can report it missing, because no later gate can
+  see it (§8 rules 5 and 7). Here is the only place it can be refused.
 - **Interfaces from ground truth, not memory**: verify an external dependency's interface against
   this environment's ground truth before coding against it (cutoff rule, PROTOCOL §1) — a
   remembered API is **(assumed)**.
 - **Error paths first**: write what happens on bad input, missing dependency, and partial failure
   before polishing the happy path. Happy-path-only code is the largest single source of later
   incidents.
-- **Names carry the documentation load**: a function whose name and signature don't explain it gets
-  renamed before it gets commented.
+- **Let the names do the explaining**: a function whose name and signature don't explain it gets
+  renamed before it gets a comment.
 - New conventions are forbidden mid-slice. If the architecture's conventions don't cover a case,
   stop, propose the convention as a ledger decision, then continue — otherwise every slice invents
-  a dialect and the codebase becomes untranslatable to future models.
-- Deferred work is legal only as a recorded row, never as a bare code comment:
+  its own style and nobody can read the codebase later.
+- Deferred work counts only as a written row, never as a bare code comment:
   `ID | what was deferred | why | trigger that makes it due | date`, inline or in the
   project's notes per §3. Prefer a trigger a machine checks (an assert, a test, a gate
   threshold) over one a human must remember to re-read — a prose trigger fires only if
@@ -88,8 +87,9 @@ and inside this skill, only **(proven)** closes a slice.
 ### Phase 3 — Wire
 
 Run the five-link trace from the `wire-check` skill on everything the slice added:
-**Exists → Registered → Routed → Invoked → Reachable**, tracing from the system's real entry point
-inward. New code that exists but is unreachable is the slice's failure, not a footnote. If
+**Exists → Registered → Routed → Invoked → Reachable**, starting at the system's real entry point
+and working inward. New code that exists but nothing can reach is the slice failing, not a
+footnote. If
 `wire-check` is installed, invoke it; if not, perform the five links manually and say so.
 
 ### Phase 4 — Prove
@@ -103,9 +103,10 @@ inward. New code that exists but is unreachable is the slice's failure, not a fo
 
 ### Phase 5 — Commit
 
-- **Read the entire diff as its own reviewer before committing** (the short leash — non-negotiable
-  for generated code): every changed line must be both explainable and intended. A line you cannot
-  explain does not ship; a line you did not intend is a finding, not a freebie.
+- **Read the whole diff as if reviewing someone else's work before committing** — this is not
+  optional for code a model generated. Every changed line must be one you can explain and one you
+  meant to make. A line you cannot explain does not ship; a line you did not intend is a finding,
+  not a bonus.
 - One slice, one commit (or one clearly bounded changeset). The message states the behavior change
   and the proof line result, not the file list.
 - The committed state must be **rollback-ready**: reverting this commit alone returns the system
@@ -133,9 +134,10 @@ uncommitted work. Re-prove the last claimed-working slice before stacking on it
 - End every slice with a `SLICE <name>` line (PROTOCOL §5): `done` carries the §1 tag, a slice that
   did not hold is `findings(at link/phase)`.
 
-## Anti-patterns this skill exists to kill
+## Common mistakes
 
-Big-bang builds proven only at the end; orphan modules awaiting a caller that never comes; happy-
-path code; TODO comments that rot; commits that can't be reverted in isolation; "it should work"
-as a completion claim; and the slow one — fifty individually-proven slices that append to the same
-overloaded file until nothing in it can be tested or moved.
+Building everything at once and proving it only at the end; modules waiting for a caller that
+never arrives; code that only handles the happy path; TODO comments nobody comes back to; commits
+that can't be reverted on their own; "it should work" as a claim of done; and the slow one — fifty
+proven slices all appended to the same overloaded file, until nothing in it can be tested or
+moved.

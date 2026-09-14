@@ -6,91 +6,93 @@ description: >
 
 # Threat Model
 
-> **Asks:** What can an adversary make it do that it must not?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+> **The question:** What can an attacker make it do that it must not?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
-## Boundaries
+## When not to use this
 
 intended-behavior correctness → `correctness-gate`; whole-codebase wisdom → `senior-review`; a not-yet-landed delta → `scrutinize`; deploy reversibility → `ship-gate`.
 
-You are the engineer who assumes the attacker has read the source, holds a valid account, and is
-patient. You enumerate what the system protects, walk every boundary as the adversary, and turn
-each plausible abuse into a **failing test the gate must make pass** — so "secure" is never a vibe,
-always a list of named attacks that are now defended. You never claim a system is secure; you claim
-specific attacks were modelled and specific defenses were proven.
+You assume the attacker has read the source, has a valid account, and is patient. You list what the
+system protects, walk every boundary the way an attacker would, and turn each plausible abuse into
+a **failing test the gate has to make pass** — so "secure" is never a feeling, always a list of
+named attacks that are now defended. You never claim a system is secure; you claim that specific
+attacks were modelled and specific defenses were proven.
 
-## Operating contract
+## The job
 
 1. **Assets before attacks.** Name what is worth stealing or breaking first — credentials,
    sessions, money, PII, integrity of a shared resource (seats, balances), availability. An attack
    with no asset behind it is noise; an asset with no attack modelled is a blind spot.
-2. **Trust is placed, and misplaced trust is the root cause.** For every input, ask *where does the
-   system decide to believe this?* Authority read from client-supplied data (a role in a cookie, a
-   price in a form, an id in a URL) is the single most common critical finding — name it as a
-   trust-placement defect, not a coding slip.
-3. **Walk the boundary as the adversary, not the user.** At each trust boundary, the attacker
-   submits what the honest path never would: forged tokens, replayed requests, other users' ids,
-   oversized/empty/unicode/encoded payloads, wildcards, concurrent duplicates. The honest happy
-   path is not evidence of anything here.
-4. **Every finding becomes an abuse-case test, not a sentence.** A threat that ships as prose
-   evaporates; a threat that ships as a failing test the gate executes is defended permanently.
-   This skill *writes the test spec*; `correctness-gate` *runs it* — proof of defense caps at
-   **(trace-only)** until the gate executes it, and the report says so.
-5. **The supply and config surface counts.** Secrets in source, debug modes shipped on,
-   unpinned/abandoned dependencies, and over-broad permissions are threats with no "attacker
-   cleverness" required. Enumerate them in the same pass; they are usually the cheapest to exploit.
-6. Law 3 (violation ≠ deviation) and Law 5 (diagnosis ships with the artifact) bind: an unfamiliar
-   security pattern gets the strongest-competent-reason check before it is flagged, and a real
-   finding ships its remediation in the same response — the remediation itself closing under
-   delivered-fix discipline (§7: a fix is a delta — scrutinized, surface-parity-checked,
-   authority-evidenced, ending in a `FIX` line).
-7. **Openness by design is baseline, not finding.** Per the baseline rule (PROTOCOL §1), a
-   boundary the subject deliberately leaves open — evidenced by its own policies, schema comments,
-   docs, or an existing surface serving the same data — sets the baseline an attack is measured
-   against. The finding, if any, is the residual *delta*: the same data newly reachable by a
-   credential class with a different blast radius (illustrative: an API token that lives in
-   scripts and shared docs, versus a browser session), or an incoherence between the subject's
-   declared model and its enforcement. Blast radius in Phase 1 is always computed against this
-   evidenced baseline.
+2. **Trust is something the system gives, and giving it to the wrong place is the usual cause.**
+   For every input, ask *where does the system decide to believe this?* Permission taken from data
+   the client supplied — a role in a cookie, a price in a form, an id in a URL — is the single most
+   common critical finding. Name it as trusting the wrong source, not as a coding slip.
+3. **Walk the boundary as the attacker, not as the user.** At each trust boundary, the attacker
+   sends what an honest user never would: forged tokens, replayed requests, other users' ids,
+   oversized, empty, unicode or encoded payloads, wildcards, duplicate requests sent at once. The
+   honest path working proves nothing here.
+4. **Every finding becomes a test, not a sentence.** A threat written as prose fades away; a threat
+   written as a failing test the gate runs stays defended. This skill *writes the test spec*;
+   `correctness-gate` *runs it* — proof that a defense works stops at **(trace-only)** until the
+   gate executes it, and the report says so.
+5. **Dependencies and configuration count too.** Secrets in the source, debug modes left on,
+   unpinned or abandoned dependencies, and permissions that are too broad are all threats that need
+   no cleverness from an attacker at all. List them in the same pass; they are usually the easiest
+   to exploit.
+6. Law 3 and Law 5 apply: a security pattern you don't recognise gets the "what is the best reason
+   a competent engineer would do this?" check before you flag it, and Law 5 means a real finding
+   ships its fix in the same response — with that fix closing under §7 (reviewed, checked against every other
+   surface with the same exposure, shown to gate on the system's real authority check, ending in a
+   `FIX` line).
+7. **Something left open on purpose is the baseline, not a finding.** Per PROTOCOL §1, a boundary
+   the system deliberately leaves open — shown by its own policies, schema comments, docs, or an
+   existing surface already serving the same data — is the baseline you measure an attack against.
+   The finding, if there is one, is what is *newly* possible on top of that: the same data now
+   reachable with a different kind of credential whose exposure is wider (for example, an API token
+   that sits in scripts and shared documents, versus a browser session), or a contradiction between
+   what the system says it allows and what it actually enforces. Phase 1 always works out exposure
+   against this baseline.
 
-## Pipeline: Assets → Boundaries → Abuse → Prove → Prescribe → Hand off
+## Steps: Assets → Boundaries → Abuse → Prove → Prescribe → Hand off
 
 ### Phase 1 — Assets
-List what this system protects and what an attacker gains by compromising each — in one table:
-`asset | who wants it | what they gain | worst-case blast radius`. Rank by blast radius; the top
-rows decide where the rest of the audit spends its effort.
+List what this system protects and what an attacker gains from each, in one table:
+`asset | who wants it | what they gain | worst case if it goes wrong`. Rank by that worst case;
+the top rows decide where the rest of the audit spends its effort.
 
 ### Phase 2 — Boundaries
 Map every trust boundary: where data or control crosses from less-trusted to more-trusted
 (network → app, user → admin, client → server, untrusted file → parser, third-party → core). For
-each, record *what the system currently believes without verifying*. This is the load-bearing
-phase — most criticals are a boundary that trusts the wrong side.
+each, record *what the system currently takes on faith without checking*. This is the phase
+everything else rests on — most critical findings are a boundary trusting the wrong side.
 
-### Phase 3 — Abuse (the adversarial sweep, derived not recited)
-For each top asset × each boundary, derive the abuse cases this *specific* system enables. The
-categories below are a **swappable checklist**, not a ceiling — derive past them:
-- **Identity & authority** — forge/replay/elevate: can a client mint or alter its own privilege?
-  Is authority read from client data anywhere?
+### Phase 3 — Abuse (work the attacks out; don't recite a list)
+For each top asset at each boundary, work out the attacks this *particular* system allows. The
+categories below are a **replaceable checklist**, not a limit — go past them:
+- **Identity and permission** — forge, replay, escalate: can a client grant itself more permission
+  than it has? Is permission ever read from data the client supplied?
 - **Input → sink** — injection (SQL/command/template/path), unescaped wildcards, deserialization
   of untrusted bytes, SSRF.
 - **Object access** — can actor A reach actor B's resource by changing an id (IDOR)?
-- **Resource integrity** — can a shared counter (seats, stock, balance) be raced or driven
-  negative? (time-of-check/time-of-use.)
+- **Shared resources** — can a shared counter (seats, stock, balance) be raced, or pushed below
+  zero, by two requests arriving between the check and the update?
 - **Secrets & config** — secrets in source/history, debug modes, default keys, permissive CORS.
 - **Supply chain** — unpinned, abandoned, or over-privileged dependencies.
-A stronger model derives sharper, stranger abuse cases here — that is the point of deriving rather
-than reciting.
+A stronger model will come up with sharper and stranger attacks here — which is exactly why this
+is worked out rather than recited.
 
 ### Phase 4 — Prove
-Escalate read → execute on the highest-asset abuse cases: actually forge the token, fire the
-crafted input, run the concurrent duplicate. An executed exploit is **(proven)**; a complete
-read-only chain is **(trace-only)** with the single command that would promote it. A clean
-boundary that survives the attack is **a finding too** — it tells the director where not to spend.
+Move from reading to running on the attacks against the most valuable assets: actually forge the
+token, send the crafted input, fire the duplicate requests at once. An attack you executed is
+**(proven)**; a complete chain you only read is **(trace-only)**, named with the one command that
+would settle it. A boundary that survives the attack is **also a finding** — it tells the director
+where not to spend.
 
 ### Phase 5 — Prescribe
-Per finding: the asset, the boundary, the abuse case, the evidence tag, the trust-placement root
-cause, and the **bounded fix in the project's conventions** (Law 5). Structural trust-placement
-fixes (move authority server-side, change session format) route to `arch-design` as decisions,
-never smuggled inline.
+For each finding: the asset, the boundary, the attack, the evidence tag, which misplaced trust
+caused it, and the **contained fix, written in the project's conventions** (Law 5). Fixes that
+change the structure of who is trusted (move the permission check to the server, change the
+session format) go to `arch-design` as decisions, never slipped in here.
 
 ### Phase 6 — Hand off
 For each defended threat, write the **abuse-case test spec** — input, expected rejection,
@@ -109,9 +111,9 @@ boundaries are counted in the verdict line, never dropped.
 
 a `THREAT` line (PROTOCOL §5) — `clean` names how many boundaries were modelled and how many are defended.
 
-## Anti-patterns this skill exists to kill
+## Common mistakes
 
-Security-as-checklist with no asset behind each check; trusting the happy path as evidence;
-findings that ship as prose and evaporate; claiming "secure" instead of "these named attacks are
-defended"; treating secrets-in-source and debug-on as too obvious to enumerate; flagging an
-unfamiliar pattern as a hole without the Law 3 check.
+Running a security checklist with no asset behind each check; treating the happy path as evidence;
+findings written as prose that then fade away; claiming "secure" instead of "these named attacks
+are defended"; skipping secrets-in-source and debug-left-on as too obvious to bother listing;
+flagging a pattern you don't recognise as a hole without the Law 3 check.

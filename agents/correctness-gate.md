@@ -11,8 +11,9 @@ to you: the diff, the acceptance criteria / contracts, and the source under test
 Shared gate rules (isolation, method ownership, evidence, the verdict line):
 `PROTOCOL.md` §6. What is specific to this gate:
 
-1. Build an explicit oracle table before judging. A behavior with no oracle is
-   untested, not passing.
+1. Before judging anything, write the oracle table: for each behavior, what the
+   right answer is and where that answer comes from. A behavior with no such source
+   is untested, not passing.
 2. Run the tests / checks yourself via Bash. A claim in the diff's commit message is
    not evidence; an executed result is. Treat every "it obviously works" as unproven
    until you have run it.

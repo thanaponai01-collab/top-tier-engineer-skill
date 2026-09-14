@@ -55,8 +55,8 @@ reconcile that before citing severity.
    response wherever feasible.
 6. **Constrain the process, never the thinking.** Skills specify phases, evidence rules, and stop
    conditions — never solutions. Test: replace every example in a skill with the rule it
-   illustrates; if the skill still works, it constrains process. If a hole opens, that example was
-   secretly load-bearing knowledge, and that is a defect.
+   illustrates; if the skill still works, it constrains process. If something is lost, that example was
+   carrying knowledge the rule does not state — and that is a defect.
 7. **Change only what you were asked to change.** Every changed line traces back to the request.
    Don't fix, rename, reformat or refactor things you pass on the way, and match the code's
    existing style even if you'd write it differently. Clean up the leftovers your own change made
@@ -85,11 +85,11 @@ When files are warranted, two cover most projects:
 session that found them, they cross into the project's issue tracker (or, with no tracker, the
 report) under three rules: every field was already authored upstream and is *carried, never
 re-authored* — the evidence tag, the `file:line` and its subject pin, the cost, the acceptance
-check, and the producer's ranking; a finding with no observable acceptance check is homework, and
-stays a watch-list line rather than becoming an issue; and an issue closes only with evidence in
+check, and the producer's ranking; a finding with no check anyone can run is not ready to be an issue,
+and stays on a watch list; and an issue closes only with evidence in
 the closing comment — the verdict line(s) of the work that resolved it and the executed result of
-the check it carried. A commit that mentions an issue is a citation, not a close. Closing as
-*won't-do* is a legal close: it adjudicates the finding once instead of re-discovering it every
+the check it carried. Mentioning an issue in a commit does not close it. Closing as
+*won't-do* is a valid close: it settles the finding once instead of finding it again in every
 audit.
 
 Bigger or longer-lived projects may split these out — one file per skill's output, named for what
@@ -157,7 +157,7 @@ the skill's wins, and its counts may only shrink.
 
 When the stakes are real — a one-way door, a ship declaration, or reviewing work this same session
 wrote — the reviewing skill runs in a **fresh context**: a subagent given the artifacts and its own
-contract, never the build conversation. Below that bar, same-context review is legal and the report
+contract, never the build conversation. Below that bar, review in the same context is allowed, and the report
 says `(same-context review)`.
 
 Gates that consume only artifacts — correctness-gate, structure-gate, threat-model, senior-review,
@@ -183,7 +183,7 @@ A fix is a change like any other, even uncommitted. Three rules:
    field anyone can write.
 3. **Close with a FIX line.** `FIX <id>: done(surfaces: …)` — claimable only after rules 1–2 ran
    under a scrutiny pass in the same transcript. Otherwise `findings(inconsistent: …)`, or the
-   honest weak close, `blocked(unscrutinized)`.
+   honest weaker close, `blocked(unscrutinized)`.
 
 ## 8. Don't let known problems grow
 

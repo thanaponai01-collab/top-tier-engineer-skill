@@ -6,49 +6,53 @@ description: >
 
 # Data Evolution
 
-> **Asks:** How does stored data change shape without loss, reversibly?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
+> **The question:** How does stored data change shape without losing any, and with a way back?  ·  Inputs, outputs and who runs next: `PROTOCOL.md` §4.
 
-## Boundaries
+## When not to use this
 
 changing code callers → `evolve-maintain`; deploying the release that carries the migration → `ship-gate`; the new structure's design → `arch-design`; how the new shape is *accessed* → `perf-optimize` Phase 3b.
 
-You are the engineer who knows that data is the one thing a revert cannot restore. Code rolls back;
-a dropped column does not come back, a corrupted backfill is not un-corrupted by `git revert`.
-Every change to persistent shape is therefore planned as a forward path *and* a backward path, with
-integrity proven on real-shaped data before the change touches anything that matters.
+## The job
 
-## Operating contract
+You are the engineer who knows that data is the one thing a revert cannot bring back. Code rolls
+back; a dropped column does not come back, and `git revert` does not un-corrupt a bad backfill. So
+every change to the shape of stored data is planned as a way forward *and* a way back, with the
+data proven intact on a realistic copy before the change touches anything that matters.
 
 1. **Data has no undo button.** A reverted commit restores code; it does not restore deleted rows,
    un-rename a column, or reverse a lossy type change. Every migration carries an explicit
    **down-path**, and where the down-path is lossy (a dropped column's data is gone), that loss is
    named and escalated as a one-way door, never discovered at rollback time.
-2. **Expand then contract — never edit in place under load.** Destructive single-step migrations
-   (rename, drop, type-change) break any running old code mid-deploy. The safe shape is: **expand**
-   (add the new column/table, dual-write), **migrate** (backfill old → new, verified), **contract**
-   (switch reads, then remove the old) — each step independently deployable and reversible. A
-   single `ALTER` that both adds and removes is the anti-pattern.
-3. **Integrity is proven on a copy before it is run on the original.** Row counts, null/constraint
-   checks, and a sample of real records are verified against a copy or staging snapshot first. "It
-   ran without error" is not "the data is correct" — a backfill can succeed and still write wrong
-   values. Per-record spot-checks are **(proven)**; a clean run alone is **(trace-only)**.
-4. **The migration is reversible-with-data, and ship-gate must know.** This skill's down-path is
-   the evidence `ship-gate` uses to classify the release. Hand it the backward procedure, the
-   point of no return (the contract step), and the loss profile if rolled back after each step.
-5. Law 5 binds: the plan ships with runnable migration *and* rollback code, not a description; Law
-   3 binds: a surprising existing schema choice gets the ledger-archaeology check before it is
-   "corrected" — a column that looks wrong may guard a constraint you haven't seen.
+2. **Expand, then contract — never change in place on a live system.** A destructive one-step
+   migration (rename, drop, change a type) breaks whatever old code is still running mid-deploy.
+   The safe shape is: **expand** (add the new column or table, write to both), **migrate** (copy
+   old → new, verified), **contract** (switch reads over, then remove the old) — each step deployed
+   and reversed on its own. A single `ALTER` that both adds and removes is the mistake to avoid.
+3. **Prove it on a copy before running it on the original.** Check row counts, nulls and
+   constraints, and read a sample of real records — on a copy or a staging snapshot first. "It ran
+   without error" is not the same as "the data is right": a backfill can finish cleanly and still
+   write wrong values. Checking actual records is **(proven)**; a clean run on its own is
+   **(trace-only)**.
+4. **The migration has to be reversible with the data intact, and ship-gate has to know.** The way
+   back that you write here is the evidence `ship-gate` uses to classify the release. Hand it the
+   backward procedure, the point of no return (the contract step), and what would be lost if it
+   were rolled back after each step.
+5. Law 5 applies: the plan ships with migration *and* rollback code you can actually run, not a
+   description of them. Law 3 applies: a schema choice that looks odd gets checked against the
+   history before you "correct" it — a column that looks wrong may be holding up a constraint you
+   have not seen.
 
 > **Boundary with `perf-optimize` Phase 3b:** that phase decides *which* index a query needs and
 > *why* (cost class from the execution plan); this skill ships that index safely onto populated
 > data (expand-contract, no table lock). It specifies, this skill migrates.
 
-## Pipeline: Inventory → Design → Expand → Backfill → Verify → Contract → Record
+## Steps: Inventory → Design → Expand → Backfill → Verify → Contract → Record
 
 ### Phase 1 — Inventory
 Establish what exists: current shape, row volume, constraints, foreign keys, and *who reads and
-writes this data* (the callers a mid-flight change would break). Read `ARCHITECTURE.md` contracts;
-a migration that ignores a caller is a TOCTOU on the schema itself.
+writes this data* (the callers a mid-deploy change would break). Read the contracts in
+`ARCHITECTURE.md`: a migration that misses a caller changes the schema out from under code that is
+still using the old one.
 
 ### Phase 2 — Design the two paths
 Specify the target shape (routing genuine *design* novelty to `arch-design`) and write **both**
@@ -61,9 +65,9 @@ Add the new structure additively. Old code still works; new and old coexist. Dep
 (via `build-discipline` + `ship-gate`) before any data moves — expansion is always reversible.
 
 ### Phase 4 — Backfill
-Move/transform existing data old → new, idempotently and in bounded batches (a single unbatched
-backfill on a large table is its own outage). Dual-write so new writes land in both shapes during
-the transition.
+Copy or transform existing data old → new, in batches, and written so that re-running it is safe
+(one unbatched backfill on a large table is an outage of its own). Write to both shapes during the
+transition, so nothing new is missed.
 
 ### Phase 5 — Verify
 On a copy or snapshot first: row counts match, constraints hold, no nulls where forbidden, and a
@@ -91,9 +95,9 @@ The plan and the verification evidence go under `Detail`.
 
 a `MIGRATE` line (PROTOCOL §5) — `done` states reversible or lossy-after-step-N and carries the §1 tag; no safe backward path is `blocked(one-way door: …)`.
 
-## Anti-patterns this skill exists to kill
+## Common mistakes
 
-`git revert` mistaken for a data rollback; destructive single-step migrations under load; backfills
-that "succeed" without anyone reading the resulting values; unbatched backfills that lock a table;
-dropping the old column in the same deploy that switches reads; discovering a migration is lossy at
-the moment rollback is needed.
+Treating `git revert` as a way to roll back data; destructive one-step migrations on a live
+system; backfills that "succeed" with nobody reading the values they wrote; unbatched backfills
+that lock a table; dropping the old column in the same deploy that switches reads; finding out a
+migration loses data at the moment you need to roll it back.

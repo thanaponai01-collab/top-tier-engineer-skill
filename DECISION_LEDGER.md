@@ -502,7 +502,8 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
 ## D013 — the suite's own prose is written the way the director asked the output not to be
 
 - **date:** 2026-09-14
-- **decision:** open. The director rules.
+- **decision:** option 2 — rewrite the prose across `PROTOCOL.md`, all twenty skills and the five
+  gate agents. Directed by the director in 2.9.0.
 - **forces:** §9 now tells every report to use short words, drop self-grading and cut lines that
   lose nothing. The suite's own files do the opposite — metaphors ("wearing a formatting costume",
   "speculation wearing architecture's costume"), long sentences, flourishes. A model writes in the
@@ -521,6 +522,12 @@ line, added after a fresh-eyes `scrutinize` gate found the original closures und
 - **evidence tag:** **(suspected)**. Settle it by measuring, not by taste: run one report under the
   current prose and one under a rewritten `PROTOCOL.md`, same subject, and compare against §9's six
   rules.
-- **status:** open — raised in 2.8.0. The director then directed the report sections of eight
-  skills into §9's shape in the same release, which is option 3 applied to reports only. What stays
-  open is the rest: the contract prose every skill loads before it produces anything.
+- **status:** decided — shipped in 2.9.0 as option 2. Raised in 2.8.0, where the director directed
+  the report sections of eight skills into §9's shape — option 3 applied to reports only. 2.9.0 closed
+  the rest: the contract prose every skill loads before it produces anything. Option 2's stated risk
+  — deleting load-bearing distinctions along with the flourishes — was gated mechanically rather than
+  by taste: every cross-reference token (`§N`, `Phase N`, `Law N`, `Discipline N`, `Rule N`, verdict
+  nouns, backticked paths) was counted per file before and after, and the four the rewrite dropped
+  were restored **(proven** — the diff of those counts shows gains only**)**. The `(suspected)` tag on
+  the forces above stands: no run has yet been measured under the new prose, which is the experiment
+  the evidence line names.
