@@ -64,9 +64,18 @@ Read as: rename the router, and sweep all twenty skills for places where a contr
   — and the router routes *"is this an N+1"* straight to it. The exception is now stated where the
   precondition is.
 
-No phase order, routing target, gate, verdict noun or tool behavior changed beyond the above. Four
+- **The suite had no `CLAUDE.md` of its own.** It tells every governed project to write one and
+  never wrote one here, so a session editing the rules landed with none of them loaded. `CLAUDE.md`
+  now names the five gates to run before any commit, the rules specific to this repo (history is
+  never rewritten, a decision carries two options, the `<root>/tools/` rule, the register warning),
+  and carries the governance block for other projects. Side effect, taken deliberately: the name
+  now resolves to a real file, so it drops out of `check-references.sh`'s subject-artifact count.
+  The cap follows it down, 9 to 8 — §8 locks a baseline at the measured number, and leaving it at 9
+  would have loosened the bureaucracy ratchet by one without anyone deciding to.
+
+No phase order, routing target, gate, verdict noun or tool behavior changed beyond the above. Five
 gates match their pre-change output **(proven)**: tests 21/21, `STRUCTURE: clean(held: 3 accepted,
-0 repaid)`, references 9/9, verdict nouns 19/19. `(same-context review)` under Discipline 5.
+0 repaid)`, references 8/8, verdict nouns 19/19, version 2.15.0. `(same-context review)` under Discipline 5.
 
 ## 2.14.0 — 2026-09-14 — a budget you count, not a style you aim at
 

@@ -44,7 +44,9 @@ for f in "${surface[@]}"; do
   done < <(grep -oE '`(<root>/)?[A-Za-z0-9_./-]+\.(py|md|json|sh|yml)`' "$f" | tr -d '`' | sort -u)
 done
 
-subject_max=9   # locked at the measured number, never at an aspiration (§8 ratchet)
+subject_max=8   # locked at the measured number, never at an aspiration (§8 ratchet)
+                # Was 9 until the suite grew its own CLAUDE.md: the name now resolves to a
+                # real file here and drops out of the count, so the cap follows it down.
 subject_list=$(printf '%s' "$subject_artifacts" | sort -u)
 subject_n=$(printf '%s' "$subject_list" | grep -c . || true)
 if [ "$subject_n" -gt "$subject_max" ]; then
