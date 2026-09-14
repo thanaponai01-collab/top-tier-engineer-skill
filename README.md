@@ -1,16 +1,21 @@
 # Top-Tier Engineer
 
-Thirteen engineering skills for AI coding agents. Each one works on its own: install and go, no setup,
-no config, no router.
+Fourteen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to do
+for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 ## Install (Claude Code)
 
 ```
-/plugin marketplace add thanaponai01-collab/top-tier-engineer-skill
+git clone https://github.com/thanaponai01-collab/top-tier-engineer-skill
+/plugin marketplace add <path-to-clone>
 /plugin install top-tier-engineer@thanaponai01-skills
 ```
 
-Or from a local copy: `/plugin marketplace add <path-to-this-folder>`, then the same install line.
+Then load the philosophy everywhere by adding one line to `~/.claude/CLAUDE.md`:
+
+```
+@<path-to-clone>/PHILOSOPHY.md
+```
 
 Claude picks the right skill from what you ask. You can also call one by name, e.g.
 `/top-tier-engineer:debug-protocol`.
@@ -29,7 +34,8 @@ Claude picks the right skill from what you ask. You can also call one by name, e
 | `debug-protocol` | "It's broken and I don't know why" |
 | `perf-optimize` | "It's slow / feels clunky / will this query scale?" |
 | `threat-model` | "Is this secure / can it be abused?" |
-| `senior-review` | "Is this code good?", "second opinion on this PR", "what's the biggest gap?" |
+| `senior-review` | "Is this code good?", "what's the biggest gap?" |
+| `scrutinize` | "Second opinion on this PR / plan" |
 | `structure-gate` | "Is this spaghetti?" (bundled script) |
 | `latent-audit` | "Find dead code / are the layers respected?" (bundled script) |
 | `safe-release` | "Ship it", "run this migration" |

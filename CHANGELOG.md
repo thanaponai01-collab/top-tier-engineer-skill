@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.0 — 2026-09-14 — philosophy out, skills clean
+
+- The `How to work` section leaves all 13 skills and lives once in `PHILOSOPHY.md` (~560 lines gone).
+  Load it via `@<path>/PHILOSOPHY.md` in `~/.claude/CLAUDE.md`.
+- `scrutinize` is its own skill again: senior-review's change mode, trimmed.
+- `senior-review` is now five plain questions a senior asks of any project (~40 lines, was ~150).
+- `perf-optimize` trimmed to the same three modes in ~60 lines.
+- `tests/test_philosophy.py` removed; `test_standalone.py` now fails if a skill re-adds the section.
+
 ## 3.4.1 — 2026-09-14 — one label set, and a test for the other rules
 
 - `debug-protocol` Rule 4: a failure you can't reproduce is still real. Add the probe that captures

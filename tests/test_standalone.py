@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 CLAUDE.md's other rules, held by a test: each skill names itself, mentions no
-other skill, and keeps "How to work" as its last section.
+other skill, and leaves "How to work" to PHILOSOPHY.md.
 
 Run them all with `python -m unittest discover tests`.
 """
@@ -33,10 +33,9 @@ class Standalone(unittest.TestCase):
             others = [o for o in SKILLS if o != name and o in body]
             self.assertEqual(others, [], f"{name} references other skills")
 
-    def test_how_to_work_is_last(self):
+    def test_philosophy_lives_outside_skills(self):
         for name, f in SKILLS.items():
-            after = read(f).split("\n## How to work\n", 1)[1]
-            self.assertNotRegex(after, r"(?m)^## ", f"{name}: a section follows How to work")
+            self.assertNotIn("\n## How to work\n", read(f), f"{name}: How to work belongs in PHILOSOPHY.md")
 
 
 if __name__ == "__main__":
