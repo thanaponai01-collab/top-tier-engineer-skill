@@ -50,8 +50,9 @@ Nothing to install.
 
 You pick the next skill, but you don't have to re-explain the work to it: `arch-design` writes each
 move to `docs/arch-moves.md` as a block complete enough to build from, `issue-handoff` turns those
-blocks into one issue each whenever you want a queue that reaches you on another machine, and
-`senior-review` ends by naming the skill for the gap it found. Every flow has the same shape:
+blocks into one issue each whenever you want a queue that reaches you on another machine,
+`arch-map` draws `arch-design`'s report page from the findings it hands over, and `senior-review`
+ends by naming the skill for the gap it found. Every flow has the same shape:
 **find → change → prove → ship**.
 
 | Goal | Find | Change | Prove | Ship |

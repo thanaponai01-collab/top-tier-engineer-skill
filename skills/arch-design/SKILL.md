@@ -122,19 +122,28 @@ shapes — is answered in the chat as its decision row: options, forces, reversi
 page is for a structure with more than one module, or an audit with more than one finding. An HTML
 file for a two-line answer is the waste this skill exists to cut.
 
-When there is a page, it exists once, in the file. None of it is repeated in the chat: when you're done, give the
-path, the verdict or structure in a sentence, and the top move or the costliest decision. Three
-lines, no diagram, no tables.
+When there is a page, the `arch-map` skill draws and writes it. Drawing is its job, and it already
+owns the notation, the legend and the file; yours is the material — the half nobody can recover once
+you've closed the code. Hand it the **Change** view, the path (`docs/arch-design.html` unless the
+user names a place), and:
 
-Draw the diagrams with the `arch-map` skill's Change view: same box names and positions in *before*
-and *after*, its legend (`+` added, `−` removed, `~` changed, `!N` problem), a `file:line` behind
-every arrow of *before*. *After* is a proposal, so its new arrows need no evidence. Borrow that
-skill's notation only, not its delivery step: its report ends in the chat, this one ends in the file.
+- **the headline sentence:** the verdict (clean / messy in places / tangled) and the move that pays
+  most, or, designing, the structure in plain words and the decision most expensive to reverse;
+- **the boxes and arrows of *before*,** each with the `file:line` you read it from, and of *after*
+  with the moves or the design applied — same names, same positions, so the diff is visible.
+  Greenfield has no *before*: draw *after* only, and as a proposal its arrows need no evidence.
+- **the marks:** `!N` on the box where finding N lives, `+` `−` `~` on what each move changes;
+- **the tables, written out:** audit's `# | sign | where | what it costs today | move | effort`;
+  design's module table (responsibility / owns / must not know), contracts, conventions,
+  requirement → structure mapping, and `decision | options considered | forces | reversibility |
+  evidence`.
 
-Write everything into one self-contained file, `docs/arch-design.html` unless the user names a place:
-the verdict or structure summary at the top, *before* and *after* side by side (stacked on narrow
-screens), then the tables as plain HTML tables. Mermaid loads from a CDN as `arch-map` shows, so
-double-clicking the file opens it.
+Anything you can't hand over — the `file:line` behind an arrow, what a finding costs today — is work
+still owed, not something the drawing will cover for you.
+
+The report then exists once, in the file, and none of it is repeated in the chat: give the path, the
+verdict or structure in a sentence, and the top move or the costliest decision. Three lines, no
+diagram, no tables.
 
 ## Handing the work to the build
 
@@ -173,6 +182,7 @@ file alone. Writing the blocks well is what makes that possible; filing them is 
 ## Common mistakes
 
 Diagrams with no decisions behind them; "decisions" with one option; walking through a one-way door
-without stopping; a second system built for a job the first already does; the report printed in the chat as well as
-written to the file; technology names in boundary descriptions (describe boundaries tech-free so they
-survive stack changes).
+without stopping; a second system built for a job the first already does; the report printed in the
+chat as well as written to the file; hand-building the page instead of handing the material to
+`arch-map`; technology names in boundary descriptions (describe boundaries tech-free so they survive
+stack changes).

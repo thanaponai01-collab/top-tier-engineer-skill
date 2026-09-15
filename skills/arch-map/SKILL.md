@@ -113,8 +113,36 @@ Don't add a second diagram format.
 Offer to save as `docs/architecture.md` (or next to the change) only if the user wants it kept; a
 committed diagram goes stale unless someone owns updating it.
 
+Asked for a page instead of an answer in the chat — by the user, or by another skill handing you its
+findings — deliver it as a file: see **The report page**.
+
+## The report page
+
+A page is for a picture someone will open later or send to someone who wasn't there, and for another
+skill whose report ends in a file rather than in the chat. Building it is this skill's job whoever
+asks: everything above still holds — one altitude, every arrow traced or drawn dashed, the legend
+from step 3.
+
+What the caller brings, and what you ask for before drawing if it's missing:
+
+- **the view and the altitude** — as-is, change or problems; system, modules or flow;
+- **the headline sentence:** what the picture shows and the single thing to notice;
+- **the boxes and arrows**, each with its mark and the `file:line` it came from — a proposed *after*
+  is not code yet, so its new arrows carry no evidence and need none;
+- **the tables** that go under the diagrams, already written;
+- **the path**, `docs/architecture.html` unless one is named.
+
+Write one self-contained file: the headline at the top, then the diagram(s) — a change view's
+*before* and *after* side by side, stacked on narrow screens — then the legend for the marks used,
+then the tables as plain HTML tables. Mermaid loads from the CDN as in step 4 and nothing else is
+fetched, so double-clicking the file opens it and copying it anywhere keeps it working.
+
+A report delivered as a page lands once, in the file. Give the path, the headline sentence, and the
+top problem or move — three lines, and none of the diagram or the tables repeated in the chat.
+
 ## Common mistakes
 
 Boxes from the folder names alone without reading imports; drawing the intended design and calling it
 the real one; 40 boxes in one picture; color as the only signal; before and after with different
-layouts so the diff is invisible; problems marked without a `file:line` behind them.
+layouts so the diff is invisible; problems marked without a `file:line` behind them; a page written
+to a file and then pasted into the chat as well.

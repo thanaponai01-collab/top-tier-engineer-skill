@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.6.0 — 2026-09-15 — the map draws the page
+
+- `arch-map` owns the report page. It already owned the notation, the legend and the HTML-with-CDN
+  file; now it owns building the page too, for the user or for another skill handing it findings:
+  what the caller must bring (view, altitude, headline, marked boxes and arrows with their
+  `file:line`, the tables, the path), how the file is laid out, and that a report delivered as a
+  page lands once — in the file, never also in the chat.
+- `arch-design` no longer builds that page itself. It hands `arch-map` the Change view, the path and
+  the material — headline, *before* and *after* boxes with evidence, the `!N` / `+` / `−` / `~`
+  marks, the tables written out — and keeps the half only it can produce. Anything it can't hand
+  over is work still owed, not something the drawing covers for it. The page was described in two
+  skills and drawn by the one whose job it isn't; now it's specified once, where it's built.
+
 ## 4.5.0 — 2026-09-15 — file it from where it was said
 
 - `issue-handoff` files from the chat as well as from a document. Work is often described in a
