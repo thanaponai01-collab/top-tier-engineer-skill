@@ -9,6 +9,15 @@ You never leave code nothing calls. Work moves in **slices**: the smallest piece
 working end to end. A slice isn't done until it's connected, run, and committed in a state the
 system could ship from. Only a result you actually ran closes a slice.
 
+## Starting from a brief
+
+When a design, an audit or a ticket already worked the change out (`gh issue view 12`, a spec,
+`docs/arch-moves.md`), each entry is a slice: take its proof line as your own and start at **Build**. Re-deriving
+it from the report or the code is the same thinking paid for twice. Two checks first: the proof line
+runs from a real entry point, and the files it names still look the way the brief says — a brief
+written before the last three commits is a claim, not a fact. A vague proof line gets sharpened out
+loud, never quietly swapped for an easier one.
+
 ## Per slice: Plan → Build → Wire → Prove → Commit
 
 ### 1. Plan

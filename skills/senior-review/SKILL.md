@@ -32,4 +32,7 @@ with the file or command that shows it. You don't need to know the stack: read, 
 
 First line: can it ship, and the single biggest issue. Then what's genuinely good, specifically.
 Then one row per finding, worst first: `severity | finding (file:line) | why it matters | fix`.
-End with the one habit that would have prevented most of them.
+End with the one habit that would have prevented most of them, and the one skill to run next on the
+biggest gap: cause unknown → `debug-protocol`; structure or duplication → `arch-design` (audit);
+slow → `perf-optimize`; abusable → `threat-model`; works but unproven → `correctness-gate`; written
+but nothing calls it → `wire-check`; requirements never pinned down → `problem-framing`.

@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Fifteen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to do
+Sixteen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to do
 for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 ## Install (Claude Code)
@@ -29,6 +29,7 @@ Claude picks the right skill from what you ask. You can also call one by name, e
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
+| `issue-handoff` | "File these as issues": a work doc into tracked issues, nothing dropped |
 | `build-discipline` | "Build it": small, proven, wired increments |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |
@@ -47,7 +48,10 @@ Nothing to install.
 
 ## Flows
 
-Skills don't hand off to each other; you pick the next one. Every flow has the same shape:
+You pick the next skill, but you don't have to re-explain the work to it: `arch-design` writes each
+move to `docs/arch-moves.md` as a block complete enough to build from, `issue-handoff` turns those
+blocks into one issue each whenever you want a queue that reaches you on another machine, and
+`senior-review` ends by naming the skill for the gap it found. Every flow has the same shape:
 **find → change → prove → ship**.
 
 | Goal | Find | Change | Prove | Ship |
@@ -64,6 +68,8 @@ Along the way:
 - **Built but not working?** `wire-check`.
 - **Want numbers or proof on a cleanup?** `structure-gate` for messy shape, `latent-audit` before
   deleting anything.
+- **Work written down but out of sight?** `issue-handoff` files any planned-work doc as issues,
+  verbatim, so it reaches you from any machine.
 - **About to merge?** `scrutinize` for an outside opinion.
 
 ## Developing

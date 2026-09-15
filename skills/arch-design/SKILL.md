@@ -84,6 +84,11 @@ than deleting the old one.
 Codebases built fast grow the same system twice and build for futures that never came. Find it,
 prove it, rank the fixes.
 
+**Scope it first.** Name the area and the question in one line ("the order flow — why does adding
+one field touch six files?"), then map only what the entry points into that area reach. A whole-repo
+sweep is for when the user asked about the whole repo; anywhere else it is reading you paid for and
+won't use.
+
 1. **Map what's really there.** From the entry points inward: each module, what it actually does,
    and where each concept lives (users, auth, config, data access, outside API calls, errors). One
    table.
@@ -112,7 +117,12 @@ Then `# | sign | where | what it costs today | move | effort`.
 
 ## The report page
 
-The report exists once, in the file. None of it is repeated in the chat: when you're done, give the
+**Size the report to the question.** A single decision — one library, one boundary, which of two
+shapes — is answered in the chat as its decision row: options, forces, reversibility, evidence. The
+page is for a structure with more than one module, or an audit with more than one finding. An HTML
+file for a two-line answer is the waste this skill exists to cut.
+
+When there is a page, it exists once, in the file. None of it is repeated in the chat: when you're done, give the
 path, the verdict or structure in a sentence, and the top move or the costliest decision. Three
 lines, no diagram, no tables.
 
@@ -125,6 +135,40 @@ Write everything into one self-contained file, `docs/arch-design.html` unless th
 the verdict or structure summary at the top, *before* and *after* side by side (stacked on narrow
 screens), then the tables as plain HTML tables. Mermaid loads from a CDN as `arch-map` shows, so
 double-clicking the file opens it.
+
+## Handing the work to the build
+
+The audit's moves, and the design's modules to create, are the build's work. They go in
+`docs/arch-moves.md` beside the report, one block per move, in the order they land. A block is not a
+summary of a move; it is the whole move:
+
+```
+## 1. <what changes, in one line>
+cost:     <what it costs today — the reason this is worth doing at all>
+files:    <paths, with the line numbers the evidence sits on>
+owner:    <the one place that owns this job afterwards>
+callers:  <every call site that has to change>
+proof:    <the command to run, and the output that counts as success>
+effort:   <S / M / L>
+after:    <the move that must land first, or "nothing">
+```
+
+Above the blocks, one short **Context** paragraph: what every move assumes (the auth model stays,
+the database doesn't change), and a link to the report. A move that contradicts it is a new
+decision, not a move.
+
+**The self-containment test:** could someone who never saw this audit build from this block alone?
+If they would have to open the report, read the code, or ask you a question, a field is missing —
+fill it now, with the code still in front of you. This is the only moment that context is free.
+
+A move whose proof line you can't name is not a move. It stays in the report as a question.
+
+## Filing the moves
+
+Not this skill's job, and never a question asked mid-audit. You finish at the file: give its path,
+say how many moves and which one pays most, and stop. When the user wants those moves as tracked
+issues — then, or next week, or from another machine — the `issue-handoff` skill does it from the
+file alone. Writing the blocks well is what makes that possible; filing them is not your step.
 
 ## Common mistakes
 

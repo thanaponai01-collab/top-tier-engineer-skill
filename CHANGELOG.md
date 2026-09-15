@@ -1,5 +1,34 @@
 # Changelog
 
+## 4.4.0 — 2026-09-15 — the work carries over
+
+- `arch-design` writes its moves to `docs/arch-moves.md` as blocks
+  (`cost / files / owner / callers / proof / effort / after`) under one shared **Context**
+  paragraph, each held to a self-containment test: someone who never saw the audit must be able to
+  build from the block alone. That block is the slice `build-discipline` starts from, so the audit's
+  thinking isn't redone by the build.
+- New skill **`issue-handoff`**: turns any planned-work document — an audit's moves, a spec, a plan
+  — into tracked issues without losing what made it buildable. It runs from the document alone, with
+  no memory of the session that wrote it, so it works a week later or from another machine. It
+  copies blocks **verbatim** (re-describing work in tidier words is where evidence, proof lines and
+  ordering die), prepends the shared Context to every body so standalone issues keep their
+  assumptions, checks each item against the five losses (what / why / where / proof / order) and
+  **holds back anything it can't complete** rather than filing a placeholder, reconciles against
+  existing issues before creating so a re-run can't double the backlog, and stamps each number back
+  into the source as it goes.
+- `arch-design` no longer files anything and never asks about filing mid-audit: it finishes at the
+  file, and `issue-handoff` takes it from there. The moves file holds each move's spec, the tracker
+  holds its state — different questions, so neither is a duplicate of the other. A move with no
+  nameable proof line is not a move and stays a question in the report.
+- `build-discipline` gains **Starting from a brief**: when a design, audit or issue already worked
+  the change out, take its proof line and start at Build — after checking the proof line runs from a
+  real entry point and the files it names still look the way the brief says.
+- `arch-design` audit mode scopes before it maps: the area and the question first, then only what
+  those entry points reach. A whole-repo sweep is for a whole-repo question.
+- `arch-design` sizes the report to the question: a single decision is answered in the chat as its
+  decision row; the HTML page is for multi-module structure or a multi-finding audit.
+- `senior-review` ends by naming the one skill to run next on the gap it found.
+
 ## 4.3.1 — 2026-09-15 — the report lands once
 
 - `arch-design` was delivering its report twice: once as chat output and once as the HTML file. It
