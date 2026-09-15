@@ -46,8 +46,8 @@ Use one legend everywhere. Color **and** a text marker, so it still reads in bla
 | none | unchanged | grey |
 
 - **Change view:** draw *before* and *after* as two diagrams side by side (or two subgraphs), same
-  box names and positions, so the eye sees the diff. Removed boxes appear only in *before*, added
-  only in *after*.
+  box names and positions, so the eye sees the diff. Removed boxes and arrows appear only in
+  *before*, added only in *after*.
 - **Problems view:** number each problem on the box or arrow where it lives (`!1`, `!2`), then a table
   `# | what's wrong | where (file:line) | what it costs | fix`. Typical shapes to look for: two boxes
   doing one job, an arrow pointing the wrong way (low layer calling high), a cycle, one box everything
@@ -78,15 +78,13 @@ flowchart LR
   class orders2 changed
 ```
 
-In the example, the removed arrow `api → Postgres` shows up only in *before*.
-
 Syntax traps: quote every label (`["..."]`); ids have no spaces or dashes; parentheses, `/` and `:`
 inside labels need the quotes. If `mmdc` (mermaid-cli) is installed, render once to prove it parses.
 Otherwise re-read the block against these traps before delivering.
 
-Viewing needs no install: GitHub renders the block in any `.md`, and https://mermaid.live renders a
-pasted one. If the user wants to open it locally or share a page, wrap the same Mermaid in one HTML
-file that loads Mermaid from a CDN, so double-clicking it works:
+Viewing needs no install: GitHub renders the block in any `.md`. For a file someone opens locally
+or sends on, wrap the same Mermaid in one HTML file that loads it from a CDN, so double-clicking
+works:
 
 ```html
 <pre class="mermaid">

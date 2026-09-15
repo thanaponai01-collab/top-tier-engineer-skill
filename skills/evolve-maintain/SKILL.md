@@ -5,65 +5,68 @@ description: Change a running system safely: bug fixes with a known cause, incid
 
 # Maintenance & Evolution
 
-A running system has a history and a future; it's not a blank page. Classify every change before
-making it, size it by how far it reaches, prove it like new work, and leave the system harder to
-break the same way twice.
+This skill decides **what kind of change this is and how far it reaches**; the change itself is
+then built like new work. Nearly all maintenance damage is a misclassification — a "small fix" that
+touched three contracts, an "upgrade" that was really a migration.
 
-## Phases
-
-### 1. Sense
-Establish what's true before touching anything:
-- Reproduce the reported behavior, or say clearly that you couldn't and what you inferred.
-- If it reproduces but the cause is unknown, diagnose first: prove the cause (present → fails,
-  removed → doesn't) before treating it. Treating an unproven cause is symptom-patching.
+## 1. Sense
+- Reproduce the reported behavior, or say plainly you couldn't and what you inferred instead.
+- **Cause unknown → `debug-protocol` first, and come back with it proven.** Treating an unproven
+  cause is symptom-patching, and it's how one bug gets shipped two fixes.
 - Read project notes and recent commits. Symptoms often trace to an assumption that quietly stopped
   being true, or a TODO whose moment came and went.
-- **Drift check:** do the docs still describe the code? Stale docs are a finding; the next reader
-  will build on them.
+- **Drift check:** do the docs still describe the code? Stale docs are their own finding; the next
+  reader will build on them.
 
-### 2. Triage
-| Class | Meaning | Obligations |
+## 2. Triage
+| Class | Meaning | What it obliges |
 |---|---|---|
-| **Fix** | Restore intended behavior | Root cause named, regression test added, prevention step (Phase 4) |
-| **Adapt** | The world changed (dependency, API, OS) | Diff the compatibility surface before upgrading; pin and schedule if not now |
-| **Migrate** | Stored data changes shape | Expand → backfill → verify → contract, with a backward path. Never change a populated schema in place |
-| **Improve** | Same behavior, better structure | Freeze behavior with tests *before* refactoring; success = zero observable change |
-| **Evolve** | New or changed behavior | Define acceptance criteria first. Maintenance is not permission to grow scope |
+| **Fix** | Restore intended behavior | Named cause, regression test, prevention (step 4) |
+| **Adapt** | The world changed (dependency, API, OS) | Diff the compatibility surface *before* upgrading; pin and schedule it if not now |
+| **Migrate** | Stored data changes shape | `safe-release` owns the forward and backward path |
+| **Improve** | Same behavior, better structure | Freeze behavior with tests *before* refactoring; success is zero observable change |
+| **Evolve** | New or changed behavior | Acceptance criteria first. Maintenance is not permission to grow scope |
 
-Then size **how far it reaches**: modules, contracts, data, callers. Short reach → one direct
-change. Long reach → staged, using the deprecation ladder. A "small fix" that reaches far was
-misclassified.
+Then size **how far it reaches**: modules, contracts, stored data, callers. Short reach → one direct
+change. Long reach → staged, down the ladder below. A "small fix" that reaches far was
+misclassified; go back to the table.
 
-### 3. Treat
-- Small, proven increments: build, wire, run the proof, commit. Quick fixes get no exemption; most
-  rot in old code is what quick fixes left behind.
-- **Cause, not symptom.** A fix is done when you can name the cause and why it wasn't caught earlier
-  (no test, a guard never connected, a false assumption).
-- **Code that looks wrong but predates you:** check git history first. If there's a reason, respect
-  it or explicitly replace it. If there's none, proceed with extra proof, not extra confidence.
-- **Deprecation ladder** for removing anything with callers: mark → warn → move callers → remove,
-  counting remaining callers at each step (code search is traced; runtime evidence is proven, use
-  it where possible).
-- **Reverting is always a legitimate fix.** A clean revert beats a clever fix forward when unsure.
+## 3. Treat
+The change is `build-discipline`'s work — smallest slice, wired, proof line run, one revertable
+commit. Maintenance adds three constraints:
 
-### 4. Strengthen
-- Every Fix produces a regression test and, where the same kind of failure could happen elsewhere, a
-  new invariant or contract change, so the whole class of bug dies.
-- If reproducing was hard, add the log, metric or probe that would have made it easy, in the same
+- **Quick fixes get no exemption.** Most rot in old code is what earlier quick fixes left behind.
+- **Code that looks wrong but predates you:** get the reason from git history first. A reason you
+  find is respected or explicitly replaced; no reason found means extra proof, not extra confidence.
+- **Reverting is a legitimate fix** — better than a clever fix forward when you're unsure, and the
+  one treatment that needs no diagnosis.
+
+**Deprecation ladder**, for removing anything with callers: mark → warn → move the callers → remove,
+counting remaining callers at each rung — a code search is traced, runtime evidence proven, prefer
+it. Nothing comes off the last rung on a count of zero alone: proving a thing dead is
+`latent-audit`'s job.
+
+## 4. Strengthen
+A fix that closes only this instance gets paid for again.
+- Every Fix leaves a regression test named after the bug.
+- Where the same *kind* of failure could happen elsewhere, raise it to an invariant or a contract
+  change, so the class dies and not just the instance.
+- If reproducing was hard, ship the log, metric or probe that would have made it easy, in the same
   change.
-- On periodic health checks: close stale TODOs, confirm or drop old assumptions, fix doc drift.
+- On a periodic health check: close stale TODOs, confirm or drop old assumptions, fix doc drift.
 
-### 5. Record
+## 5. Record
 If the project keeps a maintenance log, append:
-`date | class | symptom | root cause | treatment | reach | guarded by | follow-ups`.
-Write it so a future symptom can be matched to past causes in one read.
+`date | class | symptom | root cause | treatment | reach | guarded by | follow-ups`, written so a
+future symptom can be matched to a past cause in one read.
 
 ## Report
 
-The symptom in the reporter's words, the root cause in one sentence (proven, traced or suspected), what now
-stops it coming back, and anything left for later.
+The symptom in the reporter's words; the class and reach you triaged it as; the root cause in one
+sentence, proven, traced or suspected; what now stops it coming back; what you left.
 
 ## Common mistakes
 
-Deleting code something still calls; stale docs misleading the next maintainer; scope growth
-disguised as maintenance; closing a fix with no regression test.
+Treating a cause nobody proved; a migration triaged as a fix; scope growth wearing a maintenance
+label; deleting code something still calls; closing a fix with no regression test; stale docs left
+to mislead the next maintainer.

@@ -35,4 +35,5 @@ Then one row per finding, worst first: `severity | finding (file:line) | why it 
 End with the one habit that would have prevented most of them, and the one skill to run next on the
 biggest gap: cause unknown → `debug-protocol`; structure or duplication → `arch-design` (audit);
 slow → `perf-optimize`; abusable → `threat-model`; works but unproven → `correctness-gate`; written
-but nothing calls it → `wire-check`; requirements never pinned down → `problem-framing`.
+but nothing calls it → `wire-check`; tangled, and you want it measured → `structure-gate`; dead
+weight → `latent-audit`; requirements never pinned down → `problem-framing`.

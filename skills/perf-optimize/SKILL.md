@@ -51,8 +51,8 @@ Fast on a thousand rows can be fatal at a million; it shows in the plan, not on 
    per item). The last two on a growing table are findings **even if fast today**.
 3. **Read the plan** (`EXPLAIN ANALYZE` or the engine's equivalent) on realistic data and quote the
    line. Never just claim an index is used.
-4. **Prescribe** the fix (join, batch fetch, index). Indexing a populated table is a migration: don't
-   lock the table.
+4. **Prescribe** the fix (join, batch fetch, index). Adding an index to a populated table is a
+   migration, not a tweak: `safe-release`.
 
 ## Report
 

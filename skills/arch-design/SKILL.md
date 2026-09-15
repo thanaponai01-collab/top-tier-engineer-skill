@@ -118,11 +118,10 @@ shapes — is answered in the chat as its decision row: options, forces, reversi
 page is for a structure with more than one module, or an audit with more than one finding. An HTML
 file for a two-line answer is the waste this skill exists to cut.
 
-When there is a page, **`arch-map` draws and writes it**. Hand it the **Change** view, the path
-(`docs/arch-design.html` unless the user names one) and the material from **Deliver** above — every
-box and arrow with the `file:line` you read it from, the marks, the tables written out. It owns the
-notation, the legend, the file and how the report lands, and it asks for whatever you left out:
-what it asks for is work you still owe, with the code still open.
+When there is a page, **`arch-map` draws and writes it**: hand it the **Change** view, the path
+(`docs/arch-design.html` unless the user names one), and everything under **Deliver** above. It owns
+the notation, the legend, the file and how the report lands, and it will ask for whatever is
+missing — what it asks for is work you still owe, with the code still open.
 
 ## Handing the work to the build
 

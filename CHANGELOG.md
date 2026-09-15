@@ -1,5 +1,27 @@
 # Changelog
 
+## 4.9.0 — 2026-09-15 — a skill that names another skill's steps has two jobs
+
+- `evolve-maintain` stops re-teaching four other skills. It carried its own copy of
+  `debug-protocol`'s two-direction cause proof, `safe-release`'s expand → backfill → verify →
+  contract, `build-discipline`'s build-wire-prove-commit loop, and a common mistake that is
+  `latent-audit`'s whole thesis. Four procedures that drift the moment any of them moves, and none
+  of them this skill's. It now owns what nothing else does — classify the change, size its reach,
+  walk the deprecation ladder, kill the class of bug, keep the log — and names the skill for each
+  of the rest.
+- The cause rule is a stop, not a note. "Diagnose first" was a sentence inside a bullet; a cause
+  nobody proved is the failure this whole skill is arranged around, so it now reads as what it is:
+  cause unknown → `debug-protocol`, come back with it proven.
+- `perf-optimize` hands the populated-table index to `safe-release` instead of repeating its rule
+  in shorter words. "Don't lock the table" is the one-line version of a skill; naming the skill
+  gets the batching, the verification and the way back as well.
+- `arch-design` names the material it hands `arch-map` rather than listing it again. `arch-map`
+  already states what it asks for; stating it from both ends was one contract in two spellings.
+- `senior-review` routes the two gaps it could find and had nowhere to send: tangled and worth
+  measuring → `structure-gate`, dead weight → `latent-audit`.
+- `arch-map` drops the sentence explaining its own example. The removal rule now covers arrows as
+  well as boxes, which is what the example was there to show.
+
 ## 4.8.0 — 2026-09-15 — the card names what comes out
 
 - `arch-design`'s description now names its deliverables — decisions with options and
