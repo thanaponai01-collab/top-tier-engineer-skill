@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.5.0 — 2026-09-15 — file it from where it was said
+
+- `issue-handoff` files from the chat as well as from a document. Work is often described in a
+  message and never written down, and the skill previously had one rule for that case — don't file
+  from the conversation — which left the loose case with nowhere to go. Now the source is *either* a
+  document or the chat, and from step 2 the two are filed identically: same five losses, same
+  Context block, same reconcile, same held items. Filing from the chat, the user's own words are the
+  source block (what you concluded or half-fixed in between is not — it goes to the code to be
+  checked first), the split and titles are read back for a yes before anything public is created,
+  and each issue number is printed as it lands since there is no document to stamp it into.
+
 ## 4.4.0 — 2026-09-15 — the work carries over
 
 - `arch-design` writes its moves to `docs/arch-moves.md` as blocks

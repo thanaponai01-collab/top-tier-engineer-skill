@@ -29,7 +29,7 @@ Claude picks the right skill from what you ask. You can also call one by name, e
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
-| `issue-handoff` | "File these as issues": a work doc into tracked issues, nothing dropped |
+| `issue-handoff` | "File these as issues": a work doc, or the chat, into tracked issues, nothing dropped |
 | `build-discipline` | "Build it": small, proven, wired increments |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |
@@ -68,8 +68,8 @@ Along the way:
 - **Built but not working?** `wire-check`.
 - **Want numbers or proof on a cleanup?** `structure-gate` for messy shape, `latent-audit` before
   deleting anything.
-- **Work written down but out of sight?** `issue-handoff` files any planned-work doc as issues,
-  verbatim, so it reaches you from any machine.
+- **Work out of sight — written down, or only said?** `issue-handoff` files a planned-work doc, or
+  the conversation itself, as issues, verbatim, so it reaches you from any machine.
 - **About to merge?** `scrutinize` for an outside opinion.
 
 ## Developing
