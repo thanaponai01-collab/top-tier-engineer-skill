@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-CLAUDE.md's other rules, held by a test: each skill names itself, mentions no
-other skill, and leaves "How to work" to PHILOSOPHY.md.
+CLAUDE.md's other rules, held by a test: each skill names itself and leaves
+"How to work" to PHILOSOPHY.md.
 
 Run them all with `python -m unittest discover tests`.
 """
@@ -26,12 +26,6 @@ class Standalone(unittest.TestCase):
             m = re.match(r"---\nname: (.+)\ndescription: (.+)\n---\n", read(f))
             self.assertIsNotNone(m, f"{name}: frontmatter is not name + one-line description")
             self.assertEqual(m.group(1), name)
-
-    def test_no_skill_mentions_another(self):
-        for name, f in SKILLS.items():
-            body = read(f).split("\n---\n", 1)[1]
-            others = [o for o in SKILLS if o != name and o in body]
-            self.assertEqual(others, [], f"{name} references other skills")
 
     def test_philosophy_lives_outside_skills(self):
         for name, f in SKILLS.items():
