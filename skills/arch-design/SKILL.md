@@ -1,6 +1,6 @@
 ---
 name: arch-design
-description: Shape a system's structure, or audit an existing codebase for duplicated systems, over-building and AI slop. Use for greenfield architecture, choosing a stack or pattern, module or API boundaries, restructuring, "how should this be structured / which stack?", or "is my codebase bloated / where can the architecture improve?".
+description: Shape a system's structure, or audit an existing codebase for duplicated systems, over-building and AI slop. Delivers decisions with their options and reversibility, a report page when there is more than one module or finding, and the moves written out buildable in docs/arch-moves.md. Use for greenfield architecture, choosing a stack or pattern, module or API boundaries, restructuring, "how should this be structured / which stack?", or "is my codebase bloated / where can the architecture improve?".
 ---
 
 # Architecture & Design
@@ -121,11 +121,8 @@ file for a two-line answer is the waste this skill exists to cut.
 When there is a page, **`arch-map` draws and writes it**. Hand it the **Change** view, the path
 (`docs/arch-design.html` unless the user names one) and the material from **Deliver** above — every
 box and arrow with the `file:line` you read it from, the marks, the tables written out. It owns the
-notation, the legend and the file, and it asks for whatever you left out: what it asks for is work
-you still owe, with the code still open.
-
-The report then lands once, in the file, and none of it is repeated in the chat: the path, the
-verdict or structure in a sentence, and the top move or the costliest decision. Three lines.
+notation, the legend, the file and how the report lands, and it asks for whatever you left out:
+what it asks for is work you still owe, with the code still open.
 
 ## Handing the work to the build
 
@@ -160,7 +157,6 @@ wants them. Never ask about it mid-audit; you finish at the file.
 ## Common mistakes
 
 Diagrams with no decisions behind them; "decisions" with one option; walking through a one-way door
-without stopping; a second system built for a job the first already does; the report printed in the
-chat as well as written to the file; hand-building the page instead of handing the material to
-`arch-map`; technology names in boundary descriptions (describe boundaries tech-free so they survive
-stack changes).
+without stopping; a second system built for a job the first already does; hand-building the page
+instead of handing the material to `arch-map`; technology names in boundary descriptions (describe
+boundaries tech-free so they survive stack changes).

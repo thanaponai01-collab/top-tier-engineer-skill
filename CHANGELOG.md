@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.8.0 — 2026-09-15 — the card names what comes out
+
+- `arch-design`'s description now names its deliverables — decisions with options and
+  reversibility, a report page when there is more than one module or finding, and the moves written
+  out buildable in `docs/arch-moves.md`. It described what the skill thinks about and never what it
+  leaves behind, so a reader picking between skills couldn't tell that an audit ends in two files
+  on disk. Every other skill's card names its output; this one now does too.
+- How a page-delivered report lands is `arch-map`'s, said once. `arch-design` had kept its own copy
+  of the rule — land in the file, three lines in the chat, nothing repeated — and a second copy in
+  its common mistakes, for four statements of one rule across the two skills. `arch-design` now
+  names it as part of what `arch-map` owns and stops restating it.
+
 ## 4.7.0 — 2026-09-15 — a handoff is a name, not a retelling
 
 - `arch-design` stops restating what the skills it hands to already say. Its report-page section
