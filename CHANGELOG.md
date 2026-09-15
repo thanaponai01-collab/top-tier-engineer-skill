@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.3.1 — 2026-09-15 — the report lands once
+
+- `arch-design` was delivering its report twice: once as chat output and once as the HTML file. It
+  borrowed `arch-map`'s Change view and inherited that skill's delivery step, which ends in the
+  chat. It now borrows the notation only, and the page's contents are specified in one place.
+
 ## 4.3.0 — 2026-09-15 — see the change
 
 - `arch-design` writes its report to one HTML file (`docs/arch-design.html` by default): verdict on

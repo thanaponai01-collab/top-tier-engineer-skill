@@ -68,16 +68,16 @@ Every consequential choice goes through this frame:
 - **Novelty check:** rejecting a common pattern or using an unusual one needs a recorded reason.
 
 ### 5. Deliver
-One HTML file (see **The report page**), plus a short summary inline:
+All of this goes into one HTML file (see **The report page**), not into the chat:
 
 - **Architecture:** before → after diagrams, module table (responsibility / owns / must not know),
   contracts, conventions, requirement → structure mapping. Greenfield has no *before*: draw *after*
   only.
 - **Decisions:** `decision | options considered | forces | reversibility | evidence`.
 
-Open with the structure in plain words and the decision that's most expensive to reverse. If the
-project keeps a decision log, append new entries; replacing a decision adds an entry rather than
-deleting the old one.
+The page opens with the structure in plain words and the decision that's most expensive to reverse.
+If the project keeps a decision log, append new entries; replacing a decision adds an entry rather
+than deleting the old one.
 
 ## Audit mode
 
@@ -105,25 +105,30 @@ prove it, rank the fixes.
    every caller that changes, and the check that proves behavior didn't (tests green before and
    after). Moves land one at a time. A rewrite is its own decision, raised with the user.
 
-Report, as one HTML file (see **The report page**): the plain verdict (clean / messy in places /
-tangled) and the one move that pays most. Then *before*: the concept map as it is, each finding's
+The report is one HTML file (see **The report page**), not chat output: the plain verdict
+(clean / messy in places / tangled) and the one move that pays most. Then *before*: the concept map as it is, each finding's
 number (`!1`, `!2`) on the box where it lives. Then *after*: the same map with the moves applied.
 Then `# | sign | where | what it costs today | move | effort`.
 
 ## The report page
 
+The report exists once, in the file. None of it is repeated in the chat: when you're done, give the
+path, the verdict or structure in a sentence, and the top move or the costliest decision. Three
+lines, no diagram, no tables.
+
 Draw the diagrams with the `arch-map` skill's Change view: same box names and positions in *before*
 and *after*, its legend (`+` added, `−` removed, `~` changed, `!N` problem), a `file:line` behind
-every arrow of *before*. *After* is a proposal, so its new arrows need no evidence.
+every arrow of *before*. *After* is a proposal, so its new arrows need no evidence. Borrow that
+skill's notation only, not its delivery step: its report ends in the chat, this one ends in the file.
 
 Write everything into one self-contained file, `docs/arch-design.html` unless the user names a place:
 the verdict or structure summary at the top, *before* and *after* side by side (stacked on narrow
 screens), then the tables as plain HTML tables. Mermaid loads from a CDN as `arch-map` shows, so
-double-clicking the file opens it. Tell the user the path; inline, give only the summary and the top
-move or decision.
+double-clicking the file opens it.
 
 ## Common mistakes
 
 Diagrams with no decisions behind them; "decisions" with one option; walking through a one-way door
-without stopping; a second system built for a job the first already does; technology names in boundary descriptions (describe boundaries tech-free so they
+without stopping; a second system built for a job the first already does; the report printed in the chat as well as
+written to the file; technology names in boundary descriptions (describe boundaries tech-free so they
 survive stack changes).
