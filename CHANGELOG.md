@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.7.0 — 2026-09-15 — a handoff is a name, not a retelling
+
+- `arch-design` stops restating what the skills it hands to already say. Its report-page section
+  had carried `arch-map`'s whole caller contract — headline, marked boxes and arrows, the tables,
+  the path — a second copy of a contract that lives in `arch-map` and drifts the moment either
+  moves. It now sizes the report (its own call: chat row for one decision, page for a structure or
+  a multi-finding audit), names `arch-map`, and hands over the material.
+- The material is named once each. Design mode's **Deliver** and Audit mode's closing line each
+  list their own tables; the report-page section no longer lists them again.
+- Filing is `issue-handoff`'s, in one line instead of seven. Proving code dead is `latent-audit`'s,
+  which has the import graph behind it — `arch-design` reports unreachable code as *suspected* and
+  hands it over rather than calling it dead by eye.
+- Reversibility stops re-teaching `PHILOSOPHY.md`'s fifth habit and keeps only what is
+  architecture's: which doors are one-way.
+
+`arch-design` goes 188 → 166 lines with nothing dropped — every cut line is said once, in the
+skill that owns it.
+
 ## 4.6.0 — 2026-09-15 — the map draws the page
 
 - `arch-map` owns the report page. It already owned the notation, the legend and the HTML-with-CDN

@@ -42,10 +42,9 @@ Every consequential choice goes through this frame:
 1. **At least two real options**, one of which is the **simplest thing that meets every
    requirement**. Adopt it, or name the requirement that rules it out.
 2. **Forces:** which requirements and constraints push which way.
-3. **Reversibility:**
-   - *Two-way door* (a library, folder layout): decide fast, note briefly.
-   - *One-way door* (database, public API shape, tenancy model, auth model): present options, a
-     recommendation, and the cost of being wrong to the user. Never walk through silently.
+3. **Reversibility.** Two-way door (a library, a folder layout): decide fast, note briefly.
+   One-way door (database, public API shape, tenancy model, auth model): the options, a
+   recommendation and the cost of being wrong go to the user before you walk through it.
 4. **Dependency bar.** A new dependency needs: rough cost to write the needed part yourself, the
    fraction of the library you'd use, maintenance health (recent releases, open security issues),
    license compatibility, and a pin plan. Default: under ~10% used, or under ~100 lines to write →
@@ -68,14 +67,11 @@ Every consequential choice goes through this frame:
 - **Novelty check:** rejecting a common pattern or using an unusual one needs a recorded reason.
 
 ### 5. Deliver
-All of this goes into one HTML file (see **The report page**), not into the chat:
+The material, in this order: the structure in plain words and the decision most expensive to
+reverse; before → after diagrams (greenfield has no *before*, draw *after* only); the module table
+(responsibility / owns / must not know); contracts; conventions; requirement → structure mapping;
+and `decision | options considered | forces | reversibility | evidence`.
 
-- **Architecture:** before → after diagrams, module table (responsibility / owns / must not know),
-  contracts, conventions, requirement → structure mapping. Greenfield has no *before*: draw *after*
-  only.
-- **Decisions:** `decision | options considered | forces | reversibility | evidence`.
-
-The page opens with the structure in plain words and the decision that's most expensive to reverse.
 If the project keeps a decision log, append new entries; replacing a decision adds an entry rather
 than deleting the old one.
 
@@ -99,8 +95,8 @@ won't use.
      plugin, options nobody sets, a layer that only passes calls through.
    - **One place doing everything:** the file every feature lands in; a function that fetches,
      decides and renders.
-   - **Half-built or unreachable:** features started and left, code nothing calls. Prove nothing
-     reaches it before calling it dead.
+   - **Half-built or unreachable:** features started and left, code nothing calls. Report it as
+     *suspected* and hand the proof to `latent-audit`; nothing is called dead here.
    - **Noise:** handling for cases that can't happen, errors swallowed silently, comments that
      restate the code.
    - **No shared way:** the same problem solved differently in each part.
@@ -110,10 +106,10 @@ won't use.
    every caller that changes, and the check that proves behavior didn't (tests green before and
    after). Moves land one at a time. A rewrite is its own decision, raised with the user.
 
-The report is one HTML file (see **The report page**), not chat output: the plain verdict
-(clean / messy in places / tangled) and the one move that pays most. Then *before*: the concept map as it is, each finding's
-number (`!1`, `!2`) on the box where it lives. Then *after*: the same map with the moves applied.
-Then `# | sign | where | what it costs today | move | effort`.
+The material, in this order: the plain verdict (clean / messy in places / tangled) and the one move
+that pays most; *before*, the concept map as it is with each finding's number (`!1`, `!2`) on the box
+where it lives; *after*, the same map with the moves applied; then
+`# | sign | where | what it costs today | move | effort`.
 
 ## The report page
 
@@ -122,28 +118,14 @@ shapes — is answered in the chat as its decision row: options, forces, reversi
 page is for a structure with more than one module, or an audit with more than one finding. An HTML
 file for a two-line answer is the waste this skill exists to cut.
 
-When there is a page, the `arch-map` skill draws and writes it. Drawing is its job, and it already
-owns the notation, the legend and the file; yours is the material — the half nobody can recover once
-you've closed the code. Hand it the **Change** view, the path (`docs/arch-design.html` unless the
-user names a place), and:
+When there is a page, **`arch-map` draws and writes it**. Hand it the **Change** view, the path
+(`docs/arch-design.html` unless the user names one) and the material from **Deliver** above — every
+box and arrow with the `file:line` you read it from, the marks, the tables written out. It owns the
+notation, the legend and the file, and it asks for whatever you left out: what it asks for is work
+you still owe, with the code still open.
 
-- **the headline sentence:** the verdict (clean / messy in places / tangled) and the move that pays
-  most, or, designing, the structure in plain words and the decision most expensive to reverse;
-- **the boxes and arrows of *before*,** each with the `file:line` you read it from, and of *after*
-  with the moves or the design applied — same names, same positions, so the diff is visible.
-  Greenfield has no *before*: draw *after* only, and as a proposal its arrows need no evidence.
-- **the marks:** `!N` on the box where finding N lives, `+` `−` `~` on what each move changes;
-- **the tables, written out:** audit's `# | sign | where | what it costs today | move | effort`;
-  design's module table (responsibility / owns / must not know), contracts, conventions,
-  requirement → structure mapping, and `decision | options considered | forces | reversibility |
-  evidence`.
-
-Anything you can't hand over — the `file:line` behind an arrow, what a finding costs today — is work
-still owed, not something the drawing will cover for you.
-
-The report then exists once, in the file, and none of it is repeated in the chat: give the path, the
-verdict or structure in a sentence, and the top move or the costliest decision. Three lines, no
-diagram, no tables.
+The report then lands once, in the file, and none of it is repeated in the chat: the path, the
+verdict or structure in a sentence, and the top move or the costliest decision. Three lines.
 
 ## Handing the work to the build
 
@@ -172,12 +154,8 @@ fill it now, with the code still in front of you. This is the only moment that c
 
 A move whose proof line you can't name is not a move. It stays in the report as a question.
 
-## Filing the moves
-
-Not this skill's job, and never a question asked mid-audit. You finish at the file: give its path,
-say how many moves and which one pays most, and stop. When the user wants those moves as tracked
-issues — then, or next week, or from another machine — the `issue-handoff` skill does it from the
-file alone. Writing the blocks well is what makes that possible; filing them is not your step.
+Filing these as tracked issues is `issue-handoff`'s job, from the file alone, whenever the user
+wants them. Never ask about it mid-audit; you finish at the file.
 
 ## Common mistakes
 
