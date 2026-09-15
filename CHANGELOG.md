@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.3.0 — 2026-09-15 — see the change
+
+- `arch-design` writes its report to one HTML file (`docs/arch-design.html` by default): verdict on
+  top, *before* and *after* diagrams side by side drawn with `arch-map`'s Change view and legend, then
+  the tables. Audit mode's *after* is the map with the moves applied; greenfield draws *after* only.
+
 ## 4.2.1 — 2026-09-14 — same picture
 
 - `arch-design` draws its sketch and audit concept map as Mermaid, with audit findings numbered on

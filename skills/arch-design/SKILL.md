@@ -68,10 +68,11 @@ Every consequential choice goes through this frame:
 - **Novelty check:** rejecting a common pattern or using an unusual one needs a recorded reason.
 
 ### 5. Deliver
-Inline unless the user wants files:
+One HTML file (see **The report page**), plus a short summary inline:
 
-- **Architecture:** sketch (a Mermaid flowchart: renders on GitHub, diffs as text), module table (responsibility / owns / must not know), contracts,
-  conventions, requirement → structure mapping.
+- **Architecture:** before → after diagrams, module table (responsibility / owns / must not know),
+  contracts, conventions, requirement → structure mapping. Greenfield has no *before*: draw *after*
+  only.
 - **Decisions:** `decision | options considered | forces | reversibility | evidence`.
 
 Open with the structure in plain words and the decision that's most expensive to reverse. If the
@@ -104,9 +105,22 @@ prove it, rank the fixes.
    every caller that changes, and the check that proves behavior didn't (tests green before and
    after). Moves land one at a time. A rewrite is its own decision, raised with the user.
 
-Report: the plain verdict (clean / messy in places / tangled) and the one move that pays most. Then
-the concept map, drawn as a Mermaid flowchart with each finding's number (`!1`, `!2`) on the box where
-it lives, then `# | sign | where | what it costs today | move | effort`.
+Report, as one HTML file (see **The report page**): the plain verdict (clean / messy in places /
+tangled) and the one move that pays most. Then *before*: the concept map as it is, each finding's
+number (`!1`, `!2`) on the box where it lives. Then *after*: the same map with the moves applied.
+Then `# | sign | where | what it costs today | move | effort`.
+
+## The report page
+
+Draw the diagrams with the `arch-map` skill's Change view: same box names and positions in *before*
+and *after*, its legend (`+` added, `−` removed, `~` changed, `!N` problem), a `file:line` behind
+every arrow of *before*. *After* is a proposal, so its new arrows need no evidence.
+
+Write everything into one self-contained file, `docs/arch-design.html` unless the user names a place:
+the verdict or structure summary at the top, *before* and *after* side by side (stacked on narrow
+screens), then the tables as plain HTML tables. Mermaid loads from a CDN as `arch-map` shows, so
+double-clicking the file opens it. Tell the user the path; inline, give only the summary and the top
+move or decision.
 
 ## Common mistakes
 
