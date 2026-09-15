@@ -1,6 +1,6 @@
 ---
 name: arch-design
-description: Shape a system's structure, or audit an existing codebase for duplicated systems, over-building and AI slop. Delivers decisions with their options and reversibility, a report page when there is more than one module or finding, and the moves written out buildable in docs/arch-moves.md. Use for greenfield architecture, choosing a stack or pattern, module or API boundaries, restructuring, "how should this be structured / which stack?", or "is my codebase bloated / where can the architecture improve?".
+description: Shape a system's structure, or audit an existing codebase for duplicated systems, over-building and AI slop. Delivers decisions with their options and reversibility, and one file — docs/arch-design.md — holding the report and the moves written out buildable. Use for greenfield architecture, choosing a stack or pattern, module or API boundaries, restructuring, "how should this be structured / which stack?", or "is my codebase bloated / where can the architecture improve?".
 ---
 
 # Architecture & Design
@@ -111,26 +111,14 @@ that pays most; *before*, the concept map as it is with each finding's number (`
 where it lives; *after*, the same map with the moves applied; then
 `# | sign | where | what it costs today | move | effort`.
 
-## The report page
-
-**Size the report to the question.** A single decision — one library, one boundary, which of two
-shapes — is answered in the chat as its decision row: options, forces, reversibility, evidence. The
-page is for a structure with more than one module, or an audit with more than one finding. An HTML
-file for a two-line answer is the waste this skill exists to cut.
-
-When there is a page, **`arch-map` draws and writes it**: hand it the **Change** view, the path
-(`docs/arch-design.html` unless the user names one), and everything under **Deliver** above. It owns
-the notation, the legend, the file and how the report lands, and it will ask for whatever is
-missing — what it asks for is work you still owe, with the code still open.
-
 ## Handing the work to the build
 
-The audit's moves, and the design's modules to create, are the build's work. They go in
-`docs/arch-moves.md` beside the report, one block per move, in the order they land. A block is not a
-summary of a move; it is the whole move:
+The audit's moves, and the design's modules to create, are the build's work. They are the report's
+last section, one block per move, in the order they land. A block is not a summary of a move; it is
+the whole move:
 
 ```
-## 1. <what changes, in one line>
+### 1. <what changes, in one line>
 cost:     <what it costs today — the reason this is worth doing at all>
 files:    <paths, with the line numbers the evidence sits on>
 owner:    <the one place that owns this job afterwards>
@@ -140,8 +128,8 @@ effort:   <S / M / L>
 after:    <the move that must land first, or "nothing">
 ```
 
-Above the blocks, one short **Context** paragraph: what every move assumes (the auth model stays,
-the database doesn't change), and a link to the report. A move that contradicts it is a new
+Under the `## Moves` heading and above the blocks, one short **Context** paragraph: what every move
+assumes (the auth model stays, the database doesn't change). A move that contradicts it is a new
 decision, not a move.
 
 **The self-containment test:** could someone who never saw this audit build from this block alone?
@@ -153,9 +141,26 @@ A move whose proof line you can't name is not a move. It stays in the report as 
 Filing these as tracked issues is `issue-handoff`'s job, from the file alone, whenever the user
 wants them. Never ask about it mid-audit; you finish at the file.
 
+## The file — you write the material, `arch-map` writes the file
+
+**Size it to the question first.** A single decision that leaves nothing to build — one library, one
+boundary, which of two shapes — is answered in the chat as its decision row: options, forces,
+reversibility, evidence, and no file. There is a file when the work has more than one module, more
+than one finding, or a move someone builds from later.
+
+When there is, you don't format anything. Finish the material and hand it over in one go: the
+**Change** view, the path (`docs/arch-design.md` unless the user named one), everything under
+**Deliver** above, and the move blocks to go last, under a `## Moves` heading in that same file.
+`arch-map` owns the notation, the legend, the file and how it lands, and it will ask for whatever is
+missing — what it asks for is work you still owe, with the code still open.
+
+One file, not two: a move is built from the finding above it, and a moves file living beside the
+report drifts from it at the first edit of either.
+
 ## Common mistakes
 
 Diagrams with no decisions behind them; "decisions" with one option; walking through a one-way door
-without stopping; a second system built for a job the first already does; hand-building the page
-instead of handing the material to `arch-map`; technology names in boundary descriptions (describe
+without stopping; a second system built for a job the first already does; hand-building the file
+instead of handing the material to `arch-map`; the moves split into a file of their own, so the
+report and the work drift apart; technology names in boundary descriptions (describe
 boundaries tech-free so they survive stack changes).

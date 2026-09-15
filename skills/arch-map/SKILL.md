@@ -1,6 +1,6 @@
 ---
 name: arch-map
-description: Draw a codebase or architecture as a diagram traced from the real code, and mark what's added, removed, changed or wrong. Use for "show me the architecture", "visualize this codebase", "draw what this change does", "before and after", or "show where the problems are".
+description: Draw a codebase or architecture as a diagram traced from the real code, mark what's added, removed, changed or wrong, and leave it in a file you can open again. Use for "show me the architecture", "visualize this codebase", "draw what this change does", "before and after", or "show where the problems are".
 ---
 
 # Architecture Map
@@ -84,7 +84,7 @@ Otherwise re-read the block against these traps before delivering.
 
 Viewing needs no install: GitHub renders the block in any `.md`. For a file someone opens locally
 or sends on, wrap the same Mermaid in one HTML file that loads it from a CDN, so double-clicking
-works:
+works — same content, one format inside it:
 
 ```html
 <pre class="mermaid">
@@ -99,7 +99,13 @@ flowchart LR
 
 Don't add a second diagram format.
 
-## 5. Deliver
+## 5. Deliver — every map is a file
+
+A picture gets looked at twice: once when you draw it, again when someone hits the thing it explains.
+So the map lands in a file, always, and you give the name. Nothing is different about a map drawn
+for the chat — it goes in the file too.
+
+The file holds, in this order:
 
 1. One plain sentence: what the picture shows and the single thing to notice ("orders now reads the
    database through one repo instead of three places").
@@ -108,18 +114,24 @@ Don't add a second diagram format.
 4. Evidence table: `arrow | file:line`, with *suspected* arrows marked.
 5. Problems view only: the numbered problem table.
 
-Offer to save as `docs/architecture.md` (or next to the change) only if the user wants it kept; a
-committed diagram goes stale unless someone owns updating it.
+**Name it for the view**, unless a path was named for you: `docs/architecture.md` for an as-is map,
+`docs/arch-change-<what>.md` for a change, `docs/arch-problems-<what>.md` for problems — so a
+one-off change view never overwrites the map of how things are today. Markdown by default: GitHub
+renders the Mermaid block, editors preview it, and it diffs as text when the code moves under it.
+The HTML wrapper from step 4 instead when the reader wants a file that renders on double-click, or
+when the caller named an `.html` path.
 
-Asked for a page instead of an answer in the chat — by the user, or by another skill handing you its
-findings — deliver it as a file: see **The report page**.
+Then, in the chat: the path, the headline sentence, and the top problem or move. Three lines, and
+none of the diagram or the tables repeated — they are in the file you just named.
 
-## The report page
+A map of code that keeps moving goes stale like any other document. Say so in one line when you
+hand over a file someone will keep: it is true on the day it was traced.
 
-A page is for a picture someone will open later or send to someone who wasn't there, and for another
-skill whose report ends in a file rather than in the chat. Building it is this skill's job whoever
-asks: everything above still holds — one altitude, every arrow traced or drawn dashed, the legend
-from step 3.
+## When another skill hands you the work
+
+Another skill's report can end in this file rather than in its own chat. Drawing it is this skill's
+job whoever asks: everything above still holds — one altitude, every arrow traced or drawn dashed,
+the legend from step 3, the file and the three lines from step 5.
 
 What the caller brings, and what you ask for before drawing if it's missing:
 
@@ -128,19 +140,17 @@ What the caller brings, and what you ask for before drawing if it's missing:
 - **the boxes and arrows**, each with its mark and the `file:line` it came from — a proposed *after*
   is not code yet, so its new arrows carry no evidence and need none;
 - **the tables** that go under the diagrams, already written;
-- **the path**, `docs/architecture.html` unless one is named.
+- **the path** it wants the report at;
+- **any section of its own** that goes below the tables, already written — an audit's moves, a
+  design's next steps — copied in as handed to you, not re-worded.
 
-Write one self-contained file: the headline at the top, then the diagram(s) — a change view's
-*before* and *after* side by side, stacked on narrow screens — then the legend for the marks used,
-then the tables as plain HTML tables. Mermaid loads from the CDN as in step 4 and nothing else is
-fetched, so double-clicking the file opens it and copying it anywhere keeps it working.
-
-A report delivered as a page lands once, in the file. Give the path, the headline sentence, and the
-top problem or move — three lines, and none of the diagram or the tables repeated in the chat.
+Write one self-contained file in the order from step 5, with a change view's *before* and *after*
+side by side — stacked on narrow screens if it's HTML, where Mermaid loads from the CDN as in step 4
+and nothing else is fetched, so double-clicking opens it and copying it anywhere keeps it working.
 
 ## Common mistakes
 
 Boxes from the folder names alone without reading imports; drawing the intended design and calling it
 the real one; 40 boxes in one picture; color as the only signal; before and after with different
-layouts so the diff is invisible; problems marked without a `file:line` behind them; a page written
-to a file and then pasted into the chat as well.
+layouts so the diff is invisible; problems marked without a `file:line` behind them; a diagram written
+to a file and then pasted into the chat as well; a change view saved over the as-is map.

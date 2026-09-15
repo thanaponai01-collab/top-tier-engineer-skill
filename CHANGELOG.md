@@ -1,5 +1,24 @@
 # Changelog
 
+## 4.10.0 — 2026-09-15 — the picture is a file, and the audit is one of them
+
+- `arch-map` always leaves a file, and names it. A diagram delivered into the chat is looked at
+  once and asked for again the next time someone hits the thing it explains; saving it was an offer
+  the user had to accept. Every map now lands at a path named for its view —
+  `docs/architecture.md`, `docs/arch-change-<what>.md`, `docs/arch-problems-<what>.md`, so a
+  change view never overwrites the map of how things are today — with the path, the headline and
+  the top finding as the only three lines in the chat. Markdown by default because GitHub renders
+  Mermaid and it diffs as text; the HTML-with-CDN wrapper when the reader wants double-click.
+- `arch-design` ends in one file instead of two. The report went to `docs/arch-design.html` and the
+  moves to `docs/arch-moves.md` beside it — two documents read together, edited apart, and drifting
+  from each other from the first edit. The moves are now the report's last section, under
+  `## Moves`, with the evidence for each one a scroll away from the block that builds it.
+  `build-discipline` and `issue-handoff` read the same section they always read, in one fewer file.
+- The handoff is one move at the end, not a format to follow while working. `arch-design` finishes
+  its material — decisions, tables, move blocks — and then hands the lot to `arch-map` with a path;
+  it formats nothing itself. The section that says so now sits last, after the work it hands over,
+  and says in a line what `arch-map` already owns instead of re-explaining the file.
+
 ## 4.9.0 — 2026-09-15 — a skill that names another skill's steps has two jobs
 
 - `evolve-maintain` stops re-teaching four other skills. It carried its own copy of

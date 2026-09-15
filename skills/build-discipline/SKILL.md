@@ -11,8 +11,8 @@ system could ship from. Only a result you actually ran closes a slice.
 
 ## Starting from a brief
 
-When a design, an audit or a ticket already worked the change out (`gh issue view 12`, a spec,
-`docs/arch-moves.md`), each entry is a slice: take its proof line as your own and start at **Build**. Re-deriving
+When a design, an audit or a ticket already worked the change out (`gh issue view 12`, a spec, the
+`## Moves` section of `docs/arch-design.md`), each entry is a slice: take its proof line as your own and start at **Build**. Re-deriving
 it from the report or the code is the same thinking paid for twice. Two checks first: the proof line
 runs from a real entry point, and the files it names still look the way the brief says — a brief
 written before the last three commits is a claim, not a fact. A vague proof line gets sharpened out
