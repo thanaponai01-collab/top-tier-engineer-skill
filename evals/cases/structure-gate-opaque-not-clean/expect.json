@@ -1,0 +1,43 @@
+{
+  "case": "structure-gate-opaque-not-clean",
+  "skill": "structure-gate",
+  "question": "three tiny functions — is it clean?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "opaque-region-named",
+      "what": "dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter",
+      "must_name": ["dashboard.py"],
+      "must_say_any": [
+        "opaque", "never entered", "not parsed", "inside a string", "string literal",
+        "unseen", "unmeasured", "no parser"
+      ]
+    },
+    {
+      "id": "how-much-was-measured",
+      "what": "the fraction actually measured is reported before any finding — about 5% of the code lines",
+      "must_say_any": ["5%", "5.0%", "95%", "230"]
+    },
+    {
+      "id": "unknown-not-clean",
+      "what": "the unmeasured part is reported as unknown, not folded into a clean verdict",
+      "must_say_any": [
+        "unknown", "not clean", "cannot say", "can't say", "untestable",
+        "no test", "invisible", "not the same as clean"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "small-functions-read-as-clean",
+      "what": "the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer",
+      "must_not_say_any": [
+        "verdict: clean", "the code is clean", "reads as clean", "this is clean",
+        "no structural problems", "no findings", "nothing to flag",
+        "all functions are small and simple", "no, it is not spaghetti",
+        "not spaghetti - nothing", "complexity is low across the codebase"
+      ],
+      "must_say_any": ["opaque", "unknown", "never entered", "unmeasured", "not measured"]
+    }
+  ]
+}

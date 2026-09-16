@@ -1,0 +1,45 @@
+{
+  "case": "correctness-gate-green-but-wrong",
+  "skill": "correctness-gate",
+  "question": "the tests pass — is the code correct?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "boundary-off-by-one",
+      "what": "shipping.py uses `total > 100`; SPEC.md clause 1 says 100 or more ships free, so fee(100) is wrong",
+      "must_name": ["100"],
+      "must_say_any": [
+        "fee(100)", "total > 100", "> 100", ">= 100", "off by one", "off-by-one",
+        "boundary", "exactly 100", "at 100"
+      ]
+    },
+    {
+      "id": "test-encodes-the-bug",
+      "what": "test_hundred asserts fee(100) == 5, which is what the code does rather than what the spec says",
+      "must_name": ["test_hundred"],
+      "must_say_any": [
+        "asserts what the code does", "encodes the bug", "asserts the bug",
+        "matches the code, not the spec", "wrong expectation", "must change",
+        "contradicts the spec", "codifies"
+      ]
+    },
+    {
+      "id": "spec-is-the-oracle",
+      "what": "correctness is judged against SPEC.md, not against the existing suite",
+      "must_name": ["spec.md"],
+      "must_say_any": ["oracle", "acceptance criteri", "spec", "requirement"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-suite-read-as-correct",
+      "what": "the gate must fail; a green suite is not evidence of correctness here",
+      "must_not_say_any": [
+        "verdict: pass", "gate: pass", "**pass**", "passes the gate",
+        "gate passes", "result: pass", "ready to ship", "no oracle violations",
+        "no issues found", "the implementation is correct"
+      ],
+      "must_say_any": ["fail", "fails", "blocked", "do not ship"]
+    }
+  ]
+}

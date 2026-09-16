@@ -9,6 +9,9 @@ description: Sweep an existing codebase with no reported symptom for dead code, 
 it's proven nothing reaches it, because deleting live code is the one mistake a non-coder can
 neither see coming nor diagnose afterwards.
 
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+
 ## Rules
 
 1. **Run the graph first.** The bundled script (in this skill's `scripts/` folder; stdlib Python,
@@ -41,12 +44,16 @@ neither see coming nor diagnose afterwards.
    2. Check outside callers: cron jobs, webhooks, other services, people running scripts.
    3. If the code can run here, run the tests or a tracer and confirm it never loads.
 
+*Test:* you can quote the line in the project that declares the layer order.
+
    All three pass → delete list. Any unfinished → *watch, don't delete*. There's no path from
    suspected to deleted.
 4. **Deletions ship small and reversible.** One candidate per commit (the component, its dead tests,
    its dead config) with the proof attached, so any mistake reverts in one step.
 5. **Record bugs you pass, don't chase them.** Leaked resources, unhandled errors, races, injectable
    string building: note `file:line` and move on. This is not a full review.
+
+*Test:* for every name on the delete list you can give all three checks and their results. One unfinished check moves it to watch.
 
 ## Procedure
 

@@ -29,6 +29,8 @@ Make the failure happen on demand under recorded conditions (input, environment,
 Capture the exact signature: message, wrong value, stack. If you can't reproduce it, stop and say
 what log, metric or probe would make it reproducible.
 
+*Test:* someone else could make it fail from your written conditions alone.
+
 ### 2. Stabilize
 Shrink the reproduction: smallest input, fewest steps, least state. For intermittent failures, find
 what makes them consistent (load, ordering, timing) before going further.
@@ -39,6 +41,8 @@ Halve the search space along whichever axis is cheapest:
   data's path.
 - **Time:** which change introduced it? Bisect the commits. "It worked yesterday" is a gift.
 - **Input:** which part of the input sets it off? Bisect the minimal failing input.
+
+*Test:* you can name where the bad value is first wrong, which is rarely where it was noticed.
 
 Use the system's own logs, REPL and tests before adding logging. When still unsure, stop the
 program at the suspect point and read the real state (debugger, crash dump, memory profiler) instead
@@ -51,6 +55,8 @@ blaming code that looks odd, check git history for why it was written that way.
 ### 5. Prove
 Run the two-direction test from Rule 2 and paste both results. If the environment can't run the
 decisive experiment, say so plainly and give the one command that would settle it.
+
+*Test:* both directions were run and both outputs are in the report.
 
 ### 6. Report
 - The failure signature, the proven cause in one sentence, and why it wasn't caught earlier (no

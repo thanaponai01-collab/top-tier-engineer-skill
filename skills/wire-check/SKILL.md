@@ -21,6 +21,9 @@ starts to where the component really has an effect, and when a link is broken, s
 4. **A broken link gets a cause, a fix, and a prevention.** Which link failed, why it was missed,
    the code that connects it, and the habit or check that stops it happening again.
 
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+
 ## The five links
 
 | # | Link | Holds when | Typical break |
@@ -45,6 +48,8 @@ Walk them in order. The first broken link is the finding; later links are *block
    4. Fire the real trigger (request, CLI command, event) and watch the effect.
 3. **Repair.** Ship the connecting code in the same response.
 
+*Test:* for every link you can name which of the four steps you actually reached.
+
 ## Whole-system mode
 
 When no single component is named ("what do we serve, what does nothing reach?"):
@@ -62,6 +67,8 @@ When no single component is named ("what do we serve, what does nothing reach?")
    and delete it), not routed (wire it), never invoked (a flag or branch nobody takes: a decision
    for the owner), effect lost (a live bug that looks like dead weight). Delete nothing and connect
    nothing unasked.
+
+*Test:* the inventory came from the source. If you can't say where it came from other than the walk, the orphan list is empty for the wrong reason.
 
 ## Report
 

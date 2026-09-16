@@ -1,0 +1,40 @@
+{
+  "case": "wire-check-orphan-and-decoy",
+  "skill": "wire-check",
+  "question": "what does this system serve, and what reaches nothing?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "export-never-routed",
+      "what": "handlers/export.py loads at startup but no route maps to it — link 3, Routed",
+      "must_name": ["export.py"],
+      "must_say_any": [
+        "not routed", "no route", "never routed", "nothing routes",
+        "not reachable from any route", "missing from routes.py",
+        "absent from the route table", "no entry in routes"
+      ]
+    },
+    {
+      "id": "both-entry-points",
+      "what": "two ways in exist: app.py dispatch and scheduler.py cron. Missing the scheduler turns digest into a false orphan",
+      "must_name": ["app.py", "scheduler.py"],
+      "must_say_any": ["entry point", "entry points", "ways in", "way in"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "digest-loaded-by-name",
+      "what": "handlers/digest.py is reached only through a string in settings.py; calling it dead or orphaned is the wrong answer",
+      "must_not_say_any": [
+        "digest.py is dead", "digest is dead", "digest.py is orphaned",
+        "digest is orphaned", "delete handlers/digest", "delete digest.py",
+        "digest.py: orphaned", "digest.py | orphaned", "remove digest.py",
+        "nothing reaches digest", "digest.py is unreachable"
+      ],
+      "must_say_any": [
+        "importlib", "loaded by name", "resolved by name", "string",
+        "dynamic", "scheduled_jobs", "settings.py"
+      ]
+    }
+  ]
+}

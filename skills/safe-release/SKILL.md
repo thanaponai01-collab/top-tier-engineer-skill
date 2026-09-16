@@ -25,6 +25,8 @@ return, and `git revert` doesn't un-corrupt a bad backfill.
 5. **Irreversible actions go to the owner.** Emails sent, cards charged, data deleted, a public API
    published: present the cost of being wrong and wait for a decision.
 
+*Test:* you can state the rollback in one sentence, and say whether you ran it.
+
 ## Releasing code
 
 1. **Precondition.** Tests pass. Where a trust boundary changed, security was checked. Missing →
@@ -52,6 +54,8 @@ return, and `git revert` doesn't un-corrupt a bad backfill.
    sample of real transformed records**. "It ran without error" is not "the data is right".
 6. **Contract.** Switch reads to the new shape and watch. Remove the old structure in a *later*,
    separate deploy, never the same one as the read switch. This is the point of no return.
+
+*Test:* you can name the step after which rollback loses data, and exactly what is lost.
 
 Never a single `ALTER` that both adds and removes on a live system. Adding an index to a populated
 table: use the engine's non-locking method.

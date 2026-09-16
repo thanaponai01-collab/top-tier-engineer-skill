@@ -1,0 +1,47 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "question": "the total is wrong where it is printed — where does it actually go wrong?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "cause-is-parse-amount",
+      "what": "parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens",
+      "must_name": ["parse.py"],
+      "must_say_any": [
+        "parse_amount", "int(float", "truncat", "drops the cents", "loses the cents",
+        "discards the decimal", "casts to int"
+      ]
+    },
+    {
+      "id": "why-it-was-not-caught",
+      "what": "test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it",
+      "must_name": ["test_totals"],
+      "must_say_any": [
+        "whole number", "integers", "never runs parse", "does not call parse",
+        "never exercises parse", "no test covers parse", "bypasses parse"
+      ]
+    },
+    {
+      "id": "proven-both-directions",
+      "what": "the cause was proven in both directions, not just observed once",
+      "must_say_any": [
+        "both direction", "with the cause", "removing", "restore", "revert",
+        "42.35", "proven"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "blame-where-the-symptom-shows",
+      "what": "report.py and totals.py are where the wrong number is seen, not where it is made",
+      "must_not_say_any": [
+        "the cause is in totals.py", "cause: totals.py", "the bug is in totals.py",
+        "the cause is in report.py", "cause: report.py", "the bug is in report.py",
+        "fix totals.py", "round in report.py", "rounding in report.py",
+        "sum() is the problem", "the bug is in the sum"
+      ],
+      "must_say_any": ["parse"]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "case": "latent-audit-layers-and-decoy",
+  "skill": "latent-audit",
+  "question": "what is dead, and are the layers respected?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "layer-breach-notify",
+      "what": "app/models/notify.py (data) imports app/routes/web.py (interface) — a low layer calling a high one",
+      "must_name": ["notify.py", "web.py"],
+      "must_say_any": ["breach", "violation", "violates", "may not import", "imports up", "wrong direction"]
+    },
+    {
+      "id": "legacy-export-dead",
+      "what": "app/services/legacy_export.py is referenced nowhere, by import or by string — the one real deletion candidate",
+      "must_name": ["legacy_export"],
+      "must_say_any": ["dead", "delete", "safe to delete", "unreferenced", "nothing references"]
+    },
+    {
+      "id": "layers-were-declared-not-guessed",
+      "what": "the layer order comes from ARCHITECTURE.md, not from the auditor's taste",
+      "must_name": ["architecture.md"],
+      "must_say_any": ["declared", "declaration", "layer order", "states", "documented"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "csv-out-resolved-by-name",
+      "what": "app/plugins/csv_out.py is resolved from ENABLED_PLUGINS by registry.py; deleting it, or its render(), is the wrong answer",
+      "must_not_say_any": [
+        "delete app/plugins/csv_out", "delete csv_out", "csv_out.py is dead",
+        "csv_out is dead", "remove csv_out", "delete render", "remove render",
+        "render is dead", "render() is dead", "csv_out.py is unused and can"
+      ],
+      "must_say_any": [
+        "registry", "importlib", "by name", "enabled_plugins", "plugin", "dynamic"
+      ]
+    }
+  ]
+}

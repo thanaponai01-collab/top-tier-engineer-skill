@@ -33,10 +33,15 @@ specific defenses were proven.
 7. **Unfamiliar isn't broken.** Before flagging an odd security pattern, state the best reason a
    competent engineer might have for it.
 
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+
 ## Phases
 
 ### 1. Assets
 `asset | who wants it | what they gain | worst case`. Rank by worst case; top rows get the effort.
+
+*Test:* every attack below names one of these assets.
 
 ### 2. Boundaries
 Map every place data or control crosses from less to more trusted: network → app, user → admin,
@@ -56,6 +61,8 @@ not a limit:
 ### 4. Prove
 For attacks on the most valuable assets, run them: forge the token, send the crafted input, fire
 the concurrent requests. An attack you only read is traced: give the command that would settle it.
+
+*Test:* each top finding is either proven by an attack you ran, or carries the exact command that would settle it.
 
 ### 5. Fix
 For each finding: asset, boundary, attack, proven / traced / suspected, the misplaced trust, and a contained

@@ -21,6 +21,8 @@ structural signals that go with hard-to-maintain code and reports them in plain 
    scores zero on every signal, so the more is invisible, the cleaner it looks. Report what you
    couldn't enter as UNKNOWN, never as clean.
 
+*Test:* the fraction actually measured appears before the first finding.
+
 ## Procedure
 
 ### 1. Take stock
@@ -65,6 +67,8 @@ a one-line comment at the code, where the next reader will see it.
   person who changes it (effort, risk, what can't be tested). "This file is long" means nothing to
   a non-coder; "every change here risks breaking checkout and can't be tested in isolation" does.
 - Raw script output after.
+
+*Test:* a non-coder could say, from your row alone, what this costs them.
 
 This skill stops at shape. Whether a flagged shape is acceptable, correct, or connected is a
 separate question.

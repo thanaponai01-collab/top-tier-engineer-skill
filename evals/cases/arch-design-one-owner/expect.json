@@ -1,0 +1,48 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "question": "where did the structure go wrong, and what is the top move?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "three-date-formatters-one-job",
+      "what": "web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format",
+      "must_name": ["views.py", "serializers.py", "export.py"],
+      "must_say_any": [
+        "same job", "one owner", "duplicat", "three copies", "three places",
+        "consolidat", "merge", "same format"
+      ]
+    },
+    {
+      "id": "provider-interface-one-implementation",
+      "what": "providers/base.py is an abstraction with exactly one implementation and no second caller paying for it",
+      "must_name": ["base.py"],
+      "must_say_any": [
+        "one implementation", "single implementation", "only implementation",
+        "gonna need", "speculative", "one plugin", "inline it", "earns its place"
+      ]
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not",
+      "must_say_any": [
+        "proof:", "proof line", "tests green", "same output", "behaviour did not change",
+        "behavior did not change", "callers:"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "billing-looks-alike-but-changes-for-another-reason",
+      "what": "billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move",
+      "must_not_say_any": [
+        "all four", "four date", "four formatters", "merge billing",
+        "including billing", "billing/invoice.py into", "invoice_date into",
+        "four copies", "four places"
+      ],
+      "must_say_any": [
+        "billing", "invoice", "tax", "separate", "stays", "different reason", "iso"
+      ]
+    }
+  ]
+}

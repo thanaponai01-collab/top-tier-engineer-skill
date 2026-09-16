@@ -20,6 +20,8 @@ with the file or command that shows it. You don't need to know the stack: read, 
 5. **What's the biggest gap?** The one fix that improves the most else. Check git log first: it may
    have been tried and dropped for a reason.
 
+*Test:* each of the five has an answer with a file or a command behind it. A question you skipped is reported as skipped, not left blank.
+
 ## Rules
 
 - **Broken, not unfamiliar.** Broken loses data, races, leaks or lies. "Not how I'd do it" is a
@@ -27,6 +29,8 @@ with the file or command that shows it. You don't need to know the stack: read, 
 - **Causes, not symptoms.** Ten findings with one cause are one finding.
 - **Rank by consequence:** data loss > security > wrong results > downtime > hard to change > style.
 - Every finding names `file:line` and comes with the fix.
+
+*Test:* for every finding you can name what breaks, for whom. If the answer is "nothing, but I'd write it differently", it is a question, not a finding.
 
 ## Report
 

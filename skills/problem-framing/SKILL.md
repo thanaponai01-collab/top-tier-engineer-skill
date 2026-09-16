@@ -30,6 +30,8 @@ one you didn't, and continue. Only rank 1 becomes a question, and only when gues
 than asking. **One question, not five**, and frame everything it doesn't block in the same response.
 A list of questions with nothing framed is this skill failing.
 
+*Test:* the response contains at most one question, and the framing for everything that question doesn't block.
+
 ### 3. Constrain
 - **Invariants:** if broken, the project failed. Each must be testable. Changing one needs the
   owner's explicit agreement.
@@ -41,6 +43,8 @@ A list of questions with nothing framed is this skill failing.
 Turn every invariant into an acceptance criterion a machine could check. Banned words: *fast, clean,
 intuitive, robust, scalable, user-friendly*. Name a measurement and threshold, or an observable
 behavior:
+
+*Test:* none of the banned words survives in a criterion, and each one could be checked by someone who never read the code.
 
 > ❌ "Search should be fast."
 > ✅ "Search over 10k records returns first results in under 300 ms on target hardware. (assumed: 10k is the realistic ceiling)"

@@ -9,6 +9,9 @@ You deliver a structure that can be read back and undone, not diagrams. Every ch
 is made in the open: the options, what pushed each way, and how hard it is to reverse. Design for a
 maintainer you'll never meet, often an AI: the structure must be navigable from the files alone.
 
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+
 Pick the mode:
 - **Design:** nothing is built yet, or a new part is about to be.
 - **Audit:** it's already built. Find where the structure went wrong and the moves that fix the most.
@@ -19,13 +22,13 @@ Pick the mode:
 Read the requirements (ask for them, or state the ones you're assuming). Every structural claim
 traces to a requirement or is flagged as speculative. If code exists, map its real structure from
 the entry points inward before proposing anything.
+*Test:* each structural claim has a requirement beside it, or the word *speculative*.
 
 ### 2. Shape
 Define the system as **boundaries and contracts**, not technologies:
 - Modules, each with a one-sentence responsibility, what it owns, and what it must never know.
 - Contracts between modules: data shape, error shape, who may call whom.
-- **Delete test:** could someone replace this module by reading only its contract? If not, fix the
-  boundary.
+- Conventions stated once and then followed; errors structured and machine-parseable.
 
 **One of each.** Every concept (users, auth, config, a data source, a job queue) has one owner that
 everything else calls. Before adding a module, store, service or pipeline, find the one that already
@@ -33,8 +36,8 @@ does this job and extend it. Two systems doing one job means two places to fix, 
 keep in sync; one means one place to cache, index and speed up. But merge only what changes for the
 same reason: two things that merely look alike today stay separate, or they drag each other along.
 
-Keep it readable for future maintainers: structured, machine-parseable errors; conventions stated
-once and then followed.
+*Test:* someone could replace any one module by reading only its contract. If not, the boundary is
+wrong — fix it before going on.
 
 ### 3. Decide
 Every consequential choice goes through this frame:
@@ -55,6 +58,9 @@ Every consequential choice goes through this frame:
 6. **Say how you know.** "Postgres handles our write volume (vendor docs, not benchmarked)" is
    honest; the same sentence without the source is a future incident.
 
+*Test:* every decision row names a second option, and the simplest one is either adopted or refused
+by a named requirement. A row with one option is not a decision.
+
 ### 4. Stress
 - **Pre-mortem:** "A year later this failed. Name the three likeliest reasons." Each gets a design
   change or an accepted risk.
@@ -65,6 +71,9 @@ Every consequential choice goes through this frame:
 - **Change rehearsal:** narrate the two likeliest future changes. Touching more than two modules
   means the boundaries are misdrawn.
 - **Novelty check:** rejecting a common pattern or using an unusual one needs a recorded reason.
+
+*Test:* every pre-mortem reason has a design change or a written accepted risk next to it, and
+every invariant names the element that protects it.
 
 ### 5. Deliver
 The material, in this order: the structure in plain words and the decision most expensive to
@@ -84,6 +93,7 @@ prove it, rank the fixes.
 one field touch six files?"), then map only what the entry points into that area reach. A whole-repo
 sweep is for when the user asked about the whole repo; anywhere else it is reading you paid for and
 won't use.
+*Test:* you can name what you deliberately did not read, and why it can't affect the answer.
 
 1. **Map what's really there.** From the entry points inward: each module, what it actually does,
    and where each concept lives (users, auth, config, data access, outside API calls, errors). One
@@ -96,26 +106,32 @@ won't use.
    - **One place doing everything:** the file every feature lands in; a function that fetches,
      decides and renders.
    - **Half-built or unreachable:** features started and left, code nothing calls. Report it as
-     *suspected* and hand the proof to `latent-audit`; nothing is called dead here.
+     *suspected* and hand the proof to `latent-audit`; nothing is called dead here. No
+     `latent-audit` available → it stays *suspected* in the report and you propose no deletion.
    - **Noise:** handling for cases that can't happen, errors swallowed silently, comments that
      restate the code.
    - **No shared way:** the same problem solved differently in each part.
+
+   *Test:* every finding names a `file:line` you opened. A sign you recognised but didn't locate is
+   not a finding yet.
 3. **Rank by leverage:** how much gets simpler, faster or safer per unit of effort. The top move is
    usually a missing owner: N copies consolidated into one.
 4. **Prescribe moves, not a rewrite.** Each move: what merges or goes, the one owner left behind,
    every caller that changes, and the check that proves behavior didn't (tests green before and
    after). Moves land one at a time. A rewrite is its own decision, raised with the user.
 
+   *Test:* before merging two things, you can say what would make each of them change. Same answer
+   → merge. Different answers → they only look alike, and they stay apart.
+
 The material, in this order: the plain verdict (clean / messy in places / tangled) and the one move
 that pays most; *before*, the concept map as it is with each finding's number (`!1`, `!2`) on the box
 where it lives; *after*, the same map with the moves applied; then
 `# | sign | where | what it costs today | move | effort`.
 
-## Handing the work to the build
+## The moves — the last section, one block per move
 
-The audit's moves, and the design's modules to create, are the build's work. They are the report's
-last section, one block per move, in the order they land. A block is not a summary of a move; it is
-the whole move:
+The audit's moves, and the design's modules to create, are the build's work. They go last, under a
+`## Moves` heading, in the order they land. A block is not a summary of a move; it is the whole move:
 
 ```
 ### 1. <what changes, in one line>
@@ -128,39 +144,42 @@ effort:   <S / M / L>
 after:    <the move that must land first, or "nothing">
 ```
 
-Under the `## Moves` heading and above the blocks, one short **Context** paragraph: what every move
-assumes (the auth model stays, the database doesn't change). A move that contradicts it is a new
-decision, not a move.
+Above the blocks, one short **Context** paragraph: what every move assumes (the auth model stays,
+the database doesn't change). A move that contradicts it is a new decision, not a move.
 
-**The self-containment test:** could someone who never saw this audit build from this block alone?
-If they would have to open the report, read the code, or ask you a question, a field is missing —
-fill it now, with the code still in front of you. This is the only moment that context is free.
+*Test — self-containment:* could someone who never saw this audit build from this block alone? If
+they would have to open the report, read the code, or ask you a question, a field is missing. Fill
+it now, with the code still in front of you; this is the only moment that context is free.
 
 A move whose proof line you can't name is not a move. It stays in the report as a question.
 
 Filing these as tracked issues is `issue-handoff`'s job, from the file alone, whenever the user
 wants them. Never ask about it mid-audit; you finish at the file.
 
-## The file — you write the material, `arch-map` writes the file
+## The file
 
-**Size it to the question first.** A single decision that leaves nothing to build — one library, one
-boundary, which of two shapes — is answered in the chat as its decision row: options, forces,
-reversibility, evidence, and no file. There is a file when the work has more than one module, more
-than one finding, or a move someone builds from later.
+**Size it to the question first.** A single decision that leaves nothing to build — one library,
+one boundary, which of two shapes — is answered in the chat as its decision row: options, forces,
+reversibility, evidence, and no file. There is a file when the work has more than one module,
+more than one finding, or a move someone builds from later — and it is one file, because a moves
+file living beside the report drifts from it at the first edit of either.
 
-When there is, you don't format anything. Finish the material and hand it over in one go: the
-**Change** view, the path (`docs/arch-design.md` unless the user named one), everything under
-**Deliver** above, and the move blocks to go last, under a `## Moves` heading in that same file.
-`arch-map` owns the notation, the legend, the file and how it lands, and it will ask for whatever is
-missing — what it asks for is work you still owe, with the code still open.
+When there is a file, hand the finished material to `arch-map` in one go — the **Change** view, the
+path (`docs/arch-design.md` unless the user named one), everything under **Deliver**, and the move
+blocks to go last under `## Moves`. It owns the notation, the legend and how the file lands, and it
+will ask for whatever is missing; what it asks for is work you still owe.
 
-One file, not two: a move is built from the finding above it, and a moves file living beside the
-report drifts from it at the first edit of either.
+**No `arch-map` available here — a different agent, or only this file copied out — then you write
+the file yourself**, at that path, in the Deliver order above, with the moves last. Diagrams go in
+as Mermaid in a fenced block; mark added `+`, removed `−`, changed `~`, problems `!N`, and give the
+legend for the marks you used.
+*Test:* the run ends with a path you can name. Announcing a handoff and finishing with no file is
+the failure this paragraph exists to stop.
 
 ## Common mistakes
 
-Diagrams with no decisions behind them; "decisions" with one option; walking through a one-way door
-without stopping; a second system built for a job the first already does; hand-building the file
-instead of handing the material to `arch-map`; the moves split into a file of their own, so the
-report and the work drift apart; technology names in boundary descriptions (describe
-boundaries tech-free so they survive stack changes).
+Diagrams with no decisions behind them; "decisions" with one option; walking through a one-way
+door without stopping; a second system built for a job the first already does; two things merged
+because they looked alike, not because they change together; announcing the handoff to `arch-map`
+and leaving no file anywhere; technology names in boundary descriptions, which stop being true
+the moment the stack changes.

@@ -33,6 +33,11 @@ Mixing altitudes (a database next to a helper function) is the most common unrea
   *suspected*.
 - Leave out what doesn't serve the question: logging, utils everyone imports, test code.
 
+*Test:* every solid arrow has a `file:line` in the table. An arrow you believe in but couldn't locate is dashed and marked *suspected*, or it isn't drawn.
+
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+
 ## 3. Mark it
 
 Use one legend everywhere. Color **and** a text marker, so it still reads in black and white:
@@ -104,6 +109,8 @@ Don't add a second diagram format.
 A picture gets looked at twice: once when you draw it, again when someone hits the thing it explains.
 So the map lands in a file, always, and you give the name. Nothing is different about a map drawn
 for the chat — it goes in the file too.
+
+*Test:* the run ends with a path you can name.
 
 The file holds, in this order:
 

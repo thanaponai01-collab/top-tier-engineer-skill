@@ -1,5 +1,45 @@
 # Changelog
 
+## 4.11.0 — 2026-09-16 — an instruction nobody can check is one you claim for free
+
+- **The skills are tested now.** `evals/` holds six small codebases with a defect already planted,
+  the words to hand an agent, and a written statement of what a correct report must say. Three months
+  of writing behavioural instructions and nothing checked whether an agent following them finds
+  anything. Each case also carries a decoy — a job loaded by name from a config string that is not
+  dead, a green suite whose own test asserts the bug, a file that reads as clean because no parser
+  could enter it. Missing a finding lowers the score; falling for a decoy fails the case at any
+  score, because a confident wrong answer costs the reader more than a miss. `evals/grade.py` is
+  stdlib, and every case ships a report that must pass and a report that must fail, so a grader that
+  has stopped discriminating fails the repo's own suite instead of sitting green.
+- **`*Test:*` came down from PHILOSOPHY.md into the skills.** "Read the whole diff as if reviewing
+  someone else's code" costs nothing to claim. Every habit in PHILOSOPHY.md has carried the
+  observable that shows it happened; no skill did. Thirty-four of them now sit at the steps that are
+  cheapest to fake — the proof line written before the code, the mutation results you can list, the
+  plan line quoted rather than described, the inventory built from the source rather than from the
+  walk — and a test fails any skill that carries none.
+- **`pick-skill`, because five skills answered questions that sound identical from outside.**
+  `senior-review`, `scrutinize`, `arch-design` (audit), `structure-gate` and `latent-audit` all
+  match "look at my code and tell me what's wrong", and choosing between them meant reading five
+  overlapping descriptions at the moment of least context. The disambiguation existed only in the
+  README, which is the one file that never enters an agent's context. It is a skill now: one table
+  for that fork, one for everything else, and the rule that naming a skill and stopping is the
+  router failing.
+- **A skill copied out of this repo used to break in two ways, both now closed.** Ten skills asked
+  for claims labelled *proven / traced / suspected* and none of them said what the words meant — the
+  definition lived only in PHILOSOPHY.md, which no skill referenced. Each now carries the gloss, and
+  a test fails any skill that labels evidence without defining the labels. And every handoff that
+  the work depends on — `arch-design` to `arch-map` above all, where the file simply never got
+  written — now states what to do when that skill isn't loaded, so a pointer degrades into
+  instructions instead of a dead end.
+- **`arch-design` traded prose for checks.** It ran to 166 lines, much of it re-explaining a file
+  format that `arch-map` already owns and stating from both ends a contract that only needs one.
+  That is gone; the decision frame, the bars, the stress tests and the move block are untouched. It
+  is 186 lines now, not fewer — the twenty are six `*Test:*` lines, the evidence gloss and the two
+  fallbacks, which is the trade the whole release is about. The share of the file that changes what
+  an agent does went up even though the file got longer.
+- The README claimed sixteen skills, the marketplace entry still said fifteen. Both say seventeen,
+  and a test now fails if a skill exists that the README never mentions.
+
 ## 4.10.0 — 2026-09-15 — the picture is a file, and the audit is one of them
 
 - `arch-map` always leaves a file, and names it. A diagram delivered into the chat is looked at

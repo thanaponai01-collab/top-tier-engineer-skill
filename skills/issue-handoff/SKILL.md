@@ -52,6 +52,8 @@ issues is correct here; each issue must stand alone.
 
 An issue body must answer all five from itself, without the reader opening the source:
 
+*Test:* a reader could act on any one body without opening the source.
+
 | | Without it |
 |---|---|
 | **What changes**, in one line | nobody knows when it's done |
@@ -84,6 +86,8 @@ backlog is the failure this step exists to stop.
   interrupted run must leave the two sides agreeing. Filing from the chat, there is nothing to stamp:
   print each number as it's created, so an interrupted run still leaves the numbers somewhere.
 - One label for the batch, so both of you can list them again.
+
+*Test:* stop the run at any point and the two sides still agree about what was filed.
 
 No `gh`, no remote, or no tracker: stop and say so in one line, with the bodies you'd built. The
 source stays the queue, and nobody should be left assuming issues exist.

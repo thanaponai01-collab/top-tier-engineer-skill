@@ -8,6 +8,9 @@ description: Make a system measurably faster or cheaper, or trace a felt complai
 Measure, change one thing, measure again, guard the gain. A fast wrong answer is worth less than a
 slow right one, and a gain you only reasoned about is a hypothesis.
 
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+
 Pick the mode:
 - **Measure:** it runs here and there's a number to improve.
 - **Trace:** a felt complaint, or it can't be run or profiled here.
@@ -26,6 +29,8 @@ Pick the mode:
 5. **One change, re-measure, re-test.** Same conditions, predicted vs actual. Broke correctness →
    revert. Record failed attempts so nobody repeats them.
 6. **Guard** every kept gain with a test, assertion or alert that fails when it slips.
+
+*Test:* every target you changed came from a profile line you can quote.
 
 Stop when budgets are met, the next gain costs more complexity than it's worth, or the rest is out of
 this system's control. Say which.
@@ -52,7 +57,10 @@ Fast on a thousand rows can be fatal at a million; it shows in the plan, not on 
 3. **Read the plan** (`EXPLAIN ANALYZE` or the engine's equivalent) on realistic data and quote the
    line. Never just claim an index is used.
 4. **Prescribe** the fix (join, batch fetch, index). Adding an index to a populated table is a
-   migration, not a tweak: `safe-release`.
+   migration, not a tweak: `safe-release`. Not available here → use the engine's non-locking
+   method and write the way back before you run it; never hand over a bare `CREATE INDEX`.
+
+*Test:* the plan line is quoted in the report. "The index is used" without it is a guess.
 
 ## Report
 

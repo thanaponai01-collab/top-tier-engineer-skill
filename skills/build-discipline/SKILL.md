@@ -27,6 +27,8 @@ loud, never quietly swapped for an easier one.
 - Write the **proof line** before coding: the exact command or interaction that shows it works, and
   what output counts as success. Can't state it? The slice is too vague.
 
+*Test:* the proof line was written down before any code, and names a command and the output that counts as success.
+
 ### 2. Build
 - **Smallest change that satisfies the proof line.** Delete or reuse before adding.
 - **Simple first, then let measurements pay for more.** A known limit becomes a written note with a
@@ -48,17 +50,26 @@ Trace everything the slice added through five links, starting from the real entr
 **Exists → Registered → Routed → Invoked → Reachable** (effect actually lands). Code nothing can
 reach means the slice failed.
 
+*Test:* you can say, for each of the five links, what you did to check it — not that you believe it holds.
+
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+
 ### 4. Prove
 - Run the proof line. Paste the actual output. A described result doesn't close the slice.
 - Exercise at least one error path the slice claims to handle.
 - If execution is impossible here (no runtime, missing credentials), say so **in bold at the top**
   and record "prove in first environment that can run it" as deferred work.
 
+*Test:* the report contains output you pasted, not a sentence describing output.
+
 ### 5. Commit
 - **Read the whole diff as if reviewing someone else's code.** Every line must be one you can
   explain and meant to make.
 - One slice, one commit. The message states the behavior change and the proof result.
 - Reverting this commit alone must return the system to its previous working state.
+
+*Test:* you can name one line in the diff you changed your mind about, or say plainly that the whole diff survived the read. A commit where nothing was reconsidered usually means the diff was skimmed.
 
 ## Resuming an interrupted build
 

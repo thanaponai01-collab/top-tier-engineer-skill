@@ -10,6 +10,9 @@ statement of correct behavior. Without one, tests only prove the code agrees wit
 code like someone who knows it well, measure whether the tests would actually catch breakage, and
 mark every claim proven, traced or suspected.
 
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+
 ## Phases
 
 ### 1. Surface
@@ -27,6 +30,8 @@ For each behavior, decide how correctness is judged, in order of preference:
 
 No oracle available → report the behavior as **untestable as specified** and say what criterion is
 missing. Never invent an oracle that just describes what the code already does.
+
+*Test:* each oracle can be stated without reading the implementation. If you had to open the code to write it, it is a description, not an oracle.
 
 **Write concurrency down explicitly.** Where two callers can reach shared state at once (a file,
 row, counter, lock, queue slot), write the check-then-claim as its own property: "a concurrent
@@ -53,6 +58,8 @@ For every error path the code claims to handle: trigger it and assert the struct
 - **Look at real output.** Run a handful of realistic inputs end to end and read the results
   yourself. Include one input → output pair in the report.
 - **Flaky tests come out** of the gate and get noted for fixing. Never re-run until green.
+
+*Test:* you can list the mutations you made and what the suite did for each. "I would have caught it" is not a mutation result.
 
 ### 5. Verdict
 - Open with pass or fail and the one reason that decided it.

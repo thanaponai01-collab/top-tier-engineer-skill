@@ -1,7 +1,11 @@
 # Top-Tier Engineer
 
-Sixteen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to do
-for a task; `PHILOSOPHY.md` says *how to work* on every task.
+Seventeen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+do for a task; `PHILOSOPHY.md` says *how to work* on every task.
+
+Each skill is written to survive on its own: it defines any notation it uses, and where it hands
+work to another skill it also says what to do when that skill isn't there. `evals/` holds the
+rigged codebases that check whether the skills actually find what they claim to find.
 
 ## Install (Claude Code)
 
@@ -20,12 +24,15 @@ Then load the philosophy everywhere by adding one line to `~/.claude/CLAUDE.md`:
 Claude picks the right skill from what you ask. You can also call one by name, e.g.
 `/top-tier-engineer:debug-protocol`.
 
-**Other agents:** every `skills/<name>/SKILL.md` is plain markdown. Copy the one you need and paste it.
+**Other agents:** every `skills/<name>/SKILL.md` is plain markdown. Copy the one you need and
+paste it — it carries its own vocabulary and its own fallbacks, so nothing silently depends on
+the rest of this repo being loaded.
 
 ## The skills
 
 | Skill | Ask it |
 |---|---|
+| `pick-skill` | "Which one of these do I want?" — the map, when more than one could apply |
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
@@ -65,7 +72,9 @@ ends by naming the skill for the gap it found. Every flow has the same shape:
 | Make it secure | `threat-model` | `threat-model` | `correctness-gate` | `safe-release` |
 
 Along the way:
-- **Not sure where to start?** `senior-review` tells you the biggest gap, and so which flow.
+- **Not sure which skill?** `pick-skill` routes it in one decision, including the five that all
+  sound like "review my code".
+- **Not sure what's wrong at all?** `senior-review` tells you the biggest gap, and so which flow.
 - **Want to see it?** `arch-map` draws the structure, a change's before → after, or where the problems sit.
 - **Built but not working?** `wire-check`.
 - **Want numbers or proof on a cleanup?** `structure-gate` for messy shape, `latent-audit` before
@@ -74,8 +83,29 @@ Along the way:
   the conversation itself, as issues, verbatim, so it reaches you from any machine.
 - **About to merge?** `scrutinize` for an outside opinion.
 
+## Does it work?
+
+`evals/` answers that. Each case is a small codebase with a defect already planted, the words to
+hand an agent, and a written statement of what a correct report must say — and a decoy beside it
+that a careless report falls for: a job loaded by name that isn't dead, a green test suite whose
+own test asserts the bug, a file that reads as clean because no parser could enter it.
+
+```
+python evals/grade.py --list
+python evals/grade.py <case> --report path/to/report.md
+```
+
+Missing a finding lowers the score. Falling for a decoy fails the case outright, at any score.
+See `evals/README.md`.
+
 ## Developing
 
 ```
 python -m unittest discover tests
 ```
+
+The suite checks the scripts, and it checks the skills: every skill carries at least one
+`*Test:*` line, defines the evidence labels if it uses them, names only skills that exist, and
+states a fallback wherever it hands work to another skill. It also grades each eval case's two
+reference reports, so a case that has stopped telling good from bad fails here rather than
+sitting green.
