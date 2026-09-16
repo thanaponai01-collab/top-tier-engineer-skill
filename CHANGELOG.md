@@ -1,5 +1,37 @@
 # Changelog
 
+## 4.12.0 — 2026-09-16 — the habit nobody invokes a skill for
+
+- **PHILOSOPHY.md loads itself now.** It is the one file that applies to every task, and until now
+  it only reached a session if someone hand-edited `~/.claude/CLAUDE.md` with an `@import` — a step
+  the README asked for and nobody performs. A `SessionStart` hook emits it, so installing the plugin
+  is the whole install. The README no longer asks.
+- **A gate on the habit no skill can catch.** Every skill here is pull: it runs because someone
+  asked for it. But the failure they are all written against — code changed, turn ended, "it should
+  work" standing in for a result — happens silently, at the moment nobody thinks to invoke anything.
+  `tools/unproven-gate.py` reads the transcript and, when source files were edited with nothing run
+  since, says so and asks for the label: *proven* (you ran it) / *traced* (you read the whole chain)
+  / *suspected* (neither). Reading is not proving: `cat`, `grep`, `ls` and `git status` are inert, so
+  a session that only ever read files does not come back green.
+- **It runs on `UserPromptSubmit`, not `Stop`, and that is the whole design.** `Stop` is the obvious
+  event and this plugin already deleted one Stop hook for cause (c479319 — it linted the suite's own
+  verdict lines and could block a session over a malformed one). Reaching the model from `Stop`
+  still means `decision: "block"`; the docs now list `additionalContext` there, Anthropic's own
+  security-guidance plugin says `Stop` is not in that union and that emitting it corrupts the
+  payload (#2159). An unresolved contradiction is a poor thing to bet a hook on, and blocking is the
+  wrong answer regardless: a gate that can hold someone in a session they asked to leave gets
+  uninstalled, and then it protects nobody. `UserPromptSubmit` takes plain stdout on exit 0, is
+  documented on both sides, and fires at the first moment the reminder is actionable.
+- **Both hooks fail open, by construction.** Exit 2 on `UserPromptSubmit` blocks the prompt *and
+  erases it*; exit 2 on `SessionStart` stops the session starting. Every error path in both scripts
+  exits 0 with no output, and the tests assert it for malformed payloads, missing transcripts and
+  non-JSON stdin. A reminder is never worth losing someone's typed prompt over.
+- **Proved on a real transcript, in both directions.** Truncated to just before this release's test
+  run, the gate names `test_hooks.py` and leaves `unproven-gate.py` alone — the latter's selftest had
+  already run. With the test run appended, it goes silent. Twenty-four tests cover run-detection,
+  source-detection, ordering, dedupe and every fail-open path; `test_no_stop_hook` fails the suite if
+  a `Stop` entry ever drifts back into the manifest without the argument that would justify it.
+
 ## 4.11.0 — 2026-09-16 — an instruction nobody can check is one you claim for free
 
 - **The skills are tested now.** `evals/` holds six small codebases with a defect already planted,

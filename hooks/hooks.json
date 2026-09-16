@@ -1,0 +1,27 @@
+{
+  "description": "Top-Tier Engineer — loads PHILOSOPHY.md at session start, and flags source edits that were never run.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v python3 >/dev/null 2>&1; then python3 \"${CLAUDE_PLUGIN_ROOT}/tools/philosophy-hook.py\"; else python \"${CLAUDE_PLUGIN_ROOT}/tools/philosophy-hook.py\"; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v python3 >/dev/null 2>&1; then python3 \"${CLAUDE_PLUGIN_ROOT}/tools/unproven-gate.py\"; else python \"${CLAUDE_PLUGIN_ROOT}/tools/unproven-gate.py\"; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

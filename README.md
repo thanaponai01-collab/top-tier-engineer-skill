@@ -15,11 +15,8 @@ git clone https://github.com/thanaponai01-collab/top-tier-engineer-skill
 /plugin install top-tier-engineer@thanaponai01-skills
 ```
 
-Then load the philosophy everywhere by adding one line to `~/.claude/CLAUDE.md`:
-
-```
-@<path-to-clone>/PHILOSOPHY.md
-```
+That is the whole install. `PHILOSOPHY.md` loads itself at session start, and the unproven-change
+gate runs from the same manifest — see [Hooks](#hooks).
 
 Claude picks the right skill from what you ask. You can also call one by name, e.g.
 `/top-tier-engineer:debug-protocol`.
@@ -82,6 +79,31 @@ Along the way:
 - **Work out of sight — written down, or only said?** `issue-handoff` files a planned-work doc, or
   the conversation itself, as issues, verbatim, so it reaches you from any machine.
 - **About to merge?** `scrutinize` for an outside opinion.
+
+## Hooks
+
+Every skill here is *pull*: it runs because you asked for it. The failure they are all written
+against — code changed, turn ended, "it should work" standing in for a result — happens at the
+moment nobody thinks to ask for anything. Two hooks cover that gap, and neither can block you.
+
+| Hook | Event | What it does |
+|---|---|---|
+| `philosophy-hook.py` | `SessionStart` | Loads `PHILOSOPHY.md`, so the habits apply without a manual `@import` |
+| `unproven-gate.py` | `UserPromptSubmit` | When source files were edited and nothing was run since, says so and asks for the label: *proven* / *traced* / *suspected* |
+
+Reading is not proving: `cat`, `grep`, `ls` and `git status` are inert, so a session that only read
+files does not come back green. The gate reports a given finding once, names the files, and says
+nothing when the last thing you did was run something.
+
+**Both fail open by construction.** Exit 2 on `UserPromptSubmit` blocks the prompt *and erases it*;
+exit 2 on `SessionStart` stops the session starting. Every error path in both scripts exits 0 with
+no output. A reminder is never worth losing your typed prompt over.
+
+Not on `Stop`, deliberately: reaching the model from `Stop` means `decision: "block"`, and a gate
+that can hold you in a session you asked to leave gets uninstalled — after which it protects nobody.
+This plugin shipped a Stop hook once and deleted it for exactly that (`c479319`).
+
+Don't want them? `/plugin` → disable hooks, or delete `hooks/hooks.json`. The skills work untouched.
 
 ## Does it work?
 
