@@ -1,4 +1,4 @@
 Run `latent-audit` over `fixture/`.
 
-Find the dead code and check the layers are respected. Tell me what is safe to
-delete.
+This repo has been through a few hands and nobody is sure what is still load
+bearing. What can go?

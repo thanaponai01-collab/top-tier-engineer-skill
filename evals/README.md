@@ -56,11 +56,31 @@ Matching is substring-based after normalising case, path separators, backticks a
 expectations list several phrasings of the same claim. It is crude on purpose: a grader you cannot
 read is a grader you cannot trust.
 
+One exception to the crudeness, because it had to be. A forbidden phrase names a wrong *answer*, and
+the clearest reports state the right answer by naming the wrong one and refusing it — "do not delete
+`csv_out.py`". A substring match cannot tell that from a report recommending the deletion, so a hit
+is discounted only when a negation sits in the same clause and within ten words of it. The guard is
+deliberately narrow: a trap that stops firing costs more than one that fires too often, so "nothing
+imports it, **so** delete `csv_out.py`" still trips — the `so` ends the clause that held the
+`nothing`.
+
 ## The grader is itself tested
 
-Every case ships `reference/good.md` and `reference/bad.md`. `tests/test_evals.py` asserts the good
-one passes, the bad one fails, and an empty report never passes — so a case that has quietly stopped
-discriminating fails the repo's own suite rather than sitting green.
+Every case ships three reference reports, and `tests/test_evals.py` asserts what each one must do:
+
+- `reference/good.md` **passes**, `reference/bad.md` **fails**, and an empty report never passes — so
+  a case that has quietly stopped discriminating fails the repo's own suite rather than sitting green.
+- `reference/good-alt.md` **also passes**. It states the same findings in another writer's words, and
+  phrases the decoy the way reports really phrase it: by naming the wrong answer and refusing it. This
+  is the arm that catches a grader tuned to `good.md` — one that would clear the first two checks
+  while failing every correct report written by anyone else.
+
+The prompts are tested too. A prompt states the symptom; it must not state the finding, or the case
+measures nothing but an agent's ability to read the question back. `PromptsDoNotLeak` fails any
+`prompt.md` containing a file a planted item requires naming, or a phrase that would satisfy one on
+its own. It catches leaks at the level of tokens only — "what did someone build that nothing reaches"
+names no file and hands over the whole finding anyway — so a new prompt still has to be read by
+someone asking what it gives away.
 
 ```
 python -m unittest discover tests
@@ -73,12 +93,20 @@ evals/cases/<name>/
   prompt.md            what to say to the agent
   fixture/             the rigged codebase — make it run
   expect.json          planted + traps
-  reference/good.md    a report that must pass
-  reference/bad.md     a plausible wrong report that must fail
+  reference/good.md      a report that must pass
+  reference/good-alt.md  the same findings in different words — must also pass
+  reference/bad.md       a plausible wrong report that must fail
 ```
 
 Write `bad.md` as the mistake you actually expect an agent to make, not a strawman. If you cannot
 write a wrong report that the case catches, the case is not testing anything.
+
+Write `good-alt.md` without looking back at `good.md`'s sentences: different structure, different
+verbs, the decoy refused by name. If the only report your `expect.json` accepts is the one you wrote
+it against, you have tested your own phrasing.
+
+And write `prompt.md` as the words someone would really arrive with — a symptom, a handover, a
+deadline — never the finding. The suite checks the obvious leaks; the subtle ones are on you.
 
 ## On `claude plugin eval`
 

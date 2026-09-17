@@ -37,7 +37,12 @@
         "all functions are small and simple", "no, it is not spaghetti",
         "not spaghetti - nothing", "complexity is low across the codebase"
       ],
-      "must_say_any": ["opaque", "unknown", "never entered", "unmeasured", "not measured"]
+      "must_say_any": [
+        "opaque", "unknown", "never entered", "unmeasured", "not measured",
+        "invisible", "not clean", "cannot say", "can't say", "untestable",
+        "no test", "not the same as clean", "inside a string", "string literal",
+        "not parsed", "no parser", "unseen"
+      ]
     }
   ]
 }

@@ -117,8 +117,10 @@ python evals/grade.py --list
 python evals/grade.py <case> --report path/to/report.md
 ```
 
-Missing a finding lowers the score. Falling for a decoy fails the case outright, at any score.
-See `evals/README.md`.
+Missing a finding lowers the score. Falling for a decoy fails the case outright, at any score. The
+grading is on findings, not wording: each case ships two correct reports in different words and both
+have to pass, and a report that names the decoy in order to *refuse* it is not treated as falling for
+it. See `evals/README.md`.
 
 ## Developing
 
@@ -128,6 +130,7 @@ python -m unittest discover tests
 
 The suite checks the scripts, and it checks the skills: every skill carries at least one
 `*Test:*` line, defines the evidence labels if it uses them, names only skills that exist, and
-states a fallback wherever it hands work to another skill. It also grades each eval case's two
-reference reports, so a case that has stopped telling good from bad fails here rather than
-sitting green.
+states a fallback wherever it hands work to another skill. It also grades each eval case's three
+reference reports — two correct ones written differently, one plausible wrong one — so a case that
+has stopped telling good from bad, or has started grading phrasing, fails here rather than sitting
+green.

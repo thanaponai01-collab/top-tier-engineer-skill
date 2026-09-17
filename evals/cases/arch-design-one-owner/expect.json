@@ -27,7 +27,8 @@
       "what": "the top move is written out with the callers it changes and the check that behaviour did not",
       "must_say_any": [
         "proof:", "proof line", "tests green", "same output", "behaviour did not change",
-        "behavior did not change", "callers:"
+        "behavior did not change", "callers:", "verification:", "unchanged",
+        "same values", "same result"
       ]
     }
   ],
@@ -36,9 +37,11 @@
       "id": "billing-looks-alike-but-changes-for-another-reason",
       "what": "billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move",
       "must_not_say_any": [
-        "all four", "four date", "four formatters", "merge billing",
-        "including billing", "billing/invoice.py into", "invoice_date into",
-        "four copies", "four places"
+        "unify all four", "merge all four", "consolidate all four",
+        "all four into", "one owner for all four", "four date formatters",
+        "four copies of the same", "merge billing", "including billing",
+        "billing/invoice.py into", "invoice_date into", "fold billing",
+        "billing into"
       ],
       "must_say_any": [
         "billing", "invoice", "tax", "separate", "stays", "different reason", "iso"

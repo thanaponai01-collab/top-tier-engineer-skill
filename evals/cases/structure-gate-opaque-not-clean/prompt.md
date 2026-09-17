@@ -1,3 +1,4 @@
 Run `structure-gate` over `fixture/`.
 
-Is this code a mess? Three small functions is all I see.
+Quick shape check before I add a page to this. It is only a couple of small
+functions, right?

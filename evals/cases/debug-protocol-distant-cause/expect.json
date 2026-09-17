@@ -18,8 +18,10 @@
       "what": "test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it",
       "must_name": ["test_totals"],
       "must_say_any": [
-        "whole number", "integers", "never runs parse", "does not call parse",
-        "never exercises parse", "no test covers parse", "bypasses parse"
+        "whole number", "whole-number", "integers", "never runs parse",
+        "does not call parse", "never calls parse", "never calls into parse",
+        "never exercises parse", "does not exercise parse", "no test covers parse",
+        "bypasses parse", "no coverage"
       ]
     },
     {

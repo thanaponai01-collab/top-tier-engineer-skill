@@ -1,5 +1,34 @@
 # Changelog
 
+## 4.13.0 — 2026-09-17 — a grader that only accepts its own words is a mirror
+
+- **Every eval case now ships a second correct report, and it has to pass too.** `reference/good.md`
+  passing and `reference/bad.md` failing proves a case discriminates; it does not prove *what* it
+  discriminates on. A grader quietly tuned to the sentences in `good.md` clears both checks and fails
+  every correct report written by anyone else. `reference/good-alt.md` states the same findings in
+  another writer's words — different structure, different verbs — and
+  `test_alternate_good_reference_passes` asserts it passes. Three cases needed their `expect.json`
+  widened before it did, which is the point: they were grading phrasing and nobody could see it.
+- **Naming the wrong answer in order to refuse it is no longer counted as making it.** The clearest
+  report on a decoy says *do not delete `csv_out.py`* — and substring matching cannot tell that from a
+  report recommending the deletion, so the best-written reports tripped the trap hardest. A hit is now
+  discounted only when a negation sits in the same clause and within ten words of it. The guard is
+  deliberately narrow, because a trap that stops firing costs more than one that fires too often:
+  "nothing imports it, **so** delete `csv_out.py`" still trips, the `so` ending the clause that held
+  the `nothing`. `NegationGuard` pins both directions with twelve worked examples, including the
+  near-miss where the negation belongs to a different clause.
+- **The prompts stopped handing over the answer.** Six of them named the finding they existed to
+  measure — "find the dead code and check the layers", "the three amounts add up to 42.35", "`SPEC.md`
+  is the requirement". An agent that reads the question back scores full marks on those, and the case
+  measures nothing the skill added. All six are rewritten as the words someone would really arrive
+  with: a customer says the total is short; we are handing this service over next week; it is only a
+  couple of small functions, right? `PromptsDoNotLeak` now fails any prompt containing a file a
+  planted item requires naming, or a phrase that alone satisfies one.
+- **What that test cannot catch is written down next to it.** The leak check works on tokens. The
+  semantic kind — "what did someone build that nothing reaches" names no file and gives away the whole
+  finding — slips straight through, so `evals/README.md` says a new prompt still has to be read by
+  someone asking what it gives away. A guard that oversells its reach is worse than none.
+
 ## 4.12.0 — 2026-09-16 — the habit nobody invokes a skill for
 
 - **PHILOSOPHY.md loads itself now.** It is the one file that applies to every task, and until now

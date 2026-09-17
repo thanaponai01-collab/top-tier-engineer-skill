@@ -79,6 +79,46 @@ def says(haystack, needle):
     return normalize(needle) in haystack
 
 
+# A forbidden phrase is a wrong ANSWER, not a wrong word. The clearest reports
+# state the right answer by naming the wrong one and denying it — "do not delete
+# csv_out.py", "these are not four copies of one thing" — and a substring match
+# cannot tell that apart from a report that recommends the deletion. So a hit is
+# discounted only when the denial is attached to it: the cue must sit in the same
+# clause and within NEGATION_WINDOW words. That keeps the guard narrow, because a
+# trap that stops firing costs more than one that fires too often — "nothing
+# imports it, so delete csv_out.py" still trips, the "so" ending the clause that
+# held the "nothing".
+CLAUSE_BREAK = re.compile(
+    r"[.!?;:|]|—|–|\b(?:and|but|so|therefore|thus|however|yet|while|because|since)\b"
+)
+NEGATION_CUE = re.compile(
+    r"\b(?:not|never|no|nor|cannot|avoid|avoids|avoiding|instead|rather|without|"
+    r"don't|doesn't|isn't|aren't|won't|can't|wrong|mistake|decoy|beware|resist|"
+    r"leave|leaves|leaving|keep|keeps|keeping|stay|stays|untouched|alone)\b"
+)
+NEGATION_WINDOW = 10  # words between the cue and the phrase it denies
+
+
+def _is_denied(haystack, start):
+    """True when the clause carrying a hit at `start` denies it."""
+    head = haystack[:start]
+    breaks = list(CLAUSE_BREAK.finditer(head))
+    clause = head[breaks[-1].end():] if breaks else head
+    return bool(NEGATION_CUE.search(" ".join(clause.split()[-NEGATION_WINDOW:])))
+
+
+def claim_hits(haystack, needle):
+    """(asserted, denied) — how often the phrase is claimed, and merely named."""
+    starts = [m.start() for m in re.finditer(re.escape(normalize(needle)), haystack)]
+    denied = sum(1 for s in starts if _is_denied(haystack, s))
+    return len(starts) - denied, denied
+
+
+def says_as_claim(haystack, needle):
+    """The phrase is asserted somewhere, not only mentioned in order to deny it."""
+    return claim_hits(haystack, needle)[0] > 0
+
+
 def says_any(haystack, needles):
     return any(says(haystack, n) for n in needles)
 
@@ -104,12 +144,19 @@ def check_planted(report, item):
 def check_trap(report, item):
     """Tripped when the report makes the forbidden claim, or fails to hedge.
 
-    `must_not_say_any` is the wrong answer stated outright. `must_say_any` is
-    the hedge that has to be there instead — a decoy reported as neither wrong
-    nor uncertain is still a trap tripped, because the reader learns nothing
-    and believes the sweep was complete.
+    `must_not_say_any` is the wrong answer stated outright — asserted, not
+    quoted in order to reject it (see `says_as_claim`). `must_say_any` is the
+    hedge that has to be there instead — a decoy reported as neither wrong nor
+    uncertain is still a trap tripped, because the reader learns nothing and
+    believes the sweep was complete.
     """
-    said_wrong = [p for p in item.get("must_not_say_any", []) if says(report, p)]
+    said_wrong, denied = [], []
+    for phrase in item.get("must_not_say_any", []):
+        asserted, refused = claim_hits(report, phrase)
+        if asserted:
+            said_wrong.append(phrase)
+        elif refused:
+            denied.append(phrase)
     hedges = item.get("must_say_any", [])
     hedged = says_any(report, hedges) if hedges else True
     return {
@@ -117,6 +164,7 @@ def check_trap(report, item):
         "what": item["what"],
         "tripped": bool(said_wrong) or not hedged,
         "said": said_wrong,
+        "denied": denied,
         "hedged": hedged,
     }
 
@@ -166,6 +214,8 @@ def render(result):
             lines.append(f"            claimed: {'; '.join(t['said'])}")
         elif t["tripped"]:
             lines.append("            never marked it uncertain either")
+        if t.get("denied"):
+            lines.append(f"            named to reject it, not counted: {'; '.join(t['denied'])}")
     if result["tripped"]:
         lines.append("  a tripped trap fails the case at any score: it is a confident wrong answer")
     return "\n".join(lines)

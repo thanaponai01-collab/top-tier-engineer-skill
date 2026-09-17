@@ -1,3 +1,4 @@
 Run `arch-design` in audit mode over `fixture/`.
 
-Where has the structure gone wrong, and what is the one move that pays most?
+Someone new joins this codebase on Monday. What should they know before they
+start changing things?
