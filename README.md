@@ -84,20 +84,29 @@ Along the way:
 
 Every skill here is *pull*: it runs because you asked for it. The failure they are all written
 against — code changed, turn ended, "it should work" standing in for a result — happens at the
-moment nobody thinks to ask for anything. Two hooks cover that gap, and neither can block you.
+moment nobody thinks to ask for anything. So does the other one: not knowing a skill exists for what
+you just typed. Three hooks cover those gaps, and none of them can block you.
 
 | Hook | Event | What it does |
 |---|---|---|
 | `philosophy-hook.py` | `SessionStart` | Loads `PHILOSOPHY.md`, so the habits apply without a manual `@import` |
+| `route-hint.py` | `UserPromptSubmit` | Names the skill your prompt is asking for, when you did not ask for one |
 | `unproven-gate.py` | `UserPromptSubmit` | When source files were edited and nothing was run since, says so and asks for the label: *proven* / *traced* / *suspected* |
+
+`route-hint.py` is deliberately quiet: one suggestion per prompt, each skill named at most once per
+session, and silence whenever you already named a skill, typed a slash command, or asked for
+ordinary work. `build-discipline` is not among its rules at all — "implement this" is the most
+common thing anyone types, and a hint on every one of them is noise. It routes on what is *known*,
+not on the adjective, so "it's broken" goes to `debug-protocol` and "it's broken because the token
+expires" goes to `evolve-maintain`.
 
 Reading is not proving: `cat`, `grep`, `ls` and `git status` are inert, so a session that only read
 files does not come back green. The gate reports a given finding once, names the files, and says
 nothing when the last thing you did was run something.
 
-**Both fail open by construction.** Exit 2 on `UserPromptSubmit` blocks the prompt *and erases it*;
-exit 2 on `SessionStart` stops the session starting. Every error path in both scripts exits 0 with
-no output. A reminder is never worth losing your typed prompt over.
+**All three fail open by construction.** Exit 2 on `UserPromptSubmit` blocks the prompt *and erases it*;
+exit 2 on `SessionStart` stops the session starting. Every error path in all three scripts exits 0
+with no output. A reminder is never worth losing your typed prompt over.
 
 Not on `Stop`, deliberately: reaching the model from `Stop` means `decision: "block"`, and a gate
 that can hold you in a session you asked to leave gets uninstalled — after which it protects nobody.

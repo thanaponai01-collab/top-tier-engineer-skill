@@ -1,5 +1,36 @@
 # Changelog
 
+## 4.14.0 — 2026-09-17 — a router nobody reaches routes nobody
+
+- **`route-hint.py`, a third hook: the skill you needed, named on the prompt that needed it.**
+  `pick-skill` had a bootstrapping problem it could not solve from inside a skill file — a router is
+  only ever invoked by someone who already suspects a skill applies, and that person usually already
+  knows which one. So the routing that matters now happens before anyone chooses anything, on
+  `UserPromptSubmit`, whether or not a skill was asked for. `pick-skill` keeps the job a hook
+  genuinely cannot do: telling five overlapping skills apart by reading the codebase.
+- **The hook routes on what is known, not on the adjective.** "The login is broken" goes to
+  `debug-protocol`; "the login is broken because the token expires early" goes to `evolve-maintain`,
+  because the diagnosis is already done. That negative check is the one rule `pick-skill` names as a
+  trap, and it is now enforced rather than described.
+- **Precision over recall, because a hook that fires on ordinary work gets uninstalled** — the same
+  reasoning that ruled out a Stop hook in `c479319`. One suggestion per prompt, each skill named at
+  most once per session, and silence when the prompt already names a skill, starts with `/`, or is
+  ordinary building. `build-discipline` is deliberately absent from the rules: "implement this" is
+  the most common thing anyone types. `add error handling to the parser` was routed to
+  `debug-protocol` by the first draft and is what tightened the failure pattern — bare `error` no
+  longer counts, only a failure being reported.
+- **`senior-review` has teeth.** It was the thinnest skill in the repo and the one whose description
+  most closely matches how people actually ask ("is this code good?"), which is the worst pairing
+  available: the front door asked for the least. Four non-negotiables now sit at the top of the file.
+  Question 2 must be *run* — at least two breakages attempted with output pasted, not imagined. Every
+  answer carries a file, a command or pasted output, or is reported unanswered rather than left
+  blank. The report opens with how much of the project was actually read and what was skipped, which
+  is `structure-gate`'s coverage-before-findings rule applied to a review. Praise is a claim too: it
+  names a file or the line is cut.
+- 13 new tests (77 total, from 64), most of them negative: the ten ordinary prompts that must produce
+  no hint at all matter more than the sixteen that must route, because that is the failure that gets
+  the hook turned off.
+
 ## 4.13.0 — 2026-09-17 — a grader that only accepts its own words is a mirror
 
 - **Every eval case now ships a second correct report, and it has to pass too.** `reference/good.md`

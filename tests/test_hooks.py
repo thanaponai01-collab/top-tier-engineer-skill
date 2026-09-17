@@ -20,12 +20,17 @@ ROOT = Path(__file__).resolve().parent.parent
 TOOLS = ROOT / "tools"
 GATE = TOOLS / "unproven-gate.py"
 PHILOSOPHY_HOOK = TOOLS / "philosophy-hook.py"
+ROUTE_HINT = TOOLS / "route-hint.py"
 
 # The hooks are hyphenated CLI scripts, so they are loaded by path rather than
 # imported by name.
 _spec = importlib.util.spec_from_file_location("unproven_gate", GATE)
 unproven_gate = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(unproven_gate)
+
+_rspec = importlib.util.spec_from_file_location("route_hint", ROUTE_HINT)
+route_hint = importlib.util.module_from_spec(_rspec)
+_rspec.loader.exec_module(route_hint)
 
 
 def tool_use(name, payload):
@@ -181,6 +186,129 @@ class TestFailsOpen(unittest.TestCase):
             self.assertEqual(second.strip(), "")
 
 
+class TestRouteHintRouting(unittest.TestCase):
+    """The prompt each skill is actually asked for, in the words people use."""
+
+    def route(self, prompt):
+        return route_hint.suggest(prompt)[0]
+
+    def test_broken_with_no_cause_goes_to_diagnosis(self):
+        for prompt in ("the login page is broken",
+                       "checkout keeps failing",
+                       "it worked yesterday and now it crashes",
+                       "this doesn't work any more",
+                       "getting an error when I save",
+                       "the upload just hangs"):
+            self.assertEqual(self.route(prompt), "debug-protocol", prompt)
+
+    def test_broken_with_a_named_cause_is_maintenance_not_diagnosis(self):
+        # Route on what is known, not on the adjective: a proven cause means
+        # the diagnosis is already done.
+        for prompt in ("login is broken because the token expires early",
+                       "it fails due to the missing index",
+                       "the crash turns out to be a null config"):
+            self.assertEqual(self.route(prompt), "evolve-maintain", prompt)
+
+    def test_each_remaining_rule_routes(self):
+        cases = {
+            "time to deploy this to prod": "safe-release",
+            "I need a migration for the orders table": "safe-release",
+            "can this endpoint be abused?": "threat-model",
+            "is the session handling secure": "threat-model",
+            "file these as issues please": "issue-handoff",
+            "find the dead code in here": "latent-audit",
+            "is the new handler hooked up?": "wire-check",
+            "honestly is this codebase spaghetti": "structure-gate",
+            "second opinion on this PR before I merge": "scrutinize",
+            "does this actually work?": "correctness-gate",
+            "show me the architecture": "arch-map",
+            "upgrade the dependencies": "evolve-maintain",
+            "the report takes forever to load": "perf-optimize",
+            "which skill should I use here": "pick-skill",
+            "look at my codebase and tell me what to do": "senior-review",
+            "what should I fix first?": "senior-review",
+        }
+        for prompt, skill in cases.items():
+            self.assertEqual(self.route(prompt), skill, prompt)
+
+
+class TestRouteHintSilence(unittest.TestCase):
+    """Precision over recall: a hook that fires on ordinary work is uninstalled."""
+
+    def route(self, prompt):
+        return route_hint.suggest(prompt)[0]
+
+    def test_ordinary_work_gets_no_hint(self):
+        for prompt in ("add a button to the settings page",
+                       "add error handling to the parser",
+                       "what does this function do?",
+                       "rename the variable to userCount",
+                       "write a test for the date helper",
+                       "update the README",
+                       "commit this with a decent message",
+                       "explain this regex to me",
+                       "add two numbers together",
+                       "bump the copyright year"):
+            self.assertIsNone(self.route(prompt), prompt)
+
+    def test_building_is_left_alone(self):
+        # build-discipline is deliberately not a rule: "implement this" is the
+        # most common thing anyone types, and a hint on every one is noise.
+        for prompt in ("build it", "implement this endpoint", "make it work"):
+            self.assertIsNone(self.route(prompt), prompt)
+
+    def test_a_prompt_that_names_a_skill_is_left_alone(self):
+        for prompt in ("run debug-protocol on this",
+                       "use senior-review here",
+                       "I already tried wire-check"):
+            self.assertIsNone(self.route(prompt), prompt)
+
+    def test_slash_commands_and_junk_are_left_alone(self):
+        for prompt in ("/pick-skill", "", "   ", None, 42,
+                       "x" * (route_hint.MAX_PROMPT + 1)):
+            self.assertIsNone(self.route(prompt), repr(prompt)[:40])
+
+    def test_every_rule_points_at_a_real_skill(self):
+        for skill, _, _, _ in route_hint.COMPILED:
+            self.assertIn(skill, route_hint.SKILLS, skill)
+            self.assertTrue((ROOT / "skills" / skill / "SKILL.md").is_file(), skill)
+
+    def test_the_hint_names_the_skill_and_refuses_to_stop_at_routing(self):
+        text = route_hint.message(*route_hint.suggest("the app is broken"))
+        self.assertIn("debug-protocol", text)
+        self.assertIn("Routing is not the work", text)
+        self.assertEqual(route_hint.message(None, None), "")
+
+
+class TestRouteHintFailsOpen(unittest.TestCase):
+    """Exit 2 on UserPromptSubmit erases the user's prompt. Never happens."""
+
+    def test_every_malformed_payload_exits_zero_and_silent(self):
+        for payload in ({}, {"prompt": None}, {"prompt": []},
+                        {"session_id": "x"}, {"prompt": "add a button"}):
+            code, out, _ = run_hook(ROUTE_HINT, payload)
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(out.strip(), "", payload)
+
+    def test_non_json_stdin_exits_zero(self):
+        proc = subprocess.run([sys.executable, str(ROUTE_HINT)], input="not json",
+                              capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 0)
+
+    def test_end_to_end_hints_once_then_stays_quiet(self):
+        payload = {"prompt": "the checkout page is broken",
+                   "session_id": "route-%s" % os.getpid()}
+        code, first, _ = run_hook(ROUTE_HINT, payload)
+        self.assertEqual(code, 0)
+        self.assertIn("debug-protocol", first)
+        self.assertEqual(run_hook(ROUTE_HINT, payload)[1].strip(), "")
+
+    def test_selftest_passes(self):
+        proc = subprocess.run([sys.executable, str(ROUTE_HINT), "--selftest"],
+                              capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+
+
 class TestPhilosophyHook(unittest.TestCase):
     def test_emits_the_philosophy(self):
         code, out, _ = run_hook(PHILOSOPHY_HOOK, {"hook_event_name": "SessionStart"})
@@ -203,7 +331,7 @@ class TestHooksManifest(unittest.TestCase):
         self.assertIn("SessionStart", events)
         self.assertIn("UserPromptSubmit", events)
         referenced = json.dumps(manifest)
-        for script in ("philosophy-hook.py", "unproven-gate.py"):
+        for script in ("philosophy-hook.py", "unproven-gate.py", "route-hint.py"):
             self.assertIn(script, referenced)
             self.assertTrue((TOOLS / script).is_file(), script)
 
