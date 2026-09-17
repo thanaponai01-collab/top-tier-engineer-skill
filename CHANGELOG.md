@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.15.0 — 2026-09-17 — one file per question, not one file per skill
+
+- **`arch-design` no longer overwrites its own report.** Every run landed at the same
+  `docs/arch-design.md`, so a second design or audit on a different area silently clobbered the
+  first. The path is now named after what the run is about — `docs/arch-design-<topic>.md` — and the
+  bare filename is reserved for the one run that covers the whole system.
+- **Both `arch-design` and `arch-map`'s descriptions drop the implementation detail** (the hardcoded
+  filename, "leave it in a file you can open again") that padded them past what a reader scans a
+  skill list for. They now match the two-sentence shape every other skill in this plugin uses: what
+  it does, then what to use it for.
+
 ## 4.14.0 — 2026-09-17 — a router nobody reaches routes nobody
 
 - **`route-hint.py`, a third hook: the skill you needed, named on the prompt that needed it.**

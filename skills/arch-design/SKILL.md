@@ -1,6 +1,6 @@
 ---
 name: arch-design
-description: Shape a system's structure, or audit an existing codebase for duplicated systems, over-building and AI slop. Delivers decisions with their options and reversibility, and one file — docs/arch-design.md — holding the report and the moves written out buildable. Use for greenfield architecture, choosing a stack or pattern, module or API boundaries, restructuring, "how should this be structured / which stack?", or "is my codebase bloated / where can the architecture improve?".
+description: Shape a system's structure, or audit an existing codebase for duplicated systems, over-building and AI slop. Use for greenfield architecture, choosing a stack or pattern, module or API boundaries, restructuring, "how should this be structured / which stack?", or "is my codebase bloated / where can the architecture improve?".
 ---
 
 # Architecture & Design
@@ -165,9 +165,13 @@ more than one finding, or a move someone builds from later — and it is one fil
 file living beside the report drifts from it at the first edit of either.
 
 When there is a file, hand the finished material to `arch-map` in one go — the **Change** view, the
-path (`docs/arch-design.md` unless the user named one), everything under **Deliver**, and the move
-blocks to go last under `## Moves`. It owns the notation, the legend and how the file lands, and it
-will ask for whatever is missing; what it asks for is work you still owe.
+path, everything under **Deliver**, and the move blocks to go last under `## Moves`. Name the path
+after what this run is about, not the skill that wrote it: `docs/arch-design-<topic>.md`, so a second
+run on a different area gets its own file instead of overwriting the first. The bare
+`docs/arch-design.md` is only for the one run that covers the whole system with nothing narrower to
+name. Unless the user named a path — then that path, always. `arch-map` owns the notation, the
+legend and how the file lands, and it will ask for whatever is missing; what it asks for is work you
+still owe.
 
 **No `arch-map` available here — a different agent, or only this file copied out — then you write
 the file yourself**, at that path, in the Deliver order above, with the moves last. Diagrams go in
