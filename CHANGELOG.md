@@ -1,5 +1,27 @@
 # Changelog
 
+## 4.19.0 — 2026-09-18 — a one-way door needs a source, not a memory
+
+- **`arch-design`'s Decide step now enforces the plugin's own ground-truth-over-memory habit on
+  one-way doors instead of just labeling confidence after the fact.** A one-way-door recommendation
+  (database, public API shape, tenancy model, auth model) used to get a *proven/traced/suspected*
+  label bolted on after being written from recall — "Postgres handles our write volume (vendor docs)"
+  read as sourced whether or not anyone opened those docs this session. The dependency bar's
+  maintenance-health and license checks, and the "say how you know" line, now both require the fetch
+  (`WebFetch`/`WebSearch`, the lockfile, a run) to happen *before* the recommendation is written; the
+  evidence-labels line at the top says plainly that only *proven* and *traced* can carry a one-way
+  door, and *traced* now explicitly covers "opened the source this session," not just "read the code
+  chain." The Decide test line and Common mistakes gain the matching checks.
+
+## 4.18.0 — 2026-09-18 — every run gets its own file
+
+- **`arch-design` no longer overwrites a prior run's report.** "The file" used to name the path from
+  the topic alone (`docs/arch-design-<topic>.md`), so a second run on the same or a broader area
+  landed on the same path and silently rewrote the earlier report. It now lists `docs/` for that
+  base name first and, if it's taken, counts up to the next free number (`-2.md`, `-3.md`, …) —
+  applied to the bare `docs/arch-design.md` whole-system fallback too. A user-named path still wins
+  and still overwrites on rerun, same as before. Common mistakes gains the matching entry.
+
 ## 4.17.0 — 2026-09-18 — a finding earns its badge or it's homework
 
 - **`arch-design` gains the deletion test, borrowed from `codebase-design`'s glossary.** Both

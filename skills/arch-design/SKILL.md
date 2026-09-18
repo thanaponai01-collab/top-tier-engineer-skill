@@ -10,7 +10,8 @@ is made in the open: the options, what pushed each way, and how hard it is to re
 maintainer you'll never meet, often an AI: the structure must be navigable from the files alone.
 
 *Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
-end · **suspected** = neither.*
+end, or opened the source (docs, lockfile, a fetch) this session · **suspected** = neither. Only
+*proven* and *traced* can carry a one-way door.*
 
 Pick the mode:
 - **Design:** nothing is built yet, or a new part is about to be.
@@ -46,22 +47,33 @@ Every consequential choice goes through this frame:
    requirement**. Adopt it, or name the requirement that rules it out.
 2. **Forces:** which requirements and constraints push which way.
 3. **Reversibility.** Two-way door (a library, a folder layout): decide fast, note briefly.
-   One-way door (database, public API shape, tenancy model, auth model): the options, a
-   recommendation and the cost of being wrong go to the user before you walk through it.
+   One-way door (database, public API shape, tenancy model, auth model): ground it first (next
+   item), then the options, a recommendation and the cost of being wrong go to the user before you
+   walk through it.
 4. **Dependency bar.** A new dependency needs: rough cost to write the needed part yourself, the
    fraction of the library you'd use, maintenance health (recent releases, open security issues),
    license compatibility, and a pin plan. Default: under ~10% used, or under ~100 lines to write →
-   write it.
+   write it. For a one-way door, "maintenance health" and "license compatibility" are looked up this
+   session (the registry page, the repo's release list), not recalled.
 5. **Complexity bar.** A new layer, registry or plugin seam of your own needs the callers it has
    **today** (counted) and the requirement that pays for it. One caller and under ~100 lines →
    inline it. Run the deletion test too: imagine it gone — does the complexity it hides reappear
    across those callers, or does nothing reappear because there was nothing there yet to hide?
    Nothing reappearing is the same answer as one caller: inline it.
-6. **Say how you know.** "Postgres handles our write volume (vendor docs, not benchmarked)" is
-   honest; the same sentence without the source is a future incident.
+6. **Say how you know — and for a one-way door, know it from this session.** A two-way door can run
+   on a remembered claim; fix it fast if it's wrong. A one-way door can't, so its claims get checked
+   *before* the recommendation is written, not cited from memory and labeled after the fact: fetch
+   the vendor docs, current pricing or a benchmark (`WebFetch`/`WebSearch`), or read the lockfile,
+   config or a run for a version or behavior claim. "Postgres handles our write volume (fetched
+   vendor docs, 2026-09; not benchmarked)" is *traced* and earns the recommendation; "Postgres
+   handles our write volume (vendor docs)" with no fetch behind it this session is *suspected* —
+   say so plainly, and either look it up or hand the user the gap before recommending, don't dress
+   an assumption up as a citation.
 
-*Test:* every decision row names a second option, and the simplest one is either adopted or refused
-by a named requirement. A row with one option is not a decision.
+*Test:* every decision row names a second option, the simplest one is either adopted or refused by a
+named requirement, and every fact behind a one-way-door row traces to something you opened or ran in
+this session — not remembered. A row with one option, or a one-way-door fact with no session behind
+it, is not a decision yet.
 
 ### 4. Stress
 - **Pre-mortem:** "A year later this failed. Name the three likeliest reasons." Each gets a design
@@ -197,12 +209,20 @@ file living beside the report drifts from it at the first edit of either.
 
 When there is a file, hand the finished material to `arch-map` in one go — the **Change** view, the
 path, everything under **Deliver**, and the move blocks to go last under `## Moves`. Name the path
-after what this run is about, not the skill that wrote it: `docs/arch-design-<topic>.md`, so a second
-run on a different area gets its own file instead of overwriting the first. The bare
-`docs/arch-design.md` is only for the one run that covers the whole system with nothing narrower to
-name. Unless the user named a path — then that path, always. `arch-map` owns the notation, the
-legend and how the file lands, and it will ask for whatever is missing; what it asks for is work you
-still owe.
+after what this run is about, not the skill that wrote it: `docs/arch-design-<topic>.md`, with the
+bare `docs/arch-design.md` only for the one run that covers the whole system with nothing narrower
+to name.
+
+**Every run gets its own file — never overwrite a prior run's.** Before naming the path, list `docs/`
+for that base name. If it's free, use it bare. If it's taken (by this run's own earlier draft in the
+same session, or by a run from before), count the existing `<base>.md`, `<base>-2.md`, `<base>-3.md`
+… and use the next number — `docs/arch-design-checkout-flow.md`, then `-2.md`, then `-3.md`, and the
+same numbering for the bare `docs/arch-design.md` fallback. This applies even when the topic is
+identical to a previous run: a second pass over the same area is a new file, not an edit of the old
+one, so both stay readable and the old one isn't silently rewritten. Unless the user named a path —
+then that exact path, always, overwritten on rerun like any file they point you at. `arch-map` owns
+the notation, the legend and how the file lands, and it will ask for whatever is missing; what it
+asks for is work you still owe.
 
 **No `arch-map` available here — a different agent, or only this file copied out — then you write
 the file yourself**, at that path, in the Deliver order above, with the moves last. Diagrams go in
@@ -218,4 +238,8 @@ door without stopping, including inside a move block; a second system built for 
 already does; two things merged because they looked alike, not because they change together; a
 finding badged Strong with no counted cost behind it; re-proposing a move the decision log already
 rejected, unread; announcing the handoff to `arch-map` and leaving no file anywhere; technology
-names in boundary descriptions, which stop being true the moment the stack changes.
+names in boundary descriptions, which stop being true the moment the stack changes; reusing a prior
+run's file path without checking `docs/` first, silently overwriting the earlier report instead of
+landing on the next numbered name; citing "vendor docs" or "benchmarks" for a one-way door without
+having fetched them this session — a remembered claim wearing a citation's clothes, and the exact gap
+the *suspected* label exists to catch.
