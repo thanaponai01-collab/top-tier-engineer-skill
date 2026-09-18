@@ -17,10 +17,10 @@ a customer-facing one.
 (`providers/smtp.py`) and one caller (`providers/registry.py`). No second
 provider is asked for by any requirement here, so the seam is not paid for yet.
 
-| # | sign | where | what it costs today | move | effort |
-|---|---|---|---|---|---|
-| 1 | same job, three places | views.py:1, serializers.py:1, export.py:1 | a format change is three edits and can be done twice | one owner | S |
-| 2 | built for "gonna need" | providers/base.py:1 | a layer that only forwards | inline until a second provider exists | S |
+| # | sign | where | what it costs today | move | effort | badge |
+|---|---|---|---|---|---|---|
+| 1 | same job, three places | views.py:1, serializers.py:1, export.py:1 | a format change is three edits and can be done twice | one owner | S | Strong |
+| 2 | built for "gonna need" | providers/base.py:1 | a layer that only forwards, no cost felt yet | inline until a second provider exists | S | Worth exploring |
 
 ## Moves
 
@@ -32,6 +32,7 @@ cost:     three copies drift; a format change is three edits
 files:    web/views.py:1, api/serializers.py:1, jobs/export.py:1
 owner:    a new `formatting/dates.py` with `display_date(d)`
 callers:  web/views.py:5, api/serializers.py:5, jobs/export.py:5
+door:     two-way — internal reshuffle, nothing outside the codebase depends on it
 proof:    run the three modules on one order; same output as before the move
 effort:   S
 after:    nothing

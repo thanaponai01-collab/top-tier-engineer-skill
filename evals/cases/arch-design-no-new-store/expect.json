@@ -1,0 +1,51 @@
+{
+  "case": "arch-design-no-new-store",
+  "skill": "arch-design",
+  "question": "how should CSV export and its history be structured, and which decision here is expensive to get wrong?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "existing-db-is-the-one-owner",
+      "what": "app/db.py is already the single place reports/models.py and users/models.py persist through; export history belongs there, not in new storage",
+      "must_name": ["db.py"],
+      "must_say_any": [
+        "existing database", "already own", "one owner", "extend db.py",
+        "reuse the database", "app/db.py", "one place", "existing store",
+        "same store", "single place"
+      ]
+    },
+    {
+      "id": "no-plugin-for-one-format",
+      "what": "only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for",
+      "must_say_any": [
+        "only csv", "one format", "no second format", "no plugin", "no interface",
+        "no registry", "inline", "single function", "csv module", "earns its place",
+        "gonna need", "speculative"
+      ]
+    },
+    {
+      "id": "cost-of-a-new-store-named",
+      "what": "the report names what a separate new datastore would cost if it turned out wrong — a migration, a second thing to secure and back up — as the reason for reusing the existing database",
+      "must_say_any": [
+        "migrat", "lock-in", "second thing to", "another thing to secure",
+        "hard to undo", "one-way", "cost of being wrong", "hard to reverse",
+        "back up", "operational burden", "another datastore to run"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "new-datastore-for-history",
+      "what": "standing up a separate datastore for export history instead of a table in the database the app already has",
+      "must_not_say_any": [
+        "new database for", "separate database for", "dedicated datastore",
+        "new datastore for the export", "use s3 for", "use redis for",
+        "a new store for export", "spin up a new", "stand up a new database",
+        "introduce a new database"
+      ],
+      "must_say_any": [
+        "existing database", "same database", "db.py", "reuse", "one owner", "extend"
+      ]
+    }
+  ]
+}

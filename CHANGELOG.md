@@ -1,5 +1,46 @@
 # Changelog
 
+## 4.17.0 — 2026-09-18 — a finding earns its badge or it's homework
+
+- **`arch-design` gains the deletion test, borrowed from `codebase-design`'s glossary.** Both
+  Audit's slop-hunt and Design's complexity bar asked "does this earn its place" without a shared,
+  one-line way to answer it. Now both run the same test: undo it in your head — does the complexity
+  it hides reappear across callers, or does nothing reappear because there was nothing there to
+  hide? Only "reappears" earns a finding, or justifies the layer in the first place.
+- **Every audit finding gets a badge — Strong / Worth exploring / Speculative — instead of an
+  unscored "how much gets simpler" guess.** The badge *is* the deletion-test result: reappeared with
+  a counted cost is Strong, reappeared but the payoff depends on where the code goes next is Worth
+  exploring, ambiguous or unmeasured is Speculative. A report where everything comes back
+  Speculative is the *clean* verdict wearing a list, and now says so instead of manufacturing a top
+  move. The findings table gains a `badge` column; `arch-design-one-owner`'s reference report is
+  updated to show the split — the three-copy date format is Strong (counted: three call sites), the
+  unused provider interface is Worth exploring (real, but the cost is still zero today).
+- **A move can no longer re-litigate a decision the project already settled, unread.** Audit's
+  `Map` step now reads the decision log first if one exists, and `Prescribe moves` drops anything
+  that only restates a rejected decision — or, if the friction is real enough to reopen it, names
+  the entry it contradicts instead of overriding it silently. Design mode's novelty check gets the
+  same read-first rule, so both modes check before either writes.
+- The one-owner eval's reference report also picks up the `door:` field from 4.16.0's move block,
+  which it had missed when that release landed.
+
+## 4.16.0 — 2026-09-18 — a move is a decision wearing work clothes
+
+- **`arch-design`'s audit moves can no longer walk through a one-way door unstopped.** Design mode
+  gated deletes, public-shape changes and auth/tenancy merges behind a stop-and-confirm rule; the
+  audit-mode move block had no field for it, so a move that quietly did one of those things — drop
+  a duplicate store, merge two auth paths — could go straight from "found" to "written" with no
+  chance for the user to weigh in. Every move block (audit's and design's) now names a `door:` —
+  two-way, land it and go, or one-way, confirmed with the user first — and a move with no answer to
+  that question is a question, not a block, same standing as a move with no proof line.
+- **`arch-design` gets its first eval coverage for design mode.** The one existing case
+  (`arch-design-one-owner`) only ever exercised audit mode's duplicate-hunting; the Decide
+  framework — picking the simplest option, naming the cost of a wrong one-way choice, refusing to
+  build a seam nobody's paying for — had no case proving it holds. `arch-design-no-new-store` gives
+  it one: a CSV-export request where the tempting wrong answers are a plugin interface for a format
+  nobody asked for and a brand-new datastore for a few rows of history that the app's one existing
+  database already owns. Reference reports pass both a plain-spoken and a differently-worded correct
+  answer and fail the report that takes both bait.
+
 ## 4.15.0 — 2026-09-17 — one file per question, not one file per skill
 
 - **`arch-design` no longer overwrites its own report.** Every run landed at the same

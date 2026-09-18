@@ -54,7 +54,9 @@ Every consequential choice goes through this frame:
    write it.
 5. **Complexity bar.** A new layer, registry or plugin seam of your own needs the callers it has
    **today** (counted) and the requirement that pays for it. One caller and under ~100 lines →
-   inline it.
+   inline it. Run the deletion test too: imagine it gone — does the complexity it hides reappear
+   across those callers, or does nothing reappear because there was nothing there yet to hide?
+   Nothing reappearing is the same answer as one caller: inline it.
 6. **Say how you know.** "Postgres handles our write volume (vendor docs, not benchmarked)" is
    honest; the same sentence without the source is a future incident.
 
@@ -70,7 +72,8 @@ by a named requirement. A row with one option is not a decision.
   or write down why they must stay apart.
 - **Change rehearsal:** narrate the two likeliest future changes. Touching more than two modules
   means the boundaries are misdrawn.
-- **Novelty check:** rejecting a common pattern or using an unusual one needs a recorded reason.
+- **Novelty check:** rejecting a common pattern or using an unusual one needs a recorded reason —
+  check the decision log first for one already on record before writing a new one.
 
 *Test:* every pre-mortem reason has a design change or a written accepted risk next to it, and
 every invariant names the element that protects it.
@@ -97,8 +100,12 @@ won't use.
 
 1. **Map what's really there.** From the entry points inward: each module, what it actually does,
    and where each concept lives (users, auth, config, data access, outside API calls, errors). One
-   table.
-2. **Hunt the slop.** Each sign is a finding only with `file:line` evidence:
+   table. If the project keeps a decision log, read it now — a finding that only restates a decision
+   already settled there isn't a new finding.
+2. **Hunt the slop.** Each sign is a finding only with `file:line` evidence, and only if it passes
+   the deletion test: undo it in your head — merge the duplicates, delete the pass-through, drop the
+   interface — does the complexity concentrate somewhere smaller, or does it just move? Only
+   "concentrates" earns a finding.
    - **Same job, many places:** two API clients, three date helpers, config read five ways, the
      same query pasted into every handler.
    - **Built for "gonna need":** an interface with one implementation, a plugin system with one
@@ -114,19 +121,41 @@ won't use.
 
    *Test:* every finding names a `file:line` you opened. A sign you recognised but didn't locate is
    not a finding yet.
-3. **Rank by leverage:** how much gets simpler, faster or safer per unit of effort. The top move is
-   usually a missing owner: N copies consolidated into one.
+3. **Badge each finding, then rank by badge.** The deletion test result from step 2 is the badge:
+   - **Strong** — the complexity reappeared clearly, and its cost today is counted (call sites,
+     copies, `file:line`), not felt.
+   - **Worth exploring** — the complexity reappeared, but the payoff rides on where the code goes
+     next rather than on what it costs today.
+   - **Speculative** — the deletion test was ambiguous, or the cost is unmeasured. Surfaced for
+     completeness; most of these are safe to leave alone.
+
+   Rank by badge, then by cost within a badge. A report where every finding is Speculative is the
+   verdict *clean* wearing a list — say clean.
+   *Test:* every Strong finding has a counted cost next to it. A badge with no number behind it is
+   Worth exploring at best.
 4. **Prescribe moves, not a rewrite.** Each move: what merges or goes, the one owner left behind,
    every caller that changes, and the check that proves behavior didn't (tests green before and
    after). Moves land one at a time. A rewrite is its own decision, raised with the user.
 
+   **Gate the one-way doors.** A move that deletes data, changes a public API shape, or merges an
+   auth or tenancy model is a one-way door wearing a move's clothing. It goes through Decide's
+   reversibility rule — options, a recommendation, the cost of being wrong — to the user before the
+   block is written, not after. A move that only touches code behind a boundary nothing outside the
+   codebase depends on is a two-way door: decide it and write the block.
+
+   **Check it against what's settled.** A move that only re-proposes something the decision log
+   already rejected isn't a move — drop it. One that contradicts a settled decision but the friction
+   is real enough to reopen it still gets written up, with the entry it contradicts named plainly,
+   not silently overridden.
+
    *Test:* before merging two things, you can say what would make each of them change. Same answer
-   → merge. Different answers → they only look alike, and they stay apart.
+   → merge. Different answers → they only look alike, and they stay apart. And for every move you can
+   name which door it is — a move with no answer to that is not ready to be written.
 
 The material, in this order: the plain verdict (clean / messy in places / tangled) and the one move
 that pays most; *before*, the concept map as it is with each finding's number (`!1`, `!2`) on the box
 where it lives; *after*, the same map with the moves applied; then
-`# | sign | where | what it costs today | move | effort`.
+`# | sign | where | what it costs today | move | effort | badge`.
 
 ## The moves — the last section, one block per move
 
@@ -139,6 +168,7 @@ cost:     <what it costs today — the reason this is worth doing at all>
 files:    <paths, with the line numbers the evidence sits on>
 owner:    <the one place that owns this job afterwards>
 callers:  <every call site that has to change>
+door:     <two-way — land it and go | one-way — confirmed with the user, what they said>
 proof:    <the command to run, and the output that counts as success>
 effort:   <S / M / L>
 after:    <the move that must land first, or "nothing">
@@ -151,7 +181,8 @@ the database doesn't change). A move that contradicts it is a new decision, not 
 they would have to open the report, read the code, or ask you a question, a field is missing. Fill
 it now, with the code still in front of you; this is the only moment that context is free.
 
-A move whose proof line you can't name is not a move. It stays in the report as a question.
+A move whose proof line you can't name is not a move, and neither is one whose door you can't name
+— both stay in the report as a question, not a block.
 
 Filing these as tracked issues is `issue-handoff`'s job, from the file alone, whenever the user
 wants them. Never ask about it mid-audit; you finish at the file.
@@ -183,7 +214,8 @@ the failure this paragraph exists to stop.
 ## Common mistakes
 
 Diagrams with no decisions behind them; "decisions" with one option; walking through a one-way
-door without stopping; a second system built for a job the first already does; two things merged
-because they looked alike, not because they change together; announcing the handoff to `arch-map`
-and leaving no file anywhere; technology names in boundary descriptions, which stop being true
-the moment the stack changes.
+door without stopping, including inside a move block; a second system built for a job the first
+already does; two things merged because they looked alike, not because they change together; a
+finding badged Strong with no counted cost behind it; re-proposing a move the decision log already
+rejected, unread; announcing the handoff to `arch-map` and leaving no file anywhere; technology
+names in boundary descriptions, which stop being true the moment the stack changes.
