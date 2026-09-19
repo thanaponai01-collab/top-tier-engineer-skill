@@ -1,5 +1,30 @@
 # Changelog
 
+## 4.20.0 — 2026-09-19 — architecture is the cost of the next change
+
+- **`arch-design` rewritten around one yardstick: what the next likely change costs.** 36 releases
+  had each patched one failure in as a rule plus a matching "common mistake", which took the file
+  to 245 lines, the one-way-door rule stated four times, and 20 lines about filenames. It is now one
+  loop for both modes (Aim → Measure → Diagnose → Decide → Move), at 173 lines. Every rule that
+  carried a test is still there, stated once.
+- **Aim names the yardstick first.** Before reading, the run writes down the three changes most
+  likely to come next and where they came from. Findings, badges and moves are all judged against
+  them.
+- **Measure reads the git history, not just the code.** New `scripts/change-map.py` (stdlib only)
+  reports spread (modules touched per commit), hidden coupling (file pairs in different modules that
+  change together) and churn hotspots. The code shows what's connected; only the history shows what
+  changes together. "Change rehearsal" becomes a count instead of a story. Tested in
+  `tests/test_change_map.py` against a planted history, with a decoy and a bulk commit.
+- **New finding shapes:** shotgun change, hidden coupling, wrong direction, alongside the existing
+  ones. The same-reason test, which used to be buried in Shape, is now a named test beside the
+  deletion test.
+- **Move blocks gain `pays:`**, naming which yardstick change gets cheaper and by how much
+  ("add a report field: 6 files → 2"). A move with nothing to pay is tidying, not architecture. After
+  the moves land, re-running the rehearsal or the history is the architecture's own proof.
+- The file gains a change-cost table (`yardstick change | modules touched now | after the moves`).
+  Path rules, `door:`, badges, decision-log reads, and the fallbacks for `arch-map` and
+  `latent-audit` are all kept.
+
 ## 4.19.0 — 2026-09-18 — a one-way door needs a source, not a memory
 
 - **`arch-design`'s Decide step now enforces the plugin's own ground-truth-over-memory habit on

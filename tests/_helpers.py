@@ -8,6 +8,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPTS = {
     "structure-report.py": os.path.join(ROOT, "skills", "structure-gate", "scripts"),
     "graph-audit.py": os.path.join(ROOT, "skills", "latent-audit", "scripts"),
+    "change-map.py": os.path.join(ROOT, "skills", "arch-design", "scripts"),
 }
 
 
