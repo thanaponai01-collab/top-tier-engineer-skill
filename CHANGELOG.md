@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.21.0 — 2026-09-26 — the habits, written for an agent
+
+- **`PHILOSOPHY.md` reframed from a persona to a loop.** The opening no longer casts the reader as a
+  busy senior engineer; it says you are an agent that acts through tools in a loop of observe, act,
+  check, and that trust comes from what each step is gated on. Habits 1-7 keep their numbers, names
+  and tests (other files cite `#3` and `#7`); the wording now speaks in agent terms: observe before
+  any write, tool output is the only fact, an exit condition the loop can run itself, risk tiers on
+  actions, re-observe after a second failure.
+- **Three agent habits added.** #8 delegate with a standalone brief and verify the subagent's report
+  before building on it; #9 put state on disk where the next step can find it; #10 work inside a
+  budget and end in a passing check or a stated stop.
+
 ## 4.20.0 — 2026-09-19 — architecture is the cost of the next change
 
 - **`arch-design` rewritten around one yardstick: what the next likely change costs.** 36 releases
