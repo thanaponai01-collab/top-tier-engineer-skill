@@ -61,11 +61,34 @@ when its command exits 0.
 - run: `python scripts/smoke_refund.py`
 - fail-proof: changed the refund sign, test_refunds went red, reverted
 
+## Journey: Buy something
+- features: Login, Refunds
+- test: `python -m pytest tests/test_buy_flow.py -q`
+- fail-proof: broke the cart handoff, the flow test went red, reverted
+
+## Run
+- setup: `python scripts/seed.py`
+- start: `python app.py`
+- ready: `python scripts/wait_http.py http://localhost:8000/health`
+- login: user demo@example.com, password in .env.test
+
 ## Blind spots
 - the payment gateway is stubbed; real card declines are not exercised
 ```
 
-`verify.py run` prints a result per feature, then what a green run does **not** cover: features with
+**Journeys.** A feature can pass alone and fail with its neighbour, so the seams get their own
+section: `## Journey: <name>`, `features:` naming two or more features that have their own sections,
+and checks that run the whole flow (log in, then buy, then refund). A journey naming a feature with
+no section, or fewer than two, is BROKEN and fails the run.
+
+**Run.** A check that needs the app up needs a recipe for bringing it up, or the next session
+guesses. `## Run` holds `setup` (seed data, run first), `start` (kept running in the background),
+`ready` (exits 0 once the app is up), `stop` (optional; else the process tree is killed) and `login`
+(free text). `verify.py run` does setup, start, waits for ready, runs the checks, and always stops
+the app. If setup fails or the app never becomes ready, no check runs: a check against an app that
+is not up proves nothing. Without a `## Run`, a `run:` check gets a note that it assumes the app is up.
+
+`verify.py run` prints a result per feature (and per journey), then what a green run does **not** cover: features with
 no check (UNVERIFIED), checks nobody proved can fail, test files no feature names (orphans), and the
 blind spots. `--strict` makes the unverified and unproven ones fail the run; use it for "done". A
 bare `pytest` in a command attributes no file to a feature, so those files show as orphans; name the

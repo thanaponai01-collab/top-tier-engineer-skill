@@ -23,7 +23,7 @@ One `##` section per feature in `FEATURES.md` at the repo root. Each bullet is `
 - cli: `shop checkout` @ cli.py
 - trace: `checkout` @ src/routes.tsx > `placeOrder` @ src/orders.ts > `orders` @ db/schema.sql
 - verify: Checkout
-- status: proven: drove /checkout in a browser, order id shown
+- status: proven @ 3f2a1bc: drove /checkout in a browser, order id shown
 ```
 
 - **what:** what it does for its user, in one sentence, not what the code is called.
@@ -36,7 +36,8 @@ One `##` section per feature in `FEATURES.md` at the repo root. Each bullet is `
   (handler, then what it calls, then the row, file or request that changes). Each step must be in its
   file and referenced from the step before it, so an agent can follow the feature without searching.
 - **verify:** the VERIFY.md section that proves it (`verify-loop`). No section, no proof it works.
-- **status:** an evidence label, then how you know it.
+- **status:** an evidence label, then how you know it. Pin it to the commit you ran it at
+  (`proven @ <short sha>`): `check` then flags it as drifted once a file of that feature changes.
 - Also worth a line when true: **needs** (login, a flag, a role, seeded data) and **effect** (what
   changes: a row, a file, a request).
 
@@ -64,7 +65,7 @@ end · **suspected** = neither.*
    no check is listed as a gap, not hidden.
 6. **Check the map.** `python <base>/scripts/features.py check --strict` must exit 0.
 
-*Test:* `check --strict` prints `0 stale | 0 broken | 0 untraced | 0 unmapped | 0 unlinked | 0 unlabeled | 0 undescribed`.
+*Test:* `check --strict` prints `0 stale | 0 broken | 0 untraced | 0 unmapped | 0 unlinked | 0 unlabeled | 0 undescribed | 0 drifted`.
 
 ## What `check` says
 
@@ -77,12 +78,21 @@ end · **suspected** = neither.*
 - **Unmapped**: the code declares an entry point the map lacks: a feature nobody wrote down.
 - **Unlinked, unlabeled, undescribed**: a feature with no VERIFY.md section, no status, or no `what`.
   Also lists VERIFY.md sections no feature links.
-- `--strict` fails on the last four groups too; without it only STALE and BROKEN fail. Use `--strict` for
+- **Drifted**: a status pinned `@ commit` whose feature has files changed since (or a commit git cannot
+  resolve). Re-run the entry points, then re-pin; never re-pin without re-running.
+- `--strict` fails on the last five groups too; without it only STALE and BROKEN fail. Use `--strict` for
   "done".
 
 `check` reads code text, so it proves an entry point and each trace hop are *declared and linked*, not
 that they *work*. Step 3 is
 what makes an entry `proven`; the script keeps that claim honest afterwards, when the code moves.
+
+## After a change
+
+`python <base>/scripts/features.py impact` lists the features whose entry or trace files changed
+(git diff against HEAD, plus untracked; `--base REF` or `--files a b` to choose) and the VERIFY.md
+section to rerun for each. Changed code no feature names is a gap in the map, or shared code to
+check by hand. Run those sections with `verify-loop`, then re-pin what you re-proved.
 
 ## Using the map
 

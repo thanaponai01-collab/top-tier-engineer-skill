@@ -1,5 +1,29 @@
 # Changelog
 
+## 4.27.0 — 2026-09-26 — the app has a way up, and flows have a check
+
+- **`VERIFY.md` gains a `## Run` recipe.** `setup` (seed), `start` (background), `ready` (poll until
+  exit 0, within `--timeout`), `stop`, `login`. `verify.py run` brings the app up, runs the checks,
+  and always tears it down; a failed setup or an app that is never ready ends the run before any
+  check, since those checks would prove nothing. A `run:` check with no recipe gets a note.
+- **Journeys.** `## Journey: <name>` with `features:` (two or more, each with its own section) and
+  its own checks. Naming a missing feature, or fewer than two, is BROKEN and fails the run. The
+  summary line ends `| <j> journeys, <b> broken`; `features.py check` no longer lists journey or
+  Run sections as orphans.
+- Tests: `RunRecipe` and `Journeys` in `tests/test_verify.py`, `JourneySections` in
+  `tests/test_features.py`, written red first.
+
+## 4.26.0 — 2026-09-26 — a change points at the checks it needs
+
+- **`feature-map` gains `impact`.** `features.py impact` takes the changed files (`git diff` against
+  HEAD plus untracked, `--base REF`, or `--files a b`) and prints each feature whose entry or trace
+  files changed with its VERIFY.md section, so a change reruns only the checks it can affect. Changed
+  code that no feature names is listed as a gap.
+- **Status can be pinned to a commit** (`proven @ 3f2a1bc: ...`). `check` counts a pin as `drifted`
+  when a file of that feature changed since, or the commit does not resolve; `--strict` fails on it.
+  A proven claim now expires when the code under it moves.
+- Tests: `Impact` and `Drift` in `tests/test_features.py`, written red first (5 failing, then green).
+
 ## 4.25.0 — 2026-09-26 — a feature can be followed from click to effect
 
 - **`feature-map` gains `trace:`.** Each feature can carry the path an agent follows, entry point to

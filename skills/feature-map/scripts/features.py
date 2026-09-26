@@ -7,6 +7,8 @@ click target, shortcut, CLI command. Two commands:
   init   Draft FEATURES.md from the entry points found in the code, one feature per group.
          A draft: the agent names each feature, writes what it does, and labels it. Never
          overwrites an existing FEATURES.md.
+  impact Which features a change touches, and the VERIFY.md sections to rerun. Files come from
+         `--files a b`, else `git diff` against HEAD (`--base REF`) plus untracked files.
   check  Test the map against the code. STALE: a mapped entry point the code no longer has.
          Then what the map does NOT cover: entry points in the code the map lacks (unmapped),
          features with no VERIFY.md link, no status label, or no description.
@@ -26,7 +28,10 @@ FEATURES.md format:
   - code: src/checkout/
   - trace: `checkout` @ src/app.py > `place_order` @ src/svc.py > `orders` @ src/schema.sql
   - verify: Checkout
-  - status: proven: drove /checkout in a browser, order id shown
+  - status: proven @ 3f2a1bc: drove /checkout in a browser, order id shown
+
+`@ commit` on the status pins what the claim was true of; `check` reports it as drifted once a
+file of that feature has changed since (unknown commits count as drifted).
 
 kinds: route (or api), click, shortcut, cli, menu. status: proven | traced | suspected, then how.
 
@@ -38,7 +43,7 @@ Exit: check 0 = nothing stale or broken; 1 = something stale or broken (or --str
 unlinked, unlabeled or undescribed); 2 = no FEATURES.md. Summary line:
   FEATURES: <f> features | <e> entry points, <s> stale | <b> broken | <t> untraced | <u> unmapped | <v> unlinked | <l> unlabeled | <d> undescribed
 """
-import argparse, os, re, sys
+import argparse, os, re, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _encoding import utf8_streams
@@ -225,6 +230,67 @@ def cmd_init(repo):
     return 0
 
 
+# ---- git: what changed, what a feature owns ------------------------------------------------
+
+def git_lines(repo, *args):
+    """Output lines of a git command run in repo, or None when git or the repo is unavailable."""
+    try:
+        r = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, encoding="utf-8")
+    except OSError:
+        return None
+    return r.stdout.splitlines() if r.returncode == 0 else None
+
+
+def changed_files(repo, ref):
+    """Files changed against ref (working tree included) plus untracked ones; None if git fails."""
+    diff = git_lines(repo, "diff", "--name-only", "--relative", ref)
+    if diff is None:
+        return None
+    return set(diff) | set(git_lines(repo, "ls-files", "--others", "--exclude-standard") or [])
+
+
+def feature_files(f):
+    """Every file a feature's map names: entry-point files and trace steps."""
+    files = {rel for _k, _a, rel, _n in f["entries"] if rel}
+    for raw in f["trace"].split(" > "):
+        m = STEP.match(raw.strip())
+        if m and m.group(2):
+            files.add(m.group(2))
+    return files
+
+
+STATUS_COMMIT = re.compile(r"^\w+\s*@\s*([0-9a-fA-F]{4,40})")
+
+
+def cmd_impact(repo, files, base):
+    features = parse(read(os.path.join(repo, MAP)))
+    if not features:
+        print(f"no {MAP} with features in {repo}; run `features.py init`.")
+        return 2
+    changed = set(f.replace("\\", "/") for f in files) if files else changed_files(repo, base)
+    if changed is None:
+        print(f"cannot read the change from git in {repo}; pass --files a b.")
+        return 2
+    claimed = set()
+    hit = 0
+    for f in features:
+        own = feature_files(f)
+        touched = sorted(own & changed)
+        claimed |= own
+        if touched:
+            hit += 1
+            print(f["name"])
+            print("  changed: " + ", ".join(touched))
+            print(f"  verify: {f['verify'] if not is_todo(f['verify']) else 'none linked, no check to rerun'}")
+    loose = sorted(c for c in changed if os.path.splitext(c)[1] in CODE_EXT and c not in claimed)
+    if loose:
+        print("Changed code claimed by no feature (map gap, or shared code to check by hand):")
+        for c in loose:
+            print(f"  {c}")
+    print(f"IMPACT: {len(changed)} changed file(s) | {hit} feature(s) affected | {len(loose)} claimed by no feature")
+    return 0
+
+
 # ---- check --------------------------------------------------------------------------------
 
 def stale_reason(repo, kind, anchor, rel, needle, cache):
@@ -290,10 +356,11 @@ def cmd_check(repo, strict):
         print(f"{MAP} has no '## <feature>' sections; nothing to check.")
         return 2
     vtext = read(os.path.join(repo, VERIFY))
-    vnames = {m.lower(): m for m in re.findall(r"(?m)^##\s+(.+?)\s*$", vtext) if m.lower() != "blind spots"}
+    vnames = {m.lower(): m for m in re.findall(r"(?m)^##\s+(.+?)\s*$", vtext) if m.lower() not in ("blind spots", "run") and not m.lower().startswith("journey:")}
 
     cache, mapped = {}, set()
-    entries = stale = broken = untraced = unlinked = unlabeled = undescribed = 0
+    entries = stale = broken = untraced = unlinked = unlabeled = undescribed = drifted = 0
+    head_changed = {}
     for f in features:
         print(f["name"])
         for kind, anchor, rel, needle in f["entries"]:
@@ -325,6 +392,18 @@ def cmd_check(repo, strict):
         if not f["status"].lower().startswith(LABELS):
             unlabeled += 1
             print("  note  no status label (proven | traced | suspected)")
+        cm = STATUS_COMMIT.match(f["status"])
+        if cm:
+            ref = cm.group(1)
+            if ref not in head_changed:
+                head_changed[ref] = changed_files(repo, ref)
+            moved = head_changed[ref]
+            if moved is None:
+                drifted += 1
+                print(f"  note  drifted: status pinned to {ref}, which git cannot resolve")
+            elif feature_files(f) & moved:
+                drifted += 1
+                print(f"  note  drifted: {', '.join(sorted(feature_files(f) & moved))} changed since {ref}")
 
     unmapped = []
     for kind, anchor, rel in discover(repo):
@@ -341,8 +420,8 @@ def cmd_check(repo, strict):
         unlinked += len(orphans)
 
     print(f"FEATURES: {len(features)} features | {entries} entry points, {stale} stale | "
-          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed")
-    if stale or broken or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed)):
+          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed | {drifted} drifted")
+    if stale or broken or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed or drifted)):
         return 1
     return 0
 
@@ -356,10 +435,18 @@ def main():
     c = sub.add_parser("check", help="test every mapped entry point against the code")
     c.add_argument("repo", nargs="?", default=".")
     c.add_argument("--strict", action="store_true",
-                   help="also exit 1 on unmapped entry points, unlinked, unlabeled or undescribed features")
+                   help="also exit 1 on unmapped entry points, unlinked, unlabeled or undescribed features, and drifted status pins")
+    m = sub.add_parser("impact", help="which features a change touches and which VERIFY.md sections to rerun")
+    m.add_argument("repo", nargs="?", default=".")
+    m.add_argument("--files", nargs="+", help="changed files (default: git diff against --base, plus untracked)")
+    m.add_argument("--base", default="HEAD", help="git ref to diff against (default HEAD)")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
-    sys.exit(cmd_init(repo) if a.cmd == "init" else cmd_check(repo, a.strict))
+    if a.cmd == "init":
+        sys.exit(cmd_init(repo))
+    if a.cmd == "impact":
+        sys.exit(cmd_impact(repo, a.files, a.base))
+    sys.exit(cmd_check(repo, a.strict))
 
 
 if __name__ == "__main__":

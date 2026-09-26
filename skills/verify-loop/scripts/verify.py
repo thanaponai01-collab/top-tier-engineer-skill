@@ -20,8 +20,26 @@ VERIFY.md format:
   - run: `python app.py --smoke`
   - fail-proof: broke the tax rounding, test_x went red, reverted
 
+  ## Journey: Buy something
+  - features: Login, Checkout
+  - test: `python -m pytest tests/test_buy_flow.py -q`
+  - fail-proof: broke the cart handoff, the flow test went red, reverted
+
+  ## Run
+  - setup: `python scripts/seed.py`
+  - start: `python app.py`
+  - ready: `python scripts/wait_http.py http://localhost:8000/health`
+  - stop: `python scripts/shutdown.py`
+  - login: user demo@example.com, password in .env.test
+
   ## Blind spots
   - the payment gateway is stubbed
+
+A journey is a `## Journey: <name>` section: `features:` lists two or more features that have their
+own sections here, and its checks run the whole flow. `## Run` is how to bring the app up: `setup`
+(any number, run first), `start` (kept running in the background), `ready` (exits 0 once the app is
+up; polled for --timeout seconds), `stop` (optional, else the process tree is killed), `login`
+(free text shown to the reader). Checks run only if setup succeeded and the app became ready.
 
 Usage:
   python scripts/verify.py init [repo]
@@ -29,9 +47,9 @@ Usage:
 
 Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is unverified or
 unproven); 2 = no usable VERIFY.md. Summary line:
-  VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests
+  VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
-import argparse, os, re, subprocess, sys, time
+import argparse, os, re, signal, subprocess, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _encoding import utf8_streams
@@ -48,15 +66,21 @@ TAIL_LINES = 12
 # ---- reading the recipe -------------------------------------------------------------------
 
 def parse(text):
-    """(features, blind_spots). A feature is {name, checks: [(kind, command)], proofs: [str]}."""
+    """(features, blind_spots). A feature is {name, checks: [(kind, command)], proofs: [str],
+    journey: bool, members: [str]}. The `## Run` section is read by parse_run, not here."""
     features, blind, cur, in_blind = [], [], None, False
     for line in text.splitlines():
         h = re.match(r"^##\s+(.+?)\s*$", line)
         if h:
-            if h.group(1).lower() == "blind spots":
+            title = h.group(1)
+            if title.lower() == "blind spots":
                 cur, in_blind = None, True
+            elif title.lower() == "run":
+                cur, in_blind = None, False
             else:
-                cur = {"name": h.group(1), "checks": [], "proofs": []}
+                j = re.match(r"(?i)^journey:\s*(.+)$", title)
+                cur = {"name": j.group(1) if j else title, "checks": [], "proofs": [],
+                       "journey": bool(j), "members": []}
                 features.append(cur)
                 in_blind = False
             continue
@@ -76,9 +100,33 @@ def parse(text):
         if kind in ("fail-proof", "fail proof"):
             if val and not val.upper().startswith("TODO"):
                 cur["proofs"].append(val)
+        elif kind == "features" and cur["journey"]:
+            cur["members"] = [m.strip() for m in val.split(",") if m.strip()]
         elif val:
             cur["checks"].append((kind, val))
     return features, blind
+
+
+def parse_run(text):
+    """The `## Run` recipe: {setup: [cmd], start, ready, stop, login}, or None when absent."""
+    run, inside, seen = {"setup": []}, False, False
+    for line in text.splitlines():
+        h = re.match(r"^##\s+(.+?)\s*$", line)
+        if h:
+            inside = h.group(1).lower() == "run"
+            seen = seen or inside
+            continue
+        m = re.match(r"^\s*[-*]\s+([A-Za-z]+):\s*(.*\S)\s*$", line) if inside else None
+        if not m:
+            continue
+        key, val = m.group(1).lower(), m.group(2)
+        if len(val) >= 2 and val[0] == val[-1] == "`" and val.count("`") == 2:
+            val = val[1:-1]
+        if key == "setup":
+            run["setup"].append(val)
+        elif key in ("start", "ready", "stop", "login"):
+            run[key] = val
+    return run if seen else None
 
 
 # ---- finding tests ------------------------------------------------------------------------
@@ -218,6 +266,56 @@ def run_check(cmd, repo, timeout):
         return False, None, f"timed out after {timeout}s", time.time() - t0
 
 
+def start_app(cmd, repo):
+    """(process, log path). The app keeps running in the background; its output goes to a log."""
+    fd, log = tempfile.mkstemp(prefix="verify-app-", suffix=".log")
+    kw = ({"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if os.name == "nt"
+          else {"start_new_session": True})
+    with os.fdopen(fd, "w") as fh:
+        proc = subprocess.Popen(cmd, shell=True, cwd=repo, stdout=fh, stderr=subprocess.STDOUT, **kw)
+    return proc, log
+
+
+def stop_app(proc, stop_cmd, repo, timeout):
+    if stop_cmd:
+        run_check(stop_cmd, repo, timeout)
+    if proc.poll() is None:
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True)
+        else:
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except OSError:
+                pass
+    try:
+        proc.wait(timeout=10)
+    except subprocess.TimeoutExpired:
+        pass
+
+
+def wait_ready(cmd, proc, repo, timeout):
+    """(ready, why not). Polls `ready` until it exits 0, the app dies, or the timeout passes."""
+    if not cmd:
+        time.sleep(1)
+        return proc.poll() is None, f"the app exited with code {proc.poll()} before any check ran"
+    t0 = time.time()
+    while time.time() - t0 < timeout:
+        if proc.poll() is not None:
+            return False, f"the app exited with code {proc.poll()} before it was ready"
+        if run_check(cmd, repo, max(1, min(10, timeout)))[0]:
+            return True, ""
+        time.sleep(0.5)
+    return False, f"'ready' did not pass within {timeout}s"
+
+
+def tail_of(path):
+    try:
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            return fh.read().rstrip().splitlines()[-TAIL_LINES:]
+    except OSError:
+        return []
+
+
 def cmd_run(repo, only, timeout, strict):
     path = os.path.join(repo, RECIPE)
     if not os.path.isfile(path):
@@ -228,11 +326,57 @@ def cmd_run(repo, only, timeout, strict):
         print(f"{RECIPE} has no '## <feature>' sections; nothing to run.")
         return 2
 
+    recipe = parse_run(read(repo, RECIPE))
+    proc = log = None
+    if recipe:
+        for cmd in recipe["setup"]:
+            ok, code, out, secs = run_check(cmd, repo, timeout)
+            if not ok:
+                print(f"Run: setup failed ({cmd}); no check was run.")
+                for line in out.rstrip().splitlines()[-TAIL_LINES:]:
+                    print(f"        {line}")
+                return 1
+        if recipe.get("login"):
+            print(f"Login: {recipe['login']}")
+        if recipe.get("start"):
+            t0 = time.time()
+            proc, log = start_app(recipe["start"], repo)
+            ready, why = wait_ready(recipe.get("ready"), proc, repo, timeout)
+            if not ready:
+                print(f"Run: app not ready: {why}; no check was run.")
+                for line in tail_of(log):
+                    print(f"        {line}")
+                stop_app(proc, recipe.get("stop"), repo, timeout)
+                os.unlink(log)
+                return 1
+            print(f"Run: app ready in {time.time() - t0:.1f}s ({recipe['start']})")
+    try:
+        return run_checks(repo, features, blind, recipe, only, timeout, strict)
+    finally:
+        if proc:
+            stop_app(proc, recipe.get("stop"), repo, timeout)
+            try:
+                os.unlink(log)
+            except OSError:
+                pass
+
+
+def run_checks(repo, features, blind, recipe, only, timeout, strict):
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
-    passed = failed = unverified = unproven = 0
+    known = {f["name"].lower() for f in features if not f["journey"]}
+    passed = failed = unverified = unproven = journeys = broken = 0
     for f in shown:
-        print(f["name"])
+        print(("Journey: " if f["journey"] else "") + f["name"])
+        if f["journey"]:
+            journeys += 1
+            if len(f["members"]) < 2:
+                broken += 1
+                print("  BROKEN  a journey names fewer than two features: that is a feature, not a journey")
+            for m in f["members"]:
+                if m.lower() not in known:
+                    broken += 1
+                    print(f"  BROKEN  journey names {m}: no such feature section in {RECIPE}")
         if not f["checks"]:
             unverified += 1
             print("  UNVERIFIED  no checks")
@@ -251,6 +395,8 @@ def cmd_run(repo, only, timeout, strict):
             unproven += 1
             print("  note  no fail-proof recorded: nobody has shown these checks can go red")
 
+    if not recipe and any(k == "run" for f in features for k, _ in f["checks"]):
+        print("note  'run' checks exist but there is no ## Run section: they assume the app is already up.")
     orphans = []
     if not only:
         orphans = [t for t in find_tests(repo) if not is_covered(t, all_cmds, repo)]
@@ -265,9 +411,10 @@ def cmd_run(repo, only, timeout, strict):
     else:
         print("Blind spots: none listed. A recipe that admits none has not looked.")
 
-    print(f"VERIFY: {len(shown)} features | {passed} checks pass, {failed} fail | "
-          f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests")
-    if failed or (strict and (unverified or unproven)):
+    print(f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
+          f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
+          f"{journeys} journeys, {broken} broken")
+    if failed or broken or (strict and (unverified or unproven)):
         return 1
     return 0
 

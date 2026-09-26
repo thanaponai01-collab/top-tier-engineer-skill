@@ -148,5 +148,113 @@ class Run(unittest.TestCase):
             self.assertEqual(code, 2)
 
 
+def alive(pid):
+    import subprocess, sys
+    if sys.platform == "win32":
+        out = subprocess.run(["tasklist", "/FI", f"PID eq {pid}"], capture_output=True, text=True).stdout
+        return str(pid) in out
+    try:
+        os.kill(pid, 0)
+        return True
+    except OSError:
+        return False
+
+
+SRV = ("import os, time\n"
+       "open('pid.txt', 'w').write(str(os.getpid()))\n"
+       "time.sleep(0.5)\n"
+       "open('up.flag', 'w').write('1')\n"
+       "time.sleep(300)\n")
+UP = 'python -c "import os,sys; sys.exit(0 if os.path.exists(\'up.flag\') else 1)"'
+SEEDED_AND_UP = 'python -c "import os; assert os.path.exists(\'seeded\') and os.path.exists(\'up.flag\')"'
+
+
+class RunRecipe(unittest.TestCase):
+    def test_setup_start_ready_then_checks_then_the_app_is_stopped(self):
+        recipe = ("## Run\n"
+                  "- setup: `python -c \"open('seeded', 'w').write('1')\"`\n"
+                  "- start: `python srv.py`\n"
+                  f"- ready: `{UP}`\n\n"
+                  f"## Login\n- test: `{SEEDED_AND_UP}`\n- fail-proof: dropped the seed, went red\n\n"
+                  "## Blind spots\n- none\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "srv.py", SRV)
+            write(tmp, "VERIFY.md", recipe)
+            code, out, err = run("verify.py", "run", tmp, "--timeout", "20")
+            self.assertEqual(code, 0, out + err)
+            self.assertIn("PASS", out)
+            self.assertIn("app ready", out)
+            with open(os.path.join(tmp, "pid.txt")) as fh:
+                pid = int(fh.read())
+            self.assertFalse(alive(pid), "the started app must be stopped after the run")
+
+    def test_an_app_that_never_becomes_ready_fails_and_no_check_runs(self):
+        recipe = ("## Run\n"
+                  "- start: `python -c \"import time; time.sleep(300)\"`\n"
+                  "- ready: `python -c \"import sys; sys.exit(1)\"`\n\n"
+                  "## Login\n- test: `python -c \"open('ran', 'w').write('1')\"`\n- fail-proof: x\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", recipe)
+            code, out, _ = run("verify.py", "run", tmp, "--timeout", "3")
+            self.assertEqual(code, 1, out)
+            self.assertIn("not ready", out)
+            self.assertFalse(os.path.exists(os.path.join(tmp, "ran")),
+                             "checks against an app that is not up prove nothing")
+
+    def test_a_failing_setup_stops_the_run(self):
+        recipe = (f"## Run\n- setup: `{FAIL}`\n\n"
+                  "## Login\n- test: `python -c \"open('ran', 'w').write('1')\"`\n- fail-proof: x\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", recipe)
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("setup failed", out)
+            self.assertIn("expected 42, got 41", out)
+            self.assertFalse(os.path.exists(os.path.join(tmp, "ran")))
+
+    def test_run_checks_without_a_run_section_get_a_note(self):
+        recipe = f"## Login\n- run: `{PASS}`\n- fail-proof: x\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", recipe)
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertIn("no ## Run", out)
+
+
+class Journeys(unittest.TestCase):
+    BASE = (f"## Login\n- test: `{PASS}`\n- fail-proof: x\n\n"
+            f"## Checkout\n- test: `{PASS}`\n- fail-proof: x\n\n")
+
+    def test_a_journey_over_known_features_runs_and_is_counted(self):
+        recipe = self.BASE + (f"## Journey: Buy something\n- features: Login, Checkout\n"
+                              f"- test: `{PASS}`\n- fail-proof: x\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", recipe)
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertIn("2 features", out)
+            self.assertIn("1 journeys, 0 broken", out)
+
+    def test_a_journey_naming_a_feature_that_has_no_section_is_broken(self):
+        recipe = self.BASE + (f"## Journey: Refund it\n- features: Login, Refund\n"
+                              f"- test: `{PASS}`\n- fail-proof: x\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", recipe)
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("Refund", out)
+            self.assertIn("no such feature", out)
+            self.assertIn("1 broken", out)
+
+    def test_a_journey_of_fewer_than_two_features_is_broken(self):
+        recipe = self.BASE + (f"## Journey: Just login\n- features: Login\n"
+                              f"- test: `{PASS}`\n- fail-proof: x\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", recipe)
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("fewer than two", out)
+
+
 if __name__ == "__main__":
     unittest.main()

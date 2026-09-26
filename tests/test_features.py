@@ -209,5 +209,86 @@ class Check(unittest.TestCase):
             self.assertEqual(code, 0, out)
 
 
+def git(tmp, *args):
+    import subprocess
+    r = subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", *args], cwd=tmp,
+                       capture_output=True, text=True, check=True)
+    return r.stdout.strip()
+
+
+def repo_at_head(tmp, features=MAP):
+    setup(tmp, features)
+    git(tmp, "init", "-q")
+    git(tmp, "add", "-A")
+    git(tmp, "commit", "-qm", "base")
+    return git(tmp, "rev-parse", "--short", "HEAD")
+
+
+class Impact(unittest.TestCase):
+    def test_a_changed_file_names_its_feature_and_its_verify_section(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp)
+            code, out, err = run("features.py", "impact", tmp, "--files", "src/svc.py")
+            self.assertEqual(code, 0, err)
+            self.assertIn("Checkout", out)
+            self.assertIn("verify: Checkout", out)
+            self.assertNotIn("Export", out)
+
+    def test_a_changed_code_file_no_feature_claims_is_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp)
+            write(tmp, "src/orphan.py", "x = 1\n")
+            code, out, _ = run("features.py", "impact", tmp, "--files", "src/orphan.py")
+            self.assertEqual(code, 0)
+            self.assertIn("claimed by no feature", out)
+            self.assertIn("src/orphan.py", out)
+
+    def test_reads_the_change_from_git_when_no_files_given(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_at_head(tmp)
+            write(tmp, "cli.py", 'sub.add_parser("export")\n# edited\n')
+            code, out, err = run("features.py", "impact", tmp)
+            self.assertEqual(code, 0, err)
+            self.assertIn("Export", out)
+            self.assertNotIn("Checkout", out)
+
+
+class Drift(unittest.TestCase):
+    def test_drift_is_reported_and_fails_only_strict(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp)
+            git(tmp, "init", "-q"); git(tmp, "add", "-A"); git(tmp, "commit", "-qm", "base")
+            sha = git(tmp, "rev-parse", "--short", "HEAD")
+            mapped = MAP.replace("proven: drove", f"proven @ {sha}: drove")
+            write(tmp, "FEATURES.md", mapped)
+            code, out, _ = run("features.py", "check", tmp, "--strict")
+            self.assertEqual(code, 0, out)
+            self.assertIn("0 drifted", out)
+            write(tmp, "src/svc.py", 'def place_order():\n    save("orders")  # changed\n')
+            code, out, _ = run("features.py", "check", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertIn("drifted", out)
+            self.assertIn("1 drifted", out)
+            code, out, _ = run("features.py", "check", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+
+    def test_an_unknown_commit_counts_as_drifted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp)
+            git(tmp, "init", "-q"); git(tmp, "add", "-A"); git(tmp, "commit", "-qm", "base")
+            write(tmp, "FEATURES.md", MAP.replace("proven: drove", "proven @ deadbee: drove"))
+            code, out, _ = run("features.py", "check", tmp)
+            self.assertIn("1 drifted", out)
+
+
+class JourneySections(unittest.TestCase):
+    def test_a_verify_journey_section_is_not_an_orphan_feature(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp, verify=VERIFY + "\n## Journey: Buy it\n- features: Checkout, Export\n- test: `x`\n")
+            code, out, _ = run("features.py", "check", tmp, "--strict")
+            self.assertEqual(code, 0, out)
+            self.assertNotIn("linked from no feature", out)
+
+
 if __name__ == "__main__":
     unittest.main()
