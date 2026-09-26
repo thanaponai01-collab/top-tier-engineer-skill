@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Twenty-two engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+Twenty-three engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
 do for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
@@ -39,6 +39,7 @@ the rest of this repo being loaded.
 | `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |
+| `project-setup` | "Set this project up for the skills": drafts VERIFY.md and FEATURES.md from the code and leaves a pointer in CLAUDE.md, once |
 | `recall` | "Where were we / catch me up": a short capsule of the current state and the next step, rebuilt from disk |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |

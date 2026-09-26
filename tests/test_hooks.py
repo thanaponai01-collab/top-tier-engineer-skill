@@ -238,6 +238,9 @@ class TestRouteHintRouting(unittest.TestCase):
             "where were we?": "recall",
             "catch me up on this project": "recall",
             "what was I working on yesterday": "recall",
+            "set up this new project with these skills": "project-setup",
+            "I'm starting fresh, set up the checks for this repo": "project-setup",
+            "bootstrap the repo with the skills": "project-setup",
         }
         for prompt, skill in cases.items():
             self.assertEqual(self.route(prompt), skill, prompt)
@@ -264,7 +267,9 @@ class TestRouteHintSilence(unittest.TestCase):
                        "explain this regex to me",
                        "how does this function work?",
                        "add two numbers together",
-                       "bump the copyright year"):
+                       "bump the copyright year",
+                       "set up the project with Docker",
+                       "set up the database for this repo"):
             self.assertIsNone(self.route(prompt), prompt)
 
     def test_building_is_left_alone(self):

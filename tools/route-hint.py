@@ -48,7 +48,7 @@ SKILLS = (
     "arch-design", "arch-map", "build-discipline", "correctness-gate",
     "code-history", "debug-protocol", "evolve-maintain", "explain", "feature-map",
     "issue-handoff", "latent-audit", "perf-optimize", "pick-skill",
-    "problem-framing", "recall", "safe-release", "scrutinize", "senior-review",
+    "problem-framing", "project-setup", "recall", "safe-release", "scrutinize", "senior-review",
     "structure-gate", "threat-model", "verify-loop", "wire-check",
 )
 
@@ -133,6 +133,14 @@ RULES = (
      r"|\b(design rationale|post-?mortem|who decided)\b",
      None,
      "the reason lives in the records, and it says so when there is none"),
+
+    ("project-setup",
+     r"\b(set ?up|bootstrap|initiali[sz]e) (this|the|my|a) (new |fresh )?(project|repo|codebase) "
+     r"(with|for) (the |these )?(skills|checks|verify)\b"
+     r"|\bset ?up (the|these) skills\b|\bstart(ing)? fresh (here|with (the|these) skills)\b"
+     r"|\bset ?up the checks\b",
+     None,
+     "it drafts the checks and leaves a pointer so the next session finds them"),
 
     ("recall",
      r"\b(where were we|pick (this|it) back up|catch me up|"

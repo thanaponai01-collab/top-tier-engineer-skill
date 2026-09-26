@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.30.0 — 2026-09-26 — a fresh project can be set up for the skills in one step
+
+- **New skill `project-setup`.** Run once in a new or different codebase: reads the manifest and
+  tests to say what kind of system it is, drafts `VERIFY.md` and `FEATURES.md` with the existing
+  `verify.py init` / `features.py init` (both refuse to overwrite), and adds a `## Project checks`
+  block to the project's `CLAUDE.md` so the next session finds them. It reports what is still a
+  draft (`TODO` lines, entry points found) and the skill that finishes each; it never fills them in.
+  No new script: it drives the two that exist, and says how to draft by hand where they are absent.
+- **Routing.** `route-hint.py` sends "set up this project with these skills", "start fresh here",
+  "bootstrap the repo with the skills" to it; "set up the project with Docker" stays silent.
+  `pick-skill` and the README list it.
+- Tests: route cases and two silence cases in `tests/test_hooks.py`, written red first.
+
 ## 4.29.0 — 2026-09-26 — the architecture file is one an agent can build from and check
 
 - **`docs/arch-design.md` is now `key: value` blocks, pinned to a commit.** A header (`at`,

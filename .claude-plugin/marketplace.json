@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "top-tier-engineer",
-      "description": "Twenty-two independent engineering skills, with a router that picks between them: framing, architecture, architecture maps, building, wiring, code history, explanation, recall, correctness, debugging, performance, security, review, scrutiny, structure, dead code, safe releases and maintenance. Install and go.",
+      "description": "Twenty-three independent engineering skills, with a router that picks between them: framing, architecture, architecture maps, building, wiring, code history, explanation, project setup, recall, correctness, debugging, performance, security, review, scrutiny, structure, dead code, safe releases and maintenance. Install and go.",
       "author": {
         "name": "Thanaponai01"
       },
