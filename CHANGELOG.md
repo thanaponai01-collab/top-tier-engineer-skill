@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.24.0 — 2026-09-26 — the agent knows what the system has
+
+- **New skill `feature-map`.** `FEATURES.md` records each feature of a web, CLI or desktop app: what
+  it does for its user, every way in (route, click target, shortcut, CLI command, menu), the code
+  behind it, its `verify-loop` section, and a proven / traced / suspected label saying how it is known.
+- **`scripts/features.py`** (stdlib only). `init` drafts the map from entry points found in code
+  (server routes, page files, `data-testid` and button ids, accelerators and hotkeys, CLI
+  subcommands). `check` reports STALE entry points (the code no longer has them) and what the map
+  lacks: unmapped entry points, features with no VERIFY.md link, no label or no description.
+  `--strict` fails on those too. Shortcut modifiers are normalised (`Ctrl+O` = `CmdOrCtrl+O`).
+- **Proven by hand, kept honest by script:** the skill has the agent run each entry point once to
+  earn `proven`; `check` then catches the map drifting when the code moves.
+- Router (`tools/route-hint.py`) knows the name; `pick-skill` and the README list it.
+
 ## 4.23.0 — 2026-09-26 — the check is built first and lives in the repo
 
 - **New skill `verify-loop`.** For an agent that must tell for itself whether it succeeded: name the

@@ -46,7 +46,7 @@ MAX_PROMPT = 20_000  # a pasted stack trace is not a routing question
 # help choosing, so the hook stays out of the way.
 SKILLS = (
     "arch-design", "arch-map", "build-discipline", "correctness-gate",
-    "debug-protocol", "evolve-maintain", "issue-handoff", "latent-audit",
+    "debug-protocol", "evolve-maintain", "feature-map", "issue-handoff", "latent-audit",
     "perf-optimize", "pick-skill", "problem-framing", "safe-release",
     "scrutinize", "senior-review", "structure-gate", "threat-model",
     "verify-loop", "wire-check",

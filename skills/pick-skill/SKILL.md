@@ -49,6 +49,7 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Slow, clunky, expensive, "will this query scale?" | `perf-optimize` |
 | Auth, secrets, untrusted input, "can this be abused?" | `threat-model` |
 | An agent needs to check its own work and loop until it passes, or you want every feature mapped to its tests | `verify-loop` |
+| Learning what a system has and how to reach each feature (route, click, shortcut, command), or keeping that map current | `feature-map` |
 | "Does it actually work?" before a merge or release | `correctness-gate` |
 | Deploying, or changing the shape of stored data | `safe-release` |
 

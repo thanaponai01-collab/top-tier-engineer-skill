@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Eighteen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+Nineteen engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
 do for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
@@ -36,6 +36,7 @@ the rest of this repo being loaded.
 | `issue-handoff` | "File these as issues": a work doc, or the chat, into tracked issues, nothing dropped |
 | `build-discipline` | "Build it": small, proven, wired increments |
 | `verify-loop` | "Check your own work until it passes": builds the check first, keeps every feature's tests in one VERIFY.md (bundled script) |
+| `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |
 | `debug-protocol` | "It's broken and I don't know why" |
@@ -48,7 +49,7 @@ the rest of this repo being loaded.
 | `safe-release` | "Ship it", "run this migration" |
 | `evolve-maintain` | "Fix / upgrade / refactor / deprecate on a running system" |
 
-`structure-gate`, `latent-audit` and `verify-loop` include stdlib-only Python scripts in their `scripts/` folders.
+`structure-gate`, `latent-audit`, `verify-loop` and `feature-map` include stdlib-only Python scripts in their `scripts/` folders.
 Nothing to install.
 
 ## Flows
