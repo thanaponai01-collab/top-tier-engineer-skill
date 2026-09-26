@@ -20,7 +20,7 @@ until a tool confirms it. Check APIs, versions, config and behavior against the 
 **3. Decide what done looks like first.** Write the exit condition before the first action, as a
 check the loop can run itself: "fix the bug" → a repro that fails, then passes; "refactor" → the same
 tests green before and after; "is it secure" → the abuse case that now fails. Loop until the check
-passes. Never weaken the check to get there.
+passes. Never weaken the check to get there. Past a typo, build the check with `verify-loop`.
 *Test:* the check was written down before the work started.
 
 **4. Smallest change that holds.** Take the smallest action that moves the check. No features,

@@ -49,7 +49,7 @@ SKILLS = (
     "debug-protocol", "evolve-maintain", "issue-handoff", "latent-audit",
     "perf-optimize", "pick-skill", "problem-framing", "safe-release",
     "scrutinize", "senior-review", "structure-gate", "threat-model",
-    "wire-check",
+    "verify-loop", "wire-check",
 )
 
 # Something is wrong, and the prompt does not say what.

@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.23.0 — 2026-09-26 — the check is built first and lives in the repo
+
+- **New skill `verify-loop`.** For an agent that must tell for itself whether it succeeded: name the
+  claim, build the strongest check the environment can run, see it fail once, then loop on its
+  failure text until it passes. Five tests for a good check (it can fail, watches the real thing,
+  does not come from the work, fails specifically, is cheap to rerun) and a cheating check before
+  "done": nothing loosened, skipped or hardcoded.
+- **`VERIFY.md` is the feature-to-check map**, kept in the project so the next session runs the same
+  checks. One section per feature: its commands, a fail-proof line, and a Blind spots list.
+- **`scripts/verify.py`** (stdlib only). `init` drafts VERIFY.md from the test files on disk;
+  `run` executes every check and reports what a green run does not cover: unverified features,
+  checks never shown able to fail, orphan test files, blind spots. `--strict` fails on those.
+- **`PHILOSOPHY.md` habit 3 points at it:** "Past a typo, build the check with `verify-loop`."
+- Router (`tools/route-hint.py`) knows the name; no new trigger rule, since "verify" is too common
+  a word to route on without misfires. `pick-skill` and the README list it.
+
 ## 4.22.0 — 2026-09-26 — a build keeps its state where the next session can find it
 
 - **`build-discipline` rewritten for an agent's loop.** New `BUILD.md`: one line per slice (proof
