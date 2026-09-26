@@ -24,6 +24,7 @@ FEATURES.md format:
   - shortcut: `Ctrl+Enter` @ src/keys.js :: submitOrder
   - cli: `shop checkout` @ cli.py
   - code: src/checkout/
+  - trace: `checkout` @ src/app.py > `place_order` @ src/svc.py > `orders` @ src/schema.sql
   - verify: Checkout
   - status: proven: drove /checkout in a browser, order id shown
 
@@ -33,9 +34,9 @@ Usage:
   python scripts/features.py init  [repo]
   python scripts/features.py check [repo] [--strict]
 
-Exit: check 0 = nothing stale; 1 = something stale (or --strict and something is unmapped,
+Exit: check 0 = nothing stale or broken; 1 = something stale or broken (or --strict and something is untraced, unmapped,
 unlinked, unlabeled or undescribed); 2 = no FEATURES.md. Summary line:
-  FEATURES: <f> features | <e> entry points, <s> stale | <u> unmapped | <v> unlinked | <l> unlabeled | <d> undescribed
+  FEATURES: <f> features | <e> entry points, <s> stale | <b> broken | <t> untraced | <u> unmapped | <v> unlinked | <l> unlabeled | <d> undescribed
 """
 import argparse, os, re, sys
 
@@ -123,7 +124,7 @@ def parse(text):
     for line in text.splitlines():
         h = re.match(r"^##\s+(.+?)\s*$", line)
         if h:
-            cur = {"name": h.group(1), "what": "", "entries": [], "verify": "", "status": ""}
+            cur = {"name": h.group(1), "what": "", "entries": [], "verify": "", "status": "", "trace": ""}
             features.append(cur)
             continue
         b = re.match(r"^\s*[-*]\s+([A-Za-z][\w-]*):\s*(.*?)\s*$", line)
@@ -134,8 +135,8 @@ def parse(text):
             m = re.match(r"^`([^`]+)`(?:\s*@\s*(\S+))?(?:\s*::\s*(\S+))?", val)
             if m:
                 cur["entries"].append((key, m.group(1), m.group(2) or "", m.group(3) or ""))
-        elif key in ("what", "verify", "status"):
-            cur[key] = val.strip("`")
+        elif key in ("what", "verify", "status", "trace"):
+            cur[key] = val if key == "trace" else val.strip("`")
     return features
 
 
@@ -212,6 +213,7 @@ def cmd_init(repo):
         out.append("- what: TODO one sentence: what this feature does for its user")
         for kind, anchor, rel in groups[name]:
             out.append(f"- {kind}: `{anchor}` @ {rel}")
+        out.append("- trace: TODO `handler` @ file > `what it calls` @ file > `effect` @ file")
         out.append("- verify: TODO name of the VERIFY.md section that proves it")
         out.append("- status: TODO proven | traced | suspected, then how you know")
         out.append("")
@@ -247,6 +249,37 @@ def stale_reason(repo, kind, anchor, rel, needle, cache):
     return f"'{needle}' not found anywhere in the code"
 
 
+STEP = re.compile(r"^`([^`]+)`(?:\s*@\s*(\S+))?(?:\s*::\s*(\S+))?")
+
+
+def trace_problems(repo, trace):
+    """[(tag, message)]: STALE when a step is not in its file, BROKEN when a step is not
+    referenced from the step before it (the path is no longer a real call chain)."""
+    out, prev_rel, prev_text = [], None, ""
+    for raw in trace.split(" > "):
+        m = STEP.match(raw.strip())
+        if not m:
+            out.append(("STALE", f"unreadable step: {raw.strip()[:40]}"))
+            continue
+        sym, rel, needle = m.group(1), m.group(2) or "", m.group(3) or m.group(1)
+        text = read(os.path.join(repo, rel)) if rel else ""
+        if not rel or not os.path.isfile(os.path.join(repo, rel)):
+            out.append(("STALE", f"{sym}: {rel or 'no file given'} does not exist"))
+            prev_rel, prev_text = None, ""
+            continue
+        if needle not in text:
+            out.append(("STALE", f"{sym}: '{needle}' not found in {rel}"))
+            prev_rel, prev_text = None, ""
+            continue
+        if prev_rel is not None:
+            defined = re.search(rf"\b(?:def|function|func|fn|class|const|let|var)\s+{re.escape(needle)}\b", text)
+            need = 2 if rel == prev_rel and defined else 1
+            if prev_text.count(needle) < need:
+                out.append(("BROKEN", f"{sym} is not called from {prev_rel}"))
+        prev_rel, prev_text = rel, text
+    return out
+
+
 def cmd_check(repo, strict):
     path = os.path.join(repo, MAP)
     if not os.path.isfile(path):
@@ -260,7 +293,7 @@ def cmd_check(repo, strict):
     vnames = {m.lower(): m for m in re.findall(r"(?m)^##\s+(.+?)\s*$", vtext) if m.lower() != "blind spots"}
 
     cache, mapped = {}, set()
-    entries = stale = unlinked = unlabeled = undescribed = 0
+    entries = stale = broken = untraced = unlinked = unlabeled = undescribed = 0
     for f in features:
         print(f["name"])
         for kind, anchor, rel, needle in f["entries"]:
@@ -272,6 +305,14 @@ def cmd_check(repo, strict):
             print(f"  {'STALE' if why else 'ok   '}  {kind}  {anchor}{where}" + (f"  ({why})" if why else ""))
         if not f["entries"]:
             print("  note  no entry points: how does a user reach this?")
+        if is_todo(f["trace"]):
+            untraced += 1
+            print("  note  untraced: no 'trace:' path from entry point to effect")
+        else:
+            for tag, msg in trace_problems(repo, f["trace"]):
+                stale += tag == "STALE"
+                broken += tag == "BROKEN"
+                print(f"  {tag:<5}  trace  {msg}")
         if is_todo(f["what"]):
             undescribed += 1
             print("  note  undescribed: no 'what:' line")
@@ -300,8 +341,8 @@ def cmd_check(repo, strict):
         unlinked += len(orphans)
 
     print(f"FEATURES: {len(features)} features | {entries} entry points, {stale} stale | "
-          f"{len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed")
-    if stale or (strict and (unmapped or unlinked or unlabeled or undescribed)):
+          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed")
+    if stale or broken or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed)):
         return 1
     return 0
 

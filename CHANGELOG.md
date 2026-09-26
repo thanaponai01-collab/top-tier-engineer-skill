@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.25.0 — 2026-09-26 — a feature can be followed from click to effect
+
+- **`feature-map` gains `trace:`.** Each feature can carry the path an agent follows, entry point to
+  effect: `` `handler` @ file > `callee` @ file > `effect` @ file ``. `check` reports a step missing
+  from its file as STALE and a step not referenced from the one before it as BROKEN, so the path
+  stays a real call chain, not a remembered one.
+- **Summary line and `--strict`** count `broken` and `untraced` features; `init` drafts a `trace:`
+  placeholder that does not pass as a trace.
+- Same-file hops need a second occurrence only when the symbol has a definition, so an effect such
+  as a table name is not mistaken for an uncalled function.
+
 ## 4.24.0 — 2026-09-26 — the agent knows what the system has
 
 - **New skill `feature-map`.** `FEATURES.md` records each feature of a web, CLI or desktop app: what

@@ -21,7 +21,7 @@ One `##` section per feature in `FEATURES.md` at the repo root. Each bullet is `
 - click: `[data-testid=pay-btn]` @ src/Cart.tsx
 - shortcut: `Ctrl+Enter` @ src/keys.ts :: submitOrder
 - cli: `shop checkout` @ cli.py
-- code: src/checkout/
+- trace: `checkout` @ src/routes.tsx > `placeOrder` @ src/orders.ts > `orders` @ db/schema.sql
 - verify: Checkout
 - status: proven: drove /checkout in a browser, order id shown
 ```
@@ -32,6 +32,9 @@ One `##` section per feature in `FEATURES.md` at the repo root. Each bullet is `
   anchor (the selector's value, the route's path, the last key, the subcommand); write `:: needle`
   when that is not what the code contains. Prefer a stable anchor (a test-id attribute, an accessible
   name, an id) over a class or a position.
+- **trace:** the path from entry point to effect, steps joined by ` > `, each `` `symbol` @ file ``
+  (handler, then what it calls, then the row, file or request that changes). Each step must be in its
+  file and referenced from the step before it, so an agent can follow the feature without searching.
 - **verify:** the VERIFY.md section that proves it (`verify-loop`). No section, no proof it works.
 - **status:** an evidence label, then how you know it.
 - Also worth a line when true: **needs** (login, a flag, a role, seeded data) and **effect** (what
@@ -48,31 +51,37 @@ end · **suspected** = neither.*
    the entry points it finds (server routes, page files, test-id attributes and button ids, accelerators
    and hotkeys, CLI subcommands) grouped by likely feature. It is a scan, not the map: it cannot see
    a click path built at runtime or a shortcut set in config.
-2. **Read the code behind each group and regroup by real feature.** Trace from where the system
+2. **Trace each feature.** Follow it from the entry point to its effect and write the `trace:` path, reading
+   every hop rather than guessing the middle. A hop you cannot follow is a finding, and the path stops there.
+3. **Read the code behind each group and regroup by real feature.** Trace from where the system
    starts (router, menu template, CLI dispatcher). Add what the scan could not see. Where the map
    would need a guess, write `suspected` rather than a confident line.
-3. **Prove the entry points by running them.** Web: open the page, use the click path, screenshot.
+4. **Prove the entry points by running them.** Web: open the page, use the click path, screenshot.
    CLI: run the command with `--help`, then once for real. Desktop: press the shortcut, open the
    menu item. Set `proven` only for what you ran; a route you read but did not hit is `traced`.
    A dead entry point found here is a finding for `wire-check`, not a line to keep.
-4. **Link each feature to VERIFY.md** (`verify-loop`): name its section, or add one. A feature with
+5. **Link each feature to VERIFY.md** (`verify-loop`): name its section, or add one. A feature with
    no check is listed as a gap, not hidden.
-5. **Check the map.** `python <base>/scripts/features.py check --strict` must exit 0.
+6. **Check the map.** `python <base>/scripts/features.py check --strict` must exit 0.
 
-*Test:* `check --strict` prints `0 stale | 0 unmapped | 0 unlinked | 0 unlabeled | 0 undescribed`.
+*Test:* `check --strict` prints `0 stale | 0 broken | 0 untraced | 0 unmapped | 0 unlinked | 0 unlabeled | 0 undescribed`.
 
 ## What `check` says
 
-- **STALE**: a mapped entry point the code no longer has (renamed selector, moved route, deleted
+- **STALE**: a mapped entry point or trace step the code no longer has (renamed selector, moved route, deleted
   file). Fix the map or the code, whichever is wrong; never delete the line to make it green
   without finding out which.
+- **BROKEN**: a trace step that exists but is not referenced from the step before it, so the path is
+  no longer a real call chain (a renamed callee, a call removed). Re-trace that hop.
+- **Untraced**: a feature with no `trace:` path.
 - **Unmapped**: the code declares an entry point the map lacks: a feature nobody wrote down.
 - **Unlinked, unlabeled, undescribed**: a feature with no VERIFY.md section, no status, or no `what`.
   Also lists VERIFY.md sections no feature links.
-- `--strict` fails on the last three groups too; without it only STALE fails. Use `--strict` for
+- `--strict` fails on the last four groups too; without it only STALE and BROKEN fail. Use `--strict` for
   "done".
 
-`check` reads code text, so it proves an entry point is *declared*, not that it *works*. Step 3 is
+`check` reads code text, so it proves an entry point and each trace hop are *declared and linked*, not
+that they *work*. Step 3 is
 what makes an entry `proven`; the script keeps that claim honest afterwards, when the code moves.
 
 ## Using the map

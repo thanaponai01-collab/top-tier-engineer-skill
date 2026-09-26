@@ -19,7 +19,9 @@ def write(root, rel, text=""):
 def app(tmp):
     """A small system with one entry point of each kind: route, click, shortcut, cli."""
     write(tmp, "src/app.py", 'from flask import Flask\napp = Flask(__name__)\n\n'
-                             '@app.route("/checkout")\ndef checkout():\n    return "ok"\n')
+                             'from svc import place_order\n\n'
+                             '@app.route("/checkout")\ndef checkout():\n    return place_order()\n')
+    write(tmp, "src/svc.py", 'def place_order():\n    save("orders")\n')
     write(tmp, "src/cart.html", '<button data-testid="pay-btn">Pay</button>\n')
     write(tmp, "src/main.js", "const menu = [{ label: 'Open', accelerator: 'CmdOrCtrl+O' }];\n")
     write(tmp, "cli.py", 'sub.add_parser("export")\n')
@@ -32,18 +34,21 @@ MAP = """# FEATURES
 - what: Pay for the cart and get an order id.
 - route: `/checkout` @ src/app.py
 - click: `[data-testid=pay-btn]` @ src/cart.html
+- trace: `checkout` @ src/app.py > `place_order` @ src/svc.py > `orders` @ src/svc.py
 - verify: Checkout
 - status: proven: drove /checkout in a browser, order id shown
 
 ## Open file
 - what: Open a document from disk.
 - shortcut: `Ctrl+O` @ src/main.js
+- trace: `accelerator` @ src/main.js
 - verify: Open
 - status: traced: menu template read, accelerator wired
 
 ## Export
 - what: Write the current document to a file.
 - cli: `tool export` @ cli.py
+- trace: `add_parser` @ cli.py
 - verify: Export
 - status: proven: ran `tool export`, file written
 """
@@ -145,6 +150,49 @@ class Check(unittest.TestCase):
             code, out, _ = run("features.py", "check", tmp, "--strict")
             self.assertEqual(code, 1, out)
             self.assertIn("1 unlabeled", out)
+
+    def test_a_true_trace_is_clean(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp)
+            code, out, _ = run("features.py", "check", tmp, "--strict")
+            self.assertEqual(code, 0, out)
+            self.assertIn("0 broken", out)
+
+    def test_a_renamed_callee_breaks_the_chain(self):
+        """The fail-proof: the handler stops calling the service, so the path is no longer real."""
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp)
+            write(tmp, "src/app.py", '@app.route("/checkout")\ndef checkout():\n    return order()\n')
+            code, out, _ = run("features.py", "check", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("BROKEN", out)
+            self.assertIn("place_order", out)
+
+    def test_a_step_missing_from_its_file_is_stale(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp)
+            write(tmp, "src/svc.py", "def other():\n    pass\n")
+            code, out, _ = run("features.py", "check", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("STALE", out)
+
+    def test_a_same_file_callee_that_is_never_called_is_broken(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "a.py", "def one():\n    pass\n\ndef two():\n    pass\n")
+            write(tmp, "FEATURES.md", "## X\n- what: x\n- trace: `one` @ a.py > `two` @ a.py\n"
+                  "- status: traced: read a.py\n")
+            code, out, _ = run("features.py", "check", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("BROKEN", out)
+
+    def test_untraced_feature_fails_only_strict(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp, features=MAP.replace("- trace: `add_parser` @ cli.py\n", ""))
+            code, out, _ = run("features.py", "check", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertIn("1 untraced", out)
+            code, out, _ = run("features.py", "check", tmp, "--strict")
+            self.assertEqual(code, 1, out)
 
     def test_no_map_is_exit_2(self):
         with tempfile.TemporaryDirectory() as tmp:
