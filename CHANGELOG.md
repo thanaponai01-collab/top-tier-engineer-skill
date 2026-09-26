@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.22.0 — 2026-09-26 — a build keeps its state where the next session can find it
+
+- **`build-discipline` rewritten for an agent's loop.** New `BUILD.md`: one line per slice (proof
+  line, status, commit) plus a Deferred list whose triggers a machine can check. Resuming reads it
+  instead of trusting recollection.
+- **The proof line is a command the loop can run**, written before the first edit, ideally a test
+  that fails first. A slice gets a budget (about three attempts) and is split rather than ground on.
+- **Delegated slices** carry proof line, allowed files and off-limits files; the report is a claim
+  until the proof line is rerun.
+- Cut the "Common mistakes" and Rules sections, which repeated the steps. "Plan"/"Wire" renamed
+  "Aim"/"Connect". 96 → 91 lines.
+
 ## 4.21.0 — 2026-09-26 — the habits, written for an agent
 
 - **`PHILOSOPHY.md` reframed from a persona to a loop.** The opening no longer casts the reader as a
