@@ -5,7 +5,7 @@ description: Choose which engineering skill the work in front of you needs, and 
 
 # Pick a Skill
 
-Sixteen skills answer sixteen different questions, and five of them answer questions that sound
+Each skill answers a different question, and five of them answer questions that sound
 identical from outside. This is the map. It is one decision, then you leave.
 
 **Route on the question, not the words.** "Review my code" is five different jobs depending on what
@@ -16,7 +16,7 @@ present the menu and stop — a routing answer with no work started is this skil
 *Test:* the response that names a skill also begins it.
 
 **No skill fitting is an answer.** A typo, a rename, a config value, a question about what the code
-does — do it directly and say so. Sixteen skills are for work that is worth the ritual.
+does — do it directly and say so. The skills are for work that is worth the ritual.
 *Test:* you can say what this skill would add that doing the work plainly would not.
 
 ## "Look at my code and tell me what's wrong"
@@ -50,6 +50,9 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Auth, secrets, untrusted input, "can this be abused?" | `threat-model` |
 | An agent needs to check its own work and loop until it passes, or you want every feature mapped to its tests | `verify-loop` |
 | Learning what a system has and how to reach each feature (route, click, shortcut, command), or keeping that map current | `feature-map` |
+| Why is it built this way, why was Y picked, where does this number come from, before changing code that looks wrong | `code-history` |
+| Someone needs to understand a system: what it is, how it works, why (nothing gets changed) | `explain` |
+| Starting or resuming work: "where were we?", what is the state and the next step | `recall` |
 | "Does it actually work?" before a merge or release | `correctness-gate` |
 | Deploying, or changing the shape of stored data | `safe-release` |
 

@@ -1,7 +1,7 @@
 {
   "name": "top-tier-engineer",
-  "description": "Nineteen independent engineering skills, with a router that picks between them: framing, architecture, architecture maps, issue handoff, building, wiring, self-verification, feature maps, correctness, debugging, performance, security, review, scrutiny, structure, dead code, safe releases and maintenance. A hook names the right one when you did not ask for any. Install and go.",
-  "version": "4.27.0",
+  "description": "Twenty-two independent engineering skills, with a router that picks between them: framing, architecture, architecture maps, issue handoff, building, wiring, self-verification, feature maps, code history, explanation, recall, correctness, debugging, performance, security, review, scrutiny, structure, dead code, safe releases and maintenance. A hook names the right one when you did not ask for any. Install and go.",
+  "version": "4.28.0",
   "author": {
     "name": "Thanaponai01"
   },

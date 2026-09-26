@@ -1,5 +1,22 @@
 # Changelog
 
+## 4.28.0 — 2026-09-26 — the agent can find why, teach it, and pick work back up
+
+- **New skill `code-history`.** Answers "why is it this way" from the records, not the code: it
+  finds which evidence sources are connected (source control, tracker, docs, chat, error tracking,
+  observability, analytics), asks them in parallel, and reports the decision, the reason, whether
+  it still holds, and which sources it could not reach. "No recorded reason" is a valid finding.
+  `scripts/history.py` reads git for a file, a symbol (`-G`, so an edited value shows up) or a line
+  range: commits, bodies, `#123` / `PROJ-45` references, reverts, the introduction. Leaves `WHY.md`.
+- **New skill `explain`.** Teaches what a thing is, how it works and why, at the person's pace,
+  changing nothing; ends with a prediction the account did not cover, as the check that it landed.
+- **New skill `recall`.** Rebuilds recent context from git and the project's notes, reruns the last
+  named check, and returns one capsule (goal, done, in flight, open, broken, next, not read).
+- **Routing.** `route-hint.py` names the three; "where were we" moved from `evolve-maintain` to
+  `recall`, and `explain` stays silent on small questions ("what does this function do?") and on
+  failure reports.
+- Tests: `tests/test_history.py`, written red first; route cases in `tests/test_hooks.py`.
+
 ## 4.27.0 — 2026-09-26 — the app has a way up, and flows have a check
 
 - **`VERIFY.md` gains a `## Run` recipe.** `setup` (seed), `start` (background), `ready` (poll until

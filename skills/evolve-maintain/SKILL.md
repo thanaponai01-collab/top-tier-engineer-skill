@@ -1,6 +1,6 @@
 ---
 name: evolve-maintain
-description: Change a running system safely: bug fixes with a known cause, incidents, dependency upgrades, refactors, deprecations, or picking work back up after a gap. Use for "the system broke", "upgrade X", "refactor this", "remove this old API", "where were we?".
+description: Change a running system safely: bug fixes with a known cause, incidents, dependency upgrades, refactors, or deprecations. Use for "the system broke", "upgrade X", "refactor this", "remove this old API".
 ---
 
 # Maintenance & Evolution
@@ -44,7 +44,8 @@ isn't loaded here: smallest slice, wired, proof line run, one revertable commit.
 adds three constraints:
 
 - **Quick fixes get no exemption.** Most rot in old code is what earlier quick fixes left behind.
-- **Code that looks wrong but predates you:** get the reason from git history first. A reason you
+- **Code that looks wrong but predates you:** get the reason from git history first (`code-history`
+  does this across every record; without it, `git log` and `git blame` on the lines). A reason you
   find is respected or explicitly replaced; no reason found means extra proof, not extra confidence.
 - **Reverting is a legitimate fix** — better than a clever fix forward when you're unsure, and the
   one treatment that needs no diagnosis.

@@ -46,10 +46,10 @@ MAX_PROMPT = 20_000  # a pasted stack trace is not a routing question
 # help choosing, so the hook stays out of the way.
 SKILLS = (
     "arch-design", "arch-map", "build-discipline", "correctness-gate",
-    "debug-protocol", "evolve-maintain", "feature-map", "issue-handoff", "latent-audit",
-    "perf-optimize", "pick-skill", "problem-framing", "safe-release",
-    "scrutinize", "senior-review", "structure-gate", "threat-model",
-    "verify-loop", "wire-check",
+    "code-history", "debug-protocol", "evolve-maintain", "explain", "feature-map",
+    "issue-handoff", "latent-audit", "perf-optimize", "pick-skill",
+    "problem-framing", "recall", "safe-release", "scrutinize", "senior-review",
+    "structure-gate", "threat-model", "verify-loop", "wire-check",
 )
 
 # Something is wrong, and the prompt does not say what.
@@ -126,12 +126,31 @@ RULES = (
      None,
      "every arrow it draws has a file:line behind it"),
 
+    ("code-history",
+     r"\bwhy (does|is|did|was|do) [^?.]{0,60}(work this way|built this way|"
+     r"written this way|done this way|like this|hard-?coded)\b"
+     r"|\bwhy did we (pick|choose|go with|use)\b"
+     r"|\b(design rationale|post-?mortem|who decided)\b",
+     None,
+     "the reason lives in the records, and it says so when there is none"),
+
+    ("recall",
+     r"\b(where were we|pick (this|it) back up|catch me up|"
+     r"what was i (doing|working on)|where did i leave)\b",
+     None,
+     "it rebuilds the state from disk instead of from memory"),
+
+    ("explain",
+     r"\b(walk me through|teach me|help me understand|"
+     r"explain (how|what) (the|this) (system|app|codebase|flow|module))\b",
+     BROKEN,
+     "it builds the picture at your pace and checks that it landed"),
+
     ("debug-protocol", BROKEN, CAUSE_KNOWN,
      "it proves the cause in both directions before anything is fixed"),
 
     ("evolve-maintain",
-     BROKEN + r"|\b(upgrade|refactor|deprecat\w+|bump .*version|"
-     r"where were we|pick (this|it) back up)\b",
+     BROKEN + r"|\b(upgrade|refactor|deprecat\w+|bump .*version)\b",
      None,
      "it classifies the change first, which is where maintenance damage starts"),
 
@@ -237,6 +256,7 @@ if __name__ == "__main__":
         assert suggest("can this endpoint be abused?")[0] == "threat-model"
         assert suggest("time to deploy this to prod")[0] == "safe-release"
         assert suggest("what should I fix first?")[0] == "senior-review"
+        assert suggest("where were we?")[0] == "recall"
         assert suggest("add two numbers together")[0] is None
         assert suggest("run debug-protocol on this")[0] is None
         assert suggest("/pick-skill")[0] is None

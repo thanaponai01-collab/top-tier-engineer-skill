@@ -227,9 +227,22 @@ class TestRouteHintRouting(unittest.TestCase):
             "which skill should I use here": "pick-skill",
             "look at my codebase and tell me what to do": "senior-review",
             "what should I fix first?": "senior-review",
+            "why does the cache work this way?": "code-history",
+            "why did we pick Postgres here": "code-history",
+            "is there a postmortem for the March outage": "code-history",
+            "walk me through how checkout works": "explain",
+            "help me understand this codebase": "explain",
+            "teach me how the queue is wired": "explain",
+            "where were we?": "recall",
+            "catch me up on this project": "recall",
+            "what was I working on yesterday": "recall",
         }
         for prompt, skill in cases.items():
             self.assertEqual(self.route(prompt), skill, prompt)
+
+    def test_a_failure_report_still_goes_to_diagnosis_not_explain(self):
+        self.assertEqual(self.route("help me understand why checkout keeps failing"),
+                         "debug-protocol")
 
 
 class TestRouteHintSilence(unittest.TestCase):
