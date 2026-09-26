@@ -233,6 +233,8 @@ class TestRouteHintRouting(unittest.TestCase):
             "walk me through how checkout works": "explain",
             "help me understand this codebase": "explain",
             "teach me how the queue is wired": "explain",
+            "how does the billing subsystem work?": "explain",
+            "I'm onboarding onto the payments service, how does it work": "explain",
             "where were we?": "recall",
             "catch me up on this project": "recall",
             "what was I working on yesterday": "recall",
@@ -260,6 +262,7 @@ class TestRouteHintSilence(unittest.TestCase):
                        "update the README",
                        "commit this with a decent message",
                        "explain this regex to me",
+                       "how does this function work?",
                        "add two numbers together",
                        "bump the copyright year"):
             self.assertIsNone(self.route(prompt), prompt)

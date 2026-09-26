@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.29.0 — 2026-09-26 — the architecture file is one an agent can build from and check
+
+- **`docs/arch-design.md` is now `key: value` blocks, pinned to a commit.** A header (`at`,
+  `question`, `yardstick`, `status`, `verdict`), then one block per finding, decision and move. No
+  prose beyond the verdict; the before/after tables and concept map are gone from the file.
+- **`scripts/arch-design.py check`.** BROKEN: a missing field, a file or line not in the repo, a
+  one-way door with no `confirmed:` or resting on a suspected fact, a strong finding with no number,
+  an `after:` naming no move. STALE: a file the moves name changed after `at:` (not once
+  `status: landed`). Exit 0 / 1 / 2, summary line `ARCH: ...`.
+- **A rerun overwrites its file** (git holds the history); the `-2`, `-3` rule is gone. One-way
+  decisions are also appended to the project's decision log, which outlives the moves.
+- **Handoffs write no docs.** `arch-design` gets its concept map from `FEATURES.md` or an `explain`
+  trace, and asks `code-history` why a thing exists before proposing to delete it. `arch-map` is
+  called only when the user wants a picture, and writes its own file, linked from `diagram:`.
+- **`explain` gains an overview mode:** the account a senior engineer gives someone joining a
+  subsystem (what it is for, the parts and what each must not know, the main path once, what is not
+  obvious, where to look next). Saved only when asked, and then pinned to a commit.
+- **Routing.** "how does the billing subsystem work" and "onboarding onto X" go to `explain`;
+  "how does this function work" stays silent.
+- Tests: `tests/test_arch_design.py`, written red first; route cases in `tests/test_hooks.py`.
+
 ## 4.28.0 — 2026-09-26 — the agent can find why, teach it, and pick work back up
 
 - **New skill `code-history`.** Answers "why is it this way" from the records, not the code: it

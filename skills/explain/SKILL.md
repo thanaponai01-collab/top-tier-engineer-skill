@@ -1,6 +1,6 @@
 ---
 name: explain
-description: Teach a person what a thing in the codebase is, how it works and why it is built that way, in one plain account at their pace, changing nothing. Use for "explain how X works", "walk me through this", "teach me", "help me understand this system", "I don't get why it does that", or when someone is new to a codebase and needs to build a working picture.
+description: Teach a person what a thing in the codebase is, how it works and why it is built that way, in one plain account at their pace, changing nothing. Use for "explain how X works", "walk me through this", "teach me", "help me understand this system", "I don't get why it does that", or when someone is new to a codebase and needs to build a working picture. Also gives a subsystem overview, the account a senior engineer would give someone joining that area.
 ---
 
 # Explain
@@ -56,6 +56,32 @@ is wrong, not the wording: correct the model with the case, do not repeat the se
 Do not propose changes, and do not fix what you noticed on the way. One line at the end if you
 saw a real problem ("separately: the retry has no cap, at `queue.py:88`"). Work that follows from
 understanding starts when they ask for it.
+
+## Overview mode
+
+When the ask is a whole subsystem ("how does billing work?", "I'm joining the payments team"), give
+an **overview** instead of the paced lesson: the mental model a senior engineer hands a new
+teammate, enough to work in the area, not annotated source. Steps 1 and 2 still apply in full;
+what changes is the shape of step 3 and that step 4 becomes an offer.
+
+1. **What it is for**, in one sentence, and who or what calls it.
+2. **The parts**, as many as the system really has (usually three to six), each as one line: what it
+   owns and what it must never know. Draw it if there are more than three (`arch-map`).
+3. **The main path**, followed once with a real example, with `file:line` on each hop.
+4. **What is not obvious**: the invariant that holds it together, the shared assumption with no
+   owner, the trap that catches newcomers, and what surprised you when you read it. Each with the
+   `file:line` it sits on, or the record it came from (`code-history`).
+5. **Where to look next** for the three most likely reasons to touch it.
+
+Keep it to one screen. A file you would paste in is a sign you are narrating code; cut it to the
+lines that carry the idea. Label anything a decision could rest on *proven*, *traced* or *suspected*.
+
+**Nothing is saved.** The overview is written from the code on demand, so it cannot go stale
+unnoticed; a saved one goes wrong the next time the code changes, with no check to say so. Save it
+only when asked, and then pin it: `at: <short sha>` on the first line, and every claim keeps its
+`file:line`. What is worth keeping already has an owner: what a system has is `FEATURES.md`
+(`feature-map`), why it is that way is `WHY.md` (`code-history`). Start from `FEATURES.md` `trace:`
+lines when they exist rather than re-tracing.
 
 ## Rules
 

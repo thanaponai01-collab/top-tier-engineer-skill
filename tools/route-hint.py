@@ -142,7 +142,9 @@ RULES = (
 
     ("explain",
      r"\b(walk me through|teach me|help me understand|"
-     r"explain (how|what) (the|this) (system|app|codebase|flow|module))\b",
+     r"explain (how|what) (the|this) (system|app|codebase|flow|module)|"
+     r"how does (the|this) [\w -]{1,40}(subsystem|system|module|service|pipeline|layer|flow) work|"
+     r"onboarding (me )?(onto|to|into))\b",
      BROKEN,
      "it builds the picture at your pace and checks that it landed"),
 

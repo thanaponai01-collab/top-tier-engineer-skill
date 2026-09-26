@@ -38,7 +38,9 @@ Three instruments, and the history is the one people skip. The code shows what i
 the history shows what *changes together*.
 
 - **Concept map.** Where each concept lives: users, auth, config, data access, outside calls,
-  errors, and the domain's own nouns. One table, `concept | owner(s) | file:line`. A row with two
+  errors, and the domain's own nouns. One table, `concept | owner(s) | file:line`, kept in your
+  working notes, not filed. Start from `FEATURES.md` `trace:` lines if they exist (`feature-map`),
+  else trace the entry points as `explain` does; never write a separate map doc. A row with two
   owners is a lead.
 - **Change history.** `python <this skill's base directory>/scripts/change-map.py <repo> [--depth 2]`
   reports spread (modules touched per commit), hidden coupling (file pairs in *different* modules
@@ -83,7 +85,10 @@ count). **Worth exploring** means the payoff depends on the yardstick changes ac
 **Speculative** means the deletion test was ambiguous. If every finding is Speculative, the verdict
 is *clean*: say so rather than dressing a clean result up as a list. If the project keeps a decision
 log, read it first. A finding that restates a settled decision isn't new, and one that contradicts
-a settled decision names the entry it contradicts.
+a settled decision names the entry it contradicts. Before a finding proposes merging, inlining or
+deleting something, ask `code-history` why it exists (one question, aimed at that file or symbol):
+a recorded reason is a force in the Decide step, and "no recorded reason" keeps the finding
+*suspected*. Without `code-history`, read `git log -S` on the symbol yourself.
 
 *Test:* every Strong finding has a number next to it.
 
@@ -118,25 +123,25 @@ rests on memory.
 
 Moves, not a rewrite. Each one lands alone with its behavior proven unchanged, so each is a
 reversible step. A rewrite is its own decision, raised with the user. Moves go last in the file,
-under `## Moves`, in landing order, below one **Context** paragraph that states what every move
-assumes ("the auth model stays; the database doesn't change"). A move that contradicts the Context
-is a new decision, not a move.
+one `## Move N: <title>` block each, in landing order, under the header's `context:` bullet that
+states what every move assumes ("the auth model stays; the database doesn't change"). A move that
+contradicts the context is a new decision, not a move.
 
 ```
-### 1. <what changes, in one line>
-cost:     <what it costs today, counted>
-pays:     <which yardstick change gets cheaper: "add a report field: 6 files → 2">
-files:    <paths, with the line numbers the evidence sits on>
-owner:    <the one place that owns this job afterwards>
-callers:  <every call site that has to change>
-door:     <two-way, land it and go | one-way, confirmed with the user: what they said>
-proof:    <the command to run, and the output that counts as success>
-effort:   <S / M / L>
-after:    <the move that must land first, or "nothing">
+## Move 1: <what changes, in one line>
+- cost: <what it costs today, counted>
+- pays: <which yardstick change gets cheaper: "add a report field: 6 files → 2">
+- files: <paths, with the line numbers the evidence sits on>
+- owner: <the one place that owns this job afterwards>
+- callers: <every call site that has to change>
+- door: <two-way, land it and go | one-way, confirmed: what the user said>
+- proof: <the command to run, and the output that counts as success>
+- effort: <S / M / L>
+- after: <the move that must land first, or "nothing">
 ```
 
 A move with no `pays:` line isn't improving the architecture. It's tidying, so drop it or say so. A
-move with no `proof:` or no `door:` answer stays in the report as a question, not a block. Once the
+move with no `proof:` or no `door:` answer is not written as a move: ask it in the chat. Once the
 moves land, the architecture's own proof is to re-run the rehearsal (and `change-map.py` after a few
 weeks of commits): the yardstick changes should touch fewer modules.
 
@@ -151,23 +156,54 @@ that pays the most. For a design, it's the structure in plain words and the deci
 expensive to reverse.
 
 **Size it to the question.** A single decision that leaves nothing to build is answered in the chat
-as its decision row, with no file. Anything more gets **one file**, in this order:
-1. the verdict;
-2. the change-cost table, `yardstick change | modules touched now | after the moves`;
-3. the concept map *before* (findings marked `!1`, `!2` where they live) and *after*;
-4. the findings, `# | finding | where | cost today | badge | move`;
-5. the decisions, `decision | options | forces | door | evidence`;
-6. Context, then `## Moves`.
+as its decision row, with no file. Anything more gets **one file**, built for the agent that reads
+it next: `key: value` bullets, one block per finding, decision and move, no prose beyond the verdict.
 
-**Path.** If the user named a path, use it and overwrite it on a rerun. Otherwise name the file after
-the topic, `docs/arch-design-<topic>.md`, and use the bare `docs/arch-design.md` only for a
-whole-system run. Never overwrite an earlier run: list `docs/` first, and if the name is taken, use
-the next free `-2`, `-3`.
+```
+# ARCH-DESIGN
+- at: <short sha the analysis was true of>
+- question: <one line>
+- yardstick: <change>; <change>; <change>   (each with how many modules it touches now)
+- status: open | moves filed | landed
+- verdict: clean | messy in places | tangled
+- diagram: <path>          (optional, only when arch-map drew one)
 
-Hand the finished material to `arch-map` in one go: the Change view, the path and everything above.
-It owns the diagram notation and how the file lands. If `arch-map` isn't available, write the file
-yourself with the diagrams as Mermaid. Mark added `+`, removed `−`, changed `~` and problems `!N`,
-and include a legend.
+## Finding 1: <title>
+- where: <file:line>
+- cost: <counted today>
+- badge: strong | worth exploring | speculative
+- evidence: proven | traced | suspected, then how
 
-*Test:* the run ends with a path you can name. Filing the moves as issues is `issue-handoff`'s job,
-and it works from the file alone. Never ask about it mid-run.
+## Decision 1: <title>
+- options: <A> | <B>
+- forces: <which requirements push which way>
+- door: two-way | one-way, confirmed: <what the user said>
+- evidence: proven | traced | suspected, then how
+
+## Move 1: <title>       (the block from §5, one per move, in landing order)
+```
+
+Put the assumption every move shares ("the auth model stays") in one `context:` bullet in the header.
+Moves stay last. Diagrams, before-and-after tables and the concept map are not part of the file;
+they are a human's aid (below).
+
+**Check it.** `python <this skill's base directory>/scripts/arch-design.py check <file>` fails on a
+missing field, a file or line that is not in the repo, a one-way door with no `confirmed:` (or resting
+on a *suspected* fact), a strong finding with no number, and an `after:` that names no move. It
+reports `STALE` when a file the moves name changed after `at:`. Fix what it says before you hand the
+file over; a file that fails its own check is not buildable. Script not available: check those by hand.
+
+**Path.** If the user named a path, use it. Otherwise `docs/arch-design.md` for the whole system, and
+`docs/arch-design-<topic>.md` for one area. A rerun on the same topic overwrites the file; git holds
+the earlier versions. Set `status: moves filed` once `issue-handoff` has filed them, and `landed`
+when they are in; from then the issues, not this file, are the source.
+
+**Decisions that outlive the moves.** A one-way decision belongs in the project's decision log, if
+it keeps one: append the row there too. This file goes stale once the moves land; the log does not.
+
+**A picture, only if asked.** When the user wants the diagram, hand `arch-map` the Change view, the
+evidence and the headline; it writes its own file, and you link it in `diagram:`. Mark added `+`,
+removed `-`, changed `~` and problems `!N`, with a legend. If `arch-map` isn't available, draw Mermaid yourself.
+
+*Test:* the run ends with a path you can name and a `check` that exits 0. Filing the moves as issues
+is `issue-handoff`'s job, and it works from the file alone. Never ask about it mid-run.

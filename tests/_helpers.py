@@ -10,6 +10,7 @@ SCRIPTS = {
     "graph-audit.py": os.path.join(ROOT, "skills", "latent-audit", "scripts"),
     "change-map.py": os.path.join(ROOT, "skills", "arch-design", "scripts"),
     "verify.py": os.path.join(ROOT, "skills", "verify-loop", "scripts"),
+    "arch-design.py": os.path.join(ROOT, "skills", "arch-design", "scripts"),
     "features.py": os.path.join(ROOT, "skills", "feature-map", "scripts"),
     "history.py": os.path.join(ROOT, "skills", "code-history", "scripts"),
 }
