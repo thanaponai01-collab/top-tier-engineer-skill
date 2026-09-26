@@ -57,6 +57,9 @@ edit it, never append a second.
 
 Use the real names of the files that exist. If one was not created, leave its line out.
 
+If the project also has a `GEMINI.md` or `AGENTS.md`, put the same block in each so other agents find
+the checks too. Never create either one.
+
 ## 4. Report
 
 Answer first: what now exists. Then what is still a draft, by file and count (`TODO` lines,
@@ -72,8 +75,8 @@ NEXT:    <one step, e.g. "verify-loop: replace the TODOs in VERIFY.md">
 ## Rules
 
 - **Once, then hands off.** A second run changes nothing that exists.
-- **No code changes.** This skill writes `VERIFY.md`, `FEATURES.md` and the `CLAUDE.md` block, and
-  nothing else.
+- **No code changes.** This skill writes `VERIFY.md`, `FEATURES.md` and the pointer block (in `CLAUDE.md`, and in
+  `GEMINI.md` / `AGENTS.md` where they exist), and nothing else.
 - **Say what you could not see.** A stack the scripts do not read is a finding, not a failure.
 
 *Test:* a second run on the same repo leaves every file byte-for-byte unchanged, and the report names

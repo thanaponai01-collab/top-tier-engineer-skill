@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.31.1 — 2026-09-27 — project-setup reaches other agents' instruction files
+
+- `project-setup` now puts the "Project checks" pointer in `GEMINI.md` and `AGENTS.md` too, when the
+  project already has them. It never creates either file.
+
 ## 4.31.0 — 2026-09-26 — one prompt carries a goal through the skills, and can do it overnight
 
 - **New skill `drive`.** Give it a goal: it matches one playbook (question, bug with unknown or
