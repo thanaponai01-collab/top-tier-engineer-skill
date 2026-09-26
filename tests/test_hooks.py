@@ -241,6 +241,9 @@ class TestRouteHintRouting(unittest.TestCase):
             "set up this new project with these skills": "project-setup",
             "I'm starting fresh, set up the checks for this repo": "project-setup",
             "bootstrap the repo with the skills": "project-setup",
+            "keep going on this while I sleep": "drive-overnight",
+            "run this unattended and log what you decide": "drive-overnight",
+            "work on it overnight until the tests pass": "drive-overnight",
         }
         for prompt, skill in cases.items():
             self.assertEqual(self.route(prompt), skill, prompt)
@@ -269,7 +272,9 @@ class TestRouteHintSilence(unittest.TestCase):
                        "add two numbers together",
                        "bump the copyright year",
                        "set up the project with Docker",
-                       "set up the database for this repo"):
+                       "set up the database for this repo",
+                       "the overnight batch job failed",
+                       "add a dark mode toggle to the settings page"):
             self.assertIsNone(self.route(prompt), prompt)
 
     def test_building_is_left_alone(self):

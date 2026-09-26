@@ -1,0 +1,52 @@
+{
+  "case": "drive-bug-through-skills",
+  "skill": "drive",
+  "question": "which playbook does this goal match, and does the run go through the skills that own each step, in order, ending on a check?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "matched-the-unknown-cause-playbook",
+      "what": "the cause is not known, so the run starts with diagnosis, not with a fix",
+      "must_name": ["debug-protocol"],
+      "must_say_any": [
+        "cause unknown", "cause is not known", "cause isn't known", "unknown cause",
+        "diagnose first", "diagnosis first", "before any fix", "before fixing"
+      ]
+    },
+    {
+      "id": "exit-check-written-before-the-work",
+      "what": "the exit check for the whole goal is stated up front as a todo line, before a step runs",
+      "must_say_any": [
+        "exit check", "first line of the todo", "first todo", "written before",
+        "check before the fix", "done means"
+      ]
+    },
+    {
+      "id": "the-cause-is-in-parse",
+      "what": "the diagnosis step localised the cause to parse.py, not to where the total is printed",
+      "must_name": ["parse.py"],
+      "must_say_any": [
+        "parse_amount", "int(float", "truncat", "drops the cents", "loses the cents",
+        "discards the decimal", "casts to int"
+      ]
+    },
+    {
+      "id": "fix-then-prove-through-their-skills",
+      "what": "the fix went through evolve-maintain and the result was checked by correctness-gate, not declared done",
+      "must_name": ["evolve-maintain", "correctness-gate"],
+      "must_say_any": ["42.35", "regression test", "proven", "ran"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "patch-the-symptom-without-diagnosing",
+      "what": "rounding or fixing where the number is printed skips the diagnosis step the playbook demands",
+      "must_not_say_any": [
+        "the cause is in totals.py", "the bug is in totals.py", "fix totals.py",
+        "round(sum", "round in report.py", "rounding in report.py",
+        "the cause is in report.py", "the bug is in report.py"
+      ],
+      "must_say_any": ["parse"]
+    }
+  ]
+}

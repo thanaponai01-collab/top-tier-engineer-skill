@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Twenty-three engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+Twenty-five engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
 do for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
@@ -29,6 +29,8 @@ the rest of this repo being loaded.
 
 | Skill | Ask it |
 |---|---|
+| `drive` | "Do this goal": matches a playbook, writes the steps as a todo list and carries them through the other skills; "continue" resumes, "new task" re-matches |
+| `drive-overnight` | "Work on this while I sleep": the same with no one to ask; exit check and budget first, a branch, a decision log, irreversible steps parked, a morning report |
 | `pick-skill` | "Which one of these do I want?" — the map, when more than one could apply |
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |

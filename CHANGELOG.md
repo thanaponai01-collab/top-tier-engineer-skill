@@ -1,5 +1,28 @@
 # Changelog
 
+## 4.31.0 — 2026-09-26 — one prompt carries a goal through the skills, and can do it overnight
+
+- **New skill `drive`.** Give it a goal: it matches one playbook (question, bug with unknown or
+  known cause, feature, slow, insecure, review, release, or "big/vague"), writes the steps into the
+  todo list with the exit check first, and runs each through the skill that owns it. "continue"
+  resumes from the list, "new task" drops it and re-matches. Steps an earlier skill already did are
+  skipped; a one-way action stops the run.
+- **New skill `drive-overnight`.** The same with nobody to ask. Before leaving it fixes the exit
+  check, a budget and what is off limits (the one moment it may ask); it works on a branch, logs each
+  decision with options and how to undo it in `OVERNIGHT.md`, parks every irreversible action under
+  `NEEDS YOU`, stops on a pass or a spent budget, and ends in a VERDICT / DONE / NEEDS YOU / DECIDED /
+  FAILED / NEXT report.
+- **Routing.** `route-hint.py` sends "while I sleep", "work on it overnight", "run this unattended"
+  to `drive-overnight`; "the overnight batch job failed" stays silent. `drive` is invoked by name
+  and has no rule (its word is too common for the hook's name-check). `pick-skill` and the README
+  list both.
+- **Eval `drive-bug-through-skills`.** A bug goal with no known cause: a correct run matches the
+  unknown-cause playbook, states the exit check first, diagnoses to `parse.py` before any fix, then
+  goes through `evolve-maintain` and `correctness-gate`. Patching the printed total fails the case.
+  `drive` now says to invoke each skill with the Skill tool.
+- Inspired by the poteto-mode router in Cursor's pstack; here it composes existing skills, adds none
+  of their work.
+
 ## 4.30.0 — 2026-09-26 — a fresh project can be set up for the skills in one step
 
 - **New skill `project-setup`.** Run once in a new or different codebase: reads the manifest and

@@ -48,7 +48,7 @@ SKILLS = (
     "arch-design", "arch-map", "build-discipline", "correctness-gate",
     "code-history", "debug-protocol", "evolve-maintain", "explain", "feature-map",
     "issue-handoff", "latent-audit", "perf-optimize", "pick-skill",
-    "problem-framing", "project-setup", "recall", "safe-release", "scrutinize", "senior-review",
+    "drive-overnight", "problem-framing", "project-setup", "recall", "safe-release", "scrutinize", "senior-review",
     "structure-gate", "threat-model", "verify-loop", "wire-check",
 )
 
@@ -141,6 +141,13 @@ RULES = (
      r"|\bset ?up the checks\b",
      None,
      "it drafts the checks and leaves a pointer so the next session finds them"),
+
+    ("drive-overnight",
+     r"\bwhile i (sleep|am asleep|am away|'m away|.m asleep)\b"
+     r"|\b(work|run|go|keep going|finish)( on)?( this| it)? (overnight|unattended)\b"
+     r"|\brun (this )?(unattended|autonomously)\b",
+     None,
+     "it fixes the exit check and the budget first, then parks anything irreversible"),
 
     ("recall",
      r"\b(where were we|pick (this|it) back up|catch me up|"
