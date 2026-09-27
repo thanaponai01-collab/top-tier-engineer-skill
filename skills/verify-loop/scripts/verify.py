@@ -13,6 +13,8 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
   baseline  Freeze the test files and the check commands. Once a baseline exists, `run` fails
          with CHECK CHANGED if any of them differ: the loop fixes code, never the check.
   status Is the last run green and still true of the files on disk? One line, exit 0/1/3.
+  scope  Before a fix, name the files it may touch. Any later edit outside them fails the run
+         (OUT OF SCOPE), and every check that passed when the fix began stays on watch.
 
 `run` also remembers itself in .verify-state.json (gitignore it): it says NEWLY RED when a fix
 broke something that passed, SAME FAILURE when a check fails identically twice, and BUDGET after
@@ -54,12 +56,13 @@ Usage:
   python scripts/verify.py run  [repo] [--only TEXT] [--timeout 120] [--strict] [--budget 5]
   python scripts/verify.py baseline [repo]
   python scripts/verify.py status   [repo]
+  python scripts/verify.py scope PATH... [--add | --clear | --check] [--repo .]
 
 Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is unverified or
 unproven); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
-import argparse, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
+import argparse, fnmatch, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _encoding import utf8_streams
@@ -520,18 +523,102 @@ def track(repo, results, only, budget, failures):
         if count >= 2:
             lines.append(f"SAME FAILURE x{count}  {feat} ({kind}): the same output again. Your picture of the "
                          "system is wrong; re-read the code and this output before another try")
+    keep = (state.get("scope") or {}).get("keep", [])
+    broke = [k for k in keep if k in checks and not checks[k]["ok"]]
+    for k in broke:
+        lines.append(f"KEEP-GREEN BROKEN  {k.split('|')[0]}: it passed when this fix began. "
+                     "Undo what broke it before going on")
+    strays = out_of_scope(repo, state)
+    for r in strays:
+        lines.append(f"OUT OF SCOPE  {r} changed, and the fix was not allowed to touch it. Revert it, or "
+                     "widen the scope on purpose with `verify.py scope --add` and say why")
     changed = tampered(repo, state)
     for c in changed:
         lines.append(f"CHECK CHANGED  {c} differs from the baseline. Loosening a check is not a fix: "
                      "restore it, or have a person review it and run `verify.py baseline`")
-    red = bool(failures or changed)
+    red = bool(failures or changed or strays)
     rounds = state.get("rounds", 0) + 1 if red else 0
     if red and rounds >= budget:
         lines.append(f"BUDGET  {rounds} red runs in a row (budget {budget}): stop, report what passes, "
                      "what fails and what you would try next")
     state.update({"checks": checks, "rounds": rounds, "result": "red" if red else "green", "tree": tree_sig(repo)})
     save_state(repo, state)
-    return lines, bool(changed)
+    return lines, bool(changed or strays)
+
+
+def file_sigs(repo):
+    """{relative path: content hash} for every file outside SKIP_DIRS: what `scope` compares against."""
+    sigs = {}
+    for root, dirs, files in os.walk(repo):
+        dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS)
+        for f in sorted(files):
+            if f == STATE or f.endswith(".pyc"):
+                continue
+            p = os.path.join(root, f)
+            rel = os.path.relpath(p, repo).replace(os.sep, "/")
+            try:
+                if os.path.getsize(p) > 5_000_000:
+                    sigs[rel] = f"big:{os.path.getsize(p)}"
+                    continue
+                with open(p, "rb") as fh:
+                    sigs[rel] = hashlib.sha256(fh.read()).hexdigest()[:16]
+            except OSError:
+                continue
+    return sigs
+
+
+def in_scope(rel, allow):
+    return any(fnmatch.fnmatch(rel, a) or rel.startswith(a.rstrip("/") + "/") for a in allow)
+
+
+def out_of_scope(repo, state):
+    """Files changed, added or removed since `scope` was declared that the fix was not allowed to touch."""
+    sc = state.get("scope")
+    if not sc:
+        return []
+    now, snap = file_sigs(repo), sc.get("snap", {})
+    moved = [r for r in set(now) | set(snap) if now.get(r) != snap.get(r)]
+    return sorted(r for r in moved if not in_scope(r, sc.get("allow", [])))
+
+
+def cmd_scope(repo, patterns, add, clear, check):
+    state = load_state(repo)
+    sc = state.get("scope")
+    if clear:
+        state.pop("scope", None)
+        save_state(repo, state)
+        print("scope cleared.")
+        return 0
+    if check or (not patterns and sc):
+        if not sc:
+            print("no scope declared.")
+            return 0
+        bad = out_of_scope(repo, state)
+        print(f"scope: {', '.join(sc['allow'])} ({len(sc.get('keep', []))} passing check(s) on watch)")
+        for r in bad:
+            print(f"  OUT OF SCOPE  {r}")
+        return 1 if bad else 0
+    if not patterns:
+        print("scope needs the paths the fix may touch, e.g. `verify.py scope src/cart.py tests/test_cart.py`.")
+        return 2
+    if add:
+        if not sc:
+            print("no scope to widen; declare one first (`verify.py scope PATH...`).")
+            return 2
+        sc["allow"] = sorted(set(sc["allow"]) | set(patterns))
+        save_state(repo, state)
+        print(f"scope widened: {', '.join(sc['allow'])}. Say why in your report.")
+        return 0
+    keep = sorted(k for k, v in state.get("checks", {}).items() if v.get("ok"))
+    state["scope"] = {"allow": sorted(set(patterns)), "snap": file_sigs(repo), "keep": keep}
+    save_state(repo, state)
+    print(f"scope set: {', '.join(state['scope']['allow'])}. Edits outside it fail the run.")
+    if keep:
+        print(f"keep-green: {len(keep)} check(s) passed on the last run and must still pass when you are done.")
+    else:
+        print("note  no passing run on record: run `verify.py run` first, or nothing is on watch "
+              "and you cannot tell what you broke.")
+    return 0
 
 
 def cmd_baseline(repo):
@@ -558,6 +645,11 @@ def cmd_status(repo):
     changed = tampered(repo, state)
     if changed:
         print(f"VERIFY-STATE: tampered ({', '.join(changed)} differs from the baseline)")
+        return 1
+    strays = out_of_scope(repo, state)
+    if strays:
+        print(f"VERIFY-STATE: out-of-scope ({', '.join(strays[:3])}{' ...' if len(strays) > 3 else ''} "
+              "changed outside the declared scope)")
         return 1
     if state["result"] != "green":
         print(f"VERIFY-STATE: red (red run {state.get('rounds', 0)} in a row)")
@@ -587,8 +679,16 @@ def main():
     b.add_argument("repo", nargs="?", default=".")
     t = sub.add_parser("status", help="is the last run green and still true of the files? (exit 0/1/3)")
     t.add_argument("repo", nargs="?", default=".")
+    c = sub.add_parser("scope", help="name the files a fix may touch; edits outside them fail the run")
+    c.add_argument("patterns", nargs="*", help="files, folders or globs the fix may touch")
+    c.add_argument("--repo", default=".")
+    c.add_argument("--add", action="store_true", help="widen the existing scope")
+    c.add_argument("--clear", action="store_true", help="drop the scope")
+    c.add_argument("--check", action="store_true", help="list edits outside the scope (exit 1 if any)")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
+    if a.cmd == "scope":
+        sys.exit(cmd_scope(repo, a.patterns, a.add, a.clear, a.check))
     if a.cmd == "init":
         sys.exit(cmd_init(repo))
     if a.cmd == "baseline":

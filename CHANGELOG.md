@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.33.0 — 2026-09-27 — a fix stays inside what it named, and outputs are checked against rules
+
+- **`verify.py scope PATH...`** names the files a fix may touch and freezes what else is on disk.
+  A later edit, add or delete outside them fails the run with `OUT OF SCOPE`, and `status` reports
+  `out-of-scope`, so the Stop hook blocks over it too. `--add` widens on purpose, `--clear` drops it,
+  `--check` lists strays. This is the answer to an agent re-editing code that already worked.
+- **Keep-green.** `scope` records every check that passed on the last run. If one goes red, every
+  run says `KEEP-GREEN BROKEN` until it is green (`NEWLY RED` says it once).
+- **New `compliance.py`** in verify-loop: `schema` (JSON Schema subset, `--strict` closes objects, an
+  unsupported keyword is an error not a pass), `privacy` (PII and secret scan, never prints the
+  value), `guardrail` (abuse cases against a command), `repeat` (same output every run). Each exits
+  0 or 1, so each is a VERIFY.md check.
+- `verify-loop` gains "Fixing one thing without disturbing the rest" and "Compliance checks".
+
 ## 4.32.0 — 2026-09-27 — verify-loop closes the loop: it remembers, catches edited checks, and stops "done" over red
 
 - **`verify.py` remembers across runs** (`.verify-state.json`, gitignore it). A run now says

@@ -56,6 +56,39 @@ session finds it.
 
 *Test:* the check was written before the change it judges, and you can name a moment it was red.
 
+## Fixing one thing without disturbing the rest
+
+An agent asked to fix X often re-edits Y, which already worked: it has no record of what worked and
+nothing marks Y as off-limits. So before the first edit of a fix:
+
+1. `verify.py run` for the state before. If nothing is green, or the thing you are about to touch has
+   no check, write a check that pins its current behaviour first (it must pass now).
+2. `verify.py scope <files or folders the fix may touch, its test included>`. This freezes what else
+   is on disk and puts every passing check on watch.
+3. Fix, and `verify.py run` after each slice. `OUT OF SCOPE  <file>` means you edited something you
+   did not name: revert it. `KEEP-GREEN BROKEN` means something that worked when you began is red,
+   and it repeats every run until it is green, so it cannot be waved off as already seen.
+4. If the fix truly needs another file, `verify.py scope <file> --add` and say why in the report.
+   `scope --clear` when the fix is done. `status` is not green while a file outside the scope differs.
+
+*Test:* `verify.py scope --check` prints no OUT OF SCOPE line, and every check that was green at step 1 is green.
+
+## Compliance checks
+
+A check can also judge that the output is *allowed*, not only that it works. `scripts/compliance.py`
+gives VERIFY.md four checks that exit 0 or 1, deterministic and stdlib-only:
+
+| Kind | Command | Fails when |
+|---|---|---|
+| `schema:` | `compliance.py schema schema.json out.json --strict` | a field is missing, mistyped, out of range, or (with `--strict`) not in the schema; a schema keyword it cannot check is an error, never a pass |
+| `privacy:` | `compliance.py privacy out/ logs/` | an email, card number, national ID, cloud key, token, private key or `password=` value is in the output (it prints where, never the value) |
+| `guardrail:` | `compliance.py guardrail abuse.json -- <cmd>` | a case in `abuse.json` (`stdin`, `must_match`, `must_not_match`, `exit`) is not refused as written; an empty case list is an error |
+| `repeat:` | `compliance.py repeat 3 -- <cmd>` | two runs of the same command print different output, so the suite is not deterministic |
+
+Put the requirement in the schema or the case file *before* the code, from the requirement and not
+from the output. A schema generated from the output only proves the code agrees with itself. Prove each
+one can fail: feed it a bad file and watch it go red, then record that as the fail-proof.
+
 ## VERIFY.md
 
 At the repo root. One `##` section per feature; each bullet is `kind: command`, and a check passes
@@ -65,6 +98,8 @@ when its command exits 0.
 ## Refunds
 - test: `python -m pytest tests/test_refunds.py -q`
 - run: `python scripts/smoke_refund.py`
+- schema: `python scripts/compliance.py schema schemas/refund.json out/refund.json --strict`
+- privacy: `python scripts/compliance.py privacy out/`
 - fail-proof: changed the refund sign, test_refunds went red, reverted
 
 ## Journey: Buy something

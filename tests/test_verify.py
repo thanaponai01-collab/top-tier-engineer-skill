@@ -334,5 +334,75 @@ class LoopMemory(unittest.TestCase):
             self.assertIn("stale", out)
 
 
+class Scope(unittest.TestCase):
+    """The fix may touch what it named. Editing anything else, or breaking what worked, is visible."""
+    CHECK = 'python -c "import sys; sys.exit(\'bad\' in open(\'good.txt\').read())"'
+
+    def _repo(self, tmp):
+        write(tmp, "VERIFY.md", f"## Thing\n- test: `{self.CHECK}`\n- fail-proof: wrote bad, went red\n")
+        write(tmp, "good.txt", "ok")
+        write(tmp, "other.txt", "untouched")
+        write(tmp, "src/a.py", "x = 1")
+        self.assertEqual(run("verify.py", "run", tmp)[0], 0)
+
+    def test_edit_outside_the_scope_fails_run_and_status(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            code, out, _ = run("verify.py", "scope", "src/", "--repo", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertIn("keep-green: 1 check(s)", out)
+            write(tmp, "src/a.py", "x = 2")
+            self.assertEqual(run("verify.py", "run", tmp)[0], 0, "an edit inside the scope is fine")
+            write(tmp, "other.txt", "re-edited")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("OUT OF SCOPE  other.txt", out)
+            code, out, _ = run("verify.py", "status", tmp)
+            self.assertEqual(code, 1)
+            self.assertIn("out-of-scope", out)
+
+    def test_widening_is_explicit_and_clear_drops_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            run("verify.py", "scope", "src/", "--repo", tmp)
+            write(tmp, "other.txt", "re-edited")
+            self.assertEqual(run("verify.py", "scope", "--check", "--repo", tmp)[0], 1)
+            self.assertEqual(run("verify.py", "scope", "other.txt", "--add", "--repo", tmp)[0], 0)
+            self.assertEqual(run("verify.py", "run", tmp)[0], 0)
+            run("verify.py", "scope", "--clear", "--repo", tmp)
+            write(tmp, "src/new.py", "y")
+            self.assertEqual(run("verify.py", "run", tmp)[0], 0)
+
+    def test_added_and_deleted_files_count_as_edits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            run("verify.py", "scope", "src/", "--repo", tmp)
+            os.remove(os.path.join(tmp, "other.txt"))
+            write(tmp, "extra.txt", "new")
+            _, out, _ = run("verify.py", "scope", "--check", "--repo", tmp)
+            self.assertIn("OUT OF SCOPE  other.txt", out)
+            self.assertIn("OUT OF SCOPE  extra.txt", out)
+
+    def test_working_checks_stay_on_watch_every_run_not_only_once(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            run("verify.py", "scope", "good.txt", "--repo", tmp)
+            write(tmp, "good.txt", "bad")
+            _, out, _ = run("verify.py", "run", tmp)
+            self.assertIn("KEEP-GREEN BROKEN  Thing", out)
+            write(tmp, "good.txt", "bad again")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1)
+            self.assertNotIn("NEWLY RED", out, "second red run is not newly red")
+            self.assertIn("KEEP-GREEN BROKEN  Thing", out, "but it must still be called out")
+
+    def test_scope_without_a_passing_run_says_nothing_is_on_watch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", f"## Thing\n- test: `{self.CHECK}`\n")
+            write(tmp, "good.txt", "ok")
+            _, out, _ = run("verify.py", "scope", "good.txt", "--repo", tmp)
+            self.assertIn("no passing run on record", out)
+
+
 if __name__ == "__main__":
     unittest.main()

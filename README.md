@@ -37,7 +37,7 @@ the rest of this repo being loaded.
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
 | `issue-handoff` | "File these as issues": a work doc, or the chat, into tracked issues, nothing dropped |
 | `build-discipline` | "Build it": small, proven, wired increments |
-| `verify-loop` | "Check your own work until it passes": builds the check first, keeps every feature's tests in one VERIFY.md (bundled script) |
+| `verify-loop` | "Check your own work until it passes": builds the check first, keeps every feature's tests in one VERIFY.md, keeps a fix inside the files it named, and checks output against a schema, a privacy scan and abuse cases (bundled scripts) |
 | `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |
@@ -100,7 +100,7 @@ you just typed. Four hooks cover those gaps; only one can block you, once.
 |---|---|---|
 | `philosophy-hook.py` | `SessionStart` | Loads `PHILOSOPHY.md`, so the habits apply without a manual `@import` |
 | `route-hint.py` | `UserPromptSubmit` | Names the skill your prompt is asking for, when you did not ask for one |
-| `verify-stop-gate.py` | `Stop` | In a repo with a `VERIFY.md`, after a session that edited files: if the last `verify.py` run is red, stale or tampered with, blocks the stop **once** and asks for the run and its result. Off with `TTE_VERIFY_STOP=0` |
+| `verify-stop-gate.py` | `Stop` | In a repo with a `VERIFY.md`, after a session that edited files: if the last `verify.py` run is red, stale, tampered with or edited outside the declared scope, blocks the stop **once** and asks for the run and its result. Off with `TTE_VERIFY_STOP=0` |
 | `unproven-gate.py` | `UserPromptSubmit` | When source files were edited and nothing was run since, says so and asks for the label: *proven* / *traced* / *suspected* |
 
 `route-hint.py` is deliberately quiet: one suggestion per prompt, each skill named at most once per
