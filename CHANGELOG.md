@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.34.0 — 2026-09-27 — the stages of an AI agent, each a skill `drive` can call
+
+- **New `agent-evals`:** the task set and a grader the agent cannot touch, built before the agent and
+  proven able to fail.
+- **New `agent-prove`:** the agent against a bar set beforehand, over repeated runs, with regression
+  checks, a held-out slice and the `threat-model` abuse cases as tasks.
+- **New `agent-release`:** kill switch, caps, pinned model and prompt, logged runs, staged rollout, and
+  production failures turned into new evals.
+- `drive` gains two playbook rows (build an agent; a flaky agent or a changed model), so the chain runs
+  from one goal. The other stages reuse existing skills, so there is no separate `agent-build`.
+
 ## 4.33.0 — 2026-09-27 — a fix stays inside what it named, and outputs are checked against rules
 
 - **`verify.py scope PATH...`** names the files a fix may touch and freezes what else is on disk.

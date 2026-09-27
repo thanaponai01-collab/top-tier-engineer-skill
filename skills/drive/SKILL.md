@@ -23,6 +23,8 @@ them and start on what it does not block.
 | Broken, cause unknown | `debug-protocol` → fix with `evolve-maintain` → `correctness-gate` |
 | Broken, cause known; refactor; upgrade | `evolve-maintain` → `correctness-gate` |
 | New behavior | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `build-discipline` → `correctness-gate` |
+| An AI agent or model-driven feature | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `agent-evals` (before any agent code) → `build-discipline` → `agent-prove` (includes the `threat-model` abuse cases) → `safe-release` + `agent-release` when it goes out |
+| An agent is flaky, or a model or prompt changed | `agent-prove` → fix with `build-discipline` → `agent-prove` |
 | Slow or expensive | `perf-optimize` → `correctness-gate` |
 | Insecure, or takes untrusted input | `threat-model` → `evolve-maintain` → `correctness-gate` |
 | "Is this good / should this land" | `senior-review` for a project, `scrutinize` for one diff |

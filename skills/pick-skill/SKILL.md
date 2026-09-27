@@ -42,6 +42,9 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Choosing a stack, a boundary, a pattern | `arch-design` (design mode) |
 | "Show me the architecture" / before → after / where the problems sit | `arch-map` |
 | Planned work needs to reach another machine or another person | `issue-handoff` |
+| Building an AI agent or model-driven feature: checks first | `agent-evals` |
+| Proving an agent works over repeated runs, or after a model or prompt change | `agent-prove` |
+| Shipping a live agent, or watching one | `agent-release` |
 | Writing the code | `build-discipline` |
 | Built, but nothing happens when you run it | `wire-check` |
 | Broken, cause **unknown** | `debug-protocol` |

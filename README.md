@@ -32,6 +32,9 @@ the rest of this repo being loaded.
 | `drive` | "Do this goal": matches a playbook, writes the steps as a todo list and carries them through the other skills; "continue" resumes, "new task" re-matches |
 | `drive-overnight` | "Work on this while I sleep": the same with no one to ask; exit check and budget first, a branch, a decision log, irreversible steps parked, a morning report |
 | `pick-skill` | "Which one of these do I want?" — the map, when more than one could apply |
+| `agent-evals` | "I'm building an agent / LLM feature": the task set and a grader the agent cannot touch, built before the agent, proven able to fail |
+| `agent-prove` | "Does the agent actually work?": repeated runs against a bar set beforehand, regressions, held-out slice, abuse cases |
+| `agent-release` | "Ship the agent": kill switch, caps, pinned model, logged runs, staged rollout, production failures back into evals |
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
