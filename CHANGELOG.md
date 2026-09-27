@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.40.0 — 2026-09-27 — agent-drift: catch a live agent slipping after launch
+
+- **New `agent-drift` skill.** Turns `agent-release`'s three post-launch bullets (sample and grade,
+  file failures as tasks, watch for drift) into the actual mechanics: pull the frozen `agent-prove`
+  baseline, sample live traffic on a named schedule against a noise band (not a bare "it felt off"),
+  root-cause an unpinned model/prompt change before anything else, and file every real drop as a task
+  in `agent-evals`'s set before waiting on a fix.
+- Hands off to `agent-prove` to confirm a regression against the bar, `agent-release` to roll back or
+  throttle, `agent-trace` to pin the exact divergent step in a bad live sample. Closes the gap where
+  monitoring a shipped agent had a checklist but no method for telling real drift from noise.
+
 ## 4.39.0 — 2026-09-27 — the tool surface gets designed before the agent does
 
 - **New `agent-design` skill.** Before any agent code or eval exists: name the loop shape (one agent or

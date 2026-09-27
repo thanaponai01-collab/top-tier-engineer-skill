@@ -37,6 +37,7 @@ the rest of this repo being loaded.
 | `agent-prove` | "Does the agent actually work?": repeated runs against a bar set beforehand, regressions, held-out slice, abuse cases |
 | `agent-trace` | "Why did the agent do that?": one run's transcript walked step by step to the exact step it went wrong |
 | `agent-release` | "Ship the agent": kill switch, caps, pinned model, logged runs, staged rollout, production failures back into evals |
+| `agent-drift` | "Is the live agent still what we shipped?": scheduled sampling against the frozen baseline, a noise band so a normal bad day isn't a false alarm, and every real drop filed as a new eval task |
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
