@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.38.1 — 2026-09-27 — verify-loop: stop leaving the started app as a zombie
+
+- **Fixed `start_app` in `verify-loop`'s `scripts/verify.py`.** On a shell that forks a real
+  child for a single command instead of exec-replacing itself, `Popen`'s `proc.pid` named the
+  shell, not the app — so `stop_app`'s `os.killpg` + `proc.wait()` killed the app but only ever
+  reaped the shell, leaving the app an orphaned zombie `stop_app` could never confirm was gone.
+  `start_app` now runs the command as `exec {cmd}` (POSIX only) so the shell always replaces
+  itself with the real process; `proc.pid` is then guaranteed to be the app itself.
+
 ## 4.38.0 — 2026-09-27 — agent-trace: name where one agent run went wrong
 
 - **New `agent-trace` skill.** Given one agent run's transcript (tool calls, results, reasoning),
