@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.39.0 — 2026-09-27 — direct tests for structure_opacity
+
+- **New `tests/test_structure_opacity.py`.** `structure-gate`'s opacity/shape module
+  (`structure_opacity.py`) was only exercised indirectly, through `structure-report.py`'s CLI in
+  `test_structure_report.py`. Adds direct unit tests for `contiguous_spans`, `python_opaque_lines`,
+  `shape_stats`, `is_code_shaped`, `looks_like`, and `measure`, so a change to one of those functions
+  fails at its own test instead of surfacing as an unexplained shift in someone else's CLI assertion.
+
 ## 4.38.0 — 2026-09-27 — agent-trace: name where one agent run went wrong
 
 - **New `agent-trace` skill.** Given one agent run's transcript (tool calls, results, reasoning),
