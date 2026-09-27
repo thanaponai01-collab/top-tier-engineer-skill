@@ -19,6 +19,11 @@ planted thing — and does **not** fall for the decoy sitting next to it.
 | `arch-design-verify-caller-count` | `arch-design` | a seam with one implementation, cleared to inline | a second caller reached only through a renamed import — a plain-text grep misses it |
 | `structure-gate-opaque-not-clean` | `structure-gate` | 230 lines of JS inside a string literal | the 5% a parser can enter is genuinely simple |
 | `drive-bug-through-skills` | `drive` | a bug goal with no known cause: the run must start with diagnosis, then fix, then prove | patching the printed total instead of diagnosing |
+| `verify-loop-fake-check-and-decoy` | `verify-loop` | a test that recomputes the expected value itself and never calls the function under test | a neighboring one-line test that looks just as trivial but genuinely calls the code |
+| `perf-optimize-n-plus-one-and-decoy` | `perf-optimize` | a report that queries once per customer in a loop — a finding even though each query is indexed | an `ORDER BY ... LIMIT` over an indexed column, which looks like a full sort but isn't |
+| `threat-model-client-role-and-decoy` | `threat-model` | an authorization check that reads `role` from the client-supplied request body instead of the session | a catalog endpoint with no auth at all — intentionally public, documented in the README |
+| `senior-review-oversell-and-decoy` | `senior-review` | `reserve_stock` never validates qty, so an oversized request oversells and goes negative | a lock-free global dict that looks unsafe but the tool is single-process, so there's nothing to run to prove a race |
+| `safe-release-combined-migration-and-decoy` | `safe-release` | one migration script that expands, backfills and drops a column together, switching reads in the same deploy, with an untested "just revert the commit" rollback claim | a second, purely additive migration in the same release that really is safe as-is |
 
 Every fixture runs. The green suites are really green, the symptoms really reproduce.
 

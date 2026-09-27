@@ -1,0 +1,52 @@
+{
+  "case": "verify-loop-fake-check-and-decoy",
+  "skill": "verify-loop",
+  "question": "the suite is green — does that prove the discount code works?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "fake-check-never-calls-real-code",
+      "what": "test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail",
+      "must_name": ["test_save10_discount"],
+      "must_say_any": [
+        "never calls apply_discount", "does not call apply_discount", "doesn't call apply_discount",
+        "never invokes apply_discount", "does not invoke the function", "asserts a literal",
+        "can't fail", "cannot fail", "tautology", "self-fulfilling", "always passes",
+        "checks its own math", "checks itself"
+      ]
+    },
+    {
+      "id": "fail-proof-shows-it",
+      "what": "breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake",
+      "must_say_any": [
+        "0.8", "broke apply_discount", "changed 0.9", "still passed", "still green",
+        "stayed green", "did not go red", "didn't go red", "never turns red", "still passes"
+      ]
+    },
+    {
+      "id": "needs-a-real-check",
+      "what": "the discount feature needs a check that actually calls apply_discount and asserts its return value",
+      "must_say_any": [
+        "write a real check", "write a real test", "call apply_discount", "calling apply_discount",
+        "assert apply_discount(100", "assert apply_discount( 100", "a check that actually calls",
+        "actually invokes apply_discount"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "passthrough-test-is-real",
+      "what": "test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test",
+      "must_not_say_any": [
+        "test_invalid_code_passthrough is also fake", "both tests are fake", "both tests never call",
+        "neither test calls apply_discount", "test_invalid_code_passthrough never calls",
+        "test_invalid_code_passthrough also can't fail", "test_invalid_code_passthrough is a tautology"
+      ],
+      "must_say_any": [
+        "test_invalid_code_passthrough does call apply_discount", "test_invalid_code_passthrough is real",
+        "test_invalid_code_passthrough actually calls", "test_invalid_code_passthrough is a genuine check",
+        "test_invalid_code_passthrough would catch", "test_invalid_code_passthrough is fine"
+      ]
+    }
+  ]
+}
