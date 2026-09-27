@@ -42,6 +42,7 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Choosing a stack, a boundary, a pattern | `arch-design` (design mode) |
 | "Show me the architecture" / before → after / where the problems sit | `arch-map` |
 | Planned work needs to reach another machine or another person | `issue-handoff` |
+| Designing an AI agent before any code: tools, reversibility, what flows into its context | `agent-design` |
 | Building an AI agent or model-driven feature: checks first | `agent-evals` |
 | Proving an agent works over repeated runs, or after a model or prompt change | `agent-prove` |
 | One agent run looks wrong and you want to know where it diverged | `agent-trace` |
@@ -73,7 +74,7 @@ Every flow has the same shape: **find → change → prove → ship**.
 | Clean up a messy codebase | `arch-design` (audit) → `arch-map` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Fix a bug | `debug-protocol` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Make it faster or safer | `perf-optimize` / `threat-model` | same skill | `correctness-gate` | `safe-release` |
-| Build an AI agent | `agent-evals` (before any agent code) | `build-discipline` | `agent-prove` | `safe-release` + `agent-release`, then `agent-drift` once it's live |
+| Build an AI agent | `agent-design` → `agent-evals` (before any agent code) | `build-discipline` | `agent-prove` | `safe-release` + `agent-release`, then `agent-drift` once it's live |
 
 `drive` holds the same playbooks with its own steps; where the two disagree, `drive`'s wins.
 

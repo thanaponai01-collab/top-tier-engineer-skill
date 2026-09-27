@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.39.0 — 2026-09-27 — agent-drift: catch a live agent slipping after launch
+## 4.40.0 — 2026-09-27 — agent-drift: catch a live agent slipping after launch
 
 - **New `agent-drift` skill.** Turns `agent-release`'s three post-launch bullets (sample and grade,
   file failures as tasks, watch for drift) into the actual mechanics: pull the frozen `agent-prove`
@@ -10,6 +10,27 @@
 - Hands off to `agent-prove` to confirm a regression against the bar, `agent-release` to roll back or
   throttle, `agent-trace` to pin the exact divergent step in a bad live sample. Closes the gap where
   monitoring a shipped agent had a checklist but no method for telling real drift from noise.
+
+## 4.39.0 — 2026-09-27 — the tool surface gets designed before the agent does
+
+- **New `agent-design` skill.** Before any agent code or eval exists: name the loop shape (one agent or
+  an orchestrator, one owner per one-way action), list every tool with its reversibility tier and what
+  it hands back into the agent's context (marking tools that return content an attacker could have
+  shaped), decide the context/memory boundary, and write the whole thing to `docs/agent-design.md`.
+  Closes the gap where `agent-evals` step 1 ("name the claim") had nowhere agent-specific to point for
+  the must-refuse list, and pointed at generic `problem-framing` instead.
+- `agent-evals` step 1 now reads the must-refuse list from `agent-design`'s tool contract when one
+  exists, falling back to `problem-framing` → `agent-design` when neither the claim nor a contract can
+  be said.
+- `threat-model`'s Abuse phase gains an **agent tool surface** bullet: read the tool contract from
+  `agent-design` (or list the tools by hand), test the untrusted-content tools for prompt injection and
+  the one-way tools for reach-without-grounds and repeat-on-retry. `agent-prove` runs the resulting
+  cases as tasks that must pass before release.
+- `agent-release` step 8 (watch for drift) now runs on the same named schedule and owner as step 6
+  instead of being an unscheduled bullet, and names the threshold that pages someone.
+- `pick-skill` and the README list `agent-design`; `route-hint.py`'s skill list knows the name (no new
+  routing rule — reached by name, `pick-skill`, or `agent-evals`'s fallback, same as the other three
+  `agent-*` skills).
 
 ## 4.38.0 — 2026-09-27 — agent-trace: name where one agent run went wrong
 
