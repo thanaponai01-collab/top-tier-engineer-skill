@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.32.0 — 2026-09-27 — verify-loop closes the loop: it remembers, catches edited checks, and stops "done" over red
+
+- **`verify.py` remembers across runs** (`.verify-state.json`, gitignore it). A run now says
+  `NEWLY RED` (the last change broke something that passed), `SAME FAILURE x2` (identical output
+  twice: re-observe, do not try a third variation) and `BUDGET` (red runs in a row, `--budget`,
+  default 5). A `--only` run compares and saves nothing.
+- **`verify.py baseline`** freezes the test files and the check commands in VERIFY.md. After that,
+  any edit fails the run with `CHECK CHANGED`, even when everything is green: the loop fixes code,
+  never the check. A check believed wrong is reported and re-baselined by a person.
+- **`verify.py status`** prints one line (`VERIFY-STATE: green | red | stale | never-run | tampered`)
+  and exits 0/1/3. Silent in a repo with no VERIFY.md.
+- **New hook `verify-stop-gate.py` on `Stop`.** In a repo with a VERIFY.md, after a session that
+  edited files, a not-green `status` blocks the stop once (exit 2, reason on stderr) and asks for the
+  run and its result. A second stop with the same state always passes. Fails open; `TTE_VERIFY_STOP=0`
+  turns it off. This reverses the "no Stop hook" rule from `c479319`: the README and
+  `test_hooks.py` now state why this one cannot wedge a session.
+- `verify-loop` steps 4-7 rewritten around these signals.
+
 ## 4.31.1 — 2026-09-27 — project-setup reaches other agents' instruction files
 
 - `project-setup` now puts the "Project checks" pointer in `GEMINI.md` and `AGENTS.md` too, when the

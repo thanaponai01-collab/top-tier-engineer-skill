@@ -10,6 +10,14 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
          cover: features with no check, checks nobody proved can fail, test files that
          belong to no feature, and the blind spots the recipe lists.
 
+  baseline  Freeze the test files and the check commands. Once a baseline exists, `run` fails
+         with CHECK CHANGED if any of them differ: the loop fixes code, never the check.
+  status Is the last run green and still true of the files on disk? One line, exit 0/1/3.
+
+`run` also remembers itself in .verify-state.json (gitignore it): it says NEWLY RED when a fix
+broke something that passed, SAME FAILURE when a check fails identically twice, and BUDGET after
+--budget red runs in a row. A `--only` run compares nothing and saves nothing.
+
 A check passes when its command exits 0. Commands run through the shell, like a Makefile:
 only run a VERIFY.md from a repo you trust. Stdlib only.
 
@@ -43,13 +51,15 @@ up; polled for --timeout seconds), `stop` (optional, else the process tree is ki
 
 Usage:
   python scripts/verify.py init [repo]
-  python scripts/verify.py run  [repo] [--only TEXT] [--timeout 120] [--strict]
+  python scripts/verify.py run  [repo] [--only TEXT] [--timeout 120] [--strict] [--budget 5]
+  python scripts/verify.py baseline [repo]
+  python scripts/verify.py status   [repo]
 
 Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is unverified or
 unproven); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
-import argparse, os, re, signal, subprocess, sys, tempfile, time
+import argparse, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _encoding import utf8_streams
@@ -61,6 +71,8 @@ SKIP_DIRS = {".git", "node_modules", "venv", ".venv", "__pycache__", "dist", "bu
 TEST_PY = re.compile(r"^(test_.+|.+_test)\.py$")
 TEST_JS = re.compile(r"^.+\.(test|spec)\.(js|jsx|ts|tsx|mjs|cjs)$")
 TAIL_LINES = 12
+STATE = ".verify-state.json"
+BUDGET = 5
 
 
 # ---- reading the recipe -------------------------------------------------------------------
@@ -316,7 +328,7 @@ def tail_of(path):
         return []
 
 
-def cmd_run(repo, only, timeout, strict):
+def cmd_run(repo, only, timeout, strict, budget=BUDGET):
     path = os.path.join(repo, RECIPE)
     if not os.path.isfile(path):
         print(f"no {RECIPE} in {repo}. Run `verify.py init` to draft one.")
@@ -351,7 +363,7 @@ def cmd_run(repo, only, timeout, strict):
                 return 1
             print(f"Run: app ready in {time.time() - t0:.1f}s ({recipe['start']})")
     try:
-        return run_checks(repo, features, blind, recipe, only, timeout, strict)
+        return run_checks(repo, features, blind, recipe, only, timeout, strict, budget)
     finally:
         if proc:
             stop_app(proc, recipe.get("stop"), repo, timeout)
@@ -361,7 +373,8 @@ def cmd_run(repo, only, timeout, strict):
                 pass
 
 
-def run_checks(repo, features, blind, recipe, only, timeout, strict):
+def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET):
+    results = []
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
     known = {f["name"].lower() for f in features if not f["journey"]}
@@ -383,6 +396,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict):
             continue
         for kind, cmd in f["checks"]:
             ok, code, out, secs = run_check(cmd, repo, timeout)
+            results.append((f["name"], kind, cmd, ok, out))
             passed += ok
             failed += not ok
             tag = "PASS" if ok else "FAIL"
@@ -411,11 +425,147 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict):
     else:
         print("Blind spots: none listed. A recipe that admits none has not looked.")
 
+    notes, bad = track(repo, results, only, budget, failed + broken)
+    for n in notes:
+        print(n)
     print(f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
           f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
           f"{journeys} journeys, {broken} broken")
-    if failed or broken or (strict and (unverified or unproven)):
+    if failed or broken or bad or (strict and (unverified or unproven)):
         return 1
+    return 0
+
+
+# ---- loop memory --------------------------------------------------------------------------
+# One run has no memory. STATE remembers across runs, so the loop can see what a single run
+# cannot: the same failure twice, a fix that broke something else, a check edited to pass, and
+# whether the last run is still true of the files on disk.
+
+def sha(text):
+    return hashlib.sha256(text.encode("utf-8", "replace")).hexdigest()[:16]
+
+
+def load_state(repo):
+    try:
+        with open(os.path.join(repo, STATE), encoding="utf-8") as fh:
+            data = json.load(fh)
+        return data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def save_state(repo, state):
+    with open(os.path.join(repo, STATE), "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(state, fh, indent=1, sort_keys=True)
+
+
+def tree_sig(repo):
+    """A signature of every file (path, size, mtime) outside SKIP_DIRS: changes when the work does."""
+    h = hashlib.sha256()
+    for root, dirs, files in os.walk(repo):
+        dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS)
+        for f in sorted(files):
+            if f == STATE or f.endswith(".pyc"):
+                continue
+            p = os.path.join(root, f)
+            try:
+                st = os.stat(p)
+            except OSError:
+                continue
+            h.update(f"{os.path.relpath(p, repo)}\0{st.st_size}\0{st.st_mtime_ns}\n".encode("utf-8", "replace"))
+    return h.hexdigest()[:16]
+
+
+def check_hashes(repo):
+    """What the agent must not edit to get a pass: the test files, and the check commands in VERIFY.md."""
+    hashes = {t: sha(read(repo, t)) for t in find_tests(repo)}
+    features, _ = parse(read(repo, RECIPE))
+    hashes[RECIPE + " checks"] = sha("\n".join(f"{f['name']}|{k}|{c}" for f in features for k, c in f["checks"]))
+    return hashes
+
+
+def tampered(repo, state):
+    base = state.get("baseline") or {}
+    if not base:
+        return []
+    cur = check_hashes(repo)
+    return sorted(k for k in base if cur.get(k) != base[k])
+
+
+NOISE = re.compile(r"\S*[\\/](?:tmp|temp)[\\/]\S*|/tmp/\S+|0x[0-9a-f]+|\d+(?:\.\d+)?s\b|\d{2}:\d{2}:\d{2}", re.I)
+
+
+def fingerprint(cmd, out):
+    """The failure with its noise (timings, temp paths, addresses) removed, so 'the same' is comparable."""
+    tail = "\n".join(out.rstrip().splitlines()[-TAIL_LINES:])
+    return sha(cmd + "\0" + NOISE.sub("", tail))
+
+
+def track(repo, results, only, budget, failures):
+    """Compare this run to the last one and save it. (lines to print, True if the run must fail)."""
+    if only:
+        return ["note  --only run: loop state not updated (only a whole run can be compared)"], False
+    state = load_state(repo)
+    prev, checks, lines = state.get("checks", {}), {}, []
+    for feat, kind, cmd, ok, out in results:
+        key = f"{feat}|{cmd}"
+        p = prev.get(key, {})
+        fp = None if ok else fingerprint(cmd, out)
+        count = (p.get("count", 0) + 1) if (not ok and p.get("fp") == fp) else (0 if ok else 1)
+        checks[key] = {"ok": ok, "fp": fp, "count": count}
+        if p.get("ok") and not ok:
+            lines.append(f"NEWLY RED  {feat} ({kind}): it passed last run, so the last change broke it")
+        elif p and not p.get("ok") and ok:
+            lines.append(f"NEWLY GREEN  {feat} ({kind})")
+        if count >= 2:
+            lines.append(f"SAME FAILURE x{count}  {feat} ({kind}): the same output again. Your picture of the "
+                         "system is wrong; re-read the code and this output before another try")
+    changed = tampered(repo, state)
+    for c in changed:
+        lines.append(f"CHECK CHANGED  {c} differs from the baseline. Loosening a check is not a fix: "
+                     "restore it, or have a person review it and run `verify.py baseline`")
+    red = bool(failures or changed)
+    rounds = state.get("rounds", 0) + 1 if red else 0
+    if red and rounds >= budget:
+        lines.append(f"BUDGET  {rounds} red runs in a row (budget {budget}): stop, report what passes, "
+                     "what fails and what you would try next")
+    state.update({"checks": checks, "rounds": rounds, "result": "red" if red else "green", "tree": tree_sig(repo)})
+    save_state(repo, state)
+    return lines, bool(changed)
+
+
+def cmd_baseline(repo):
+    if not os.path.isfile(os.path.join(repo, RECIPE)):
+        print(f"no {RECIPE} in {repo}. Run `verify.py init` first.")
+        return 2
+    state = load_state(repo)
+    state["baseline"] = check_hashes(repo)
+    save_state(repo, state)
+    print(f"baseline recorded: {len(state['baseline'])} check file(s). From here an edit to any of "
+          "them fails the run until a person re-baselines.")
+    return 0
+
+
+def cmd_status(repo):
+    """One line for a hook or a human: is the last run green and still true of the files? Exit 0 yes,
+    1 red, 3 stale or never run. No VERIFY.md means this repo does not use it: 0, silent."""
+    if not os.path.isfile(os.path.join(repo, RECIPE)):
+        return 0
+    state = load_state(repo)
+    if not state.get("result"):
+        print("VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)")
+        return 3
+    changed = tampered(repo, state)
+    if changed:
+        print(f"VERIFY-STATE: tampered ({', '.join(changed)} differs from the baseline)")
+        return 1
+    if state["result"] != "green":
+        print(f"VERIFY-STATE: red (red run {state.get('rounds', 0)} in a row)")
+        return 1
+    if state.get("tree") != tree_sig(repo):
+        print("VERIFY-STATE: stale (files changed since the last green run)")
+        return 3
+    print("VERIFY-STATE: green")
     return 0
 
 
@@ -431,11 +581,21 @@ def main():
     r.add_argument("--timeout", type=int, default=120, help="seconds per check (default 120)")
     r.add_argument("--strict", action="store_true",
                    help="also exit 1 when a feature is unverified or has no fail-proof")
+    r.add_argument("--budget", type=int, default=BUDGET,
+                   help="red runs in a row before the run says stop (default 5)")
+    b = sub.add_parser("baseline", help="freeze the check files; later edits to them fail the run")
+    b.add_argument("repo", nargs="?", default=".")
+    t = sub.add_parser("status", help="is the last run green and still true of the files? (exit 0/1/3)")
+    t.add_argument("repo", nargs="?", default=".")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
     if a.cmd == "init":
         sys.exit(cmd_init(repo))
-    sys.exit(cmd_run(repo, a.only, a.timeout, a.strict))
+    if a.cmd == "baseline":
+        sys.exit(cmd_baseline(repo))
+    if a.cmd == "status":
+        sys.exit(cmd_status(repo))
+    sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget))
 
 
 if __name__ == "__main__":

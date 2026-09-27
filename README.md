@@ -94,12 +94,13 @@ Along the way:
 Every skill here is *pull*: it runs because you asked for it. The failure they are all written
 against — code changed, turn ended, "it should work" standing in for a result — happens at the
 moment nobody thinks to ask for anything. So does the other one: not knowing a skill exists for what
-you just typed. Three hooks cover those gaps, and none of them can block you.
+you just typed. Four hooks cover those gaps; only one can block you, once.
 
 | Hook | Event | What it does |
 |---|---|---|
 | `philosophy-hook.py` | `SessionStart` | Loads `PHILOSOPHY.md`, so the habits apply without a manual `@import` |
 | `route-hint.py` | `UserPromptSubmit` | Names the skill your prompt is asking for, when you did not ask for one |
+| `verify-stop-gate.py` | `Stop` | In a repo with a `VERIFY.md`, after a session that edited files: if the last `verify.py` run is red, stale or tampered with, blocks the stop **once** and asks for the run and its result. Off with `TTE_VERIFY_STOP=0` |
 | `unproven-gate.py` | `UserPromptSubmit` | When source files were edited and nothing was run since, says so and asks for the label: *proven* / *traced* / *suspected* |
 
 `route-hint.py` is deliberately quiet: one suggestion per prompt, each skill named at most once per
@@ -113,13 +114,15 @@ Reading is not proving: `cat`, `grep`, `ls` and `git status` are inert, so a ses
 files does not come back green. The gate reports a given finding once, names the files, and says
 nothing when the last thing you did was run something.
 
-**All three fail open by construction.** Exit 2 on `UserPromptSubmit` blocks the prompt *and erases it*;
+**All four fail open by construction.** Exit 2 on `UserPromptSubmit` blocks the prompt *and erases it*;
 exit 2 on `SessionStart` stops the session starting. Every error path in all three scripts exits 0
-with no output. A reminder is never worth losing your typed prompt over.
+with no output (the one exit 2 is the Stop gate's single block). A reminder is never worth losing your typed prompt over.
 
-Not on `Stop`, deliberately: reaching the model from `Stop` means `decision: "block"`, and a gate
-that can hold you in a session you asked to leave gets uninstalled — after which it protects nobody.
-This plugin shipped a Stop hook once and deleted it for exactly that (`c479319`).
+`Stop` is used once, on purpose. A gate that can hold you in a session gets uninstalled, and this
+plugin deleted an earlier Stop hook for exactly that (`c479319`). `verify-stop-gate.py` differs: it
+judges your work (`verify.py status`), not the suite's own output; it stays silent unless the repo
+has a `VERIFY.md` and the session edited a file; and it blocks at most once per state, so it can
+nudge but never trap.
 
 Don't want them? `/plugin` → disable hooks, or delete `hooks/hooks.json`. The skills work untouched.
 

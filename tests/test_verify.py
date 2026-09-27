@@ -256,5 +256,83 @@ class Journeys(unittest.TestCase):
             self.assertIn("fewer than two", out)
 
 
+class LoopMemory(unittest.TestCase):
+    """The loop remembers across runs: same failure, regression, tampered check, stale green."""
+    FLAG = 'python -c "import os,sys; sys.exit(0 if os.path.exists(\'ok.flag\') else 1)"'
+
+    def _repo(self, tmp, cmd=None):
+        write(tmp, "VERIFY.md", f"## Thing\n- test: `{cmd or self.FLAG}`\n- fail-proof: removed flag, went red\n")
+
+    def test_same_failure_twice_says_stop_and_reobserve(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            _, out, _ = run("verify.py", "run", tmp)
+            self.assertNotIn("SAME FAILURE", out)
+            _, out, _ = run("verify.py", "run", tmp)
+            self.assertIn("SAME FAILURE x2", out)
+
+    def test_budget_of_red_runs_says_stop(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            run("verify.py", "run", tmp, "--budget", "2")
+            _, out, _ = run("verify.py", "run", tmp, "--budget", "2")
+            self.assertIn("BUDGET  2 red runs in a row", out)
+
+    def test_a_fix_that_breaks_a_passing_check_is_newly_red(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            write(tmp, "ok.flag")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 0, out)
+            os.remove(os.path.join(tmp, "ok.flag"))
+            _, out, _ = run("verify.py", "run", tmp)
+            self.assertIn("NEWLY RED  Thing", out)
+            write(tmp, "ok.flag")
+            _, out, _ = run("verify.py", "run", tmp)
+            self.assertIn("NEWLY GREEN  Thing", out)
+
+    def test_editing_a_check_after_baseline_fails_the_run_even_when_it_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp, PASS)
+            write(tmp, "tests/test_thing.py", "assert 1 == 2\n")
+            self.assertEqual(run("verify.py", "baseline", tmp)[0], 0)
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertNotIn("CHECK CHANGED", out)
+            write(tmp, "tests/test_thing.py", "assert True\n")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("CHECK CHANGED  tests/test_thing.py", out)
+            self.assertIn("1 checks pass, 0 fail", out)
+            self.assertEqual(run("verify.py", "status", tmp)[0], 1)
+
+    def test_only_run_does_not_touch_the_state(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp, PASS)
+            run("verify.py", "run", tmp, "--only", "thing")
+            self.assertFalse(os.path.exists(os.path.join(tmp, ".verify-state.json")))
+
+    def test_status_is_none_never_red_stale_or_green(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out, _ = run("verify.py", "status", tmp)
+            self.assertEqual((code, out), (0, ""), "no VERIFY.md: not this repo's business")
+            self._repo(tmp)
+            code, out, _ = run("verify.py", "status", tmp)
+            self.assertEqual(code, 3)
+            self.assertIn("never-run", out)
+            run("verify.py", "run", tmp)
+            code, out, _ = run("verify.py", "status", tmp)
+            self.assertEqual(code, 1)
+            self.assertIn("red", out)
+            write(tmp, "ok.flag")
+            run("verify.py", "run", tmp)
+            code, out, _ = run("verify.py", "status", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertIn("green", out)
+            write(tmp, "src/app.py", "x = 1\n")
+            code, out, _ = run("verify.py", "status", tmp)
+            self.assertEqual(code, 3)
+            self.assertIn("stale", out)
+
+
 if __name__ == "__main__":
     unittest.main()

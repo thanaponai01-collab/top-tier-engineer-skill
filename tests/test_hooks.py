@@ -21,6 +21,8 @@ TOOLS = ROOT / "tools"
 GATE = TOOLS / "unproven-gate.py"
 PHILOSOPHY_HOOK = TOOLS / "philosophy-hook.py"
 ROUTE_HINT = TOOLS / "route-hint.py"
+STOP_GATE = TOOLS / "verify-stop-gate.py"
+VERIFY = ROOT / "skills" / "verify-loop" / "scripts" / "verify.py"
 
 # The hooks are hyphenated CLI scripts, so they are loaded by path rather than
 # imported by name.
@@ -361,14 +363,78 @@ class TestHooksManifest(unittest.TestCase):
             self.assertIn(script, referenced)
             self.assertTrue((TOOLS / script).is_file(), script)
 
-    def test_no_stop_hook(self):
-        # The Stop hook was deleted in c479319 for blocking sessions. Reaching
-        # the model from Stop still requires decision:"block". If a Stop entry
-        # ever reappears here, it is a deliberate decision that needs its own
-        # justification — not something that drifted back in.
+    def test_the_only_stop_hook_is_the_verify_gate(self):
+        # A Stop hook was deleted in c479319 for wedging sessions. This one is a deliberate
+        # return (verify-stop-gate.py explains why); anything else on Stop needs the same case.
         manifest = json.loads((ROOT / "hooks" / "hooks.json")
                               .read_text(encoding="utf-8-sig"))
-        self.assertNotIn("Stop", manifest["hooks"])
+        commands = [h["command"] for e in manifest["hooks"]["Stop"] for h in e["hooks"]]
+        self.assertEqual(len(commands), 1)
+        self.assertIn("verify-stop-gate.py", commands[0])
+        self.assertTrue(STOP_GATE.is_file())
+
+
+class TestVerifyStopGate(unittest.TestCase):
+    """Blocks a stop over a not-green verify run at most once, and otherwise says nothing."""
+
+    def _repo(self, tmp, green):
+        (Path(tmp) / "VERIFY.md").write_text(
+            "## Thing\n- test: `python -c \"import sys; sys.exit(%d)\"`\n- fail-proof: x\n" % (0 if green else 1),
+            encoding="utf-8")
+        subprocess.run([sys.executable, str(VERIFY), "run", tmp], capture_output=True)
+
+    def _payload(self, tmp, lines, sid):
+        path = Path(tmp) / "transcript.jsonl"
+        path.write_text("\n".join(lines), encoding="utf-8")
+        return {"transcript_path": str(path), "cwd": tmp, "session_id": sid}
+
+    def test_red_run_after_an_edit_blocks_once_with_exit_two(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp, green=False)
+            payload = self._payload(tmp, [edit("src/api.py")], "stop-red-%s" % os.getpid())
+            code, _, err = run_hook(STOP_GATE, payload)
+            self.assertEqual(code, 2)
+            self.assertIn("VERIFY-STATE: red", err)
+            self.assertIn("verify.py", err)
+            code, _, err = run_hook(STOP_GATE, payload)
+            self.assertEqual((code, err.strip()), (0, ""), "the second stop must pass: nudge, never trap")
+
+    def test_stale_green_blocks_and_a_fresh_green_does_not(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp, green=True)
+            payload = self._payload(tmp, [edit("src/api.py")], "stop-green-%s" % os.getpid())
+            (Path(tmp) / "later.py").write_text("x = 1\n", encoding="utf-8")
+            code, _, err = run_hook(STOP_GATE, dict(payload, session_id="stop-stale-%s" % os.getpid()))
+            self.assertEqual(code, 2)
+            self.assertIn("stale", err)
+            subprocess.run([sys.executable, str(VERIFY), "run", tmp], capture_output=True)
+            code, _, err = run_hook(STOP_GATE, dict(payload, session_id="stop-fresh-%s" % os.getpid()))
+            self.assertEqual((code, err.strip()), (0, ""))
+
+    def test_silent_when_nothing_was_edited_or_no_verify_md(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp, green=False)
+            code, _, err = run_hook(STOP_GATE, self._payload(tmp, [bash("pytest -q")], "stop-noedit-%s" % os.getpid()))
+            self.assertEqual((code, err.strip()), (0, ""), "a session that wrote nothing has nothing to verify")
+        with tempfile.TemporaryDirectory() as tmp:
+            code, _, err = run_hook(STOP_GATE, self._payload(tmp, [edit("src/api.py")], "stop-norepo-%s" % os.getpid()))
+            self.assertEqual((code, err.strip()), (0, ""), "no VERIFY.md: not this repo's business")
+
+    def test_env_switch_turns_it_off(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp, green=False)
+            payload = self._payload(tmp, [edit("src/api.py")], "stop-off-%s" % os.getpid())
+            proc = subprocess.run([sys.executable, str(STOP_GATE)], input=json.dumps(payload),
+                                  capture_output=True, text=True, env=dict(os.environ, TTE_VERIFY_STOP="0"))
+            self.assertEqual(proc.returncode, 0)
+
+    def test_every_malformed_payload_exits_zero_and_silent(self):
+        for payload in ({}, {"transcript_path": "/nonexistent/x.jsonl"}, {"transcript_path": None},
+                        {"session_id": "x", "cwd": "/nonexistent"}):
+            code, _, err = run_hook(STOP_GATE, payload)
+            self.assertEqual((code, err.strip()), (0, ""), payload)
+        proc = subprocess.run([sys.executable, str(STOP_GATE)], input="not json", capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 0)
 
 
 if __name__ == "__main__":

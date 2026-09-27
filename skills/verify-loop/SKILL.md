@@ -40,13 +40,19 @@ session finds it.
    starting point, and a VERIFY.md with TODOs left in it does not count as done.
 4. **Prove it can fail.** Break the feature on purpose, watch a check go red, revert, and write one
    line under fail-proof saying what you broke. Do this before the work, or on the working state.
+   Then freeze the check: `verify.py baseline`. From here the loop fixes code and never the check.
 5. **Do the work in slices, and run `verify.py run` after each.** Read the failure text and fix that.
-6. **Stop guessing.** Two failures on the same idea means your picture of the system is wrong: re-read
-   the code and the failure before a third try. Give the loop a budget (about five rounds per
-   feature); at the budget, stop and report what passes, what fails and what you would try next.
-7. **Before you say done, check the check.** Look at what changed in VERIFY.md and the test files:
-   no assertion loosened, no test skipped or deleted, no output hardcoded to match. A pass you got by
-   editing the check is not a pass.
+   The run remembers the last one (`.verify-state.json`, gitignored) and says what one run cannot:
+   `NEWLY RED` (your last change broke something that passed: undo or fix that first),
+   `SAME FAILURE x2` (the same output twice: stop, your picture is wrong, re-read the code and the
+   output before a third try), `BUDGET` (five red runs in a row, tune with `--budget`: stop and
+   report what passes, what fails and what you would try next).
+6. **A check you believe is wrong is a finding, not an edit.** If the code is right and the check is
+   not, say so and stop for a person; they review it and run `verify.py baseline` again. Editing it
+   yourself gets `CHECK CHANGED` and a failed run, even when everything else is green.
+7. **Before you say done, run `verify.py status`.** It must print `VERIFY-STATE: green`: not `red`,
+   not `stale` (files changed since the last run: run again) and not never-run. Then look for what a
+   green cannot show: a test skipped or deleted, an output hardcoded to match. `--strict` for "done".
 
 *Test:* the check was written before the change it judges, and you can name a moment it was red.
 
