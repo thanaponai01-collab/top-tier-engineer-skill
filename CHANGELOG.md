@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.39.0 — 2026-09-27 — route-hint closes the gaps a real routing eval found
+
+- **New `evals/route.py`.** Scores `route-hint.py`'s `suggest()` against a batch of real prompts,
+  including several written to expose overlap between skills whose descriptions look alike from
+  outside — `arch-design` vs `structure-gate`, the `agent-*` family against each other, "done" the
+  goal-word vs "done" the finished-work-word. `python evals/route.py`; exit 0 only if every case
+  passes.
+- **`route-hint.py` gains rules for `arch-design`, `feature-map`, `verify-loop`, `agent-evals`,
+  `agent-prove`, `agent-trace`, `agent-release`, `problem-framing` and `drive`** — nine skills that
+  previously had no rule at all, so a prompt clearly asking for one routed to silence instead.
+  `BROKEN` now also catches "timing out" / "timeouts", which were symptom words with nowhere to go.
+- Fixed a false-negative the new `drive` name introduced: the "did they already name a skill"
+  check was plain substring matching, so `"drive"` matched inside `"driven"` and silenced routing
+  for that prompt. It now matches skill names on word boundaries.
+- Baseline on the new eval was 20 of 32; all 32 pass after these rules.
+
 ## 4.38.0 — 2026-09-27 — agent-trace: name where one agent run went wrong
 
 - **New `agent-trace` skill.** Given one agent run's transcript (tool calls, results, reasoning),

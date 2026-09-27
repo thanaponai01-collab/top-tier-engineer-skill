@@ -46,10 +46,15 @@ MAX_PROMPT = 20_000  # a pasted stack trace is not a routing question
 # help choosing, so the hook stays out of the way.
 SKILLS = (
     "agent-evals", "agent-prove", "agent-release", "agent-trace", "arch-design", "arch-map", "build-discipline", "correctness-gate",
-    "code-history", "debug-protocol", "evolve-maintain", "explain", "feature-map",
+    "code-history", "debug-protocol", "drive", "evolve-maintain", "explain", "feature-map",
     "issue-handoff", "latent-audit", "perf-optimize", "pick-skill",
     "drive-overnight", "problem-framing", "project-setup", "recall", "safe-release", "scrutinize", "senior-review",
     "structure-gate", "threat-model", "verify-loop", "wire-check",
+)
+# Word-boundary matchers for SKILLS, so a prompt containing "driven" or
+# "recalled" isn't mistaken for one that already named "drive" or "recall".
+_SKILL_NAME_RE = tuple(
+    (name, re.compile(r"\b" + re.escape(name) + r"\b", re.I)) for name in SKILLS
 )
 
 # Something is wrong, and the prompt does not say what.
@@ -60,7 +65,8 @@ SKILLS = (
 # reported — "getting an error", "the error says".
 BROKEN = (r"\b(broken|breaks|failing|fails|crash\w*|throws?|throwing|"
           r"traceback|stack ?trace|not working|doesn.?t work|does not work|"
-          r"won.?t work|stopped working|regression|hangs?|flaky)\b"
+          r"won.?t work|stopped working|regression|hangs?|flaky|"
+          r"timing out|timeouts?)\b"
           r"|\b(?:getting|got|an|the|this|that|same|weird|odd)\s+errors?\b"
           r"|\berror (?:message|says)\b")
 # ...unless it does, in which case this is maintenance, not diagnosis.
@@ -191,6 +197,58 @@ RULES = (
      r"make (this|it) better)\b",
      None,
      "it answers the five questions with evidence and names the skill after it"),
+
+    ("arch-design",
+     r"\b(over-?engineered|too many layers|duplicat\w+ (systems?|logic|"
+     r"implementations?)|should (this|these|it|they) be one (thing|module|"
+     r"service)|queue or a (synchronous|cron|sync) |which (stack|pattern|"
+     r"boundary) (should|to)|is the structure (itself )?wrong)\b",
+     None,
+     "it finds the duplicated system or the layer built for a future that never came"),
+
+    ("feature-map",
+     r"\b(map (every|each|the) feature|feature map|map .*(to (its |their )?"
+     r"(shortcut|route|command))|which (shortcut|command)s? (map|correspond))\b",
+     None,
+     "it keeps every route, click and command mapped to the feature it serves"),
+
+    ("verify-loop",
+     r"\bchecks? its own work\b|\bloops? until (the )?tests? pass",
+     None,
+     "it closes the loop itself instead of stopping at green once"),
+
+    ("agent-evals",
+     r"\b(model-?driven feature|building an ai agent|what checks (do we need|"
+     r"before))\b",
+     None,
+     "the checks come before the agent code, not after"),
+
+    ("agent-prove",
+     r"\bprove (this |the )?agent (still )?works\b|\bafter (we|you|i) swapped "
+     r"the prompt\b|\b(model|prompt) (change|swap)\b",
+     None,
+     "it proves the agent still works over repeated runs, not just once"),
+
+    ("agent-trace",
+     r"\bagent runs? (look|looked)s? wrong\b|\bwhere (it|the run) diverged\b",
+     None,
+     "it finds the exact step where the run went wrong"),
+
+    ("agent-release",
+     r"\bshipping a live agent\b|\bwatch (a |the )?(live )?agent\b",
+     None,
+     "shipping an agent needs its own watch, not just a deploy"),
+
+    ("problem-framing",
+     r"\bwhat (done|finished) (even )?means\b|\bnobody (can|knows how to) "
+     r"agree on\b",
+     None,
+     "it gets everyone to the same definition of done before anything is built"),
+
+    ("drive",
+     r"\bcarry (this|the) goal through to done\b|\bcarry .* through to done\b",
+     None,
+     "it knows the goal but not yet the skills, and carries it through"),
 )
 
 COMPILED = tuple(
@@ -207,8 +265,7 @@ def suggest(prompt):
     text = prompt.strip()
     if not text or len(text) > MAX_PROMPT or text.startswith("/"):
         return None, None
-    lowered = text.lower()
-    if any(name in lowered for name in SKILLS):
+    if any(pattern.search(text) for _, pattern in _SKILL_NAME_RE):
         return None, None  # they already named one
     for skill, trigger, veto, why in COMPILED:
         if trigger.search(text) and not (veto and veto.search(text)):
