@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.39.0 — 2026-09-27 — onboard-system: the paved path for first contact with a codebase
+
+- **New `onboard-system` skill.** First contact with an unfamiliar codebase: runs `project-setup`,
+  `feature-map`, `arch-map` and `code-history` in the order that lets each one use the last one's
+  output (setup → what it has → how it's shaped → why), then proves the resulting picture with an
+  `explain` overview checked against a real prediction. Ends with `VERIFY.md`, `FEATURES.md`,
+  `docs/architecture.md` and `WHY.md` all on disk, so the next session or agent finds the whole
+  picture instead of re-deriving it.
+- `project-setup`'s `CLAUDE.md` pointer block now also names `docs/architecture.md` / `arch-map`,
+  `WHY.md` / `code-history`, `debug-protocol` and `explain`, and points a fresh project with none of
+  those files at `onboard-system` to build the full set in one pass. It previously mentioned only
+  `VERIFY.md`, `FEATURES.md` and `code-history`.
+- `route-hint.py`'s "onboarding onto X" phrasing now routes to `onboard-system` instead of `explain`
+  — that phrase means the whole first-contact pass, not one paced explanation. `pick-skill`'s table
+  gained the matching row.
+
 ## 4.38.0 — 2026-09-27 — agent-trace: name where one agent run went wrong
 
 - **New `agent-trace` skill.** Given one agent run's transcript (tool calls, results, reasoning),
