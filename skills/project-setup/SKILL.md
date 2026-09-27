@@ -52,7 +52,13 @@ rewrite it only if its content differs, never append a second.
   `verify-loop` builds and maintains it.
 - `FEATURES.md`: what the system has and how a user reaches each feature. Read it before driving or
   changing the app; `feature-map` keeps it true.
-- Before deleting or rewriting code that looks wrong, ask `code-history` why it is that way.
+- `docs/architecture.md`, if present: the system traced as a diagram; `arch-map` draws and updates it.
+- `WHY.md`, if present: recorded reasons behind decisions that took real digging to find;
+  `code-history` looks them up and adds to it before you change something that looks wrong.
+- Something broken and the cause unknown: `debug-protocol`. Need the system explained plainly, not
+  changed: `explain`.
+- None of the files above exist yet and this is first contact with the system: `onboard-system` builds
+  the whole set in one pass, in the order that makes each one true.
 ```
 
 Use the real names of the files that exist. If one was not created, leave its line out.
@@ -85,4 +91,5 @@ every `TODO` still open.
 
 Checks that an agent has run its own work is `verify-loop`; a map of what the system has is
 `feature-map`; why code is the way it is, is `code-history`. This skill stands without them: it
-drafts by hand and leaves the pointer.
+drafts by hand and leaves the pointer. Called as step 2 of a full first-contact pass, it's
+`onboard-system`; run this skill directly when only the checks need setting up.

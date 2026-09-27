@@ -47,7 +47,7 @@ MAX_PROMPT = 20_000  # a pasted stack trace is not a routing question
 SKILLS = (
     "agent-design", "agent-drift", "agent-evals", "agent-prove", "agent-release", "agent-trace", "arch-design", "arch-map", "build-discipline", "correctness-gate",
     "code-history", "debug-protocol", "evolve-maintain", "explain", "feature-map",
-    "issue-handoff", "latent-audit", "perf-optimize", "pick-skill",
+    "issue-handoff", "latent-audit", "onboard-system", "perf-optimize", "pick-skill",
     "drive-overnight", "problem-framing", "project-setup", "recall", "safe-release", "scrutinize", "senior-review",
     "structure-gate", "threat-model", "verify-loop", "wire-check",
 )
@@ -134,6 +134,15 @@ RULES = (
      None,
      "the reason lives in the records, and it says so when there is none"),
 
+    ("onboard-system",
+     r"\bonboard(ing)? (me )?(onto|to|into)\b"
+     r"|\bget(ting)?( me)? up to speed on\b"
+     r"|\bnever (seen|worked with) this (repo|codebase|system)\b"
+     r"|\blearn this (codebase|system|repo) (top to bottom|from scratch|inside out)\b"
+     r"|\bfirst (time|contact) (in|with) this (repo|codebase|system)\b",
+     None,
+     "it runs setup, the feature map, the architecture map and the why in one pass and leaves all of it behind"),
+
     ("project-setup",
      r"\b(set ?up|bootstrap|initiali[sz]e) (this|the|my|a) (new |fresh )?(project|repo|codebase) "
      r"(with|for) (the |these )?(skills|checks|verify)\b"
@@ -158,8 +167,7 @@ RULES = (
     ("explain",
      r"\b(walk me through|teach me|help me understand|"
      r"explain (how|what) (the|this) (system|app|codebase|flow|module)|"
-     r"how does (the|this) [\w -]{1,40}(subsystem|system|module|service|pipeline|layer|flow) work|"
-     r"onboarding (me )?(onto|to|into))\b",
+     r"how does (the|this) [\w -]{1,40}(subsystem|system|module|service|pipeline|layer|flow) work)\b",
      BROKEN,
      "it builds the picture at your pace and checks that it landed"),
 
@@ -274,6 +282,7 @@ if __name__ == "__main__":
         assert suggest("time to deploy this to prod")[0] == "safe-release"
         assert suggest("what should I fix first?")[0] == "senior-review"
         assert suggest("where were we?")[0] == "recall"
+        assert suggest("never seen this codebase before, get me up to speed on it")[0] == "onboard-system"
         assert suggest("add two numbers together")[0] is None
         assert suggest("run debug-protocol on this")[0] is None
         assert suggest("/pick-skill")[0] is None
