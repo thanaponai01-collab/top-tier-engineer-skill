@@ -34,6 +34,7 @@ the rest of this repo being loaded.
 | `pick-skill` | "Which one of these do I want?" — the map, when more than one could apply |
 | `agent-evals` | "I'm building an agent / LLM feature": the task set and a grader the agent cannot touch, built before the agent, proven able to fail |
 | `agent-prove` | "Does the agent actually work?": repeated runs against a bar set beforehand, regressions, held-out slice, abuse cases |
+| `agent-trace` | "Why did the agent do that?": one run's transcript walked step by step to the exact step it went wrong |
 | `agent-release` | "Ship the agent": kill switch, caps, pinned model, logged runs, staged rollout, production failures back into evals |
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |

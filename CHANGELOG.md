@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.38.0 — 2026-09-27 — agent-trace: name where one agent run went wrong
+
+- **New `agent-trace` skill.** Given one agent run's transcript (tool calls, results, reasoning),
+  walks it step by step and names the first step where it diverged from what was wanted, plus the
+  cause category at that step. Traces only — no fixing, no rate over many runs, no grader judgment.
+- Hands off to `debug-protocol`/`build-discipline` for a fix, `agent-prove` for whether it's a
+  pattern, `agent-evals` if the task or grader itself looks wrong. Closes the gap where `agent-prove`
+  step 3 ("read the failures") and `debug-protocol` (code-only) had no single-run agent tracer to
+  call.
+
 ## 4.37.0 — 2026-09-27 — arch-design verifies itself before handing off
 
 - **New `## 6. Verify` step** in `arch-design`, between Move and Deliver: re-derive every Strong

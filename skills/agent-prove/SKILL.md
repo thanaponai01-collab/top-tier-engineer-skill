@@ -21,7 +21,8 @@ build those first.
    rate, not a single pass. If the spend ceiling is reached first, stop and report the runs you have.
 3. **Read the failures.** Open the transcripts of the tasks that failed most. A task that fails
    sometimes is a different problem from one that always fails: the first is missing information or
-   an ambiguous instruction, the second is a wrong tool or a wrong grader.
+   an ambiguous instruction, the second is a wrong tool or a wrong grader. To pin the exact step one
+   transcript went wrong, use `agent-trace`.
 4. **Compare to the last baseline** (the latest file in `runs/`). A change that lifts one task and drops two is a regression.
    Name what got worse. Keep a fix inside the files it named with `verify.py scope` from `verify-loop`.
 5. **Run the held-out slice once, at the end,** and report it separately. If it is far below the tuned

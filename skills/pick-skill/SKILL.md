@@ -44,6 +44,7 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Planned work needs to reach another machine or another person | `issue-handoff` |
 | Building an AI agent or model-driven feature: checks first | `agent-evals` |
 | Proving an agent works over repeated runs, or after a model or prompt change | `agent-prove` |
+| One agent run looks wrong and you want to know where it diverged | `agent-trace` |
 | Shipping a live agent, or watching one | `agent-release` |
 | Writing the code | `build-discipline` |
 | Built, but nothing happens when you run it | `wire-check` |
