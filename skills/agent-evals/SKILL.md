@@ -15,7 +15,10 @@ to something non-deterministic; read that skill for the VERIFY.md format and the
 ## Steps
 
 1. **Name the claim.** What a finished task looks like, observable from outside, and what the agent
-   must refuse. If neither can be said, run `problem-framing` first.
+   must refuse. Read the refusal list straight from `agent-design`'s tool contract
+   (`docs/agent-design.md`) if one exists — it names the one-way tools and the untrusted-content tools
+   the refusal and injection tasks below come from. If neither the claim nor a tool contract can be
+   said, run `problem-framing` then `agent-design` first.
 2. **Write the task set** in `evals/<agent>/tasks.*`. Aim for 20 inputs, never fewer than 12: real
    ones where you have them, otherwise realistic. Include the ambiguous, the hostile and the ones
    that should be refused. Set aside a held-out slice (a quarter of them) that nobody tunes against.

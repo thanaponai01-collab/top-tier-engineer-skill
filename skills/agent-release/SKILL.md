@@ -34,8 +34,9 @@ has met its bar.
    write "none" so the gap is visible), grade a sample of real runs with the same graders.
 7. **Every real failure becomes a task** in the eval set, with a grader, before it is fixed. The set
    then grows with the mistakes it caught.
-8. **Watch for drift:** pass rate, cost and latency per version, and a spike in refusals, retries or
-   cap hits.
+8. **Watch for drift**, on the same named schedule and owner as step 6 — a metric nobody is due to
+   look at is not being watched: pass rate, cost and latency per version, and a spike in refusals,
+   retries or cap hits. Name the threshold that pages someone, not just the metric.
 
 *Test:* the last production failure exists as a task that would have caught it.
 

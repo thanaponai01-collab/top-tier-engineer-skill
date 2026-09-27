@@ -45,7 +45,7 @@ MAX_PROMPT = 20_000  # a pasted stack trace is not a routing question
 # Every skill in this plugin. A prompt that already says one of these needs no
 # help choosing, so the hook stays out of the way.
 SKILLS = (
-    "agent-evals", "agent-prove", "agent-release", "agent-trace", "arch-design", "arch-map", "build-discipline", "correctness-gate",
+    "agent-design", "agent-evals", "agent-prove", "agent-release", "agent-trace", "arch-design", "arch-map", "build-discipline", "correctness-gate",
     "code-history", "debug-protocol", "evolve-maintain", "explain", "feature-map",
     "issue-handoff", "latent-audit", "perf-optimize", "pick-skill",
     "drive-overnight", "problem-framing", "project-setup", "recall", "safe-release", "scrutinize", "senior-review",
