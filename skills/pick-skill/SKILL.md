@@ -61,7 +61,7 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | "Does it actually work?" before a merge or release | `correctness-gate` |
 | Deploying, or changing the shape of stored data | `safe-release` |
 
-## The four flows
+## The five flows
 
 Every flow has the same shape: **find → change → prove → ship**.
 
@@ -71,6 +71,9 @@ Every flow has the same shape: **find → change → prove → ship**.
 | Clean up a messy codebase | `arch-design` (audit) → `arch-map` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Fix a bug | `debug-protocol` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Make it faster or safer | `perf-optimize` / `threat-model` | same skill | `correctness-gate` | `safe-release` |
+| Build an AI agent | `agent-evals` (before any agent code) | `build-discipline` | `agent-prove` | `safe-release` + `agent-release` |
+
+`drive` holds the same playbooks with its own steps; where the two disagree, `drive`'s wins.
 
 A flow is a route, not a queue. Run the next skill when the work reaches it, not because the table
 says so — and never re-run a step whose job the last skill already did.

@@ -60,7 +60,9 @@ not a limit:
 
 ### 4. Prove
 For attacks on the most valuable assets, run them: forge the token, send the crafted input, fire
-the concurrent requests. An attack you only read is traced: give the command that would settle it.
+the concurrent requests. Run them only against a local or test instance of the system you were asked
+about, with fake accounts and data; never production, a shared service or a third party's API. An
+attack you only read, or may not run, is traced: give the command that would settle it.
 
 *Test:* each top finding is either proven by an attack you ran, or carries the exact command that would settle it.
 
@@ -73,6 +75,9 @@ how the system really decides access, not a field anyone can write. Fixes that c
 trusted (moving a check server-side, changing the session format) are design decisions: raise them.
 
 ## Report
+
+A secret you find (in source, history, config) is reported by location and kind, never pasted, with
+"rotate it" as the fix, since git history keeps it.
 
 Open with the worst thing an attacker can do today, in one sentence, proven, traced or suspected. Then one row
 per finding by blast radius: boundary, what the attacker gets, evidence, fix. Then the abuse-case

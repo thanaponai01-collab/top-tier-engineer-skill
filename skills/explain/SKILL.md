@@ -17,7 +17,8 @@ end · **suspected** = neither.*
 Read the question for what they already know: their words, what they pointed at, what they tried.
 If you cannot tell, ask one question ("what do you already know about this part, and what do you want
 to do with it once you understand it?") and carry on with what it does not block. Say your
-assumption in a line: "I'll assume you know React but haven't seen this app."
+assumption in a line: "I'll assume you know React but haven't seen this app." No one there to
+answer (an unattended run, or another skill asked): skip the question and state the assumption.
 
 ## 2. Learn it yourself first, from the code
 
@@ -48,6 +49,8 @@ picture beats words for structure: draw it (`arch-map`), or a small ASCII one if
 Ask them to predict something the account did not cover: "what happens if the cart is empty?"
 Compare their answer with the code, by reading it or running it. A wrong prediction means the model
 is wrong, not the wording: correct the model with the case, do not repeat the sentence louder.
+
+No one to answer: trace one case the account did not cover, and say what the code does there.
 
 *Test:* the person can say back what it is, how it works and why, and gets one new case right.
 

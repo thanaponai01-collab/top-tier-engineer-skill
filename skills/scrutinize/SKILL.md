@@ -11,6 +11,12 @@ The diff is where you start, not where you stop.
 *Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
 end · **suspected** = neither.*
 
+## 0. Get the change
+
+Name what you are reading and how you got it: `gh pr diff <n>`, `git diff <base>...HEAD` (say which
+base), or the path of the plan. Say it first in the report; a review of the wrong diff is a real
+answer to nobody's question.
+
 ## 1. Should it exist?
 
 State the goal in one sentence. Can't? It's underspecified: say what's missing and stop. Then look
@@ -35,7 +41,8 @@ surprise; that's where the bugs are.
 - **Silent changes:** performance, error meaning, logs, stored formats, contracts other callers use.
 - **The tests:** do they run the path you traced, or mock around it?
 
-Run things wherever it's cheap.
+Run things wherever it's cheap, from a scratch checkout, and not code from an author you have no
+reason to trust. Post nothing on the PR or ticket unless asked.
 
 ## Report
 

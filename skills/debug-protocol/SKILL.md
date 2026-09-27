@@ -17,7 +17,8 @@ and fixing is how symptoms get patched while the cause survives.
    With only the cause removed, the same trigger no longer fails. One direction only is a
    coincidence.
 3. **One change per experiment.** Write down every experiment, including dead ends, so nobody walks
-   into them again.
+   into them again. Probe edits go on a clean tree or a scratch branch, so an interrupted run leaves
+   nothing behind.
 4. **Reproduce before you theorize.** A failure you can't reproduce is still real: don't close it
    and don't guess a fix. Add the log, metric or probe that captures it next time, and treat that
    capture as the reproduction.
@@ -51,6 +52,10 @@ of inferring it from source.
 ### 4. Hypothesize
 One sentence that could be proven wrong: *"X fails because Y, so experiment Z will show W."* Before
 blaming code that looks odd, check git history for why it was written that way.
+
+Budget: about five experiments. When a second experiment refutes the same idea, your model of the
+system is wrong; go back to Localize and re-observe rather than try a third variation. At the
+budget, stop and report what is ruled out, what is still open and the next experiment you would run.
 
 ### 5. Prove
 Run the two-direction test from Rule 2 and paste both results. If the environment can't run the

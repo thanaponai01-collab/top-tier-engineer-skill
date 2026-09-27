@@ -33,7 +33,8 @@ Pick the mode:
 *Test:* every target you changed came from a profile line you can quote.
 
 Stop when budgets are met, the next gain costs more complexity than it's worth, or the rest is out of
-this system's control. Say which.
+this system's control. Say which. Also stop after about five changes, kept or reverted, and report
+what moved, what didn't and what you would try next.
 
 ## Trace mode
 
@@ -55,7 +56,8 @@ Fast on a thousand rows can be fatal at a million; it shows in the plan, not on 
 2. **Classify growth:** flat (indexed lookup), with result, with table (full scan), unbounded (query
    per item). The last two on a growing table are findings **even if fast today**.
 3. **Read the plan** (`EXPLAIN ANALYZE` or the engine's equivalent) on realistic data and quote the
-   line. Never just claim an index is used.
+   line. Never just claim an index is used. `ANALYZE` runs the statement: use a copy or a
+   rolled-back transaction, never live data, and plain `EXPLAIN` for anything that writes.
 4. **Prescribe** the fix (join, batch fetch, index). Adding an index to a populated table is a
    migration, not a tweak: `safe-release`. Not available here → use the engine's non-locking
    method and write the way back before you run it; never hand over a bare `CREATE INDEX`.

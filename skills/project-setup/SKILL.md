@@ -44,7 +44,7 @@ Making each check real is `verify-loop`; making the map true is `feature-map`.
 
 Add this block to the project's `CLAUDE.md`. If there is no `CLAUDE.md`, create one holding only this
 block (the built-in `/init` writes the rest). If a `## Project checks` heading is already there,
-edit it, never append a second.
+rewrite it only if its content differs, never append a second.
 
 ```
 ## Project checks
@@ -62,7 +62,8 @@ the checks too. Never create either one.
 
 ## 4. Report
 
-Answer first: what now exists. Then what is still a draft, by file and count (`TODO` lines,
+Answer first: what now exists. Leave the files uncommitted and include the `git status` lines for
+them. Then what is still a draft, by file and count (`TODO` lines,
 entry points found), and the one skill that finishes each. Nothing here is verified yet, so do not
 call the project set up in the sense of *done*; call it *ready for* the skills.
 

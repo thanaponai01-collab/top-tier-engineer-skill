@@ -51,9 +51,12 @@ On an old codebase, a fixed threshold is red forever and gets ignored. Freeze to
 only fail on things that get worse:
 
 ```
-python scripts/structure-report.py --write-baseline .structure-baseline.json <paths>
-python scripts/structure-report.py --baseline .structure-baseline.json <paths>
+python <this skill's base directory>/scripts/structure-report.py --write-baseline .structure-baseline.json <paths>
+python <this skill's base directory>/scripts/structure-report.py --baseline .structure-baseline.json <paths>
 ```
+
+Exit codes, for a CI step: 0 clean, 1 a breach (with a baseline, a new or worse one), 2 nothing
+analyzable, which is blocked, not clean.
 
 With a baseline, report only what's new, worse, or repaid. **Never regenerate the baseline to clear
 a regression**; regenerate it when debt has actually been paid down. A debt worth explaining gets

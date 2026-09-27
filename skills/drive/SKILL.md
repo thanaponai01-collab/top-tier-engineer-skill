@@ -28,6 +28,11 @@ them and start on what it does not block.
 | Slow or expensive | `perf-optimize` → `correctness-gate` |
 | Insecure, or takes untrusted input | `threat-model` → `evolve-maintain` → `correctness-gate` |
 | "Is this good / should this land" | `senior-review` for a project, `scrutinize` for one diff |
+| Dead code, or "is this hooked up?" | `latent-audit` for a sweep, `wire-check` for one change. Read-only until you say to delete. |
+| "Is it a mess?", restructure, module boundaries | `structure-gate` to measure, `arch-design` to decide, `evolve-maintain` → `correctness-gate` per move |
+| Resume, or "where were we?" | `recall`, then match the goal it surfaces |
+| Plans to file as tickets | `issue-handoff` (it writes to the tracker: ask first unless the goal itself said to file) |
+| A new repo, or "set this up for the skills" | `project-setup` |
 | Deploy, or change stored data | `safe-release` |
 | Big, vague, or matches nothing | `problem-framing` to make the goal checkable, then match again |
 
@@ -38,7 +43,8 @@ going out. No matching row is an answer: a typo or a rename is done directly, an
 
 One line per step, each with the check that means that step is done (a repro that now passes, the
 same tests green before and after). Put the exit check for the whole goal on the first line, before
-any step runs. If the agent has no todo tool, keep the list in a file called `DRIVE.md` at the
+any step runs, with a budget beside it (the number of steps you expect, and a stop at about double).
+Hit the budget: stop and report what passed, what failed and what you would try next. If the agent has no todo tool, keep the list in a file called `DRIVE.md` at the
 repo root, so it survives the context.
 
 *Test:* the list was written before the first step ran, and every line names its check.

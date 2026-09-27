@@ -51,8 +51,10 @@ For every error path the code claims to handle: trigger it and assert the struct
 
 ### 4. Measure the tests
 - **Mutation spot-check:** make 3–5 deliberate small breaks in the riskiest code (flip a comparison,
-  drop an error branch, shift a boundary by one). The suite must catch each. Revert and re-run
-  clean. A surviving mutation is a blind spot to close before passing.
+  drop an error branch, shift a boundary by one). The suite must catch each. Start from a clean
+  `git status` (or a throwaway worktree), revert each break, and finish with an empty `git diff`
+  and a clean re-run; never mutate a tree that holds uncommitted work. A surviving mutation is a
+  blind spot to close before passing.
 - **Coverage is evidence, not a target.** Report uncovered code that holds real logic; ignore the
   percentage.
 - **Look at real output.** Run a handful of realistic inputs end to end and read the results
@@ -76,6 +78,8 @@ an oracle fails; code that merely surprises you gets a question, not a rewrite.
 - Don't pass on reading alone if the environment can run the tests.
 - Tests are production code: same naming, conventions, review standard.
 - Never weaken an oracle to make the gate pass. Changing a criterion needs the owner's agreement.
+- The gate judges; it does not fix. A second failure for the same reason means stop and report the
+  verdict, not try a third fix.
 
 ## Common mistakes
 

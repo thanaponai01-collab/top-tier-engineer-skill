@@ -32,6 +32,10 @@ touched three contracts, an "upgrade" that was really a migration.
 | **Improve** | Same behavior, better structure | Freeze behavior with tests *before* refactoring; success is zero observable change |
 | **Evolve** | New or changed behavior | Acceptance criteria first. Maintenance is not permission to grow scope |
 
+For **Adapt** and **Improve**, run the existing suite before the first edit and keep the result: a
+red run afterwards means something only if you know what was red before. Any action on a live
+system (restart, config change, data fix) is one-way: ask first, and a yes covers that action only.
+
 Then size **how far it reaches**: modules, contracts, stored data, callers. Short reach → one direct
 change. Long reach → staged, down the ladder below. A "small fix" that reaches far was
 misclassified; go back to the table.

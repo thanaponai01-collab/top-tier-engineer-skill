@@ -51,6 +51,9 @@ the history shows what *changes together*.
 - **Rehearsal.** Walk each yardstick change through the map: which files do you edit? Count the
   modules. More than two for one change means a boundary is drawn in the wrong place.
 
+Budget: two passes of Measure and Diagnose. If a third seems needed, the yardstick is too wide or
+too vague; go back to Aim and narrow it, or report what you have and stop.
+
 *Test:* every lead you carry forward has a `file:line` or a number from the history behind it.
 
 ## 3. Diagnose
@@ -104,7 +107,9 @@ could take more than one shape.
    note it in one line. One-way (stored data shape, a public API, a datastore, the tenancy or auth
    model, deleting data): check every fact it rests on *this session* (fetch the vendor docs or
    pricing, read the lockfile, run it), then take the options, a recommendation and the cost of
-   being wrong to the user *before* it becomes a move.
+   being wrong to the user *before* it becomes a move. No one to ask (an unattended run): leave the
+   row out of the file, since `check` rejects an unconfirmed one-way door, and name it in the answer
+   as "parked, needs a yes: <options, recommendation, cost of being wrong>".
 4. **Bars.** A new dependency: under ~10% of it used, or under ~100 lines to write yourself, means
    you write it. For a one-way door, look up its health and license, don't recall them. A new layer
    or seam of your own: count its callers today and name the requirement that pays for it. One

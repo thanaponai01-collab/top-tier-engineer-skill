@@ -18,7 +18,8 @@ Everything here is on disk or one command away; nothing is changed.
 
 - **Git:** `git status`, `git log -n 15 --stat`, the uncommitted diff, the branch and how far it is
   from the main branch. The last commits say what was finished; the diff says what was in flight.
-- **Notes the project keeps:** `BUILD.md`, `VERIFY.md`, `FEATURES.md`, `docs/arch-design.md`,
+- **Notes the project keeps:** first the run files, which hold the newest state (`OVERNIGHT.md`,
+  `DRIVE.md`), then `BUILD.md`, `BRIEF.md`, `VERIFY.md`, `FEATURES.md`, `docs/arch-design.md`,
   `WHY.md`, a `TODO` or handoff file, and your memory directory if there is one.
 - **Open work outside the repo,** only if a tool for it is connected: open issues and PRs, the
   last CI run.
@@ -29,7 +30,8 @@ Do not read the whole repo. Say what you left unread.
 ## 2. Check what can be checked
 
 A note that says "proven" is a claim from an earlier session. Rerun the last check it names (the
-test, the `VERIFY.md` section, the build) before you repeat the claim. Where the notes and the code
+test, the `VERIFY.md` section, the build) before you repeat the claim. Rerun only what is safe to
+repeat; a check that writes data or calls a live service stays "from the notes". Where the notes and the code
 disagree, the code wins: say which line of the notes is stale.
 
 *Test:* every "done" in the capsule was either rerun now or is labelled as from the notes.

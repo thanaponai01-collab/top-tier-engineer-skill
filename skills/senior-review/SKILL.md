@@ -18,7 +18,8 @@ end · **suspected** = neither.*
    opened and what you deliberately left out. A review that reads a tenth of a repo and reports as
    though it read all of it is the most common way this skill lies.
 2. **Question 2 is run, not imagined.** At least two breakages actually attempted, output pasted.
-   "It would probably fail on empty input" is a guess wearing a finding's clothes.
+   "It would probably fail on empty input" is a guess wearing a finding's clothes. Attempt them in a
+   scratch copy with fake data, never against real credentials, a live service or production.
 3. **An answer with nothing behind it is reported as unanswered.** Five confident paragraphs and no
    evidence is the failure this skill exists to stop.
 4. **Praise is a claim too.** "Well structured" with no file behind it is filler: name the file or
@@ -52,7 +53,7 @@ end · **suspected** = neither.*
   question, not a finding.
 - **Causes, not symptoms.** Ten findings with one cause are one finding.
 - **Rank by consequence:** data loss > security > wrong results > downtime > hard to change > style.
-- Every finding names `file:line` and comes with the fix.
+- Every finding names `file:line` and comes with the fix, described, not applied, unless asked.
 
 *Test:* for every finding you can name what breaks, for whom. If the answer is "nothing, but I'd write it differently", it is a question, not a finding.
 

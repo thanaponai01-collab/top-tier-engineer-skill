@@ -48,7 +48,8 @@ end · **suspected** = neither.*
 
    All three pass → delete list. Any unfinished → *watch, don't delete*. There's no path from
    suspected to deleted.
-4. **Deletions ship small and reversible.** One candidate per commit (the component, its dead tests,
+4. **Report only, unless asked to delete.** When asked, deletions ship small and reversible: one
+   candidate per commit (the component, its dead tests,
    its dead config) with the proof attached, so any mistake reverts in one step.
 5. **Record bugs you pass, don't chase them.** Leaked resources, unhandled errors, races, injectable
    string building: note `file:line` and move on. This is not a full review.
@@ -61,7 +62,8 @@ end · **suspected** = neither.*
    postponed work. Check what can run here; with no runtime, deletion proofs stop at traced, and the
    report says so up front.
 2. **Measure.** Run the script; write a layers file if the architecture declares layers.
-3. **Prove or drop.** Run the three checks on every candidate.
+3. **Prove or drop.** Run the three checks on the largest candidates first, about 15 in one run; the
+   rest stay listed as suspects and the report says how many were not checked.
 4. **Trace breaches.** For each layer breach, read the import and say what it couples; give the two
    remedies (fix the code / change the declaration).
 

@@ -16,9 +16,9 @@ to something non-deterministic; read that skill for the VERIFY.md format and the
 
 1. **Name the claim.** What a finished task looks like, observable from outside, and what the agent
    must refuse. If neither can be said, run `problem-framing` first.
-2. **Write the task set.** 20 or more inputs: real ones where you have them, otherwise realistic.
-   Include the ambiguous, the hostile and the ones that should be refused. Set aside a held-out
-   slice (a quarter of them) that nobody tunes against.
+2. **Write the task set** in `evals/<agent>/tasks.*`. Aim for 20 inputs, never fewer than 12: real
+   ones where you have them, otherwise realistic. Include the ambiguous, the hostile and the ones
+   that should be refused. Set aside a held-out slice (a quarter of them) that nobody tunes against.
 3. **Write a grader per task.** Prefer, in order: a state check on the real system after the run (the
    row exists, the file changed, the refund was not issued); a schema or exact check on the output; a
    rubric graded by a fresh context that sees the task, the output and the rubric, never the agent's
@@ -26,7 +26,8 @@ to something non-deterministic; read that skill for the VERIFY.md format and the
    matters.
 4. **Prove the grader can fail.** Run it against an empty agent and a deliberately wrong one. Both
    must score low, and for each you can name the task that failed and why. A grader that passes a
-   wrong agent is the bug.
+   wrong agent is the bug. Give it three attempts to fix; then stop and report which tasks the wrong
+   agent still passes, instead of grinding on.
 5. **Freeze it.** `verify.py baseline` from `verify-loop`, so the grader and task set are never edited
    to make a run pass. A grader believed wrong is a finding for a person, not an edit.
 
@@ -36,7 +37,7 @@ to something non-deterministic; read that skill for the VERIFY.md format and the
 
 Writing the grader from what the agent happened to output; only happy-path tasks; grading text when
 the state could be checked; a rubric grader that sees the agent's reasoning; tuning against the
-held-out slice; fewer than a dozen tasks, where one flake moves the score by several points.
+held-out slice; fewer than 12 tasks, where one flake moves the score by several points.
 
 ## Next
 

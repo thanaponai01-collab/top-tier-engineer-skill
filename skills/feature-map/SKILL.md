@@ -60,10 +60,16 @@ end · **suspected** = neither.*
 4. **Prove the entry points by running them.** Web: open the page, use the click path, screenshot.
    CLI: run the command with `--help`, then once for real. Desktop: press the shortcut, open the
    menu item. Set `proven` only for what you ran; a route you read but did not hit is `traced`.
+   Run only what is safe: an entry point that sends, pays or deletes stays `traced` unless the
+   person says to run it, and a yes covers that one entry point.
    A dead entry point found here is a finding for `wire-check`, not a line to keep.
 5. **Link each feature to VERIFY.md** (`verify-loop`): name its section, or add one. A feature with
    no check is listed as a gap, not hidden.
 6. **Check the map.** `python <base>/scripts/features.py check --strict` must exit 0.
+
+A large app (about 15 features or more) is mapped in batches, most-reached first. `--strict` cannot
+pass until every entry point is mapped, so at the end of a batch run `check` without it, and report
+the unmapped count as what is left instead of calling the map done.
 
 *Test:* `check --strict` prints `0 stale | 0 broken | 0 untraced | 0 unmapped | 0 unlinked | 0 unlabeled | 0 undescribed | 0 drifted`.
 

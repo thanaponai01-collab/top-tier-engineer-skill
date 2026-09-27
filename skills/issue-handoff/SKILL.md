@@ -37,7 +37,8 @@ nothing: split it yourself, and say how you split it.
 
 A chat source has one advantage a document doesn't — the person who wrote it is still here. Before
 creating, put the split and the titles in front of them in one line each and wait. That costs a
-message now; a wrong public issue costs an awkward close later.
+message now; a wrong public issue costs an awkward close later. No one to answer (an unattended
+run): write the bodies to a file, file nothing, and say the split is unconfirmed.
 
 ## 2. Lift what's shared
 
@@ -78,6 +79,8 @@ backlog is the failure this step exists to stop.
 
 ## 5. Create, one per unit
 
+- Before the first create, run `gh repo view --json visibility`. On a public repo, read every body
+  for secrets, tokens, personal or customer data, and cut or hold what you find.
 - `gh issue create --title "…" --body-file <path> --label <label>`. Always `--body-file`; passing
   markdown through `--body` on a shell mangles backticks, quotes and newlines silently.
 - File in dependency order so prerequisites get lower numbers, then write `Blocked by #N` into the

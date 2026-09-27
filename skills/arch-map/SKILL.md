@@ -20,7 +20,8 @@ One diagram answers one question. Choose the level before drawing:
 - **Modules:** folders or packages inside one app, and which may call which.
 - **Flow:** one request or job end to end, as a sequence.
 
-Keep it to about 15 boxes. More than that → split into one overview plus a zoom-in per busy area.
+Keep it to about 15 boxes. More than that → split into one overview plus a zoom-in per busy area,
+each its own file (`docs/architecture-<area>.md`), all named in the reply.
 Mixing altitudes (a database next to a helper function) is the most common unreadable diagram.
 
 ## 2. Trace, don't recall
@@ -85,7 +86,9 @@ flowchart LR
 
 Syntax traps: quote every label (`["..."]`); ids have no spaces or dashes; parentheses, `/` and `:`
 inside labels need the quotes. If `mmdc` (mermaid-cli) is installed, render once to prove it parses.
-Otherwise re-read the block against these traps before delivering.
+Otherwise check by hand and say the render was not run: every label is quoted, every id on either
+side of an arrow is declared, no id has a space or dash, and every `class` line names an id that
+exists.
 
 Viewing needs no install: GitHub renders the block in any `.md`. For a file someone opens locally
 or sends on, wrap the same Mermaid in one HTML file that loads it from a CDN, so double-clicking

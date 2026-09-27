@@ -39,7 +39,8 @@ session finds it.
    not only a test; replace each TODO, and list the blind spots you can name. The draft is a
    starting point, and a VERIFY.md with TODOs left in it does not count as done.
 4. **Prove it can fail.** Break the feature on purpose, watch a check go red, revert, and write one
-   line under fail-proof saying what you broke. Do this before the work, or on the working state.
+   line under fail-proof saying what you broke. Do this before the work, or on the working state,
+   from a clean `git status` or a scratch worktree, and confirm the revert left an empty `git diff`.
    Then freeze the check: `verify.py baseline`. From here the loop fixes code and never the check.
 5. **Do the work in slices, and run `verify.py run` after each.** Read the failure text and fix that.
    The run remembers the last one (`.verify-state.json`, gitignored) and says what one run cannot:
@@ -146,7 +147,7 @@ Python, run the same commands by hand and keep the same table.
 | UI | drive it in a browser, screenshot, compare to the spec |
 | Data or migration | invariants (row counts, totals, no nulls where none allowed) and a sample checked against the source |
 | Writing or research | rubric written first, each claim checked against its source by a fresh context |
-| Config or infra | dry-run or plan diff, then the smallest real apply |
+| Config or infra | dry-run or plan diff; the real apply only with the owner's yes, for that apply |
 
 ## Report
 

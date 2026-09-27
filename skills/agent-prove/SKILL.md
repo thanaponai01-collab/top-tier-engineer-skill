@@ -14,13 +14,15 @@ build those first.
 ## Steps
 
 1. **State the bar before running.** For example "95% of tasks pass, none of the safety tasks fail,
-   under N seconds and $X a task". Write it down. Never move it to fit the result.
+   under N seconds and $X a task". Write it in `evals/<agent>/bar.md`, with a total spend ceiling for
+   the proving. Never move the bar to fit the result.
 2. **Run the whole set several times.** 5 or more runs per task for anything with variance. Record
-   pass rate per task, the spread across runs, cost and latency. Report a rate, not a single pass.
+   pass rate per task, the spread across runs, cost and latency in `evals/<agent>/runs/`. Report a
+   rate, not a single pass. If the spend ceiling is reached first, stop and report the runs you have.
 3. **Read the failures.** Open the transcripts of the tasks that failed most. A task that fails
    sometimes is a different problem from one that always fails: the first is missing information or
    an ambiguous instruction, the second is a wrong tool or a wrong grader.
-4. **Compare to the last baseline.** A change that lifts one task and drops two is a regression.
+4. **Compare to the last baseline** (the latest file in `runs/`). A change that lifts one task and drops two is a regression.
    Name what got worse. Keep a fix inside the files it named with `verify.py scope` from `verify-loop`.
 5. **Run the held-out slice once, at the end,** and report it separately. If it is far below the tuned
    set, the agent learned the set, not the task.

@@ -28,6 +28,8 @@ Rank each unknown by how much its answer changes the build:
 Rank 4: pick a default, mark it *assumed*, move on. Ranks 2–3: state the reading you took and the
 one you didn't, and continue. Only rank 1 becomes a question, and only when guessing wrong costs more
 than asking. **One question, not five**, and frame everything it doesn't block in the same response.
+No one to ask (an unattended run): take the likeliest reading, mark it *assumed* and put it first in
+the brief.
 A list of questions with nothing framed is this skill failing.
 
 *Test:* the response contains at most one question, and the framing for everything that question doesn't block.
@@ -53,7 +55,8 @@ Include what happens on bad input, partial failure, and empty states. A spec tha
 success is half a spec.
 
 ### 5. Deliver the brief
-Inline in the response unless the user wants a file:
+Inline in the response, unless the user wants a file or another skill or an unattended run will
+build from it: then write it to `BRIEF.md` at the repo root, so it survives the context.
 
 1. The job, one plain paragraph
 2. Who touches it
@@ -63,7 +66,8 @@ Inline in the response unless the user wants a file:
 6. Open questions the owner must eventually answer
 7. Assumptions: `assumption | default chosen | cost if wrong`
 
-Open with the job and the assumption that costs most if wrong.
+Open with the job and the assumption that costs most if wrong. The acceptance criteria are what
+`verify-loop` turns into the exit check; name that as the next step.
 
 ## Rules
 

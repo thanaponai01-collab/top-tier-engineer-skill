@@ -27,7 +27,9 @@ Settle three things and write them at the top of `OVERNIGHT.md` in the repo root
 
 ## 2. Work where nothing is lost
 
-Create a branch (a fresh worktree if other work is open) and commit there in small steps. Never
+Create a branch (a fresh worktree if other work is open; never start on top of uncommitted work
+that is not yours) and commit there in small steps. Before each step, re-read the top of
+`OVERNIGHT.md`: the exit check, budget and off-limits list are what a long run forgets first. Never
 push, merge, deploy, delete data, send anything, or change a public interface: every action that
 cannot be undone is **parked**, not done. Write it under `NEEDS YOU` with what it is, why it is
 wanted, and the exact command, then carry on with work that does not depend on it.

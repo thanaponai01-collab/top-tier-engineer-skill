@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.35.0 — 2026-09-27 — every skill tuned to run cold as an agent
+
+- **Stop rules and budgets** added where a run could loop: `agent-evals`, `agent-prove` (spend
+  ceiling), `arch-design`, `build-discipline`, `code-history`, `correctness-gate`, `debug-protocol`,
+  `drive`, `perf-optimize`, `latent-audit`.
+- **One-way actions need a yes, for that action only:** `agent-release`, `safe-release`,
+  `evolve-maintain`, `feature-map`, `issue-handoff`, `verify-loop`.
+- **Unattended paths** in `arch-design`, `explain`, `problem-framing`, `issue-handoff`.
+- **Safe places to run risky steps:** clean tree or worktree for mutations, scratch copy for breakage,
+  `EXPLAIN ANALYZE` on a copy, attacks only on a local or test instance, secrets never pasted.
+- **Seams:** `recall` reads `OVERNIGHT.md`, `DRIVE.md` and `BRIEF.md`; `drive` routes to the skills it
+  missed; `pick-skill` gains an agent flow; `structure-gate` baseline commands used a path that did
+  not resolve.
+- `latent-audit`, `senior-review`, `scrutinize`, `project-setup` are report-only unless asked.
+
 ## 4.34.0 — 2026-09-27 — the stages of an AI agent, each a skill `drive` can call
 
 - **New `agent-evals`:** the task set and a grader the agent cannot touch, built before the agent and

@@ -35,7 +35,8 @@ fact. A vague proof line gets sharpened out loud, never quietly swapped for an e
 - Write the **proof line** before any code: a command the loop can run itself, and the output that
   counts as success. Better still, a test that fails now. Can't state it? The slice is too vague.
 - Set a budget: if the slice needs more than about three attempts or touches more than it should,
-  split it. Don't grind.
+  split it. Don't grind. A slice that cannot be split smaller and is still failing: stop, and report
+  what you know, what failed and what you would try next.
 
 *Test:* the proof line is in `BUILD.md` before the first edit, as a command plus expected output.
 
@@ -74,7 +75,9 @@ end · **suspected** = neither.*
 ### 5. Commit
 - Read the whole diff as if reviewing someone else's code. Every line must be one you meant to make.
 - One slice, one commit; the message states the behavior change and the proof result. Reverting it
-  alone returns the system to its previous working state.
+  alone returns the system to its previous working state. Commit when the person or the calling
+  skill (`drive`, `drive-overnight`) has said to; otherwise leave the slice staged, say so, and
+  record the slice in `BUILD.md` as uncommitted.
 
 *Test:* you can name one line you changed your mind about, or say plainly that the whole diff
 survived the read. Nothing reconsidered usually means it was skimmed.

@@ -38,7 +38,9 @@ return, and `git revert` doesn't un-corrupt a bad backfill.
    the rollout.
 4. **Watch.** Signals and the threshold that triggers rollback (Rule 3).
 5. **Go / no-go.** In plain language: ship, stage, or hold; the biggest risk; the rollback trigger;
-   and for a one-way door, exactly what's being approved.
+   and for a one-way door, exactly what's being approved. This skill ends at the call. Running the
+   deploy needs an explicit yes from the owner, for this release only; an unattended run parks it
+   with the exact command.
 
 ## Changing stored data
 
@@ -54,6 +56,9 @@ return, and `git revert` doesn't un-corrupt a bad backfill.
    sample of real transformed records**. "It ran without error" is not "the data is right".
 6. **Contract.** Switch reads to the new shape and watch. Remove the old structure in a *later*,
    separate deploy, never the same one as the read switch. This is the point of no return.
+
+Steps 3, 4 and 6 write to live data: each needs its own yes from the owner, and a yes to one does
+not cover the next.
 
 *Test:* you can name the step after which rollback loses data, and exactly what is lost.
 
