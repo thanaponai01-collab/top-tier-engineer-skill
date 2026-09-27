@@ -15,7 +15,7 @@ Format (`key: value` bullets, so an agent reads it without prose):
   - at: 3f2a1bc                    commit the analysis was true of
   - question: <one line>
   - yardstick: <change>; <change>; <change>
-  - status: open | moves filed | landed
+  - status: open | landed
   - verdict: clean | messy in places | tangled
 
   ## Finding 1: <title>            where, cost, badge (strong|worth exploring|speculative), evidence
@@ -42,7 +42,7 @@ KEYS = {
     "decision": ("options", "door", "evidence"),
     "move": ("cost", "pays", "files", "owner", "callers", "door", "proof", "effort", "after"),
 }
-STATUS = ("open", "moves filed", "landed")
+STATUS = ("open", "landed")
 BADGES = ("strong", "worth exploring", "speculative")
 LABELS = ("proven", "traced", "suspected")
 SECTION = re.compile(r"^##\s+(Finding|Decision|Move)\s+(\d+)\s*:?\s*(.*)$", re.I)

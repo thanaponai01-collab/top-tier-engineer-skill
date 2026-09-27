@@ -1,7 +1,7 @@
 {
   "name": "top-tier-engineer",
   "description": "Twenty-eight independent engineering skills, with a router that picks between them: framing, agent evals, agent proof, agent release, architecture, architecture maps, issue handoff, building, wiring, self-verification, feature maps, code history, explanation, project setup, goal-driven runs, overnight runs, recall, correctness, debugging, performance, security, review, scrutiny, structure, dead code, safe releases and maintenance. A hook names the right one when you did not ask for any. Install and go.",
-  "version": "4.35.0",
+  "version": "4.37.0",
   "author": {
     "name": "Thanaponai01"
   },

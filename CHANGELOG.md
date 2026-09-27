@@ -1,5 +1,22 @@
 # Changelog
 
+## 4.37.0 — 2026-09-27 — arch-design verifies itself before handing off
+
+- **New `## 6. Verify` step** in `arch-design`, between Move and Deliver: re-derive every Strong
+  finding's and move's numbers with the same tools rather than re-reading the notes that produced
+  them, then send each Strong finding and one-way door to a fresh subagent that is told the fact to
+  check but never the conclusion it's supposed to reach — the run that found something is the worst
+  judge of whether it's still true.
+- `arch-design` no longer names `issue-handoff`, sets no `moves filed` status, and makes no claim
+  about what happens to its output after `check` passes — that's the next skill's call, not this
+  one's. `status` is now `open | landed`; `arch-design.py check` enforces the narrower set.
+
+## 4.36.0 — 2026-09-27 — the map carries the move numbers
+
+- `arch-design` hands `arch-map` the Change view whenever there are moves (not only "if asked"),
+  with each move's number and a `move | what | cost | effort` table.
+- `arch-map` marks each box or arrow with its `Move N`, so a reader approves moves from the picture.
+
 ## 4.35.0 — 2026-09-27 — every skill tuned to run cold as an agent
 
 - **Stop rules and budgets** added where a run could loop: `agent-evals`, `agent-prove` (spend

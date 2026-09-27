@@ -149,7 +149,9 @@ What the caller brings, and what you ask for before drawing if it's missing:
 - **the headline sentence:** what the picture shows and the single thing to notice;
 - **the boxes and arrows**, each with its mark and the `file:line` it came from — a proposed *after*
   is not code yet, so its new arrows carry no evidence and need none;
-- **the tables** that go under the diagrams, already written;
+- **the tables** that go under the diagrams, already written. When the caller's work is a set of
+  numbered moves, write `Move N` on each box or arrow it adds, removes or changes, and put the
+  `move | what | cost | effort` table under the diagram: the reader approves by that number;
 - **the path** it wants the report at;
 - **any section of its own** that goes below the tables, already written — an audit's moves, a
   design's next steps — copied in as handed to you, not re-worded.

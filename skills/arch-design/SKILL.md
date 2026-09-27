@@ -14,8 +14,8 @@ never meet, often an AI: the structure must be navigable from the files alone.
 opened the source (docs, lockfile, a fetch) this session · **suspected** = neither. Only *proven* and
 *traced* can carry a one-way door.*
 
-One loop, whether the code exists or not: **Aim → Measure → Diagnose → Decide → Move.** With code,
-the *as-is* comes from the repo. Greenfield, it's empty, and the likely changes come from the
+One loop, whether the code exists or not: **Aim → Measure → Diagnose → Decide → Move → Verify.** With
+code, the *as-is* comes from the repo. Greenfield, it's empty, and the likely changes come from the
 requirements.
 
 ## 1. Aim
@@ -154,6 +154,24 @@ weeks of commits): the yardstick changes should touch fewer modules.
 report, read the code or ask you something, a field is missing. Fill it now, while the code is in
 front of you.
 
+## 6. Verify
+
+Every number above was produced by the same run that's now vouching for it; re-reading your own
+notes confirms them, it doesn't test them. For each Strong finding and each move, re-derive it
+instead: rerun `change-map.py` against the co-change counts cited, grep the repo for every name in a
+`callers:` list, re-walk the `pays:` rehearsal by hand, re-open the `code-history` source. A number
+that doesn't reproduce loses its badge or gets fixed.
+
+That's cheap self-checking, not a second opinion. For each Strong finding and one-way door, also
+delegate per PHILOSOPHY §8: a fresh subagent, told the fact to verify ("count the current callers of
+`orders.legacy_client`") but never the conclusion ("...so it's safe to inline") — a prompt that leaks
+the answer only invites agreement. A disagreement fixes the finding or drops its badge, noted in
+`evidence:` ("subagent recounted: 3 callers, not 1"). Skip it for Worth-exploring and Speculative
+findings; they already carry their own hedge.
+
+*Test:* every Strong finding and one-way door was re-derived by a tool this session, and checked by
+a subagent that was never told the expected answer.
+
 ## Deliver
 
 Answer first. For an audit, that's the verdict (*clean / messy in places / tangled*) and the one move
@@ -169,7 +187,7 @@ it next: `key: value` bullets, one block per finding, decision and move, no pros
 - at: <short sha the analysis was true of>
 - question: <one line>
 - yardstick: <change>; <change>; <change>   (each with how many modules it touches now)
-- status: open | moves filed | landed
+- status: open | landed
 - verdict: clean | messy in places | tangled
 - diagram: <path>          (optional, only when arch-map drew one)
 
@@ -200,15 +218,19 @@ file over; a file that fails its own check is not buildable. Script not availabl
 
 **Path.** If the user named a path, use it. Otherwise `docs/arch-design.md` for the whole system, and
 `docs/arch-design-<topic>.md` for one area. A rerun on the same topic overwrites the file; git holds
-the earlier versions. Set `status: moves filed` once `issue-handoff` has filed them, and `landed`
-when they are in; from then the issues, not this file, are the source.
+the earlier versions. Set `status: landed` once the moves are in; from then the repo, not this file,
+is the source.
 
 **Decisions that outlive the moves.** A one-way decision belongs in the project's decision log, if
 it keeps one: append the row there too. This file goes stale once the moves land; the log does not.
 
-**A picture, only if asked.** When the user wants the diagram, hand `arch-map` the Change view, the
-evidence and the headline; it writes its own file, and you link it in `diagram:`. Mark added `+`,
-removed `-`, changed `~` and problems `!N`, with a legend. If `arch-map` isn't available, draw Mermaid yourself.
+**A picture, whenever there are moves.** Verdict *clean* or a single decision row: no picture. Otherwise
+hand `arch-map` the Change view, the evidence and the headline; it writes its own file, and you link
+it in `diagram:`. Give it each move's number for the box or arrow it changes, and a table already
+written, `move | what | cost | effort`, copied from the Move blocks. Marks: added `+`, removed `-`,
+changed `~`, problems `!N`, with a legend. The reader approves moves by number from that picture, so a
+box with no move number on it is a gap. If `arch-map` isn't available, draw Mermaid yourself.
 
-*Test:* the run ends with a path you can name and a `check` that exits 0. Filing the moves as issues
-is `issue-handoff`'s job, and it works from the file alone. Never ask about it mid-run.
+*Test:* the run ends with a path you can name and a `check` that exits 0. What happens to the moves
+after that — filed as issues, handed to a build loop, read by a person — is the next skill's
+decision, not this one's; the file is written to stand alone either way.
