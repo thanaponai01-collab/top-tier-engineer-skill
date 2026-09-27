@@ -34,5 +34,8 @@
       ],
       "must_say_any": ["reprice.py", "pick_calc", "alias"]
     }
-  ]
+  ],
+  "actions": {
+    "read_only": true
+  }
 }

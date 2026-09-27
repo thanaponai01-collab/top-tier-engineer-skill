@@ -41,5 +41,14 @@
       ],
       "must_say_any": ["fail", "fails", "blocked", "do not ship"]
     }
-  ]
+  ],
+  "actions": {
+    "must_run_any": [
+      "\\bunittest\\b",
+      "\\bpytest\\b",
+      "python[0-9.]*\\s+(\\S*/)?test_shipping"
+    ],
+    "must_run_before_edit": true,
+    "must_run_why": "ran the test suite itself before changing anything, instead of trusting that green means correct"
+  }
 }

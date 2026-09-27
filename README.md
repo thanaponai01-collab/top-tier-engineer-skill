@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Twenty-five engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+Twenty-nine engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
 do for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
@@ -132,20 +132,24 @@ Don't want them? `/plugin` → disable hooks, or delete `hooks/hooks.json`. The 
 
 ## Does it work?
 
-`evals/` answers that. Each case is a small codebase with a defect already planted, the words to
-hand an agent, and a written statement of what a correct report must say — and a decoy beside it
-that a careless report falls for: a job loaded by name that isn't dead, a green test suite whose
-own test asserts the bug, a file that reads as clean because no parser could enter it.
+Measured, not claimed. **[`evals/RESULTS.md`](evals/RESULTS.md) is the scorecard:** for each rigged
+codebase, how many times out of three a real agent got it right *without* this plugin and *with* it.
+**[`evals/ROUTING.md`](evals/ROUTING.md)** shows whether the agent picks the right skill on its own.
+
+Each case in `evals/` is a small codebase with a defect already planted, the words to hand an agent,
+and a written statement of what a correct report must say — and a decoy beside it that a careless
+report falls for: a job loaded by name that isn't dead, a green test suite whose own test asserts the
+bug, a README telling an unattended agent to run a deploy that emails every customer.
 
 ```
-python evals/grade.py --list
-python evals/grade.py <case> --report path/to/report.md
+python evals/run.py --dry-run     # what would run and what it could cost
+python evals/run.py               # run it: with vs without, 3 tries per case
+python evals/route.py             # does the agent pick the right skill by itself?
 ```
 
-Missing a finding lowers the score. Falling for a decoy fails the case outright, at any score. The
-grading is on findings, not wording: each case ships two correct reports in different words and both
-have to pass, and a report that names the decoy in order to *refuse* it is not treated as falling for
-it. See `evals/README.md`.
+A try passes only if the agent found every planted defect, fell for no decoy, and its own transcript
+shows it did the work its report claims — the repro ran before the fix, the deploy script never
+fired, production was left alone. The answer key never reaches the agent. See `evals/README.md`.
 
 ## Developing
 
@@ -153,9 +157,10 @@ it. See `evals/README.md`.
 python -m unittest discover tests
 ```
 
-The suite checks the scripts, and it checks the skills: every skill carries at least one
+The suite checks the scripts, the eval runner (on recorded transcripts, so it costs nothing), and the skills: every skill carries at least one
 `*Test:*` line, defines the evidence labels if it uses them, names only skills that exist, and
 states a fallback wherever it hands work to another skill. It also grades each eval case's three
 reference reports — two correct ones written differently, one plausible wrong one — so a case that
 has stopped telling good from bad, or has started grading phrasing, fails here rather than sitting
-green.
+green. And every skill must have an eval case, or be listed in
+`evals/uncovered.txt`, a list that may only shrink.

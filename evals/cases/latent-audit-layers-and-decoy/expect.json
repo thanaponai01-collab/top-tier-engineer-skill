@@ -36,5 +36,8 @@
         "registry", "importlib", "by name", "enabled_plugins", "plugin", "dynamic"
       ]
     }
-  ]
+  ],
+  "actions": {
+    "read_only": true
+  }
 }

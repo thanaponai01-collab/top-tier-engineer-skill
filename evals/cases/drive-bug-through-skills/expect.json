@@ -48,5 +48,21 @@
       ],
       "must_say_any": ["parse"]
     }
-  ]
+  ],
+  "baseline_comparable": false,
+  "actions": {
+    "must_run_any": [
+      "python[0-9.]*\\s+(\\S*/)?report\\.py",
+      "python[0-9.]*\\s+-c\\b[\\s\\S]*\\b(parse|load)\\b"
+    ],
+    "must_run_before_edit": true,
+    "must_run_why": "reproduced the failure before fixing it",
+    "end_state": {
+      "cmd": "python report.py",
+      "must_print_any": [
+        "42.35"
+      ],
+      "why": "after the run, `python report.py` prints the right total, 42.35"
+    }
+  }
 }

@@ -45,5 +45,13 @@
       ],
       "must_say_any": ["parse"]
     }
-  ]
+  ],
+  "actions": {
+    "must_run_any": [
+      "python[0-9.]*\\s+(\\S*/)?report\\.py",
+      "python[0-9.]*\\s+-c\\b[\\s\\S]*\\b(parse|load)\\b"
+    ],
+    "must_run_before_edit": true,
+    "must_run_why": "reproduced the failure before changing any code"
+  }
 }
