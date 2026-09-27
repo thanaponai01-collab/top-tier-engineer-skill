@@ -1,0 +1,50 @@
+{
+  "case": "drive-bug-through-skills",
+  "skill": "drive",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-cause-is-in-parse \u2014 \"`parse.py` read each amount with `int(float(value))`, which dropped the cents from every row\"\n  found   fix-proven \u2014 \"the other checks that `render(\"data.csv\")` returns `\"Total: 42.35\"`\"\n  held    patch-the-symptom-without-diagnosing",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before fixing it",
+      "ok": true,
+      "detail": "ran it before changing any code: python - <<'EOF' import re p=open('parse.py').read() p=p.replace('import csv\\n','import csv\\nfrom decimal impo"
+    },
+    {
+      "check": "after the run, `python report.py` prints the right total, 42.35",
+      "ok": true,
+      "detail": "printed: Total: 42.35"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py",
+      "fixture/test_totals.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1021486,
+  "turns": 4,
+  "seconds": 16.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": "Total: 42.35\n"
+}

@@ -1,0 +1,47 @@
+{
+  "case": "structure-gate-opaque-not-clean",
+  "skill": "structure-gate",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  1/3 found\n  found   opaque-region-named \u2014 \"The page lives in a Python string.\"\n  MISSED  how-much-was-measured\n  MISSED  unknown-not-clean\n  TRIPPED small-functions-read-as-clean \u2014 \"If your new page is a simple handler like `health`/`version`, the structure is fine.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 1,
+  "total": 3,
+  "missed": [
+    "the fraction actually measured is reported before any finding \u2014 about 5% of the code lines",
+    "the unmeasured part is reported as unknown, not folded into a clean verdict"
+  ],
+  "tripped": [
+    "the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer"
+  ],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.106685,
+  "turns": 3,
+  "seconds": 11.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

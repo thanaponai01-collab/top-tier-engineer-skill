@@ -1,0 +1,27 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd /tmp/tte-eval-kcqlo6ti; ls -la; find fixture -type f | grep -v '/.git/' | head -100; cd fixture && git log --oneline | head -30; git log --oneline | wc -l
+  3. Bash: cd /tmp/tte-eval-kcqlo6ti/fixture; for f in $(find . -type f | sort); do echo "=== $f"; cat -n $f; done; ls -la /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skil…
+  4. Bash: cd /tmp/tte-eval-kcqlo6ti/fixture; grep -rn "import\|registry\|get(\|format_date\|fmt_date\|date_str\|invoice_date\|strftime\|order_json\|order_page\|rows(\|li…
+  5. Bash: sed -n 76,184p /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py
+  6. Agent: Recount date formatters
+  7.   (subagent) Bash: find /tmp/tte-eval-kcqlo6ti/fixture -type f -name "*.py" | head -20
+  8.   (subagent) Bash: grep -rn "strftime" /tmp/tte-eval-kcqlo6ti/fixture --include="*.py"
+  9.   (subagent) Bash: grep -rn "def.*format.*date\|def.*date.*format" /tmp/tte-eval-kcqlo6ti/fixture --include="*.py" -i
+ 10.   (subagent) Bash: grep -rn "\.strftime\|format.*date\|format_date\|format_datetime" /tmp/tte-eval-kcqlo6ti/fixture --include="*.py"
+ 11.   (subagent) Read: /tmp/tte-eval-kcqlo6ti/fixture/api/serializers.py
+ 12.   (subagent) Read: /tmp/tte-eval-kcqlo6ti/fixture/jobs/export.py
+ 13.   (subagent) Read: /tmp/tte-eval-kcqlo6ti/fixture/web/views.py
+ 14.   (subagent) Read: /tmp/tte-eval-kcqlo6ti/fixture/billing/invoice.py
+ 15.   (subagent) Bash: grep -rn "format_date\|date_str\|fmt_date\|invoice_date" /tmp/tte-eval-kcqlo6ti/fixture --include="*.py"
+ 16.   (subagent) Bash: grep -rn "from providers\|import providers\|providers\." /tmp/tte-eval-kcqlo6ti/fixture --include="*.py"
+ 17.   (subagent) Read: /tmp/tte-eval-kcqlo6ti/fixture/providers/base.py
+ 18.   (subagent) Read: /tmp/tte-eval-kcqlo6ti/fixture/providers/registry.py
+ 19.   (subagent) Read: /tmp/tte-eval-kcqlo6ti/fixture/providers/smtp.py
+ 20.   (subagent) Bash: find /tmp/tte-eval-kcqlo6ti/fixture -type f -name "*.py" -exec grep -l "providers" {} \;
+ 21.   (subagent) Bash: for file in /tmp/tte-eval-kcqlo6ti/fixture/api/serializers.py /tmp/tte-eval-kcqlo6ti/fixture/jobs/export.py /tmp/tte-eval-kcqlo6ti/fixture/web/views.py /tmp/tt…
+ 22.   (subagent) Bash: for file in /tmp/tte-eval-kcqlo6ti/fixture/providers/base.py /tmp/tte-eval-kcqlo6ti/fixture/providers/registry.py /tmp/tte-eval-kcqlo6ti/fixture/providers/smtp…
+ 23. Bash: python3 -c "import datetime as D; from api.serializers import order_json; from web.views import order_page; from billing.invoice import line; from jobs.export …
+ 24. Write: /tmp/tte-eval-kcqlo6ti/fixture/docs/arch-design.md
+ 25. Bash: S=/tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py; T=$(mktemp -d); cp -r /tmp/tte-eval-kcqlo6ti/fixture/. $T/; cd $T && gi…
+ 26. Edit: /tmp/tte-eval-kcqlo6ti/fixture/docs/arch-design.md
+ 27. Bash: S=/tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py; T=$(mktemp -d); cp -r /tmp/tte-eval-kcqlo6ti/fixture/. $T/; cd $T && gi…

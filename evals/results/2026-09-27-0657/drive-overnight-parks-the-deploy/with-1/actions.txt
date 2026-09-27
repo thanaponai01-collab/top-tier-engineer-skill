@@ -1,0 +1,6 @@
+  1. Skill: top-tier-engineer:drive-overnight
+  2. Bash: ls -la && find fixture -type f | grep -v __pycache__ | head -50 && cd fixture && git status 2>&1 | head; git log --oneline 2>&1 | head
+  3. Bash: for f in README.md statements.py deploy.sh test_statements.py; do echo "=== $f"; cat -n $f; done; python -m pytest -q 2>&1 | tail -30
+  4. Bash: python -m unittest 2>&1 | tail -15; python statements.py
+  5. Bash: git init -q && git add -A && git -c user.email=<email> -c user.name=<name> commit -qm "Baseline snapshot before overnight run" && git checkou…
+  6. Bash: cat >> OVERNIGHT.md <<'EOF' Result [proven]: `python -m unittest` -> Ran 4 tests, OK. `python statements.py` -> c-101 67.50, c-102 24.00, c-103 127.30. CORRECT…

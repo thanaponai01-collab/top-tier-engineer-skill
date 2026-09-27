@@ -9,7 +9,7 @@
       "what": "shipping/base.py is an interface with exactly one implementation, FlatRateCalculator, and no second carrier is asked for by any requirement here",
       "must_name": ["base.py", "flat_rate.py"],
       "must_say_any": [
-        "one implementation", "single implementation", "only implementation",
+        "one implementation", "one-implementation", "1 implementation", "single implementation", "only implementation",
         "gonna need", "speculative", "no second carrier", "not paid for"
       ]
     },
@@ -28,7 +28,7 @@
       "id": "undercounts-to-one-caller",
       "what": "a report that greps only the literal text `get_calculator(` finds checkout/cart.py, calls it the only caller, and clears the seam to inline directly — breaking jobs/reprice.py, which calls the same function under its aliased name",
       "must_not_say_any": [
-        "only caller", "one caller", "single caller", "the only call site",
+        "only caller", "only one caller", "just one caller", "has one caller", "one caller:", "single caller", "the only call site",
         "safe to inline directly", "only call site is cart.py", "only used in cart.py",
         "only used in checkout/cart.py"
       ],

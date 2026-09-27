@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "export-never-routed",
+      "what": "handlers/export.py loads at startup but no route maps to it \u2014 link 3, Routed",
+      "found": true,
+      "quote": "no request can reach it",
+      "quote_checked": true
+    },
+    {
+      "id": "both-entry-points",
+      "what": "two ways in exist: app.py dispatch and scheduler.py cron. Missing the scheduler turns digest into a false orphan",
+      "found": true,
+      "quote": "The service has two ways in (the web dispatcher and the cron scheduler)",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "digest-loaded-by-name",
+      "what": "handlers/digest.py is reached only through a string in settings.py; calling it dead or orphaned is the wrong answer",
+      "tripped": false,
+      "quote": "A plain search for imports gets this backwards. It flags `digest` as dead",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0500218,
+  "model": "claude-sonnet-5"
+}

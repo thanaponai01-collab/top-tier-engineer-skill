@@ -14,7 +14,7 @@ graders that read the transcript grade the work.
 
 Stdlib only. Needs the `claude` CLI on PATH.
 """
-import hashlib, json, os, shutil, subprocess, tempfile, time
+import hashlib, json, os, re, shutil, subprocess, tempfile, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -190,6 +190,17 @@ def diff_snapshots(before, after):
         "added": sorted(p for p in after if p not in before),
         "deleted": sorted(p for p in before if p not in after),
     }
+
+
+EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+GIT_NAME = re.compile(r"(user\.name[= ]+['\"]?)[^'\"\s]+")
+
+
+def redact(text):
+    """Email addresses and git user names out: a run's agent may pick up the account's
+    identity (e.g. for a git commit in its scratch folder), and the saved evidence is
+    committed to the repo."""
+    return GIT_NAME.sub(r"\1<name>", EMAIL.sub("<email>", text))
 
 
 def scratch_dir(prefix):

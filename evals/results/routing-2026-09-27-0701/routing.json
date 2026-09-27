@@ -1,0 +1,587 @@
+{
+  "meta": {
+    "started": "2026-09-27-0701",
+    "models": [
+      "claude-opus-5-5"
+    ]
+  },
+  "results": [
+    {
+      "prompt": "The nightly digest stopped going out after yesterday's deploy and I have no idea why.",
+      "expect": [
+        "debug-protocol",
+        "drive"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "safe-release",
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la && find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100\n  2. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*.py; do echo \"=== $f\"; cat -n \"$f\"; do\u2026\n  3. Bash: python3 scheduler.py; echo \"exit=$?\"; python3 -c \" import scheduler, importlib for s in scheduler.S\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1432476,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "The export sometimes returns the wrong totals. Figure out what's going on.",
+      "expect": [
+        "debug-protocol",
+        "drive"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -50\n  2. Bash: for f in $(find . -name '*.py'); do echo \"=== $f\"; cat -n $f; done\n  3. Bash: python3 -c \" import app, scheduler, settings print('routes:', list(app.ROUTES)) print('/export ->',\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1340404,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Change scheduler.py to import the digest job directly instead of loading it by name from settings. Don't break the nightly run.",
+      "expect": [
+        "evolve-maintain",
+        "build-discipline",
+        "drive"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: find . -type f -not -path './.git/*' | head -50 && cat scheduler.py && grep -rn \"digest\\|DIGEST\" --\u2026\n  2. Bash: for f in settings.py handlers/digest.py handlers/__init__.py app.py routes.py; do echo \"== $f\"; cat\u2026\n  3. Write: /tmp/tte-route-7w8abiql/scheduler.py\n  4. Bash: python3 scheduler.py; echo rc=$?; python3 -c \" import handlers.digest as d calls=[]; orig=d.run d.r\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.14249499999999998,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "I want to turn this into an app where my team can log which customers they called this week. Where do we start?",
+      "expect": [
+        "problem-framing",
+        "drive"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la && find . -maxdepth 3 -type f -not -path './.git/*' | head -50\n  2. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*.py; do echo \"=== $f\"; cat \"$f\"; done",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1275646,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "We need a real job queue for the digest instead of cron. How should this be structured: Postgres queue or Redis?",
+      "expect": [
+        "arch-design"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la && find . -maxdepth 3 -not -path '*/node_modules*' -not -path '*/.git/*' | head -50\n  2. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*.py; do echo \"=== $f\"; cat \"$f\"; done",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1405846,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Draw me a picture of how the pieces of this service connect.",
+      "expect": [
+        "arch-map"
+      ],
+      "pick": "top-tier-engineer:arch-map",
+      "right": true,
+      "hint": "arch-map",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:arch-map\n  2. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100 && wc -l $(find . -t\u2026\n  3. Bash: for f in $(find . -type f | sort); do echo \"=== $f\"; cat -n $f; done\n  4. Bash: python3 app.py; python3 -c \"import scheduler,handlers.digest as d; print(d.run())\"; python3 -c \" im\u2026\n  5. Write: /tmp/tte-route-aupiyfld/docs/architecture.md",
+      "all_skills": [
+        "top-tier-engineer:arch-map"
+      ],
+      "try": 1,
+      "cost_usd": 0.209204,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "I wrote the export handler but hitting it does nothing. Is it even hooked up?",
+      "expect": [
+        "wire-check"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "wire-check",
+      "hint_right": true,
+      "actions": "  1. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -50 && grep -rniI \"export\u2026\n  2. Bash: for f in app.py routes.py settings.py scheduler.py handlers/*.py; do echo \"=== $f\"; cat -n \"$f\"; do\u2026\n  3. Bash: python3 -c \"from app import dispatch; import sys; print(dispatch('/export')); print('handlers.expor\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1323702,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Before this goes out: does the health check actually do what it should? Test it properly.",
+      "expect": [
+        "correctness-gate"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -50 && cat *.md 2>/dev/nu\u2026\n  2. Bash: for f in $(find . -name '*.py'); do echo \"=== $f\"; cat $f; done\n  3. Bash: python3 app.py && python3 -c \" from app import dispatch print(dispatch('/health'), dispatch('/expor\u2026\n  4. Bash: rm -rf /tmp/hc && cp -r /tmp/tte-route-_l45fda9 /tmp/hc && cd /tmp/hc && echo 'raise RuntimeError(\"\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.15464139999999998,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "The health check takes eight seconds to answer under load. Make it fast.",
+      "expect": [
+        "perf-optimize"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -50\n  2. Bash: for f in settings.py routes.py scheduler.py app.py handlers/*.py; do echo \"=== $f\"; cat \"$f\"; done\n  3. Bash: time python3 app.py && python3 -c \" import timeit, app; print(timeit.timeit(lambda: app.dispatch('/\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1301898,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "We're about to expose the export endpoint to anonymous users on the internet. Can someone abuse it?",
+      "expect": [
+        "threat-model"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "threat-model",
+      "hint_right": true,
+      "actions": "  1. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -50 && grep -rniI \"export\u2026\n  2. Bash: for f in handlers/export.py handlers/__init__.py routes.py app.py settings.py; do echo \"=== $f\"; ca\u2026\n  3. Bash: python3 -c \" import app print('/export ->', app.dispatch('/export')) print('routes:', list(app.ROUT\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1395912,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Be honest: is this codebase any good? What's the biggest problem?",
+      "expect": [
+        "senior-review"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100 && find . -type f -n\u2026\n  2. Bash: for f in $(find . -type f -name '*.py'); do echo \"=== $f\"; cat -n $f; done\n  3. Bash: python3 app.py && python3 scheduler.py; echo \"exit $?\"; python3 -c \"import app; print(app.dispatch(\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1343868,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Can you give me a second opinion on this code before I merge it?",
+      "expect": [
+        "scrutinize",
+        "senior-review"
+      ],
+      "pick": "top-tier-engineer:scrutinize",
+      "right": true,
+      "hint": "scrutinize",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:scrutinize\n  2. Bash: ls -la && find . -type f -not -path '*/node_modules/*' | head -50\n  3. Bash: for f in $(find . -type f -name '*.py'); do echo \"=== $f\"; cat -n $f; done\n  4. Bash: python3 app.py; python3 -c \"import app; print(app.dispatch('/export'))\"; python3 scheduler.py && ec\u2026",
+      "all_skills": [
+        "top-tier-engineer:scrutinize"
+      ],
+      "try": 1,
+      "cost_usd": 0.15295620000000001,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "The handlers folder feels like spaghetti. Is it, or is it just me?",
+      "expect": [
+        "structure-gate"
+      ],
+      "pick": "top-tier-engineer:structure-gate",
+      "right": true,
+      "hint": "structure-gate",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:structure-gate\n  2. Bash: cd /tmp/tte-route-0dwc3klu; find . -path '*handlers*' -type f | head -50; echo; find . -type f -not\u2026\n  3. Bash: cd /tmp/tte-route-0dwc3klu; wc -l handlers/*; python3 /tmp/tte-plugin-f2l2fruu/top-tier-engineer/sk\u2026\n  4. Bash: cd /tmp/tte-route-0dwc3klu; for f in handlers/*; do echo \"== $f\"; cat \"$f\"; done; ruff check --sele\u2026\n  5. Bash: cd /tmp/tte-route-0dwc3klu; find . -type f -not -path './handlers/*' | xargs ls -la; grep -rn \"dige\u2026\n  6. Bash: cd /tmp/tte-route-0dwc3klu; cat scheduler.py app.py routes.py; rm -rf .ruff_cache",
+      "all_skills": [
+        "top-tier-engineer:structure-gate"
+      ],
+      "try": 1,
+      "cost_usd": 0.17681599999999997,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "What code in here is dead and safe to delete?",
+      "expect": [
+        "latent-audit"
+      ],
+      "pick": "top-tier-engineer:latent-audit",
+      "right": true,
+      "hint": "latent-audit",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:latent-audit\n  2. Bash: find . -type f -not -path './.git/*' | head -100 && cat *.md 2>/dev/null | head -50\n  3. Bash: for f in $(find . -name '*.py'); do echo \"=== $f\"; cat -n $f; done; python3 /tmp/tte-plugin-f2l2fru\u2026\n  4. Bash: grep -rn \"export\\|digest\" --include='*' . ; python3 - <<'EOF' import sys; sys.path.insert(0,'.') ca\u2026",
+      "all_skills": [
+        "top-tier-engineer:latent-audit"
+      ],
+      "try": 1,
+      "cost_usd": 0.17031620000000003,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Ship this to production tonight.",
+      "expect": [
+        "safe-release"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la && find . -maxdepth 2 -not -path './node_modules*' | head -50\n  2. Bash: for f in *.py handlers/*.py; do echo \"=== $f\"; cat \"$f\"; done\n  3. Bash: python3 app.py && python3 -c \"from app import dispatch; print(dispatch('/export'))\" && python3 -c \"\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.13352819999999999,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "I need to rename the email column to contact_email in the users table on the live database.",
+      "expect": [
+        "safe-release",
+        "evolve-maintain"
+      ],
+      "pick": "top-tier-engineer:safe-release",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:safe-release\n  2. Bash: ls -la && find . -maxdepth 3 -not -path '*/node_modules*' -not -path '*/.git/*' | head -50\n  3. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*.py; do echo \"=== $f\"; cat \"$f\"; done",
+      "all_skills": [
+        "top-tier-engineer:safe-release"
+      ],
+      "try": 1,
+      "cost_usd": 0.14789180000000002,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Upgrade this service to the newest Python version without breaking anything.",
+      "expect": [
+        "evolve-maintain",
+        "drive"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "evolve-maintain",
+      "hint_right": true,
+      "actions": "  1. Bash: find . -type f -not -path './.git/*' | head -50 && for f in Dockerfile pyproject.toml setup.cfg set\u2026\n  2. Bash: for f in *.py handlers/*.py; do echo \"=== $f\"; cat \"$f\"; done; ls /usr/bin/python3* /usr/local/bin/\u2026\n  3. Bash: for py in python3.11 python3.13; do echo \"== $py\"; $py -W error -X dev app.py; $py -W error -X dev \u2026\n  4. Bash: py=$(uv python find 3.14) && $py -W error -X dev app.py && $py -W error -X dev -c \"import scheduler\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.16391380000000003,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Get the export handler routed and working. Keep going on it overnight, I'm going to sleep.",
+      "expect": [
+        "drive-overnight"
+      ],
+      "pick": "top-tier-engineer:drive-overnight",
+      "right": true,
+      "hint": "drive-overnight",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:drive-overnight\n  2. Bash: find . -type f -not -path './node_modules/*' -not -path './.git/*' | head -50 && cat *.md 2>/dev/nu\u2026\n  3. Bash: for f in settings.py routes.py scheduler.py app.py handlers/*.py; do echo \"=== $f\"; cat \"$f\"; done\n  4. Bash: cat > check_export.py <<'EOF' \"\"\"Exit check for OVERNIGHT.md: /export is routed and returns the CSV\u2026\n  5. Bash: cat > OVERNIGHT.md <<'EOF' # OVERNIGHT: route the export handler EXIT CHECK: `python3 check_export.\u2026\n  6. Bash: cat > routes.py <<'EOF' \"\"\"The route table. Every request reaches a handler through this dict.\"\"\" f\u2026\n  7. Bash: cat >> OVERNIGHT.md <<'EOF' ## Result Step 1 (add \"/export\": export.run to routes.ROUTES): `python3\u2026",
+      "all_skills": [
+        "top-tier-engineer:drive-overnight"
+      ],
+      "try": 1,
+      "cost_usd": 0.2099046,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Where were we? Catch me up on this project.",
+      "expect": [
+        "recall"
+      ],
+      "pick": "top-tier-engineer:recall",
+      "right": true,
+      "hint": "recall",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:recall\n  2. Bash: cd /tmp/tte-route-i60israw; ls -la; ls /root/.claude/projects/-tmp-tte-route-i60israw/memory/ 2>&1;\u2026\n  3. Bash: cd /tmp/tte-route-i60israw; for f in *.py handlers/*; do echo \"== $f\"; cat \"$f\"; done; ls -la handl\u2026\n  4. Bash: cd /tmp/tte-route-i60israw; python3 app.py; python3 -c \"import scheduler; scheduler.run_all(); prin\u2026",
+      "all_skills": [
+        "top-tier-engineer:recall"
+      ],
+      "try": 1,
+      "cost_usd": 0.15046379999999998,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Why does the scheduler load digest by name from settings instead of importing it? Who decided that?",
+      "expect": [
+        "code-history",
+        "explain"
+      ],
+      "pick": "top-tier-engineer:code-history",
+      "right": true,
+      "hint": "code-history",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:code-history\n  2. Bash: cd /tmp/tte-route-t_t8ji4w; ls -la; cat WHY.md 2>/dev/null; git log --oneline -5 2>&1 | head; grep \u2026\n  3. Bash: cd /tmp/tte-route-t_t8ji4w; for f in scheduler.py settings.py app.py routes.py handlers/*; do echo \u2026",
+      "all_skills": [
+        "top-tier-engineer:code-history"
+      ],
+      "try": 1,
+      "cost_usd": 0.1560312,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Walk me through how a request travels through this app. Don't change anything.",
+      "expect": [
+        "explain",
+        "feature-map"
+      ],
+      "pick": "top-tier-engineer:explain",
+      "right": true,
+      "hint": "explain",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:explain\n  2. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100 && cat package.json \u2026\n  3. Bash: for f in app.py routes.py settings.py scheduler.py handlers/*.py; do echo \"=== $f\"; cat -n $f; done\n  4. Bash: python3 app.py && python3 -c \"from app import dispatch; print(dispatch('/export')); print(dispatch(\u2026",
+      "all_skills": [
+        "top-tier-engineer:explain"
+      ],
+      "try": 1,
+      "cost_usd": 0.1623348,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "What features does this app actually have, and how do I reach each one?",
+      "expect": [
+        "feature-map"
+      ],
+      "pick": "top-tier-engineer:feature-map",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:feature-map\n  2. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100 && cat FEATURES.md V\u2026\n  3. Bash: for f in app.py routes.py settings.py scheduler.py handlers/*.py; do echo \"=== $f\"; cat -n $f; done\u2026\n  4. Bash: python app.py; python -c \"from app import dispatch; print(dispatch('/export'))\"; python -c \"import \u2026\n  5. Write: /tmp/tte-route-mh1gmv9x/FEATURES.md\n  6. Bash: python /tmp/tte-plugin-f2l2fruu/top-tier-engineer/skills/feature-map/scripts/features.py check --st\u2026",
+      "all_skills": [
+        "top-tier-engineer:feature-map"
+      ],
+      "try": 1,
+      "cost_usd": 0.2041556,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Here's the plan: 1) route the export handler, 2) add a test for the digest, 3) add auth to export. File these as tracked issues.",
+      "expect": [
+        "issue-handoff"
+      ],
+      "pick": "top-tier-engineer:issue-handoff",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:issue-handoff\n  2. Bash: ls -la && find . -type f -not -path './node_modules/*' -not -path './.git/*' | head -50; echo ---; \u2026\n  3. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*.py; do echo \"=== $f\"; cat -n \"$f\"; do\u2026\n  4. Bash: python3 -c 'from app import dispatch; print(dispatch(\"/export\")); print(dispatch(\"/health\"))'; pyth\u2026\n  5. Write: /tmp/tte-route-z47bgbgl/ISSUES-DRAFT.md",
+      "all_skills": [
+        "top-tier-engineer:issue-handoff"
+      ],
+      "try": 1,
+      "cost_usd": 0.21271120000000004,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Set this repo up so the engineering skills work well in it.",
+      "expect": [
+        "project-setup"
+      ],
+      "pick": "top-tier-engineer:project-setup",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:project-setup\n  2. Bash: find . -maxdepth 3 -not -path './.git*' -not -path '*/node_modules*' | head -50; ls /tmp/tte-plugin\u2026\n  3. Bash: head -40 app.py routes.py scheduler.py settings.py handlers/*.py\n  4. Bash: S=/tmp/tte-plugin-f2l2fruu/top-tier-engineer/skills; python3 $S/verify-loop/scripts/verify.py init \u2026\n  5. Bash: cat >> FEATURES.md <<'EOF' ## Health check - Reached by: HTTP route `/health` (`routes.py` \u2192 `handl\u2026",
+      "all_skills": [
+        "top-tier-engineer:project-setup"
+      ],
+      "try": 1,
+      "cost_usd": 0.1907576,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Add a header comment to export.py, and check your own work until it really passes.",
+      "expect": [
+        "verify-loop",
+        "build-discipline"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: cd /tmp/tte-route-2we2q7az; ls -la; cat -n export.py 2>/dev/null | head -50\n  2. Bash: cd /tmp/tte-route-2we2q7az; find . -type f | xargs grep -n \"\"\n  3. Bash: cd /tmp/tte-route-2we2q7az; grep -rn \"export\" --include=*.py . ; python3 -c \" import sys; sys.path.\u2026\n  4. Bash: cd /tmp/tte-route-2we2q7az; cp handlers/export.py /tmp/export.py.bak; { printf '%s\\n' '# handlers/e\u2026\n  5. Bash: rm /tmp/export.py.bak",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.169045,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "I want to add an LLM agent that writes the nightly digest. How do I know if it's any good before I build it?",
+      "expect": [
+        "agent-evals"
+      ],
+      "pick": "top-tier-engineer:agent-evals",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:agent-evals\n  2. Bash: ls -la /tmp/tte-route-qczjzufw 2>&1 | head -30\n  3. Bash: for f in *.py handlers/*; do echo \"== $f\"; cat \"$f\"; done",
+      "all_skills": [
+        "top-tier-engineer:agent-evals"
+      ],
+      "try": 1,
+      "cost_usd": 0.14419300000000002,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Our support agent passes sometimes and fails other times. Does it actually work?",
+      "expect": [
+        "agent-prove"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "correctness-gate",
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la && find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100\n  2. Bash: for f in $(find . -type f -name '*.py'); do echo \"=== $f\"; cat \"$f\"; done\n  3. Bash: grep -rniE 'agent|support|llm|anthropic|openai|claude|prompt|random|test' . ; echo \"--- runs:\"; for\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1362894,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "My coding agent deleted handlers/health.py last night when I asked it to clean up imports. Why did it do that?",
+      "expect": [
+        "agent-trace"
+      ],
+      "pick": "top-tier-engineer:agent-trace",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:agent-trace\n  2. Bash: find . -maxdepth 4 -not -path '*/node_modules*' | head -100\n  3. Bash: ls -la handlers; for f in $(find . -type f); do echo \"=== $f\"; cat \"$f\"; done; ls -la ~/.claude/pro\u2026\n  4. Bash: ls -la /root/.claude/projects/-tmp-tte-route-2hjigus7/; ls -la /root/.claude/projects/-tmp-tte-rout\u2026",
+      "all_skills": [
+        "top-tier-engineer:agent-trace"
+      ],
+      "try": 1,
+      "cost_usd": 0.2152992,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "We're about to put our AI agent in front of real customers. What do we need first?",
+      "expect": [
+        "agent-release"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la /tmp/tte-route-2hmh89qq | head -30\n  2. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*; do echo \"== $f\"; cat \"$f\"; done",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.13011699999999998,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Fix the typo in health.py's docstring if there is one, otherwise add one that says 'Liveness probe.'",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": null,
+      "hint_right": true,
+      "actions": "  1. Bash: find . -name health.py -not -path '*/node_modules/*' | head; for f in $(find . -name health.py); do\u2026\n  2. Bash: sed -i '1a\\ \"\"\"Liveness probe.\"\"\"' handlers/health.py && cat -n handlers/health.py && python3 -c \"i\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.1054544,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "What does HTTP status 418 mean?",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": null,
+      "hint_right": true,
+      "actions": "",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0906636,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "prompt": "Rename the function check() in handlers/health.py to ping() and update its caller.",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": null,
+      "hint_right": true,
+      "actions": "  1. Bash: cat handlers/health.py && grep -rn \"check\\b\\|check(\" --include=*.py . | grep -v \"^./handlers/health\u2026\n  2. Bash: sed -i 's/^def check():/def ping():/' handlers/health.py && sed -i 's/health\\.check\\b/health.ping/'\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.10826419999999999,
+      "models_used": [
+        "claude-opus-5-5"
+      ]
+    }
+  ]
+}

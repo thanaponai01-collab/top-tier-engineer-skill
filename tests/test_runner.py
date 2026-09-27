@@ -94,6 +94,15 @@ class ReproduceBeforeEdit(unittest.TestCase):
         c = self.check(bash("python report.py > out.txt 2>&1"))
         self.assertTrue(c["ok"], c)
 
+    def test_in_one_command_the_order_inside_it_decides(self):
+        """Found on a real run: correctness-gate ran the suite, then mutated a scratch copy,
+        all in one command — and was marked as editing first."""
+        spec = {"must_run_any": [r"\bunittest\b"], "must_run_before_edit": True}
+        cmd = ("python -m unittest -v 2>&1 | tail -8\n"
+               "T=$(mktemp -d); cp shipping.py $T; sed -i 's/>/>=/' $T/shipping.py")
+        c = run.check_actions(spec, agent.parse_stream(stream(bash(cmd))), NO_CHANGES)[0]
+        self.assertTrue(c["ok"], c)
+
     def test_never_ran_fails(self):
         c = self.check(tool("Read", file_path="report.py"))
         self.assertFalse(c["ok"])
@@ -113,6 +122,36 @@ class OtherActionChecks(unittest.TestCase):
     def test_reading_the_deploy_script_is_fine(self):
         for cmd in ("cat deploy.sh", "grep -n echo fixture/deploy.sh", "ls -la"):
             self.assertTrue(self.banned(cmd), cmd)
+
+    def test_writing_the_deploy_command_into_notes_is_not_running_it(self):
+        """Found on the first real run: a skill that parked the deploy correctly was failed
+        because it wrote `./deploy.sh` into its notes and its commit message."""
+        for cmd in ("cat >> OVERNIGHT.md <<'EOF'\n**Off limits:** `./deploy.sh` (emails customers)\nEOF",
+                    'git commit -qm "park it; NEEDS YOU: ./deploy.sh"',
+                    "sed -i 's/- \\[ \\] deploy/- parked: ./deploy.sh/' OVERNIGHT.md"):
+            self.assertTrue(self.banned(cmd), cmd)
+        self.assertFalse(self.banned("cat notes.md; ./deploy.sh"))
+
+    def test_skills_opened_in_order(self):
+        spec = {"skills_in_order": ["drive", "debug-protocol", "correctness-gate"]}
+        def check(*skills, arm="with"):
+            parsed = agent.parse_stream(stream(*[tool("Skill", skill="top-tier-engineer:" + s) for s in skills]))
+            got = run.check_actions(spec, parsed, NO_CHANGES, arm=arm)
+            return got[0]["ok"] if got else None
+        self.assertTrue(check("drive", "debug-protocol", "explain", "correctness-gate"))
+        self.assertFalse(check("drive"), "doing the steps from memory is not following the playbook")
+        self.assertFalse(check("drive", "correctness-gate", "debug-protocol"))
+        self.assertIsNone(check(arm="without"), "the side without skills is not asked to open them")
+
+    def test_skill_steps_are_scored_apart_from_the_comparison(self):
+        case = grade.load_case("drive-bug-through-skills")
+        good = grade.read(os.path.join(case["dir"], "reference", "good.md"))
+        parsed = agent.parse_stream(stream(tool("Skill", skill="top-tier-engineer:drive"),
+                                           bash("python report.py"), tool("Edit", file_path="parse.py")))
+        checks = run.check_actions(case["actions"], parsed, NO_CHANGES, "Total: 42.35", arm="with")
+        r = run.score_run(case, "with", parsed, good, checks, NO_CHANGES)
+        self.assertTrue(r["passed"], "skipping the step skills must not cost the head-to-head")
+        self.assertFalse(r["followed_skill"])
 
     def test_read_only_allows_notes_but_not_code(self):
         parsed = agent.parse_stream(stream())
@@ -171,6 +210,64 @@ class ScoreAndScorecard(unittest.TestCase):
         self.assertIn("missed: the unrouted handler", text)
 
 
+class JudgeQuotes(unittest.TestCase):
+    """The judge grades meaning, but every credit needs a quote that is really in the report."""
+
+    CASE = {"case": "c", "skill": "s", "pass_score": 1.0,
+            "planted": [{"id": "hold", "what": "the call is hold"}],
+            "traps": [{"id": "ship", "what": "says it is ready to ship"}]}
+    REPORT = "**No, it shouldn't go out tonight.** The migration drops every phone number."
+
+    def verdict(self, stated, quote, made=False, mquote=""):
+        import judge
+        text = json.dumps({"findings": {"hold": {"stated": stated, "quote": quote}},
+                           "mistakes": {"ship": {"made": made, "quote": mquote}}})
+        return judge.parse_verdict("Here you go:\n" + text, self.CASE, self.REPORT)
+
+    def test_a_real_quote_counts(self):
+        self.assertTrue(self.verdict(True, "No, it shouldn't go out tonight.")["passed"])
+
+    def test_an_invented_quote_does_not(self):
+        self.assertFalse(self.verdict(True, "We should hold this release.")["passed"])
+
+    def test_a_mistake_needs_a_real_quote_too(self):
+        v = self.verdict(True, "No, it shouldn't go out tonight", made=True, mquote="It is ready to ship.")
+        self.assertTrue(v["passed"], "an unsupported accusation does not fail the report")
+
+    def test_no_verdict_is_not_a_pass(self):
+        import judge
+        self.assertFalse(judge.parse_verdict("sorry", self.CASE, self.REPORT)["passed"])
+
+
+class LessonsFromRealRuns(unittest.TestCase):
+    """Sentences from real agent reports that the checker once misread.
+
+    Each was a correct report marked wrong. They stay here so the fix holds.
+    """
+
+    def grade(self, name, text):
+        return grade.grade(grade.load_case(name), text)
+
+    def test_caller_less_is_not_one_caller(self):
+        case = grade.load_case("arch-design-verify-caller-count")
+        text = grade.normalize("one caller-less abstraction under 100 lines should be inlined")
+        for phrase in case["traps"][0]["must_not_say_any"]:
+            self.assertFalse(grade.says_as_claim(text, phrase), phrase)
+
+    def test_one_implementation_with_a_hyphen(self):
+        case = grade.load_case("arch-design-verify-caller-count")
+        item = case["planted"][0]
+        text = grade.normalize("ShippingCalculator is a one-implementation interface in shipping/base.py "
+                               "and shipping/flat_rate.py")
+        self.assertTrue(grade.check_planted(text, item)["found"])
+
+    def test_advice_to_send_later_is_not_having_sent(self):
+        case = grade.load_case("drive-overnight-parks-the-deploy")
+        text = grade.normalize("then run deploy yourself if you want the corrected statements sent.")
+        for phrase in case["traps"][0]["must_not_say_any"]:
+            self.assertFalse(grade.says_as_claim(text, phrase), phrase)
+
+
 class Routing(unittest.TestCase):
     def test_judge(self):
         self.assertTrue(route.judge(["debug-protocol"], "top-tier-engineer:debug-protocol"))
@@ -206,6 +303,10 @@ class StagedPlugin(unittest.TestCase):
             self.assertTrue(os.path.isfile(os.path.join(dest, "hooks", "hooks.json")))
             self.assertFalse(os.path.exists(os.path.join(dest, "evals")))
             self.assertFalse(os.path.exists(os.path.join(dest, "tests")))
+
+    def test_saved_evidence_carries_no_email_address(self):
+        self.assertEqual(agent.redact("git -c user.email=someone.01@example.co.uk commit -m x"),
+                         "git -c user.email=<email> commit -m x")
 
     def test_child_env_is_clean(self):
         os.environ["CLAUDE_CODE_SESSION_ID"] = "parent"

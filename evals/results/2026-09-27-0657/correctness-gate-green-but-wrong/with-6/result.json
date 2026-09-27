@@ -1,0 +1,46 @@
+{
+  "case": "correctness-gate-green-but-wrong",
+  "skill": "correctness-gate",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  2/3 found\n  found   boundary-off-by-one \u2014 \"`shipping.py:4` uses `total > 100` where the spec needs `>= 100`\"\n  found   test-encodes-the-bug \u2014 \"`test_hundred` asserts `fee(100) == 5`, so the test repeats the bug instead of checking the spec\"\n  MISSED  spec-is-the-oracle\n  held    green-suite-read-as-correct",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:correctness-gate"
+  ],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "correctness is judged against SPEC.md, not against the existing suite"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "ran the test suite itself before changing anything, instead of trusting that green means correct",
+      "ok": true,
+      "detail": "ran it before changing any code: cd /tmp/tte-eval-bkj598d2/fixture && python3 -m unittest -v 2>&1 | tail -8 W=$(mktemp -d) && cp shipping.py te"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2155226,
+  "turns": 7,
+  "seconds": 38.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

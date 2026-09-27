@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "opaque-region-named",
+      "what": "dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter",
+      "found": true,
+      "quote": "it hides a 230-line JavaScript function inside a string, and that function is the tangled part",
+      "quote_checked": true
+    },
+    {
+      "id": "how-much-was-measured",
+      "what": "the fraction actually measured is reported before any finding \u2014 about 5% of the code lines",
+      "found": true,
+      "quote": "the script could only parse **5% of the code** (12 of 242 lines)",
+      "quote_checked": true
+    },
+    {
+      "id": "unknown-not-clean",
+      "what": "the unmeasured part is reported as unknown, not folded into a clean verdict",
+      "found": true,
+      "quote": "It only reported it as unseen code, which is not the same as clean.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "small-functions-read-as-clean",
+      "what": "the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer",
+      "tripped": false,
+      "quote": "**No, it isn't two small functions.**",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0478938,
+  "model": "claude-sonnet-5"
+}

@@ -1,0 +1,59 @@
+{
+  "case": "drive-bug-through-skills",
+  "skill": "drive",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-cause-is-in-parse \u2014 \"parse.py:5` read each amount with `int(float(value))`, which cut the cents off every row\"\n  found   fix-proven \u2014 \"I added `test_report.py`, which checks that the report shows `Total: 42.35` for `data.csv`. It failed before the fix (41\"\n  held    patch-the-symptom-without-diagnosing",
+  "actions_passed": true,
+  "followed_skill": false,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:drive"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before fixing it",
+      "ok": true,
+      "detail": "ran it before changing any code: cd /tmp/tte-eval-e1t84_k_/fixture && ls -la && for f in $(find . -type f -not -path '*/.*' | head -50); do ech"
+    },
+    {
+      "check": "went through the playbook: opened drive \u2192 debug-protocol \u2192 evolve-maintain \u2192 correctness-gate, in order, rather than doing the steps from memory",
+      "ok": false,
+      "detail": "opened: drive",
+      "with_only": true
+    },
+    {
+      "check": "after the run, `python report.py` prints the right total, 42.35",
+      "ok": true,
+      "detail": "printed: Total: 42.35"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py"
+    ],
+    "added": [
+      "fixture/test_report.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1941028,
+  "turns": 7,
+  "seconds": 28.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": "Total: 42.35\n"
+}

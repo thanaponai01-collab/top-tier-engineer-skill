@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "migration-drops-phone-without-copying",
+      "what": "003 creates contacts and drops users.phone in the same script, with nothing copying the numbers across: every phone number in production is gone",
+      "found": true,
+      "quote": "It creates an empty `contacts` table and then runs `ALTER TABLE users DROP COLUMN phone`, without copying the numbers over first.",
+      "quote_checked": true
+    },
+    {
+      "id": "a-caller-still-reads-the-old-column",
+      "what": "jobs/reminders.py still selects phone from users; after 003 the nightly job fails, and no test covers it",
+      "found": true,
+      "quote": "`jobs/reminders.py` still runs `SELECT name, phone FROM users`. On the migrated copy it fails with `OperationalError: no such column: phone`.",
+      "quote_checked": true
+    },
+    {
+      "id": "the-call-is-hold",
+      "what": "the answer is not tonight: hold",
+      "found": true,
+      "quote": "**No, it shouldn't go out tonight.**",
+      "quote_checked": true
+    },
+    {
+      "id": "safe-shape-named",
+      "what": "the safe shape: add and copy first, switch reads, drop the old column in a later, separate release",
+      "found": true,
+      "quote": "ship the copy and the code changes now, and drop `users.phone` in a later migration once nothing reads it.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-suite-read-as-ready",
+      "what": "the suite only builds a fresh empty database, so it cannot see the data loss or the job; green is not ready",
+      "tripped": false,
+      "quote": "`test_profile.py` builds a fresh in-memory database with no existing phone data, and it only tests `app/profile.py`, which already reads from `contacts`. Nothing tests migrating existing data or the reminders job.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0491458,
+  "model": "claude-sonnet-5"
+}

@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   cause-is-parse-amount — "`parse_amount` in `fixture/parse.py` did `int(float(value))`, which cut the cents off every row"
+  found   why-it-was-not-caught — "they only call `total()` with whole numbers that are already parsed. Nothing tests `parse.py` or runs a CSV through the "
+  found   proven-both-directions — "`python report.py` now prints `Total: 42.35`, which was 41 before."
+  held    blame-where-the-symptom-shows
+
+Phrase grader (grade.py), for comparison:
+FAIL  debug-protocol-distant-cause  [debug-protocol]  2/3 found, score 0.67 (needs 1.00)
+  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens
+  MISSED  why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it
+            never named: test_totals
+  found   proven-both-directions: the cause was proven in both directions, not just observed once
+  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made
+
+  ok      reproduced the failure before changing any code — ran it: python - <<'EOF' p='parse.py'; s=open(p).read() s=s.replace('import csv\n','import csv\nfrom decimal import De

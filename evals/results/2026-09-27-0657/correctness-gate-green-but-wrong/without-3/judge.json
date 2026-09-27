@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "boundary-off-by-one",
+      "what": "shipping.py uses `total > 100`; SPEC.md clause 1 says 100 or more ships free, so fee(100) is wrong",
+      "found": true,
+      "quote": "an order of exactly 100 is charged 5 when it should ship free",
+      "quote_checked": true
+    },
+    {
+      "id": "test-encodes-the-bug",
+      "what": "test_hundred asserts fee(100) == 5, which is what the code does rather than what the spec says",
+      "found": true,
+      "quote": "That test expects the wrong behavior, so it passes instead of catching the bug.",
+      "quote_checked": true
+    },
+    {
+      "id": "spec-is-the-oracle",
+      "what": "correctness is judged against SPEC.md, not against the existing suite",
+      "found": true,
+      "quote": "the code doesn't match the spec at exactly 100",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-suite-read-as-correct",
+      "what": "the gate must fail; a green suite is not evidence of correctness here",
+      "tripped": false,
+      "quote": "All 4 tests pass, but the code doesn't match the spec at exactly 100",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0463818,
+  "model": "claude-sonnet-5"
+}

@@ -1,0 +1,45 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   cause-is-parse-amount \u2014 \"`parse_amount` did `int(float(value))`, which dropped the cents from every row\"\n  found   why-it-was-not-caught \u2014 \"they only passed whole numbers straight to `total()` and never went through the parsing step\"\n  found   proven-both-directions \u2014 \"One checks that parsing keeps the cents; the other runs the whole CSV through to the report and expects `Total: 42.35`.\"\n  held    blame-where-the-symptom-shows",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": false,
+      "detail": "changed the code first; ran it only afterwards"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py",
+      "fixture/test_totals.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.0925824,
+  "turns": 3,
+  "seconds": 13.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

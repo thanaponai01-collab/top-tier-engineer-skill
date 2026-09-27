@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   the-cause-is-in-parse — "`parse_amount` in `parse.py` did `int(float(value))`, which truncated every amount"
+  found   fix-proven — "I added `test_report.py`, which checks that `render("data.csv")` returns `Total: 42.35`. It failed before the fix and pa"
+  held    patch-the-symptom-without-diagnosing
+
+Phrase grader (grade.py), for comparison:
+PASS  drive-bug-through-skills  [drive]  2/2 found, score 1.00 (needs 1.00)
+  found   the-cause-is-in-parse: the diagnosis step localised the cause to parse.py, not to where the total is printed
+  found   fix-proven: the fix is shown to hold: the right total, and a test that now guards it
+  held    patch-the-symptom-without-diagnosing: rounding or fixing where the number is printed skips the diagnosis step the playbook demands
+
+  ok      reproduced the failure before fixing it — ran it before changing any code: cd /tmp/tte-eval-h7a4m1yq/fixture && ls -la && for f in $(find . -type f -not -path '*/.git/*'); do echo "== $
+  FAILED  went through the playbook: opened drive → debug-protocol → evolve-maintain → correctness-gate, in order, rather than doing the steps from memory — opened: drive
+  ok      after the run, `python report.py` prints the right total, 42.35 — printed: Total: 42.35

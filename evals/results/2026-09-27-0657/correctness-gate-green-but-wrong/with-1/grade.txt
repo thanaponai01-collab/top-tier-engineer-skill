@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   boundary-off-by-one — "`fixture/shipping.py:4` uses `total > 100` where the spec says "100 or more", which needs `>=`."
+  found   test-encodes-the-bug — "The suite is green only because `test_hundred` checks for the wrong answer (`fee(100) == 5`)."
+  found   spec-is-the-oracle — "Oracle | Input → output"
+  held    green-suite-read-as-correct
+
+Phrase grader (grade.py), for comparison:
+PASS  correctness-gate-green-but-wrong  [correctness-gate]  3/3 found, score 1.00 (needs 1.00)
+  found   boundary-off-by-one: shipping.py uses `total > 100`; SPEC.md clause 1 says 100 or more ships free, so fee(100) is wrong
+  found   test-encodes-the-bug: test_hundred asserts fee(100) == 5, which is what the code does rather than what the spec says
+  found   spec-is-the-oracle: correctness is judged against SPEC.md, not against the existing suite
+  held    green-suite-read-as-correct: the gate must fail; a green suite is not evidence of correctness here
+
+  ok      ran the test suite itself before changing anything, instead of trusting that green means correct — ran it before changing any code: cd /tmp/tte-eval-9cxjflu5/fixture && cat -n shipping.py test_shipping.py && python -m pytest -q 2>&1 | tail -5

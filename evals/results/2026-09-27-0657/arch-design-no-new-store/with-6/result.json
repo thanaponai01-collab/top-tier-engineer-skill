@@ -1,0 +1,47 @@
+{
+  "case": "arch-design-no-new-store",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   existing-db-is-the-one-owner \u2014 \"app/db.py stays the only place that opens connections\"\n  found   no-plugin-for-one-format \u2014 \"1 caller today and well under 100 lines, so the bar says inline it; move it out only when a second format (XLSX) or a se\"\n  found   cost-of-a-new-store-named \u2014 \"Cost of choosing wrong: a migration plus a backfill.\"\n  held    new-datastore-for-history",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/docs/arch-design-csv-export.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-haiku-4-5-20251001",
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.44767504999999996,
+  "turns": 10,
+  "seconds": 80.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

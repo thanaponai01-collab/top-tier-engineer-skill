@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-no-new-store",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   existing-db-is-the-one-owner \u2014 \"app/db.execute stays the only DB access path\"\n  found   no-plugin-for-one-format \u2014 \"There's only one thing to export today, so a separate package isn't worth it yet.\"\n  found   cost-of-a-new-store-named \u2014 \"Cost of choosing wrong:** a migration plus a backfill that can't recover titles that were never stored.\"\n  held    new-datastore-for-history",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/docs/arch-design-csv-export.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.3585406,
+  "turns": 11,
+  "seconds": 69.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

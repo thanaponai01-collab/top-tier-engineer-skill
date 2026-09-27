@@ -45,14 +45,34 @@ For every case, side and try, `run.py`:
 2. runs Claude Code headless: **with** = Claude Code + this plugin, given `prompt.md`;
    **without** = plain Claude Code, given `prompt-plain.md` (the same task in plain words — naming
    a skill the agent doesn't have would measure its confusion, not the skill);
-3. grades what the agent **wrote** with `grade.py`, and what it **did** from its transcript (the
-   `actions` block below);
+3. grades what the agent **wrote** on meaning with `judge.py` (below), and what it **did** from its
+   transcript (the `actions` block below);
 4. saves the report, a one-line-per-step action log and the grade under `evals/results/<time>/`,
    and rewrites `RESULTS.md`.
 
 A try passes only when the report passes *and* the actions check out. Every run spends real usage;
 `--budget-usd` caps each one. `--rescore evals/results/<time>` re-grades saved runs against the
 current `expect.json` without running an agent.
+
+## Grading on meaning — `judge.py`
+
+`grade.py` matches phrases. On real agent reports that misreads in both directions — "No, it
+shouldn't go out tonight" is a hold that never says "hold"; "one caller-less abstraction" contains
+"one caller" — and it quietly rewards the side with the skill, because a skill teaches the agent
+the very words the phrase list looks for. On the first real run it disagreed with a careful reading
+on 21 of 66 reports.
+
+So `run.py` grades each report with a second model. It is told the planted findings and the known
+mistakes, never which side wrote the report or which skills exist, and it must quote the report for
+every finding it credits and every mistake it charges. A quote that is not really in the report does
+not count, so it cannot invent support. It is held to the same bar as the phrase grader:
+
+```
+python evals/judge.py --calibrate      # every good/good-alt must pass, every bad must fail
+```
+
+The phrase verdict is kept beside it in every run's `grade.txt`, and `--no-judge` grades on phrases
+alone (free, less accurate).
 
 ## Does it pick the right skill? — `route.py`
 

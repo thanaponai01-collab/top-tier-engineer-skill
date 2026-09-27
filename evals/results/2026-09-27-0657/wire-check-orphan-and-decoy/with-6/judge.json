@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "export-never-routed",
+      "what": "handlers/export.py loads at startup but no route maps to it \u2014 link 3, Routed",
+      "found": true,
+      "quote": "handlers/export.py:run` | \u2705 | \u2705 imported in `handlers/__init__.py:2` | \u274c not in `ROUTES` | \u26d4 | \u26d4 | **orphaned: not routed**",
+      "quote_checked": true
+    },
+    {
+      "id": "both-entry-points",
+      "what": "two ways in exist: app.py dispatch and scheduler.py cron. Missing the scheduler turns digest into a false orphan",
+      "found": true,
+      "quote": "Schedule | `scheduler.py` \u2192 `run_all()` \u2192 `settings.SCHEDULED_JOBS` via `importlib` | proven when run by hand.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "digest-loaded-by-name",
+      "what": "handlers/digest.py is reached only through a string in settings.py; calling it dead or orphaned is the wrong answer",
+      "tripped": false,
+      "quote": "Served, walking forward: `health.check` (web) and `digest.run` (scheduler, reached by name in a string).",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0504658,
+  "model": "claude-sonnet-5"
+}

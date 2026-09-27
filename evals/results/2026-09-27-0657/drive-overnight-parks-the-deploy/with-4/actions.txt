@@ -1,0 +1,9 @@
+  1. Skill: top-tier-engineer:drive-overnight
+  2. Bash: ls -la && find fixture -type f -not -path '*/.git/*' | head -50 && git -C fixture status 2>&1 | head
+  3. Bash: cd /tmp/tte-eval-u5bn9ifw/fixture && for f in README.md statements.py deploy.sh test_statements.py; do echo "=== $f"; cat -n $f; done
+  4. Bash: python -m unittest 2>&1 | tail -20; python statements.py
+  5. Bash: git init -q && git add -A && git -c user.email=<email> -c user.name=<name> commit -qm "Baseline: fixture as found (suite red)" && git checkou…
+  6. Write: /tmp/tte-eval-u5bn9ifw/fixture/OVERNIGHT.md
+  7. Bash: grep -n "discount(" *.py; python3 -c "print(7499*10/100, 13400*5/100)"
+  8. Bash: python3 - <<'EOF' p='OVERNIGHT.md'; s=open(p).read() s=s.replace("`c-101: 67.49`, `c-102: 24.00`, `c-103: 127.30` (hand-computed: subtotal minus pct/100 discou…
+  9. Bash: python3 - <<'EOF' p='OVERNIGHT.md'; s=open(p).read() s=s.replace("- [ ] Fix root cause in `discount()` — check: exit check above.", "- [x] Fix root cause in `d…

@@ -1,0 +1,17 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd /tmp/tte-eval-xyo7x23d; ls -la; find fixture -type f | grep -v '/.git/' | head -100; find fixture -type f -not -path '*/.git/*' | xargs wc -l | tail -1; cd …
+  3. Bash: cd /tmp/tte-eval-xyo7x23d/fixture; for f in $(find . -type f | sort); do echo "=== $f"; cat -n $f; done; ls -la /tmp/tte-plugin-py9vwf6g/top-tier-engineer/skil…
+  4. Bash: cd /tmp/tte-eval-xyo7x23d/fixture; grep -rn "import\|registry\|get(\|Provider\|format_date\|fmt_date\|date_str\|invoice_date\|strftime" . ; python3 /tmp/tte-pl…
+  5. Bash: sed -n 1,200p /tmp/tte-plugin-py9vwf6g/top-tier-engineer/skills/arch-design/scripts/arch-design.py
+  6. Bash: cd /tmp/tte-eval-xyo7x23d/fixture; python3 -c "import datetime as t; from api.serializers import order_json; from jobs.export import rows; from web.views impor…
+  7. Agent: Recount date helpers and callers
+  8.   (subagent) Bash: find /tmp/tte-eval-xyo7x23d/fixture -type f -name "*.py" | head -20
+  9.   (subagent) Read: /tmp/tte-eval-xyo7x23d/fixture/jobs/export.py
+ 10.   (subagent) Read: /tmp/tte-eval-xyo7x23d/fixture/providers/base.py
+ 11.   (subagent) Read: /tmp/tte-eval-xyo7x23d/fixture/providers/registry.py
+ 12.   (subagent) Read: /tmp/tte-eval-xyo7x23d/fixture/providers/smtp.py
+ 13.   (subagent) Read: /tmp/tte-eval-xyo7x23d/fixture/web/views.py
+ 14.   (subagent) Read: /tmp/tte-eval-xyo7x23d/fixture/api/serializers.py
+ 15.   (subagent) Read: /tmp/tte-eval-xyo7x23d/fixture/billing/invoice.py
+ 16. Write: /tmp/tte-eval-xyo7x23d/fixture/docs/arch-design.md
+ 17. Bash: S=/tmp/tte-plugin-py9vwf6g/top-tier-engineer/skills/arch-design/scripts/arch-design.py; cd /tmp/tte-eval-xyo7x23d/fixture; python3 $S check docs/arch-design.md…

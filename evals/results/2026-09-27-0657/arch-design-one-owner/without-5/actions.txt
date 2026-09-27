@@ -1,0 +1,2 @@
+  1. Bash: cd /tmp/tte-eval-p9n8m_lj/fixture && find . -type f | head -100 && wc -l $(find . -type f) | tail -1
+  2. Bash: for f in $(find . -type f); do echo "=== $f"; cat -n $f; done

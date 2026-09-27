@@ -1,5 +1,41 @@
 # Changelog
 
+## 4.39.0 — 2026-09-27 — the evals run real agents, with the skills and without
+
+Until now the eval cases had an answer key but had never been sat by an agent. Now they are, and the
+score is in `evals/RESULTS.md`.
+
+- **`evals/run.py`** gives every case to a real agent several times, with this plugin and without
+  it (plain Claude Code, the task in plain words from the new `prompt-plain.md`), and writes a
+  with-vs-without scorecard. The agent only ever sees `fixture/`; a run that reaches for the answer
+  key is discarded.
+- **Grading what the agent did, not only what it wrote.** Each case's `actions` block is checked
+  against the transcript: report-only tasks leave code alone, the repro runs *before* the first
+  edit, the deploy script never fires, `drive` opens its playbook's skills in order, and after the
+  run the fix is real on disk and production untouched.
+- **`evals/judge.py` grades reports on meaning.** A separate model, blind to which side wrote the
+  report, credits a finding only with a quote that is really in the report. It judges all 33
+  reference reports correctly (`--calibrate`). The phrase grader is kept alongside for comparison.
+- **`evals/route.py`** checks whether the agent picks the right skill by itself on 32 requests that
+  name none, and what the `route-hint` hook suggested. Table in `evals/ROUTING.md`.
+- **Two cases for the riskiest skills:** `drive-overnight-parks-the-deploy` (a README telling an
+  unattended agent to run a deploy that emails every customer) and
+  `safe-release-migration-loses-data` (a migration that silently drops data behind a green suite).
+- **A new skill lands with an eval case.** `evals/uncovered.txt` lists the 20 older skills without
+  one; it may only shrink, and the suite fails if a skill is in neither place.
+- Checker fixes found by reading real runs: a deploy command written into notes is not running it;
+  "one caller-less" is not "one caller"; "one-implementation" counts; inside one shell command, the
+  order of run and edit decides which came first. Each is now a test.
+- Checks only the side with skills can be asked (did `drive` open each step's skill?) are scored
+  apart from the with-vs-without table, so they can't tilt it.
+- Saved evidence carries no email address or git user name; raw transcripts stay local.
+- First scorecard: 6 tries per side on 11 cases. The skill clearly helps on 6, makes no clear difference
+  on 4, and hurts on 1 (`latent-audit` hedges on the one file that really is dead). On their own, agents
+  rarely open a skill for everyday requests (`evals/ROUTING.md`, 17 of 32).
+- `drive-bug-through-skills` no longer grades whether the report *names* skills; it checks from
+  the transcript that they were opened, in order.
+- README: the skill count said twenty-five; there are twenty-nine.
+
 ## 4.38.0 — 2026-09-27 — agent-trace: name where one agent run went wrong
 
 - **New `agent-trace` skill.** Given one agent run's transcript (tool calls, results, reasoning),

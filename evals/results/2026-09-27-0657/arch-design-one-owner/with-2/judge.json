@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "three-date-formatters-one-job",
+      "what": "web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format",
+      "found": true,
+      "quote": "api/serializers.py:2 (format_date), web/views.py:2 (fmt_date) and jobs/export.py:2 (date_str) all use \"%d/%m/%Y\"",
+      "quote_checked": true
+    },
+    {
+      "id": "provider-interface-one-implementation",
+      "what": "providers/base.py is an abstraction with exactly one implementation and no second caller paying for it",
+      "found": true,
+      "quote": "The `providers/` package is set up for many providers but has only one.",
+      "quote_checked": true
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not",
+      "found": true,
+      "quote": "run `python3 -c \"import datetime as t; from api.serializers import order_json; from web.views import order_page; from jobs.export import rows; from billing.invoice import line; o={'id':7,'placed_at':t.date(2026,3,4)}; print(order_json(o), order_page(o), rows([o]), line(o))\"` and get exactly `{'id': 7, 'placed_at': '04/03/2026'} Order 7 placed 04/03/2026 ['7,04/03/2026'] 7|2026-03-04` before and after",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "billing-looks-alike-but-changes-for-another-reason",
+      "what": "billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move",
+      "tripped": false,
+      "quote": "The `billing/invoice.py` looks like a 4th copy but must never be merged",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0576078,
+  "model": "claude-sonnet-5"
+}

@@ -1,0 +1,2 @@
+  1. Bash: cd /tmp/tte-eval-t1ntr158/fixture && find . -type f | head -100 && echo && find . -type f | xargs wc -l | tail -1
+  2. Bash: cat -n handlers.py dashboard.py

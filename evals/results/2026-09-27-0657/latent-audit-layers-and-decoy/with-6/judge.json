@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 3,
+  "score": 0.667,
+  "planted": [
+    {
+      "id": "layer-breach-notify",
+      "what": "app/models/notify.py (data) imports app/routes/web.py (interface) \u2014 a low layer calling a high one",
+      "found": true,
+      "quote": "`from app.routes.web import BANNER`: the data layer imports from the interface layer to get a copy string",
+      "quote_checked": true
+    },
+    {
+      "id": "legacy-export-dead",
+      "what": "app/services/legacy_export.py is referenced nowhere, by import or by string \u2014 the one real deletion candidate",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "layers-were-declared-not-guessed",
+      "what": "the layer order comes from ARCHITECTURE.md, not from the auditor's taste",
+      "found": true,
+      "quote": "The layer order comes from `fixture/ARCHITECTURE.md`",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "csv-out-resolved-by-name",
+      "what": "app/plugins/csv_out.py is resolved from ENABLED_PLUGINS by registry.py; deleting it, or its render(), is the wrong answer",
+      "tripped": false,
+      "quote": "Keep. The script was wrong because it can't see name-based loading",
+      "quote_checked": true
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.049081799999999995,
+  "model": "claude-sonnet-5"
+}

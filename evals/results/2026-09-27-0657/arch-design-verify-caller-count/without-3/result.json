@@ -1,0 +1,42 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"ShippingCalculator is used in exactly one place: the import and the base-class line in flat_rate.py.\"\n  found   second-caller-hides-behind-an-alias \u2014 \"jobs/reprice.py imports get_calculator under the name pick_calc, so searching for get_calculator( call sites won't find \"\n  held    undercounts-to-one-caller",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.11408959999999999,
+  "turns": 4,
+  "seconds": 24.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

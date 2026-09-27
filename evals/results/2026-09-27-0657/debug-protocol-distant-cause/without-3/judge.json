@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "cause-is-parse-amount",
+      "what": "parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens",
+      "found": true,
+      "quote": "`parse_amount` did `int(float(value))`, which dropped the cents from every row",
+      "quote_checked": true
+    },
+    {
+      "id": "why-it-was-not-caught",
+      "what": "test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it",
+      "found": true,
+      "quote": "they only passed whole numbers straight to `total()` and never went through the parsing step",
+      "quote_checked": true
+    },
+    {
+      "id": "proven-both-directions",
+      "what": "the cause was proven in both directions, not just observed once",
+      "found": true,
+      "quote": "One checks that parsing keeps the cents; the other runs the whole CSV through to the report and expects `Total: 42.35`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "blame-where-the-symptom-shows",
+      "what": "report.py and totals.py are where the wrong number is seen, not where it is made",
+      "tripped": false,
+      "quote": "`report.py` and `totals.py` were fine. The bug was in how amounts were read in `parse.py`.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.046523800000000004,
+  "model": "claude-sonnet-5"
+}

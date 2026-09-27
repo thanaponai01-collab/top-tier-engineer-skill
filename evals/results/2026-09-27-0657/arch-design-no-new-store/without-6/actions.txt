@@ -1,0 +1,2 @@
+  1. Bash: cd /tmp/tte-eval-87cedxe7; find fixture -type f | grep -v node_modules | head -100; echo; find fixture -type f | grep -v node_modules | xargs wc -l | tail -1
+  2. Bash: cd /tmp/tte-eval-87cedxe7/fixture; for f in $(find . -type f); do echo "=== $f"; cat -n $f; done

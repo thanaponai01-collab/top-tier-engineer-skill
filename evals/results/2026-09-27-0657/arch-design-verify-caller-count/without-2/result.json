@@ -1,0 +1,42 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"`shipping/flat_rate.py:4`: `FlatRateCalculator(ShippingCalculator)`, the only implementation.\"\n  found   second-caller-hides-behind-an-alias \u2014 \"`jobs/reprice.py:2` imports it **under an alias**: `get_calculator as pick_calc`. Searching for `get_calculator(` call s\"\n  held    undercounts-to-one-caller",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.10617359999999999,
+  "turns": 4,
+  "seconds": 20.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

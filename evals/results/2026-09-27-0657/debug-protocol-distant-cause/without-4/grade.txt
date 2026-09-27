@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   cause-is-parse-amount — "`parse_amount` in `parse.py` converted each amount with `int(float(value))`, which cuts off the cents"
+  found   why-it-was-not-caught — "the existing tests only used whole numbers, so they never caught this"
+  found   proven-both-directions — "`python report.py` now prints `Total: 42.35`, which is correct."
+  held    blame-where-the-symptom-shows
+
+Phrase grader (grade.py), for comparison:
+PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)
+  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens
+  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it
+  found   proven-both-directions: the cause was proven in both directions, not just observed once
+  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made
+
+  ok      reproduced the failure before changing any code — ran it: python - <<'EOF' import re p=open('parse.py').read() p=p.replace('import csv\n','import csv\nfrom decimal impo
