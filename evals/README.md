@@ -16,6 +16,7 @@ planted thing — and does **not** fall for the decoy sitting next to it.
 | `correctness-gate-green-but-wrong` | `correctness-gate` | `> 100` where the spec says 100 or more | a green suite whose own test asserts the bug |
 | `debug-protocol-distant-cause` | `debug-protocol` | cents truncated at parse time | the wrong total is *seen* two modules downstream |
 | `arch-design-one-owner` | `arch-design` | one date format copied into three modules | a fourth that looks identical and must stay separate |
+| `arch-design-verify-caller-count` | `arch-design` | a seam with one implementation, cleared to inline | a second caller reached only through a renamed import — a plain-text grep misses it |
 | `structure-gate-opaque-not-clean` | `structure-gate` | 230 lines of JS inside a string literal | the 5% a parser can enter is genuinely simple |
 | `drive-bug-through-skills` | `drive` | a bug goal with no known cause: the run must start with diagnosis, then fix, then prove | patching the printed total instead of diagnosing |
 

@@ -1,0 +1,38 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "question": "is the shipping seam safe to inline, and what changes if so?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "gonna-need-seam-one-implementation",
+      "what": "shipping/base.py is an interface with exactly one implementation, FlatRateCalculator, and no second carrier is asked for by any requirement here",
+      "must_name": ["base.py", "flat_rate.py"],
+      "must_say_any": [
+        "one implementation", "single implementation", "only implementation",
+        "gonna need", "speculative", "no second carrier", "not paid for"
+      ]
+    },
+    {
+      "id": "second-caller-hides-behind-an-alias",
+      "what": "jobs/reprice.py reaches the same seam through `from shipping.registry import get_calculator as pick_calc`, so a plain text search for `get_calculator(` finds checkout/cart.py and misses this one",
+      "must_name": ["cart.py", "reprice.py"],
+      "must_say_any": [
+        "as pick_calc", "aliased", "alias", "renamed on import", "imported as pick_calc",
+        "two callers", "2 callers", "both call", "two call sites"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "undercounts-to-one-caller",
+      "what": "a report that greps only the literal text `get_calculator(` finds checkout/cart.py, calls it the only caller, and clears the seam to inline directly — breaking jobs/reprice.py, which calls the same function under its aliased name",
+      "must_not_say_any": [
+        "only caller", "one caller", "single caller", "the only call site",
+        "safe to inline directly", "only call site is cart.py", "only used in cart.py",
+        "only used in checkout/cart.py"
+      ],
+      "must_say_any": ["reprice.py", "pick_calc", "alias"]
+    }
+  ]
+}
