@@ -49,4 +49,4 @@ for the last few rows, the right answer is that no skill of this plugin loads at
 pushes the agent toward the wrong instructions.
 
 A wrong row is either a description that doesn't say when to use the skill, or two skills
-that overlap. Fix the description, or merge the skills, and re-run `python evals/route.py`.
+that overlap. Fix the description, or merge the skills, and re-run `python evals/route_live.py`.

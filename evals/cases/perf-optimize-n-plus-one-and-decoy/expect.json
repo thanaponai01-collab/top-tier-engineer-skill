@@ -1,0 +1,65 @@
+{
+  "case": "perf-optimize-n-plus-one-and-decoy",
+  "skill": "perf-optimize",
+  "question": "what happens to this dashboard as the customer count grows?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "n-plus-one-customer-totals",
+      "what": "customer_totals runs one SELECT SUM(...) per customer inside a Python loop instead of a single aggregate query",
+      "must_name": ["customer_totals"],
+      "must_say_any": [
+        "n+1", "one query per customer", "query per customer", "a query per item",
+        "loop that queries", "per-customer query", "one select per customer",
+        "issues a separate query for each customer"
+      ]
+    },
+    {
+      "id": "unbounded-even-if-fast-today",
+      "what": "this is a finding regardless of today's speed, because query count grows with the customer count",
+      "must_say_any": [
+        "even if fast today", "even though it's fast today", "even if it's fast now",
+        "will get slower as", "grows with the number of customers", "scales with customer count",
+        "at tens of thousands", "unbounded"
+      ]
+    },
+    {
+      "id": "fix-single-aggregate-query",
+      "what": "the fix is one query with a JOIN/GROUP BY (or equivalent batch fetch) instead of a query per customer",
+      "must_say_any": [
+        "group by", "single query", "one query", "a single aggregate", "join",
+        "batch fetch", "batch the"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "recent-orders-is-fine",
+      "what": "recent_orders sorts with ORDER BY ... LIMIT over an indexed column (idx_orders_created_at); EXPLAIN QUERY PLAN shows an index scan, not a full table sort, so it is not a scaling finding",
+      "must_not_say_any": [
+        "recent_orders is unbounded", "recent_orders is a finding", "recent_orders does a full scan",
+        "recent_orders needs an index", "recent_orders will not scale", "flag recent_orders",
+        "recent_orders scans the whole table", "recent_orders is also a problem"
+      ],
+      "must_say_any": [
+        "recent_orders uses the index", "recent_orders is fine", "recent_orders already uses",
+        "idx_orders_created_at", "recent_orders scales fine", "recent_orders is not a finding"
+      ]
+    },
+    {
+      "id": "not-excused-by-its-own-index",
+      "what": "customer_totals hitting idx_orders_customer_id on each call does not excuse the N+1 pattern; the finding is about the number of round trips, not whether each one is indexed",
+      "must_not_say_any": [
+        "fine because it's indexed", "fine because customer_id is indexed", "no issue since it uses an index",
+        "not a problem because the query is indexed", "each query is fast so it's fine",
+        "acceptable because each lookup uses the index"
+      ],
+      "must_say_any": [
+        "even if indexed", "even though it's indexed", "regardless of the index", "still a finding",
+        "even if fast today", "even though it's fast today", "even if it's fast now",
+        "will get slower as", "grows with the number of customers", "scales with customer count",
+        "unbounded"
+      ]
+    }
+  ]
+}

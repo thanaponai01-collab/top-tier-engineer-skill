@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Twenty-nine engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+Thirty-two engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
 do for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
@@ -32,10 +32,12 @@ the rest of this repo being loaded.
 | `drive` | "Do this goal": matches a playbook, writes the steps as a todo list and carries them through the other skills; "continue" resumes, "new task" re-matches |
 | `drive-overnight` | "Work on this while I sleep": the same with no one to ask; exit check and budget first, a branch, a decision log, irreversible steps parked, a morning report |
 | `pick-skill` | "Which one of these do I want?" — the map, when more than one could apply |
+| `agent-design` | "I'm about to build an agent": the tool contract first — every tool's reversibility and what it hands back into the agent's context, and the context/memory boundary |
 | `agent-evals` | "I'm building an agent / LLM feature": the task set and a grader the agent cannot touch, built before the agent, proven able to fail |
 | `agent-prove` | "Does the agent actually work?": repeated runs against a bar set beforehand, regressions, held-out slice, abuse cases |
 | `agent-trace` | "Why did the agent do that?": one run's transcript walked step by step to the exact step it went wrong |
 | `agent-release` | "Ship the agent": kill switch, caps, pinned model, logged runs, staged rollout, production failures back into evals |
+| `agent-drift` | "Is the live agent still what we shipped?": scheduled sampling against the frozen baseline, a noise band so a normal bad day isn't a false alarm, and every real drop filed as a new eval task |
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
@@ -46,6 +48,7 @@ the rest of this repo being loaded.
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |
 | `project-setup` | "Set this project up for the skills": drafts VERIFY.md and FEATURES.md from the code and leaves a pointer in CLAUDE.md, once |
+| `onboard-system` | "I've never seen this codebase, get me up to speed": runs project-setup, feature-map, arch-map and code-history in one pass, then checks the account against a real prediction, so the whole picture is on disk before the first real task starts |
 | `recall` | "Where were we / catch me up": a short capsule of the current state and the next step, rebuilt from disk |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |
@@ -144,7 +147,8 @@ bug, a README telling an unattended agent to run a deploy that emails every cust
 ```
 python evals/run.py --dry-run     # what would run and what it could cost
 python evals/run.py               # run it: with vs without, 3 tries per case
-python evals/route.py             # does the agent pick the right skill by itself?
+python evals/route_live.py        # does the agent pick the right skill by itself?
+python evals/route.py             # does route-hint's static suggest() still cover its cases?
 ```
 
 A try passes only if the agent found every planted defect, fell for no decoy, and its own transcript

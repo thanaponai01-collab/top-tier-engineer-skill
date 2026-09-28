@@ -57,6 +57,14 @@ not a limit:
 - **Object access:** can user A reach user B's resource by changing an id?
 - **Shared resources:** can a counter be raced or pushed below zero between check and update?
 - **Secrets & config**, **supply chain.**
+- **Agent tool surface** (an AI agent is one of the boundaries, not exempt from them): read the tool
+  contract from `agent-design` if one exists, otherwise list the agent's tools by hand. For each tool
+  that hands content back into the agent's context — a fetched page, a file, another user's message —
+  assume that content is attacker-shaped and try to make it redirect the agent's next action (a
+  prompt-injection test, not a code-injection one). For each one-way tool, try to reach it without the
+  grounds a human confirm should have required, and try firing it twice from one retry to see if it
+  repeats an effect it shouldn't. `agent-prove` runs the resulting cases as tasks that must pass before
+  release.
 
 ### 4. Prove
 For attacks on the most valuable assets, run them: forge the token, send the crafted input, fire

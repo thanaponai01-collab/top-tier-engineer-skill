@@ -2,7 +2,7 @@
 """
 The eval runner, held by a test — without running an agent.
 
-run.py and route.py spend real usage, so they can't run in this suite. What
+run.py and route_live.py spend real usage, so they can't run in this suite. What
 can: everything they do with a transcript once they have one. These tests feed
 them hand-written transcripts and check the part that decides a score — what
 the agent did, in what order, and whether that counts.
@@ -19,7 +19,7 @@ sys.path.insert(0, EVALS)
 
 import agent  # noqa: E402
 import grade  # noqa: E402
-import route  # noqa: E402
+import route_live as route  # noqa: E402
 import run    # noqa: E402
 
 
