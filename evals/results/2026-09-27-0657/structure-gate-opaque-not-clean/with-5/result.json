@@ -1,0 +1,44 @@
+{
+  "case": "structure-gate-opaque-not-clean",
+  "skill": "structure-gate",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   opaque-region-named \u2014 \"`fixture/dashboard.py` holds a 230-line JavaScript function inside a Python string\"\n  found   how-much-was-measured \u2014 \"The analyzer measured only **5% of the code** (12 of 242 lines).\"\n  found   unknown-not-clean \u2014 \"So \"clean\" is the wrong conclusion here.\"\n  held    small-functions-read-as-clean",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:structure-gate"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.16668660000000002,
+  "turns": 6,
+  "seconds": 21.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

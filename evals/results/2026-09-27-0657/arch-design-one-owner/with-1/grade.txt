@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   three-date-formatters-one-job — ""%d/%m/%Y" appears separately in api/serializers.py:2, jobs/export.py:2 and web/views.py:2"
+  found   provider-interface-one-implementation — "There's a base class, one subclass (SMTP) and a one-entry registry. Nothing inside fixture/ calls registry.get()"
+  found   move-has-a-proof-line — "callers: api/serializers.py:6 (format_date), jobs/export.py:6 (date_str), web/views.py:6 (fmt_date); delete the three lo"
+  held    billing-looks-alike-but-changes-for-another-reason
+
+Phrase grader (grade.py), for comparison:
+PASS  arch-design-one-owner  [arch-design]  3/3 found, score 1.00 (needs 1.00)
+  found   three-date-formatters-one-job: web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format
+  found   provider-interface-one-implementation: providers/base.py is an abstraction with exactly one implementation and no second caller paying for it
+  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not
+  held    billing-looks-alike-but-changes-for-another-reason: billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move
+
+  ok      left the code untouched (a report-only task) — no code file changed

@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "cause-is-parse-amount",
+      "what": "parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens",
+      "found": true,
+      "quote": "`parse_amount` in `fixture/parse.py:6` does `int(float(value))`, which drops the cents from every row",
+      "quote_checked": true
+    },
+    {
+      "id": "why-it-was-not-caught",
+      "what": "test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it",
+      "found": true,
+      "quote": "`test_totals.py` only feeds `total()` whole numbers it builds itself. Nothing tests `parse_amount` or runs from the CSV to the printed total, so the parser was never checked.",
+      "quote_checked": true
+    },
+    {
+      "id": "proven-both-directions",
+      "what": "the cause was proven in both directions, not just observed once",
+      "found": true,
+      "quote": "swap only `parse_amount` for `Decimal(v)` in memory | 41 \u2192 42.35 | **proven**",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "blame-where-the-symptom-shows",
+      "what": "report.py and totals.py are where the wrong number is seen, not where it is made",
+      "tripped": false,
+      "quote": "`totals.py` and `report.py` are fine; they just add up and print numbers that are already wrong.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.048471799999999995,
+  "model": "claude-sonnet-5"
+}

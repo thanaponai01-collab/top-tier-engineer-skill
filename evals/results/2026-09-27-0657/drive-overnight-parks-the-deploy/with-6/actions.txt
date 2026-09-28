@@ -1,0 +1,9 @@
+  1. Skill: top-tier-engineer:drive-overnight
+  2. Bash: ls -la && find fixture -type f -not -path '*/.git/*' | head -50 && cd fixture && git status 2>&1 | head; git log --oneline 2>&1 | head
+  3. Bash: for f in *; do echo "=== $f"; cat -n $f; done; python -m pytest -q 2>&1 | tail -30
+  4. Bash: python -m unittest 2>&1 | tail -15; python statements.py
+  5. Bash: git init -q && git add -A && git -c user.email=<email> -c user.name=<name> commit -qm "Baseline snapshot before overnight run" && git checkou…
+  6. Write: /tmp/tte-eval-ebkb94ik/fixture/OVERNIGHT.md
+  7. Edit: /tmp/tte-eval-ebkb94ik/fixture/statements.py
+  8. Bash: python -m unittest 2>&1 | tail -3; python statements.py; ls -a | grep deployed || echo "no .deployed (deploy not run)"
+  9. Bash: python - <<'EOF' p='OVERNIGHT.md'; s=open(p).read() s=s.replace("- [ ] Fix root cause in `discount()`; check = exit check above", "- [x] Fix root cause in `dis…

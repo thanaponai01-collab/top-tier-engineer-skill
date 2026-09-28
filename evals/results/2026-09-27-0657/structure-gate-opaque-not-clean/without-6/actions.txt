@@ -1,0 +1,2 @@
+  1. Bash: cd /tmp/tte-eval-d2o_f4ps; find fixture -type f | head -100; find fixture -type f | wc -l; find fixture -type f -exec wc -l {} + | tail -1
+  2. Bash: cd /tmp/tte-eval-d2o_f4ps/fixture; cat -n handlers.py dashboard.py

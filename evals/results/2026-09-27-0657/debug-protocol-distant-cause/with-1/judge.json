@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "cause-is-parse-amount",
+      "what": "parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens",
+      "found": true,
+      "quote": "`parse_amount` does `int(float(value))`, which drops the cents from every row before anything is added up",
+      "quote_checked": true
+    },
+    {
+      "id": "why-it-was-not-caught",
+      "what": "test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it",
+      "found": true,
+      "quote": "`test_totals.py` only passes whole numbers straight into `total()`. Nothing tests `parse_amount`, and nothing runs the full path from the CSV to the printed total.",
+      "quote_checked": true
+    },
+    {
+      "id": "proven-both-directions",
+      "what": "the cause was proven in both directions, not just observed once",
+      "found": true,
+      "quote": "Truncation left in | `python report.py` | `Total: 41`",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "blame-where-the-symptom-shows",
+      "what": "report.py and totals.py are where the wrong number is seen, not where it is made",
+      "tripped": false,
+      "quote": "`report.py` is only where the wrong number shows up. The amounts are already wrong by the time `load()` returns them",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0482758,
+  "model": "claude-sonnet-5"
+}

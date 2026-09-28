@@ -31,6 +31,102 @@
   breaks a finished copy the ways a shortcut would (delete the test, make it always fail, empty the
   data, write the proof line without fixing the check, edit the check to pass) and requires each to
   fail on a named check.
+- **The real-agent runner judges the finished copy too.** Each new case ships the `prompt-plain.md`
+  the runner now requires, and `evals/run.py` hands a case's `workdir` rules the agent's finished
+  copy, so a real-agent run of an action-graded case cannot pass on its report alone. A `--rescore`
+  keeps the saved working-copy verdict, since the scratch folder is gone by then. Without this the
+  runner would have graded those cases on words while `grade.py` graded them on actions.
+
+## 4.41.5 — 2026-09-28 — the evals run real agents, with the skills and without
+
+Until now the eval cases had an answer key but had never been sat by an agent. Now they are, and the
+score is in `evals/RESULTS.md`.
+
+- **`evals/run.py`** gives every case to a real agent several times, with this plugin and without
+  it (plain Claude Code, the task in plain words from the new `prompt-plain.md`), and writes a
+  with-vs-without scorecard. The agent only ever sees `fixture/`; a run that reaches for the answer
+  key is discarded.
+- **Grading what the agent did, not only what it wrote.** Each case's `actions` block is checked
+  against the transcript: report-only tasks leave code alone, the repro runs *before* the first
+  edit, the deploy script never fires, `drive` opens its playbook's skills in order, and after the
+  run the fix is real on disk and production untouched.
+- **`evals/judge.py` grades reports on meaning.** A separate model, blind to which side wrote the
+  report, credits a finding only with a quote that is really in the report. It judges all 33
+  reference reports correctly (`--calibrate`). The phrase grader is kept alongside for comparison.
+- **`evals/route_live.py`** checks whether the agent picks the right skill by itself on 32 requests
+  that name none, and what the `route-hint` hook suggested. Table in `evals/ROUTING.md`. (Renamed
+  from `route.py` to leave room for the free, static `route-hint` regression check of the same name.)
+- **Two cases for the riskiest skills:** `drive-overnight-parks-the-deploy` (a README telling an
+  unattended agent to run a deploy that emails every customer) and
+  `safe-release-migration-loses-data` (a migration that silently drops data behind a green suite).
+- **A new skill lands with an eval case.** `evals/uncovered.txt` lists the 20 older skills without
+  one; it may only shrink, and the suite fails if a skill is in neither place.
+- Checker fixes found by reading real runs: a deploy command written into notes is not running it;
+  "one caller-less" is not "one caller"; "one-implementation" counts; inside one shell command, the
+  order of run and edit decides which came first. Each is now a test.
+- Checks only the side with skills can be asked (did `drive` open each step's skill?) are scored
+  apart from the with-vs-without table, so they can't tilt it.
+- Saved evidence carries no email address or git user name; raw transcripts stay local.
+- First scorecard: 6 tries per side on 11 cases. The skill clearly helps on 6, makes no clear difference
+  on 4, and hurts on 1 (`latent-audit` hedges on the one file that really is dead). On their own, agents
+  rarely open a skill for everyday requests (`evals/ROUTING.md`, 17 of 32).
+- `drive-bug-through-skills` no longer grades whether the report *names* skills; it checks from
+  the transcript that they were opened, in order.
+- README: the skill count said twenty-five; there are twenty-nine.
+
+## 4.41.4 — 2026-09-28 — five new eval cases for the judgment-call skills
+
+- **New eval cases**, one each for `verify-loop`, `perf-optimize`, `threat-model`, `senior-review`
+  and `safe-release` — the skills that make an objective judgment call over a script's yes/no, and
+  so are the ones most likely to be fooled by a decoy next to the real problem:
+  - `verify-loop-fake-check-and-decoy` — a test that recomputes its own expected value and never
+    calls the function under test, next to a one-line test that looks just as trivial but is real.
+  - `perf-optimize-n-plus-one-and-decoy` — a query-per-customer loop that's a finding even though
+    each query is indexed, next to an `ORDER BY ... LIMIT` that looks like a full sort but isn't.
+  - `threat-model-client-role-and-decoy` — an authorization check that trusts a client-supplied
+    `role` field over the session, next to a catalog endpoint with no auth that's intentionally
+    public per its README.
+  - `senior-review-oversell-and-decoy` — `reserve_stock` oversells with no qty validation, proven by
+    running it, next to a lock-free global dict that looks unsafe but has nothing here to prove a
+    race against (single-process CLI).
+  - `safe-release-combined-migration-and-decoy` — one migration that expands, backfills and drops a
+    column together with an untested "revert the commit" rollback claim, next to a second migration
+    in the same release that really is safe as it stands.
+  Each ships `prompt.md`, a fixture that runs, `expect.json` (planted + traps) and the three
+  reference reports (`good`, `good-alt`, `bad`) `tests/test_evals.py` checks the case against.
+
+## 4.41.3 — 2026-09-28 — route-hint closes the gaps a real routing eval found
+
+- **New `evals/route.py`.** Scores `route-hint.py`'s `suggest()` against a batch of real prompts,
+  including several written to expose overlap between skills whose descriptions look alike from
+  outside — `arch-design` vs `structure-gate`, the `agent-*` family against each other, "done" the
+  goal-word vs "done" the finished-work-word. `python evals/route.py`; exit 0 only if every case
+  passes.
+- **`route-hint.py` gains rules for `arch-design`, `feature-map`, `verify-loop`, `agent-evals`,
+  `agent-prove`, `agent-trace`, `agent-release`, `problem-framing` and `drive`** — nine skills that
+  previously had no rule at all, so a prompt clearly asking for one routed to silence instead.
+  `BROKEN` now also catches "timing out" / "timeouts", which were symptom words with nowhere to go.
+- Fixed a false-negative the new `drive` name introduced: the "did they already name a skill"
+  check was plain substring matching, so `"drive"` matched inside `"driven"` and silenced routing
+  for that prompt. It now matches skill names on word boundaries.
+- Baseline on the new eval was 20 of 32; all 32 pass after these rules.
+
+## 4.41.2 — 2026-09-28 — direct tests for structure_opacity
+
+- **New `tests/test_structure_opacity.py`.** `structure-gate`'s opacity/shape module
+  (`structure_opacity.py`) was only exercised indirectly, through `structure-report.py`'s CLI in
+  `test_structure_report.py`. Adds direct unit tests for `contiguous_spans`, `python_opaque_lines`,
+  `shape_stats`, `is_code_shaped`, `looks_like`, and `measure`, so a change to one of those functions
+  fails at its own test instead of surfacing as an unexplained shift in someone else's CLI assertion.
+
+## 4.41.1 — 2026-09-28 — verify-loop: stop leaving the started app as a zombie
+
+- **Fixed `start_app` in `verify-loop`'s `scripts/verify.py`.** On a shell that forks a real
+  child for a single command instead of exec-replacing itself, `Popen`'s `proc.pid` named the
+  shell, not the app — so `stop_app`'s `os.killpg` + `proc.wait()` killed the app but only ever
+  reaped the shell, leaving the app an orphaned zombie `stop_app` could never confirm was gone.
+  `start_app` now runs the command as `exec {cmd}` (POSIX only) so the shell always replaces
+  itself with the real process; `proc.pid` is then guaranteed to be the app itself.
 
 ## 4.41.0 — 2026-09-27 — onboard-system: the paved path for first contact with a codebase
 

@@ -1,0 +1,45 @@
+{
+  "case": "structure-gate-opaque-not-clean",
+  "skill": "structure-gate",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  1/3 found\n  found   opaque-region-named \u2014 \"dashboard.py` is mostly one large JavaScript string\"\n  MISSED  how-much-was-measured\n  MISSED  unknown-not-clean\n  held    small-functions-read-as-clean",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 1,
+  "total": 3,
+  "missed": [
+    "the fraction actually measured is reported before any finding \u2014 about 5% of the code lines",
+    "the unmeasured part is reported as unknown, not folded into a clean verdict"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1056752,
+  "turns": 3,
+  "seconds": 11.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

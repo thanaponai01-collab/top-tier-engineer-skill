@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "existing-db-is-the-one-owner",
+      "what": "app/db.py is already the single place reports/models.py and users/models.py persist through; export history belongs there, not in new storage",
+      "found": true,
+      "quote": "app/db.execute stays the only DB access path",
+      "quote_checked": true
+    },
+    {
+      "id": "no-plugin-for-one-format",
+      "what": "only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for",
+      "found": true,
+      "quote": "There's only one thing to export today, so a separate package isn't worth it yet.",
+      "quote_checked": true
+    },
+    {
+      "id": "cost-of-a-new-store-named",
+      "what": "the report names what a separate new datastore would cost if it turned out wrong \u2014 a migration, a second thing to secure and back up \u2014 as the reason for reusing the existing database",
+      "found": true,
+      "quote": "Cost of choosing wrong:** a migration plus a backfill that can't recover titles that were never stored.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "new-datastore-for-history",
+      "what": "standing up a separate datastore for export history instead of a table in the database the app already has",
+      "tripped": false,
+      "quote": "keep history in the browser's local storage. There's no table, but history is per device and lost when the browser is cleared.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0571358,
+  "model": "claude-sonnet-5"
+}

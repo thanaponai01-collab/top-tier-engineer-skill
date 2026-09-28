@@ -1,0 +1,44 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   cause-is-parse-amount \u2014 \"`parse_amount` in `fixture/parse.py:6` does `int(float(value))`, which cuts the cents off every amount\"\n  found   why-it-was-not-caught \u2014 \"`test_totals.py` only tests `total()`, and only with whole numbers. Nothing tests `parse.py` or runs the full path with \"\n  found   proven-both-directions \u2014 \"With the truncation in place, the unmodified code prints `Total: 41`.\n  - With only `parse_amount` replaced by `Decimal(\"\n  held    blame-where-the-symptom-shows",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:debug-protocol"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": true,
+      "detail": "ran it: cd /tmp/tte-eval-lg02dtu8/fixture && ls -la && for f in $(find . -type f -not -path '*/.git/*'); do echo \"=== "
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.16125899999999999,
+  "turns": 5,
+  "seconds": 22.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

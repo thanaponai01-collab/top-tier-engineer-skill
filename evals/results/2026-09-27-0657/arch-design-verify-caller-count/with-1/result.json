@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"ShippingCalculator is an interface with one implementation and no callers of its own\"\n  found   second-caller-hides-behind-an-alias \u2014 \"jobs/reprice.py:2 imports the lookup function as get_calculator as pick_calc. A search for get_calculator( misses that c\"\n  held    undercounts-to-one-caller",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/docs/arch-design-shipping.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.46315559999999995,
+  "turns": 12,
+  "seconds": 74.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,24 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd /tmp/tte-eval-mdn83fp5; ls -la; find fixture -type f | grep -v '/.git/' | head -100; cd fixture 2>/dev/null && git log --oneline | head -30
+  3. Bash: cd /tmp/tte-eval-mdn83fp5/fixture; for f in $(find . -type f | sort); do echo "=== $f"; cat -n $f; done
+  4. Bash: cd /tmp/tte-eval-mdn83fp5/fixture; grep -rn "strftime\|registry\|get(\|Provider\|format_date\|date_str\|fmt_date\|invoice_date\|order_json\|rows(\|order_page\|…
+  5. Agent: Recount date formats and callers
+  6.   (subagent) Bash: find /tmp/tte-eval-mdn83fp5/fixture -type f -name "*.py" | head -20
+  7.   (subagent) Read: /tmp/tte-eval-mdn83fp5/fixture
+  8.   (subagent) Read: /tmp/tte-eval-mdn83fp5/fixture/providers/base.py
+  9.   (subagent) Read: /tmp/tte-eval-mdn83fp5/fixture/providers/registry.py
+ 10.   (subagent) Read: /tmp/tte-eval-mdn83fp5/fixture/providers/smtp.py
+ 11.   (subagent) Read: /tmp/tte-eval-mdn83fp5/fixture/web/views.py
+ 12.   (subagent) Read: /tmp/tte-eval-mdn83fp5/fixture/api/serializers.py
+ 13.   (subagent) Read: /tmp/tte-eval-mdn83fp5/fixture/jobs/export.py
+ 14.   (subagent) Read: /tmp/tte-eval-mdn83fp5/fixture/billing/invoice.py
+ 15.   (subagent) Bash: grep -rn "providers\.registry\.get\|providers\.registry\.get(" /tmp/tte-eval-mdn83fp5/fixture --include="*.py"
+ 16.   (subagent) Bash: grep -rn "\.get(" /tmp/tte-eval-mdn83fp5/fixture --include="*.py" | grep -v "order\[" | grep -v "provider"
+ 17.   (subagent) Bash: grep -rn "PROVIDERS" /tmp/tte-eval-mdn83fp5/fixture --include="*.py"
+ 18.   (subagent) Bash: grep -rn "SmtpProvider" /tmp/tte-eval-mdn83fp5/fixture --include="*.py"
+ 19.   (subagent) Bash: grep -rn "class.*Provider" /tmp/tte-eval-mdn83fp5/fixture --include="*.py"
+ 20. Write: /tmp/tte-eval-mdn83fp5/fixture/docs/arch-design.md
+ 21. Bash: cd /tmp/tte-eval-mdn83fp5/fixture; python3 /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py check docs/arch-design.md; echo…
+ 22. Bash: cd /tmp/tte-eval-mdn83fp5/fixture; grep -n "root\|toplevel\|new\b\|--" /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py | h…
+ 23. Bash: sed -n 60,200p /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py
+ 24. Bash: cd /tmp/tte-eval-mdn83fp5/fixture; python3 - <<'EOF' p='docs/arch-design.md'; s=open(p).read() s=s.replace("- files: new tests/test_date_formats.py; reads bill…

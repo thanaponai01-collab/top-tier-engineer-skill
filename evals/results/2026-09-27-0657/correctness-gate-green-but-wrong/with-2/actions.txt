@@ -1,0 +1,3 @@
+  1. Skill: top-tier-engineer:correctness-gate
+  2. Bash: cd /tmp/tte-eval-zizih942; find fixture -type f | head -50; for f in $(find fixture -type f -not -path '*/.*' | head -30); do echo "=== $f"; cat "$f"; done
+  3. Bash: cd /tmp/tte-eval-zizih942/fixture && python3 -m unittest -v 2>&1 | tail -8 python3 -c " from shipping import fee for t in [0,99,99.99,100,100.01,150,-0.01]: tr…

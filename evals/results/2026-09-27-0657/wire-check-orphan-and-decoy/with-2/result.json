@@ -1,0 +1,46 @@
+{
+  "case": "wire-check-orphan-and-decoy",
+  "skill": "wire-check",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  1/2 found\n  found   export-never-routed \u2014 \"Export is built but has no route (first broken link: 3, Routed).\"\n  MISSED  both-entry-points\n  held    digest-loaded-by-name",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:wire-check"
+  ],
+  "found": 1,
+  "total": 2,
+  "missed": [
+    "two ways in exist: app.py dispatch and scheduler.py cron. Missing the scheduler turns digest into a false orphan"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1898596,
+  "turns": 6,
+  "seconds": 32.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

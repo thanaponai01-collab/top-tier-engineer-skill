@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 3,
+  "score": 0.667,
+  "planted": [
+    {
+      "id": "layer-breach-notify",
+      "what": "app/models/notify.py (data) imports app/routes/web.py (interface) \u2014 a low layer calling a high one",
+      "found": true,
+      "quote": "The breach is at `app/models/notify.py:2`: `from app.routes.web import BANNER`, so the data layer imports from the interface layer.",
+      "quote_checked": true
+    },
+    {
+      "id": "legacy-export-dead",
+      "what": "app/services/legacy_export.py is referenced nowhere, by import or by string \u2014 the one real deletion candidate",
+      "found": false,
+      "quote": "Delete once you confirm no external script or job calls `to_xml`.",
+      "quote_checked": true
+    },
+    {
+      "id": "layers-were-declared-not-guessed",
+      "what": "the layer order comes from ARCHITECTURE.md, not from the auditor's taste",
+      "found": true,
+      "quote": "The layer order comes from `fixture/ARCHITECTURE.md`: \"Three layers. A module may import its own layer or a lower one, never a higher one.\"",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "csv-out-resolved-by-name",
+      "what": "app/plugins/csv_out.py is resolved from ENABLED_PLUGINS by registry.py; deleting it, or its render(), is the wrong answer",
+      "tripped": false,
+      "quote": "The script flags it as unused, but `app/registry.py:4` names it in `ENABLED_PLUGINS` and loads it with `importlib`.",
+      "quote_checked": true
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.0503038,
+  "model": "claude-sonnet-5"
+}

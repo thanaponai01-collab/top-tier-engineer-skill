@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "the-cause-is-in-parse",
+      "what": "the diagnosis step localised the cause to parse.py, not to where the total is printed",
+      "found": true,
+      "quote": "`parse_amount` in `parse.py:6` did `int(float(value))`, so 10.50, 20.25 and 11.60 became 10, 20 and 11.",
+      "quote_checked": true
+    },
+    {
+      "id": "fix-proven",
+      "what": "the fix is shown to hold: the right total, and a test that now guards it",
+      "found": true,
+      "quote": "a full report on this data prints `Total: 42.35`",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "patch-the-symptom-without-diagnosing",
+      "what": "rounding or fixing where the number is printed skips the diagnosis step the playbook demands",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.048145799999999996,
+  "model": "claude-sonnet-5"
+}

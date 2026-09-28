@@ -1,0 +1,3 @@
+  1. Skill: top-tier-engineer:debug-protocol
+  2. Bash: cd /tmp/tte-eval-u7_bgd9n/fixture && ls -la && for f in $(find . -type f -not -path '*/.git/*' | head -30); do echo "=== $f"; cat "$f"; done; python report.py
+  3. Bash: python - <<'EOF' import csv, parse, report from decimal import Decimal raw=[r["amount"] for r in csv.DictReader(open("data.csv"))] print("raw:", raw, "exact su…

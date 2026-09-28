@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "migration-drops-phone-without-copying",
+      "what": "003 creates contacts and drops users.phone in the same script, with nothing copying the numbers across: every phone number in production is gone",
+      "found": true,
+      "quote": "`003_contacts.sql` creates `contacts` and then runs `DROP COLUMN phone` without copying anything across first.",
+      "quote_checked": true
+    },
+    {
+      "id": "a-caller-still-reads-the-old-column",
+      "what": "jobs/reminders.py still selects phone from users; after 003 the nightly job fails, and no test covers it",
+      "found": true,
+      "quote": "`jobs/reminders.py:7` still reads `SELECT name, phone FROM users`.",
+      "quote_checked": true
+    },
+    {
+      "id": "the-call-is-hold",
+      "what": "the answer is not tonight: hold",
+      "found": true,
+      "quote": "Hold. It can't go tonight as written.",
+      "quote_checked": true
+    },
+    {
+      "id": "safe-shape-named",
+      "what": "the safe shape: add and copy first, switch reads, drop the old column in a later, separate release",
+      "found": true,
+      "quote": "Expand (reversible)...Switch reads (reversible)...Contract (lossy, later). In a separate deploy, add `004`, which drops `users.phone`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-suite-read-as-ready",
+      "what": "the suite only builds a fresh empty database, so it cannot see the data loss or the job; green is not ready",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0528038,
+  "model": "claude-sonnet-5"
+}

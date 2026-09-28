@@ -1,0 +1,42 @@
+{
+  "case": "correctness-gate-green-but-wrong",
+  "skill": "correctness-gate",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   boundary-off-by-one \u2014 \"The code checks `total > 100` instead (`shipping.py:4`), so an order of exactly 100 is charged 5 when it should ship fre\"\n  found   test-encodes-the-bug \u2014 \"The test expects the wrong answer, so it hides the bug instead of catching it.\"\n  found   spec-is-the-oracle \u2014 \"the code and one of the tests go against the spec when the total is exactly 100\"\n  held    green-suite-read-as-correct",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "ran the test suite itself before changing anything, instead of trusting that green means correct",
+      "ok": true,
+      "detail": "ran it: cd /tmp/tte-eval-7tabx02o/fixture && python3 -m unittest -v 2>&1 | tail -8"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.0775014,
+  "turns": 3,
+  "seconds": 11.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

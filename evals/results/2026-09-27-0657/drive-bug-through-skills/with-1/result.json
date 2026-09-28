@@ -1,0 +1,63 @@
+{
+  "case": "drive-bug-through-skills",
+  "skill": "drive",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-cause-is-in-parse \u2014 \"`parse_amount` in `parse.py:6` did `int(float(value))`, so 10.50, 20.25 and 11.60 became 10, 20 and 11.\"\n  found   fix-proven \u2014 \"a full report on this data prints `Total: 42.35`\"\n  held    patch-the-symptom-without-diagnosing",
+  "actions_passed": true,
+  "followed_skill": true,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:drive",
+    "top-tier-engineer:debug-protocol",
+    "top-tier-engineer:evolve-maintain",
+    "top-tier-engineer:correctness-gate"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before fixing it",
+      "ok": true,
+      "detail": "ran it before changing any code: cd /tmp/tte-eval-x79ry8cr/fixture && ls -la && for f in $(find . -type f -not -path '*/.git/*' | head -30); do"
+    },
+    {
+      "check": "went through the playbook: opened drive \u2192 debug-protocol \u2192 evolve-maintain \u2192 correctness-gate, in order, rather than doing the steps from memory",
+      "ok": true,
+      "detail": "opened: drive \u2192 debug-protocol \u2192 evolve-maintain \u2192 correctness-gate",
+      "with_only": true
+    },
+    {
+      "check": "after the run, `python report.py` prints the right total, 42.35",
+      "ok": true,
+      "detail": "printed: Total: 42.35"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py"
+    ],
+    "added": [
+      "fixture/DRIVE.md",
+      "fixture/test_report.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.3356716,
+  "turns": 16,
+  "seconds": 52.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": "Total: 42.35\n"
+}

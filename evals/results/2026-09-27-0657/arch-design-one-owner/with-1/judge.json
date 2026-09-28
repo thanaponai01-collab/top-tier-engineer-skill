@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "three-date-formatters-one-job",
+      "what": "web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format",
+      "found": true,
+      "quote": "\"%d/%m/%Y\" appears separately in api/serializers.py:2, jobs/export.py:2 and web/views.py:2",
+      "quote_checked": true
+    },
+    {
+      "id": "provider-interface-one-implementation",
+      "what": "providers/base.py is an abstraction with exactly one implementation and no second caller paying for it",
+      "found": true,
+      "quote": "There's a base class, one subclass (SMTP) and a one-entry registry. Nothing inside fixture/ calls registry.get()",
+      "quote_checked": true
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not",
+      "found": true,
+      "quote": "callers: api/serializers.py:6 (format_date), jobs/export.py:6 (date_str), web/views.py:6 (fmt_date); delete the three local helpers",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "billing-looks-alike-but-changes-for-another-reason",
+      "what": "billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move",
+      "tripped": false,
+      "quote": "billing/invoice.py:5 looks like a fourth copy, and must never be merged with them.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0558918,
+  "model": "claude-sonnet-5"
+}

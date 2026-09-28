@@ -1,0 +1,44 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   cause-is-parse-amount \u2014 \"`parse_amount` in `fixture/parse.py` did `int(float(value))`, which cut the cents off every row\"\n  found   why-it-was-not-caught \u2014 \"they only call `total()` with whole numbers that are already parsed. Nothing tests `parse.py` or runs a CSV through the \"\n  found   proven-both-directions \u2014 \"`python report.py` now prints `Total: 42.35`, which was 41 before.\"\n  held    blame-where-the-symptom-shows",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": true,
+      "detail": "ran it: python - <<'EOF' p='parse.py'; s=open(p).read() s=s.replace('import csv\\n','import csv\\nfrom decimal import De"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.08303840000000001,
+  "turns": 3,
+  "seconds": 12.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

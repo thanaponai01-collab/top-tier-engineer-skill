@@ -44,5 +44,8 @@
         "not parsed", "no parser", "unseen"
       ]
     }
-  ]
+  ],
+  "actions": {
+    "read_only": true
+  }
 }

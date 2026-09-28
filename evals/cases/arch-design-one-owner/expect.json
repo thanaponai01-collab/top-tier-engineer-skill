@@ -47,5 +47,8 @@
         "billing", "invoice", "tax", "separate", "stays", "different reason", "iso"
       ]
     }
-  ]
+  ],
+  "actions": {
+    "read_only": true
+  }
 }

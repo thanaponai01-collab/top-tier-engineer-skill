@@ -1,0 +1,51 @@
+{
+  "case": "drive-bug-through-skills",
+  "skill": "drive",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-cause-is-in-parse \u2014 \"`parse_amount` in `parse.py` did `int(float(value))`, which dropped the cents from every row before adding them up. `tot\"\n  found   fix-proven \u2014 \"`data.csv` gives `Total: 42.35`\"\n  held    patch-the-symptom-without-diagnosing",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before fixing it",
+      "ok": true,
+      "detail": "ran it before changing any code: cd /tmp/tte-eval-1skxap5t/fixture && ls -la && for f in $(find . -type f -not -path '*/.*'); do echo \"== $f\"; "
+    },
+    {
+      "check": "after the run, `python report.py` prints the right total, 42.35",
+      "ok": true,
+      "detail": "printed: Total: 42.35"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py"
+    ],
+    "added": [
+      "fixture/test_report.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.10877640000000001,
+  "turns": 4,
+  "seconds": 18.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": "Total: 42.35\n"
+}

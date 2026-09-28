@@ -1,0 +1,5 @@
+  1. Skill: top-tier-engineer:wire-check
+  2. Bash: find fixture -type f | head -100 && wc -l $(find fixture -type f) | tail -1
+  3. Bash: for f in $(find fixture -type f); do echo "=== $f"; cat -n $f; done
+  4. Bash: cd /tmp/tte-eval-3jzde14_/fixture && python3 app.py; python3 scheduler.py; echo "sched exit=$?"; python3 -c " import app print(app.dispatch('/export')) import …
+  5. Bash: cd /tmp/tte-eval-3jzde14_/fixture && rm -rf __pycache__ handlers/__pycache__ && find . -type f | wc -l

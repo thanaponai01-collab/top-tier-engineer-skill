@@ -40,7 +40,11 @@ end · **suspected** = neither.*
 3. **Three checks before anything goes on the delete list:**
    1. Search every way it can be referenced: imports, names in strings, config keys, CLI and CI
       files, templates, dynamic lookups (`getattr`, `import_module`, route tables, plugin
-      registries).
+      registries). Sweeping a whole codebase for orphans, not one named symbol? Build this as an
+      inventory-vs-served list, per `wire-check`'s whole-system mode — it separates what's built
+      from what's actually reached and marks anything unfollowable (dynamic lookups, cron, other
+      services) as UNKNOWN rather than dead. For a single named candidate, this search stands on
+      its own; don't reach for another skill to do it.
    2. Check outside callers: cron jobs, webhooks, other services, people running scripts.
    3. If the code can run here, run the tests or a tracer and confirm it never loads.
 

@@ -1,0 +1,44 @@
+{
+  "case": "latent-audit-layers-and-decoy",
+  "skill": "latent-audit",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   layer-breach-notify \u2014 \"The data layer imports `BANNER` from the interface layer (`app.routes.web`).\"\n  found   legacy-export-dead \u2014 \"No import, string or config mentions `legacy_export` or `to_xml` (proven, grep).\"\n  found   layers-were-declared-not-guessed \u2014 \"The layer order comes from `fixture/ARCHITECTURE.md`\"\n  held    csv-out-resolved-by-name",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:latent-audit"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.184777,
+  "turns": 6,
+  "seconds": 27.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

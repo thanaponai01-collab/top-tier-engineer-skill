@@ -1,0 +1,2 @@
+  1. Bash: cd /tmp/tte-eval-jy5ncba7/fixture && find . -type f | head -100 && wc -l $(find . -type f -not -path '*/.git/*') | tail -1
+  2. Bash: for f in $(find . -type f | sort); do echo "=== $f"; cat -n $f; done

@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "migration-drops-phone-without-copying",
+      "what": "003 creates contacts and drops users.phone in the same script, with nothing copying the numbers across: every phone number in production is gone",
+      "found": true,
+      "quote": "003 creates contacts and drops users.phone, but nothing moves the phone numbers across. All 3 are lost the moment it runs.",
+      "quote_checked": true
+    },
+    {
+      "id": "a-caller-still-reads-the-old-column",
+      "what": "jobs/reminders.py still selects phone from users; after 003 the nightly job fails, and no test covers it",
+      "found": true,
+      "quote": "jobs/reminders.py:7 still reads users.phone. DEPLOY.md step 3 restarts the nightly jobs, so tonight's reminder texts would fail.",
+      "quote_checked": true
+    },
+    {
+      "id": "the-call-is-hold",
+      "what": "the answer is not tonight: hold",
+      "found": true,
+      "quote": "Hold. It can't go tonight as written.",
+      "quote_checked": true
+    },
+    {
+      "id": "safe-shape-named",
+      "what": "the safe shape: add and copy first, switch reads, drop the old column in a later, separate release",
+      "found": true,
+      "quote": "1. Expand (003) ... 2. Switch readers ... 3. Contract (004, a later deploy)",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-suite-read-as-ready",
+      "what": "the suite only builds a fresh empty database, so it cannot see the data loss or the job; green is not ready",
+      "tripped": false,
+      "quote": "The tests can't catch any of this. They start from an empty DB and insert straight into contacts.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0502818,
+  "model": "claude-sonnet-5"
+}

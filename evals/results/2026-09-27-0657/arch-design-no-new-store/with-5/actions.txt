@@ -1,0 +1,19 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd /tmp/tte-eval-c97vx3w9; find fixture -type f | grep -v node_modules | head -100; ls -la; cat fixture/*.md 2>/dev/null | head -50
+  3. Bash: cd /tmp/tte-eval-c97vx3w9/fixture; for f in $(find . -type f); do echo "=== $f"; cat -n $f; done; git log --oneline 2>&1 | head
+  4. Bash: cd /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design; ls -R; sed -n 1,200p scripts/arch-design.py | grep -nE "door|confirmed|at:|STALE|git|field|RE…
+  5. Agent: Recount facts in fixture
+  6.   (subagent) Bash: find /tmp/tte-eval-c97vx3w9/fixture -type f -name "*.py" -o -name "*.sql" -o -name "*.js" -o -name "*.ts" | head -20
+  7.   (subagent) Read: /tmp/tte-eval-c97vx3w9/fixture/app/db.py
+  8.   (subagent) Read: /tmp/tte-eval-c97vx3w9/fixture/app/users/models.py
+  9.   (subagent) Read: /tmp/tte-eval-c97vx3w9/fixture/app/reports/models.py
+ 10.   (subagent) Read: /tmp/tte-eval-c97vx3w9/fixture/app/reports/views.py
+ 11.   (subagent) Bash: find /tmp/tte-eval-c97vx3w9/fixture -type f \( -name "*.sql" -o -name "*migration*" -o -name "*schema*" -o -name "*.sqlite3" \)
+ 12.   (subagent) Bash: grep -r "CREATE TABLE\|ALTER TABLE" /tmp/tte-eval-c97vx3w9/fixture --include="*.py" --include="*.sql"
+ 13.   (subagent) Bash: grep -r "headers\|content.type\|Content-Type\|set_header" /tmp/tte-eval-c97vx3w9/fixture --include="*.py"
+ 14.   (subagent) Bash: grep -r "get_report\|app\.db\.execute" /tmp/tte-eval-c97vx3w9/fixture --include="*.py" -n
+ 15.   (subagent) Bash: find /tmp/tte-eval-c97vx3w9/fixture -type f \( -name "*.py" -o -name "*.txt" -o -name "*.md" \) | sort
+ 16. Bash: mkdir -p /tmp/tte-eval-c97vx3w9/fixture/docs && cat > /tmp/tte-eval-c97vx3w9/fixture/docs/arch-design-report-export.md <<'EOF' # ARCH-DESIGN - at: none (fixtur…
+ 17. Bash: cd /tmp/tte-eval-c97vx3w9/fixture; sed -i 's#fixture/app/#app/#g' docs/arch-design-report-export.md; python3 /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/…
+ 18. Bash: sed -n 55,115p /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py; sed -n 160,185p /tmp/tte-plugin-soy1pc0g/top-tier-engineer…
+ 19. Bash: cd /tmp/tte-eval-c97vx3w9/fixture; cp docs/arch-design-report-export.md ./_tmpcheck.md; python3 /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/s…

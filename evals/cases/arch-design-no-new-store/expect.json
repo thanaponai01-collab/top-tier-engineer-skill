@@ -47,5 +47,8 @@
         "existing database", "same database", "db.py", "reuse", "one owner", "extend"
       ]
     }
-  ]
+  ],
+  "actions": {
+    "read_only": true
+  }
 }

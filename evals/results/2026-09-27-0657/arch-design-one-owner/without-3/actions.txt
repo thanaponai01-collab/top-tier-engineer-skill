@@ -1,0 +1,2 @@
+  1. Bash: find fixture -type f | head -100 && echo && find fixture -type f | xargs wc -l | tail -1
+  2. Bash: for f in $(find fixture -type f | sort); do echo "=== $f"; cat -n $f; done

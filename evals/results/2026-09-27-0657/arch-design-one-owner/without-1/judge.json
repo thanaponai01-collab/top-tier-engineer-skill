@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 3,
+  "score": 0.667,
+  "planted": [
+    {
+      "id": "three-date-formatters-one-job",
+      "what": "web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format",
+      "found": true,
+      "quote": "Three files each define it under a different name. If someone asks you to change how dates look, you need to change all three.",
+      "quote_checked": true
+    },
+    {
+      "id": "provider-interface-one-implementation",
+      "what": "providers/base.py is an abstraction with exactly one implementation and no second caller paying for it",
+      "found": true,
+      "quote": "So there is no hidden second provider to worry about.",
+      "quote_checked": true
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "billing-looks-alike-but-changes-for-another-reason",
+      "what": "billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move",
+      "tripped": false,
+      "quote": "Leave `billing/invoice.py` out of any cleanup.",
+      "quote_checked": true
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.0489918,
+  "model": "claude-sonnet-5"
+}

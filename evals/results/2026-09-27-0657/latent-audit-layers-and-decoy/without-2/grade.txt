@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   layer-breach-notify — "a data-layer module (`models/`) imports `BANNER` from the interface layer (`routes/web.py`)"
+  found   legacy-export-dead — "Nothing imports it or mentions its name."
+  found   layers-were-declared-not-guessed — "It also breaks the rule in `ARCHITECTURE.md`"
+  held    csv-out-resolved-by-name
+
+Phrase grader (grade.py), for comparison:
+FAIL  latent-audit-layers-and-decoy  [latent-audit]  1/3 found, score 0.33 (needs 1.00)
+  MISSED  layer-breach-notify: app/models/notify.py (data) imports app/routes/web.py (interface) — a low layer calling a high one
+            named it, but never said what was wrong with it
+  found   legacy-export-dead: app/services/legacy_export.py is referenced nowhere, by import or by string — the one real deletion candidate
+  MISSED  layers-were-declared-not-guessed: the layer order comes from ARCHITECTURE.md, not from the auditor's taste
+            named it, but never said what was wrong with it
+  held    csv-out-resolved-by-name: app/plugins/csv_out.py is resolved from ENABLED_PLUGINS by registry.py; deleting it, or its render(), is the wrong answer
+
+  ok      left the code untouched (a report-only task) — no code file changed

@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:safe-release
+  2. Bash: cd /tmp/tte-eval-f00c2gzg/fixture && find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100 && cat DEPLOY.md
+  3. Bash: for f in migrate.py migrations/*.sql app/*.py jobs/*.py test_profile.py; do echo "=== $f"; cat $f; done
+  4. Bash: python3 -m unittest 2>&1 | tail -3; sqlite3 --version 2>/dev/null; python3 - <<'EOF' import sqlite3, shutil, sys sys.path.insert(0,'.') c=sqlite3.connect('file…

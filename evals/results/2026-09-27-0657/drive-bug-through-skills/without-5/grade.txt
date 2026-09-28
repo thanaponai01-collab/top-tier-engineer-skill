@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   the-cause-is-in-parse — "`parse.py` read each amount with `int(float(value))`, which dropped the cents from every row"
+  found   fix-proven — "the other checks that `render("data.csv")` returns `"Total: 42.35"`"
+  held    patch-the-symptom-without-diagnosing
+
+Phrase grader (grade.py), for comparison:
+PASS  drive-bug-through-skills  [drive]  2/2 found, score 1.00 (needs 1.00)
+  found   the-cause-is-in-parse: the diagnosis step localised the cause to parse.py, not to where the total is printed
+  found   fix-proven: the fix is shown to hold: the right total, and a test that now guards it
+  held    patch-the-symptom-without-diagnosing: rounding or fixing where the number is printed skips the diagnosis step the playbook demands
+
+  ok      reproduced the failure before fixing it — ran it before changing any code: python - <<'EOF' import re p=open('parse.py').read() p=p.replace('import csv\n','import csv\nfrom decimal impo
+  ok      after the run, `python report.py` prints the right total, 42.35 — printed: Total: 42.35
