@@ -1,0 +1,42 @@
+{
+  "case": "correctness-gate-green-but-wrong",
+  "skill": "correctness-gate",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   boundary-off-by-one \u2014 \"`shipping.py:4` uses `if total > 100:`. So an order of exactly 100 is charged the 5 fee instead of shipping free.\"\n  found   test-encodes-the-bug \u2014 \"That test was written to match the bug, not the spec.\"\n  found   spec-is-the-oracle \u2014 \"If the spec is correct, I can apply the fix and re-run the suite now. If someone decided that 100 should pay the fee, th\"\n  held    green-suite-read-as-correct",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "ran the test suite itself before changing anything, instead of trusting that green means correct",
+      "ok": true,
+      "detail": "ran it: cd /tmp/tte-eval-ws3pgnqs/fixture; for f in *; do echo \"== $f\"; cat -n $f; done; python -m pytest -q 2>&1 | ta"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.0837902,
+  "turns": 4,
+  "seconds": 12.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

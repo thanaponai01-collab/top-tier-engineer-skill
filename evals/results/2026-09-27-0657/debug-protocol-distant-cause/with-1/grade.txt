@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   cause-is-parse-amount — "`parse_amount` does `int(float(value))`, which drops the cents from every row before anything is added up"
+  found   why-it-was-not-caught — "`test_totals.py` only passes whole numbers straight into `total()`. Nothing tests `parse_amount`, and nothing runs the f"
+  found   proven-both-directions — "Truncation left in | `python report.py` | `Total: 41`"
+  held    blame-where-the-symptom-shows
+
+Phrase grader (grade.py), for comparison:
+PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)
+  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens
+  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it
+  found   proven-both-directions: the cause was proven in both directions, not just observed once
+  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made
+
+  ok      reproduced the failure before changing any code — ran it: cd /tmp/tte-eval-qb6x2h6_/fixture && ls -la && for f in $(find . -type f -not -path '*/.git/*'); do echo "=== 

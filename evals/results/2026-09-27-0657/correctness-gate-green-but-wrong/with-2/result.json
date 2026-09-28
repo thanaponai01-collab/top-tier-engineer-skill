@@ -1,0 +1,44 @@
+{
+  "case": "correctness-gate-green-but-wrong",
+  "skill": "correctness-gate",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   boundary-off-by-one \u2014 \"The cause is `shipping.py:4`: `if total > 100:` should be `>= 100`.\"\n  found   test-encodes-the-bug \u2014 \"The suite is green only because `test_hundred` asserts the wrong answer (`fee(100) == 5`), so it checks what the code do\"\n  found   spec-is-the-oracle \u2014 \"| Behavior (SPEC.md) | Oracle | Result | Label |\"\n  held    green-suite-read-as-correct",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:correctness-gate"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "ran the test suite itself before changing anything, instead of trusting that green means correct",
+      "ok": true,
+      "detail": "ran it before changing any code: cd /tmp/tte-eval-zizih942/fixture && python3 -m unittest -v 2>&1 | tail -8 python3 -c \" from shipping import f"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.157365,
+  "turns": 5,
+  "seconds": 20.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

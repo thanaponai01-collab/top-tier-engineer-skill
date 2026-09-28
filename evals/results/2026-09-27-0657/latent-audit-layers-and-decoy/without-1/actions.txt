@@ -1,0 +1,3 @@
+  1. Bash: cd /tmp/tte-eval-lw2_4etq/fixture && find . -type f | head -100 && wc -l $(find . -type f -not -path '*/.git/*') | tail -1
+  2. Bash: for f in $(find . -type f | sort); do echo "=== $f"; cat -n $f; done
+  3. Bash: grep -rnE "legacy_export|to_xml|notify|subject|registry|csv_out|handle|load\(" . ; ls -la ..

@@ -1,0 +1,47 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"The display date format is copied three times under three names\"\n  found   provider-interface-one-implementation \u2014 \"The provider plugin system has one plugin and no callers\"\n  found   move-has-a-proof-line \u2014 \"proof: the Move 1 tests still pass unchanged, and `grep -rn '%d/%m/%Y' fixture --include=*.py` returns only formats.py\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/docs/arch-design.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-haiku-4-5-20251001",
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.42663320000000005,
+  "turns": 12,
+  "seconds": 98.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

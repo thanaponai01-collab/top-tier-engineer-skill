@@ -1,0 +1,47 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"\"%d/%m/%Y\" appears separately in api/serializers.py:2, jobs/export.py:2 and web/views.py:2\"\n  found   provider-interface-one-implementation \u2014 \"There's a base class, one subclass (SMTP) and a one-entry registry. Nothing inside fixture/ calls registry.get()\"\n  found   move-has-a-proof-line \u2014 \"callers: api/serializers.py:6 (format_date), jobs/export.py:6 (date_str), web/views.py:6 (fmt_date); delete the three lo\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/docs/arch-design.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-haiku-4-5-20251001",
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.43022345000000006,
+  "turns": 11,
+  "seconds": 91.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

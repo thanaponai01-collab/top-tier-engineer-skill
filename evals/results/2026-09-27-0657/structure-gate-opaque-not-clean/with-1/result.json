@@ -1,0 +1,44 @@
+{
+  "case": "structure-gate-opaque-not-clean",
+  "skill": "structure-gate",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   opaque-region-named \u2014 \"The other 230 lines are JavaScript stored as a Python string (`DASHBOARD_JS` in `fixture/dashboard.py:3`)\"\n  found   how-much-was-measured \u2014 \"The analyzer could only read **5%** of it (12 lines).\"\n  found   unknown-not-clean \u2014 \"That part is **unknown to the tool, not clean**.\"\n  held    small-functions-read-as-clean",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:structure-gate"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1598624,
+  "turns": 6,
+  "seconds": 18.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

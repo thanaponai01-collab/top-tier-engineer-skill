@@ -1,0 +1,44 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   cause-is-parse-amount \u2014 \"`parse_amount` in `fixture/parse.py:6` does `int(float(value))`, which drops the cents from every row\"\n  found   why-it-was-not-caught \u2014 \"`test_totals.py` only feeds `total()` whole numbers it builds itself. Nothing tests `parse_amount` or runs from the CSV \"\n  found   proven-both-directions \u2014 \"swap only `parse_amount` for `Decimal(v)` in memory | 41 \u2192 42.35 | **proven**\"\n  held    blame-where-the-symptom-shows",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:debug-protocol"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": true,
+      "detail": "ran it: cd /tmp/tte-eval-1awabq2z/fixture && ls -la && for f in $(find . -type f -not -path '*/.git/*'); do echo \"=== "
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.154157,
+  "turns": 5,
+  "seconds": 18.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

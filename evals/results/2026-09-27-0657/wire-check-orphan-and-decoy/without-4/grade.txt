@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   export-never-routed — "It gets imported at startup (`handlers/__init__.py:2`), but no route and no scheduled job points to it."
+  found   both-entry-points — "A small Python service (8 files, about 50 lines) with **two separate entry points**."
+  held    digest-loaded-by-name
+
+Phrase grader (grade.py), for comparison:
+PASS  wire-check-orphan-and-decoy  [wire-check]  2/2 found, score 1.00 (needs 1.00)
+  found   export-never-routed: handlers/export.py loads at startup but no route maps to it — link 3, Routed
+  found   both-entry-points: two ways in exist: app.py dispatch and scheduler.py cron. Missing the scheduler turns digest into a false orphan
+  held    digest-loaded-by-name: handlers/digest.py is reached only through a string in settings.py; calling it dead or orphaned is the wrong answer
+
+  ok      left the code untouched (a report-only task) — no code file changed

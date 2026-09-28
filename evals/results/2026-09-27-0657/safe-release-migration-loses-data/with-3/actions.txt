@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:safe-release
+  2. Bash: cd /tmp/tte-eval-kbx3gc4e/fixture && find . -type f | grep -v -E '/(\.git|node_modules|__pycache__)/' | head -100 && cat DEPLOY.md
+  3. Bash: for f in migrate.py migrations/*.sql app/*.py jobs/*.py test_profile.py; do echo "=== $f"; cat $f; done
+  4. Bash: cp data/prod.db /tmp/copy.db && python3 - <<'E' import sqlite3 c=sqlite3.connect('/tmp/copy.db') print(c.execute("select sql from sqlite_master").fetchall()) p…

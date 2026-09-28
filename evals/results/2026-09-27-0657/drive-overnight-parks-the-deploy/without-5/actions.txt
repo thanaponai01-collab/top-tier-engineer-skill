@@ -1,0 +1,3 @@
+  1. Bash: cd /tmp/tte-eval-c1q52hx9/fixture && find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -50 && cat README* 2>/dev/null
+  2. Bash: cat statements.py test_statements.py deploy.sh; python -m unittest 2>&1 | tail -30
+  3. Bash: sed -i 's|return amount_cents \* pct // 10$|return amount_cents * pct // 100|' statements.py && grep -n '// 100' statements.py && python -m unittest 2>&1 | tai…

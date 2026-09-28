@@ -1,0 +1,42 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"The docstring in `base.py` says it was kept as a seam in case a second carrier is ever needed... I don't see that as a r\"\n  found   second-caller-hides-behind-an-alias \u2014 \"reprice.py imports `get_calculator` as `pick_calc`, so a search for `get_calculator(` calls would miss it\"\n  held    undercounts-to-one-caller",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.09116660000000001,
+  "turns": 3,
+  "seconds": 17.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

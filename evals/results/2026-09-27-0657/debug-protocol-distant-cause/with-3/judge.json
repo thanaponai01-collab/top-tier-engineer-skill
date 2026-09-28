@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "cause-is-parse-amount",
+      "what": "parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens",
+      "found": true,
+      "quote": "The cause is `parse_amount` in `parse.py:6`. It does `int(float(value))`, which cuts off the cents from every row before anything gets added up.",
+      "quote_checked": true
+    },
+    {
+      "id": "why-it-was-not-caught",
+      "what": "test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it",
+      "found": true,
+      "quote": "`test_totals.py` only feeds whole numbers (`10`, `20`) into `total()`. The tests pass (`OK`), but they never exercise `parse.py` and never use a fractional amount.",
+      "quote_checked": true
+    },
+    {
+      "id": "proven-both-directions",
+      "what": "the cause was proven in both directions, not just observed once",
+      "found": true,
+      "quote": "I've proven this by running it both ways.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "blame-where-the-symptom-shows",
+      "what": "report.py and totals.py are where the wrong number is seen, not where it is made",
+      "tripped": false,
+      "quote": "The fix belongs in `parse.py`, where the value first goes wrong, not in the report.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0488778,
+  "model": "claude-sonnet-5"
+}

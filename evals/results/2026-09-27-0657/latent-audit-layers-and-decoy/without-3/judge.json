@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "layer-breach-notify",
+      "what": "app/models/notify.py (data) imports app/routes/web.py (interface) \u2014 a low layer calling a high one",
+      "found": true,
+      "quote": "it's in the data layer but imports `BANNER` from `app.routes.web` (interface layer)",
+      "quote_checked": true
+    },
+    {
+      "id": "legacy-export-dead",
+      "what": "app/services/legacy_export.py is referenced nowhere, by import or by string \u2014 the one real deletion candidate",
+      "found": true,
+      "quote": "Nothing imports `legacy_export` or calls `to_xml` anywhere in the tree, and its docstring says it was replaced by the plugins.",
+      "quote_checked": true
+    },
+    {
+      "id": "layers-were-declared-not-guessed",
+      "what": "the layer order comes from ARCHITECTURE.md, not from the auditor's taste",
+      "found": true,
+      "quote": "It also breaks the layering rule in `ARCHITECTURE.md`",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "csv-out-resolved-by-name",
+      "what": "app/plugins/csv_out.py is resolved from ENABLED_PLUGINS by registry.py; deleting it, or its render(), is the wrong answer",
+      "tripped": false,
+      "quote": "`registry.py:4` loads it at runtime by its dotted name `\"app.plugins.csv_out\"`.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0488358,
+  "model": "claude-sonnet-5"
+}

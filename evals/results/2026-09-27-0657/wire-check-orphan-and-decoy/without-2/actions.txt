@@ -1,0 +1,3 @@
+  1. Bash: find fixture -type f | head -100 && find fixture -type f | xargs wc -l | tail -1
+  2. Bash: for f in $(find fixture -type f); do echo "=== $f"; cat -n $f; done
+  3. Bash: cd /tmp/tte-eval-9oer47dt/fixture && python3 app.py; python3 -c "import scheduler,importlib; import handlers.digest as d; print(d.run())"; python3 scheduler.py…

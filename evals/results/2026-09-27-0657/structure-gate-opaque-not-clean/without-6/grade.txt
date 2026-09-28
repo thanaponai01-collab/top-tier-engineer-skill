@@ -1,0 +1,19 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  0/3 found
+  MISSED  opaque-region-named
+  MISSED  how-much-was-measured
+  MISSED  unknown-not-clean
+  held    small-functions-read-as-clean
+
+Phrase grader (grade.py), for comparison:
+FAIL  structure-gate-opaque-not-clean  [structure-gate]  1/3 found, score 0.33 (needs 1.00)
+  MISSED  opaque-region-named: dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter
+            named it, but never said what was wrong with it
+  found   how-much-was-measured: the fraction actually measured is reported before any finding — about 5% of the code lines
+  MISSED  unknown-not-clean: the unmeasured part is reported as unknown, not folded into a clean verdict
+            named it, but never said what was wrong with it
+  TRIPPED small-functions-read-as-clean: the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+
+  ok      left the code untouched (a report-only task) — no code file changed

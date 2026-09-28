@@ -1,0 +1,19 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  2/3 found
+  found   three-date-formatters-one-job — "The other three are copies of the same code under three names."
+  found   provider-interface-one-implementation — "its own docstring says it is "Implemented once, by SmtpProvider.""
+  MISSED  move-has-a-proof-line
+  held    billing-looks-alike-but-changes-for-another-reason
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-one-owner  [arch-design]  1/3 found, score 0.33 (needs 1.00)
+  MISSED  three-date-formatters-one-job: web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format
+            named it, but never said what was wrong with it
+  found   provider-interface-one-implementation: providers/base.py is an abstraction with exactly one implementation and no second caller paying for it
+  MISSED  move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not
+            named it, but never said what was wrong with it
+  TRIPPED billing-looks-alike-but-changes-for-another-reason: billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move
+            claimed: four date formatters
+  a tripped trap fails the case at any score: it is a confident wrong answer
+
+  ok      left the code untouched (a report-only task) — no code file changed

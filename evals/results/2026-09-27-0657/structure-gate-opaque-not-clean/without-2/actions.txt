@@ -1,0 +1,2 @@
+  1. Bash: cd /tmp/tte-eval-ji1vrue2/fixture && find . -type f | head -100 && wc -l $(find . -type f) | tail -30
+  2. Bash: cat handlers.py && cat -n dashboard.py

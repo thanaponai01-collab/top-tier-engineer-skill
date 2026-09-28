@@ -36,5 +36,8 @@
         "dynamic", "scheduled_jobs", "settings.py"
       ]
     }
-  ]
+  ],
+  "actions": {
+    "read_only": true
+  }
 }

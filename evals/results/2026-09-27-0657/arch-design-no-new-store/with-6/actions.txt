@@ -1,0 +1,19 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd /tmp/tte-eval-ueu64ip8; find fixture -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100; ls -a fixture; cd fixture && git log --oneline…
+  3. Bash: cd /tmp/tte-eval-ueu64ip8/fixture; for f in $(find app -type f); do echo "=== $f"; cat -n $f; done
+  4. Bash: cd /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design; ls scripts; python3 scripts/arch-design.py --help 2>&1 | head -30; grep -n "one-way\|confirme…
+  5. Bash: sed -n 1,200p /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py
+  6. Agent: Recount report query scoping
+  7.   (subagent) Bash: find /tmp/tte-eval-ueu64ip8/fixture -type f -name "*.py" -o -name "*.sql" -o -name "*.md" | head -30
+  8.   (subagent) Read: /tmp/tte-eval-ueu64ip8/fixture
+  9.   (subagent) Read: /tmp/tte-eval-ueu64ip8/fixture/app/db.py
+ 10.   (subagent) Read: /tmp/tte-eval-ueu64ip8/fixture/app/users/models.py
+ 11.   (subagent) Read: /tmp/tte-eval-ueu64ip8/fixture/app/reports/models.py
+ 12.   (subagent) Read: /tmp/tte-eval-ueu64ip8/fixture/app/reports/views.py
+ 13.   (subagent) Bash: find /tmp/tte-eval-ueu64ip8/fixture -type f \( -name "*.sql" -o -name "*migration*" -o -name "*schema*" -o -name "*routes*" -o -name "*auth*" -o -name "*.txt" …
+ 14.   (subagent) Bash: grep -r "CREATE TABLE" /tmp/tte-eval-ueu64ip8/fixture --include="*.py" --include="*.sql"
+ 15.   (subagent) Bash: grep -r "200\|201\|301\|302\|400\|401\|403\|404\|500" /tmp/tte-eval-ueu64ip8/fixture --include="*.py" | head -20
+ 16.   (subagent) Bash: find /tmp/tte-eval-ueu64ip8/fixture -type f
+ 17.   (subagent) Bash: grep -r "reports" /tmp/tte-eval-ueu64ip8/fixture --include="*.py" -n
+ 18. Write: /tmp/tte-eval-ueu64ip8/fixture/docs/arch-design-csv-export.md
+ 19. Bash: cd /tmp/tte-eval-ueu64ip8/fixture && python3 /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py check docs/arch-design-csv-ex…

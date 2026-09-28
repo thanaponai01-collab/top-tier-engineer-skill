@@ -1,0 +1,6 @@
+  1. Skill: top-tier-engineer:drive
+  2. Bash: cd /tmp/tte-eval-gm5ezkes/fixture && ls -la && for f in $(find . -type f -not -path './.git/*' | head -50); do echo "=== $f"; cat "$f"; done; python report.py
+  3. Skill: top-tier-engineer:debug-protocol
+  4. Bash: cat > test_report.py <<'EOF' import unittest from decimal import Decimal from parse import load, parse_amount from report import render class Report(unittest.T…
+  5. Skill: top-tier-engineer:evolve-maintain
+  6. Bash: cp parse.py /tmp/parse.py.orig && python - <<'EOF' p='parse.py'; s=open(p).read() s=s.replace('import csv\n','import csv\nfrom decimal import Decimal\n',1) s=s…

@@ -1,0 +1,47 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  2/3 found\n  found   cause-is-parse-amount \u2014 \"`parse_amount` did `int(float(value))`, which threw away the cents on every row\"\n  found   why-it-was-not-caught \u2014 \"The existing tests didn't catch it because they only used whole numbers and never tested parsing.\"\n  MISSED  proven-both-directions\n  held    blame-where-the-symptom-shows",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "the cause was proven in both directions, not just observed once"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": false,
+      "detail": "changed the code first; ran it only afterwards"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py",
+      "fixture/test_totals.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.08774520000000001,
+  "turns": 3,
+  "seconds": 12.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

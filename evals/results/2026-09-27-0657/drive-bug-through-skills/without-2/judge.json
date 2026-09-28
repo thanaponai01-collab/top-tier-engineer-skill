@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "the-cause-is-in-parse",
+      "what": "the diagnosis step localised the cause to parse.py, not to where the total is printed",
+      "found": true,
+      "quote": "`parse_amount` in `parse.py` used `int(float(value))`, which dropped the cents from every row",
+      "quote_checked": true
+    },
+    {
+      "id": "fix-proven",
+      "what": "the fix is shown to hold: the right total, and a test that now guards it",
+      "found": true,
+      "quote": "one runs `render()` on a copy of the CSV and expects `Total: 42.35`... All 4 tests pass with the fix.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "patch-the-symptom-without-diagnosing",
+      "what": "rounding or fixing where the number is printed skips the diagnosis step the playbook demands",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.045467799999999996,
+  "model": "claude-sonnet-5"
+}

@@ -1,0 +1,44 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   cause-is-parse-amount \u2014 \"The cause is `parse_amount` in `parse.py:6`. It does `int(float(value))`, which cuts off the cents from every row before\"\n  found   why-it-was-not-caught \u2014 \"`test_totals.py` only feeds whole numbers (`10`, `20`) into `total()`. The tests pass (`OK`), but they never exercise `p\"\n  found   proven-both-directions \u2014 \"I've proven this by running it both ways.\"\n  held    blame-where-the-symptom-shows",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:debug-protocol"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": true,
+      "detail": "ran it: cd /tmp/tte-eval-tu6qhsqn/fixture && ls -la && for f in $(find . -type f -not -path '*/.git/*'); do echo \"=== "
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.15672419999999998,
+  "turns": 5,
+  "seconds": 20.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

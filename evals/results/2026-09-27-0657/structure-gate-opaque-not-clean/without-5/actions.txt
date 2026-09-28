@@ -1,0 +1,2 @@
+  1. Bash: cd /tmp/tte-eval-va6f7f6v; find fixture -type f | head -100; find fixture -type f | wc -l; find fixture -type f -exec wc -l {} + | tail -1
+  2. Bash: cd /tmp/tte-eval-va6f7f6v; cat -n fixture/handlers.py fixture/dashboard.py

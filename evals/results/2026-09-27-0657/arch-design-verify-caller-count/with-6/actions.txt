@@ -1,0 +1,13 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd /tmp/tte-eval-q2cx99f2; find fixture -type f | grep -v '/.git/' | head -100; cd fixture && git log --oneline | head -20
+  3. Bash: cd /tmp/tte-eval-q2cx99f2/fixture; for f in $(find . -type f); do echo "=== $f"; cat -n $f; done; ls -la /tmp/tte-eval-q2cx99f2
+  4. Bash: cd /tmp/tte-eval-q2cx99f2/fixture; grep -rn -e ShippingCalculator -e 'shipping.base' -e 'shipping import' -e isinstance -e issubclass -e __subclasses__ -e geta…
+  5. Bash: cd /tmp/tte-eval-q2cx99f2/fixture; T=$(mktemp -d); cp -r . $T; cd $T probe='from checkout.cart import total_with_shipping as t; from jobs.reprice import repric…
+  6. Agent: Count shipping symbol references
+  7.   (subagent) Bash: find . -type f | grep -v __pycache__ | sort && echo && for f in $(find . -type f -not -path '*/__pycache__/*' | sort); do echo "=== $f"; cat -n "$f"; done
+  8. Write: /tmp/tte-eval-q2cx99f2/fixture/docs/arch-design-shipping.md
+  9. Bash: python3 /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py check docs/arch-design-shipping.md; echo exit=$?
+ 10. Bash: grep -n -i -e "root" -e "git" /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py | head -30
+ 11. Bash: sed -n 160,185p /tmp/tte-plugin-soy1pc0g/top-tier-engineer/skills/arch-design/scripts/arch-design.py
+ 12. Bash: T=$(mktemp -d); cp -r /tmp/tte-eval-q2cx99f2/fixture/. $T; cd $T && git init -q && git add -A && git -c user.email=x@x -c user.name=<name> commit -qm snap && S=$(gi…
+ 13. Bash: cd /tmp/tte-eval-q2cx99f2/fixture && sed -i 's/gives identical output from both callers (15.0 and shipping=5.0)$/gives identical output from both callers (15.0…

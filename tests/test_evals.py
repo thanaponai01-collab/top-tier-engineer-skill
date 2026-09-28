@@ -75,22 +75,80 @@ class PromptsDoNotLeak(unittest.TestCase):
     def test_a_prompt_does_not_contain_its_own_answer(self):
         for name in grade.case_names():
             case = grade.load_case(name)
-            prompt = grade.normalize(
-                read(os.path.join(case["dir"], "prompt.md"))
-            )
-            for item in case["planted"]:
-                for token in item.get("must_name", []):
-                    self.assertFalse(
-                        grade.says(prompt, token),
-                        f"{name}: prompt.md names {token!r}, which planted item "
-                        f"'{item['id']}' exists to see whether the agent finds",
-                    )
-                for phrase in item.get("must_say_any", []):
-                    self.assertFalse(
-                        grade.says(prompt, phrase),
-                        f"{name}: prompt.md already says {phrase!r}, which alone "
-                        f"satisfies planted item '{item['id']}'",
-                    )
+            for file in ("prompt.md", "prompt-plain.md"):
+                prompt = grade.normalize(read(os.path.join(case["dir"], file)))
+                for item in case["planted"]:
+                    for token in item.get("must_name", []):
+                        self.assertFalse(
+                            grade.says(prompt, token),
+                            f"{name}: {file} names {token!r}, which planted item "
+                            f"'{item['id']}' exists to see whether the agent finds",
+                        )
+                    for phrase in item.get("must_say_any", []):
+                        self.assertFalse(
+                            grade.says(prompt, phrase),
+                            f"{name}: {file} already says {phrase!r}, which alone "
+                            f"satisfies planted item '{item['id']}'",
+                        )
+
+    def test_a_prompt_does_not_hand_over_a_trap(self):
+        """A report that quotes the question back must not trip a trap by doing so."""
+        for name in grade.case_names():
+            case = grade.load_case(name)
+            for file in ("prompt.md", "prompt-plain.md"):
+                prompt = grade.normalize(read(os.path.join(case["dir"], file)))
+                for trap in case.get("traps", []):
+                    for phrase in trap.get("must_not_say_any", []):
+                        self.assertFalse(
+                            grade.says(prompt, phrase),
+                            f"{name}: {file} contains {phrase!r}, the wrong answer trap "
+                            f"'{trap['id']}' looks for — quoting the question would trip it",
+                        )
+
+
+class PlainPrompts(unittest.TestCase):
+    """The without-skills side gets the same task in plain words.
+
+    run.py compares an agent with the plugin against one without it. Handing the
+    second one "Run `wire-check`" names a skill it does not have, which measures
+    confusion rather than the skill. So each case carries prompt-plain.md: the
+    same task, no skill named.
+    """
+
+    def test_each_case_has_a_plain_prompt_naming_no_skill(self):
+        skills = os.listdir(os.path.join(ROOT, "skills"))
+        for name in grade.case_names():
+            path = os.path.join(grade.CASES_DIR, name, "prompt-plain.md")
+            self.assertTrue(os.path.isfile(path), f"{name}: missing prompt-plain.md")
+            text = read(path)
+            for skill in skills:
+                self.assertNotIn(f"`{skill}`", text, f"{name}: prompt-plain.md names skill {skill}")
+
+
+class EveryNewSkillHasACase(unittest.TestCase):
+    """A skill earns its place by making an agent better on a case, so it needs one.
+
+    evals/uncovered.txt lists the skills written before this rule. It may only
+    shrink: a skill missing from both the cases and the list fails here, and so
+    does a listed skill that has since gained a case.
+    """
+
+    def uncovered(self):
+        with open(os.path.join(EVALS, "uncovered.txt"), encoding="utf-8") as fh:
+            return {l.strip() for l in fh if l.strip() and not l.startswith("#")}
+
+    def test_every_skill_has_a_case_or_is_listed_as_untested(self):
+        skills = {d for d in os.listdir(os.path.join(ROOT, "skills"))
+                  if os.path.isfile(os.path.join(ROOT, "skills", d, "SKILL.md"))}
+        covered = {grade.load_case(n)["skill"] for n in grade.case_names()}
+        listed = self.uncovered()
+        missing = sorted(skills - covered - listed)
+        self.assertFalse(missing, f"no eval case tests {missing}: add one under evals/cases/ "
+                                  f"(a new skill lands with its case)")
+        stale = sorted(listed & covered)
+        self.assertFalse(stale, f"{stale} now have a case: delete them from evals/uncovered.txt")
+        unknown = sorted(listed - skills)
+        self.assertFalse(unknown, f"evals/uncovered.txt lists skills that do not exist: {unknown}")
 
 
 class GraderDiscriminates(unittest.TestCase):

@@ -1,0 +1,44 @@
+{
+  "case": "latent-audit-layers-and-decoy",
+  "skill": "latent-audit",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   layer-breach-notify \u2014 \"`app/models/notify.py:2` does `from app.routes.web import BANNER`. That's the data layer importing from the interface la\"\n  found   legacy-export-dead \u2014 \"one file is close: `app/services/legacy_export.py`. Nothing in the repo reaches it, and a test run never loaded it.\"\n  found   layers-were-declared-not-guessed \u2014 \"The layer order comes from `ARCHITECTURE.md` (\"routes \u2192 services \u2192 models, never import a higher layer\").\"\n  held    csv-out-resolved-by-name",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:latent-audit"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1987424,
+  "turns": 7,
+  "seconds": 29.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

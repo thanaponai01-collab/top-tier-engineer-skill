@@ -1,0 +1,42 @@
+{
+  "case": "wire-check-orphan-and-decoy",
+  "skill": "wire-check",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   export-never-routed \u2014 \"But no route points to it and no scheduled job names it.\"\n  found   both-entry-points \u2014 \"It has **two separate entry points**, and the incoming team needs to know about both\"\n  held    digest-loaded-by-name",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1250444,
+  "turns": 5,
+  "seconds": 26.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

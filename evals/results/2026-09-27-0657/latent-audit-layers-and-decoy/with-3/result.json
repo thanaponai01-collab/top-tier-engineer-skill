@@ -1,0 +1,46 @@
+{
+  "case": "latent-audit-layers-and-decoy",
+  "skill": "latent-audit",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  2/3 found\n  found   layer-breach-notify \u2014 \"notify.py:2 imports app.routes.web.BANNER\"\n  MISSED  legacy-export-dead\n  found   layers-were-declared-not-guessed \u2014 \"Layers were checked against `ARCHITECTURE.md:3-7`\"\n  held    csv-out-resolved-by-name",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:latent-audit"
+  ],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "app/services/legacy_export.py is referenced nowhere, by import or by string \u2014 the one real deletion candidate"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2076778,
+  "turns": 6,
+  "seconds": 36.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

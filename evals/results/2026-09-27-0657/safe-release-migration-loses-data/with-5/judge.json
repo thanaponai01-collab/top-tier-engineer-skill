@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 4,
+  "score": 0.75,
+  "planted": [
+    {
+      "id": "migration-drops-phone-without-copying",
+      "what": "003 creates contacts and drops users.phone in the same script, with nothing copying the numbers across: every phone number in production is gone",
+      "found": true,
+      "quote": "The migration creates `contacts`, never copies anything into it, then runs `DROP COLUMN phone`.",
+      "quote_checked": true
+    },
+    {
+      "id": "a-caller-still-reads-the-old-column",
+      "what": "jobs/reminders.py still selects phone from users; after 003 the nightly job fails, and no test covers it",
+      "found": true,
+      "quote": "The job still reads `users.phone`. Only `app/profile.py` was switched to `contacts`, so tonight's reminder texts fail.",
+      "quote_checked": true
+    },
+    {
+      "id": "the-call-is-hold",
+      "what": "the answer is not tonight: hold",
+      "found": true,
+      "quote": "Hold. Don't run this tonight.",
+      "quote_checked": true
+    },
+    {
+      "id": "safe-shape-named",
+      "what": "the safe shape: add and copy first, switch reads, drop the old column in a later, separate release",
+      "found": false,
+      "quote": "**No drop.**",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-suite-read-as-ready",
+      "what": "the suite only builds a fresh empty database, so it cannot see the data loss or the job; green is not ready",
+      "tripped": false,
+      "quote": "The tests passing doesn't mean much here.",
+      "quote_checked": true
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.0494478,
+  "model": "claude-sonnet-5"
+}

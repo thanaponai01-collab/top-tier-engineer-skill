@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:wire-check
+  2. Bash: cd /tmp/tte-eval-qusafg2v; find fixture -type f | head -100; echo; find fixture -type f | xargs wc -l | tail -1
+  3. Bash: cd /tmp/tte-eval-qusafg2v/fixture; for f in $(find . -type f); do echo "=== $f"; cat -n $f; done
+  4. Bash: cd /tmp/tte-eval-qusafg2v/fixture; python3 app.py; python3 scheduler.py; echo "sched exit=$?"; python3 -c " import app,handlers.export as e print('/export ->',…
