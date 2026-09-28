@@ -80,6 +80,20 @@ When the answer took real digging, add it to `WHY.md` at the repo root: the ques
 the sources (sha, ticket, link), the date and the label. Read that file first next time. An entry
 whose file has changed since is a lead, not an answer.
 
+`WHY.md` opens with an index, one line per entry: `question | label | date`. Read only the index
+first; open the full entry below it only for the question you came for. Never re-read the whole
+file to answer one question.
+
+## Archive
+
+An entry that has sat unread for a long time is a cost every session pays and nobody spends. Once
+`WHY.md` passes about 30 entries, move the oldest ones whose **STILL HOLDS** is `yes` or `cannot
+tell` (an `expired` one stays, since it warns against the same dead reason twice) into
+`WHY.archive.md`, verbatim, keeping their index lines in `WHY.md` but marked `→ archive`. Do this in
+the same sitting you add an entry that would push the file over the line, never as a separate pass.
+`WHY.archive.md` is opened only when its own index line is the one you need; it is never read start
+to end.
+
 ## Rules
 
 - **Read-only.** Never post a comment, close a ticket or message anyone from here. `WHY.md` is the
