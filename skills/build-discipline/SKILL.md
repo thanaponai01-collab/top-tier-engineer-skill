@@ -18,6 +18,15 @@ if it has one). One line per slice: `proof line | status | commit`. Under it, a 
 `p95 > 300 ms at 10k rows`); a deferral without one is a wish. Read it first every session; update
 it in the same commit as the slice.
 
+`BUILD.md` is a log of every slice ever proven, so it grows for the life of the project unless
+something takes lines back out. Once it passes about 40 slice lines, archive the ones that are
+`proven`, committed, and whose feature has stayed green since (check `FEATURES.md` /
+`VERIFY.md` if the repo has them): move them verbatim to `BUILD.archive.md`, and leave one line in
+`BUILD.md` per archived slice — the proof line and its commit, nothing else. Never archive a slice
+that is `traced` but not `proven`, uncommitted, or still on the Deferred list: those are exactly
+what the next session needs in full. Do the archive pass in the same commit that would otherwise
+push the file over the line, not as a separate cleanup.
+
 ## Starting from a brief
 
 When a design, audit or ticket already worked the change out (`gh issue view 12`, a spec, the
