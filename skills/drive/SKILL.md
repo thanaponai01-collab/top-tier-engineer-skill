@@ -34,6 +34,7 @@ them and start on what it does not block.
 | Resume, or "where were we?" | `recall`, then match the goal it surfaces |
 | Plans to file as tickets | `issue-handoff` (it writes to the tracker: ask first unless the goal itself said to file) |
 | A new repo, or "set this up for the skills" | `project-setup` |
+| An unfamiliar codebase, or "get me up to speed" | `onboard-system` (it runs `project-setup` itself) |
 | Deploy, or change stored data | `safe-release` |
 | Big, vague, or matches nothing | `problem-framing` to make the goal checkable, then match again |
 

@@ -55,6 +55,7 @@ rewrite it only if its content differs, never append a second.
 - `docs/architecture.md`, if present: the system traced as a diagram; `arch-map` draws and updates it.
 - `WHY.md`, if present: recorded reasons behind decisions that took real digging to find;
   `code-history` looks them up and adds to it before you change something that looks wrong.
+- Coming back after a gap, or "where were we": `recall` rebuilds the state from git and these files.
 - Something broken and the cause unknown: `debug-protocol`. Need the system explained plainly, not
   changed: `explain`.
 - None of the files above exist yet and this is first contact with the system: `onboard-system` builds

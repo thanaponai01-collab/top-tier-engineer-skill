@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.42.1 — 2026-09-28 — first contact and resume no longer dead-end
+
+- **`recall` reads `docs/architecture.md`.** `onboard-system` writes that file, but `recall` only
+  looked for `docs/arch-design.md`, so the resume skill never saw the output of the skill that
+  feeds it.
+- **`recall` hands first contact to `onboard-system`.** On a repo it has never seen, with no
+  `VERIFY.md`, `FEATURES.md` or `WHY.md`, it used to stop at "nothing recorded". It now says this is
+  first contact and names the skill to run.
+- **`drive` routes "unfamiliar codebase / get me up to speed" to `onboard-system`.** No row matched
+  that goal before; only `project-setup` was listed for a new repo.
+- **`project-setup`'s pointer block mentions `recall`,** so a fresh session is told the resume
+  skill exists.
+- **Not measured.** The unit tests pass, but `recall`, `project-setup` and `drive` have no eval case
+  covering these routes, so nothing has shown the new wording changes what an agent does.
+
 ## 4.42.0 — 2026-09-28 — verify-loop: repairing a check that never ran, and evals that grade what the agent left behind
 
 - **`verify-loop` step 4 now covers a check that cannot fail.** A check that runs nothing (loads no
