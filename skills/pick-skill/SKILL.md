@@ -42,10 +42,12 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Choosing a stack, a boundary, a pattern | `arch-design` (design mode) |
 | "Show me the architecture" / before → after / where the problems sit | `arch-map` |
 | Planned work needs to reach another machine or another person | `issue-handoff` |
+| Designing an AI agent before any code: tools, reversibility, what flows into its context | `agent-design` |
 | Building an AI agent or model-driven feature: checks first | `agent-evals` |
 | Proving an agent works over repeated runs, or after a model or prompt change | `agent-prove` |
 | One agent run looks wrong and you want to know where it diverged | `agent-trace` |
 | Shipping a live agent, or watching one | `agent-release` |
+| A live agent has been running a while and you want to know if it drifted | `agent-drift` |
 | Writing the code | `build-discipline` |
 | Built, but nothing happens when you run it | `wire-check` |
 | Broken, cause **unknown** | `debug-protocol` |
@@ -57,6 +59,7 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Why is it built this way, why was Y picked, where does this number come from, before changing code that looks wrong | `code-history` |
 | Someone needs to understand a system: what it is, how it works, why (nothing gets changed) | `explain` |
 | A new or different project needs these skills set up: VERIFY.md, FEATURES.md, a pointer in CLAUDE.md | `project-setup` |
+| First time in this codebase, nothing documented yet, want the whole picture (setup, features, architecture, why, an account you can check) built and left behind in one pass | `onboard-system` |
 | You know the goal but not the skills, and want it carried through to done | `drive` (unattended, with a decision log: `drive-overnight`) |
 | Starting or resuming work: "where were we?", what is the state and the next step | `recall` |
 | "Does it actually work?" before a merge or release | `correctness-gate` |
@@ -72,7 +75,7 @@ Every flow has the same shape: **find → change → prove → ship**.
 | Clean up a messy codebase | `arch-design` (audit) → `arch-map` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Fix a bug | `debug-protocol` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Make it faster or safer | `perf-optimize` / `threat-model` | same skill | `correctness-gate` | `safe-release` |
-| Build an AI agent | `agent-evals` (before any agent code) | `build-discipline` | `agent-prove` | `safe-release` + `agent-release` |
+| Build an AI agent | `agent-design` → `agent-evals` (before any agent code) | `build-discipline` | `agent-prove` | `safe-release` + `agent-release`, then `agent-drift` once it's live |
 
 `drive` holds the same playbooks with its own steps; where the two disagree, `drive`'s wins.
 
