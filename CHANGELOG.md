@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.39.0 — 2026-09-27 — five new eval cases for the judgment-call skills
+## 4.41.4 — 2026-09-28 — five new eval cases for the judgment-call skills
 
 - **New eval cases**, one each for `verify-loop`, `perf-optimize`, `threat-model`, `senior-review`
   and `safe-release` — the skills that make an objective judgment call over a script's yes/no, and
@@ -20,6 +20,87 @@
     in the same release that really is safe as it stands.
   Each ships `prompt.md`, a fixture that runs, `expect.json` (planted + traps) and the three
   reference reports (`good`, `good-alt`, `bad`) `tests/test_evals.py` checks the case against.
+
+## 4.41.3 — 2026-09-28 — route-hint closes the gaps a real routing eval found
+
+- **New `evals/route.py`.** Scores `route-hint.py`'s `suggest()` against a batch of real prompts,
+  including several written to expose overlap between skills whose descriptions look alike from
+  outside — `arch-design` vs `structure-gate`, the `agent-*` family against each other, "done" the
+  goal-word vs "done" the finished-work-word. `python evals/route.py`; exit 0 only if every case
+  passes.
+- **`route-hint.py` gains rules for `arch-design`, `feature-map`, `verify-loop`, `agent-evals`,
+  `agent-prove`, `agent-trace`, `agent-release`, `problem-framing` and `drive`** — nine skills that
+  previously had no rule at all, so a prompt clearly asking for one routed to silence instead.
+  `BROKEN` now also catches "timing out" / "timeouts", which were symptom words with nowhere to go.
+- Fixed a false-negative the new `drive` name introduced: the "did they already name a skill"
+  check was plain substring matching, so `"drive"` matched inside `"driven"` and silenced routing
+  for that prompt. It now matches skill names on word boundaries.
+- Baseline on the new eval was 20 of 32; all 32 pass after these rules.
+
+## 4.41.2 — 2026-09-28 — direct tests for structure_opacity
+
+- **New `tests/test_structure_opacity.py`.** `structure-gate`'s opacity/shape module
+  (`structure_opacity.py`) was only exercised indirectly, through `structure-report.py`'s CLI in
+  `test_structure_report.py`. Adds direct unit tests for `contiguous_spans`, `python_opaque_lines`,
+  `shape_stats`, `is_code_shaped`, `looks_like`, and `measure`, so a change to one of those functions
+  fails at its own test instead of surfacing as an unexplained shift in someone else's CLI assertion.
+
+## 4.41.1 — 2026-09-28 — verify-loop: stop leaving the started app as a zombie
+
+- **Fixed `start_app` in `verify-loop`'s `scripts/verify.py`.** On a shell that forks a real
+  child for a single command instead of exec-replacing itself, `Popen`'s `proc.pid` named the
+  shell, not the app — so `stop_app`'s `os.killpg` + `proc.wait()` killed the app but only ever
+  reaped the shell, leaving the app an orphaned zombie `stop_app` could never confirm was gone.
+  `start_app` now runs the command as `exec {cmd}` (POSIX only) so the shell always replaces
+  itself with the real process; `proc.pid` is then guaranteed to be the app itself.
+
+## 4.41.0 — 2026-09-27 — onboard-system: the paved path for first contact with a codebase
+
+- **New `onboard-system` skill.** First contact with an unfamiliar codebase: runs `project-setup`,
+  `feature-map`, `arch-map` and `code-history` in the order that lets each one use the last one's
+  output (setup → what it has → how it's shaped → why), then proves the resulting picture with an
+  `explain` overview checked against a real prediction. Ends with `VERIFY.md`, `FEATURES.md`,
+  `docs/architecture.md` and `WHY.md` all on disk, so the next session or agent finds the whole
+  picture instead of re-deriving it.
+- `project-setup`'s `CLAUDE.md` pointer block now also names `docs/architecture.md` / `arch-map`,
+  `WHY.md` / `code-history`, `debug-protocol` and `explain`, and points a fresh project with none of
+  those files at `onboard-system` to build the full set in one pass. It previously mentioned only
+  `VERIFY.md`, `FEATURES.md` and `code-history`.
+- `route-hint.py`'s "onboarding onto X" phrasing now routes to `onboard-system` instead of `explain`
+  — that phrase means the whole first-contact pass, not one paced explanation. `pick-skill`'s table
+  gained the matching row.
+
+## 4.40.0 — 2026-09-27 — agent-drift: catch a live agent slipping after launch
+
+- **New `agent-drift` skill.** Turns `agent-release`'s three post-launch bullets (sample and grade,
+  file failures as tasks, watch for drift) into the actual mechanics: pull the frozen `agent-prove`
+  baseline, sample live traffic on a named schedule against a noise band (not a bare "it felt off"),
+  root-cause an unpinned model/prompt change before anything else, and file every real drop as a task
+  in `agent-evals`'s set before waiting on a fix.
+- Hands off to `agent-prove` to confirm a regression against the bar, `agent-release` to roll back or
+  throttle, `agent-trace` to pin the exact divergent step in a bad live sample. Closes the gap where
+  monitoring a shipped agent had a checklist but no method for telling real drift from noise.
+
+## 4.39.0 — 2026-09-27 — the tool surface gets designed before the agent does
+
+- **New `agent-design` skill.** Before any agent code or eval exists: name the loop shape (one agent or
+  an orchestrator, one owner per one-way action), list every tool with its reversibility tier and what
+  it hands back into the agent's context (marking tools that return content an attacker could have
+  shaped), decide the context/memory boundary, and write the whole thing to `docs/agent-design.md`.
+  Closes the gap where `agent-evals` step 1 ("name the claim") had nowhere agent-specific to point for
+  the must-refuse list, and pointed at generic `problem-framing` instead.
+- `agent-evals` step 1 now reads the must-refuse list from `agent-design`'s tool contract when one
+  exists, falling back to `problem-framing` → `agent-design` when neither the claim nor a contract can
+  be said.
+- `threat-model`'s Abuse phase gains an **agent tool surface** bullet: read the tool contract from
+  `agent-design` (or list the tools by hand), test the untrusted-content tools for prompt injection and
+  the one-way tools for reach-without-grounds and repeat-on-retry. `agent-prove` runs the resulting
+  cases as tasks that must pass before release.
+- `agent-release` step 8 (watch for drift) now runs on the same named schedule and owner as step 6
+  instead of being an unscheduled bullet, and names the threshold that pages someone.
+- `pick-skill` and the README list `agent-design`; `route-hint.py`'s skill list knows the name (no new
+  routing rule — reached by name, `pick-skill`, or `agent-evals`'s fallback, same as the other three
+  `agent-*` skills).
 
 ## 4.38.0 — 2026-09-27 — agent-trace: name where one agent run went wrong
 

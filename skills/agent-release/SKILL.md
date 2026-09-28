@@ -34,8 +34,11 @@ has met its bar.
    write "none" so the gap is visible), grade a sample of real runs with the same graders.
 7. **Every real failure becomes a task** in the eval set, with a grader, before it is fixed. The set
    then grows with the mistakes it caught.
-8. **Watch for drift:** pass rate, cost and latency per version, and a spike in refusals, retries or
-   cap hits.
+8. **Watch for drift**, on the same named schedule and owner as step 6 — a metric nobody is due to
+   look at is not being watched: pass rate, cost and latency per version, and a spike in refusals,
+   retries or cap hits. Name the threshold that pages someone, not just the metric. `agent-drift` is
+   the full mechanics for 6–8 — the noise band, the sampling size, and the root-cause order — run it
+   on the named schedule rather than re-deriving these three lines each time.
 
 *Test:* the last production failure exists as a task that would have caught it.
 
@@ -47,5 +50,6 @@ its test.
 
 ## Next
 
-The release itself and any stored-data change: `safe-release`. A failure to trace: `debug-protocol`.
-Without those loaded, do the step plainly and say the skill was missing.
+The release itself and any stored-data change: `safe-release`. The ongoing drift check once it's
+live: `agent-drift`. A failure to trace: `debug-protocol`. Without those loaded, do the step plainly
+and say the skill was missing.
