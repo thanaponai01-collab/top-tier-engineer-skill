@@ -1,5 +1,22 @@
 # Changelog
 
+## 4.42.2 — 2026-09-28 — `project-setup` and `onboard-system` say which is which; evals run on Windows
+
+- **The two descriptions now draw the line.** `project-setup` says it is only the checks and the
+  pointer, and that `onboard-system` runs it; `onboard-system` says it runs `project-setup` first and
+  that `project-setup` alone is for when only the checks are wanted.
+- **New routing case for `onboard-system`** in `evals/routing.json` ("I've never seen this codebase
+  before…"). Run live, 3 tries each: it picked `onboard-system` 3 of 3, and the existing
+  `project-setup` case picked `project-setup` 3 of 3.
+- **Evals no longer die instantly on Windows.** `evals/agent.py`'s environment allow-list dropped
+  `SystemRoot`, so every headless agent call exited in 0.1s with "Bun needs this set" and
+  `route_live.py` reported `0 of N right`. It now keeps `SystemRoot`, `USERPROFILE`, `APPDATA` and the
+  other variables Windows needs.
+- **Not measured.** There was no run before the description edits, and `onboard-system` was already
+  hinted by the `route-hint` hook, so this does not show the wording changed a pick. `ROUTING.md` was
+  not regenerated. `route_live.py` still crashes printing `←` on a cp1252 console unless
+  `PYTHONUTF8=1` is set, and the runner still discards the child's stderr.
+
 ## 4.42.1 — 2026-09-28 — first contact and resume no longer dead-end
 
 - **`recall` reads `docs/architecture.md`.** `onboard-system` writes that file, but `recall` only

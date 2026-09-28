@@ -32,6 +32,10 @@ ENV_KEEP = (
     "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE",
     "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
     "CLAUDE_CODE_OAUTH_TOKEN", "IS_SANDBOX",
+    # Windows: without SystemRoot the child dies in 0.1s ("Bun needs this set"); the rest is where
+    # it finds its login and temp folder.
+    "SystemRoot", "SYSTEMROOT", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "HOMEDRIVE", "HOMEPATH",
+    "COMSPEC", "PATHEXT", "TEMP", "TMP",
 )
 
 IGNORED_DIRS = {"__pycache__", ".pytest_cache", ".git", ".mypy_cache", ".ruff_cache"}

@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: Set a fresh project up for these skills, once, so every later session finds its checks. Drafts VERIFY.md and FEATURES.md from whatever code is there and adds a pointer block to the project's CLAUDE.md. Use when starting these skills in a new or different codebase, "set up this project for the skills", "start fresh here", or when a repo has code but no VERIFY.md or FEATURES.md.
+description: Set a fresh project up for these skills, once, so every later session finds its checks. Drafts VERIFY.md and FEATURES.md from whatever code is there and adds a pointer block to the project's CLAUDE.md. Only the checks and the pointer, not the full picture of an unfamiliar system (that is onboard-system, which runs this itself). Use when starting these skills in a new or different codebase, "set up this project for the skills", "start fresh here", or when a repo has code but no VERIFY.md or FEATURES.md.
 ---
 
 # Project Setup
