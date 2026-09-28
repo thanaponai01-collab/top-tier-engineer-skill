@@ -282,12 +282,20 @@ def run_check(cmd, repo, timeout):
 
 
 def start_app(cmd, repo):
-    """(process, log path). The app keeps running in the background; its output goes to a log."""
+    """(process, log path). The app keeps running in the background; its output goes to a log.
+
+    `exec` makes the shell replace itself with `cmd` instead of forking it as a child: on a
+    shell where a single simple command is not tail-call-optimized away, `proc.pid` would
+    otherwise name the shell, not the app, and killing+reaping `proc` would leave the real
+    app process an orphaned zombie for `stop_app` to never actually confirm dead.
+    """
     fd, log = tempfile.mkstemp(prefix="verify-app-", suffix=".log")
-    kw = ({"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if os.name == "nt"
+    posix = os.name != "nt"
+    kw = ({"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if not posix
           else {"start_new_session": True})
+    run_cmd = f"exec {cmd}" if posix else cmd
     with os.fdopen(fd, "w") as fh:
-        proc = subprocess.Popen(cmd, shell=True, cwd=repo, stdout=fh, stderr=subprocess.STDOUT, **kw)
+        proc = subprocess.Popen(run_cmd, shell=True, cwd=repo, stdout=fh, stderr=subprocess.STDOUT, **kw)
     return proc, log
 
 
