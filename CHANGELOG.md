@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.41.4 — 2026-09-28 — five new eval cases for the judgment-call skills
+
+- **New eval cases**, one each for `verify-loop`, `perf-optimize`, `threat-model`, `senior-review`
+  and `safe-release` — the skills that make an objective judgment call over a script's yes/no, and
+  so are the ones most likely to be fooled by a decoy next to the real problem:
+  - `verify-loop-fake-check-and-decoy` — a test that recomputes its own expected value and never
+    calls the function under test, next to a one-line test that looks just as trivial but is real.
+  - `perf-optimize-n-plus-one-and-decoy` — a query-per-customer loop that's a finding even though
+    each query is indexed, next to an `ORDER BY ... LIMIT` that looks like a full sort but isn't.
+  - `threat-model-client-role-and-decoy` — an authorization check that trusts a client-supplied
+    `role` field over the session, next to a catalog endpoint with no auth that's intentionally
+    public per its README.
+  - `senior-review-oversell-and-decoy` — `reserve_stock` oversells with no qty validation, proven by
+    running it, next to a lock-free global dict that looks unsafe but has nothing here to prove a
+    race against (single-process CLI).
+  - `safe-release-combined-migration-and-decoy` — one migration that expands, backfills and drops a
+    column together with an untested "revert the commit" rollback claim, next to a second migration
+    in the same release that really is safe as it stands.
+  Each ships `prompt.md`, a fixture that runs, `expect.json` (planted + traps) and the three
+  reference reports (`good`, `good-alt`, `bad`) `tests/test_evals.py` checks the case against.
+
 ## 4.41.3 — 2026-09-28 — route-hint closes the gaps a real routing eval found
 
 - **New `evals/route.py`.** Scores `route-hint.py`'s `suggest()` against a batch of real prompts,

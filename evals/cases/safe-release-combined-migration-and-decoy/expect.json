@@ -1,0 +1,51 @@
+{
+  "case": "safe-release-combined-migration-and-decoy",
+  "skill": "safe-release",
+  "question": "go / no-go on this release plan?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "single-step-combines-add-and-drop",
+      "what": "002_migrate_total_to_cents.sql adds total_cents, backfills it, and drops total all in one script/deploy, with app.py switching reads in the same release — no separate expand/backfill/contract deploys",
+      "must_name": ["002_migrate_total_to_cents.sql"],
+      "must_say_any": [
+        "same migration", "same deploy", "single deploy", "one migration", "all in one",
+        "not separate deploys", "single script", "one script", "one step",
+        "expand, backfill and contract", "adds and removes", "both adds and removes"
+      ]
+    },
+    {
+      "id": "point-of-no-return-immediate",
+      "what": "dropping total loses the original dollar data immediately with nothing verified first; this is the point of no return",
+      "must_say_any": [
+        "point of no return", "data is lost", "cannot restore", "loses the total column",
+        "irreversible", "no way back", "total is gone", "total column is dropped"
+      ]
+    },
+    {
+      "id": "rollback-untested-claim",
+      "what": "MIGRATION.md's \"revert the commit\" rollback claim is false: reverting the code does not bring back a dropped column's data",
+      "must_name": ["migration.md"],
+      "must_say_any": [
+        "untested", "revert the commit does not restore", "does not restore", "git revert won't bring back",
+        "won't bring back", "doesn't bring back", "false", "cannot be reverted by", "wrong",
+        "reverting the commit does not"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "notes-column-is-safe",
+      "what": "001_add_notes_column.sql is purely additive (nullable column, no backfill) and is safe/reversible on its own; it is not part of the risk in 002",
+      "must_not_say_any": [
+        "001 is irreversible", "001 is also risky", "notes column is risky", "adding notes column is risky",
+        "notes migration is also unsafe", "both migrations are risky", "001 is a one-way door",
+        "flag 001 as", "001 cannot be rolled back"
+      ],
+      "must_say_any": [
+        "001 is safe", "purely additive", "001 is reversible", "just drop the column", "no data loss",
+        "001 is fine", "nullable column", "safe on its own"
+      ]
+    }
+  ]
+}

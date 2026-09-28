@@ -1,0 +1,49 @@
+{
+  "case": "senior-review-oversell-and-decoy",
+  "skill": "senior-review",
+  "question": "is this stock-reservation tool safe to rely on?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "oversell-no-qty-validation",
+      "what": "reserve_stock never checks qty against available stock (or that qty is positive); reserve_stock(\"widget\", 999) silently returns -989",
+      "must_name": ["reserve_stock"],
+      "must_say_any": [
+        "oversell", "goes negative", "negative stock", "no validation", "does not validate qty",
+        "doesn't validate qty", "sells stock it doesn't have", "sold more than", "-989",
+        "no check that qty", "never checks qty"
+      ]
+    },
+    {
+      "id": "proven-by-running",
+      "what": "the finding is proven by actually running reserve_stock (or the cli) with an oversized qty and pasting the output, not guessed",
+      "must_name": ["-989"],
+      "must_say_any": ["ran", "output", "proven", "pasted"]
+    },
+    {
+      "id": "fix-validate-qty",
+      "what": "the fix validates qty is positive and does not exceed current stock before mutating _STOCK",
+      "must_say_any": [
+        "validate", "raise", "reject", "0 < qty", "qty <= stock", "qty > stock", "qty >  stock",
+        "check qty against", "refuse the reservation"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "global-dict-not-a-finding",
+      "what": "the module-level _STOCK dict with no lock is not a proven finding: README.md says this is a single-process CLI with no concurrent access, so a race condition here is not something the fixture lets you actually run and observe",
+      "must_not_say_any": [
+        "_stock is not thread-safe and", "global _stock is a bug", "race condition in reserve_stock",
+        "not thread safe and must be fixed", "not thread-safe and must be fixed",
+        "add a lock to reserve_stock", "add a lock around _stock", "add a threading lock around _stock",
+        "concurrency bug in inventory.py", "reserve_stock needs a lock", "flag the lack of locking"
+      ],
+      "must_say_any": [
+        "single-process", "single process", "no concurrent access", "not exercised here",
+        "one reservation at a time", "no web server", "cannot run two callers at once",
+        "nothing here calls it concurrently"
+      ]
+    }
+  ]
+}
