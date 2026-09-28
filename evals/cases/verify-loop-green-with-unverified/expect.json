@@ -1,0 +1,50 @@
+{
+  "case": "verify-loop-green-with-unverified",
+  "skill": "verify-loop",
+  "question": "the run is green: is every feature verified, as the release notes will claim?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "search-has-no-check",
+      "what": "search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section",
+      "must_name": ["search.py"],
+      "must_say_any": [
+        "no check", "no test", "no section", "unverified", "not covered", "unchecked",
+        "nothing checks", "nothing verifies", "not in verify.md", "missing from verify.md",
+        "no entry", "not listed in verify.md", "no verify.md entry"
+      ]
+    },
+    {
+      "id": "the-checks-are-unproven",
+      "what": "the checks that do exist were never shown able to go red: no fail-proof lines",
+      "must_say_any": [
+        "fail-proof", "nobody has shown", "never been red", "never went red", "unproven",
+        "not proven", "cannot go red", "can't go red"
+      ]
+    },
+    {
+      "id": "an-orphan-that-asserts-nothing",
+      "what": "test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing",
+      "must_name": ["test_legacy_import"],
+      "must_say_any": [
+        "orphan", "no feature", "asserttrue(true)", "assert true", "asserts nothing",
+        "placeholder", "vacuous", "checks nothing", "cannot fail"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-read-as-every-feature",
+      "what": "two green checks do not cover three features; the report must not clear the release notes",
+      "must_not_say_any": [
+        "all features are verified", "all features verified",
+        "all three features", "both features are verified", "safe to send", "ok to send",
+        "yes, send", "yes - send", "go ahead and send", "release notes are accurate"
+      ],
+      "must_say_any": [
+        "not verified", "unverified", "do not send", "don't send", "hold the", "no check",
+        "cannot say", "not every feature", "not all"
+      ]
+    }
+  ]
+}

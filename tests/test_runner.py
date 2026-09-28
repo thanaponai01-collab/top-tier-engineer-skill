@@ -318,5 +318,122 @@ class StagedPlugin(unittest.TestCase):
         self.assertEqual(env["IS_SANDBOX"], "1")
 
 
+class WorkdirChecksInTheRunner(unittest.TestCase):
+    """A case that grades what the agent left behind must not pass on its report alone.
+
+    grade.py can inspect the agent's finished copy; the runner has to hand it that
+    copy, or every action-graded case would quietly be graded on words.
+    """
+
+    def setUp(self):
+        import shutil
+        self._shutil = shutil
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.case = grade.load_case("verify-loop-make-it-verified")
+        self.good = grade.read(os.path.join(self.case["dir"], "reference", "good.md"))
+        self.work = os.path.join(self._tmp.name, "fixture")
+        shutil.copytree(os.path.join(self.case["dir"], "fixture"), self.work)
+        self.parsed = agent.parse_stream(stream(tool("Read", file_path="refund.py")))
+
+    def solve(self):
+        self._shutil.copytree(os.path.join(self.case["dir"], "reference", "solution"), self.work,
+                              dirs_exist_ok=True)
+
+    def score(self):
+        checks = run.workdir_checks(self.case, self.work)
+        return checks, run.score_run(self.case, "with", self.parsed, self.good, checks, NO_CHANGES)
+
+    def test_a_perfect_report_over_an_untouched_copy_does_not_pass(self):
+        checks, r = self.score()
+        self.assertTrue(r["report_passed"], "the words alone were fine")
+        self.assertFalse(r["actions_passed"])
+        self.assertFalse(r["passed"], "a run passed on its report while its repo still had a check that cannot fail")
+        self.assertTrue(all(c["workdir"] for c in checks))
+
+    def test_a_solved_copy_passes(self):
+        self.solve()
+        checks, r = self.score()
+        self.assertTrue(r["passed"], r["action_checks"])
+
+    def test_an_advisory_miss_is_listed_but_does_not_fail_the_run(self):
+        self.solve()
+        os.remove(os.path.join(self.work, ".verify-state.json"))
+        checks, r = self.score()
+        self.assertTrue(r["passed"], r["action_checks"])
+        self.assertTrue(any(c["detail"].startswith("advisory") for c in checks))
+
+    def test_an_edit_outside_the_allowed_files_is_a_failed_check(self):
+        self.solve()
+        with open(os.path.join(self.work, "SPEC.md"), "w", encoding="utf-8") as fh:
+            fh.write("# edited to fit\n")
+        checks, r = self.score()
+        self.assertFalse(r["passed"])
+        self.assertTrue(any(not c["ok"] and "SPEC.md" in c["check"] for c in checks))
+
+    def test_a_case_with_no_workdir_rules_adds_nothing(self):
+        case = grade.load_case("correctness-gate-green-but-wrong")
+        self.assertEqual(run.workdir_checks(case, self.work), [])
+
+    def test_a_rescore_keeps_the_checks_made_while_the_folder_existed(self):
+        self.solve()
+        os.remove(os.path.join(self.work, "test_refund.py"))
+        checks, r = self.score()
+        self.assertFalse(r["passed"])
+        carried = run.carry_workdir_checks({"action_checks": r["action_checks"] + [{"check": "x", "ok": True}]})
+        self.assertEqual(carried, checks, "the saved verdict must survive a rescore, and only the workdir part")
+
+
+class WorkdirChecksAreWiredIntoARun(unittest.TestCase):
+    """The helper is only worth having if a whole run actually uses it.
+
+    Drives one_run with a fake agent that edits the scratch copy the way a real
+    one would, then rescores the saved run. Deleting either wiring line makes a
+    flawless report pass over a repo that is still wrong.
+    """
+
+    def setUp(self):
+        import types
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.case = grade.load_case("verify-loop-make-it-verified")
+        self.good = grade.read(os.path.join(self.case["dir"], "reference", "good.md"))
+        self.args = types.SimpleNamespace(model=None, timeout=60, budget_usd=None, no_judge=True,
+                                          keep_workdirs=False)
+        self.out = os.path.join(self._tmp.name, "out")
+
+    def run_with_agent_that(self, leaves):
+        """`leaves(fixture_dir)` edits the agent's scratch copy; the report is always the good one."""
+        from unittest import mock
+
+        def fake_agent(prompt, workdir, plugin_dir, **kw):
+            leaves(os.path.join(workdir, "fixture"))
+            return {"lines": stream(result=self.good), "timed_out": False, "seconds": 1.0, "stderr": ""}
+
+        with mock.patch.object(agent, "run_agent", fake_agent), mock.patch.object(run, "say", lambda *a, **k: None):
+            return run.one_run(self.case, "with", 1, self.out, None, self.args)
+
+    def solve(self, fixture_dir):
+        import shutil
+        shutil.copytree(os.path.join(self.case["dir"], "reference", "solution"), fixture_dir,
+                        dirs_exist_ok=True)
+
+    def test_an_agent_that_fixed_the_repo_passes(self):
+        r = self.run_with_agent_that(self.solve)
+        self.assertTrue(r["passed"], r["action_checks"])
+        self.assertTrue(any(c.get("workdir") for c in r["action_checks"]))
+
+    def test_a_flawless_report_over_an_untouched_repo_does_not_pass(self):
+        r = self.run_with_agent_that(lambda fixture_dir: None)
+        self.assertTrue(r["report_passed"], "the words were fine")
+        self.assertFalse(r["passed"], "the run passed on its report although the repo still has a check that cannot fail")
+
+    def test_a_rescore_of_that_run_stays_failed(self):
+        self.run_with_agent_that(lambda fixture_dir: None)
+        [r] = run.rescore(self.out, use_judge=False)
+        self.assertFalse(r["passed"], "rescoring dropped the working-copy verdict")
+        self.assertTrue(any(c.get("workdir") for c in r["action_checks"]))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -240,6 +240,34 @@ def report_text(parsed, workdir, changes):
     return "".join(parts)
 
 
+def workdir_checks(case, fixture_dir):
+    """grade.py's working-copy rules as action checks: what the agent left behind.
+
+    A case that declares `workdir` is judged on the repo the agent finished with,
+    not only on its report, so a run cannot pass on words alone. Advisory items
+    (gate: false) are listed but never fail the run. Each entry is marked
+    `workdir` so a rescore, which has no scratch folder any more, can carry the
+    saved verdict forward instead of losing it.
+    """
+    edits = grade.check_workdir(case, fixture_dir)
+    if not edits or not edits["checked"]:
+        return []
+    out = [{"check": f"left {v['path']} alone", "ok": False, "workdir": True,
+            "detail": f"{v['how']}: outside the files this run may change"} for v in edits["violations"]]
+    if not edits["violations"]:
+        out.append({"check": "changed nothing outside the allowed files", "ok": True,
+                    "detail": "", "workdir": True})
+    for c in edits["checks"]:
+        detail = "" if c["ok"] else (c["detail"] if c["gate"] else "advisory, not met: " + c["detail"])
+        out.append({"check": c["what"], "ok": c["ok"] or not c["gate"], "detail": detail, "workdir": True})
+    return out
+
+
+def carry_workdir_checks(old):
+    """A rescore cannot re-inspect a folder that is gone; keep the checks made while it existed."""
+    return [c for c in old.get("action_checks", []) if c.get("workdir")]
+
+
 # ---------------------------------------------------------------- one run
 
 def score_run(case, arm, parsed, report, checks, changes, verdict=None):
@@ -301,6 +329,7 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
         report = report_text(parsed, workdir, changes)
         end_output = run_end_state(case.get("actions"), workdir)
         checks = check_actions(case.get("actions"), parsed, changes, end_output, arm)
+        checks += workdir_checks(case, os.path.join(workdir, "fixture"))
         verdict = None if args.no_judge else judge.judge(case, report)
         if verdict:
             with open(os.path.join(run_dir, "judge.json"), "w", encoding="utf-8") as fh:
@@ -508,6 +537,7 @@ def rescore(out_dir, use_judge=True, rejudge=False, jobs=6):
         report = grade.read(os.path.join(run_dir, "report.md"))
         checks = check_actions(case.get("actions"), parsed, old["changes"], old.get("end_output"),
                                old["arm"])
+        checks += carry_workdir_checks(old)
         verdict, jpath = None, os.path.join(run_dir, "judge.json")
         if use_judge:
             if os.path.isfile(jpath) and not rejudge:

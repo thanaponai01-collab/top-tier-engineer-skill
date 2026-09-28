@@ -33,7 +33,8 @@ session finds it.
    integration tests, a real run of the built thing, a run on real data. Take the top rung this
    environment can execute, and add one below it for a fast signal.
 3. **Record it in VERIFY.md** (format below). If tests already exist, `python <this skill's base
-   directory>/scripts/verify.py init` drafts the feature map from them. Then finish the draft: read
+   directory>/scripts/verify.py init` drafts the feature map from them (it works in any folder, git or
+   not). Then finish the draft: read
    the code behind each test file and regroup by real feature (one feature can span several test
    files, one file can cover several features); give every feature a check that runs the built thing,
    not only a test; replace each TODO, and list the blind spots you can name. The draft is a
@@ -42,15 +43,22 @@ session finds it.
    line under fail-proof saying what you broke. Do this before the work, or on the working state,
    from a clean `git status` or a scratch worktree, and confirm the revert left an empty `git diff`.
    Then freeze the check: `verify.py baseline`. From here the loop fixes code and never the check.
+   A check that cannot fail because it runs nothing (it loads no cases, mocks the thing it tests,
+   asserts nothing) is broken machinery, and repairing it before the freeze is part of this step, not
+   an edit to make it pass. Leave what it *expects* as it was: an expected value comes from the claim
+   or the spec, never from the code. Prove the repaired check can fail, freeze it, and list the check
+   files you changed in the report so a person can review them.
 5. **Do the work in slices, and run `verify.py run` after each.** Read the failure text and fix that.
    The run remembers the last one (`.verify-state.json`, gitignored) and says what one run cannot:
    `NEWLY RED` (your last change broke something that passed: undo or fix that first),
    `SAME FAILURE x2` (the same output twice: stop, your picture is wrong, re-read the code and the
    output before a third try), `BUDGET` (five red runs in a row, tune with `--budget`: stop and
    report what passes, what fails and what you would try next).
-6. **A check you believe is wrong is a finding, not an edit.** If the code is right and the check is
-   not, say so and stop for a person; they review it and run `verify.py baseline` again. Editing it
-   yourself gets `CHECK CHANGED` and a failed run, even when everything else is green.
+6. **A check you believe is wrong about what it expects is a finding, not an edit.** If the code is
+   right and the check is not, say so and stop for a person; they review it and run `verify.py
+   baseline` again. Editing it yourself gets `CHECK CHANGED` and a failed run, even when everything
+   else is green. Repairing a check that never really ran is step 4; changing what a check expects so
+   that it passes is this step.
 7. **Before you say done, run `verify.py status`.** It must print `VERIFY-STATE: green`: not `red`,
    not `stale` (files changed since the last run: run again) and not never-run. Then look for what a
    green cannot show: a test skipped or deleted, an output hardcoded to match. `--strict` for "done".
