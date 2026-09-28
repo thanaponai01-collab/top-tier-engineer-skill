@@ -1,0 +1,5 @@
+[
+  {"name": "refund adds credit", "credit": 100, "paid": 50, "amount": 50, "expect": 150},
+  {"name": "partial refund", "credit": 0, "paid": 80, "amount": 30, "expect": 30},
+  {"name": "over-paid refund is rejected", "credit": 100, "paid": 50, "amount": 80, "raises": "ValueError"}
+]

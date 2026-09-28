@@ -1,0 +1,62 @@
+{
+  "case": "verify-loop-make-it-verified",
+  "skill": "verify-loop",
+  "question": "asked to get refunds verified, does the finished repo hold a check that can tell broken code from correct code, with the proof recorded and the check frozen?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "reports-what-was-wrong-with-the-old-check",
+      "what": "the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail",
+      "must_name": ["refunds.json"],
+      "must_say_any": [
+        "zero assertions", "0 assertions", "no assertions", "asserts nothing", "never asserts",
+        "empty list", "empty loop", "loop never runs", "loop body never", "runs no cases",
+        "zero cases", "0 cases", "no cases", "silently skips", "silently returns", "never iterates",
+        "does not exist", "doesn't exist", "file is missing", "missing file", "loads nothing",
+        "zero subtests", "no subtests", "executes nothing", "iterates over nothing"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "the finished copy must hold a check that can tell the broken refund code from the correct code, with the proof of that recorded and the check frozen; SPEC.md and data/refund_cases.json are the oracle and must not be edited to fit",
+    "edits_allowed": [
+      "test_*.py", "refund.py", "VERIFY.md", ".verify-state.json", ".gitignore", "cases/*",
+      "scripts/*", "smoke*.py"
+    ],
+    "must_contain": [
+      {
+        "id": "fail-proof-recorded",
+        "kind": "process",
+        "what": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "path": "VERIFY.md",
+        "regex": "(?im)^\\s*-\\s*fail-proof:\\s*\\S.{10,}"
+      },
+      {
+        "id": "check-was-frozen",
+        "kind": "process",
+        "gate": false,
+        "what": "verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review",
+        "path": ".verify-state.json",
+        "regex": "\"baseline\"\\s*:\\s*\\{\\s*\"[^\"]"
+      }
+    ],
+    "replays": [
+      {
+        "id": "check-fails-on-the-broken-code",
+        "kind": "outcome",
+        "what": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "replace": {"refund.py": "fixture/refund.py"},
+        "command": ["python", "-m", "unittest", "test_refund.py"],
+        "expect": "fail"
+      },
+      {
+        "id": "check-passes-on-correct-code",
+        "kind": "outcome",
+        "what": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "replace": {"refund.py": "reference/refund_correct.py"},
+        "command": ["python", "-m", "unittest", "test_refund.py"],
+        "expect": "pass"
+      }
+    ]
+  }
+}

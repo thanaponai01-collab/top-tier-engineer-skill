@@ -1,5 +1,37 @@
 # Changelog
 
+## 4.42.0 — 2026-09-28 — verify-loop: repairing a check that never ran, and evals that grade what the agent left behind
+
+- **`verify-loop` step 4 now covers a check that cannot fail.** A check that runs nothing (loads no
+  cases, mocks the thing it tests, asserts nothing) is broken machinery, and repairing it before the
+  freeze is part of building the check, not an edit to make it pass. What the check *expects* is left
+  as it was, since an expected value comes from the claim or the spec, never from the code. The agent
+  proves the repaired check can fail, freezes it with `verify.py baseline`, and lists the check files
+  it changed so a person can review them.
+- **Step 6 is narrowed to say what it always meant:** a check you believe is wrong about what it
+  *expects* is a finding, not an edit. Repairing a check that never really ran is step 4; changing
+  what a check expects so it passes is step 6. The two steps used to read as a conflict for an
+  existing broken check with no baseline. Step 3 also notes `verify.py` works in any folder, git or
+  not.
+- **Measured, small samples (3 per condition, 5 for the case-C regression check).** Agents reading
+  the original text froze the baseline in 0 of 3 runs, and only 1 of 3 ran `verify.py` at all; with
+  the new text 3 of 3 ran it and froze the baseline, with `verify.py status` green. Reading the
+  original text from disk instead of through the Skill tool changed nothing, so the difference is the
+  wording. The case where the right move is to stop still held: 5 of 5 left every file untouched.
+- **Four new eval cases for `verify-loop`.** `verify-loop-check-cannot-fail` (a test that quietly
+  loops over nothing), `verify-loop-green-with-unverified` (a feature no check covers),
+  `verify-loop-check-is-wrong` (a stale test over correct code) and `verify-loop-make-it-verified`
+  (the same vacuous test, but the ask is to get it verified, graded on the finished repo).
+- **`evals/grade.py` can grade actions, not only reports.** A case's `workdir` block is checked
+  against the copy of `fixture/` the agent worked in: `edits_allowed` fails any change outside the
+  named files, `must_contain` requires a regex to match a file, and `replays` re-runs the copy's own
+  tests against a known-broken and a known-correct version of the code, so a check is judged by
+  whether it can tell them apart. A `must_contain` or `replays` item may carry `"gate": false`, shown
+  as a note without deciding the verdict. Without `--workdir` a case that grades actions will not pass. `tests/` also
+  breaks a finished copy the ways a shortcut would (delete the test, make it always fail, empty the
+  data, write the proof line without fixing the check, edit the check to pass) and requires each to
+  fail on a named check.
+
 ## 4.41.0 — 2026-09-27 — onboard-system: the paved path for first contact with a codebase
 
 - **New `onboard-system` skill.** First contact with an unfamiliar codebase: runs `project-setup`,
