@@ -1,0 +1,45 @@
+{
+  "case": "plan-work-shared-function-and-decoy",
+  "skill": "plan-work",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  2/3 found\n  found   discount-and-exempt-share-one-function \u2014 \"Both discount and tax-exempt touch the *same* dataclass (`Customer` in `models.py`) and the *same* function (`invoice.to\"\n  found   csv-export-can-run-alongside \u2014 \"It only calls `invoice.total()` as a black box and never touches `models.py`/`invoice.py`/`tax.py`, so it can't conflict\"\n  MISSED  every-piece-has-its-own-check\n  held    all-three-parallel-as-written\n  held    everything-in-a-line",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "every piece comes with its own runnable check: a command and the output that counts as success (for instance a fixed invoice whose total must equal a stated number), not just 'add tests'"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5",
+  "models_used": [
+    "claude-sonnet-5"
+  ],
+  "cost_usd": 0.157202,
+  "turns": 9,
+  "seconds": 40.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

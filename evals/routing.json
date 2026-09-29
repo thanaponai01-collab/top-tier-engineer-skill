@@ -32,6 +32,7 @@
     {"prompt": "Our support agent passes sometimes and fails other times. Does it actually work?", "expect": ["agent-prove"]},
     {"prompt": "My coding agent deleted handlers/health.py last night when I asked it to clean up imports. Why did it do that?", "expect": ["agent-trace"]},
     {"prompt": "We're about to put our AI agent in front of real customers. What do we need first?", "expect": ["agent-release"]},
+    {"prompt": "I need to add per-user quiet hours, a second export format, and a configurable timeout on the health check. Break it down so different agents can take the pieces. What can go at the same time?", "expect": ["plan-work"]},
     {"prompt": "Fix the typo in health.py's docstring if there is one, otherwise add one that says 'Liveness probe.'", "expect": []},
     {"prompt": "What does HTTP status 418 mean?", "expect": []},
     {"prompt": "Rename the function check() in handlers/health.py to ping() and update its caller.", "expect": []}

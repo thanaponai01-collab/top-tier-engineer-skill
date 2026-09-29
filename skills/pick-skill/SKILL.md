@@ -41,6 +41,7 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | A vague idea, or nobody can say what "done" means | `problem-framing` |
 | Choosing a stack, a boundary, a pattern | `arch-design` (design mode) |
 | "Show me the architecture" / before → after / where the problems sit | `arch-map` |
+| More than one piece to build, or work about to go to other agents: what order, and what can safely run together | `plan-work` |
 | Planned work needs to reach another machine or another person | `issue-handoff` |
 | Designing an AI agent before any code: tools, reversibility, what flows into its context | `agent-design` |
 | Building an AI agent or model-driven feature: checks first | `agent-evals` |
@@ -65,17 +66,38 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | "Does it actually work?" before a merge or release | `correctness-gate` |
 | Deploying, or changing the shape of stored data | `safe-release` |
 
+## The Relay: nine checkpoints
+
+Any piece of work passes the same nine checkpoints, each owned by one skill, and each leaves a file
+the next one reads. That file is the baton. Skip a checkpoint on purpose (a typo skips all nine),
+never by accident.
+
+| # | Checkpoint | Question | Skill | Baton |
+|---|---|---|---|---|
+| 1 | Orient | Where are we? What is here? | `recall` to resume, `onboard-system` on first contact | the capsule; `VERIFY.md`, `FEATURES.md`, `docs/architecture.md` |
+| 2 | Frame | What does done mean? | `problem-framing`, then `verify-loop` | `BRIEF.md`; the exit check |
+| 3 | Design | What shape, and what can go wrong? | `arch-design` (`agent-design` for an agent), `threat-model` | `docs/arch-design.md` |
+| 4 | Plan | Which pieces, in what order, which can run together? | `plan-work` | `PLAN.md` |
+| 5 | Build | Is each slice proven and wired? | `build-discipline` (`agent-evals` before any agent code) | `BUILD.md`, commits |
+| 6 | Prove | Does the whole thing hold? | `correctness-gate`, `wire-check`; `agent-prove` for an agent | the verdict |
+| 7 | Review | Should this land? | `scrutinize` | the verdict |
+| 8 | Ship | Is there a way back? | `safe-release`, plus `agent-release` for an agent | the release note |
+| 9 | Watch | Is it still right, and what did the last failure teach? | `agent-drift` for an agent; `safe-release`'s watch signals and `evolve-maintain`'s regression test otherwise | new eval tasks, regression tests |
+
+Broken, slow or insecure work enters at its own skill (`debug-protocol`, `perf-optimize`,
+`threat-model`) and rejoins at Build. `drive` walks these for you.
+
 ## The five flows
 
 Every flow has the same shape: **find → change → prove → ship**.
 
 | Goal | Find | Change | Prove | Ship |
 |---|---|---|---|---|
-| Build something new | `problem-framing` → `arch-design` | `build-discipline` | `correctness-gate` | `safe-release` |
+| Build something new | `problem-framing` → `arch-design` → `plan-work` | `build-discipline` | `correctness-gate` | `safe-release` |
 | Clean up a messy codebase | `arch-design` (audit) → `arch-map` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Fix a bug | `debug-protocol` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Make it faster or safer | `perf-optimize` / `threat-model` | same skill | `correctness-gate` | `safe-release` |
-| Build an AI agent | `agent-design` → `agent-evals` (before any agent code) | `build-discipline` | `agent-prove` | `safe-release` + `agent-release`, then `agent-drift` once it's live |
+| Build an AI agent | `agent-design` → `agent-evals` (before any agent code) → `plan-work` | `build-discipline` | `agent-prove` | `safe-release` + `agent-release`, then `agent-drift` once it's live |
 
 `drive` holds the same playbooks with its own steps; where the two disagree, `drive`'s wins.
 

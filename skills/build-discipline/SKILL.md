@@ -60,6 +60,8 @@ fact. A vague proof line gets sharpened out loud, never quietly swapped for an e
   don't cover a case, decide it explicitly.
 - **Delegating a slice?** The brief carries the proof line, the files it may touch, and what it must
   not. Its report is a claim: rerun the proof line yourself before marking the slice done.
+  Several slices, some for other agents? `plan-work` marks which can run together and how to merge
+  them back; without it, hand out only slices that touch different files and share no function.
 
 ### 3. Connect
 Trace what the slice added from the real entry point through five links:

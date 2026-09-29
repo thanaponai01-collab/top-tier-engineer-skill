@@ -1,0 +1,8 @@
+  1. Bash: find fixture -type f | head -200
+  2. Read: fixture/README.md
+  3. Read: fixture/models.py
+  4. Read: fixture/invoice.py
+  5. Read: fixture/tax.py
+  6. Read: fixture/report.py
+  7. Read: fixture/data.py
+  8. Read: fixture/test_invoice.py

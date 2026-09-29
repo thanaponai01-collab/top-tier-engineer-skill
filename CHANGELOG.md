@@ -1,5 +1,37 @@
 # Changelog
 
+## 4.43.0 — 2026-09-29 — `plan-work`, and the nine checkpoints named
+
+- **New skill `plan-work`: the Plan checkpoint.** Every `drive` playbook went from framing or design
+  straight to building, so nobody owned cutting the work into pieces, ordering them, and saying
+  which can safely run at the same time. It writes `PLAN.md`: slices, each with a check whose
+  expected value is worked out beforehand; the "can run together" mark only after opening the shared
+  code; and, when work is handed to other agents, a brief that stands alone, a rerun of each report's
+  check, and the whole exit check after every merge.
+- **The Relay, in `pick-skill`.** The nine checkpoints (Orient, Frame, Design, Plan, Build, Prove,
+  Review, Ship, Watch), the one skill that owns each, and the file each leaves for the next. Every
+  checkpoint but Plan already had an owner; this made that visible. `drive`, `build-discipline`, the
+  README and the flows table point at `plan-work` where it belongs.
+- **Measured, new case `plan-work-shared-function-and-decoy`** (3 tries per side, claude-opus-5-5):
+  without the skill 0 of 3, with it 3 of 3. Evidence in `evals/results/2026-09-29-0815/`.
+- **What the case showed about the baseline.** A plain agent already found the collision (discount
+  and tax-exempt both rewrite `total()`) and already saw the export could run alongside, 3 of 3. It
+  failed all three on one thing: no piece came with a command and an expected result. So the proven
+  gain of this skill is the per-slice check; the parallel-safety steps are written down but were not
+  what separated the sides.
+- **Not measured.** Handing slices to real subagents and merging them back (steps 6 and 7) is not
+  exercised by the case, which only plans. The new routing row (`evals/routing.json`) and the new
+  `route-hint` rule are covered by `evals/route.py` (34 of 34) but `route_live.py` was not re-run,
+  so nothing shows the agent now picks `plan-work` unprompted. `RESULTS.md` and `ROUTING.md` were
+  not regenerated (single-case run).
+- **Considered and not built.** A "land the change" skill (commit and PR packaging): a plain agent
+  given a working tree with the fix, an unrelated edit, a leftover debug line and a fake secret
+  committed only the fix and its test, 3 of 3, left the rest out and said so. No gap, so no skill.
+- **Not fixed here, found on the way.** `evals/ROUTING.md` (2026-09-27) has the agent opening the
+  right skill on 17 of 32 requests, and `RESULTS.md` has only 1 of 6 tries following the `drive`
+  playbook step by step. Skills at every checkpoint do nothing if they are not opened. `marketplace.json`
+  still says "Twenty-five" skills.
+
 ## 4.42.2 — 2026-09-28 — `project-setup` and `onboard-system` say which is which; evals run on Windows
 
 - **The two descriptions now draw the line.** `project-setup` says it is only the checks and the

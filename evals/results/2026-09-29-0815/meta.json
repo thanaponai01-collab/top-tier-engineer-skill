@@ -1,0 +1,12 @@
+{
+  "started": "2026-09-29-0815",
+  "repeats": 3,
+  "arms": [
+    "with"
+  ],
+  "version": "4.42.2",
+  "models": [
+    "claude-sonnet-5"
+  ],
+  "out_rel": "evals/results/2026-09-29-0815"
+}
