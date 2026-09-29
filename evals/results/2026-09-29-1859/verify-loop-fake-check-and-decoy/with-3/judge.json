@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "fake-check-never-calls-real-code",
+      "what": "test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail",
+      "found": true,
+      "quote": "`test_save10_discount` never called `apply_discount`. It computed `100 * 0.9` and checked that the answer was 90",
+      "quote_checked": true
+    },
+    {
+      "id": "fail-proof-shows-it",
+      "what": "breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake",
+      "found": true,
+      "quote": "In a scratch copy I changed SAVE10 to `total * 1.0`, which gives no discount at all, and the suite stayed green.",
+      "quote_checked": true
+    },
+    {
+      "id": "needs-a-real-check",
+      "what": "the discount feature needs a check that actually calls apply_discount and asserts its return value",
+      "found": true,
+      "quote": "the test now asserts `apply_discount(100, \"SAVE10\") == 90`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "passthrough-test-is-real",
+      "what": "test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.1013412,
+  "model": "claude-sonnet-5-5"
+}

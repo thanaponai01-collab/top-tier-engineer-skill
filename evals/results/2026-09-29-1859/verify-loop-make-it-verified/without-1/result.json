@@ -1,0 +1,70 @@
+{
+  "case": "verify-loop-make-it-verified",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`test_refund.py` looked for `cases/refunds.json`, which doesn't exist; the cases are in `data/refund_cases.json`.\"",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+      "ok": false,
+      "detail": "VERIFY.md has nothing matching '(?im)^\\\\s*-\\\\s*fail-proof:\\\\s*\\\\S.{10,}'",
+      "workdir": true
+    },
+    {
+      "check": "verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review",
+      "ok": true,
+      "detail": "advisory, not met: .verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/refund.py",
+      "fixture/test_refund.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.34061400000000003,
+  "turns": 6,
+  "seconds": 37.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

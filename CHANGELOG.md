@@ -1,5 +1,39 @@
 # Changelog
 
+## 4.44.0 — 2026-09-29 — verify-loop: `verify.py tests`, every test mapped to a feature
+
+- **New `verify.py tests [--strict]`.** `verify.py run` mapped test *files* to features, so a file
+  with forty tests was one row and a hollow test hid inside a "verified" feature. `tests` goes down
+  to the function: every test listed under the feature whose command names its file, and each one
+  flagged when it has no assertion (directly or through a helper in the same file), catches its
+  exception and passes either way, is skipped, or sits in a file no feature names. Static (it parses
+  and runs nothing), Python only; JS/TS test files are counted but not itemised. Ends with
+  `TESTS: n tests | m mapped | k unmapped | h without an assertion or a way to fail | s skipped`.
+  `--strict` exits 1 on any flagged or unmapped test; no `VERIFY.md` exits 2. The existing `VERIFY:`
+  summary line and `run` output are unchanged. `SKILL.md` step 7 says to run it after adding tests.
+- **Proven.** Six new tests in `tests/test_verify.py`, written first and red before the code, with
+  decoys that must not be flagged (a test asserting through a helper, `assertRaises`, a bare
+  pytest-style `assert`). Breaking the detection six ways (helper calls not counted, swallow check
+  off, skip check off, `--strict` ignored, every file under every feature, bare `assert` ignored)
+  turned a test red each time. On a probe suite the tool flagged the two assertion-free tests in a
+  file that `run` reported as a verified feature.
+- **Measured, existing `verify-loop` cases (3 tries per side, claude-opus-5-5).** With the plugin 10
+  of 15 passed, without it 3 of 15, so the change did not regress the skill; evidence in
+  `evals/results/2026-09-29-1859/`. Per case, with vs without: `check-is-wrong` 3 vs 0,
+  `make-it-verified` 3 vs 0, `check-cannot-fail` 1 vs 0, `green-with-unverified` 0 vs 0,
+  `fake-check-and-decoy` 3 vs 3. The two low rows miss the same item on both sides (no fail-proof
+  recorded), so they predate this change.
+- **Not measured.** No run called `verify.py tests`: none of these cases is about test volume, so
+  they say nothing about whether an agent reaches for it. `RESULTS.md` was not regenerated (a
+  five-case run would drop the other rows).
+- **Considered and not built.** A `test-audit` skill (break the code, read the assertions) and two
+  write-time cases (add tests to a 3-function module and to a 17-function package). A plain agent
+  already audits well when asked (3 of 3), and already writes tests that catch every planted break
+  (6 of 6 on the small module, 3 of 3 on the package, 24 breaks); it also found and reported real
+  bugs in the fixture. No gap, so no skill. One caveat: the with-plugin agents left the tests that
+  exposed those bugs failing where plain agents marked them `expectedFailure`, which the case's
+  "green on correct code" check scored as a failure, so its with-plugin results were not usable.
+
 ## 4.43.0 — 2026-09-29 — `plan-work`, and the nine checkpoints named
 
 - **New skill `plan-work`: the Plan checkpoint.** Every `drive` playbook went from framing or design

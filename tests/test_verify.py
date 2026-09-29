@@ -404,5 +404,94 @@ class Scope(unittest.TestCase):
             self.assertIn("no passing run on record", out)
 
 
+class TestMap(unittest.TestCase):
+    """`verify.py tests`: every test function under the feature whose command names its file,
+    and the ones that can never go red flagged. Static: it runs no check."""
+
+    CART = (
+        "import unittest\n\n\n"
+        "def check_total(t, expected):\n    assert t == expected\n\n\n"
+        "class Cart(unittest.TestCase):\n"
+        "    def test_real(self):\n        self.assertEqual(1 + 1, 2)\n\n"
+        "    def test_no_assert(self):\n        x = 1 + 1\n\n"
+        "    def test_helper_asserts(self):\n        check_total(2, 2)\n\n"
+        "    def test_swallow(self):\n        try:\n            int('x')\n"
+        "        except ValueError:\n            pass\n\n"
+        "    def test_raises_ok(self):\n        with self.assertRaises(ValueError):\n            int('x')\n\n"
+        "    @unittest.skip('later')\n    def test_skipped(self):\n        self.assertTrue(True)\n\n\n"
+        "def test_module_level_style():\n    assert True\n"
+    )
+    ONE = "import unittest\nclass R(unittest.TestCase):\n    def test_refund(self):\n        self.assertTrue(1)\n"
+    LONELY = ("import unittest\nclass L(unittest.TestCase):\n"
+              "    def test_a(self):\n        self.assertTrue(1)\n    def test_b(self):\n        pass\n")
+    RECIPE = (f"## Cart\n- test: `{PASS} tests/test_cart.py`\n- fail-proof: x\n\n"
+              f"## Refunds\n- test: `{PASS} tests/test_refunds.py`\n- fail-proof: x\n")
+
+    def _repo(self, tmp):
+        write(tmp, "VERIFY.md", self.RECIPE)
+        write(tmp, "tests/test_cart.py", self.CART)
+        write(tmp, "tests/test_refunds.py", self.ONE)
+        write(tmp, "tests/test_lonely.py", self.LONELY)
+
+    @staticmethod
+    def _line(out, name):
+        hits = [ln for ln in out.splitlines() if ln.rstrip().split("  <- ")[0].endswith(name)]
+        assert len(hits) == 1, (name, hits)
+        return hits[0]
+
+    def test_every_test_is_listed_under_the_feature_that_names_its_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            code, out, _ = run("verify.py", "tests", tmp)
+            self.assertEqual(code, 0)
+            cart = out[out.index("\nCart\n"):out.index("\nRefunds\n")]
+            for name in ("Cart.test_real", "Cart.test_no_assert", "Cart.test_helper_asserts",
+                         "Cart.test_swallow", "Cart.test_raises_ok", "Cart.test_skipped",
+                         "test_module_level_style"):
+                self.assertIn(name, cart)
+            self.assertIn("R.test_refund", out[out.index("\nRefunds\n"):out.index("Unmapped")])
+
+    def test_tests_that_cannot_fail_are_flagged_and_the_decoys_are_not(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            _, out, _ = run("verify.py", "tests", tmp)
+            self.assertIn("no assertion", self._line(out, "Cart.test_no_assert"))
+            self.assertIn("passes either way", self._line(out, "Cart.test_swallow"))
+            self.assertIn("skipped", self._line(out, "Cart.test_skipped"))
+            for decoy in ("Cart.test_real", "Cart.test_helper_asserts", "Cart.test_raises_ok",
+                          "test_module_level_style"):
+                self.assertNotIn("<-", self._line(out, decoy), decoy)
+
+    def test_tests_in_a_file_no_feature_names_are_unmapped(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            _, out, _ = run("verify.py", "tests", tmp)
+            block = out.split("Unmapped")[1]
+            self.assertIn("test_lonely.py::L.test_a", block)
+            self.assertIn("test_lonely.py::L.test_b", block)
+            self.assertNotIn("test_cart.py", block)
+
+    def test_the_summary_line_counts_each_kind(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            _, out, _ = run("verify.py", "tests", tmp)
+            self.assertIn("TESTS: 10 tests | 8 mapped to a feature | 2 unmapped | "
+                          "3 without an assertion or a way to fail | 1 skipped", out)
+
+    def test_strict_fails_on_a_test_that_cannot_fail_or_has_no_feature(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            self.assertEqual(run("verify.py", "tests", tmp, "--strict")[0], 1)
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", self.RECIPE)
+            write(tmp, "tests/test_cart.py", "def test_ok():\n    assert 1\n")
+            write(tmp, "tests/test_refunds.py", self.ONE)
+            self.assertEqual(run("verify.py", "tests", tmp, "--strict")[0], 0)
+
+    def test_no_recipe_exits_two(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(run("verify.py", "tests", tmp)[0], 2)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,36 @@
+{
+  "case": "verify-loop-fake-check-and-decoy",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` (`fixture/test_discount.py:7-11`) never calls `apply_discount`.\"\n  found   fail-proof-shows-it \u2014 \"I broke the discount on purpose in a throwaway copy and the suite stayed green.\"\n  found   needs-a-real-check \u2014 \"make the test call the real code, e.g. `self.assertAlmostEqual(apply_discount(100, \"SAVE10\"), 90)`.\"\n  held    passthrough-test-is-real",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.271643,
+  "turns": 3,
+  "seconds": 23.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

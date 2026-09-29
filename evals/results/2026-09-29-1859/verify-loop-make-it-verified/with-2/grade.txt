@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   reports-what-was-wrong-with-the-old-check — "`test_refund.py` loaded its cases from `cases/refunds.json`, which doesn't exist, so it ran zero cases and passed anyway"
+
+Phrase grader (grade.py), for comparison:
+PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)
+  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      VERIFY.md has a fail-proof line saying what was broken to make the check go red — 
+  ok      verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review — 
+  ok      the copy's own tests go red when refund.py is the original sign-flipped version — 
+  ok      the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test — 

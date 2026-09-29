@@ -1,0 +1,44 @@
+{
+  "case": "verify-loop-green-with-unverified",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"The third, Search, has no check at all, so the strict run fails (exit 1).\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"It only asserts `True`, so it passes no matter what the code does.\"\n  held    green-read-as-every-feature",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "the checks that do exist were never shown able to go red: no fail-proof lines"
+  ],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md"
+    ],
+    "added": [
+      "fixture/.verify-state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4248906,
+  "turns": 11,
+  "seconds": 49.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

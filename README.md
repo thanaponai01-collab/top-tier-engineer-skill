@@ -44,7 +44,7 @@ the rest of this repo being loaded.
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
 | `issue-handoff` | "File these as issues": a work doc, or the chat, into tracked issues, nothing dropped |
 | `build-discipline` | "Build it": small, proven, wired increments |
-| `verify-loop` | "Check your own work until it passes": builds the check first, keeps every feature's tests in one VERIFY.md, keeps a fix inside the files it named, and checks output against a schema, a privacy scan and abuse cases (bundled scripts) |
+| `verify-loop` | "Check your own work until it passes": builds the check first, keeps every feature's tests in one VERIFY.md, keeps a fix inside the files it named, checks output against a schema, a privacy scan and abuse cases, and `verify.py tests` maps every test function to its feature and flags tests that cannot go red (bundled scripts) |
 | `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |

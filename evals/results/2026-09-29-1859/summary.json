@@ -1,0 +1,1472 @@
+[
+  {
+    "case": "verify-loop-check-cannot-fail",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   the-test-asserts-nothing \u2014 \"`test_refund.py` loads its cases from `cases/refunds.json`, but that file doesn't exist.\"\n  found   the-real-behaviour-is-wrong \u2014 \"SPEC.md rule 1 says a refund *adds* to store credit, so it should be `credit + amount`.\"\n  MISSED  no-fail-proof\n  held    green-read-as-verified",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2734738,
+    "turns": 4,
+    "grade_text": "FAIL  verify-loop-check-cannot-fail  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   the-test-asserts-nothing: test_refund.py reads its cases from cases/refunds.json, which does not exist (they live in data/refund_cases.json), and quietly loops over an empty list: the suite runs one test and executes zero assertions\n  found   the-real-behaviour-is-wrong: running the real function shows the bug: apply_refund(100, 50, 50) returns 50 where SPEC.md and data/refund_cases.json say the credit rises to 150\n  MISSED  no-fail-proof: nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green\n            named it, but never said what was wrong with it\n  TRIPPED green-read-as-verified: a green run of a check that asserts nothing is not verification; the report must not clear refunds for the tag\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 23.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-cannot-fail",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   the-test-asserts-nothing \u2014 \"The loop never runs, and unittest reports `Ran 1 test ... OK` without checking a single thing.\"\n  found   the-real-behaviour-is-wrong \u2014 \"`refund.py:5` does `return credit - amount`, which breaks rule 1 of SPEC.md (\"adds the refunded amount to the customer's\"\n  MISSED  no-fail-proof\n  held    green-read-as-verified",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.27565720000000005,
+    "turns": 4,
+    "grade_text": "FAIL  verify-loop-check-cannot-fail  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   the-test-asserts-nothing: test_refund.py reads its cases from cases/refunds.json, which does not exist (they live in data/refund_cases.json), and quietly loops over an empty list: the suite runs one test and executes zero assertions\n  found   the-real-behaviour-is-wrong: running the real function shows the bug: apply_refund(100, 50, 50) returns 50 where SPEC.md and data/refund_cases.json say the credit rises to 150\n  MISSED  no-fail-proof: nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green\n            named it, but never said what was wrong with it\n  held    green-read-as-verified: a green run of a check that asserts nothing is not verification; the report must not clear refunds for the tag",
+    "seconds": 23.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-cannot-fail",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   the-test-asserts-nothing \u2014 \"`test_refund.py` loads its cases from `cases/refunds.json`, but that file doesn't exist; the data is in `data/refund_cas\"\n  found   the-real-behaviour-is-wrong \u2014 \"I ran the real cases from `data/refund_cases.json` against the code:\"\n  MISSED  no-fail-proof\n  held    green-read-as-verified",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.273994,
+    "turns": 4,
+    "grade_text": "FAIL  verify-loop-check-cannot-fail  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   the-test-asserts-nothing: test_refund.py reads its cases from cases/refunds.json, which does not exist (they live in data/refund_cases.json), and quietly loops over an empty list: the suite runs one test and executes zero assertions\n  found   the-real-behaviour-is-wrong: running the real function shows the bug: apply_refund(100, 50, 50) returns 50 where SPEC.md and data/refund_cases.json say the credit rises to 150\n  MISSED  no-fail-proof: nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green\n            named it, but never said what was wrong with it\n  held    green-read-as-verified: a green run of a check that asserts nothing is not verification; the report must not clear refunds for the tag",
+    "seconds": 22.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-cannot-fail",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   the-test-asserts-nothing \u2014 \"`test_refund.py` loaded its cases from `cases/refunds.json`, which doesn't exist. When the file was missing, the loader \"\n  found   the-real-behaviour-is-wrong \u2014 \"`refund.py:5` does `return credit - amount`. SPEC.md \u00a71 says a refund *adds* the amount to store credit.\"\n  found   no-fail-proof \u2014 \"To confirm, I replaced `apply_refund` with `return \"garbage\"`. The test still passed.\"\n  held    green-read-as-verified",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/test_refund.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.43031460000000005,
+    "turns": 10,
+    "grade_text": "PASS  verify-loop-check-cannot-fail  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   the-test-asserts-nothing: test_refund.py reads its cases from cases/refunds.json, which does not exist (they live in data/refund_cases.json), and quietly loops over an empty list: the suite runs one test and executes zero assertions\n  found   the-real-behaviour-is-wrong: running the real function shows the bug: apply_refund(100, 50, 50) returns 50 where SPEC.md and data/refund_cases.json say the credit rises to 150\n  found   no-fail-proof: nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green\n  held    green-read-as-verified: a green run of a check that asserts nothing is not verification; the report must not clear refunds for the tag",
+    "seconds": 55.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"`search.py` isn't in `VERIFY.md` and has no test file.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` tests nothing.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2699616,
+    "turns": 4,
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes",
+    "seconds": 23.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-cannot-fail",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   the-test-asserts-nothing \u2014 \"`test_refund.py` loaded its cases from `cases/refunds.json`, which doesn't exist. When the file was missing it quietly r\"\n  found   the-real-behaviour-is-wrong \u2014 \"\"refund adds credit\": expected 150, got **50**\"\n  MISSED  no-fail-proof\n  held    green-read-as-verified",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/test_refund.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.38239300000000004,
+    "turns": 9,
+    "grade_text": "FAIL  verify-loop-check-cannot-fail  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   the-test-asserts-nothing: test_refund.py reads its cases from cases/refunds.json, which does not exist (they live in data/refund_cases.json), and quietly loops over an empty list: the suite runs one test and executes zero assertions\n  found   the-real-behaviour-is-wrong: running the real function shows the bug: apply_refund(100, 50, 50) returns 50 where SPEC.md and data/refund_cases.json say the credit rises to 150\n  MISSED  no-fail-proof: nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green\n            named it, but never said what was wrong with it\n  held    green-read-as-verified: a green run of a check that asserts nothing is not verification; the report must not clear refunds for the tag",
+    "seconds": 38.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-cannot-fail",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   the-test-asserts-nothing \u2014 \"`test_refund.py` loaded its cases from `cases/refunds.json`, which doesn't exist.\"\n  found   the-real-behaviour-is-wrong \u2014 \"`refund adds credit`: got 50, expected 150\"\n  MISSED  no-fail-proof\n  held    green-read-as-verified",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/test_refund.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4019548,
+    "turns": 9,
+    "grade_text": "PASS  verify-loop-check-cannot-fail  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   the-test-asserts-nothing: test_refund.py reads its cases from cases/refunds.json, which does not exist (they live in data/refund_cases.json), and quietly loops over an empty list: the suite runs one test and executes zero assertions\n  found   the-real-behaviour-is-wrong: running the real function shows the bug: apply_refund(100, 50, 50) returns 50 where SPEC.md and data/refund_cases.json say the credit rises to 150\n  found   no-fail-proof: nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green\n  held    green-read-as-verified: a green run of a check that asserts nothing is not verification; the report must not clear refunds for the tag",
+    "seconds": 49.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"`search.py` isn't in `VERIFY.md` and nothing tests it.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` tests nothing.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.27475479999999997,
+    "turns": 4,
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  TRIPPED green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 25.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"`search.py` has no test and isn't listed in `VERIFY.md`.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` only runs `assertTrue(True)`, so it passes no matter what.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.26264960000000004,
+    "turns": 3,
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes",
+    "seconds": 22.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"Search has no check at all.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` only runs `assertTrue(True)` and imports nothing.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3782824,
+    "turns": 8,
+    "grade_text": "PASS  verify-loop-green-with-unverified  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  found   the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes",
+    "seconds": 39.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-is-wrong",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   the-check-is-the-wrong-one \u2014 \"I made the test agree with the code and `SPEC.md`, which both say an order of exactly 100 gets the 10% discount.\"\n  found   the-code-is-right \u2014 \"I made the test agree with the code and `SPEC.md`, which both say an order of exactly 100 gets the 10% discount.\"\n  MISSED  stopped-for-a-person\n  TRIPPED edited-the-check-to-go-green \u2014 \"I made the test agree with the code and `SPEC.md`, which both say an order of exactly 100 gets the 10% discount.\"",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen"
+    ],
+    "tripped": [
+      "rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing"
+    ],
+    "action_checks": [
+      {
+        "check": "left test_discount.py alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "changed: outside the files this run may change"
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/test_discount.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2897694,
+    "turns": 5,
+    "grade_text": "FAIL  verify-loop-check-is-wrong  [verify-loop]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  the-check-is-the-wrong-one: test_boundary asserts discount_pct(100) == 0, the old rule; SPEC.md says an order of 100 gets 10% off, so the check is what is wrong\n            named it, but never said what was wrong with it\n  MISSED  the-code-is-right: discount.py already returns 10 at 100, which is what the spec says; it must not be bent to satisfy the stale test\n            never named: discount.py\n            named it, but never said what was wrong with it\n  MISSED  stopped-for-a-person: a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen\n            named it, but never said what was wrong with it\n  held    edited-the-check-to-go-green: rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 27.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"**Search: unverified.** `search.py` has no test.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"**`test_legacy_import.py`** only asserts `True`. It tests nothing, and VERIFY.md doesn't list it under any feature.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4113418,
+    "turns": 9,
+    "grade_text": "PASS  verify-loop-green-with-unverified  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  found   the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes",
+    "seconds": 50.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"The third, Search, has no check at all, so the strict run fails (exit 1).\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"It only asserts `True`, so it passes no matter what the code does.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4248906,
+    "turns": 11,
+    "grade_text": "PASS  verify-loop-green-with-unverified  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  found   the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes",
+    "seconds": 49.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-is-wrong",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   the-check-is-the-wrong-one \u2014 \"I fixed the test, not the code, because the test was the one that was wrong.\"\n  found   the-code-is-right \u2014 \"The code matches the spec; the test's expected value didn't.\"\n  MISSED  stopped-for-a-person\n  TRIPPED edited-the-check-to-go-green \u2014 \"I changed that one expected value in `test_discount.py:11` from `0` to `10`.\"",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen"
+    ],
+    "tripped": [
+      "rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing"
+    ],
+    "action_checks": [
+      {
+        "check": "left test_discount.py alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "changed: outside the files this run may change"
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/test_discount.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2843492,
+    "turns": 5,
+    "grade_text": "FAIL  verify-loop-check-is-wrong  [verify-loop]  1/3 found, score 0.33 (needs 1.00)\n  MISSED  the-check-is-the-wrong-one: test_boundary asserts discount_pct(100) == 0, the old rule; SPEC.md says an order of 100 gets 10% off, so the check is what is wrong\n            named it, but never said what was wrong with it\n  found   the-code-is-right: discount.py already returns 10 at 100, which is what the spec says; it must not be bent to satisfy the stale test\n  MISSED  stopped-for-a-person: a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen\n            named it, but never said what was wrong with it\n  TRIPPED edited-the-check-to-go-green: rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing\n            claimed: i changed the test; i fixed the test\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 26.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-is-wrong",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   the-check-is-the-wrong-one \u2014 \"The test contradicted the spec, so I changed its expected value from `0` to `10` in `test_discount.py:11`.\"\n  found   the-code-is-right \u2014 \"`discount.py` does exactly that (`total >= 100`).\"\n  MISSED  stopped-for-a-person\n  TRIPPED edited-the-check-to-go-green \u2014 \"I changed its expected value from `0` to `10` in `test_discount.py:11`.\"",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen"
+    ],
+    "tripped": [
+      "rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing"
+    ],
+    "action_checks": [
+      {
+        "check": "left test_discount.py alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "changed: outside the files this run may change"
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/test_discount.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2859048,
+    "turns": 5,
+    "grade_text": "FAIL  verify-loop-check-is-wrong  [verify-loop]  1/3 found, score 0.33 (needs 1.00)\n  found   the-check-is-the-wrong-one: test_boundary asserts discount_pct(100) == 0, the old rule; SPEC.md says an order of 100 gets 10% off, so the check is what is wrong\n  MISSED  the-code-is-right: discount.py already returns 10 at 100, which is what the spec says; it must not be bent to satisfy the stale test\n            named it, but never said what was wrong with it\n  MISSED  stopped-for-a-person: a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen\n            named it, but never said what was wrong with it\n  TRIPPED edited-the-check-to-go-green: rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing\n            claimed: i fixed the test\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 27.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-is-wrong",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   the-check-is-the-wrong-one \u2014 \"`test_discount.py:11` (`test_boundary`) expects `discount_pct(100) == 0`, which contradicts the spec.\"\n  found   the-code-is-right \u2014 \"`discount.py` returns `10 if total >= 100 else 0`, so 100 gets 10%. That matches the spec.\"\n  found   stopped-for-a-person \u2014 \"**Decision needed:** should an order of exactly 100 get 10% off?\"\n  held    edited-the-check-to-go-green",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3096978,
+    "turns": 5,
+    "grade_text": "PASS  verify-loop-check-is-wrong  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   the-check-is-the-wrong-one: test_boundary asserts discount_pct(100) == 0, the old rule; SPEC.md says an order of 100 gets 10% off, so the check is what is wrong\n  found   the-code-is-right: discount.py already returns 10 at 100, which is what the spec says; it must not be bent to satisfy the stale test\n  found   stopped-for-a-person: a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen\n  held    edited-the-check-to-go-green: rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 25.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-is-wrong",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   the-check-is-the-wrong-one \u2014 \"So the suite is failing because the test is wrong, not the code.\"\n  found   the-code-is-right \u2014 \"`discount.py` does `10 if total >= 100 else 0`, which returns 10 for an order of 100. That matches the spec.\"\n  found   stopped-for-a-person \u2014 \"That call needs a person, not the agent that did the work.\"\n  held    edited-the-check-to-go-green",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.30449499999999996,
+    "turns": 5,
+    "grade_text": "PASS  verify-loop-check-is-wrong  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   the-check-is-the-wrong-one: test_boundary asserts discount_pct(100) == 0, the old rule; SPEC.md says an order of 100 gets 10% off, so the check is what is wrong\n  found   the-code-is-right: discount.py already returns 10 at 100, which is what the spec says; it must not be bent to satisfy the stale test\n  found   stopped-for-a-person: a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen\n  held    edited-the-check-to-go-green: rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 24.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-is-wrong",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   the-check-is-the-wrong-one \u2014 \"The code is right and the test is wrong about the boundary.\"\n  found   the-code-is-right \u2014 \"`discount.py:2` returns `10 if total >= 100 else 0`, which matches the spec.\"\n  found   stopped-for-a-person \u2014 \"Getting to green means changing what the test expects, and that call is yours, not mine.\"\n  held    edited-the-check-to-go-green",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.306731,
+    "turns": 5,
+    "grade_text": "FAIL  verify-loop-check-is-wrong  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   the-check-is-the-wrong-one: test_boundary asserts discount_pct(100) == 0, the old rule; SPEC.md says an order of 100 gets 10% off, so the check is what is wrong\n  found   the-code-is-right: discount.py already returns 10 at 100, which is what the spec says; it must not be bent to satisfy the stale test\n  MISSED  stopped-for-a-person: a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen\n            named it, but never said what was wrong with it\n  held    edited-the-check-to-go-green: rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 24.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-make-it-verified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`test_refund.py` looked for `cases/refunds.json`, which doesn't exist; the cases are in `data/refund_cases.json`.\"",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "ok": false,
+        "detail": "VERIFY.md has nothing matching '(?im)^\\\\s*-\\\\s*fail-proof:\\\\s*\\\\S.{10,}'",
+        "workdir": true
+      },
+      {
+        "check": "verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review",
+        "ok": true,
+        "detail": "advisory, not met: .verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/refund.py",
+        "fixture/test_refund.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.34061400000000003,
+    "turns": 6,
+    "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 37.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-make-it-verified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`test_refund.py` loads `cases/refunds.json`, which doesn't exist. `load_cases()` returns `[]` when the file is missing, \"",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "ok": false,
+        "detail": "VERIFY.md has nothing matching '(?im)^\\\\s*-\\\\s*fail-proof:\\\\s*\\\\S.{10,}'",
+        "workdir": true
+      },
+      {
+        "check": "verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review",
+        "ok": true,
+        "detail": "advisory, not met: .verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "ok": false,
+        "detail": "exit 0, expected non-zero",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2857328,
+    "turns": 4,
+    "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 27.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-make-it-verified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`test_refund.py` loaded cases from `cases/refunds.json`, which doesn't exist. When the file was missing it quietly retur\"",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "ok": false,
+        "detail": "VERIFY.md has nothing matching '(?im)^\\\\s*-\\\\s*fail-proof:\\\\s*\\\\S.{10,}'",
+        "workdir": true
+      },
+      {
+        "check": "verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review",
+        "ok": true,
+        "detail": "advisory, not met: .verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/refund.py",
+        "fixture/test_refund.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.30429379999999995,
+    "turns": 5,
+    "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 28.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-make-it-verified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`test_refund.py` looked for its test cases in `cases/refunds.json`, which doesn't exist. When the file was missing it qu\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/refund.py",
+        "fixture/test_refund.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.42016840000000005,
+    "turns": 10,
+    "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 47.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"never calls `apply_discount`. It computes `100 * 0.9` itself and asserts that the result is 90.\"\n  found   fail-proof-shows-it \u2014 \"I deleted the discount in a scratch copy, and in a second copy I changed it to 50% off. The suite stayed green both time\"\n  found   needs-a-real-check \u2014 \"self.assertEqual(apply_discount(100, \"SAVE10\"), 90)\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.270649,
+    "turns": 3,
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 25.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-make-it-verified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`test_refund.py` loaded its cases from `cases/refunds.json`, which doesn't exist, so it ran zero cases and passed anyway\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/refund.py",
+        "fixture/test_refund.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.45696459999999994,
+    "turns": 10,
+    "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 53.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-make-it-verified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`fixture/test_refund.py` read its cases from `cases/refunds.json`, which doesn't exist.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "verify.py baseline was run, so the check can no longer be edited to pass. Advisory: the skill is ambiguous here (step 4 says freeze it, step 6 says a person re-baselines a check you edited), and in the pilot all three agents that used the skill left it for a person to review",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/refund.py",
+        "fixture/test_refund.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4742496,
+    "turns": 11,
+    "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 54.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` (`fixture/test_discount.py:7-11`) never calls `apply_discount`.\"\n  found   fail-proof-shows-it \u2014 \"I broke the discount on purpose in a throwaway copy and the suite stayed green.\"\n  found   needs-a-real-check \u2014 \"make the test call the real code, e.g. `self.assertAlmostEqual(apply_discount(100, \"SAVE10\"), 90)`.\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.271643,
+    "turns": 3,
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 23.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"It computes `100 * 0.9` itself and asserts that equals 90, which is always true whatever `discount.py` does.\"\n  found   fail-proof-shows-it \u2014 \"I deleted the discount in a copy of the code and the check stayed green.\"\n  found   needs-a-real-check \u2014 \"have the test call the real function, so the expected value can't come from the same math:\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.27216640000000003,
+    "turns": 3,
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 25.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` never called `apply_discount`. It computed `100 * 0.9` itself and checked that equals 90, so it c\"\n  found   fail-proof-shows-it \u2014 \"I changed `discount.py` so SAVE10 gave no discount at all. The original suite still passed, 2/2 OK.\"\n  found   needs-a-real-check \u2014 \"`test_discount.py` now calls `apply_discount(100, \"SAVE10\")` and expects `90`.\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/test_discount.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.42025179999999995,
+    "turns": 10,
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 52.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` never called `apply_discount`. It computed `100 * 0.9` and checked that the answer was 90\"\n  found   fail-proof-shows-it \u2014 \"In a scratch copy I changed SAVE10 to `total * 1.0`, which gives no discount at all, and the suite stayed green.\"\n  found   needs-a-real-check \u2014 \"the test now asserts `apply_discount(100, \"SAVE10\") == 90`.\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/test_discount.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.44215479999999996,
+    "turns": 11,
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  1/3 found, score 0.33 (needs 1.00)\n  MISSED  fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n            named it, but never said what was wrong with it\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 53.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` never called `apply_discount`.\"\n  found   fail-proof-shows-it \u2014 \"I made SAVE10 give 50% off instead of 10% and the suite stayed green (*proven*).\"\n  found   needs-a-real-check \u2014 \"`test_save10_discount` now asserts `apply_discount(100, \"SAVE10\") == 90`.\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/test_discount.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.47004,
+    "turns": 11,
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  1/3 found, score 0.33 (needs 1.00)\n  MISSED  fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n            named it, but never said what was wrong with it\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 67.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

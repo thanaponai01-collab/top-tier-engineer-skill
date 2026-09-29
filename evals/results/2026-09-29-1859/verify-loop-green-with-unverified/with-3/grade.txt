@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  2/3 found
+  found   search-has-no-check — "The third, Search, has no check at all, so the strict run fails (exit 1)."
+  MISSED  the-checks-are-unproven
+  found   an-orphan-that-asserts-nothing — "It only asserts `True`, so it passes no matter what the code does."
+  held    green-read-as-every-feature
+
+Phrase grader (grade.py), for comparison:
+PASS  verify-loop-green-with-unverified  [verify-loop]  3/3 found, score 1.00 (needs 1.00)
+  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section
+  found   the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines
+  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing
+  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes
+
