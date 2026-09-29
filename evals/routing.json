@@ -26,11 +26,13 @@
     {"prompt": "What features does this app actually have, and how do I reach each one?", "expect": ["feature-map"]},
     {"prompt": "Here's the plan: 1) route the export handler, 2) add a test for the digest, 3) add auth to export. File these as tracked issues.", "expect": ["issue-handoff"]},
     {"prompt": "Set this repo up so the engineering skills work well in it.", "expect": ["project-setup"]},
+    {"prompt": "I've never seen this codebase before. Get me fully up to speed: what it has, how it's built, and why.", "expect": ["onboard-system"]},
     {"prompt": "Add a header comment to export.py, and check your own work until it really passes.", "expect": ["verify-loop", "build-discipline"]},
     {"prompt": "I want to add an LLM agent that writes the nightly digest. How do I know if it's any good before I build it?", "expect": ["agent-evals"]},
     {"prompt": "Our support agent passes sometimes and fails other times. Does it actually work?", "expect": ["agent-prove"]},
     {"prompt": "My coding agent deleted handlers/health.py last night when I asked it to clean up imports. Why did it do that?", "expect": ["agent-trace"]},
     {"prompt": "We're about to put our AI agent in front of real customers. What do we need first?", "expect": ["agent-release"]},
+    {"prompt": "I need to add per-user quiet hours, a second export format, and a configurable timeout on the health check. Break it down so different agents can take the pieces. What can go at the same time?", "expect": ["plan-work"]},
     {"prompt": "Fix the typo in health.py's docstring if there is one, otherwise add one that says 'Liveness probe.'", "expect": []},
     {"prompt": "What does HTTP status 418 mean?", "expect": []},
     {"prompt": "Rename the function check() in handlers/health.py to ping() and update its caller.", "expect": []}

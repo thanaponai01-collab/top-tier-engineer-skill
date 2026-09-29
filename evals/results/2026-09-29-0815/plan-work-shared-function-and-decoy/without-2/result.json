@@ -1,0 +1,45 @@
+{
+  "case": "plan-work-shared-function-and-decoy",
+  "skill": "plan-work",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  2/3 found\n  found   discount-and-exempt-share-one-function \u2014 \"Both add fields to the same `Customer` dataclass and both rewrite the same few lines inside `invoice.total()`.\"\n  found   csv-export-can-run-alongside \u2014 \"**C can run in parallel with A and/or B.**\"\n  MISSED  every-piece-has-its-own-check\n  held    all-three-parallel-as-written\n  held    everything-in-a-line",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "every piece comes with its own runnable check: a command and the output that counts as success (for instance a fixed invoice whose total must equal a stated number), not just 'add tests'"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5",
+  "models_used": [
+    "claude-sonnet-5"
+  ],
+  "cost_usd": 0.1643036,
+  "turns": 9,
+  "seconds": 47.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

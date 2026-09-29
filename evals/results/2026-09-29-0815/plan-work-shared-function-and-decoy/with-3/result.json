@@ -1,0 +1,47 @@
+{
+  "case": "plan-work-shared-function-and-decoy",
+  "skill": "plan-work",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   discount-and-exempt-share-one-function \u2014 \"The discount and tax-exempt rules both rewrite the same lines of `invoice.total()`, so they're one slice with one owner,\"\n  found   csv-export-can-run-alongside \u2014 \"The CSV export is a separate slice (new `export.py` file, only calls `total()` as a black box) and can safely run at the\"\n  found   every-piece-has-its-own-check \u2014 \"new cases pass: (a) TH customer, discount_pct=10, subtotal 10000 \u2192 total **9630**\"\n  held    all-three-parallel-as-written\n  held    everything-in-a-line",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:plan-work"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/PLAN.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5",
+  "models_used": [
+    "claude-sonnet-5"
+  ],
+  "cost_usd": 0.259816,
+  "turns": 12,
+  "seconds": 75.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

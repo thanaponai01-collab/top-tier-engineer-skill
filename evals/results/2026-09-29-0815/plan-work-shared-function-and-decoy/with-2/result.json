@@ -1,0 +1,47 @@
+{
+  "case": "plan-work-shared-function-and-decoy",
+  "skill": "plan-work",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   discount-and-exempt-share-one-function \u2014 \"both change the arithmetic in `invoice.py::total()`, and the order they apply in changes the answer\"\n  found   csv-export-can-run-alongside \u2014 \"Safe to run in parallel with Slice 1\"\n  found   every-piece-has-its-own-check \u2014 \"(c) TH customer, discount 20% + tax_exempt=True, subtotal 10000 \u2192 8000\"\n  held    all-three-parallel-as-written\n  held    everything-in-a-line",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:plan-work"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/PLAN.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5",
+  "models_used": [
+    "claude-sonnet-5"
+  ],
+  "cost_usd": 0.28408120000000003,
+  "turns": 13,
+  "seconds": 85.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

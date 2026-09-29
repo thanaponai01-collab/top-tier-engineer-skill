@@ -1,0 +1,64 @@
+{
+  "case": "plan-work-shared-function-and-decoy",
+  "skill": "plan-work",
+  "question": "three features to split across agents: which can safely run together, and what does each piece's check look like?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "discount-and-exempt-share-one-function",
+      "what": "the discount and the tax-exempt flag both have to change the same function, total() in invoice.py, and their result depends on the order they are applied in; so they cannot be handed to two agents at once. One goes first, or one agent owns both, or a first slice settles the order before either starts",
+      "must_name": ["invoice.py"],
+      "must_say_any": [
+        "same function", "same file", "both change", "both edit", "both modify", "both touch",
+        "both rewrite", "both need to change", "conflict", "one after the other", "sequential",
+        "serialize", "serialise", "in sequence", "not in parallel", "cannot run in parallel",
+        "can't run in parallel", "should not run in parallel", "shouldn't run in parallel",
+        "not parallel", "collide", "overlap", "order of operations", "one agent owns", "one owner",
+        "must go first", "goes first", "go first"
+      ]
+    },
+    {
+      "id": "csv-export-can-run-alongside",
+      "what": "the CSV export is the piece that is safe to run alongside: it is a new file that only calls total(), so it touches nothing the other two change",
+      "must_say_any": [
+        "independent", "alongside", "concurrently", "in parallel with", "safe to run",
+        "safe to start", "no overlap", "separate file", "new file", "new module",
+        "does not touch", "doesn't touch", "touches nothing", "no shared file", "safe to hand"
+      ]
+    },
+    {
+      "id": "every-piece-has-its-own-check",
+      "what": "every piece comes with its own runnable check: a command and the output that counts as success (for instance a fixed invoice whose total must equal a stated number), not just 'add tests'",
+      "must_say_any": [
+        "expected output", "expected result", "should print", "should return", "should equal",
+        "proof line", "exit check", "check:", "proof:", "passes when", "counts as done",
+        "done when", "must equal", "must print"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "all-three-parallel-as-written",
+      "what": "telling the person all three pieces are independent and can go to three agents at once, when two of them rewrite the same function and give different totals depending on which is applied first",
+      "must_not_say_any": [
+        "all three can run in parallel", "all three can be done in parallel", "all three are independent",
+        "all three pieces are independent", "three independent", "fully independent", "all three in parallel",
+        "all three at once", "all three can be worked on at once", "all three can go to three agents"
+      ]
+    },
+    {
+      "id": "everything-in-a-line",
+      "what": "over-correcting: making the export wait behind the discount and the exemption, so nothing runs together and the person is told to hand it all to one agent, when the export shares nothing with them",
+      "must_not_say_any": [
+        "export must wait", "export has to wait", "export should wait", "export must come last",
+        "export depends on the discount", "export depends on both", "export is blocked by",
+        "all three must be sequential", "all three must be done in sequence", "nothing can run in parallel",
+        "none of them can run in parallel", "give all three to one agent", "hand all three to one agent"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "a planning task: the code is left as it is. A plan written to PLAN.md is allowed.",
+    "edits_allowed": ["PLAN.md"]
+  }
+}

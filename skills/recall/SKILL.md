@@ -20,7 +20,7 @@ Everything here is on disk or one command away; nothing is changed.
   from the main branch. The last commits say what was finished; the diff says what was in flight.
 - **Notes the project keeps:** first the run files, which hold the newest state (`OVERNIGHT.md`,
   `DRIVE.md`), then `BUILD.md`, `BRIEF.md`, `VERIFY.md`, `FEATURES.md`, `docs/arch-design.md`,
-  `WHY.md`, a `TODO` or handoff file, and your memory directory if there is one.
+  `docs/architecture.md`, `WHY.md`, a `TODO` or handoff file, and your memory directory if there is one.
 - **Open work outside the repo,** only if a tool for it is connected: open issues and PRs, the
   last CI run.
 
@@ -51,7 +51,8 @@ NOT READ:  <what you did not look at>
 ```
 
 If nothing is recorded, a clean tree and no notes, say "nothing recorded" and ask what the work
-is. Do not reconstruct a plausible history.
+is. Do not reconstruct a plausible history. A repo you have never seen, with no `VERIFY.md`,
+`FEATURES.md` or `WHY.md`, is first contact, not a resume: hand off to `onboard-system`.
 
 ## 4. Then
 

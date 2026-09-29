@@ -77,6 +77,10 @@ GAPS = [
     ("is the session handling secure", "threat-model"),
     ("what was I working on yesterday", "recall"),
     ("bootstrap the repo with the skills", "project-setup"),
+    ("plan this out before anyone writes code, and tell me what can run in parallel",
+     "plan-work"),
+    ("break this feature down so I can hand the pieces to different agents",
+     "plan-work"),
 ]
 
 CASES = ESTABLISHED + GAPS

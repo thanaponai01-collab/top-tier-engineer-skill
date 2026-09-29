@@ -1,5 +1,69 @@
 # Changelog
 
+## 4.43.0 — 2026-09-29 — `plan-work`, and the nine checkpoints named
+
+- **New skill `plan-work`: the Plan checkpoint.** Every `drive` playbook went from framing or design
+  straight to building, so nobody owned cutting the work into pieces, ordering them, and saying
+  which can safely run at the same time. It writes `PLAN.md`: slices, each with a check whose
+  expected value is worked out beforehand; the "can run together" mark only after opening the shared
+  code; and, when work is handed to other agents, a brief that stands alone, a rerun of each report's
+  check, and the whole exit check after every merge.
+- **The Relay, in `pick-skill`.** The nine checkpoints (Orient, Frame, Design, Plan, Build, Prove,
+  Review, Ship, Watch), the one skill that owns each, and the file each leaves for the next. Every
+  checkpoint but Plan already had an owner; this made that visible. `drive`, `build-discipline`, the
+  README and the flows table point at `plan-work` where it belongs.
+- **Measured, new case `plan-work-shared-function-and-decoy`** (3 tries per side, claude-opus-5-5):
+  without the skill 0 of 3, with it 3 of 3. Evidence in `evals/results/2026-09-29-0815/`.
+- **What the case showed about the baseline.** A plain agent already found the collision (discount
+  and tax-exempt both rewrite `total()`) and already saw the export could run alongside, 3 of 3. It
+  failed all three on one thing: no piece came with a command and an expected result. So the proven
+  gain of this skill is the per-slice check; the parallel-safety steps are written down but were not
+  what separated the sides.
+- **Not measured.** Handing slices to real subagents and merging them back (steps 6 and 7) is not
+  exercised by the case, which only plans. The new routing row (`evals/routing.json`) and the new
+  `route-hint` rule are covered by `evals/route.py` (34 of 34) but `route_live.py` was not re-run,
+  so nothing shows the agent now picks `plan-work` unprompted. `RESULTS.md` and `ROUTING.md` were
+  not regenerated (single-case run).
+- **Considered and not built.** A "land the change" skill (commit and PR packaging): a plain agent
+  given a working tree with the fix, an unrelated edit, a leftover debug line and a fake secret
+  committed only the fix and its test, 3 of 3, left the rest out and said so. No gap, so no skill.
+- **Not fixed here, found on the way.** `evals/ROUTING.md` (2026-09-27) has the agent opening the
+  right skill on 17 of 32 requests, and `RESULTS.md` has only 1 of 6 tries following the `drive`
+  playbook step by step. Skills at every checkpoint do nothing if they are not opened. `marketplace.json`
+  still says "Twenty-five" skills.
+
+## 4.42.2 — 2026-09-28 — `project-setup` and `onboard-system` say which is which; evals run on Windows
+
+- **The two descriptions now draw the line.** `project-setup` says it is only the checks and the
+  pointer, and that `onboard-system` runs it; `onboard-system` says it runs `project-setup` first and
+  that `project-setup` alone is for when only the checks are wanted.
+- **New routing case for `onboard-system`** in `evals/routing.json` ("I've never seen this codebase
+  before…"). Run live, 3 tries each: it picked `onboard-system` 3 of 3, and the existing
+  `project-setup` case picked `project-setup` 3 of 3.
+- **Evals no longer die instantly on Windows.** `evals/agent.py`'s environment allow-list dropped
+  `SystemRoot`, so every headless agent call exited in 0.1s with "Bun needs this set" and
+  `route_live.py` reported `0 of N right`. It now keeps `SystemRoot`, `USERPROFILE`, `APPDATA` and the
+  other variables Windows needs.
+- **Not measured.** There was no run before the description edits, and `onboard-system` was already
+  hinted by the `route-hint` hook, so this does not show the wording changed a pick. `ROUTING.md` was
+  not regenerated. `route_live.py` still crashes printing `←` on a cp1252 console unless
+  `PYTHONUTF8=1` is set, and the runner still discards the child's stderr.
+
+## 4.42.1 — 2026-09-28 — first contact and resume no longer dead-end
+
+- **`recall` reads `docs/architecture.md`.** `onboard-system` writes that file, but `recall` only
+  looked for `docs/arch-design.md`, so the resume skill never saw the output of the skill that
+  feeds it.
+- **`recall` hands first contact to `onboard-system`.** On a repo it has never seen, with no
+  `VERIFY.md`, `FEATURES.md` or `WHY.md`, it used to stop at "nothing recorded". It now says this is
+  first contact and names the skill to run.
+- **`drive` routes "unfamiliar codebase / get me up to speed" to `onboard-system`.** No row matched
+  that goal before; only `project-setup` was listed for a new repo.
+- **`project-setup`'s pointer block mentions `recall`,** so a fresh session is told the resume
+  skill exists.
+- **Not measured.** The unit tests pass, but `recall`, `project-setup` and `drive` have no eval case
+  covering these routes, so nothing has shown the new wording changes what an agent does.
+
 ## 4.42.0 — 2026-09-28 — verify-loop: repairing a check that never ran, and evals that grade what the agent left behind
 
 - **`verify-loop` step 4 now covers a check that cannot fail.** A check that runs nothing (loads no

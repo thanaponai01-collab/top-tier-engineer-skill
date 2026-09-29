@@ -1,6 +1,6 @@
 ---
 name: onboard-system
-description: First contact with an unfamiliar codebase — set it up for the skills, then build and leave behind the full picture (what it has, how it's shaped, why it's built that way) so every later session or agent finds it instead of rediscovering it. Use for "onboard me to this codebase", "get up to speed on this system", "I've never seen this repo before", "learn this system top to bottom", or when a repo has no VERIFY.md, FEATURES.md, docs/architecture.md or WHY.md yet.
+description: First contact with an unfamiliar codebase — set it up for the skills, then build and leave behind the full picture (what it has, how it's shaped, why it's built that way) so every later session or agent finds it instead of rediscovering it. Runs project-setup itself as its first step; use project-setup alone when only the checks are wanted. Use for "onboard me to this codebase", "get up to speed on this system", "I've never seen this repo before", "learn this system top to bottom", or when a repo has no VERIFY.md, FEATURES.md, docs/architecture.md or WHY.md yet.
 ---
 
 # Onboard System

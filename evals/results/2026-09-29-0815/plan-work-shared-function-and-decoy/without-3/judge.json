@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 3,
+  "score": 0.667,
+  "planted": [
+    {
+      "id": "discount-and-exempt-share-one-function",
+      "what": "the discount and the tax-exempt flag both have to change the same function, total() in invoice.py, and their result depends on the order they are applied in; so they cannot be handed to two agents at once. One goes first, or one agent owns both, or a first slice settles the order before either starts",
+      "found": true,
+      "quote": "Both discount and tax-exempt touch the *same* dataclass (`Customer` in `models.py`) and the *same* function (`invoice.total()`/`subtotal()` in `invoice.py`)",
+      "quote_checked": true
+    },
+    {
+      "id": "csv-export-can-run-alongside",
+      "what": "the CSV export is the piece that is safe to run alongside: it is a new file that only calls total(), so it touches nothing the other two change",
+      "found": true,
+      "quote": "It only calls `invoice.total()` as a black box and never touches `models.py`/`invoice.py`/`tax.py`, so it can't conflict with either feature",
+      "quote_checked": true
+    },
+    {
+      "id": "every-piece-has-its-own-check",
+      "what": "every piece comes with its own runnable check: a command and the output that counts as success (for instance a fixed invoice whose total must equal a stated number), not just 'add tests'",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "all-three-parallel-as-written",
+      "what": "telling the person all three pieces are independent and can go to three agents at once, when two of them rewrite the same function and give different totals depending on which is applied first",
+      "tripped": false,
+      "quote": "only the CSV export is safe to hand to an independent agent right now",
+      "quote_checked": true
+    },
+    {
+      "id": "everything-in-a-line",
+      "what": "over-correcting: making the export wait behind the discount and the exemption, so nothing runs together and the person is told to hand it all to one agent, when the export shares nothing with them",
+      "tripped": false,
+      "quote": "In parallel with all of the above, safely: the CSV export.",
+      "quote_checked": true
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.1202122,
+  "model": "claude-sonnet-5"
+}

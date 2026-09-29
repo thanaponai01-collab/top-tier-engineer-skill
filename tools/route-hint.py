@@ -46,6 +46,7 @@ MAX_PROMPT = 20_000  # a pasted stack trace is not a routing question
 # help choosing, so the hook stays out of the way.
 SKILLS = (
     "agent-design", "agent-drift", "agent-evals", "agent-prove", "agent-release", "agent-trace", "arch-design", "arch-map", "build-discipline", "correctness-gate",
+    "plan-work",
     "code-history", "debug-protocol", "drive", "evolve-maintain", "explain", "feature-map",
     "issue-handoff", "latent-audit", "onboard-system", "perf-optimize", "pick-skill",
     "drive-overnight", "problem-framing", "project-setup", "recall", "safe-release", "scrutinize", "senior-review",
@@ -253,6 +254,14 @@ RULES = (
      None,
      "it gets everyone to the same definition of done before anything is built"),
 
+    ("plan-work",
+     r"\b(plan (this|it|the work|the feature) out|break (this|it|the \w+) down (into|so)|"
+     r"what can (safely )?(run|go) (at the same time|in parallel|together)|"
+     r"(split|divide) (this|it|the work) (across|between|among) (agents|subagents|people)|"
+     r"hand (the |these )?(pieces|parts|slices) (to|off to) (different|other|separate) agents)\b",
+     None,
+     "it gives every piece its own check and marks what can safely run together"),
+
     ("drive",
      r"\bcarry (this|the) goal through to done\b|\bcarry .* through to done\b",
      None,
@@ -340,6 +349,7 @@ if __name__ == "__main__":
         assert suggest("what should I fix first?")[0] == "senior-review"
         assert suggest("where were we?")[0] == "recall"
         assert suggest("never seen this codebase before, get me up to speed on it")[0] == "onboard-system"
+        assert suggest("break this down so other agents can take the pieces")[0] == "plan-work"
         assert suggest("add two numbers together")[0] is None
         assert suggest("run debug-protocol on this")[0] is None
         assert suggest("/pick-skill")[0] is None

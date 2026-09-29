@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 3,
+  "score": 0.667,
+  "planted": [
+    {
+      "id": "discount-and-exempt-share-one-function",
+      "what": "the discount and the tax-exempt flag both have to change the same function, total() in invoice.py, and their result depends on the order they are applied in; so they cannot be handed to two agents at once. One goes first, or one agent owns both, or a first slice settles the order before either starts",
+      "found": true,
+      "quote": "the discount and tax-exempt changes both land in the same function and file, so they should not run concurrently",
+      "quote_checked": true
+    },
+    {
+      "id": "csv-export-can-run-alongside",
+      "what": "the CSV export is the piece that is safe to run alongside: it is a new file that only calls total(), so it touches nothing the other two change",
+      "found": true,
+      "quote": "Run **CSV export** in parallel with either of the other two \u2014 no shared file, no shared logic.",
+      "quote_checked": true
+    },
+    {
+      "id": "every-piece-has-its-own-check",
+      "what": "every piece comes with its own runnable check: a command and the output that counts as success (for instance a fixed invoice whose total must equal a stated number), not just 'add tests'",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "all-three-parallel-as-written",
+      "what": "telling the person all three pieces are independent and can go to three agents at once, when two of them rewrite the same function and give different totals depending on which is applied first",
+      "tripped": false,
+      "quote": "only 2 of them can run in parallel",
+      "quote_checked": true
+    },
+    {
+      "id": "everything-in-a-line",
+      "what": "over-correcting: making the export wait behind the discount and the exemption, so nothing runs together and the person is told to hand it all to one agent, when the export shares nothing with them",
+      "tripped": false,
+      "quote": "Run **CSV export** in parallel with either of the other two",
+      "quote_checked": true
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.1185662,
+  "model": "claude-sonnet-5"
+}

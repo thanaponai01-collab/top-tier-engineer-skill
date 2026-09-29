@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Thirty-two engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+Thirty-three engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
 do for a task; `PHILOSOPHY.md` says *how to work* on every task.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
@@ -40,6 +40,7 @@ the rest of this repo being loaded.
 | `agent-drift` | "Is the live agent still what we shipped?": scheduled sampling against the frozen baseline, a noise band so a normal bad day isn't a false alarm, and every real drop filed as a new eval task |
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
 | `arch-design` | "How should this be structured / which stack?" |
+| `plan-work` | "Plan this / break it down / what can run in parallel?": ordered slices, each with a check and expected result worked out beforehand, the ones that are safe to run at the same time marked after opening the shared code, and a full-suite check after every merge |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
 | `issue-handoff` | "File these as issues": a work doc, or the chat, into tracked issues, nothing dropped |
 | `build-discipline` | "Build it": small, proven, wired increments |
@@ -74,11 +75,13 @@ section writes each move out complete enough to build from, `issue-handoff` turn
 one issue each whenever you want a queue that reaches you on another machine, `arch-map` draws a
 picture when you want one, and `senior-review`
 ends by naming the skill for the gap it found. Every flow has the same shape:
-**find → change → prove → ship**.
+**find → change → prove → ship**. Underneath, the work passes nine checkpoints, each owned by one
+skill and each leaving a file the next reads: Orient, Frame, Design, Plan, Build, Prove, Review,
+Ship, Watch. `pick-skill` holds the table ("The Relay").
 
 | Goal | Find | Change | Prove | Ship |
 |---|---|---|---|---|
-| Build something new | `problem-framing` → `arch-design` | `build-discipline` | `correctness-gate` | `safe-release` |
+| Build something new | `problem-framing` → `arch-design` → `plan-work` | `build-discipline` | `correctness-gate` | `safe-release` |
 | Improve a messy codebase | `arch-design` (audit) → `arch-map` (problems) | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Fix a bug | `debug-protocol` | `evolve-maintain` | `correctness-gate` | `safe-release` |
 | Make it faster | `perf-optimize` | `perf-optimize` | `correctness-gate` | `safe-release` |

@@ -22,8 +22,8 @@ them and start on what it does not block.
 | A question about the code | `explain` or `code-history`. Read-only; nothing else runs. |
 | Broken, cause unknown | `debug-protocol` → fix with `evolve-maintain` → `correctness-gate` |
 | Broken, cause known; refactor; upgrade | `evolve-maintain` → `correctness-gate` |
-| New behavior | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `build-discipline` → `correctness-gate` |
-| An AI agent or model-driven feature | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `agent-evals` (before any agent code) → `build-discipline` → `agent-prove` (includes the `threat-model` abuse cases) → `safe-release` + `agent-release` when it goes out → `agent-drift` on the schedule once it's live |
+| New behavior | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `plan-work` (only if it has more than one piece) → `build-discipline` → `correctness-gate` |
+| An AI agent or model-driven feature | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `agent-evals` (before any agent code) → `plan-work` (only if it has more than one piece) → `build-discipline` → `agent-prove` (includes the `threat-model` abuse cases) → `safe-release` + `agent-release` when it goes out → `agent-drift` on the schedule once it's live |
 | An agent is flaky, or a model or prompt changed | `agent-prove` → fix with `build-discipline` → `agent-prove` |
 | A live agent might have drifted, or a check-in is due | `agent-drift` → `agent-prove` + fix if it's real |
 | Slow or expensive | `perf-optimize` → `correctness-gate` |
@@ -34,6 +34,7 @@ them and start on what it does not block.
 | Resume, or "where were we?" | `recall`, then match the goal it surfaces |
 | Plans to file as tickets | `issue-handoff` (it writes to the tracker: ask first unless the goal itself said to file) |
 | A new repo, or "set this up for the skills" | `project-setup` |
+| An unfamiliar codebase, or "get me up to speed" | `onboard-system` (it runs `project-setup` itself) |
 | Deploy, or change stored data | `safe-release` |
 | Big, vague, or matches nothing | `problem-framing` to make the goal checkable, then match again |
 

@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   discount-and-exempt-share-one-function — "both change `invoice.total()`... That's one calculation, not two — splitting it across two agents means whoever merges s"
+  found   csv-export-can-run-alongside — "Why CSV export is safe to parallelize... It doesn't touch `models.py` or `invoice.py`"
+  found   every-piece-has-its-own-check — "check (command → expected)"
+  held    all-three-parallel-as-written
+  held    everything-in-a-line
+
+Phrase grader (grade.py), for comparison:
+FAIL  plan-work-shared-function-and-decoy  [plan-work]  3/3 found, score 1.00 (needs 1.00)
+  found   discount-and-exempt-share-one-function: the discount and the tax-exempt flag both have to change the same function, total() in invoice.py, and their result depends on the order they are applied in; so they cannot be handed to two agents at once. One goes first, or one agent owns both, or a first slice settles the order before either starts
+  found   csv-export-can-run-alongside: the CSV export is the piece that is safe to run alongside: it is a new file that only calls total(), so it touches nothing the other two change
+  found   every-piece-has-its-own-check: every piece comes with its own runnable check: a command and the output that counts as success (for instance a fixed invoice whose total must equal a stated number), not just 'add tests'
+  TRIPPED all-three-parallel-as-written: telling the person all three pieces are independent and can go to three agents at once, when two of them rewrite the same function and give different totals depending on which is applied first
+            claimed: fully independent
+  held    everything-in-a-line: over-correcting: making the export wait behind the discount and the exemption, so nothing runs together and the person is told to hand it all to one agent, when the export shares nothing with them
+  a tripped trap fails the case at any score: it is a confident wrong answer
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 

@@ -1,0 +1,45 @@
+{
+  "case": "plan-work-shared-function-and-decoy",
+  "skill": "plan-work",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   discount-and-exempt-share-one-function \u2014 \"both change `invoice.total()`... That's one calculation, not two \u2014 splitting it across two agents means whoever merges s\"\n  found   csv-export-can-run-alongside \u2014 \"Why CSV export is safe to parallelize... It doesn't touch `models.py` or `invoice.py`\"\n  found   every-piece-has-its-own-check \u2014 \"check (command \u2192 expected)\"\n  held    all-three-parallel-as-written\n  held    everything-in-a-line",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:plan-work"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5",
+  "models_used": [
+    "claude-sonnet-5"
+  ],
+  "cost_usd": 0.221134,
+  "turns": 11,
+  "seconds": 62.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: Set a fresh project up for these skills, once, so every later session finds its checks. Drafts VERIFY.md and FEATURES.md from whatever code is there and adds a pointer block to the project's CLAUDE.md. Use when starting these skills in a new or different codebase, "set up this project for the skills", "start fresh here", or when a repo has code but no VERIFY.md or FEATURES.md.
+description: Set a fresh project up for these skills, once, so every later session finds its checks. Drafts VERIFY.md and FEATURES.md from whatever code is there and adds a pointer block to the project's CLAUDE.md. Only the checks and the pointer, not the full picture of an unfamiliar system (that is onboard-system, which runs this itself). Use when starting these skills in a new or different codebase, "set up this project for the skills", "start fresh here", or when a repo has code but no VERIFY.md or FEATURES.md.
 ---
 
 # Project Setup
@@ -55,6 +55,7 @@ rewrite it only if its content differs, never append a second.
 - `docs/architecture.md`, if present: the system traced as a diagram; `arch-map` draws and updates it.
 - `WHY.md`, if present: recorded reasons behind decisions that took real digging to find;
   `code-history` looks them up and adds to it before you change something that looks wrong.
+- Coming back after a gap, or "where were we": `recall` rebuilds the state from git and these files.
 - Something broken and the cause unknown: `debug-protocol`. Need the system explained plainly, not
   changed: `explain`.
 - None of the files above exist yet and this is first contact with the system: `onboard-system` builds
