@@ -62,6 +62,10 @@ session finds it.
 7. **Before you say done, run `verify.py status`.** It must print `VERIFY-STATE: green`: not `red`,
    not `stale` (files changed since the last run: run again) and not never-run. Then look for what a
    green cannot show: a test skipped or deleted, an output hardcoded to match. `--strict` for "done".
+   After adding or changing tests, run `verify.py tests`: it lists every test function under the
+   feature whose command names its file, and flags each with no assertion, each that catches its
+   exception and passes either way, each skipped, and each in a file no feature names. A test with
+   no row is one to give a row or to drop; a flagged one is a check that cannot go red (step 4).
 
 *Test:* the check was written before the change it judges, and you can name a moment it was red.
 

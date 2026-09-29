@@ -1,0 +1,4 @@
+  1. Bash: find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -50
+  2. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-secg0b2j/fixture && for f in SPEC.md discount.py test_discount.py; do echo "=== $f"; cat -n $f; done; python -m p…
+  3. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-secg0b2j\fixture\test_discount.py
+  4. Bash: python -m pytest -q 2>&1 | tail -3

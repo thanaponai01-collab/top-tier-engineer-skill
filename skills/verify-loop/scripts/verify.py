@@ -56,13 +56,14 @@ Usage:
   python scripts/verify.py run  [repo] [--only TEXT] [--timeout 120] [--strict] [--budget 5]
   python scripts/verify.py baseline [repo]
   python scripts/verify.py status   [repo]
+  python scripts/verify.py tests    [repo] [--strict]
   python scripts/verify.py scope PATH... [--add | --clear | --check] [--repo .]
 
 Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is unverified or
 unproven); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
-import argparse, fnmatch, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
+import argparse, ast, fnmatch, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _encoding import utf8_streams
@@ -170,6 +171,141 @@ def is_covered(rel, commands, repo):
             if rel.startswith(t + "/") and os.path.isdir(os.path.join(repo, t)):
                 return True
     return False
+
+
+# ---- the per-test map ---------------------------------------------------------------------
+# `run` maps test FILES to features. A file with forty tests is one row there, so a hollow test
+# hides inside a verified feature. `tests` goes down to the function: every test under the
+# feature whose command names its file, and the ones that can never go red flagged. Static (it
+# parses, it runs nothing), Python only.
+
+ASSERTING = ("assert", "fail", "raises", "warns")
+
+
+def _call_name(node):
+    f = node.func
+    return f.attr if isinstance(f, ast.Attribute) else f.id if isinstance(f, ast.Name) else ""
+
+
+def _asserts(fn, helpers):
+    """True if the function has an assertion, directly or by calling a helper that has one."""
+    for n in ast.walk(fn):
+        if isinstance(n, ast.Assert):
+            return True
+        if isinstance(n, ast.Call):
+            name = _call_name(n)
+            if name.lower().startswith(ASSERTING) or name in helpers:
+                return True
+    return False
+
+
+def _swallows(fn):
+    """A try whose handler only passes, with no failure on the other path: green either way."""
+    for n in ast.walk(fn):
+        if not isinstance(n, ast.Try):
+            continue
+        quiet = any(h.body and all(isinstance(b, ast.Pass) or (isinstance(b, ast.Expr)
+                    and isinstance(b.value, ast.Constant)) for b in h.body) for h in n.handlers)
+        fails = any(isinstance(m, ast.Assert) or (isinstance(m, ast.Call)
+                    and _call_name(m).lower().startswith(ASSERTING))
+                    for part in (n.body, n.orelse) for st in part for m in ast.walk(st))
+        if quiet and not fails:
+            return True
+    return False
+
+
+def _skipped(fn):
+    names = [n.attr if isinstance(n, ast.Attribute) else n.id for d in fn.decorator_list
+             for n in ast.walk(d) if isinstance(n, (ast.Attribute, ast.Name))]
+    return any(n.lower().startswith("skip") for n in names)
+
+
+def tests_in(repo, rel):
+    """[(name, flag, skipped)] for the test functions in one Python file; flag is '' or a reason.
+    None when the file cannot be parsed."""
+    try:
+        tree = ast.parse(read(repo, rel))
+    except SyntaxError:
+        return None
+    defs = (ast.FunctionDef, ast.AsyncFunctionDef)
+    helpers = set()
+    for _ in range(2):
+        helpers |= {n.name for n in ast.walk(tree) if isinstance(n, defs)
+                    and not n.name.startswith("test") and _asserts(n, helpers)}
+    found = []
+
+    def take(fn, name):
+        if _swallows(fn):
+            flag = "passes either way: it catches the exception and never fails"
+        elif not _asserts(fn, helpers):
+            flag = "no assertion"
+        else:
+            flag = ""
+        found.append((name, flag, _skipped(fn)))
+
+    for node in tree.body:
+        if isinstance(node, defs) and node.name.startswith("test"):
+            take(node, node.name)
+        elif isinstance(node, ast.ClassDef):
+            for m in node.body:
+                if isinstance(m, defs) and m.name.startswith("test"):
+                    take(m, f"{node.name}.{m.name}")
+    return found
+
+
+def cmd_tests(repo, strict):
+    path = os.path.join(repo, RECIPE)
+    if not os.path.isfile(path):
+        print(f"no {RECIPE} in {repo}. Run `verify.py init` to draft one.")
+        return 2
+    features, _ = parse(read(repo, RECIPE))
+    if not features:
+        print(f"{RECIPE} has no '## <feature>' sections; nothing to map.")
+        return 2
+    files = find_tests(repo)
+    py = [t for t in files if t.endswith(".py")]
+    unread = [t for t in files if not t.endswith(".py")]
+    per_file, bad = {}, []
+    for t in py:
+        got = tests_in(repo, t)
+        (bad.append(t) if got is None else per_file.__setitem__(t, got))
+    print("Test map: every test under the feature whose command names its file")
+    total = mapped = hollow = skipped = 0
+    seen = set()
+
+    def show(rel, rows):
+        nonlocal total, hollow, skipped
+        for name, flag, skip in rows:
+            total += 1
+            hollow += bool(flag)
+            skipped += skip
+            marks = [m for m in (flag, "skipped" if skip else "") if m]
+            print(f"  {rel}::{name}" + (f"  <- {'; '.join(marks)}" if marks else ""))
+
+    for f in features:
+        print(("Journey: " if f["journey"] else "") + f["name"])
+        cmds = [c for _, c in f["checks"]]
+        mine = [t for t in per_file if is_covered(t, cmds, repo)]
+        if not mine:
+            print("  (no test functions named by this feature's commands)")
+        for t in mine:
+            seen.add(t)
+            n0 = total
+            show(t, per_file[t])
+            mapped += total - n0
+    loose = [t for t in per_file if t not in seen]
+    if loose:
+        print("Unmapped (no feature's command names their file):")
+        for t in loose:
+            show(t, per_file[t])
+    for t in bad:
+        print(f"note  could not parse {t}; its tests are not counted")
+    if unread:
+        print(f"note  {len(unread)} JS/TS test file(s) are not itemised: {', '.join(unread)}")
+    unmapped = total - mapped
+    print(f"TESTS: {total} tests | {mapped} mapped to a feature | {unmapped} unmapped | "
+          f"{hollow} without an assertion or a way to fail | {skipped} skipped")
+    return 1 if strict and (hollow or unmapped) else 0
 
 
 # ---- init ---------------------------------------------------------------------------------
@@ -687,6 +823,10 @@ def main():
     b.add_argument("repo", nargs="?", default=".")
     t = sub.add_parser("status", help="is the last run green and still true of the files? (exit 0/1/3)")
     t.add_argument("repo", nargs="?", default=".")
+    m = sub.add_parser("tests", help="map every test function to a feature; flag tests that cannot fail")
+    m.add_argument("repo", nargs="?", default=".")
+    m.add_argument("--strict", action="store_true",
+                   help="exit 1 if a test has no assertion, swallows its failure, or maps to no feature")
     c = sub.add_parser("scope", help="name the files a fix may touch; edits outside them fail the run")
     c.add_argument("patterns", nargs="*", help="files, folders or globs the fix may touch")
     c.add_argument("--repo", default=".")
@@ -703,6 +843,8 @@ def main():
         sys.exit(cmd_baseline(repo))
     if a.cmd == "status":
         sys.exit(cmd_status(repo))
+    if a.cmd == "tests":
+        sys.exit(cmd_tests(repo, a.strict))
     sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget))
 
 

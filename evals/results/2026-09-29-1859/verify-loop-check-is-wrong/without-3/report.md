@@ -1,0 +1,5 @@
+The suite passes now: 3/3 tests pass (I ran it). I fixed the test, not the pricing code, so please confirm that's the right call before you ship.
+
+**What was wrong:** `test_boundary` expected an order of exactly 100 to get **0%** off. `SPEC.md` rule 1 says "100 or more gets 10% off", and `discount.py` does exactly that (`total >= 100`). The test contradicted the spec, so I changed its expected value from `0` to `10` in `test_discount.py:11`. The shipped code is unchanged.
+
+**The one thing to check:** there's no git history here, so I couldn't see what Tuesday's change actually was. If Tuesday's change was meant to make the discount start *above* 100 and the spec just wasn't updated, then the code is what's wrong. In that case, revert my one-line test edit and change `>=` to `>` in `discount.py`. Whoever made Tuesday's change can settle it in a few seconds.

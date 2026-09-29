@@ -1,0 +1,43 @@
+{
+  "case": "verify-loop-fake-check-and-decoy",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` never called `apply_discount`. It computed `100 * 0.9` and checked that the answer was 90\"\n  found   fail-proof-shows-it \u2014 \"In a scratch copy I changed SAVE10 to `total * 1.0`, which gives no discount at all, and the suite stayed green.\"\n  found   needs-a-real-check \u2014 \"the test now asserts `apply_discount(100, \"SAVE10\") == 90`.\"\n  held    passthrough-test-is-real",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/test_discount.py"
+    ],
+    "added": [
+      "fixture/.verify-state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.44215479999999996,
+  "turns": 11,
+  "seconds": 53.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,18 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   fake-check-never-calls-real-code — "`test_save10_discount` never called `apply_discount`."
+  found   fail-proof-shows-it — "I made SAVE10 give 50% off instead of 10% and the suite stayed green (*proven*)."
+  found   needs-a-real-check — "`test_save10_discount` now asserts `apply_discount(100, "SAVE10") == 90`."
+  held    passthrough-test-is-real
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  1/3 found, score 0.33 (needs 1.00)
+  MISSED  fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail
+            named it, but never said what was wrong with it
+  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake
+  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value
+            named it, but never said what was wrong with it
+  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, "BAD") and would fail if passthrough broke; it is not fake like the other test
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+
