@@ -179,5 +179,15 @@ class Stale(unittest.TestCase):
             self.assertEqual(rc, 0, out)
 
 
+class SkillStaysSmall(unittest.TestCase):
+    """The skill drifted from 100 lines to 230 by accretion. A new section has to displace one."""
+
+    def test_skill_md_line_cap(self):
+        from _helpers import ROOT
+        with open(os.path.join(ROOT, "skills", "arch-design", "SKILL.md"), encoding="utf-8") as fh:
+            n = len(fh.read().splitlines())
+        self.assertLessEqual(n, 110, f"arch-design SKILL.md is {n} lines; move detail to references/ or cut")
+
+
 if __name__ == "__main__":
     unittest.main()

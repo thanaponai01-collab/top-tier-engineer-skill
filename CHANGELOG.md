@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.46.0 — 2026-09-30 — arch-design: one purpose again, 231 lines to 98
+
+- **`arch-design` `SKILL.md` cut back to its job:** improve, redesign a part, or design new backend
+  structure, using a short list of engineering techniques (one owner per job, dependencies one way,
+  logic apart from I/O, small interfaces, clear boundaries, data model first, no structure nobody
+  needs). It picks improve / replace-a-part / design-new first and says which; replacement is one
+  part at a time behind a stable interface and needs the user's yes. Answer is a ranked list in chat.
+- **Moved out of the main flow:** the graph and history instruments, and the optional
+  `docs/arch-design.md` format with its `check`, now live in `references/instruments.md`. The
+  scripts are unchanged.
+- **New test** caps `SKILL.md` at 110 lines, so a new section has to displace an old one.
+- **Measured.** Suite 277 green. `arch-design-no-new-store`, with-skill n=2: 0/2 pass (2/3 and 1/3
+  items), $0.18 a run, about half the old skill's cost. Still missing: naming what a separate new
+  datastore would cost. Improve-vs-replace and design-new behavior are suspected, not measured.
+
 ## 4.45.0 — 2026-09-30 — arch-design: `dep-map.py`, See / Judge / Shape
 
 - **New `dep-map.py` (arch-design).** Reads the import graph that `latent-audit`'s `graph-audit.py`
