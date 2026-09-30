@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"`orders.status` imports `shipping.tracking`, which imports `notifications.email`, which imports `orders.status`.\"\n  found   pricing-does-network-io \u2014 \"It is a network fetch inside pricing, and it is why the order flow can't run on a train.\"\n  found   pass-through-order-service \u2014 \"`services/order_service.py` is 5 lines and has 1 caller. It forwards its 4 arguments unchanged.\"\n  found   move-has-a-proof-line \u2014 \"Each move in the file has a proof step.\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "docs/arch-design.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.34322700000000006,
+  "turns": 23,
+  "seconds": 79.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

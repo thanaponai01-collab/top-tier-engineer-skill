@@ -1,6 +1,6 @@
 ---
 name: arch-design
-description: Improve a codebase's structure, or shape a new one, judged by what the next likely change costs. Measures duplicated systems, misdrawn boundaries, hidden coupling and over-building from the code and its git history, decides with options and reversibility, and ends in one file — docs/arch-design.md — whose moves are written out buildable. Use for "where can the architecture improve?", "is my codebase bloated?", "why does every change touch six files?", restructuring, module or API boundaries, choosing a stack or pattern, or greenfield architecture.
+description: Improve a codebase's structure, or shape a new one, judged by what the next likely change costs. Measures import cycles, duplicated systems, hubs, pass-through layers, seams, hidden coupling and over-building from the code, its import graph and its git history, decides with options and reversibility, and ends in one file — docs/arch-design.md — whose moves are written out buildable. Use for "where can the architecture improve?", "is my codebase bloated?", "why does every change touch six files?", restructuring, module or API boundaries, choosing a stack or pattern, or greenfield architecture.
 ---
 
 # Architecture & Design
@@ -14,123 +14,138 @@ never meet, often an AI: the structure must be navigable from the files alone.
 opened the source (docs, lockfile, a fetch) this session · **suspected** = neither. Only *proven* and
 *traced* can carry a one-way door.*
 
-One loop, whether the code exists or not: **Aim → Measure → Diagnose → Decide → Move → Verify.** With
-code, the *as-is* comes from the repo. Greenfield, it's empty, and the likely changes come from the
-requirements.
+One loop, whether the code exists or not: **See → Judge → Shape.** With code, the *as-is* comes from
+the repo. Greenfield, it's empty, and the likely changes come from the requirements.
 
-## 1. Aim
+## 1. See
 
-Write down two things before reading further:
+Write down two things first:
 - **The question**, in one line: "the order flow: why does adding one field touch six files?"
-- **The yardstick:** the three changes most likely to come next, and where you got them (the user,
-  the requirements, the issue tracker, the last month of `git log`). Every later judgment is one
+- **The yardstick:** the three changes most likely to come next, and where each came from (the last
+  month of `git log`, the issue tracker, the user, the requirements). Every later judgment is one
   question: does this make those changes cheaper?
 
-Read only what those changes reach, from the entry points inward. Sweep the whole repo only when the
-user asked about the whole repo. Greenfield: get the requirements (ask, or state the ones you're
-assuming); a structural claim with no requirement behind it is *speculative*.
+Read only what those changes reach, from the entry points inward; sweep the whole repo only when
+asked about the whole repo. Greenfield: get the requirements, or state the ones you're assuming; a
+structural claim with no requirement behind it is *speculative*.
 
-*Test:* you can name the three changes, where they came from, and what you deliberately did not read.
+Then run the instruments. The code shows what is *connected*; only the history shows what *changes
+together*; a rehearsal shows what one change *costs*.
 
-## 2. Measure
-
-Three instruments, and the history is the one people skip. The code shows what is *connected*; only
-the history shows what *changes together*.
-
-- **Concept map.** Where each concept lives: users, auth, config, data access, outside calls,
-  errors, and the domain's own nouns. One table, `concept | owner(s) | file:line`, kept in your
-  working notes, not filed. Start from `FEATURES.md` `trace:` lines if they exist (`feature-map`),
-  else trace the entry points as `explain` does; never write a separate map doc. A row with two
-  owners is a lead.
-- **Change history.** `python <this skill's base directory>/scripts/change-map.py <repo> [--depth 2]`
+- **Import graph** (Python). `latent-audit` owns the graph: `python <latent-audit base>/scripts/graph-audit.py
+  <src> --edges edges.json`, then `python <this skill's base directory>/scripts/dep-map.py edges.json`.
+  It lists import cycles (with file:line), the most-imported modules and how unstable each is,
+  modules that only forward their arguments, Protocol/ABC seams with how many classes implement
+  each, and modules that import a network, database or process library. These are leads, not
+  verdicts. Either script not available, or not Python: grep the imports of the modules the
+  yardstick reaches, and label what you find *traced*.
+- **Change history.** `python <this skill's base directory>/scripts/change-map.py <repo> --json > change.json`
   reports spread (modules touched per commit), hidden coupling (file pairs in *different* modules
   that keep changing in the same commit) and hotspots (churn × size). Exclude what is coupled on
-  purpose, such as a version file and its changelog, with `--exclude`. Script not available → read
-  `git log -n 50 --name-only` by hand and count the same three things. No history at all →
-  greenfield rules: the rehearsal below is your only measure.
-- **Rehearsal.** Walk each yardstick change through the map: which files do you edit? Count the
-  modules. More than two for one change means a boundary is drawn in the wrong place.
+  purpose (a version file and its changelog) with `--exclude`. Then
+  `dep-map.py edges.json --cochange change.json` says which coupled pairs have *no import edge*
+  between them: a shared format or assumption nobody named. No history: the rehearsal is your only
+  measure.
+- **Rehearsal.** Walk each yardstick change through the code: which files do you edit? Count the
+  modules. More than two for one change means something is drawn in the wrong place.
+- **Concept map**, in your working notes, never filed: `concept | owner(s) | file:line` for users,
+  auth, config, data access, outside calls, errors and the domain's own nouns. A row with two owners
+  is a lead. Start from `FEATURES.md` `trace:` lines if they exist, else trace the entry points.
 
-Budget: two passes of Measure and Diagnose. If a third seems needed, the yardstick is too wide or
-too vague; go back to Aim and narrow it, or report what you have and stop.
+Budget: two passes of See and Judge. A third means the yardstick is too wide; narrow it, or report
+what you have and stop.
 
-*Test:* every lead you carry forward has a `file:line` or a number from the history behind it.
+*Test:* every lead you carry forward has a `file:line` or a number behind it, and you can name what you
+deliberately did not read.
 
-## 3. Diagnose
+## 2. Judge
 
 A lead becomes a finding by passing two tests:
 
 - **Deletion test.** Undo it in your head: merge the duplicates, inline the layer, drop the
-  interface. If the complexity collapses into something smaller, it's a finding. If it just moves
+  interface. If the complexity collapses into something smaller, it's a finding; if it just moves
   somewhere else, it isn't.
-- **Same-reason test**, before any merge. Ask what would make each of the two change. The same
-  answer means one owner. Different answers mean they only look alike, and merging them drags each
-  along with the other's changes. A display date and a tax-filing date can be byte-identical today
-  and still change for different reasons.
+- **Same-reason test**, before any merge. Ask what would make each of the two change. The same answer
+  means one owner; different answers mean they only look alike, and merging drags each along with
+  the other's changes. A display date and a tax-filing date can be byte-identical today.
 
-What the findings look like:
-- **One job, many owners:** two API clients, three date helpers, config read five ways.
-- **Shotgun change:** one concept smeared so that each change touches many modules. High spread,
-  or a failed rehearsal.
-- **Hidden coupling:** files that change together with no import between them. A format, schema or
-  assumption is shared and has no named owner. Give it one.
-- **Built for "gonna need":** an interface with one implementation, a plugin system with one
-  plugin, options nobody sets, a layer that only passes calls through. Count today's callers.
+What findings look like, and what to count:
+- **One job, many owners:** two API clients, three date helpers, config read five ways. Count the copies.
+- **Shotgun change:** one concept smeared across modules. Count the modules from the rehearsal.
+- **Hidden coupling:** files that change together with no import between them. Give the shared
+  format or assumption one named owner.
+- **A cycle:** modules that import each other change together whatever their names say. Count the
+  modules and pick the one edge that can point the other way.
+- **Effects in the core:** domain code that calls the network, a database, the clock or a global
+  itself cannot run or be tested without them. The missing piece is an injected dependency at that
+  edge. Ask of every module the yardstick reaches: can it run with nothing outside the process?
+- **Built for "gonna need":** an interface with one implementation, a plugin system with one plugin,
+  options nobody sets, a layer that only forwards calls. A seam with one implementer is a guess, with
+  two a fact (count them; the test fake counts). Count today's callers.
 - **The place everything lands:** a top hotspot that every feature edits.
-- **Wrong direction:** a lower layer that knows about a higher one, or domain code that names a
-  technology. `latent-audit`'s graph proves layer breaches; without it available, read the imports
-  and label the finding *traced*.
 - **Half-built or unreachable:** it stays *suspected* here. Proving it dead is `latent-audit`'s job;
-  with that not available, it stays *suspected* in the report and you propose no deletion.
+  without it available, propose no deletion.
 
-**Badge each finding.** **Strong** means the cost is counted today (copies, call sites, co-change
-count). **Worth exploring** means the payoff depends on the yardstick changes actually coming.
-**Speculative** means the deletion test was ambiguous. If every finding is Speculative, the verdict
-is *clean*: say so rather than dressing a clean result up as a list. If the project keeps a decision
-log, read it first. A finding that restates a settled decision isn't new, and one that contradicts
-a settled decision names the entry it contradicts. Before a finding proposes merging, inlining or
-deleting something, ask `code-history` why it exists (one question, aimed at that file or symbol):
-a recorded reason is a force in the Decide step, and "no recorded reason" keeps the finding
-*suspected*. Without `code-history`, read `git log -S` on the symbol yourself.
+**Do not flag what only looks bad.** A module imported by many that imports nothing is a stable
+foundation; only one that is both widely imported and imports a lot makes changes ripple. A seam with
+two real implementers earns its place.
+
+**Badge each finding.** **Strong**: the cost is counted today. **Worth exploring**: the payoff
+depends on the yardstick changes actually coming. **Speculative**: the deletion test was ambiguous.
+If every finding is Speculative the verdict is *clean*; say so rather than dressing it up. If the
+project keeps a decision log, read it first: a finding that restates a settled decision isn't new,
+and one that contradicts it names the entry. Before proposing to merge, inline or delete something,
+ask `code-history` why it exists (one question, aimed at that file or symbol); a recorded reason is
+a force in Shape, and "no recorded reason" keeps the finding *suspected*. Without it available,
+read `git log -S` on the symbol yourself.
+
+**Rank** by cost counted × the chance the yardstick change comes ÷ effort. The top of the list is
+the headline move.
 
 *Test:* every Strong finding has a number next to it.
 
-## 4. Decide
+## 3. Shape
 
-Every structural choice goes through one frame: a greenfield boundary, a stack, or a finding whose fix
-could take more than one shape.
+**Reuse before you add.** When the work asks for something new (a table, a store, a module, a format,
+a dependency), first find who already owns that job in this repo: `file:line`, from the concept
+map. Reuse that owner unless a requirement rules it out, and say what adding a second one would
+cost if it turned out wrong: a migration, another thing to secure, back up and run. Design for the
+cases asked for, not the ones you can imagine: one format is one function, not a plugin seam.
 
-1. **Two real options**, one of them the simplest thing that meets every requirement. Adopt it, or
-   name the requirement that rules it out.
+Every structural choice, whether a greenfield boundary, a stack, where new data lives or a finding
+that could be fixed more than one way, goes through one frame:
+
+1. **Two real options**, one of them the simplest thing that meets every requirement (often the
+   existing owner). Adopt it, or name the requirement that rules it out.
 2. **Forces:** which requirements push which way.
-3. **Door.** Two-way (a library, a folder layout, code behind an internal boundary): decide it and
-   note it in one line. One-way (stored data shape, a public API, a datastore, the tenancy or auth
-   model, deleting data): check every fact it rests on *this session* (fetch the vendor docs or
-   pricing, read the lockfile, run it), then take the options, a recommendation and the cost of
-   being wrong to the user *before* it becomes a move. No one to ask (an unattended run): leave the
-   row out of the file, since `check` rejects an unconfirmed one-way door, and name it in the answer
-   as "parked, needs a yes: <options, recommendation, cost of being wrong>".
-4. **Bars.** A new dependency: under ~10% of it used, or under ~100 lines to write yourself, means
-   you write it. For a one-way door, look up its health and license, don't recall them. A new layer
-   or seam of your own: count its callers today and name the requirement that pays for it. One
-   caller and under ~100 lines means you inline it.
+3. **Door.** Two-way (a library, a folder layout, code behind an internal boundary): decide it in one
+   line. One-way (stored data shape, a public API, a datastore, the tenancy or auth model, deleting
+   data): check every fact it rests on *this session* (fetch the vendor docs, read the lockfile, run
+   it), then give the user the options, a recommendation and the cost of being wrong *before* it
+   becomes a move. Nobody to ask: leave the row out of the file (`check` rejects an unconfirmed
+   one-way door) and name it in the answer as "parked, needs a yes".
+4. **Bars.** A dependency you would use under ~10% of, or could write in ~100 lines, you write. A
+   new seam needs two implementers today or a named requirement that pays for it; one caller and
+   under ~100 lines, you inline it.
 
-Greenfield shapes as **boundaries and contracts, not technologies**: each module gets one sentence
-of responsibility, what it owns, and what it must never know. Contracts say the data shape, the
-error shape, and who may call whom. Each concept has exactly one owner. Then stress the design. Run
-a pre-mortem ("a year on, this failed: the three likeliest reasons") and give each reason a design
-change or an accepted risk. Name the element that protects each invariant.
+The shape a move heads toward, in one line each: a module has a small interface and does a lot behind
+it; each concept has one owner; dependencies point toward the stable side; logic that decides sits
+apart from code that touches the outside world, and reaches it through an injected dependency; a
+seam is a place two things really vary. How to test across a seam depends on what is on the other
+side: in-process, merge and test directly; something with a local stand-in (an in-memory database),
+test with it; your own service across a network, a port with a real and an in-memory adapter; a
+third party, a port with a fake. Once a move's target interface is chosen, that is module design, not
+architecture: shape it there, then come back here for the proof.
 
-*Test:* each decision row has a second option, a door, and an evidence label, and no one-way row
-rests on memory.
+Greenfield shapes as boundaries and contracts, not technologies: each module gets one sentence of
+responsibility, what it owns, what it must never know; contracts say the data shape, the error shape
+and who may call whom. Then run a pre-mortem ("a year on, this failed: the three likeliest reasons")
+and give each reason a design change or an accepted risk.
 
-## 5. Move
-
-Moves, not a rewrite. Each one lands alone with its behavior proven unchanged, so each is a
-reversible step. A rewrite is its own decision, raised with the user. Moves go last in the file,
-one `## Move N: <title>` block each, in landing order, under the header's `context:` bullet that
-states what every move assumes ("the auth model stays; the database doesn't change"). A move that
-contradicts the context is a new decision, not a move.
+**Moves, not a rewrite.** Each lands alone with behavior proven unchanged. A rewrite is its own
+decision, raised with the user. Moves go last in the file, one block each, in landing order, under a
+header `context:` bullet that states what every move assumes ("the auth model stays"). A move that
+contradicts the context is a new decision.
 
 ```
 ## Move 1: <what changes, in one line>
@@ -140,47 +155,33 @@ contradicts the context is a new decision, not a move.
 - owner: <the one place that owns this job afterwards>
 - callers: <every call site that has to change>
 - door: <two-way, land it and go | one-way, confirmed: what the user said>
-- proof: <the command to run, and the output that counts as success>
+- proof: <the command to run, the output that counts as success, and which old tests it replaces>
 - effort: <S / M / L>
 - after: <the move that must land first, or "nothing">
 ```
 
-A move with no `pays:` line isn't improving the architecture. It's tidying, so drop it or say so. A
-move with no `proof:` or no `door:` answer is not written as a move: ask it in the chat. Once the
-moves land, the architecture's own proof is to re-run the rehearsal (and `change-map.py` after a few
-weeks of commits): the yardstick changes should touch fewer modules.
+A move with no `pays:` line is tidying: drop it or say so. A move with no `proof:` or `door:` answer
+is asked in the chat, not written. Once the moves land, the architecture's own proof is to repeat
+the rehearsal (and `change-map.py` after a few weeks of commits): the yardstick changes should touch
+fewer modules.
 
-*Test:* someone who never saw this run could build from the block alone. If they'd need to open the
-report, read the code or ask you something, a field is missing. Fill it now, while the code is in
-front of you.
+**Re-derive before you hand over.** Every number was produced by the run that vouches for it, so
+recount it: grep every name in a `callers:` list, rerun `change-map.py` against the co-change counts
+cited, re-walk the `pays:` rehearsal. A number that doesn't reproduce loses its badge. For each
+one-way door, also give a fresh subagent the fact to verify ("count the current callers of
+`orders.legacy_client`") and never the conclusion ("...so it's safe to inline"); a disagreement
+fixes the finding, noted in `evidence:`.
 
-## 6. Verify
-
-Every number above was produced by the same run that's now vouching for it; re-reading your own
-notes confirms them, it doesn't test them. For each Strong finding and each move, re-derive it
-instead: rerun `change-map.py` against the co-change counts cited, grep the repo for every name in a
-`callers:` list, re-walk the `pays:` rehearsal by hand, re-open the `code-history` source. A number
-that doesn't reproduce loses its badge or gets fixed.
-
-That's cheap self-checking, not a second opinion. For each Strong finding and one-way door, also
-delegate per PHILOSOPHY §8: a fresh subagent, told the fact to verify ("count the current callers of
-`orders.legacy_client`") but never the conclusion ("...so it's safe to inline") — a prompt that leaks
-the answer only invites agreement. A disagreement fixes the finding or drops its badge, noted in
-`evidence:` ("subagent recounted: 3 callers, not 1"). Skip it for Worth-exploring and Speculative
-findings; they already carry their own hedge.
-
-*Test:* every Strong finding and one-way door was re-derived by a tool this session, and checked by
-a subagent that was never told the expected answer.
+*Test:* someone who never saw this run could build from a Move block alone, each decision has a
+second option and a door, and no one-way row rests on memory.
 
 ## Deliver
 
-Answer first. For an audit, that's the verdict (*clean / messy in places / tangled*) and the one move
-that pays the most. For a design, it's the structure in plain words and the decision that's most
-expensive to reverse.
-
-**Size it to the question.** A single decision that leaves nothing to build is answered in the chat
-as its decision row, with no file. Anything more gets **one file**, built for the agent that reads
-it next: `key: value` bullets, one block per finding, decision and move, no prose beyond the verdict.
+Answer first. For an audit, the verdict (*clean / messy in places / tangled*) and the one move that
+pays the most; for a design, the structure in plain words and the decision that's most expensive to
+reverse. A single decision that leaves nothing to build is answered in the chat as its decision
+row, with no file. Anything more gets **one file**, built for the agent that reads it next:
+`key: value` bullets, one block per finding, decision and move, no prose beyond the verdict.
 
 ```
 # ARCH-DESIGN
@@ -203,34 +204,28 @@ it next: `key: value` bullets, one block per finding, decision and move, no pros
 - door: two-way | one-way, confirmed: <what the user said>
 - evidence: proven | traced | suspected, then how
 
-## Move 1: <title>       (the block from §5, one per move, in landing order)
+## Move 1: <title>       (the block from Shape, one per move, in landing order)
 ```
 
-Put the assumption every move shares ("the auth model stays") in one `context:` bullet in the header.
-Moves stay last. Diagrams, before-and-after tables and the concept map are not part of the file;
-they are a human's aid (below).
+Put the assumption every move shares in one `context:` bullet in the header; moves stay last.
 
 **Check it.** `python <this skill's base directory>/scripts/arch-design.py check <file>` fails on a
 missing field, a file or line that is not in the repo, a one-way door with no `confirmed:` (or resting
 on a *suspected* fact), a strong finding with no number, and an `after:` that names no move. It
-reports `STALE` when a file the moves name changed after `at:`. Fix what it says before you hand the
-file over; a file that fails its own check is not buildable. Script not available: check those by hand.
+reports `STALE` when a file the moves name changed after `at:`. Fix what it says before handing
+over; a file that fails its own check is not buildable. Script not available: check those by hand.
 
-**Path.** If the user named a path, use it. Otherwise `docs/arch-design.md` for the whole system, and
-`docs/arch-design-<topic>.md` for one area. A rerun on the same topic overwrites the file; git holds
-the earlier versions. Set `status: landed` once the moves are in; from then the repo, not this file,
-is the source.
+**Path.** The user's path if named, else `docs/arch-design.md` for the whole system and
+`docs/arch-design-<topic>.md` for one area. A rerun on the same topic overwrites it; git holds the
+old one. Set `status: landed` once the moves are in. A one-way decision also belongs in the
+project's decision log, if it keeps one: this file goes stale, the log does not.
 
-**Decisions that outlive the moves.** A one-way decision belongs in the project's decision log, if
-it keeps one: append the row there too. This file goes stale once the moves land; the log does not.
-
-**A picture, whenever there are moves.** Verdict *clean* or a single decision row: no picture. Otherwise
-hand `arch-map` the Change view, the evidence and the headline; it writes its own file, and you link
-it in `diagram:`. Give it each move's number for the box or arrow it changes, and a table already
-written, `move | what | cost | effort`, copied from the Move blocks. Marks: added `+`, removed `-`,
-changed `~`, problems `!N`, with a legend. The reader approves moves by number from that picture, so a
-box with no move number on it is a gap. If `arch-map` isn't available, draw Mermaid yourself.
+**A picture, when there are moves.** Verdict *clean* or a single decision row: no picture. Otherwise
+hand `arch-map` the Change view, the evidence, the headline, each move's number for the box or
+arrow it changes, and the `move | what | cost | effort` table copied from the Move blocks; it writes
+its own file, which you link in `diagram:`. A box with no move number on it is a gap. If `arch-map`
+isn't available, draw Mermaid yourself or skip the picture.
 
 *Test:* the run ends with a path you can name and a `check` that exits 0. What happens to the moves
-after that — filed as issues, handed to a build loop, read by a person — is the next skill's
-decision, not this one's; the file is written to stand alone either way.
+after that (filed as issues, handed to a build loop, read by a person) is the next skill's decision;
+the file is written to stand alone either way.

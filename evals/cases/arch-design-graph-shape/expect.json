@@ -1,0 +1,74 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "question": "where is the shape costing change, and what is the top move?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "three-module-import-cycle",
+      "what": "orders/status.py imports shipping/tracking.py, which imports notifications/email.py, which imports orders/status.py: a three-module cycle with no lazy import to give it away",
+      "must_name": ["status.py", "tracking.py", "email.py"],
+      "must_say_any": [
+        "cycle", "circular", "imports each other", "import each other",
+        "each other", "mutual", "loop", "back to orders", "round trip"
+      ]
+    },
+    {
+      "id": "pricing-does-network-io",
+      "what": "pricing/quote.py fetches a rate over HTTP from inside a price calculation, so the order flow cannot run or be tested offline",
+      "must_name": ["quote.py"],
+      "must_say_any": [
+        "network", "http", "urllib", "urlopen", "infrastructure", "i/o",
+        "inject", "port", "adapter", "offline", "side effect"
+      ]
+    },
+    {
+      "id": "pass-through-order-service",
+      "what": "services/order_service.py forwards one call to orders.place and adds nothing; it has one caller",
+      "must_name": ["order_service.py"],
+      "must_say_any": [
+        "pass-through", "pass through", "passthrough", "only forwards",
+        "just forwards", "forwards", "thin wrapper", "wrapper", "no logic",
+        "delegat", "shallow", "adds nothing", "inline it", "deletion test"
+      ]
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not change",
+      "must_say_any": [
+        "proof:", "proof line", "tests green", "same output", "behaviour did not change",
+        "behavior did not change", "callers:", "verification:", "unchanged",
+        "same values", "same result"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "payment-gateway-is-a-real-seam",
+      "what": "payments/gateway.py has two adapters (live and an in-memory fake): a real seam that earns its place. Calling it speculative and inlining it is the wrong move",
+      "must_not_say_any": [
+        "inline the gateway", "inline gateway", "remove the gateway",
+        "delete the gateway", "drop the protocol", "remove the protocol",
+        "collapse the gateway", "remove payments/gateway", "delete payments/gateway",
+        "gateway.py is over", "gateway is speculative", "gateway is over-engineered"
+      ],
+      "must_say_any": [
+        "gateway", "two adapters", "two implementations", "fake", "real seam",
+        "earns its place", "stays"
+      ]
+    },
+    {
+      "id": "core-util-is-a-stable-hub-not-the-problem",
+      "what": "core/util.py is imported by 16 modules but imports nothing itself: a stable leaf. High fan-in alone is not a defect, and splitting or rewriting it is the wrong first move",
+      "must_not_say_any": [
+        "split core/util", "split up core/util", "break up core/util", "break up util",
+        "split util", "split up util", "util.py is a god", "util is a god",
+        "god module", "god object", "core/util.py is the problem",
+        "util is the worst", "rewrite core/util", "remove core/util", "delete core/util"
+      ]
+    }
+  ],
+  "actions": {
+    "read_only": true
+  }
+}

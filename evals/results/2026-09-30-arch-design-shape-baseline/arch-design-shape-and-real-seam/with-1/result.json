@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-shape-and-real-seam",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   import-cycle-orders-inventory \u2014 \"**`orders` and `inventory` import each other.** `inventory/reserve.py:5` hides the cycle with a lazy import, and moving \"\n  found   domain-code-does-network-io \u2014 \"Fetch the tax rate once per order and pass it into `place_order`, so the flow runs with zero network calls.\"\n  found   pass-through-service-layer \u2014 \"**`services/order_service.py` only forwards one call.**\"\n  found   move-has-a-proof-line \u2014 \"proof: `grep -rn \"order_service\" fixture/` returns nothing after the move, and the Move 2 proof still prints `fake-` cha\"\n  held    payment-gateway-is-a-real-seam",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "arch-design-fixture.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.35126499999999994,
+  "turns": 14,
+  "seconds": 85.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

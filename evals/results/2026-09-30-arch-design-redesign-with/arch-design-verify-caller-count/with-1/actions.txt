@@ -1,0 +1,5 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Glob: fixture/**/*
+  3. Grep: interface |Protocol|ABC
+  4. Bash: cd fixture && for f in shipping/*.py checkout/cart.py jobs/reprice.py; do echo "=== $f"; cat -n $f; done; ls -a . ..
+  5. Bash: cd fixture && grep -rnE "ShippingCalculator|shipping\.base|shipping import|import shipping|__import__|importlib|getattr" . ; echo ---; python -c " from checkou…

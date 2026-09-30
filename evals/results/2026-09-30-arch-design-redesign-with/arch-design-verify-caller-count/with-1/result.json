@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"It has one implementer, and its own docstring says so: \"in case a second carrier is ever needed.\"\"\n  found   second-caller-hides-behind-an-alias \u2014 \"`jobs/reprice.py:2` renames that to `pick_calc`, so a grep for `get_calculator` misses it.\"\n  held    undercounts-to-one-caller",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.186027,
+  "turns": 7,
+  "seconds": 27.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

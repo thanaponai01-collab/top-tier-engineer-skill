@@ -1,0 +1,13 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Glob: fixture/**/*
+  3. Bash: ls -la fixture 2>&1 | head -50; git -C fixture log --oneline 2>&1 | head -5
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_e62710w\fixture\app\db.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_e62710w\fixture\app\reports\models.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_e62710w\fixture\app\reports\views.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_e62710w\fixture\app\users\models.py
+  8. Grep: get_report|list_reports|execute\(|render\(|find_user
+  9. Bash: ls "C:/Users/thana/AppData/Local/Temp/tte-plugin-xzoj__08/top-tier-engineer/skills/arch-design/scripts" 2>&1; cd fixture && grep -rniE "test|schema|CREATE TABL…
+ 10. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-_e62710w\docs\arch-design.md
+ 11. Bash: python "C:/Users/thana/AppData/Local/Temp/tte-plugin-xzoj__08/top-tier-engineer/skills/arch-design/scripts/arch-design.py" check docs/arch-design.md; echo exit…
+ 12. Bash: sed -i 's#fixture/app/#app/#g; s# and a new `report_export(request, report_id)` beside it# and a new report_export view beside it#; s#^- at: .*#- at: no-git#' …
+ 13. Bash: rm -rf fixture/docs && sed -i 's#\(: \|(\|; \| \)app/reports/#\1fixture/app/reports/#g; s#^- context: sqlite via app/db.py#- context: sqlite via fixture/app/db…

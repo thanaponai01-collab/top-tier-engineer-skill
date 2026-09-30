@@ -53,6 +53,21 @@ class GraphAudit(unittest.TestCase):
             names = {u["name"] for u in r["unused_defs"]}
             self.assertIn("legacy_discount", names)
 
+    def test_edges_flag_writes_the_graph_for_other_tools(self):
+        """--edges FILE dumps the import graph (module -> file, importer -> imported @ line)
+        so arch-design's dep-map.py can read it without importing this script."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._fixture(tmp)
+            out_file = os.path.join(tmp, "edges.json")
+            code, out, err = run("graph-audit.py", tmp, "--edges", out_file)
+            self.assertIn(code, (0, 1), out + err)
+            g = json.load(open(out_file, encoding="utf-8"))
+            self.assertIn("app.services.billing", g["modules"])
+            self.assertTrue(g["modules"]["app.services.billing"].endswith("billing.py"))
+            self.assertIn(
+                {"from": "app.services.billing", "to": "app.models.invoice", "line": 1},
+                g["edges"])
+
     def test_raw_text_reference_rescues_dead_candidate(self):
         with tempfile.TemporaryDirectory() as tmp:
             layers = self._fixture(tmp, with_yml_rescue=True)

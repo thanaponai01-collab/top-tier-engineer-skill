@@ -1,0 +1,13 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Glob: fixture/**/*
+  3. Bash: cd fixture 2>/dev/null && git log --oneline -20 2>&1 | head; ls -la
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-l0ghz37a\fixture\app\db.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-l0ghz37a\fixture\app\reports\models.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-l0ghz37a\fixture\app\reports\views.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-l0ghz37a\fixture\app\users\models.py
+  8. Bash: ls "C:/Users/thana/AppData/Local/Temp/tte-plugin-u3rkjfde/top-tier-engineer/skills/arch-design/scripts"; cd "C:/Users/thana/AppData/Local/Temp/tte-eval-l0ghz37…
+  9. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-l0ghz37a\docs\arch-design-report-export.md
+ 10. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-l0ghz37a"; python "C:/Users/thana/AppData/Local/Temp/tte-plugin-u3rkjfde/top-tier-engineer/skills/arch-design/sc…
+ 11. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-l0ghz37a\docs\arch-design-report-export.md
+ 12. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-l0ghz37a\docs\arch-design-report-export.md
+ 13. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-l0ghz37a"; python "C:/Users/thana/AppData/Local/Temp/tte-plugin-u3rkjfde/top-tier-engineer/skills/arch-design/sc…

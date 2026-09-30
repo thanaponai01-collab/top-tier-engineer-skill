@@ -1,0 +1,9 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Glob: fixture/**/*
+  3. Bash: ls "C:/Users/thana/AppData/Local/Temp/tte-plugin-xzoj__08/top-tier-engineer/skills/arch-design/scripts" "C:/Users/thana/AppData/Local/Temp/tte-plugin-xzoj__08/…
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-av4db_rr\fixture\shipping\base.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-av4db_rr\fixture\shipping\flat_rate.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-av4db_rr\fixture\shipping\registry.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-av4db_rr\fixture\checkout\cart.py
+  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-av4db_rr\fixture\jobs\reprice.py
+  9. Grep: ShippingCalculator|shipping\.base|shipping import|\.quote\(|get_calculator|pick_calc|importlib|__import__|getattr

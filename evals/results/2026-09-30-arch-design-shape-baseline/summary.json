@@ -1,0 +1,92 @@
+[
+  {
+    "case": "arch-design-shape-and-real-seam",
+    "skill": "arch-design",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   import-cycle-orders-inventory \u2014 \"There's also an import cycle that a lazy import is hiding.\"\n  found   domain-code-does-network-io \u2014 \"**Pricing does network I/O inside a calculation** (`pricing/quote.py:6-15`).\"\n  found   pass-through-service-layer \u2014 \"`services/order_service.py` is a pass-through that adds no logic, so it's one more file to touch per change.\"\n  found   move-has-a-proof-line \u2014 \"**Done means:** a test that calls `place_order(order, FakeGateway(), fixed_rate)` with the network disabled.\"\n  held    payment-gateway-is-a-real-seam",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.14305579999999998,
+    "turns": 3,
+    "grade_text": "FAIL  arch-design-shape-and-real-seam  [arch-design]  3/4 found, score 0.75 (needs 1.00)\n  found   import-cycle-orders-inventory: orders/place.py imports inventory/reserve.py at the top, and reserve() imports orders.place back inside the function: a cycle hidden by a lazy import\n  found   domain-code-does-network-io: pricing/quote.py calls the network itself from domain code, so the order flow cannot run or be tested offline\n  found   pass-through-service-layer: services/order_service.py forwards one call to orders.place and adds nothing; it has one caller\n  MISSED  move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not change\n            named it, but never said what was wrong with it\n  held    payment-gateway-is-a-real-seam: payments/gateway.py has two adapters (live and an in-memory fake used by tests): a real seam that earns its place. Calling it speculative and inlining it is the wrong move",
+    "seconds": 25.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-shape-and-real-seam",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  4/4 found\n  found   import-cycle-orders-inventory \u2014 \"**`orders` and `inventory` import each other.** `inventory/reserve.py:5` hides the cycle with a lazy import, and moving \"\n  found   domain-code-does-network-io \u2014 \"Fetch the tax rate once per order and pass it into `place_order`, so the flow runs with zero network calls.\"\n  found   pass-through-service-layer \u2014 \"**`services/order_service.py` only forwards one call.**\"\n  found   move-has-a-proof-line \u2014 \"proof: `grep -rn \"order_service\" fixture/` returns nothing after the move, and the Move 2 proof still prints `fake-` cha\"\n  held    payment-gateway-is-a-real-seam",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:arch-design"
+    ],
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "arch-design-fixture.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.35126499999999994,
+    "turns": 14,
+    "grade_text": "PASS  arch-design-shape-and-real-seam  [arch-design]  4/4 found, score 1.00 (needs 1.00)\n  found   import-cycle-orders-inventory: orders/place.py imports inventory/reserve.py at the top, and reserve() imports orders.place back inside the function: a cycle hidden by a lazy import\n  found   domain-code-does-network-io: pricing/quote.py calls the network itself from domain code, so the order flow cannot run or be tested offline\n  found   pass-through-service-layer: services/order_service.py forwards one call to orders.place and adds nothing; it has one caller\n  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not change\n  held    payment-gateway-is-a-real-seam: payments/gateway.py has two adapters (live and an in-memory fake used by tests): a real seam that earns its place. Calling it speculative and inlining it is the wrong move",
+    "seconds": 85.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

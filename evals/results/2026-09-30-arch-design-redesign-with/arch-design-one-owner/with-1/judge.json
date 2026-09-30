@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "three-date-formatters-one-job",
+      "what": "web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format",
+      "found": true,
+      "quote": "`%d/%m/%Y` appears in `api/serializers.py:1`, `web/views.py:1` and `jobs/export.py:1`, so changing it means editing 3 files.",
+      "quote_checked": true
+    },
+    {
+      "id": "provider-interface-one-implementation",
+      "what": "providers/base.py is an abstraction with exactly one implementation and no second caller paying for it",
+      "found": true,
+      "quote": "The `providers/` abstraction has one implementation.",
+      "quote_checked": true
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not",
+      "found": true,
+      "quote": "add a test that display_date(date(2026,1,2)) == \"02/01/2026\" and that billing.invoice.invoice_date(date(2026,1,2)) == \"2026-01-02\"; both must pass before and after.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "billing-looks-alike-but-changes-for-another-reason",
+      "what": "billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.1056278,
+  "model": "claude-sonnet-5-5"
+}

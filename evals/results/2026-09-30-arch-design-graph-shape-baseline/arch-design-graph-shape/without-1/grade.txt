@@ -1,0 +1,21 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  4/4 found
+  found   three-module-import-cycle — "Import cycle: `orders.status` → `shipping.tracking` → `notifications.email` → `orders.status`."
+  found   pricing-does-network-io — "**The order flow can't run offline because `pricing/quote.py` makes a live HTTP call inside price calculation, and chang"
+  found   pass-through-order-service — "The `services/order_service.py` wrapper only forwards the call, so it adds a file without adding a boundary."
+  found   move-has-a-proof-line — "`place_order(cid, items, FakeGateway(), ...)` with the network blocked should return a deterministic total."
+  held    payment-gateway-is-a-real-seam
+  held    core-util-is-a-stable-hub-not-the-problem
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-graph-shape  [arch-design]  2/4 found, score 0.50 (needs 1.00)
+  MISSED  three-module-import-cycle: orders/status.py imports shipping/tracking.py, which imports notifications/email.py, which imports orders/status.py: a three-module cycle with no lazy import to give it away
+            never named: status.py, tracking.py, email.py
+  found   pricing-does-network-io: pricing/quote.py fetches a rate over HTTP from inside a price calculation, so the order flow cannot run or be tested offline
+  found   pass-through-order-service: services/order_service.py forwards one call to orders.place and adds nothing; it has one caller
+  MISSED  move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not change
+            named it, but never said what was wrong with it
+  held    payment-gateway-is-a-real-seam: payments/gateway.py has two adapters (live and an in-memory fake): a real seam that earns its place. Calling it speculative and inlining it is the wrong move
+  held    core-util-is-a-stable-hub-not-the-problem: core/util.py is imported by 16 modules but imports nothing itself: a stable leaf. High fan-in alone is not a defect, and splitting or rewriting it is the wrong first move
+
+  ok      left the code untouched (a report-only task) — no code file changed

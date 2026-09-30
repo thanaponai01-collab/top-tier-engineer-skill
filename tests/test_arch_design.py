@@ -73,6 +73,25 @@ class Check(unittest.TestCase):
             self.assertEqual(rc, 0, out)
             self.assertIn("ARCH: 1 moves", out)
 
+    def test_a_tree_with_no_git_checks_paths_from_the_folder_above_docs(self):
+        """Not a git repo (a fixture, a fresh export): docs/ is not the root, and there is no
+        commit for `at:` to name, so staleness is skipped rather than reported as broken."""
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "src/dates.py", "import datetime\ndef fmt(d):\n    return d.isoformat()\n")
+            write(tmp, "src/report.py", "from dates import fmt\n")
+            write(tmp, "docs/arch-design.md", HEAD.format(sha="none") + FINDING + MOVE)
+            rc, out, _ = run("arch-design.py", "check", os.path.join(tmp, "docs", "arch-design.md"))
+            self.assertEqual(rc, 0, out)
+            self.assertNotIn("STALE", out)
+
+    def test_no_git_still_rejects_a_path_that_is_not_there(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "src/report.py", "from dates import fmt\n")           # dates.py is missing
+            write(tmp, "docs/arch-design.md", HEAD.format(sha="none") + FINDING + MOVE)
+            rc, out, _ = run("arch-design.py", "check", os.path.join(tmp, "docs", "arch-design.md"))
+            self.assertEqual(rc, 1, out)
+            self.assertIn("src/dates.py", out)
+
     def test_no_file_is_exit_2(self):
         with tempfile.TemporaryDirectory() as tmp:
             rc, _, _ = run("arch-design.py", "check", os.path.join(tmp, "docs", "arch-design.md"))

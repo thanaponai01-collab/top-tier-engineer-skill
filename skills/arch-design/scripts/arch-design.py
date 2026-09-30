@@ -7,7 +7,7 @@ The file is a work order with a shelf life. `check` says whether it can still be
           door has no recorded confirmation (or rests on a suspected fact), a strong finding has
           no number, or `after:` names a move that does not exist.
   STALE   a file the moves and findings name has changed since the commit the file is pinned to
-          (`at:`). Not checked once `status: landed`.
+          (`at:`). Not checked once `status: landed`, or outside a git repo (no commit to compare).
 
 Format (`key: value` bullets, so an agent reads it without prose):
 
@@ -167,10 +167,15 @@ def cmd_check(target):
         return 2
     with open(path, encoding="utf-8") as fh:
         head, sections = parse(fh.read())
-    rc, top = git(os.path.dirname(os.path.abspath(path)), "rev-parse", "--show-toplevel")
-    repo = top.strip() if rc == 0 else os.path.dirname(os.path.abspath(path))
+    here = os.path.dirname(os.path.abspath(path))
+    rc, top = git(here, "rev-parse", "--show-toplevel")
+    in_git = rc == 0
+    if in_git:
+        repo = top.strip()
+    else:  # no git: the root is the folder above docs/, and there is no commit for `at:` to name
+        repo = os.path.dirname(here) if os.path.basename(here).lower() == "docs" else here
     broken = problems(repo, head, sections)
-    old = [] if head.get("status", "").lower() == "landed" else stale(repo, head, sections)
+    old = [] if head.get("status", "").lower() == "landed" or not in_git else stale(repo, head, sections)
     for p in broken:
         print(f"BROKEN: {p}")
     for p in old:

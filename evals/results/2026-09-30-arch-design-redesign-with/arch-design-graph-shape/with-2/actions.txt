@@ -1,0 +1,21 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Glob: fixture/**/*
+  3. Grep: ^\s*(from|import)\s+\S+
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\orders\place.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\services\order_service.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\pricing\quote.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\api\routes.py
+  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\payments\gateway.py
+  9. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\payments\fake.py
+ 10. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\shipping\tracking.py
+ 11. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\notifications\email.py
+ 12. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\orders\status.py
+ 13. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\orders\lines.py
+ 14. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\payments\live.py
+ 15. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\core\util.py
+ 16. Grep: ^def |^class |^[A-Z_]+ =
+ 17. Bash: grep -rn "fake\|FakeGateway\|test" fixture --include=*.py -il; ls
+ 18. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-ef85btny/fixture && for f in catalog/products.py shipping/rates.py inventory/reserve.py inventory/stock.py custom…
+ 19. Grep: unit_price|subject_for|_fetch_margin|order_service|record\(|build_lines|place_order|quote_shipping
+ 20. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\fixture\api\schemas.py
+ 21. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-ef85btny\docs\arch-design.md

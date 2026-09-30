@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "import-cycle-orders-inventory",
+      "what": "orders/place.py imports inventory/reserve.py at the top, and reserve() imports orders.place back inside the function: a cycle hidden by a lazy import",
+      "found": true,
+      "quote": "**`orders` and `inventory` import each other.** `inventory/reserve.py:5` hides the cycle with a lazy import, and moving it to the top of the file raises an `ImportError`.",
+      "quote_checked": true
+    },
+    {
+      "id": "domain-code-does-network-io",
+      "what": "pricing/quote.py calls the network itself from domain code, so the order flow cannot run or be tested offline",
+      "found": true,
+      "quote": "Fetch the tax rate once per order and pass it into `place_order`, so the flow runs with zero network calls.",
+      "quote_checked": true
+    },
+    {
+      "id": "pass-through-service-layer",
+      "what": "services/order_service.py forwards one call to orders.place and adds nothing; it has one caller",
+      "found": true,
+      "quote": "**`services/order_service.py` only forwards one call.**",
+      "quote_checked": true
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not change",
+      "found": true,
+      "quote": "proof: `grep -rn \"order_service\" fixture/` returns nothing after the move, and the Move 2 proof still prints `fake-` charge ids",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "payment-gateway-is-a-real-seam",
+      "what": "payments/gateway.py has two adapters (live and an in-memory fake used by tests): a real seam that earns its place. Calling it speculative and inlining it is the wrong move",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.1145578,
+  "model": "claude-sonnet-5-5"
+}
