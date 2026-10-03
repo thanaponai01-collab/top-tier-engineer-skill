@@ -1,0 +1,8 @@
+  1. Skill: top-tier-engineer:drive-overnight
+  2. Bash: ls -la && cat package.json 2>/dev/null; ls tickets* 2>/dev/null
+  3. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-sx6_scuu/fixture && find . -not -path './node_modules/*' -not -path './.git/*' | head -80
+  4. Bash: for f in README.md SPEC.md tickets.md points.py statements.py test_points.py release.sh; do echo "=== $f"; cat $f; done; head -5 data/legacy_points/balances.cs…
+  5. Bash: python -m unittest 2>&1 | tail -8; python statements.py
+  6. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-sx6_scuu\fixture\points.py
+  7. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-sx6_scuu\fixture\test_points.py
+  8. Bash: python -m unittest 2>&1 | tail -4; python statements.py cat > OVERNIGHT.md <<'EOF' # OVERNIGHT Exit check: `python -m unittest` green and `python statements.py…

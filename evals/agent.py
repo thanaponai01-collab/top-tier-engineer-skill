@@ -54,8 +54,12 @@ def clean_env():
     return env
 
 
-def stage_plugin(dest):
-    """Copy only what an installed plugin contains into `dest`; return it."""
+def stage_plugin(dest, hooks_profile=None):
+    """Copy only what an installed plugin contains into `dest`; return it.
+
+    `hooks_profile` ("optional", "autonomous") installs hooks/<profile>.json as the staged
+    plugin's hooks.json, the same copy a person makes by hand. The checkout is not touched.
+    """
     os.makedirs(dest, exist_ok=True)
     for part in PLUGIN_PARTS:
         src = os.path.join(ROOT, part)
@@ -64,6 +68,9 @@ def stage_plugin(dest):
                             ignore=shutil.ignore_patterns(*IGNORED_DIRS))
         elif os.path.isfile(src):
             shutil.copy2(src, os.path.join(dest, part))
+    if hooks_profile:
+        shutil.copy2(os.path.join(ROOT, "hooks", hooks_profile + ".json"),
+                     os.path.join(dest, "hooks", "hooks.json"))
     return dest
 
 

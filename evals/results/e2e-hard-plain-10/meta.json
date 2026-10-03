@@ -1,0 +1,12 @@
+{
+  "started": "2026-10-03-1752",
+  "repeats": 10,
+  "arms": [
+    "without"
+  ],
+  "version": "4.47.0",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "out_rel": "evals/results/e2e-hard-plain-10"
+}

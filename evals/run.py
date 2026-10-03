@@ -570,6 +570,8 @@ def main(argv=None):
     ap.add_argument("--budget-usd", type=float, default=5.0, help="spend cap per run (default 5)")
     ap.add_argument("--out", help="results folder (default evals/results/<timestamp>); an existing one "
                                   "gets the new tries added beside its old ones")
+    ap.add_argument("--hooks-profile", choices=["optional", "autonomous"],
+                    help="run the with-skills arm with hooks/<profile>.json installed (default: none)")
     ap.add_argument("--no-scorecard", action="store_true", help="don't overwrite evals/RESULTS.md")
     ap.add_argument("--keep-workdirs", action="store_true", help="keep the temp folders for inspection")
     ap.add_argument("--dry-run", action="store_true", help="list the runs and exit")
@@ -618,7 +620,8 @@ def main(argv=None):
         return 2
 
     os.makedirs(out_dir, exist_ok=True)
-    plugin_dir = agent.stage_plugin(os.path.join(agent.scratch_dir("tte-plugin-"), "top-tier-engineer"))
+    plugin_dir = agent.stage_plugin(os.path.join(agent.scratch_dir("tte-plugin-"), "top-tier-engineer"),
+                                  args.hooks_profile)
     cases = {n: grade.load_case(n) for n in names}
 
     results = []

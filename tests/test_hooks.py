@@ -445,3 +445,40 @@ class TestVerifyStopGate(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestDriveEntry(unittest.TestCase):
+    """The autonomous profile's entry hook: loud on tasks, silent on everything else, never exit 2."""
+
+    ENTRY = TOOLS / "drive-entry.py"
+
+    def _run(self, stdin):
+        return subprocess.run([sys.executable, str(self.ENTRY)], input=stdin,
+                              capture_output=True, text=True)
+
+    def test_task_prompt_gets_the_drive_directive(self):
+        proc = self._run(json.dumps({"prompt": "the nightly digest stopped going out after yesterday's deploy"}))
+        self.assertEqual(proc.returncode, 0)
+        self.assertIn("`drive`", proc.stdout)
+
+    def test_silent_on_questions_chat_slash_and_named_skills(self):
+        for prompt in ("ok", "/drive fix the export that is broken", "why is the export so slow today?",
+                       "run debug-protocol on the export, it is broken somehow"):
+            proc = self._run(json.dumps({"prompt": prompt}))
+            self.assertEqual((proc.returncode, proc.stdout), (0, ""), prompt)
+
+    def test_fails_open_on_garbage(self):
+        for stdin in ("", "garbage", "[]", json.dumps({"prompt": 5})):
+            proc = self._run(stdin)
+            self.assertEqual((proc.returncode, proc.stdout), (0, ""), stdin)
+
+    def test_autonomous_profile_points_at_real_scripts(self):
+        manifest = json.loads((ROOT / "hooks" / "autonomous.json").read_text(encoding="utf-8-sig"))
+        referenced = json.dumps(manifest)
+        for script in ("philosophy-hook.py", "drive-entry.py", "verify-stop-gate.py"):
+            self.assertIn(script, referenced)
+            self.assertTrue((TOOLS / script).is_file(), script)
+
+    def test_selftest(self):
+        proc = subprocess.run([sys.executable, str(self.ENTRY), "--selftest"], capture_output=True, text=True)
+        self.assertEqual((proc.returncode, proc.stdout.strip()), (0, "selftest ok"), proc.stderr)

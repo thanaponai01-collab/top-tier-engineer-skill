@@ -1,0 +1,1 @@
+Customers are writing in that their points are lower than they should be (tickets are in the repo), and the test suite is red. Please take this from here to done. I am offline until tomorrow and cannot answer questions.

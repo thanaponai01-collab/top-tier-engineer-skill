@@ -1,0 +1,11 @@
+  1. Glob: **/*
+  2. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\tickets.md
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\points.py
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\SPEC.md
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\test_points.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\README.md
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\statements.py
+  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\release.sh
+  9. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\points.py
+ 10. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-ede0cajt\fixture\test_points.py
+ 11. Bash: cd fixture && python -m unittest 2>&1 | tail -5; python statements.py

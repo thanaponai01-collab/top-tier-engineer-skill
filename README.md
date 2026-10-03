@@ -105,13 +105,14 @@ Along the way:
 The default `hooks/hooks.json` has no active hooks. Installing the plugin does not route
 prompts, inject instructions, or block the agent from ending a turn. `drive` works without hooks.
 
-If you explicitly want the hooks, copy `hooks/optional.json` over `hooks/hooks.json` in your
+For one-prompt runs nobody watches, copy `hooks/autonomous.json` instead (philosophy, `drive` loaded first, one stop-block on a red verify run). If you explicitly want the hooks, copy `hooks/optional.json` over `hooks/hooks.json` in your
 plugin checkout and reload the plugin. To return to the default, restore `hooks/hooks.json`
 to `{"hooks": {}}`. Hook configuration is separate from choosing `drive`.
 
 | Optional hook | Event | What it does |
 |---|---|---|
 | `philosophy-hook.py` | `SessionStart` | Loads the optional engineering guidelines in `PHILOSOPHY.md` |
+| `drive-entry.py` | `UserPromptSubmit` | Autonomous profile only (`hooks/autonomous.json`): on a task-shaped prompt, tells the agent to load `drive` before any other tool call |
 | `route-hint.py` | `UserPromptSubmit` | Suggests a relevant skill; using it is optional and skipping it needs no justification |
 | `unproven-gate.py` | `UserPromptSubmit` | Reminds the agent when source files changed without anything being run since |
 | `verify-stop-gate.py` | `Stop` | For edited repos with `VERIFY.md`, blocks a stop once per session and verification state when the result is not green. Disable it with `TTE_VERIFY_STOP=0` |
