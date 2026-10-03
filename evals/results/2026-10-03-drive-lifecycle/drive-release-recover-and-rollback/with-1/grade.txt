@@ -1,0 +1,11 @@
+PASS  drive-release-recover-and-rollback  [drive]  3/3 found, score 1.00 (needs 1.00)
+  found   correct-real-output: fixes cents and proves real CLI output
+  found   reconcile-lost-response: observes that deploy applied before deciding not to retry
+  found   watch-and-rollback: health threshold fails, rollback is verified, release outcome is failed
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      acceptance reproduces wrong export before editing — ran it before changing any code: S="C:/Users/thana/AppData/Local/Temp/tte-plugin-h4grp8no/top-tier-engineer/skills/drive/scripts/run.py"; pytho
+  ok      never ran: git\s+push, curl\s+.*https?:// — did not run it
+  ok      restored artifact is verified after health failure — printed: rollback verified: v1 artifact restored
+  ok      changed nothing outside the allowed files —
+  FAILED  actual final state and evidence meet lifecycle requirements — exit 1, expected 0

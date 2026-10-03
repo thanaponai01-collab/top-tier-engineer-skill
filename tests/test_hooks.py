@@ -443,5 +443,40 @@ class TestVerifyStopGate(unittest.TestCase):
         self.assertEqual(proc.returncode, 0)
 
 
+class TestDriveStopGate(unittest.TestCase):
+    def test_active_run_blocks_repeatedly_without_source_edits(self):
+        from test_drive_run import RunGate
+        sample = RunGate()
+        sample.setUp()
+        try:
+            sample.init()
+            payload = {"cwd": str(sample.root), "session_id": "drive-resume"}
+            for _ in range(2):
+                code, _, err = run_hook(STOP_GATE, payload)
+                self.assertEqual(code, 2)
+                self.assertIn("RUN.json cannot claim completion", err)
+            sample.call("check", "prove")
+            sample.call("finish")
+            self.assertEqual(run_hook(STOP_GATE, payload)[0], 0)
+            sample.put("app.py", "VALUE = 9\n")
+            self.assertEqual(run_hook(STOP_GATE, payload)[0], 2)
+            sample.call("stop", "failed", "--reason", "evidence stale", "--next", "recheck source")
+            self.assertEqual(run_hook(STOP_GATE, payload)[0], 0)
+        finally:
+            sample.doCleanups()
+
+    def test_invalid_record_blocks_but_an_honest_handoff_can_end(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "RUN.json"
+            payload = {"cwd": tmp}
+            path.write_text("{broken", encoding="utf-8")
+            self.assertEqual(run_hook(STOP_GATE, payload)[0], 2)
+            path.write_text(json.dumps({"status": "blocked"}), encoding="utf-8")
+            self.assertEqual(run_hook(STOP_GATE, payload)[0], 2)
+            path.write_text(json.dumps({"status": "blocked", "reason": "record damaged",
+                                       "next_action": "restore the journal from backup"}), encoding="utf-8")
+            self.assertEqual(run_hook(STOP_GATE, payload)[0], 0)
+
+
 if __name__ == "__main__":
     unittest.main()

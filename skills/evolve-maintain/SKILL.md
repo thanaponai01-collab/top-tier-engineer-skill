@@ -34,7 +34,9 @@ touched three contracts, an "upgrade" that was really a migration.
 
 For **Adapt** and **Improve**, run the existing suite before the first edit and keep the result: a
 red run afterwards means something only if you know what was red before. Any action on a live
-system (restart, config change, data fix) is one-way: ask first, and a yes covers that action only.
+system (restart, config change, data fix) must fit the user's explicit environment, action and limits.
+Use recorded upfront authority when it covers the move; ask only when absent or exceeded. Persist
+intent and reconcile ambiguous external state before retrying.
 
 Then size **how far it reaches**: modules, contracts, stored data, callers. Short reach → one direct
 change. Long reach → staged, down the ladder below. A "small fix" that reaches far was

@@ -221,6 +221,12 @@ python -m unittest discover tests
 
 ## Adding a case
 
+For action grading, `actions.setup_files` may name contract/run artifacts whose creation is setup,
+not an implementation edit. Reproduction-before-edit still counts edits to all other files; a
+shell `sed` touching both setup and source is a source edit. Keep the list narrow: never exempt
+the checks, their fixtures or implementation. The drive lifecycle case uses contract.json and
+RUN.json so initializing its evidence controller does not falsely count as fixing the application.
+
 ```
 evals/cases/<name>/
   prompt.md            what to say to the agent (names the skill)

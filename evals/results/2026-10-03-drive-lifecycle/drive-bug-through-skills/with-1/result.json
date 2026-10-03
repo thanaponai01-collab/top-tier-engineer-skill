@@ -1,0 +1,59 @@
+{
+  "case": "drive-bug-through-skills",
+  "skill": "drive",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": false,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:drive"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before fixing it",
+      "ok": true,
+      "detail": "ran it before changing any code: cd fixture && cat parse.py totals.py test_totals.py; python report.py; python -m pytest -q 2>&1 | tail -5"
+    },
+    {
+      "check": "went through the playbook: opened drive \u2192 debug-protocol \u2192 evolve-maintain \u2192 correctness-gate, in order, rather than doing the steps from memory",
+      "ok": false,
+      "detail": "opened: drive",
+      "with_only": true
+    },
+    {
+      "check": "after the run, `python report.py` prints the right total, 42.35",
+      "ok": true,
+      "detail": "printed: Total: 42.35"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py"
+    ],
+    "added": [
+      "fixture/test_parse.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.17332579999999997,
+  "turns": 6,
+  "seconds": 27.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": "Total: 42.35\n"
+}

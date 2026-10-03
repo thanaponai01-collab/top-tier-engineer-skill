@@ -30,8 +30,8 @@ the rest of this repo being loaded.
 
 | Skill | Ask it |
 |---|---|
-| `drive` | "Do this goal": matches a playbook, writes the steps as a todo list and carries them through the other skills; "continue" resumes, "new task" re-matches |
-| `drive-overnight` | "Work on this while I sleep": the same with no one to ask; exit check and budget first, a branch, a decision log, irreversible steps parked, a morning report |
+| `drive` | "Do this goal": matches a playbook, pins a run contract and advances on executed evidence; resumes uncertain actions safely and carries authorized releases through observation |
+| `drive-overnight` | "Work on this while I sleep": the same with no one to ask; scoped authority and budgets first, a branch, decisions recorded, out-of-scope actions parked, a morning report |
 | `pick-skill` | "Which one of these do I want?" — the map, when more than one could apply |
 | `agent-design` | "I'm about to build an agent": the tool contract first — every tool's reversibility and what it hands back into the agent's context, and the context/memory boundary |
 | `agent-evals` | "I'm building an agent / LLM feature": the task set and a grader the agent cannot touch, built before the agent, proven able to fail |
@@ -66,6 +66,19 @@ the rest of this repo being loaded.
 
 `structure-gate`, `latent-audit`, `verify-loop`, `feature-map` and `code-history` include stdlib-only Python scripts in their `scripts/` folders.
 Nothing to install.
+
+`drive` also includes a stdlib-only evidence controller. For a multi-step goal, RUN.json owns the
+contract, stage evidence, attempts and external action journal. See its
+[run contract](skills/drive/references/run-contract.md): `init`, `next`, `check`, `begin`, `reconcile`,
+`finish`, `status`, and honest `stop blocked|failed`. Supporting build and release notes hold detail.
+An interrupted deploy is reconciled against the provider before retrying; finish reruns checks,
+never mutations. Staging and production goals end in version/journey checks and bounded observation.
+
+The promise is a verified result in the requested environment **or an explicit blocked/failed
+handoff with preserved work**. The helper is not a scheduler or security sandbox. Protect independent
+acceptance checks in CI and restrict host tools/credentials; local writable hashes cannot enforce
+permissions against their writer. Other agents can use the helper directly and put `status` in
+their completion gate; the optional Stop integration below is for Claude Code.
 
 ## Flows
 
@@ -114,10 +127,11 @@ to `{"hooks": {}}`. Hook configuration is separate from choosing `drive`.
 | `philosophy-hook.py` | `SessionStart` | Loads the optional engineering guidelines in `PHILOSOPHY.md` |
 | `route-hint.py` | `UserPromptSubmit` | Suggests a relevant skill; using it is optional and skipping it needs no justification |
 | `unproven-gate.py` | `UserPromptSubmit` | Reminds the agent when source files changed without anything being run since |
-| `verify-stop-gate.py` | `Stop` | For edited repos with `VERIFY.md`, blocks a stop once per session and verification state when the result is not green. Disable it with `TTE_VERIFY_STOP=0` |
+| `verify-stop-gate.py` | `Stop` | With RUN.json: repeatedly blocks incomplete, invalid or stale completion, including resumed sessions; allows passing evidence or an explicit blocked/failed handoff. Without RUN.json: retains the one-time VERIFY.md reminder after edits. Off with `TTE_VERIFY_STOP=0` |
 
-The optional hooks fail open on errors. Only the optional Stop gate can block, and a changed
-verification state can trigger another block. None of these hooks is needed to use the skills.
+Prompt/session hooks fail open. The optional Stop hook checks RUN.json strictly when present,
+allowing successful evidence or an explicit failed/blocked handoff. Without RUN.json it retains the
+one-time VERIFY.md reminder. Hooks remain opt-in; invoking drive does not enable them.
 
 ## Does it work?
 
