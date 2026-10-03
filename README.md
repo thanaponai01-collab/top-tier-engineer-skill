@@ -1,7 +1,7 @@
 # Top-Tier Engineer
 
 Thirty-three engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
-do for a task; `PHILOSOPHY.md` says *how to work* on every task.
+do for a task; `PHILOSOPHY.md` offers optional engineering guidelines.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
 work to another skill it also says what to do when that skill isn't there. `evals/` holds the
@@ -15,11 +15,12 @@ git clone https://github.com/thanaponai01-collab/top-tier-engineer-skill
 /plugin install top-tier-engineer@thanaponai01-skills
 ```
 
-That is the whole install. `PHILOSOPHY.md` loads itself at session start, and the unproven-change
-gate runs from the same manifest — see [Hooks](#hooks).
+That is the whole install. No hooks run by default, and no philosophy or workflow is
+injected into the session. Skills are available when useful; ordinary work can proceed directly.
 
-Claude picks the right skill from what you ask. You can also call one by name, e.g.
-`/top-tier-engineer:debug-protocol`.
+Use `/top-tier-engineer:drive` with a goal when you want the full workflow. It chooses and runs
+the relevant skills, so you do not need to invoke each one. You can also call an individual
+skill by name, e.g. `/top-tier-engineer:debug-protocol`. Skipping a skill needs no justification.
 
 **Other agents:** every `skills/<name>/SKILL.md` is plain markdown. Copy the one you need and
 paste it — it carries its own vocabulary and its own fallbacks, so nothing silently depends on
@@ -75,8 +76,8 @@ section writes each move out complete enough to build from, `issue-handoff` turn
 one issue each whenever you want a queue that reaches you on another machine, `arch-map` draws a
 picture when you want one, and `senior-review`
 ends by naming the skill for the gap it found. Every flow has the same shape:
-**find → change → prove → ship**. Underneath, the work passes nine checkpoints, each owned by one
-skill and each leaving a file the next reads: Orient, Frame, Design, Plan, Build, Prove, Review,
+**find → change → prove → ship**. For a full workflow, the map offers nine checkpoints, each owned by one
+skill with a file the next can read: Orient, Frame, Design, Plan, Build, Prove, Review,
 Ship, Watch. `pick-skill` holds the table ("The Relay").
 
 | Goal | Find | Change | Prove | Ship |
@@ -101,40 +102,22 @@ Along the way:
 
 ## Hooks
 
-Every skill here is *pull*: it runs because you asked for it. The failure they are all written
-against — code changed, turn ended, "it should work" standing in for a result — happens at the
-moment nobody thinks to ask for anything. So does the other one: not knowing a skill exists for what
-you just typed. Four hooks cover those gaps; only one can block you, once.
+The default `hooks/hooks.json` has no active hooks. Installing the plugin does not route
+prompts, inject instructions, or block the agent from ending a turn. `drive` works without hooks.
 
-| Hook | Event | What it does |
+If you explicitly want the hooks, copy `hooks/optional.json` over `hooks/hooks.json` in your
+plugin checkout and reload the plugin. To return to the default, restore `hooks/hooks.json`
+to `{"hooks": {}}`. Hook configuration is separate from choosing `drive`.
+
+| Optional hook | Event | What it does |
 |---|---|---|
-| `philosophy-hook.py` | `SessionStart` | Loads `PHILOSOPHY.md`, so the habits apply without a manual `@import` |
-| `route-hint.py` | `UserPromptSubmit` | Names the skill your prompt is asking for, when you did not ask for one |
-| `verify-stop-gate.py` | `Stop` | In a repo with a `VERIFY.md`, after a session that edited files: if the last `verify.py` run is red, stale, tampered with or edited outside the declared scope, blocks the stop **once** and asks for the run and its result. Off with `TTE_VERIFY_STOP=0` |
-| `unproven-gate.py` | `UserPromptSubmit` | When source files were edited and nothing was run since, says so and asks for the label: *proven* / *traced* / *suspected* |
+| `philosophy-hook.py` | `SessionStart` | Loads the optional engineering guidelines in `PHILOSOPHY.md` |
+| `route-hint.py` | `UserPromptSubmit` | Suggests a relevant skill; using it is optional and skipping it needs no justification |
+| `unproven-gate.py` | `UserPromptSubmit` | Reminds the agent when source files changed without anything being run since |
+| `verify-stop-gate.py` | `Stop` | For edited repos with `VERIFY.md`, blocks a stop once per session and verification state when the result is not green. Disable it with `TTE_VERIFY_STOP=0` |
 
-`route-hint.py` is deliberately quiet: one suggestion per prompt, each skill named at most once per
-session, and silence whenever you already named a skill, typed a slash command, or asked for
-ordinary work. `build-discipline` is not among its rules at all — "implement this" is the most
-common thing anyone types, and a hint on every one of them is noise. It routes on what is *known*,
-not on the adjective, so "it's broken" goes to `debug-protocol` and "it's broken because the token
-expires" goes to `evolve-maintain`.
-
-Reading is not proving: `cat`, `grep`, `ls` and `git status` are inert, so a session that only read
-files does not come back green. The gate reports a given finding once, names the files, and says
-nothing when the last thing you did was run something.
-
-**All four fail open by construction.** Exit 2 on `UserPromptSubmit` blocks the prompt *and erases it*;
-exit 2 on `SessionStart` stops the session starting. Every error path in all three scripts exits 0
-with no output (the one exit 2 is the Stop gate's single block). A reminder is never worth losing your typed prompt over.
-
-`Stop` is used once, on purpose. A gate that can hold you in a session gets uninstalled, and this
-plugin deleted an earlier Stop hook for exactly that (`c479319`). `verify-stop-gate.py` differs: it
-judges your work (`verify.py status`), not the suite's own output; it stays silent unless the repo
-has a `VERIFY.md` and the session edited a file; and it blocks at most once per state, so it can
-nudge but never trap.
-
-Don't want them? `/plugin` → disable hooks, or delete `hooks/hooks.json`. The skills work untouched.
+The optional hooks fail open on errors. Only the optional Stop gate can block, and a changed
+verification state can trigger another block. None of these hooks is needed to use the skills.
 
 ## Does it work?
 

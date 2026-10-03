@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.45.0 - 2026-10-03 - optional workflows by default
+
+- Default hook manifest is empty. The previous four hooks remain in `hooks/optional.json` for explicit opt-in.
+- `drive` remains the entry point for orchestrating skills; ordinary work needs no skill calls or skip justification.
+- Optional philosophy no longer requires `verify-loop` beyond typos or repeated permission for authorized actions. Routing hints are advisory.
+- Updated hook tests cover the inactive default and the optional manifest. Existing skill workflows are unchanged.
+
 ## 4.44.0 — 2026-09-29 — verify-loop: `verify.py tests`, every test mapped to a feature
 
 - **New `verify.py tests [--strict]`.** `verify.py run` mapped test *files* to features, so a file

@@ -296,9 +296,8 @@ def message(skill, why):
         return ""
     return (
         "[top-tier-engineer] This reads like a job for `%s` — %s.\n"
-        "Run it, or say in one line why it does not fit and carry on. Routing "
-        "is not the work: naming a skill and stopping is worse than never "
-        "naming one." % (skill, why)
+        "Optional guidance: use it if helpful, or continue directly. "
+        "Skipping a skill needs no justification." % (skill, why)
     )
 
 

@@ -302,10 +302,11 @@ class TestRouteHintSilence(unittest.TestCase):
             self.assertIn(skill, route_hint.SKILLS, skill)
             self.assertTrue((ROOT / "skills" / skill / "SKILL.md").is_file(), skill)
 
-    def test_the_hint_names_the_skill_and_refuses_to_stop_at_routing(self):
+    def test_the_hint_names_an_optional_skill(self):
         text = route_hint.message(*route_hint.suggest("the app is broken"))
         self.assertIn("debug-protocol", text)
-        self.assertIn("Routing is not the work", text)
+        self.assertIn("Optional guidance", text)
+        self.assertNotIn("Run it, or", text)
         self.assertEqual(route_hint.message(None, None), "")
 
 
@@ -353,8 +354,12 @@ class TestPhilosophyHook(unittest.TestCase):
 
 
 class TestHooksManifest(unittest.TestCase):
+    def test_default_install_runs_no_hooks(self):
+        manifest = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8-sig"))
+        self.assertEqual(manifest["hooks"], {})
+
     def test_manifest_is_valid_and_points_at_real_scripts(self):
-        manifest = json.loads((ROOT / "hooks" / "hooks.json")
+        manifest = json.loads((ROOT / "hooks" / "optional.json")
                               .read_text(encoding="utf-8-sig"))
         events = manifest["hooks"]
         self.assertIn("SessionStart", events)
@@ -367,7 +372,7 @@ class TestHooksManifest(unittest.TestCase):
     def test_the_only_stop_hook_is_the_verify_gate(self):
         # A Stop hook was deleted in c479319 for wedging sessions. This one is a deliberate
         # return (verify-stop-gate.py explains why); anything else on Stop needs the same case.
-        manifest = json.loads((ROOT / "hooks" / "hooks.json")
+        manifest = json.loads((ROOT / "hooks" / "optional.json")
                               .read_text(encoding="utf-8-sig"))
         commands = [h["command"] for e in manifest["hooks"]["Stop"] for h in e["hooks"]]
         self.assertEqual(len(commands), 1)

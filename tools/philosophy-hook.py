@@ -2,10 +2,8 @@
 """
 philosophy-hook — SessionStart hook that loads PHILOSOPHY.md into the session.
 
-Why this exists: PHILOSOPHY.md is the one file that applies to every task, and
-until now it only reached a session if the user hand-edited ~/.claude/CLAUDE.md
-with an @import. Most people never do. Installing the plugin should be the whole
-install.
+This hook is available through hooks/optional.json. The default install does
+not inject philosophy; enabling these guidelines is an explicit choice.
 
 Channel: plain stdout on exit 0. Claude Code adds stdout to the model's context
 for SessionStart (and UserPromptSubmit) specifically; for other events stdout
@@ -27,8 +25,8 @@ PHILOSOPHY = PLUGIN_ROOT / "PHILOSOPHY.md"
 
 HEADER = (
     "The engineering habits below are loaded for this session by the "
-    "top-tier-engineer plugin. Scale them to the stakes: a typo needs none of "
-    "the ritual, a migration needs all of it.\n\n"
+    "top-tier-engineer plugin after hooks were enabled. They are optional "
+    "guidelines; work directly or choose drive for an orchestrated workflow.\n\n"
 )
 
 

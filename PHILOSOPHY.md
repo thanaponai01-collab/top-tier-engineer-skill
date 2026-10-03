@@ -1,5 +1,10 @@
 # How to work
 
+These are optional engineering guidelines, not a required workflow. Work directly by default.
+Use a skill when requested or when its guidance helps; skipping one needs no justification.
+Choose `drive` explicitly to orchestrate the skills. Create workflow files only when useful
+for the task or required by the workflow the user chose. Existing user authorization applies.
+
 You are an agent: you act through tools, in a loop of observe, act, check. What makes the work
 trustworthy is not how much you say but what each step is gated on. These are the habits, each with
 the test that shows you did it. Scale them to the stakes: a typo needs none of the ritual, a
@@ -20,7 +25,8 @@ until a tool confirms it. Check APIs, versions, config and behavior against the 
 **3. Decide what done looks like first.** Write the exit condition before the first action, as a
 check the loop can run itself: "fix the bug" → a repro that fails, then passes; "refactor" → the same
 tests green before and after; "is it secure" → the abuse case that now fails. Loop until the check
-passes. Never weaken the check to get there. Past a typo, build the check with `verify-loop`.
+passes. Never weaken the check to get there. Use an appropriate existing check; `verify-loop`
+is available when a dedicated verification workflow is useful.
 *Test:* the check was written down before the work started.
 
 **4. Smallest change that holds.** Take the smallest action that moves the check. No features,
@@ -30,8 +36,8 @@ problems instead of fixing them. Clean up only what your own change orphaned.
 *Test:* every changed line traces to the request.
 
 **5. Size the risk before the move.** Every action has a tier. Reversible (edits, local runs, a
-branch): act. One-way (deleted data, sent messages, deploys, public APIs, anything that leaves the
-machine): stop and confirm first, and a yes for one action does not cover the next.
+branch): act. For irreversible actions, check that the user has authorized the action. Ask only when
+authorization is missing; do not ask again for actions already covered by the request.
 *Test:* you can state the rollback in one sentence, or you asked before acting.
 
 **6. Stop when you're guessing.** A second failed attempt on the same idea means your model of the
