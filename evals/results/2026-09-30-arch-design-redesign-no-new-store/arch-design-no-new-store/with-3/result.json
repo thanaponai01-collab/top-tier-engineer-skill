@@ -1,0 +1,49 @@
+{
+  "case": "arch-design-no-new-store",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  1/3 found\n  found   existing-db-is-the-one-owner \u2014 \"Storage is a new `report_exports` table written through `app/db.py:11`.\"\n  MISSED  no-plugin-for-one-format\n  MISSED  cost-of-a-new-store-named\n  held    new-datastore-for-history",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 1,
+  "total": 3,
+  "missed": [
+    "only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for",
+    "the report names what a separate new datastore would cost if it turned out wrong \u2014 a migration, a second thing to secure and back up \u2014 as the reason for reusing the existing database"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "docs/arch-design-csv-export.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.24880560000000002,
+  "turns": 13,
+  "seconds": 53.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

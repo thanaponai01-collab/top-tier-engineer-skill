@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   gonna-need-seam-one-implementation — "It has exactly one implementer, `FlatRateCalculator`, which returns a constant `5.00`."
+  found   second-caller-hides-behind-an-alias — "`reprice.py` renames it to `pick_calc`, which is probably why a name search missed it."
+  held    undercounts-to-one-caller
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-verify-caller-count  [arch-design]  1/2 found, score 0.50 (needs 1.00)
+  MISSED  gonna-need-seam-one-implementation: shipping/base.py is an interface with exactly one implementation, FlatRateCalculator, and no second carrier is asked for by any requirement here
+            named it, but never said what was wrong with it
+  found   second-caller-hides-behind-an-alias: jobs/reprice.py reaches the same seam through `from shipping.registry import get_calculator as pick_calc`, so a plain text search for `get_calculator(` finds checkout/cart.py and misses this one
+  held    undercounts-to-one-caller: a report that greps only the literal text `get_calculator(` finds checkout/cart.py, calls it the only caller, and clears the seam to inline directly — breaking jobs/reprice.py, which calls the same function under its aliased name
+
+  ok      left the code untouched (a report-only task) — no code file changed

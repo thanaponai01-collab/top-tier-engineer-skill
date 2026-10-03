@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"`notifications.email`, `orders.status` and `shipping.tracking` import each other\"\n  found   pricing-does-network-io \u2014 \"`pricing/quote.py:12` calls `urllib.request.urlopen` inside `unit_price`, once per order line\"\n  found   pass-through-order-service \u2014 \"`services/order_service.py` only forwards to `orders.place`.\"\n  found   move-has-a-proof-line \u2014 \"Check: run `place_order` with `FakeGateway` and a fixed margin, with the network off.\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/arch-design.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.33233060000000003,
+  "turns": 13,
+  "seconds": 64.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

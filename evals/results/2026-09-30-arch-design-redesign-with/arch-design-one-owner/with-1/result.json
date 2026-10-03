@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"`%d/%m/%Y` appears in `api/serializers.py:1`, `web/views.py:1` and `jobs/export.py:1`, so changing it means editing 3 fi\"\n  found   provider-interface-one-implementation \u2014 \"The `providers/` abstraction has one implementation.\"\n  found   move-has-a-proof-line \u2014 \"add a test that display_date(date(2026,1,2)) == \"02/01/2026\" and that billing.invoice.invoice_date(date(2026,1,2)) == \"2\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "docs/arch-design.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.24455420000000003,
+  "turns": 9,
+  "seconds": 43.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

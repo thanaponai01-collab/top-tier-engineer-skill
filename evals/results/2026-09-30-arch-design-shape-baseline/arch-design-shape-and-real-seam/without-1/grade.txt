@@ -1,0 +1,18 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  4/4 found
+  found   import-cycle-orders-inventory — "There's also an import cycle that a lazy import is hiding."
+  found   domain-code-does-network-io — "**Pricing does network I/O inside a calculation** (`pricing/quote.py:6-15`)."
+  found   pass-through-service-layer — "`services/order_service.py` is a pass-through that adds no logic, so it's one more file to touch per change."
+  found   move-has-a-proof-line — "**Done means:** a test that calls `place_order(order, FakeGateway(), fixed_rate)` with the network disabled."
+  held    payment-gateway-is-a-real-seam
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-shape-and-real-seam  [arch-design]  3/4 found, score 0.75 (needs 1.00)
+  found   import-cycle-orders-inventory: orders/place.py imports inventory/reserve.py at the top, and reserve() imports orders.place back inside the function: a cycle hidden by a lazy import
+  found   domain-code-does-network-io: pricing/quote.py calls the network itself from domain code, so the order flow cannot run or be tested offline
+  found   pass-through-service-layer: services/order_service.py forwards one call to orders.place and adds nothing; it has one caller
+  MISSED  move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not change
+            named it, but never said what was wrong with it
+  held    payment-gateway-is-a-real-seam: payments/gateway.py has two adapters (live and an in-memory fake used by tests): a real seam that earns its place. Calling it speculative and inlining it is the wrong move
+
+  ok      left the code untouched (a report-only task) — no code file changed

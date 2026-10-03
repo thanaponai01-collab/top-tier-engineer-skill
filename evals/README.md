@@ -22,6 +22,7 @@ next to it, and its transcript shows the work its report claims.
 | `debug-protocol-distant-cause` | `debug-protocol` | cents truncated at parse time | the wrong total is *seen* two modules downstream |
 | `arch-design-no-new-store` | `arch-design` | CSV export history, designed before any code: the existing database already owns this | a new datastore, or a plugin interface for a single format |
 | `arch-design-one-owner` | `arch-design` | one date format copied into three modules | a fourth that looks identical and must stay separate |
+| `arch-design-graph-shape` | `arch-design` | a 40-module backend: a three-module import cycle with no lazy import, a network call inside the price calculation, a service that only forwards one call | a payment seam with two adapters (real, must stay) and a utility module imported by 16 others that imports nothing (stable, not a problem). Both arms pass it: it is the fixture for `dep-map.py`'s tests and a cost check, not proof the skill helps |
 | `arch-design-verify-caller-count` | `arch-design` | a seam with one implementation, cleared to inline | a second caller reached only through a renamed import — a plain-text grep misses it |
 | `structure-gate-opaque-not-clean` | `structure-gate` | 230 lines of JS inside a string literal | the 5% a parser can enter is genuinely simple |
 | `drive-bug-through-skills` | `drive` | a bug goal with no known cause: the run must start with diagnosis, then fix, then prove | patching the printed total instead of diagnosing |

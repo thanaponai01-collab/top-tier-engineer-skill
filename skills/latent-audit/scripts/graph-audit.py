@@ -18,7 +18,11 @@ than dressing shallow up as uniform.
 
 Usage:
   python3 scripts/graph-audit.py <path> [<path> ...]
-        [--layers LAYERS_FILE] [--entry MODULE ...] [--json]
+        [--layers LAYERS_FILE] [--entry MODULE ...] [--json] [--edges FILE]
+
+--edges FILE writes the import graph as JSON ({"modules": {name: path},
+"edges": [{"from", "to", "line"}]}) for other skills' tools to read; the
+report is unchanged.
 
 Layers file format (top layer first; a module may import SAME or LOWER
 layers, never a HIGHER one), '#' comments allowed:
@@ -291,6 +295,7 @@ def main():
     ap.add_argument("--entry", action="append", default=[],
                     help="module known to be an entry point (repeatable)")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--edges", help="also write the import graph to this JSON file")
     args = ap.parse_args()
 
     pyfiles = [p for p in iter_files(args.paths, PY_EXT)]
@@ -299,6 +304,12 @@ def main():
         return 2
 
     modules, edges, asts = build_graph(pyfiles, args.paths)
+    if args.edges:
+        with open(args.edges, "w", encoding="utf-8") as f:
+            json.dump({"modules": {m: os.path.abspath(p) for m, p in modules.items()},
+                       "edges": [{"from": a, "to": b, "line": ln}
+                                 for a in sorted(edges) for b, ln in sorted(edges[a])]},
+                      f, indent=1)
     dead = check_dead_modules(modules, edges, args.paths, set(args.entry))
     unused = check_unused_defs(modules, asts, args.paths)
     breaches, unmapped, layers = [], [], None

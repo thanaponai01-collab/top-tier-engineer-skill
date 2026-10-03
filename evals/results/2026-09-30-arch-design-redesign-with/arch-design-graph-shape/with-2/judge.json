@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "three-module-import-cycle",
+      "what": "orders/status.py imports shipping/tracking.py, which imports notifications/email.py, which imports orders/status.py: a three-module cycle with no lazy import to give it away",
+      "found": true,
+      "quote": "`orders.status` imports `shipping.tracking`, which imports `notifications.email`, which imports `orders.status`.",
+      "quote_checked": true
+    },
+    {
+      "id": "pricing-does-network-io",
+      "what": "pricing/quote.py fetches a rate over HTTP from inside a price calculation, so the order flow cannot run or be tested offline",
+      "found": true,
+      "quote": "It is a network fetch inside pricing, and it is why the order flow can't run on a train.",
+      "quote_checked": true
+    },
+    {
+      "id": "pass-through-order-service",
+      "what": "services/order_service.py forwards one call to orders.place and adds nothing; it has one caller",
+      "found": true,
+      "quote": "`services/order_service.py` is 5 lines and has 1 caller. It forwards its 4 arguments unchanged.",
+      "quote_checked": true
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not change",
+      "found": true,
+      "quote": "Each move in the file has a proof step.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "payment-gateway-is-a-real-seam",
+      "what": "payments/gateway.py has two adapters (live and an in-memory fake): a real seam that earns its place. Calling it speculative and inlining it is the wrong move",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "core-util-is-a-stable-hub-not-the-problem",
+      "what": "core/util.py is imported by 16 modules but imports nothing itself: a stable leaf. High fan-in alone is not a defect, and splitting or rewriting it is the wrong first move",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.11602580000000001,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"`api/serializers.py:1`, `web/views.py:1` and `jobs/export.py:1` are three identical copies of `%d/%m/%Y`.\"\n  found   provider-interface-one-implementation \u2014 \"`Provider` has only `SmtpProvider`, and nothing in the tree calls `registry.get`.\"\n  found   move-has-a-proof-line \u2014 \"proof: characterization test that each of the three outputs is unchanged for one sample date (dd/mm/yyyy), plus one asse\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "docs/arch-design.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.21130480000000001,
+  "turns": 7,
+  "seconds": 38.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

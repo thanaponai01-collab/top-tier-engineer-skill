@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "import-cycle-orders-inventory",
+      "what": "orders/place.py imports inventory/reserve.py at the top, and reserve() imports orders.place back inside the function: a cycle hidden by a lazy import",
+      "found": true,
+      "quote": "There's also an import cycle that a lazy import is hiding.",
+      "quote_checked": true
+    },
+    {
+      "id": "domain-code-does-network-io",
+      "what": "pricing/quote.py calls the network itself from domain code, so the order flow cannot run or be tested offline",
+      "found": true,
+      "quote": "**Pricing does network I/O inside a calculation** (`pricing/quote.py:6-15`).",
+      "quote_checked": true
+    },
+    {
+      "id": "pass-through-service-layer",
+      "what": "services/order_service.py forwards one call to orders.place and adds nothing; it has one caller",
+      "found": true,
+      "quote": "`services/order_service.py` is a pass-through that adds no logic, so it's one more file to touch per change.",
+      "quote_checked": true
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not change",
+      "found": true,
+      "quote": "**Done means:** a test that calls `place_order(order, FakeGateway(), fixed_rate)` with the network disabled.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "payment-gateway-is-a-real-seam",
+      "what": "payments/gateway.py has two adapters (live and an in-memory fake used by tests): a real seam that earns its place. Calling it speculative and inlining it is the wrong move",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.10242380000000001,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,42 @@
+{
+  "case": "arch-design-shape-and-real-seam",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  4/4 found\n  found   import-cycle-orders-inventory \u2014 \"There's also an import cycle that a lazy import is hiding.\"\n  found   domain-code-does-network-io \u2014 \"**Pricing does network I/O inside a calculation** (`pricing/quote.py:6-15`).\"\n  found   pass-through-service-layer \u2014 \"`services/order_service.py` is a pass-through that adds no logic, so it's one more file to touch per change.\"\n  found   move-has-a-proof-line \u2014 \"**Done means:** a test that calls `place_order(order, FakeGateway(), fixed_rate)` with the network disabled.\"\n  held    payment-gateway-is-a-real-seam",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.14305579999999998,
+  "turns": 3,
+  "seconds": 25.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

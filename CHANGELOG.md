@@ -1,11 +1,71 @@
 # Changelog
 
-## 4.45.0 - 2026-10-03 - optional workflows by default
+## 4.47.0 - 2026-10-03 - optional workflows by default
 
 - Default hook manifest is empty. The previous four hooks remain in `hooks/optional.json` for explicit opt-in.
 - `drive` remains the entry point for orchestrating skills; ordinary work needs no skill calls or skip justification.
 - Optional philosophy no longer requires `verify-loop` beyond typos or repeated permission for authorized actions. Routing hints are advisory.
 - Updated hook tests cover the inactive default and the optional manifest. Existing skill workflows are unchanged.
+
+- Merged architecture dependency-map and slim-skill branches; preserved optional hooks and workflows.
+
+## 4.46.0 — 2026-09-30 — arch-design: one purpose again, 231 lines to 98
+
+- **`arch-design` `SKILL.md` cut back to its job:** improve, redesign a part, or design new backend
+  structure, using a short list of engineering techniques (one owner per job, dependencies one way,
+  logic apart from I/O, small interfaces, clear boundaries, data model first, no structure nobody
+  needs). It picks improve / replace-a-part / design-new first and says which; replacement is one
+  part at a time behind a stable interface and needs the user's yes. Answer is a ranked list in chat.
+- **Moved out of the main flow:** the graph and history instruments, and the optional
+  `docs/arch-design.md` format with its `check`, now live in `references/instruments.md`. The
+  scripts are unchanged.
+- **New test** caps `SKILL.md` at 110 lines, so a new section has to displace an old one.
+- **Measured.** Suite 277 green. `arch-design-no-new-store`, with-skill n=2: 0/2 pass (2/3 and 1/3
+  items), $0.18 a run, about half the old skill's cost. Still missing: naming what a separate new
+  datastore would cost. Improve-vs-replace and design-new behavior are suspected, not measured.
+
+## 4.45.0 — 2026-09-30 — arch-design: `dep-map.py`, See / Judge / Shape
+
+- **New `dep-map.py` (arch-design).** Reads the import graph that `latent-audit`'s `graph-audit.py`
+  now writes with `--edges FILE`, so the graph is built once, in one place, and nothing here
+  re-parses imports. Reports import cycles (with `file:line`), the most-imported modules with their
+  instability, modules whose every function only forwards its own arguments, Protocol/ABC seams by
+  how many classes implement each (one is a guess, two a fact), and modules that import a network,
+  database or process library. `--cochange` (from `change-map.py --json`) adds which co-changing
+  file pairs have no import edge. Leads, not verdicts. Python only, stdlib only.
+- **`arch-design` `SKILL.md` rewritten** as See → Judge → Shape (was six phases). New: run the
+  graph and the history before reading, judge modules by what they import and who imports them
+  (a module imported by many that imports nothing is stable, not a defect), count seams before
+  calling one over-built, reuse the repo's existing owner before adding a second, and say how to
+  test across a seam by what is on the other side. The move block and file format are unchanged.
+- **`arch-design.py check` works outside a git repo.** It treated `docs/` as the root and rejected
+  every path, and reported the pinned commit as stale. Both baseline runs on a fixture hit it. With
+  no git the root is the folder above `docs/` and staleness is skipped.
+- **Proven.** 9 tests for `dep-map.py` (planted patterns with a decoy each, and the 40-module eval
+  fixture giving exactly the planted answer); breaking the tool four ways turned a test red each
+  time, after one surviving break got its own test. Tests written first for `--edges` and for the
+  `check` fix. Suite: 276 green.
+- **New eval case `arch-design-graph-shape`** (40 modules: a three-module cycle, a network call in
+  the price calculation, a pass-through service; decoys: a two-adapter payment seam, a stable
+  utility imported by 16 modules). **A plain agent passes it** (2 of 2, and 2 of 2 with the previous
+  skill), as it did an earlier 9-file version: at this size the agent reads everything, so the case
+  does not show the skill helping. It stays as the fixture for `dep-map.py`'s tests. Evidence in
+  `evals/results/2026-09-30-arch-design-*`.
+- **Measured, new skill, existing cases (2 tries each, claude-sonnet-5-5).** `graph-shape` 2/2,
+  `one-owner` 2/2, `verify-caller-count` 2/2. Cost did not fall: $0.33–0.34 per graph-shape run vs
+  $0.36 before, and report length is unchanged; `SKILL.md` is 224 lines (was 236), not the ~150
+  aimed for. Agents ran `dep-map.py` in 3 of 8 runs, all where the repo was big enough to need it.
+- **Known regression, shipped anyway.** `arch-design-no-new-store` passes 0 of 10 runs with the new
+  skill against 3 of 6 with the old one. The new text pulled agents toward audit findings on the
+  existing code and away from the design decision. Adding "reuse before you add" and restoring the
+  "plugin system with one plugin" line moved every run from 0–1 to 2 of 3 planted items, but all
+  four still miss the third: none compares a separate datastore, so none names its cost. Not fixed.
+  Next step if wanted: make "the store the app already has" a mandatory option in every
+  where-does-new-data-live decision.
+- **Not done.** A separate module-design skill (its case has to be something a plain agent does
+  not already pass), and a refreshed `RESULTS.md` (a partial run would drop the other rows).
+- **A fixture cannot carry git history.** `run.py` copies only `fixture/`, so `change-map.py` and the
+  co-change join remain unmeasured by any eval.
 
 ## 4.44.0 — 2026-09-29 — verify-loop: `verify.py tests`, every test mapped to a feature
 

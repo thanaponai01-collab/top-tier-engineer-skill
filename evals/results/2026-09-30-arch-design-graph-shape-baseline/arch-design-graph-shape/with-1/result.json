@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"`orders/status.py` imports `shipping/tracking.py`, which imports `notifications/email.py`, which imports `orders/status.\"\n  found   pricing-does-network-io \u2014 \"`pricing/quote.py:10` does an HTTP GET to `rates.example.internal` for every order line, inside `unit_price`.\"\n  found   pass-through-order-service \u2014 \"`services/order_service.py` is a one-line wrapper with one caller, `api/routes.py:10`.\"\n  found   move-has-a-proof-line \u2014 \"Proof: run the order with `urlopen` patched to raise.\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "arch-design.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.33767579999999997,
+  "turns": 11,
+  "seconds": 73.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

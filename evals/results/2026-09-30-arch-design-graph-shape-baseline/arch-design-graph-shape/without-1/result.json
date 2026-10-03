@@ -1,0 +1,42 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"Import cycle: `orders.status` \u2192 `shipping.tracking` \u2192 `notifications.email` \u2192 `orders.status`.\"\n  found   pricing-does-network-io \u2014 \"**The order flow can't run offline because `pricing/quote.py` makes a live HTTP call inside price calculation, and chang\"\n  found   pass-through-order-service \u2014 \"The `services/order_service.py` wrapper only forwards the call, so it adds a file without adding a boundary.\"\n  found   move-has-a-proof-line \u2014 \"`place_order(cid, items, FakeGateway(), ...)` with the network blocked should return a deterministic total.\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1803576,
+  "turns": 14,
+  "seconds": 29.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

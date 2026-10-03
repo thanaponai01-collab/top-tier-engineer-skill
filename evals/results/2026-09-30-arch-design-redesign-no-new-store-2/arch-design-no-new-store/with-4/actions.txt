@@ -1,0 +1,10 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Glob: fixture/**/*
+  3. Glob: **/fixture/**/*
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-5_x1lkyg\fixture\app\db.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-5_x1lkyg\fixture\app\reports\models.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-5_x1lkyg\fixture\app\reports\views.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-5_x1lkyg\fixture\app\users\models.py
+  8. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-5_x1lkyg" && ls -a . fixture; ls "C:/Users/thana/AppData/Local/Temp/tte-plugin-p6hi9o7s/top-tier-engineer/skills…
+  9. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-5_x1lkyg/fixture" && mkdir -p docs && cat > docs/arch-design-csv-export.md <<'EOF' # ARCH-DESIGN - at: no-git (f…
+ 10. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-5_x1lkyg/fixture" && sed -i 's#fixture/app/#app/#g' docs/arch-design-csv-export.md && sed -i 's#^- files: .*#- f…
