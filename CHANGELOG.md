@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.49.0 - 2026-10-03 - drive loads first in unattended runs
+
+- New opt-in profile `hooks/autonomous.json`: philosophy at session start, `tools/drive-entry.py` on every prompt, verify stop-gate. The default `hooks.json` stays empty.
+- `drive-entry.py` tells the agent to load `drive` before any other tool call when a prompt reads as a task; silent on questions, chat, slash commands and prompts that name a skill. Fails open.
+- New eval case `e2e-one-prompt-fix-and-hold` (one vague prompt, nobody to ask): plain agent 2/10, autonomous hooks 10/10. `evals/run.py --hooks-profile` runs the with-skills arm under a hooks profile.
+
 ## 4.48.0 - 2026-10-03 - durable goal-to-release execution
 
 - `drive` now owns a durable RUN.json contract and a stdlib-only evidence controller: ordered
