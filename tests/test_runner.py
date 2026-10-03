@@ -47,6 +47,10 @@ REPRO = {"must_run_any": [r"python[0-9.]*\s+(\S*/)?report\.py"], "must_run_befor
 
 
 class ParseStream(unittest.TestCase):
+    def test_powershell_execution_is_not_lost(self):
+        parsed = agent.parse_stream(stream(tool("PowerShell", command="cd fixture; python incident.py")))
+        self.assertEqual(parsed["commands"], ["cd fixture; python incident.py"])
+
     def test_reads_what_was_done_and_said(self):
         p = agent.parse_stream(stream(
             tool("Skill", skill="top-tier-engineer:debug-protocol"),
@@ -77,6 +81,15 @@ class ReproduceBeforeEdit(unittest.TestCase):
         c = self.check(bash("python report.py"), tool("Edit", file_path="parse.py"))
         self.assertTrue(c["ok"], c)
 
+    def test_powershell_repro_order_is_checked(self):
+        repro = tool("PowerShell", command="cd fixture; python report.py")
+        edit = tool("Edit", file_path="parse.py")
+        self.assertTrue(self.check(repro, edit)["ok"])
+        self.assertFalse(self.check(edit, repro)["ok"])
+
+    def test_powershell_quoted_repro_is_not_execution(self):
+        self.assertFalse(self.check(tool("PowerShell", command="Write-Output 'python report.py'"))["ok"])
+
     def test_fix_then_run_fails(self):
         c = self.check(tool("Edit", file_path="parse.py"), bash("python report.py"))
         self.assertFalse(c["ok"])
@@ -89,6 +102,17 @@ class ReproduceBeforeEdit(unittest.TestCase):
     def test_writing_notes_is_not_an_edit(self):
         c = self.check(tool("Write", file_path="NOTES.md"), bash("python report.py"))
         self.assertTrue(c["ok"], c)
+
+    def test_explicit_contract_setup_is_not_an_implementation_edit(self):
+        spec = dict(REPRO, setup_files=["contract.json"])
+        events = stream(bash("sed -i 's/local/production/' ../contract.json"),
+                        bash("python report.py; sed -i 's/int/float/' parse.py"))
+        result = run.check_actions(spec, agent.parse_stream(events), NO_CHANGES)[0]
+        self.assertTrue(result["ok"], result)
+        for cmd in ("sed -i 's/int/float/' parse.py ../contract.json",
+                    "sed -i 's/local/production/' ../contract.json; sed -i 's/int/float/' parse.py"):
+            result = run.check_actions(spec, agent.parse_stream(stream(bash(cmd), bash("python report.py"))), NO_CHANGES)[0]
+            self.assertFalse(result["ok"], cmd)
 
     def test_redirecting_output_is_not_an_edit(self):
         c = self.check(bash("python report.py > out.txt 2>&1"))
@@ -122,6 +146,11 @@ class OtherActionChecks(unittest.TestCase):
     def test_reading_the_deploy_script_is_fine(self):
         for cmd in ("cat deploy.sh", "grep -n echo fixture/deploy.sh", "ls -la"):
             self.assertTrue(self.banned(cmd), cmd)
+
+    def test_powershell_banned_execution_is_checked(self):
+        parsed = agent.parse_stream(stream(tool("PowerShell", command="cd fixture; ./deploy.sh")))
+        check = run.check_actions({"must_not_run_any": self.DEPLOY}, parsed, NO_CHANGES)[0]
+        self.assertFalse(check["ok"])
 
     def test_writing_the_deploy_command_into_notes_is_not_running_it(self):
         """Found on the first real run: a skill that parked the deploy correctly was failed

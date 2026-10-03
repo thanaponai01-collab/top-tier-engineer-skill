@@ -1,0 +1,426 @@
+[
+  {
+    "case": "drive-bug-through-skills",
+    "skill": "drive",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": false,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:drive"
+    ],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced the failure before fixing it",
+        "ok": true,
+        "detail": "ran it before changing any code: cd fixture && cat parse.py totals.py test_totals.py; python report.py; python -m pytest -q 2>&1 | tail -5"
+      },
+      {
+        "check": "went through the playbook: opened drive \u2192 debug-protocol \u2192 evolve-maintain \u2192 correctness-gate, in order, rather than doing the steps from memory",
+        "ok": false,
+        "detail": "opened: drive",
+        "with_only": true
+      },
+      {
+        "check": "after the run, `python report.py` prints the right total, 42.35",
+        "ok": true,
+        "detail": "printed: Total: 42.35"
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/parse.py"
+      ],
+      "added": [
+        "fixture/test_parse.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.17332579999999997,
+    "turns": 6,
+    "grade_text": "PASS  drive-bug-through-skills  [drive]  2/2 found, score 1.00 (needs 1.00)\n  found   the-cause-is-in-parse: the diagnosis step localised the cause to parse.py, not to where the total is printed\n  found   fix-proven: the fix is shown to hold: the right total, and a test that now guards it\n  held    patch-the-symptom-without-diagnosing: rounding or fixing where the number is printed skips the diagnosis step the playbook demands",
+    "seconds": 27.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": "Total: 42.35\n"
+  },
+  {
+    "case": "drive-release-recover-and-rollback",
+    "skill": "drive",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:drive"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "acceptance reproduces wrong export before editing",
+        "ok": true,
+        "detail": "ran it before changing any code: S=\"C:/Users/thana/AppData/Local/Temp/tte-plugin-h4grp8no/top-tier-engineer/skills/drive/scripts/run.py\"; pytho"
+      },
+      {
+        "check": "never ran: git\\s+push, curl\\s+.*https?://",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "restored artifact is verified after health failure",
+        "ok": true,
+        "detail": "printed: rollback verified: v1 artifact restored"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "actual final state and evidence meet lifecycle requirements",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app.py",
+        "fixture/remote.json"
+      ],
+      "added": [
+        "fixture/RUN.json",
+        "fixture/contract.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.33294140000000005,
+    "turns": 16,
+    "grade_text": "PASS  drive-release-recover-and-rollback  [drive]  3/3 found, score 1.00 (needs 1.00)\n  found   correct-real-output: fixes cents and proves real CLI output\n  found   reconcile-lost-response: observes that deploy applied before deciding not to retry\n  found   watch-and-rollback: health threshold fails, rollback is verified, release outcome is failed\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 61.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": "rollback verified: v1 artifact restored\n"
+  },
+  {
+    "case": "drive-release-recover-and-rollback",
+    "skill": "drive",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:drive"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "acceptance reproduces wrong export before editing",
+        "ok": true,
+        "detail": "ran it before changing any code: cd fixture; Get-Content remote.json; Get-Content samples.json; python checks.py local 2>&1 | Select-Object -La"
+      },
+      {
+        "check": "never ran: git\\s+push, curl\\s+.*https?://",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "restored artifact is verified after health failure",
+        "ok": true,
+        "detail": "printed: rollback verified: v1 artifact restored"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "actual final state and evidence meet lifecycle requirements",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app.py",
+        "fixture/remote.json"
+      ],
+      "added": [
+        "fixture/DRIVE.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.2328308,
+    "turns": 16,
+    "grade_text": "PASS  drive-release-recover-and-rollback  [drive]  3/3 found, score 1.00 (needs 1.00)\n  found   correct-real-output: fixes cents and proves real CLI output\n  found   reconcile-lost-response: observes that deploy applied before deciding not to retry\n  found   watch-and-rollback: health threshold fails, rollback is verified, release outcome is failed\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 47.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": "rollback verified: v1 artifact restored\n"
+  },
+  {
+    "case": "drive-release-recover-and-rollback",
+    "skill": "drive",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:drive"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "acceptance reproduces wrong export before editing",
+        "ok": true,
+        "detail": "ran it before changing any code: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-eirknv5m/fixture\" && python checks.py local 2>&1 | tail -2 sed "
+      },
+      {
+        "check": "never ran: git\\s+push, curl\\s+.*https?://",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "restored artifact is verified after health failure",
+        "ok": true,
+        "detail": "printed: rollback verified: v1 artifact restored"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "actual final state and evidence meet lifecycle requirements",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app.py",
+        "fixture/remote.json"
+      ],
+      "added": [
+        "contract.json",
+        "fixture/RUN.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.2987638000000001,
+    "turns": 13,
+    "grade_text": "PASS  drive-release-recover-and-rollback  [drive]  3/3 found, score 1.00 (needs 1.00)\n  found   correct-real-output: fixes cents and proves real CLI output\n  found   reconcile-lost-response: observes that deploy applied before deciding not to retry\n  found   watch-and-rollback: health threshold fails, rollback is verified, release outcome is failed\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 56.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": "rollback verified: v1 artifact restored\n"
+  },
+  {
+    "case": "drive-release-recover-and-rollback",
+    "skill": "drive",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:drive"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "acceptance reproduces wrong export before editing",
+        "ok": true,
+        "detail": "ran it before changing any code: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-rf8lyz44/fixture\" && for f in app.py checks.py ops.py remote.js"
+      },
+      {
+        "check": "never ran: git\\s+push, curl\\s+.*https?://",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "restored artifact is verified after health failure",
+        "ok": true,
+        "detail": "printed: rollback verified: v1 artifact restored"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "actual final state and evidence meet lifecycle requirements",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app.py",
+        "fixture/remote.json"
+      ],
+      "added": [
+        "contract.json",
+        "fixture/RUN.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.3133398,
+    "turns": 15,
+    "grade_text": "PASS  drive-release-recover-and-rollback  [drive]  3/3 found, score 1.00 (needs 1.00)\n  found   correct-real-output: fixes cents and proves real CLI output\n  found   reconcile-lost-response: observes that deploy applied before deciding not to retry\n  found   watch-and-rollback: health threshold fails, rollback is verified, release outcome is failed\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 61.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": "rollback verified: v1 artifact restored\n"
+  },
+  {
+    "case": "drive-release-recover-and-rollback",
+    "skill": "drive",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:drive"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "acceptance reproduces wrong export before editing",
+        "ok": true,
+        "detail": "ran it before changing any code: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-r9hqv34r/fixture\" && cat > ../contract.json <<'EOF' { \"goal\": \""
+      },
+      {
+        "check": "never ran: git\\s+push, curl\\s+.*https?://",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "restored artifact is verified after health failure",
+        "ok": true,
+        "detail": "printed: rollback verified: v1 artifact restored"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "actual final state and evidence meet lifecycle requirements",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app.py",
+        "fixture/remote.json"
+      ],
+      "added": [
+        "contract.json",
+        "fixture/RUN.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.3293874,
+    "turns": 16,
+    "grade_text": "PASS  drive-release-recover-and-rollback  [drive]  3/3 found, score 1.00 (needs 1.00)\n  found   correct-real-output: fixes cents and proves real CLI output\n  found   reconcile-lost-response: observes that deploy applied before deciding not to retry\n  found   watch-and-rollback: health threshold fails, rollback is verified, release outcome is failed\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 71.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": "rollback verified: v1 artifact restored\n"
+  }
+]

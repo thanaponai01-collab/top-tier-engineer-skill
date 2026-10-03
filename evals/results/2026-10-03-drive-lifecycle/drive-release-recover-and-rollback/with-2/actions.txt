@@ -1,0 +1,14 @@
+  1. Skill: top-tier-engineer:drive
+  2. Glob: **/*
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-d7vpe7pc\fixture\BRIEF.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-d7vpe7pc\fixture\app.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-d7vpe7pc\fixture\ops.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-d7vpe7pc\fixture\checks.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-d7vpe7pc\fixture\test_app.py
+  8. PowerShell: cd fixture; Get-Content remote.json; Get-Content samples.json; python checks.py local 2>&1 | Select-Object -Last 2; python -m unittest 2>&1 | Select-Object -La…
+  9. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-d7vpe7pc\fixture\app.py
+ 10. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-d7vpe7pc\fixture\DRIVE.md
+ 11. PowerShell: python checks.py local; python -m unittest 2>&1 | Select-Object -Last 2
+ 12. PowerShell: python ops.py deploy; "deploy exit=$LASTEXITCODE"; python ops.py probe-deploy; "probe exit=$LASTEXITCODE"
+ 13. PowerShell: python checks.py ship; "ship exit=$LASTEXITCODE"; python checks.py watch 2>&1 | Select-Object -Last 4; "watch exit=$LASTEXITCODE"
+ 14. PowerShell: Add-Content DRIVE.md "Deploy applied (probe=v2); ship passed; watch FAILED (sample 0.12>0.01). Intent: ops.py rollback once (authorized). Reconcile via probe-r…

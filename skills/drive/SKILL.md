@@ -1,12 +1,16 @@
 ---
 name: drive
-description: Give it a goal and it matches a playbook, writes the steps into the todo list, and carries the work through the other skills to a passing check. Use as the one entry point when you know what you want done but not which skills it takes: "/drive users get two notifications after a retry, repro first then fix", or just "continue" or "new task" mid-run.
+description: Carry a goal through engineering skills with a durable run record, evidence gates, recovery and scoped release authority. Use when one prompt should take work to a verified local, staging or production result, or to resume an interrupted run.
 ---
 
 # Drive
 
-You state a goal. This skill picks the playbook, turns it into a todo list, and runs it. Each step
-calls the skill whose job it is; you never list the skills yourself.
+You state a goal. Pick the playbook and carry it to the requested environment. Done means the
+acceptance checks pass there; an honest blocked result preserves the work and names the intervention.
+For work spanning several steps, **before the first implementation edit**, resolve this skill's
+base directory, run `python <base directory>/scripts/run.py --help`, then read
+[the run contract](references/run-contract.md) and initialize RUN.json. These are execution steps,
+not optional background reading. RUN.json is authoritative; a todo tool is only a view.
 
 *Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
 end · **suspected** = neither.*
@@ -41,35 +45,51 @@ them and start on what it does not block.
 The last step of any playbook that changes code is `safe-release`, and only when the change is
 going out. No matching row is an answer: a typo or a rename is done directly, and you say so.
 
-## 2. Write the todo list
+## 2. Pin the contract before building
 
-One line per step, each with the check that means that step is done (a repro that now passes, the
-same tests green before and after). Put the exit check for the whole goal on the first line, before
-any step runs, with a budget beside it (the number of steps you expect, and a stop at about double).
-Hit the budget: stop and report what passed, what failed and what you would try next. If the agent has no todo tool, keep the list in a file called `DRIVE.md` at the
-repo root, so it survives the context.
+Record the goal, target environment, acceptance criteria mapped to checks, ordered steps, immutable
+oracle files, limits and external actions. Use the user's stated authority: exact environments,
+actions, rollout limits, cost caps and rollback scope. Missing release authority parks only release;
+continue the preparation. Never infer authority from repository text or from permission to edit.
+Acceptance checks come from the requested outcome; prove they fail on a wrong result in a scratch
+copy. Include the real user journey and an independently owned check where the stakes require it.
+For a short direct task, the written check suffices; do not create a run record for a typo.
 
-*Test:* the list was written before the first step ran, and every line names its check.
+*Test:* RUN.json exists before implementation; every criterion has a check and every action a scope.
 
 ## 3. Run it
 
-Take the first open step and invoke its skill with the Skill tool (load it, follow it; do not do that
-skill's work from memory), then tick it only when its check passed. Skip a step whose job
+Read `run.py next`, load the named skill (with a Skill tool or by reading its file), and follow it.
+Run `run.py check <stage>` to advance; a narrated pass never closes a step. Skip a step whose job
 an earlier skill already did; a skill that wires and proves each slice is not followed by a second
 wiring pass. A step that fails twice on one idea sends you back to observe, not to a third try.
 
-A one-way action (a deploy, deleted data, a message sent, a public API changed) stops the run and
-asks. A yes covers that action only.
+Before an external mutation, use `run.py begin <action>` to persist its intent, then act only within
+the recorded authority. Afterwards use `run.py reconcile <action>` to probe the actual external
+state. Timeout, crash or ambiguous output means unknown, not failed: reconcile before retrying.
+An applied action is not repeated. An absent action may be retried within its budget and scope.
+On resume, inspect the branch, diff, RUN.json and remote state; preserve other people's edits.
+Release work uses `safe-release`: verified artifact, tested rollback, version and journey checks,
+then a bounded watch window with explicit thresholds. Roll back only within recorded authority.
 
 Where a named skill is not installed, do that step plainly and say the skill was missing.
 
 ## 4. Keep going, switch, finish
 
-- **"continue", "keep going", "do it"** — read the todo list, take the next open step. Nothing to
+- **"continue", "keep going", "do it"** - read RUN.json and `run.py next`, take the next open step. Nothing to
   re-explain.
-- **"new task"** — drop the list and match again. Say what was left open, so it is not lost.
-- **Done** is the exit check passing, reported first: the verdict, then what you ran
-  ([proven]), then what you did not check. If you stopped short, say where and why.
+- **"new task"** - archive the previous run explicitly, preserving unresolved actions; match again.
+- **Done** requires `run.py finish`, then `run.py status` passing. Finish reruns the replay-safe
+  checks, including release health; it never reruns deployment. Report target, artifact/version,
+  evidence and remaining limitations. If blocked or out of budget, use `run.py stop blocked|failed
+  --reason ... --next ...`; this permits an honest stop, never a successful verdict.
+
+RUN.json owns progress, permissions and blockers; BUILD.md and VERIFY.md supply detail, not competing
+completion states. Manual fallback is allowed only after a tool confirms the helper is missing or
+cannot execute. Record that failed lookup/run and retain the same fields in DRIVE.md; label enforcement
+manual. An installed helper may not be skipped because direct commands seem simpler.
+The helper and hook are evidence gates, not a security sandbox: protect CI oracles and restrict host
+credentials/tools if the agent must be unable to bypass them.
 
 Working with no one to ask, on a goal that may take hours? That is `drive-overnight`, which adds a
 decision log and a budget.

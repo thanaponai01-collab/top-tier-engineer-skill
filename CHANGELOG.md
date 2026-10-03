@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.48.0 - 2026-10-03 - durable goal-to-release execution
+
+- `drive` now owns a durable RUN.json contract and a stdlib-only evidence controller: ordered
+  checks, frozen oracles, input freshness, bounded attempts/time, recorded external intent and
+  reconciliation, and successful completion separate from blocked/failed handoff.
+- The Stop hook strictly checks opted-in driven runs, including resumed sessions without edits;
+  repositories without RUN.json retain the one-time verification reminder.
+- Scoped user authority can cover a bounded deployment/rollback sequence upfront. Release now
+  continues through execution, running-version/journey checks, bounded observation and verified
+  rollback; overnight and recall share the same authoritative run state.
+- Lifecycle eval simulates a misleading green suite, lost deployment response, health threshold
+  failure and rollback. Its held-out grader checks actual final state and evidence outside the agent.
+- Validation: 306 unit/integration checks passed on the current main integration; the latest revised lifecycle trials passed 3/3
+  using the CLI's default model. Earlier development failures are retained; no comparative baseline
+  or real cloud deployment is claimed. See evals/RESULTS.md.
+- Local state hashes are not a security boundary. Protected CI oracles, host permissions, provider
+  cost caps and the project's real deployment adapters remain required for production autonomy.
+
 ## 4.47.0 - 2026-10-03 - optional workflows by default
 
 - Default hook manifest is empty. The previous four hooks remain in `hooks/optional.json` for explicit opt-in.

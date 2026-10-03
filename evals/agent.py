@@ -39,6 +39,7 @@ ENV_KEEP = (
 )
 
 IGNORED_DIRS = {"__pycache__", ".pytest_cache", ".git", ".mypy_cache", ".ruff_cache"}
+SHELL_TOOLS = {"Bash", "PowerShell"}
 
 # Strings that mean the agent reached the answer key instead of doing the task.
 LEAK_MARKERS = ("evals/cases", "reference/good", "reference/bad", "expect.json",
@@ -135,7 +136,7 @@ def parse_stream(lines):
         elif kind == "result":
             result = ev
 
-    commands = [t["input"].get("command", "") for t in tools if t["name"] == "Bash"]
+    commands = [t["input"].get("command", "") for t in tools if t["name"] in SHELL_TOOLS]
     skills = [t["input"].get("skill", "") for t in tools if t["name"] == "Skill"]
     usage = result.get("modelUsage") or {}
     final = result.get("result")

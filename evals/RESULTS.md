@@ -1,4 +1,30 @@
-# Scorecard — do the skills make an agent better?
+# Scorecard - do the skills make an agent better?
+
+## Focused lifecycle validation - 2026-10-03 (unreleased working tree)
+
+The revised `drive` workflow's latest three real-agent trials passed
+`drive-release-recover-and-rollback` (**3/3**, runs with-3 through with-5). Each fixed the export,
+used RUN.json, deployed exactly once despite a lost provider response, observed the unhealthy
+sample, verified rollback and recorded a failed release rather than claiming success. The held-out
+grader inspected actual files and durable evidence in a scratch copy; the agent could not edit it.
+This is a local provider simulation, not evidence of a real cloud deployment or all task types.
+
+Evidence: [saved trials](results/2026-10-03-drive-lifecycle/). Model: claude-sonnet-5-5 (the CLI's
+configured default). No without-skills arm was run for this focused validation, so it establishes
+workflow behavior on this task, not a measured improvement over the model alone. Earlier development
+trials with-1 and with-2 remain recorded: grading initially overfit action names/phrasing, and one
+agent skipped the helper. The pointer was tightened; grader tests now distinguish contract setup
+from an implementation edit and accept equivalent reports while requiring real final-state evidence.
+
+The existing `drive-bug-through-skills` outcome also passed 1/1; its separate skill-loading process
+check still failed (only drive loaded). Do not treat passing outcomes as proof every skill was invoked.
+The current-main integration suite passed **306 tests** (the development workspace included
+four additional architecture tests and passed 310), including healthy release, lost-response recovery,
+rollback, stale/changed evidence, unauthorized actions, budgets, malformed-state preservation,
+strict stop gating, and mutations that the held-out grader rejects. Older uncovered skills remain
+listed in uncovered.txt; this focused change does not establish their effectiveness.
+
+## Earlier comparative scorecard
 
 Each row is one rigged codebase from `evals/cases/`: a real defect planted in it, and a
 trap beside it that a careless agent falls for. A real agent was given the task several

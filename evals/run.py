@@ -103,7 +103,7 @@ def check_actions(spec, parsed, changes, end_output=None, arm="with"):
     commands = parsed["commands"]
     wanted = spec.get("must_run_any")
     if wanted:
-        steps = run_steps(parsed["tools"], wanted)
+        steps = run_steps(parsed["tools"], wanted, spec.get("setup_files", []))
         first_edit = next((i for i, s in enumerate(steps) if s["edits"]), None)
         runs = [i for i, s in enumerate(steps) if s["runs"]]
         # In a command that edits AND runs, order inside it decides: `cat > x.py <<EOF ... EOF;
@@ -186,7 +186,7 @@ def executed_part(cmd):
     return QUOTED.sub("''", HEREDOC.sub("", cmd))
 
 
-def run_steps(tools, patterns):
+def run_steps(tools, patterns, setup_files=()):
     """Each tool call as {edits, runs, runs_first, command}.
 
     `runs_first`: within one shell command, the wanted run comes before any edit
@@ -198,12 +198,23 @@ def run_steps(tools, patterns):
         inp = t["input"]
         if t["name"] in EDIT_TOOLS:
             path = str(inp.get("file_path") or inp.get("notebook_path") or "")
-            steps.append({"edits": not path.lower().endswith(".md"), "runs": False,
+            setup = os.path.basename(path.replace("\\", "/")) in setup_files
+            steps.append({"edits": not path.lower().endswith(".md") and not setup, "runs": False,
                           "runs_first": False, "command": ""})
-        elif t["name"] == "Bash":
+        elif t["name"] in agent.SHELL_TOOLS:
             cmd = inp.get("command", "")
             live = executed_part(cmd)
-            edit = SHELL_EDIT.search(live)
+            edits = []
+            for match in SHELL_EDIT.finditer(live):
+                if match.group().startswith("sed") and setup_files:
+                    # Contract setup is not changing the implementation under test. Only ignore
+                    # sed when ALL visible file operands are explicitly named setup artifacts.
+                    tail = re.split(r"[;\n&]", live[match.start():], maxsplit=1)[0]
+                    paths = [word for word in tail.split() if re.fullmatch(r"[\w./-]+\.[\w]+", word)]
+                    if paths and all(os.path.basename(p) in setup_files for p in paths):
+                        continue
+                edits.append(match)
+            edit = edits[0] if edits else None
             hits = [m.start() for m in (re.search(p, live) for p in patterns) if m]
             first_run = min(hits) if hits else None
             steps.append({"edits": bool(edit), "runs": first_run is not None,

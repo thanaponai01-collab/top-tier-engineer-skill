@@ -68,8 +68,9 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 
 ## The Relay: nine checkpoints
 
-Any piece of work passes the same nine checkpoints, each owned by one skill, and each leaves a file
-the next one reads. That file is the baton. Skip a checkpoint on purpose (a typo skips all nine),
+Any piece of work passes the same nine checkpoints, each owned by one skill, and each leaves evidence
+the next one reads. In a driven run, RUN.json is authoritative for progress and blockers; the files
+below support its checks. Skip a checkpoint on purpose (a typo skips all nine),
 never by accident.
 
 | # | Checkpoint | Question | Skill | Baton |

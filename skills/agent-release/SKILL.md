@@ -22,9 +22,10 @@ has met its bar.
    replayed. Redact secrets and personal data before they are stored.
 5. **Staged rollout.** Shadow or read-only first, then a slice of traffic, with the rate you will
    compare against named beforehand. One-way actions the agent can take (sending, paying, deleting)
-   stay behind a human confirm until the slice is clean. Going live is itself one-way: ask the
-   person before the first live traffic and before each widening, since a yes to one stage does not
-   cover the next.
+   require the user's scoped grant until the slice is clean. First live traffic and widening must
+   fit recorded environment, traffic and spend limits; an upfront grant may cover those stages and
+   rollback. Ask when widening exceeds it. Configure tool permissions and provider caps outside
+   the agent's writable files; a recorded grant alone cannot enforce access.
 
 *Test:* you can turn it off and roll the prompt back, and say each in one sentence.
 

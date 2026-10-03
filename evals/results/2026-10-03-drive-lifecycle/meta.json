@@ -1,0 +1,12 @@
+{
+  "started": "2026-10-03-1451",
+  "repeats": 2,
+  "arms": [
+    "with"
+  ],
+  "version": "4.46.0",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "out_rel": "evals/results/2026-10-03-drive-lifecycle"
+}

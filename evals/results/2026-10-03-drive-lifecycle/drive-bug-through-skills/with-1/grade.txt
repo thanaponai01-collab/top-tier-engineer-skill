@@ -1,0 +1,8 @@
+PASS  drive-bug-through-skills  [drive]  2/2 found, score 1.00 (needs 1.00)
+  found   the-cause-is-in-parse: the diagnosis step localised the cause to parse.py, not to where the total is printed
+  found   fix-proven: the fix is shown to hold: the right total, and a test that now guards it
+  held    patch-the-symptom-without-diagnosing: rounding or fixing where the number is printed skips the diagnosis step the playbook demands
+
+  ok      reproduced the failure before fixing it — ran it before changing any code: cd fixture && cat parse.py totals.py test_totals.py; python report.py; python -m pytest -q 2>&1 | tail -5
+  FAILED  went through the playbook: opened drive → debug-protocol → evolve-maintain → correctness-gate, in order, rather than doing the steps from memory — opened: drive
+  ok      after the run, `python report.py` prints the right total, 42.35 — printed: Total: 42.35

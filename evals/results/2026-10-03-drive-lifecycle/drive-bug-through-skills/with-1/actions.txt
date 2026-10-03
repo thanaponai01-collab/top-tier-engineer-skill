@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:drive
+  2. Bash: cd fixture && ls -la && cat report.py && ls ..; cat *.csv *.json 2>/dev/null | head -50
+  3. Bash: cd fixture && cat parse.py totals.py test_totals.py; python report.py; python -m pytest -q 2>&1 | tail -5
+  4. Bash: cd fixture && cat > test_parse.py <<'EOF' import unittest from decimal import Decimal from parse import load from report import render class Parse(unittest.Tes…
