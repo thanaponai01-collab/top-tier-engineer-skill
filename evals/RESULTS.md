@@ -15,6 +15,9 @@ local state to remain unchanged and never appear in the generated proof.
 - Both runs passed the final case grading after removing a phrase that echoed the prompt.
 - No semantic judge was used. One run per arm is not a reliability estimate.
 - All 349 unit tests pass; the skill validator also passes.
+- The real nested example exposed a Git archive working-directory prefix bug; a failing
+  subdirectory regression was added and the export now runs at the Git root. The example
+  passes from a clean clone. All 350 unit tests and 7 focused CI checks pass.
 - Hosted workflow validation is recorded separately once the pinned workflow runs.
 
 ## Earlier change verification evaluation

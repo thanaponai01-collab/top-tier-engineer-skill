@@ -51,7 +51,7 @@ def cmd_ci(v, repo, plan_file, output, timeout):
         with tempfile.TemporaryDirectory(prefix="verify-ci-") as tmp:
             archive = Path(tmp, "input.tar")
             with archive.open("wb") as fh:
-                subprocess.run(["git", "-C", str(root), "archive", archive_ref], stdout=fh,
+                subprocess.run(["git", "-C", str(checkout), "archive", archive_ref], stdout=fh,
                                stderr=subprocess.PIPE, check=True)
             work = Path(tmp, "project")
             work.mkdir()

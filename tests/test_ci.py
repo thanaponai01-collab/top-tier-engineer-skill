@@ -44,6 +44,8 @@ class CI(unittest.TestCase):
             root = self.fixture(tmp)
             local = root / ".verify-state.json"
             local.write_text('{"result": "green", "strict": true, "local_only": true}')
+            self.git(root, "add", "-f", ".verify-state.json")
+            self.commit(root)
             before = local.read_bytes()
             out = Path(tmp, "evidence")
             code, stdout, stderr = self.ci(root, out)
@@ -99,3 +101,18 @@ class CI(unittest.TestCase):
             code, stdout, stderr = self.ci(root, root / "evidence")
             self.assertNotEqual(code, 0, stdout + stderr)
             self.assertFalse((root / "evidence").exists())
+
+    def test_committed_project_subdirectory_is_exported_from_git_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(tmp)
+            nested = root / "application"
+            nested.mkdir()
+            for path in list(root.iterdir()):
+                if path.is_file():
+                    self.git(root, "mv", path.name, "application/" + path.name)
+            self.commit(root)
+            out = Path(tmp, "evidence")
+            code, stdout, stderr = self.ci(nested, out)
+            self.assertEqual(code, 0, stdout + stderr)
+            report = json.loads((out / "report.json").read_text())
+            self.assertEqual(report["project_path"], "application")

@@ -4,7 +4,9 @@
 
 `python -m unittest discover tests -p test_challenge.py`: sequential feature challenges retain both receipts and finish strict green; live change evaluation detects a shared-caller regression and completes verification | proven (12 challenge checks, 5 grader checks and full suite 343 passed; live case passed) | 7b89281
 
-`python -m unittest discover tests -p test_ci.py`: fresh CI proof ignores local state, rejects a survivor and bad product, and records checkout identity | proven (6 CLI checks; full suite 349 passed; live mode passed) | this slice
+`python -m unittest discover tests -p test_ci.py`: fresh CI proof ignores local state, rejects a survivor and bad product, and records checkout identity | proven (6 CLI checks; full suite 349 passed; live mode passed) | b4456bb
+
+Subdirectory archive export uses the Git root; correct committed example passes and tracked local green state is ignored | proven (7 CI checks; full suite 350 passed) | this slice
 
 Pinned GitHub Actions example executes fresh proof and uploads commit-bound artifacts | planned | uncommitted
 
