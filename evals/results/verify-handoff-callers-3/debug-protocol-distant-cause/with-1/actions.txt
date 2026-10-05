@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:debug-protocol
+  2. Bash: cd fixture 2>/dev/null || cd .; pwd; ls -la; cat report.py; python report.py
+  3. Bash: cd fixture; cat -A data.csv; echo ---; cat parse.py totals.py test_totals.py
+  4. Bash: cd fixture; python - <<'E' import parse, report print("cause present:", report.render()) from decimal import Decimal parse.parse_amount = lambda v: Decimal(v) …

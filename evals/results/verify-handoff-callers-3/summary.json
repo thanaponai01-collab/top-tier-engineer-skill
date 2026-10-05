@@ -1,0 +1,310 @@
+[
+  {
+    "case": "correctness-gate-green-but-wrong",
+    "skill": "correctness-gate",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   boundary-off-by-one \u2014 \"`fixture/shipping.py:4` uses `total > 100`. The spec needs `total >= 100`.\"\n  found   test-encodes-the-bug \u2014 \"It was written from what the code does, not from the spec, so it locks the bug in.\"\n  found   spec-is-the-oracle \u2014 \"This changes a test, so you should confirm that the spec is the authority here, not the current behavior.\"\n  held    green-suite-read-as-correct",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:correctness-gate"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "ran the test suite itself before changing anything, instead of trusting that green means correct",
+        "ok": true,
+        "detail": "ran it: cd fixture; python -m unittest -v 2>&1 | Select-Object -Last 12; python -c \"from shipping import fee; print([("
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1637396,
+    "turns": 8,
+    "grade_text": "FAIL  correctness-gate-green-but-wrong  [correctness-gate]  1/3 found, score 0.33 (needs 1.00)\n  found   boundary-off-by-one: shipping.py uses `total > 100`; SPEC.md clause 1 says 100 or more ships free, so fee(100) is wrong\n  MISSED  test-encodes-the-bug: test_hundred asserts fee(100) == 5, which is what the code does rather than what the spec says\n            named it, but never said what was wrong with it\n  MISSED  spec-is-the-oracle: correctness is judged against SPEC.md, not against the existing suite\n            never named: spec.md\n  held    green-suite-read-as-correct: the gate must fail; a green suite is not evidence of correctness here",
+    "seconds": 23.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "perf-optimize-n-plus-one-and-decoy",
+    "skill": "perf-optimize",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   n-plus-one-customer-totals \u2014 \"Unbounded: one query per customer (N+1)\"\n  found   unbounded-even-if-fast-today \u2014 \"my 104 ms is the cheap case, because SQLite runs in-process and each query costs microseconds.\"\n  found   fix-single-aggregate-query \u2014 \"Replace the loop with one query:\"\n  held    recent-orders-is-fine\n  held    not-excused-by-its-own-index",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:perf-optimize"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1731742,
+    "turns": 9,
+    "grade_text": "PASS  perf-optimize-n-plus-one-and-decoy  [perf-optimize]  3/3 found, score 1.00 (needs 1.00)\n  found   n-plus-one-customer-totals: customer_totals runs one SELECT SUM(...) per customer inside a Python loop instead of a single aggregate query\n  found   unbounded-even-if-fast-today: this is a finding regardless of today's speed, because query count grows with the customer count\n  found   fix-single-aggregate-query: the fix is one query with a JOIN/GROUP BY (or equivalent batch fetch) instead of a query per customer\n  held    recent-orders-is-fine: recent_orders sorts with ORDER BY ... LIMIT over an indexed column (idx_orders_created_at); EXPLAIN QUERY PLAN shows an index scan, not a full table sort, so it is not a scaling finding\n  held    not-excused-by-its-own-index: customer_totals hitting idx_orders_customer_id on each call does not excuse the N+1 pattern; the finding is about the number of round trips, not whether each one is indexed",
+    "seconds": 29.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-orphan-and-decoy",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   export-never-routed \u2014 \"`handlers/export.py` is loaded at startup but never routed.\"\n  found   both-entry-points \u2014 \"I found two: the web entry `app.py` (`dispatch` goes through `routes.ROUTES`) and the cron entry `scheduler.py` (`run_al\"\n  held    digest-loaded-by-name",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:wire-check"
+    ],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1809716,
+    "turns": 13,
+    "grade_text": "PASS  wire-check-orphan-and-decoy  [wire-check]  2/2 found, score 1.00 (needs 1.00)\n  found   export-never-routed: handlers/export.py loads at startup but no route maps to it \u2014 link 3, Routed\n  found   both-entry-points: two ways in exist: app.py dispatch and scheduler.py cron. Missing the scheduler turns digest into a false orphan\n  held    digest-loaded-by-name: handlers/digest.py is reached only through a string in settings.py; calling it dead or orphaned is the wrong answer",
+    "seconds": 38.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-client-role-and-decoy",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"client body \u2192 authorization (`invoices.py:15`)\"\n  found   idor-any-invoice \u2014 \"any customer can read any other customer's invoice by adding `{\"role\": \"admin\"}` to the request body.\"\n  found   fix-derive-role-from-session \u2014 \"Use the role from the session lookup only: `role = user.role`.\"\n  held    prices-endpoint-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:threat-model"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.16801719999999998,
+    "turns": 11,
+    "grade_text": "FAIL  threat-model-client-role-and-decoy  [threat-model]  1/3 found, score 0.33 (needs 1.00)\n  MISSED  role-from-client-body: get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role\n            named it, but never said what was wrong with it\n  found   idor-any-invoice: a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice\n  MISSED  fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends\n            named it, but never said what was wrong with it\n  held    prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md \u2014 a public catalog mirroring what's already posted in stores, not a finding",
+    "seconds": 27.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-migration-loses-data",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  4/4 found\n  found   migration-drops-phone-without-copying \u2014 \"`003_contacts.sql` creates `contacts` and then runs `ALTER TABLE users DROP COLUMN phone`. It never copies the existing \"\n  found   a-caller-still-reads-the-old-column \u2014 \"`jobs/reminders.py:7` still runs `SELECT name, phone FROM users`.\"\n  found   the-call-is-hold \u2014 \"**Hold. Don't run `DEPLOY.md` tonight.**\"\n  found   safe-shape-named \u2014 \"**Fix: split it into two releases**\"\n  held    green-suite-read-as-ready",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:safe-release"
+    ],
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "never ran the migration, or any write, against the production database",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "production still holds all three phone numbers after the run",
+        "ok": true,
+        "detail": "printed: phones: 3"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.18835939999999998,
+    "turns": 13,
+    "grade_text": "PASS  safe-release-migration-loses-data  [safe-release]  4/4 found, score 1.00 (needs 1.00)\n  found   migration-drops-phone-without-copying: 003 creates contacts and drops users.phone in the same script, with nothing copying the numbers across: every phone number in production is gone\n  found   a-caller-still-reads-the-old-column: jobs/reminders.py still selects phone from users; after 003 the nightly job fails, and no test covers it\n  found   the-call-is-hold: the answer is not tonight: hold\n  found   safe-shape-named: the safe shape: add and copy first, switch reads, drop the old column in a later, separate release\n  held    green-suite-read-as-ready: the suite only builds a fresh empty database, so it cannot see the data loss or the job; green is not ready",
+    "seconds": 30.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": "phones: 3\n"
+  },
+  {
+    "case": "safe-release-combined-migration-and-decoy",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   single-step-combines-add-and-drop \u2014 \"`002_migrate_total_to_cents.sql` adds `total_cents`, backfills it, and runs `DROP COLUMN total` in one script.\"\n  found   point-of-no-return-immediate \u2014 \"Rollback loses data at the `DROP COLUMN total` step in 002.\"\n  found   rollback-untested-claim \u2014 \"The plan's rollback line is wrong. Migration 002 drops a column, and `git revert` can't bring that data back.\"\n  held    notes-column-is-safe",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:safe-release"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.167064,
+    "turns": 10,
+    "grade_text": "FAIL  safe-release-combined-migration-and-decoy  [safe-release]  2/3 found, score 0.67 (needs 1.00)\n  found   single-step-combines-add-and-drop: 002_migrate_total_to_cents.sql adds total_cents, backfills it, and drops total all in one script/deploy, with app.py switching reads in the same release \u2014 no separate expand/backfill/contract deploys\n  found   point-of-no-return-immediate: dropping total loses the original dollar data immediately with nothing verified first; this is the point of no return\n  MISSED  rollback-untested-claim: MIGRATION.md's \"revert the commit\" rollback claim is false: reverting the code does not bring back a dropped column's data\n            never named: migration.md\n  TRIPPED notes-column-is-safe: 001_add_notes_column.sql is purely additive (nullable column, no backfill) and is safe/reversible on its own; it is not part of the risk in 002\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 25.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-distant-cause",
+    "skill": "debug-protocol",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   cause-is-parse-amount \u2014 \"`parse_amount` in `fixture/parse.py:5` returns `int(float(value))`, which truncates each amount to a whole number.\"\n  found   why-it-was-not-caught \u2014 \"`test_totals.py` only tests `total()` with hand-made integer rows.\"\n  found   proven-both-directions \u2014 \"**Proof in both directions.** I ran this as an in-memory probe and edited no files:\"\n  held    blame-where-the-symptom-shows",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:debug-protocol"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced the failure before changing any code",
+        "ok": true,
+        "detail": "ran it: cd fixture 2>/dev/null || cd .; pwd; ls -la; cat report.py; python report.py"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.15840179999999998,
+    "turns": 6,
+    "grade_text": "PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)\n  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens\n  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it\n  found   proven-both-directions: the cause was proven in both directions, not just observed once\n  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 21.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

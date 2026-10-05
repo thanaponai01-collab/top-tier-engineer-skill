@@ -37,14 +37,11 @@ missing. Never invent an oracle that just describes what the code already does.
 row, counter, lock, queue slot), write the check-then-claim as its own property: "a concurrent
 caller sees the before state or the after state, never half of it."
 
-When VERIFY.md exists or reusable verification is requested, read the installed
-`verify-loop` skill and its VERIFY_FORMAT.md. Map this gate's requirement-backed oracles,
-real-run checks and adjacent regressions into the recipe; let verify-loop retain behavioral
-rejection evidence, freeze the checks and finish with strict, current green status. This gate
-still owns oracle quality, mutation breadth and the verdict; a green recipe covers only mapped
-claims. A review-only request reports findings without fixing the product. If verify-loop is
-unavailable, run the checks directly, retain rejection/passing output and disclose the missing
-strict evidence.
+Reusable proof: when VERIFY.md exists or reusable verification is requested, hand the claim to
+`verify-loop`: load that skill, follow its references/handoff.md and record the rejection and strict
+green through its bundled `verify.py`. Direct output files are the fallback only when verify-loop is
+not installed. This gate supplies the requirement-backed oracles and a mutation of the rule as the
+wrong state; it keeps oracle quality, mutation breadth and the verdict.
 
 ### 3. Attack
 Build tests as an adversary, in this priority order:

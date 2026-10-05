@@ -1,0 +1,12 @@
+{
+  "started": "2026-10-05-2236",
+  "repeats": 1,
+  "arms": [
+    "with"
+  ],
+  "version": "4.50.0",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "out_rel": "evals/results/verify-handoff-callers"
+}

@@ -76,20 +76,14 @@ Turn the minimal reproduction into a check against the requirement and actual en
 on the original bug and retain the specific expected-versus-actual rejection before fixing code.
 Include adjacent behavior that must remain working. Probe output alone is not a regression check.
 
-For requested reusable regression evidence, locate verify-loop in the installed plugin's sibling
-skills or the available skill catalog before treating it as unavailable. Read its SKILL.md and
-VERIFY_FORMAT.md. Resolve its bundled helper
-from the installed skill location, finish the affected VERIFY.md recipe and declared oracles, and
-retain the bug rejection through that helper before freezing the baseline. Fix the proven cause,
-then finish with `run --strict` and current green `status`. If checks were repaired, collect fresh
-rejection evidence; never change the expected outcome to match the fix. Its challenge mode can
-reintroduce the proven cause in scratch copies when the negative receipt needs refreshing.
-
-For diagnosis only, leave a runnable regression proposal and captured experiments; strict green
-is not the diagnosis completion gate. If verify-loop is absent, run the same regression directly
-before and after the fix, retain both outputs and report that reusable strict evidence is absent.
-No project-setup, commit, CI or release is required by this handoff. Report the cause, check edits,
-regression result and coverage limits separately from the diagnosis experiments.
+Reusable proof: for requested reusable regression evidence, hand the regression to `verify-loop`:
+load that skill, follow its references/handoff.md and record the rejection and strict green through
+its bundled `verify.py`. Direct output files are the fallback only when verify-loop is not
+installed. The wrong state is the proven cause, retained as the rejection before the fix (or
+reintroduced by challenge in a scratch copy). Diagnosis only leaves a runnable regression proposal
+and the captured experiments; strict green is not the diagnosis completion gate. No project-setup,
+commit, CI or release is required by this handoff. Report the cause, check edits, regression result
+and coverage limits separately from the diagnosis experiments.
 
 ## Common mistakes
 

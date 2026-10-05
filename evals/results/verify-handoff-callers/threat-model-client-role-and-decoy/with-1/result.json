@@ -1,0 +1,38 @@
+{
+  "case": "threat-model-client-role-and-decoy",
+  "skill": "threat-model",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"Take the role only from the server-side session: `role = user.role`. Delete the `body[\"role\"]` path.\"\n  found   idor-any-invoice \u2014 \"any logged-in customer can read any other customer's invoice by adding `\"role\": \"admin\"` to the request body.\"\n  found   fix-derive-role-from-session \u2014 \"Take the role only from the server-side session: `role = user.role`.\"\n  held    prices-endpoint-is-intentional",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:threat-model"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.17022140000000002,
+  "turns": 11,
+  "seconds": 65.0,
+  "timed_out": false,
+  "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+  "end_output": null
+}

@@ -29,14 +29,13 @@ has met its bar.
 
 *Test:* you can turn it off and roll the prompt back, and say each in one sentence.
 
-When VERIFY.md exists or reusable release-control verification is requested, read the installed
-`verify-loop` skill and its VERIFY_FORMAT.md. Map executable checks for the real kill switch,
-step/spend caps and log redaction. Exercise cap hits and shutdown with fake tools and bounded
-test workloads; prove each mapped control check rejects a broken control in scratch before
-freezing it and finishing with strict, current green status. Keep secrets out of captured output.
-Agent-prove still owns repeated behavioral evaluation; safe-release owns deployment and rollback.
-A readiness review reports gaps without launching the agent. If verify-loop is unavailable,
-retain direct control-check rejection/passing output and name the missing strict evidence.
+Reusable proof: when VERIFY.md exists or reusable release-control verification is requested, hand
+checks for the real kill switch, step/spend caps and log redaction to `verify-loop`: load that
+skill, follow its references/handoff.md and record the rejection and strict green through its
+bundled `verify.py`. Direct output files are the fallback only when verify-loop is not installed.
+Exercise cap hits and shutdown with fake tools and bounded workloads; the wrong state is a broken
+control in scratch. Agent-prove still owns repeated behavioral evaluation; safe-release owns
+deployment and rollback.
 
 ## After it is live
 

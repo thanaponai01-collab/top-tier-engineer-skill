@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.51.0 - 2026-10-05 - callers use the verify-loop handoff
+
+- Nine skills (correctness-gate, wire-check, perf-optimize, threat-model, safe-release,
+  evolve-maintain, agent-release, debug-protocol, build-discipline) replace their own copy of the
+  verify-loop handoff with one pointer to `verify-loop/references/handoff.md`, keeping only what
+  they supply (their wrong state) and what they keep (their verdict).
+- Shared rules move into handoff.md: bundled helper location, behavioral rejection only, scratch
+  mutations with fake data, recorded conditions, keep prior behavior green.
+- The pointer says to load verify-loop and record through its bundled `verify.py`. A bare file
+  pointer was not enough: debug-protocol-regression-proof and build-discipline-verified-slice fell
+  back to plain evidence files until it did.
+- project-setup keeps its own validate section; it is that skill's job, not a handoff.
+
 ## 4.50.0 - 2026-10-05 - verify-loop rewritten, handoff contract
 
 - `verify-loop` SKILL.md 148 -> 108 lines: routing-first description, "done" defined once, one

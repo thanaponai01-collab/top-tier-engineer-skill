@@ -44,13 +44,12 @@ misclassified; go back to the table.
 
 *Test:* the reach you named matches the class you chose. A "fix" that reaches contracts or stored data was misclassified — go back to the table.
 
-When VERIFY.md exists or reusable regression verification is requested, read the installed
-`verify-loop` skill and its VERIFY_FORMAT.md alongside the build handoff. Map the affected
-contracts and adjacent callers before editing: the reproduced bug for Fix, compatibility cases
-for Adapt, and preserved behavior for Improve. Retain a meaningful rejection, freeze the checks,
-and finish with strict, current green status; the check baseline freezes expectations, not the
-implementation being refactored. Diagnosis-only work reports the cause and proposed regression.
-If verify-loop is unavailable, retain direct before/after and rejection evidence with its limits.
+Reusable proof: when VERIFY.md exists or reusable regression verification is requested, hand the
+affected contracts and adjacent callers to `verify-loop`: load that skill, follow its
+references/handoff.md and record the rejection and strict green through its bundled `verify.py`.
+Direct output files are the fallback only when verify-loop is not installed. Do this before editing,
+mapping the reproduced bug for Fix, compatibility cases for Adapt, preserved behavior for Improve. The check
+baseline freezes expectations, not the implementation being refactored.
 
 ## 3. Treat
 The change is `build-discipline`'s work, and that phrase is also the fallback if the skill

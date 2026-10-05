@@ -35,6 +35,18 @@ Records the sections in VERIFY.md, retains the rejection receipt, freezes with `
 finishes with `run --strict` and `status`, as in the loop. If checks were repaired, it collects
 fresh rejection evidence; it never changes an expected result to match the fix.
 
+Rules that hold for every caller:
+
+- Read this skill's SKILL.md and VERIFY_FORMAT.md, and run its bundled helper from the installed
+  skill location, never an assumed path in the target repo.
+- The rejection must be the behavioral `fail-signal:`. A missing dependency, startup failure or
+  timeout proves nothing.
+- Controlled mutations run in scratch copies, with fake accounts and data. Never break a live
+  system to prove a check can fail.
+- Record the conditions the result depends on (environment, target identity, workload) in the
+  retained evidence. Keep secrets out of captured output.
+- Keep prior mapped behavior green and report what stays unmapped.
+
 ## The caller keeps
 
 Its own verdict: oracle quality and mutation breadth, severity, the performance baseline (kept

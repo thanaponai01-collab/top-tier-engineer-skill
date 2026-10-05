@@ -1,0 +1,38 @@
+{
+  "case": "safe-release-combined-migration-and-decoy",
+  "skill": "safe-release",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   single-step-combines-add-and-drop \u2014 \"`002_migrate_total_to_cents.sql` adds `total_cents`, backfills it, and runs `DROP COLUMN total` in one script.\"\n  found   point-of-no-return-immediate \u2014 \"Rollback loses data at the `DROP COLUMN total` step in 002.\"\n  found   rollback-untested-claim \u2014 \"The plan's rollback line is wrong. Migration 002 drops a column, and `git revert` can't bring that data back.\"\n  held    notes-column-is-safe",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:safe-release"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.167064,
+  "turns": 10,
+  "seconds": 25.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

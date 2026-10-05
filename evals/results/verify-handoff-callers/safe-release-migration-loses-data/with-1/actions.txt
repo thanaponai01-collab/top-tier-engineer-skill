@@ -1,0 +1,14 @@
+  1. Skill: top-tier-engineer:safe-release
+  2. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1_6l0601\fixture\DEPLOY.md
+  3. Glob: **/*
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1_6l0601\fixture\migrate.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1_6l0601\fixture\migrations\003_contacts.sql
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1_6l0601\fixture\migrations\002_phone.sql
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1_6l0601\fixture\migrations\001_users.sql
+  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1_6l0601\fixture\app\profile.py
+  9. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1_6l0601\fixture\jobs\reminders.py
+ 10. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1_6l0601\fixture\test_profile.py
+ 11. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-1_6l0601/fixture && cp data/prod.db /tmp/copy.db && python - <<'E' import sqlite3,shutil,sys c=sqlite3.connect('/…
+ 12. Bash: python - <<'E' import sqlite3 c=sqlite3.connect('file:data/prod.db?mode=ro',uri=True) print(c.execute("select name from sqlite_master").fetchall()) print(c.exe…
+ 13. Bash: cp data/prod.db /tmp/copy.db && python - <<'E' import sqlite3,sys sys.path.insert(0,'.') import migrate c=sqlite3.connect('/tmp/copy.db') print(c.execute("sele…
+ 14. Bash: cp data/prod.db ../copy.db && python - <<'E' import sqlite3,sys sys.path.insert(0,'.') import migrate c=sqlite3.connect('../copy.db') print(c.execute("select *…

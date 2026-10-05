@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   role-from-client-body — "client body → authorization (`invoices.py:15`)"
+  found   idor-any-invoice — "any customer can read any other customer's invoice by adding `{"role": "admin"}` to the request body."
+  found   fix-derive-role-from-session — "Use the role from the session lookup only: `role = user.role`."
+  held    prices-endpoint-is-intentional
+
+Phrase grader (grade.py), for comparison:
+FAIL  threat-model-client-role-and-decoy  [threat-model]  1/3 found, score 0.33 (needs 1.00)
+  MISSED  role-from-client-body: get_invoice reads role from body.get("role", user.role) instead of only trusting the session's own role, so the caller can supply its own role
+            named it, but never said what was wrong with it
+  found   idor-any-invoice: a plain authenticated customer, sending {"role": "admin"} in the body, can read another customer's invoice
+  MISSED  fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends
+            named it, but never said what was wrong with it
+  held    prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md — a public catalog mirroring what's already posted in stores, not a finding
+

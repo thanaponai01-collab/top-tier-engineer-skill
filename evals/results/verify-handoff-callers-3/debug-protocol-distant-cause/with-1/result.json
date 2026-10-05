@@ -1,0 +1,50 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   cause-is-parse-amount \u2014 \"`parse_amount` in `fixture/parse.py:5` returns `int(float(value))`, which truncates each amount to a whole number.\"\n  found   why-it-was-not-caught \u2014 \"`test_totals.py` only tests `total()` with hand-made integer rows.\"\n  found   proven-both-directions \u2014 \"**Proof in both directions.** I ran this as an in-memory probe and edited no files:\"\n  held    blame-where-the-symptom-shows",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:debug-protocol"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": true,
+      "detail": "ran it: cd fixture 2>/dev/null || cd .; pwd; ls -la; cat report.py; python report.py"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.15840179999999998,
+  "turns": 6,
+  "seconds": 21.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

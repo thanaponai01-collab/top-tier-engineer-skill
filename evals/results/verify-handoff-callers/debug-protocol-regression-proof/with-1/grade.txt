@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   limited — "The live payment gateway is still unverified and manual."
+
+Phrase grader (grade.py), for comparison:
+PASS  debug-protocol-regression-proof  [debug-protocol]  1/1 found, score 1.00 (needs 1.00)
+  found   limited: The live gateway remains outside coverage.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  Retained state is strict green. — .verify-state.json is not there
+  FAILED  Checks passed. — .verify-state.json is not there
+  ok      Existing coverage limit remains. — 
+  FAILED  Actual rejection evidence exists. — .verify-state.json is not there
+  ok      The native check rejects an independently supplied wrong implementation. — 
+  ok      Native checks pass the unchanged original implementation. — 

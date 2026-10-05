@@ -30,15 +30,13 @@ Pick the mode:
    revert. Record failed attempts so nobody repeats them.
 6. **Guard** every kept gain with a test, assertion or alert that fails when it slips.
 
-When VERIFY.md exists or reusable performance verification is requested, read the installed
-`verify-loop` skill and its VERIFY_FORMAT.md. Register the budget check with adjacent correctness
-checks, and freeze its expectation and workload inputs as declared oracles. Record input size,
-warm/cold state, concurrency and sampling conditions; retain a specific threshold rejection
-on the slow state or a controlled slowdown in scratch, then finish strict verification with
-current green status. Keep the measured performance baseline separate from verify-loop's check
-baseline. Noisy measurements remain inconclusive rather than being retried until green. Trace-only
-work ends with findings. If verify-loop is unavailable, retain direct measurements and rejection/
-passing output, with the conditions and evidence limits.
+Reusable proof: when VERIFY.md exists or reusable performance verification is requested, hand the
+budget check to `verify-loop`: load that skill, follow its references/handoff.md and record the
+rejection and strict green through its bundled `verify.py`. Direct output files are the fallback
+only when verify-loop is not installed. The wrong state is the slow path or a controlled slowdown in
+scratch, rejected by a specific threshold. Freeze workload inputs as oracles and record input size,
+warm/cold state, concurrency and sampling. Keep the measured performance baseline separate from the
+check baseline; noisy measurements stay inconclusive, never retried until green.
 
 *Test:* every target you changed came from a profile line you can quote.
 

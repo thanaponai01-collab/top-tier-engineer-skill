@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   export-never-routed — "**`export` is loaded but not routed.**"
+  found   both-entry-points — "| Scheduled job | `scheduler.run_all` → `settings.SCHEDULED_JOBS` | read, and run |"
+  held    digest-loaded-by-name
+
+Phrase grader (grade.py), for comparison:
+FAIL  wire-check-orphan-and-decoy  [wire-check]  1/2 found, score 0.50 (needs 1.00)
+  found   export-never-routed: handlers/export.py loads at startup but no route maps to it — link 3, Routed
+  MISSED  both-entry-points: two ways in exist: app.py dispatch and scheduler.py cron. Missing the scheduler turns digest into a false orphan
+            never named: app.py
+  held    digest-loaded-by-name: handlers/digest.py is reached only through a string in settings.py; calling it dead or orphaned is the wrong answer
+
+  ok      left the code untouched (a report-only task) — no code file changed

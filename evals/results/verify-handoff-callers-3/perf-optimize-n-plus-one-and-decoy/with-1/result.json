@@ -1,0 +1,38 @@
+{
+  "case": "perf-optimize-n-plus-one-and-decoy",
+  "skill": "perf-optimize",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   n-plus-one-customer-totals \u2014 \"Unbounded: one query per customer (N+1)\"\n  found   unbounded-even-if-fast-today \u2014 \"my 104 ms is the cheap case, because SQLite runs in-process and each query costs microseconds.\"\n  found   fix-single-aggregate-query \u2014 \"Replace the loop with one query:\"\n  held    recent-orders-is-fine\n  held    not-excused-by-its-own-index",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:perf-optimize"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1731742,
+  "turns": 9,
+  "seconds": 29.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

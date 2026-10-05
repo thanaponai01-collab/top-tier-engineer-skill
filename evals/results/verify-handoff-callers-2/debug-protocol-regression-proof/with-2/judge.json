@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "limited",
+      "what": "The live gateway remains outside coverage.",
+      "found": true,
+      "quote": "The live payment gateway is unverified. It is still listed as a manual blind spot.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.1224186,
+  "model": "claude-sonnet-5-5"
+}

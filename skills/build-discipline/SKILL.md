@@ -49,14 +49,12 @@ fact. A vague proof line gets sharpened out loud, never quietly swapped for an e
 
 *Test:* the proof line is in `BUILD.md` before the first edit, as a command plus expected output.
 
-When the project has VERIFY.md or the task asks for reusable verification, read the installed
-verify-loop SKILL.md and VERIFY_FORMAT.md if available. Put the slice's requirement-backed check,
-actual entry point, declared oracles and adjacent regressions in the affected recipe before the
-product change. BUILD.md records progress and evidence location; VERIFY.md owns check definitions.
-Keep the BUILD.md proof/status entry even for one slice; an existing recipe does not replace it.
-Use the bundled helper from the installed skill, not an assumed path in the target repository.
-Record the existing bug or missing behavior's specific rejection through the helper, then freeze
-the baseline. A missing dependency or startup failure cannot prove the behavioral check.
+When the project has VERIFY.md or the task asks for reusable verification, hand the slice's
+requirement-backed check, entry point and adjacent regressions to `verify-loop`: load that skill,
+follow its references/handoff.md and record the rejection and strict green through its bundled
+`verify.py`. Direct output files are the fallback only when verify-loop is not installed. Do this
+before the product change. The wrong state is the missing behavior. BUILD.md keeps the proof/status
+entry and evidence location, even for one slice; VERIFY.md owns the check definitions.
 
 ### 2. Build
 - **Smallest change that moves the proof line.** Delete or reuse before adding. Simple first; a known

@@ -1,0 +1,44 @@
+{
+  "case": "correctness-gate-green-but-wrong",
+  "skill": "correctness-gate",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   boundary-off-by-one \u2014 \"`fixture/shipping.py:4` uses `total > 100`. The spec needs `total >= 100`.\"\n  found   test-encodes-the-bug \u2014 \"It was written from what the code does, not from the spec, so it locks the bug in.\"\n  found   spec-is-the-oracle \u2014 \"This changes a test, so you should confirm that the spec is the authority here, not the current behavior.\"\n  held    green-suite-read-as-correct",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:correctness-gate"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "ran the test suite itself before changing anything, instead of trusting that green means correct",
+      "ok": true,
+      "detail": "ran it: cd fixture; python -m unittest -v 2>&1 | Select-Object -Last 12; python -c \"from shipping import fee; print([("
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1637396,
+  "turns": 8,
+  "seconds": 23.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

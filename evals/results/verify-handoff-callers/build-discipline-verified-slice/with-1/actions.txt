@@ -1,0 +1,15 @@
+  1. Skill: top-tier-engineer:build-discipline
+  2. Glob: fixture/**/*
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\SPEC.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\VERIFY.md
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\AGENTS.md
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\app.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\checkout.py
+  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\tests\test_total.py
+  9. PowerShell: cd fixture; New-Item -ItemType Directory -Force evidence | Out-Null; python -m unittest discover tests 2>&1 | Out-String; python checkout.py | Out-String
+ 10. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\tests\test_checkout_entry.py
+ 11. PowerShell: python -m unittest discover tests -v *> evidence\1-rejection-before-fix.txt; $LASTEXITCODE; Get-Content evidence\1-rejection-before-fix.txt | Select-String "FA…
+ 12. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\app.py
+ 13. PowerShell: python -m unittest discover tests -v *> evidence\2-pass-after-fix.txt; "exit $LASTEXITCODE" | Add-Content evidence\2-pass-after-fix.txt; Get-Content evidence\2…
+ 14. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\BUILD.md
+ 15. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-xhnnmpa0\fixture\VERIFY.md

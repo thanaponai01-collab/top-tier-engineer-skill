@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "single-step-combines-add-and-drop",
+      "what": "002_migrate_total_to_cents.sql adds total_cents, backfills it, and drops total all in one script/deploy, with app.py switching reads in the same release \u2014 no separate expand/backfill/contract deploys",
+      "found": true,
+      "quote": "`002_migrate_total_to_cents.sql` adds `total_cents`, backfills it, and runs `DROP COLUMN total` in one script.",
+      "quote_checked": true
+    },
+    {
+      "id": "point-of-no-return-immediate",
+      "what": "dropping total loses the original dollar data immediately with nothing verified first; this is the point of no return",
+      "found": true,
+      "quote": "Rollback loses data at the `DROP COLUMN total` step in 002.",
+      "quote_checked": true
+    },
+    {
+      "id": "rollback-untested-claim",
+      "what": "MIGRATION.md's \"revert the commit\" rollback claim is false: reverting the code does not bring back a dropped column's data",
+      "found": true,
+      "quote": "The plan's rollback line is wrong. Migration 002 drops a column, and `git revert` can't bring that data back.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "notes-column-is-safe",
+      "what": "001_add_notes_column.sql is purely additive (nullable column, no backfill) and is safe/reversible on its own; it is not part of the risk in 002",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.1004326,
+  "model": "claude-sonnet-5-5"
+}

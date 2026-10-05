@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "n-plus-one-customer-totals",
+      "what": "customer_totals runs one SELECT SUM(...) per customer inside a Python loop instead of a single aggregate query",
+      "found": true,
+      "quote": "`customer_totals` runs one query per customer, so it grows linearly with customers.",
+      "quote_checked": true
+    },
+    {
+      "id": "unbounded-even-if-fast-today",
+      "what": "this is a finding regardless of today's speed, because query count grows with the customer count",
+      "found": true,
+      "quote": "Each lookup is indexed and fast, but there are N of them.",
+      "quote_checked": true
+    },
+    {
+      "id": "fix-single-aggregate-query",
+      "what": "the fix is one query with a JOIN/GROUP BY (or equivalent batch fetch) instead of a query per customer",
+      "found": true,
+      "quote": "**Fix (traced):** fetch everything in one query.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "recent-orders-is-fine",
+      "what": "recent_orders sorts with ORDER BY ... LIMIT over an indexed column (idx_orders_created_at); EXPLAIN QUERY PLAN shows an index scan, not a full table sort, so it is not a scaling finding",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "not-excused-by-its-own-index",
+      "what": "customer_totals hitting idx_orders_customer_id on each call does not excuse the N+1 pattern; the finding is about the number of round trips, not whether each one is indexed",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.09977660000000001,
+  "model": "claude-sonnet-5-5"
+}

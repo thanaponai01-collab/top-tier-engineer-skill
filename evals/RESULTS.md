@@ -1,3 +1,23 @@
+# Callers on the verify-loop handoff (4.51.0)
+
+2026-10-05: nine caller skills now point to `verify-loop/references/handoff.md` instead of each
+restating it. With-plugin arm only, semantic judge, default model claude-sonnet-5-5.
+
+| case | bare file pointer | final text (load verify-loop, record via its `verify.py`) |
+|---|---|---|
+| debug-protocol-regression-proof | fail: verify-loop never loaded, no `.verify-state.json` | 2/2 pass |
+| build-discipline-verified-slice | fail: verify-loop never loaded, no `.verify-state.json` | 2/2 pass (one more try lost to a runner file-lock error, not graded) |
+| correctness-gate-green-but-wrong | pass | 1/1 pass |
+| wire-check-orphan-and-decoy | pass | 1/1 pass |
+| perf-optimize-n-plus-one-and-decoy | pass | 1/1 pass |
+| threat-model-client-role-and-decoy | pass | 1/1 pass |
+| safe-release-migration-loses-data | pass | 1/1 pass |
+| safe-release-combined-migration-and-decoy | pass | 1/1 pass |
+| debug-protocol-distant-cause | pass | 1/1 pass |
+
+evolve-maintain and agent-release still have no behavioral case. Evidence:
+`evals/results/verify-handoff-callers*/`.
+
 # verify-loop rewrite (4.50.0)
 
 2026-10-05: SKILL.md restructured (148 -> 108 lines) and `references/handoff.md` added. All eight

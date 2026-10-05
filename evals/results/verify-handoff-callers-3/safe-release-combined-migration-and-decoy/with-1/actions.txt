@@ -1,0 +1,8 @@
+  1. Skill: top-tier-engineer:safe-release
+  2. Glob: fixture/**/*
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-025u2bko\fixture\MIGRATION.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-025u2bko\fixture\app.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-025u2bko\fixture\migrations\001_add_notes_column.sql
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-025u2bko\fixture\migrations\002_migrate_total_to_cents.sql
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-025u2bko\fixture\test_migration.py
+  8. PowerShell: cd fixture; python -m unittest test_migration 2>&1 | Select-Object -Last 5

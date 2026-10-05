@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   single-step-combines-add-and-drop — "`002_migrate_total_to_cents.sql` adds `total_cents`, backfills it, and runs `DROP COLUMN total` in one script, in the sa"
+  found   point-of-no-return-immediate — "| 002c `DROP total` | Same script as 002a/b | None | **Yes, point of no return** |"
+  found   rollback-untested-claim — "After it runs, `git revert` brings back the old code, but the old code reads a `total` column that no longer exists."
+  held    notes-column-is-safe
+
+Phrase grader (grade.py), for comparison:
+FAIL  safe-release-combined-migration-and-decoy  [safe-release]  2/3 found, score 0.67 (needs 1.00)
+  found   single-step-combines-add-and-drop: 002_migrate_total_to_cents.sql adds total_cents, backfills it, and drops total all in one script/deploy, with app.py switching reads in the same release — no separate expand/backfill/contract deploys
+  found   point-of-no-return-immediate: dropping total loses the original dollar data immediately with nothing verified first; this is the point of no return
+  MISSED  rollback-untested-claim: MIGRATION.md's "revert the commit" rollback claim is false: reverting the code does not bring back a dropped column's data
+            never named: migration.md
+  TRIPPED notes-column-is-safe: 001_add_notes_column.sql is purely additive (nullable column, no backfill) and is safe/reversible on its own; it is not part of the risk in 002
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+

@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:debug-protocol
+  2. Glob: fixture/**/*
+  3. Bash: cd fixture && cat data.csv parse.py report.py totals.py test_totals.py; python report.py
+  4. Bash: cd fixture && python -c " import parse from decimal import Decimal from totals import total print('present:', total(parse.load('data.csv'))) parse.parse_amount…
