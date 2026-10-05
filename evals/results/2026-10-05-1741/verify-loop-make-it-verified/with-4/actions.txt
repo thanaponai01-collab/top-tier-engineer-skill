@@ -1,0 +1,6 @@
+  1. Skill: top-tier-engineer:verify-loop
+  2. Bash: cd fixture && ls -la && cat VERIFY.md 2>/dev/null; ls ../ ; ls C:/Users/thana/AppData/Local/Temp/tte-plugin-rk1wb7m4/top-tier-engineer/skills/verify-loop/scrip…
+  3. Bash: cd fixture && cat SPEC.md refund.py test_refund.py; ls -R data
+  4. Bash: cd fixture && cat data/refund_cases.json; python -m unittest test_refund.py 2>&1 | tail -4
+  5. Bash: cd fixture && sed -i 's|"cases", "refunds.json"|"data", "refund_cases.json"|' test_refund.py && python -m unittest test_refund.py 2>&1 | tail -15
+  6. Bash: cd fixture && sed -i 's/return credit - amount/return credit + amount/' refund.py && python -m unittest -v test_refund.py 2>&1 | tail -6

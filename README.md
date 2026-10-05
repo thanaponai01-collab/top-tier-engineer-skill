@@ -22,6 +22,12 @@ Use `/top-tier-engineer:drive` with a goal when you want the full workflow. It c
 the relevant skills, so you do not need to invoke each one. You can also call an individual
 skill by name, e.g. `/top-tier-engineer:debug-protocol`. Skipping a skill needs no justification.
 
+**Starting in a project:** no manual seed is required. Give the task and its expected result;
+the agent discovers existing commands, entry points and tests, then verifies the relevant behavior.
+`verify-loop` saves a small reusable recipe in VERIFY.md and grows it as needed. A complete
+FEATURES.md map is optional; `project-setup` is available when you want those starter files upfront.
+The map records what was found, while executed checks establish what worked.
+
 **Other agents:** every `skills/<name>/SKILL.md` is plain markdown. Copy the one you need and
 paste it — it carries its own vocabulary and its own fallbacks, so nothing silently depends on
 the rest of this repo being loaded.
@@ -45,7 +51,7 @@ the rest of this repo being loaded.
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
 | `issue-handoff` | "File these as issues": a work doc, or the chat, into tracked issues, nothing dropped |
 | `build-discipline` | "Build it": small, proven, wired increments |
-| `verify-loop` | "Check your own work until it passes": builds the check first, keeps every feature's tests in one VERIFY.md, keeps a fix inside the files it named, checks output against a schema, a privacy scan and abuse cases, and `verify.py tests` maps every test function to its feature and flags tests that cannot go red (bundled scripts) |
+| `verify-loop` | "Check your own work until it passes": discovers a project recipe without manual setup, records a real failed check before trusting a strict pass, keeps reusable checks in VERIFY.md, and flags stale evidence, changed oracles and unmapped tests (bundled scripts) |
 | `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |

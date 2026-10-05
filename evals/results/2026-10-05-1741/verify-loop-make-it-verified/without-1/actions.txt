@@ -1,0 +1,8 @@
+  1. Glob: fixture/**/*
+  2. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-8nulnpb7\fixture\VERIFY.md
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-8nulnpb7\fixture\SPEC.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-8nulnpb7\fixture\refund.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-8nulnpb7\fixture\test_refund.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-8nulnpb7\fixture\data\refund_cases.json
+  7. Bash: cd fixture && python -m unittest -v test_refund.py 2>&1 | tail -15
+  8. Bash: cd fixture && python -c " import json,refund for c in json.load(open('data/refund_cases.json')): a=(c['credit'],c['paid'],c['amount']) try: r=refund.apply_refu…

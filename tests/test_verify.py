@@ -4,7 +4,7 @@ verify.py — the feature-to-check map behind verify-loop.
 
 Run them all with `python -m unittest discover tests`.
 """
-import os, tempfile, unittest
+import json, os, tempfile, unittest
 
 from _helpers import run
 
@@ -20,6 +20,18 @@ def write(root, rel, text=""):
 
 
 class Init(unittest.TestCase):
+    def test_scaffolded_driver_is_unverified_until_real_checks_are_implemented(self):
+        import subprocess, sys
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out, err = run("verify.py", "scaffold-driver", tmp, "--type", "cli")
+            self.assertEqual(code, 0, out + err)
+            driver = os.path.join(tmp, "scripts", "smoke_driver.py")
+            proc = subprocess.run([sys.executable, driver], capture_output=True, text=True)
+            self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+            with open(os.path.join(tmp, ".verify-evidence", "smoke_run.json"), encoding="utf-8") as fh:
+                self.assertEqual(json.load(fh)["status"], "unverified")
+            self.assertEqual(run("verify.py", "scaffold-driver", tmp)[0], 1)
+
     def test_drafts_one_feature_per_test_file_and_never_overwrites(self):
         with tempfile.TemporaryDirectory() as tmp:
             write(tmp, "tests/test_cart.py")
@@ -258,7 +270,7 @@ class Journeys(unittest.TestCase):
 
 class LoopMemory(unittest.TestCase):
     """The loop remembers across runs: same failure, regression, tampered check, stale green."""
-    FLAG = 'python -c "import os,sys; sys.exit(0 if os.path.exists(\'ok.flag\') else 1)"'
+    FLAG = 'python -c "import os; assert os.path.exists(\'ok.flag\'), \'missing ok.flag\'"'
 
     def _repo(self, tmp, cmd=None):
         write(tmp, "VERIFY.md", f"## Thing\n- test: `{cmd or self.FLAG}`\n- fail-proof: removed flag, went red\n")
@@ -324,7 +336,7 @@ class LoopMemory(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertIn("red", out)
             write(tmp, "ok.flag")
-            run("verify.py", "run", tmp)
+            run("verify.py", "run", tmp, "--strict")
             code, out, _ = run("verify.py", "status", tmp)
             self.assertEqual(code, 0, out)
             self.assertIn("green", out)
@@ -332,6 +344,122 @@ class LoopMemory(unittest.TestCase):
             code, out, _ = run("verify.py", "status", tmp)
             self.assertEqual(code, 3)
             self.assertIn("stale", out)
+
+
+class EvidenceGate(unittest.TestCase):
+    CHECK = 'python check.py'
+
+    def _repo(self, tmp):
+        write(tmp, "check.py", "assert open('value.txt').read() == '42', 'expected 42'\n")
+        write(tmp, "value.txt", "41")
+        write(tmp, "VERIFY.md", "## Answer\n- test: `python check.py`\n"
+              "- oracle: check.py\n- fail-proof: input 41 rejected, expected 42\n")
+
+    def test_prose_alone_cannot_pass_strict_and_status_keeps_the_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", f"## Answer\n- test: `{PASS}`\n- fail-proof: claimed red\n")
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("no recorded failing run", out)
+            self.assertEqual(run("verify.py", "status", tmp)[0], 1)
+
+    def test_a_non_strict_pass_is_partial_not_completion(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", f"## Answer\n- test: `{PASS}`\n- fail-proof: x\n")
+            self.assertEqual(run("verify.py", "run", tmp)[0], 0)
+            code, out, _ = run("verify.py", "status", tmp)
+            self.assertEqual(code, 3, out)
+            self.assertIn("partial", out)
+
+    def test_missing_oracle_is_a_failure_even_after_a_baseline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            run("verify.py", "baseline", tmp)
+            os.remove(os.path.join(tmp, "check.py"))
+            code, out, err = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out + err)
+            self.assertIn("invalid oracle", out)
+            self.assertEqual(run("verify.py", "status", tmp)[0], 1)
+
+    def test_strict_missing_proof_and_unverified_features_stay_red(self):
+        for extra in ("", "\n## Not checked\n"):
+            with self.subTest(extra=extra), tempfile.TemporaryDirectory() as tmp:
+                write(tmp, "VERIFY.md", f"## Answer\n- test: `{PASS}`\n" + extra)
+                self.assertEqual(run("verify.py", "run", tmp, "--strict")[0], 1)
+                self.assertEqual(run("verify.py", "status", tmp)[0], 1)
+
+    def test_real_red_then_green_records_output_and_freezes_the_oracle(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            self.assertEqual(run("verify.py", "run", tmp)[0], 1)
+            write(tmp, "value.txt", "42")
+            self.assertEqual(run("verify.py", "baseline", tmp)[0], 0)
+            code, out, err = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 0, out + err)
+            self.assertEqual(run("verify.py", "status", tmp)[0], 0)
+            with open(os.path.join(tmp, ".verify-state.json"), encoding="utf-8") as fh:
+                state = json.load(fh)
+            proof = state["failures"]["Answer|python check.py"]
+            self.assertIn("expected 42", proof["output"])
+            self.assertEqual(proof["exit"], 1)
+            write(tmp, "check.py", "pass\n")
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("CHECK CHANGED  check.py", out)
+
+    def test_editing_the_check_invalidates_its_old_failure_even_without_baseline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            run("verify.py", "run", tmp)
+            write(tmp, "check.py", "pass\n")
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("no recorded failing run", out)
+
+    def test_a_check_cannot_rewrite_its_oracle_and_leave_a_valid_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            write(tmp, "check.py", "open('check.py', 'w').write('pass\\n')\n"
+                  "raise AssertionError('wrong result')\n")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("CHECK CHANGED DURING RUN", out)
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("no recorded failing run", out)
+
+    def test_oracle_removed_during_the_check_fails_without_a_traceback_from_the_runner(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            write(tmp, "check.py", "from pathlib import Path\nPath('check.py').unlink()\n")
+            code, out, err = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out + err)
+            self.assertIn("CHECK CHANGED DURING RUN", out)
+            self.assertEqual(err, "")
+
+    def test_doctor_failure_prevents_checks_and_invalidates_previous_green(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", f"## Answer\n- test: `{PASS}`\n- fail-proof: x\n"
+                  "\n## Run\n- doctor: `python doctor.py`\n")
+            write(tmp, "doctor.py", "pass\n")
+            self.assertEqual(run("verify.py", "run", tmp)[0], 0)
+            write(tmp, "doctor.py", "raise SystemExit('wrong build')\n")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("doctor failed", out)
+            self.assertNotIn("  PASS", out)
+            self.assertEqual(run("verify.py", "status", tmp)[0], 1)
+
+    def test_status_detects_same_size_content_change_even_with_restored_mtime(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            write(tmp, "value.txt", "42")
+            run("verify.py", "run", tmp)
+            path = os.path.join(tmp, "value.txt")
+            stat = os.stat(path)
+            write(tmp, "value.txt", "41")
+            os.utime(path, ns=(stat.st_atime_ns, stat.st_mtime_ns))
+            self.assertEqual(run("verify.py", "status", tmp)[0], 3)
 
 
 class Scope(unittest.TestCase):
@@ -487,6 +615,14 @@ class TestMap(unittest.TestCase):
             write(tmp, "tests/test_cart.py", "def test_ok():\n    assert 1\n")
             write(tmp, "tests/test_refunds.py", self.ONE)
             self.assertEqual(run("verify.py", "tests", tmp, "--strict")[0], 0)
+
+    def test_strict_fails_on_skipped_or_unparseable_tests(self):
+        for text in ("import unittest\n@unittest.skip('later')\ndef test_ok():\n    assert 1\n",
+                     "def test_broken(:\n    pass\n"):
+            with self.subTest(text=text), tempfile.TemporaryDirectory() as tmp:
+                write(tmp, "VERIFY.md", self.RECIPE)
+                write(tmp, "tests/test_cart.py", text)
+                self.assertEqual(run("verify.py", "tests", tmp, "--strict")[0], 1)
 
     def test_no_recipe_exits_two(self):
         with tempfile.TemporaryDirectory() as tmp:

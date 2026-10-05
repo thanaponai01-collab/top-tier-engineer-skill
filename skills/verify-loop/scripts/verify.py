@@ -10,15 +10,17 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
          cover: features with no check, checks nobody proved can fail, test files that
          belong to no feature, and the blind spots the recipe lists.
 
-  baseline  Freeze the test files and the check commands. Once a baseline exists, `run` fails
+  baseline  Freeze tests, declared oracle files, check commands and the Run recipe. `run` fails
          with CHECK CHANGED if any of them differ: the loop fixes code, never the check.
-  status Is the last run green and still true of the files on disk? One line, exit 0/1/3.
+  status Was the last whole run strict, green and current? One line, exit 0/1/3.
   scope  Before a fix, name the files it may touch. Any later edit outside them fails the run
          (OUT OF SCOPE), and every check that passed when the fix began stays on watch.
 
 `run` also remembers itself in .verify-state.json (gitignore it): it says NEWLY RED when a fix
 broke something that passed, SAME FAILURE when a check fails identically twice, and BUDGET after
 --budget red runs in a row. A `--only` run compares nothing and saves nothing.
+Strict runs require retained failure output for the current checks plus a fail-proof note;
+a non-strict pass is partial, never a successful completion status.
 
 A check passes when its command exits 0. Commands run through the shell, like a Makefile:
 only run a VERIFY.md from a repo you trust. Stdlib only.
@@ -28,6 +30,7 @@ VERIFY.md format:
   ## Feature name
   - test: `python -m pytest tests/test_x.py -q`
   - run: `python app.py --smoke`
+  - oracle: SPEC.md, scripts/smoke.py
   - fail-proof: broke the tax rounding, test_x went red, reverted
 
   ## Journey: Buy something
@@ -39,6 +42,7 @@ VERIFY.md format:
   - setup: `python scripts/seed.py`
   - start: `python app.py`
   - ready: `python scripts/wait_http.py http://localhost:8000/health`
+  - doctor: `python scripts/check_instance.py`
   - stop: `python scripts/shutdown.py`
   - login: user demo@example.com, password in .env.test
 
@@ -60,7 +64,7 @@ Usage:
   python scripts/verify.py scope PATH... [--add | --clear | --check] [--repo .]
 
 Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is unverified or
-unproven); 2 = no usable VERIFY.md. Summary line:
+unproven, or has orphan tests); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
 import argparse, ast, fnmatch, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
@@ -96,7 +100,7 @@ def parse(text):
             else:
                 j = re.match(r"(?i)^journey:\s*(.+)$", title)
                 cur = {"name": j.group(1) if j else title, "checks": [], "proofs": [],
-                       "journey": bool(j), "members": []}
+                       "journey": bool(j), "members": [], "oracles": []}
                 features.append(cur)
                 in_blind = False
             continue
@@ -118,6 +122,8 @@ def parse(text):
                 cur["proofs"].append(val)
         elif kind == "features" and cur["journey"]:
             cur["members"] = [m.strip() for m in val.split(",") if m.strip()]
+        elif kind == "oracle":
+            cur["oracles"].extend(p.strip() for p in val.split(",") if p.strip())
         elif val:
             cur["checks"].append((kind, val))
     return features, blind
@@ -140,7 +146,7 @@ def parse_run(text):
             val = val[1:-1]
         if key == "setup":
             run["setup"].append(val)
-        elif key in ("start", "ready", "stop", "login"):
+        elif key in ("start", "ready", "doctor", "stop", "login"):
             run[key] = val
     return run if seen else None
 
@@ -305,7 +311,7 @@ def cmd_tests(repo, strict):
     unmapped = total - mapped
     print(f"TESTS: {total} tests | {mapped} mapped to a feature | {unmapped} unmapped | "
           f"{hollow} without an assertion or a way to fail | {skipped} skipped")
-    return 1 if strict and (hollow or unmapped) else 0
+    return 1 if strict and (hollow or unmapped or skipped or bad) else 0
 
 
 # ---- init ---------------------------------------------------------------------------------
@@ -386,7 +392,8 @@ def cmd_init(repo):
         "",
         "Each feature lists the commands that prove it. A check passes when its command exits 0.",
         "Run them all with `verify.py run`. This is a draft: fix the grouping, add a real-run check",
-        "for each feature, and replace every TODO.",
+        "for each feature, and replace every TODO. Start with the current task; a complete map",
+        "is optional. Unchecked sections remain unverified, and a draft is never proof.",
         "",
     ]
     for name in sorted(groups):
@@ -449,12 +456,12 @@ def main():
     # TODO: Perform observable runtime checks (e.g., HTTP probe, CLI execution, or Playwright browser)
     evidence = {{
         "timestamp": time.time(),
-        "status": "passed",
+        "status": "unverified",
         "driver_type": "{driver_type}"
     }}
     record_evidence("smoke_run.json", evidence)
-    print("Runtime smoke driver check passed.")
-    return 0
+    print("Runtime smoke driver is a draft: implement observable assertions before verification.")
+    return 2
 
 if __name__ == "__main__":
     sys.exit(main())
@@ -547,7 +554,15 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET):
     features, blind = parse(read(repo, RECIPE))
     if not features:
         print(f"{RECIPE} has no '## <feature>' sections; nothing to run.")
+        track(repo, [], only, budget, 1, strict)
         return 2
+
+    try:
+        check_hashes(repo)
+    except (OSError, ValueError) as exc:
+        print(f"Run: invalid oracle: {exc}; no check was run.")
+        track(repo, [], only, budget, 1, strict)
+        return 1
 
     recipe = parse_run(read(repo, RECIPE))
     proc = log = None
@@ -558,6 +573,7 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET):
                 print(f"Run: setup failed ({cmd}); no check was run.")
                 for line in out.rstrip().splitlines()[-TAIL_LINES:]:
                     print(f"        {line}")
+                track(repo, [], only, budget, 1, strict)
                 return 1
         if recipe.get("login"):
             print(f"Login: {recipe['login']}")
@@ -571,9 +587,18 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET):
                     print(f"        {line}")
                 stop_app(proc, recipe.get("stop"), repo, timeout)
                 os.unlink(log)
+                track(repo, [], only, budget, 1, strict)
                 return 1
             print(f"Run: app ready in {time.time() - t0:.1f}s ({recipe['start']})")
     try:
+        if recipe and recipe.get("doctor"):
+            ok, _, out, _ = run_check(recipe["doctor"], repo, timeout)
+            if not ok:
+                print("Run: doctor failed; no check was run.")
+                for line in out.rstrip().splitlines()[-TAIL_LINES:]:
+                    print(f"        {line}")
+                track(repo, [], only, budget, 1, strict)
+                return 1
         return run_checks(repo, features, blind, recipe, only, timeout, strict, budget)
     finally:
         if proc:
@@ -590,6 +615,8 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
     known = {f["name"].lower() for f in features if not f["journey"]}
     passed = failed = unverified = unproven = journeys = broken = 0
+    receipts = load_state(repo).get("failures", {})
+    signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
     for f in shown:
         print(("Journey: " if f["journey"] else "") + f["name"])
         if f["journey"]:
@@ -607,7 +634,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
             continue
         for kind, cmd in f["checks"]:
             ok, code, out, secs = run_check(cmd, repo, timeout)
-            results.append((f["name"], kind, cmd, ok, out))
+            results.append((f["name"], kind, cmd, ok, out, code))
             passed += ok
             failed += not ok
             tag = "PASS" if ok else "FAIL"
@@ -619,6 +646,11 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         if not f["proofs"]:
             unproven += 1
             print("  note  no fail-proof recorded: nobody has shown these checks can go red")
+        elif strict and not any(
+                receipts.get(f"{f['name']}|{cmd}", {}).get("signature") == signature
+                for kind, cmd in f["checks"] if kind not in ("lint", "type", "types")):
+            unproven += 1
+            print("  note  no recorded failing run for the current checks; fail-proof prose alone is not evidence")
 
     if not recipe and any(k == "run" for f in features for k, _ in f["checks"]):
         print("note  'run' checks exist but there is no ## Run section: they assume the app is already up.")
@@ -636,13 +668,21 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     else:
         print("Blind spots: none listed. A recipe that admits none has not looked.")
 
-    notes, bad = track(repo, results, only, budget, failed + broken)
+    incomplete = strict and (unverified or unproven or orphans)
+    try:
+        changed_during_run = signature != sha(json.dumps(check_hashes(repo), sort_keys=True))
+    except (OSError, ValueError):
+        changed_during_run = True
+    if changed_during_run:
+        print("CHECK CHANGED DURING RUN  repeat verification with stable checks and oracles")
+    notes, bad = track(repo, results, only, budget,
+                       failed + broken + bool(incomplete) + changed_during_run, strict, signature)
     for n in notes:
         print(n)
     print(f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
           f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
           f"{journeys} journeys, {broken} broken")
-    if failed or broken or bad or (strict and (unverified or unproven)):
+    if failed or broken or bad or incomplete or changed_during_run:
         return 1
     return 0
 
@@ -671,7 +711,7 @@ def save_state(repo, state):
 
 
 def tree_sig(repo):
-    """A signature of every file (path, size, mtime) outside SKIP_DIRS: changes when the work does."""
+    """Content signature outside SKIP_DIRS; preserved timestamps cannot hide an edit."""
     h = hashlib.sha256()
     for root, dirs, files in os.walk(repo):
         dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS)
@@ -680,10 +720,13 @@ def tree_sig(repo):
                 continue
             p = os.path.join(root, f)
             try:
-                st = os.stat(p)
+                h.update(os.path.relpath(p, repo).encode("utf-8", "replace") + b"\0")
+                with open(p, "rb") as fh:
+                    for chunk in iter(lambda: fh.read(65536), b""):
+                        h.update(chunk)
+                h.update(b"\0")
             except OSError:
                 continue
-            h.update(f"{os.path.relpath(p, repo)}\0{st.st_size}\0{st.st_mtime_ns}\n".encode("utf-8", "replace"))
     return h.hexdigest()[:16]
 
 
@@ -691,7 +734,15 @@ def check_hashes(repo):
     """What the agent must not edit to get a pass: the test files, and the check commands in VERIFY.md."""
     hashes = {t: sha(read(repo, t)) for t in find_tests(repo)}
     features, _ = parse(read(repo, RECIPE))
+    for f in features:
+        for name in f["oracles"]:
+            path = os.path.realpath(os.path.join(repo, name))
+            if os.path.commonpath([os.path.realpath(repo), path]) != os.path.realpath(repo):
+                raise ValueError(f"oracle must be inside the repo: {name}")
+            with open(path, "rb") as fh:
+                hashes[name] = hashlib.sha256(fh.read()).hexdigest()[:16]
     hashes[RECIPE + " checks"] = sha("\n".join(f"{f['name']}|{k}|{c}" for f in features for k, c in f["checks"]))
+    hashes[RECIPE + " run"] = sha(json.dumps(parse_run(read(repo, RECIPE)), sort_keys=True))
     return hashes
 
 
@@ -712,18 +763,23 @@ def fingerprint(cmd, out):
     return sha(cmd + "\0" + NOISE.sub("", tail))
 
 
-def track(repo, results, only, budget, failures):
+def track(repo, results, only, budget, failures, strict=False, signature=None):
     """Compare this run to the last one and save it. (lines to print, True if the run must fail)."""
     if only:
         return ["note  --only run: loop state not updated (only a whole run can be compared)"], False
     state = load_state(repo)
     prev, checks, lines = state.get("checks", {}), {}, []
-    for feat, kind, cmd, ok, out in results:
+    receipts = state.setdefault("failures", {})
+    if results and signature is None:
+        signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
+    for feat, kind, cmd, ok, out, code in results:
         key = f"{feat}|{cmd}"
         p = prev.get(key, {})
         fp = None if ok else fingerprint(cmd, out)
         count = (p.get("count", 0) + 1) if (not ok and p.get("fp") == fp) else (0 if ok else 1)
-        checks[key] = {"ok": ok, "fp": fp, "count": count}
+        checks[key] = {"ok": ok, "fp": fp, "count": count, "exit": code, "output": out[-4000:]}
+        if not ok and code is not None and out.strip():
+            receipts[key] = {"signature": signature, "exit": code, "output": out[-4000:]}
         if p.get("ok") and not ok:
             lines.append(f"NEWLY RED  {feat} ({kind}): it passed last run, so the last change broke it")
         elif p and not p.get("ok") and ok:
@@ -740,7 +796,10 @@ def track(repo, results, only, budget, failures):
     for r in strays:
         lines.append(f"OUT OF SCOPE  {r} changed, and the fix was not allowed to touch it. Revert it, or "
                      "widen the scope on purpose with `verify.py scope --add` and say why")
-    changed = tampered(repo, state)
+    try:
+        changed = tampered(repo, state)
+    except (OSError, ValueError) as exc:
+        changed = [str(exc)]
     for c in changed:
         lines.append(f"CHECK CHANGED  {c} differs from the baseline. Loosening a check is not a fix: "
                      "restore it, or have a person review it and run `verify.py baseline`")
@@ -749,7 +808,8 @@ def track(repo, results, only, budget, failures):
     if red and rounds >= budget:
         lines.append(f"BUDGET  {rounds} red runs in a row (budget {budget}): stop, report what passes, "
                      "what fails and what you would try next")
-    state.update({"checks": checks, "rounds": rounds, "result": "red" if red else "green", "tree": tree_sig(repo)})
+    state.update({"checks": checks, "rounds": rounds, "result": "red" if red else "green",
+                  "strict": strict, "tree": tree_sig(repo)})
     save_state(repo, state)
     return lines, bool(changed or strays)
 
@@ -834,7 +894,11 @@ def cmd_baseline(repo):
         print(f"no {RECIPE} in {repo}. Run `verify.py init` first.")
         return 2
     state = load_state(repo)
-    state["baseline"] = check_hashes(repo)
+    try:
+        state["baseline"] = check_hashes(repo)
+    except (OSError, ValueError) as exc:
+        print(f"invalid oracle: {exc}")
+        return 2
     save_state(repo, state)
     print(f"baseline recorded: {len(state['baseline'])} check file(s). From here an edit to any of "
           "them fails the run until a person re-baselines.")
@@ -850,7 +914,11 @@ def cmd_status(repo):
     if not state.get("result"):
         print("VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)")
         return 3
-    changed = tampered(repo, state)
+    try:
+        changed = tampered(repo, state)
+    except (OSError, ValueError) as exc:
+        print(f"VERIFY-STATE: tampered ({exc})")
+        return 1
     if changed:
         print(f"VERIFY-STATE: tampered ({', '.join(changed)} differs from the baseline)")
         return 1
@@ -864,6 +932,9 @@ def cmd_status(repo):
         return 1
     if state.get("tree") != tree_sig(repo):
         print("VERIFY-STATE: stale (files changed since the last green run)")
+        return 3
+    if not state.get("strict"):
+        print("VERIFY-STATE: partial (last run was not strict; run --strict before claiming done)")
         return 3
     print("VERIFY-STATE: green")
     return 0
@@ -880,7 +951,7 @@ def main():
     r.add_argument("--only", help="run only features whose name contains this text")
     r.add_argument("--timeout", type=int, default=120, help="seconds per check (default 120)")
     r.add_argument("--strict", action="store_true",
-                   help="also exit 1 when a feature is unverified or has no fail-proof")
+                   help="require recorded failure evidence and reject unverified features or orphan tests")
     r.add_argument("--budget", type=int, default=BUDGET,
                    help="red runs in a row before the run says stop (default 5)")
     b = sub.add_parser("baseline", help="freeze the check files; later edits to them fail the run")
@@ -890,7 +961,7 @@ def main():
     m = sub.add_parser("tests", help="map every test function to a feature; flag tests that cannot fail")
     m.add_argument("repo", nargs="?", default=".")
     m.add_argument("--strict", action="store_true",
-                   help="exit 1 if a test has no assertion, swallows its failure, or maps to no feature")
+                   help="exit 1 on hollow, unmapped, skipped or unparseable Python tests")
     c = sub.add_parser("scope", help="name the files a fix may touch; edits outside them fail the run")
     c.add_argument("patterns", nargs="*", help="files, folders or globs the fix may touch")
     c.add_argument("--repo", default=".")

@@ -1,0 +1,13 @@
+  1. Skill: top-tier-engineer:verify-loop
+  2. Glob: **/*
+  3. Glob: VERIFY.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mz12ay1n\fixture\VERIFY.md
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mz12ay1n\fixture\refund.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mz12ay1n\fixture\SPEC.md
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mz12ay1n\fixture\test_refund.py
+  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mz12ay1n\fixture\data\refund_cases.json
+  9. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-mz12ay1n/fixture && python -m unittest test_refund.py -v 2>&1 | tail -8; ls /c/Users/thana/AppData/Local/Temp/tte…
+ 10. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-mz12ay1n\fixture\test_refund.py
+ 11. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-mz12ay1n\fixture\VERIFY.md
+ 12. Bash: V=/c/Users/thana/AppData/Local/Temp/tte-plugin-7pr2og1o/top-tier-engineer/skills/verify-loop/scripts/verify.py; python $V run 2>&1 | tail -30
+ 13. Bash: V=/c/Users/thana/AppData/Local/Temp/tte-plugin-7pr2og1o/top-tier-engineer/skills/verify-loop/scripts/verify.py cat >> VERIFY.md <<'EOF' - fail-proof: with the …

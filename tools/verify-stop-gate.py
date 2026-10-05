@@ -83,7 +83,7 @@ def already_blocked(session_id, line):
 
 def reason(line):
     return (f"[top-tier-engineer] {line}\n"
-            f"Before you stop: run `python \"{VERIFY}\" run` in the repo and report the result, "
+            f"Before you stop: run `python \"{VERIFY}\" run --strict` in the repo and report the result, "
             "or say plainly why you cannot. Fix the code, never the check: an edited check fails the run. "
             "This blocks once.")
 

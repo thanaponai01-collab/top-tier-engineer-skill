@@ -385,9 +385,14 @@ class TestVerifyStopGate(unittest.TestCase):
 
     def _repo(self, tmp, green):
         (Path(tmp) / "VERIFY.md").write_text(
-            "## Thing\n- test: `python -c \"import sys; sys.exit(%d)\"`\n- fail-proof: x\n" % (0 if green else 1),
+            "## Thing\n- test: `python -c \"from pathlib import Path; "
+            "assert Path('ok.flag').exists(), 'missing flag'\"`\n"
+            "- fail-proof: removed flag, assertion failed\n",
             encoding="utf-8")
         subprocess.run([sys.executable, str(VERIFY), "run", tmp], capture_output=True)
+        if green:
+            (Path(tmp) / "ok.flag").write_text("ok", encoding="utf-8")
+            subprocess.run([sys.executable, str(VERIFY), "run", tmp, "--strict"], capture_output=True)
 
     def _payload(self, tmp, lines, sid):
         path = Path(tmp) / "transcript.jsonl"
@@ -413,7 +418,7 @@ class TestVerifyStopGate(unittest.TestCase):
             code, _, err = run_hook(STOP_GATE, dict(payload, session_id="stop-stale-%s" % os.getpid()))
             self.assertEqual(code, 2)
             self.assertIn("stale", err)
-            subprocess.run([sys.executable, str(VERIFY), "run", tmp], capture_output=True)
+            subprocess.run([sys.executable, str(VERIFY), "run", tmp, "--strict"], capture_output=True)
             code, _, err = run_hook(STOP_GATE, dict(payload, session_id="stop-fresh-%s" % os.getpid()))
             self.assertEqual((code, err.strip()), (0, ""))
 
