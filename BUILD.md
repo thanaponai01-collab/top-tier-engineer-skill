@@ -6,7 +6,7 @@
 
 `python -m unittest discover tests -p test_ci.py`: fresh CI proof ignores local state, rejects a survivor and bad product, and records checkout identity | proven (6 CLI checks; full suite 349 passed; live mode passed) | b4456bb
 
-Subdirectory archive export uses the Git root; correct committed example passes and tracked local green state is ignored | proven (7 CI checks; full suite 350 passed) | this slice
+Subdirectory archive export uses the Git root; correct committed example passes and tracked local green state is ignored | proven (7 CI checks; full suite 350 passed) | 06f0e7a
 
 Pinned GitHub Actions example executes fresh proof and uploads commit-bound artifacts | planned | uncommitted
 

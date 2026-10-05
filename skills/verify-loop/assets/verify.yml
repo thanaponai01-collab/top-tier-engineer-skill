@@ -1,0 +1,43 @@
+# Adapt the candidate project path, runtime and plan; keep the reviewed verifier pin.
+name: Verify
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Candidate checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          path: project
+          persist-credentials: false
+      - name: Reviewed verification runner
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: thanaponai01-collab/top-tier-engineer-skill
+          ref: 06f0e7a6b68a5a68b9c35835938bd93300425924
+          path: verifier
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Fresh verification
+        run: >-
+          python verifier/skills/verify-loop/scripts/verify.py ci project
+          --plan verification/ci.json
+          --output "$RUNNER_TEMP/verify-evidence"
+      - name: Retain evidence even on failure
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verify-evidence-${{ github.sha }}
+          path: ${{ runner.temp }}/verify-evidence/
+          if-no-files-found: error
+          retention-days: 7
