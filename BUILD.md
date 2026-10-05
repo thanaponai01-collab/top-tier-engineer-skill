@@ -14,6 +14,5 @@ Project setup refreshes partial recipes, preserves manual notes and obtains stri
 
 Build/debug handoffs retain rejection proof and finish strict green while preserving diagnosis-only scope and BUILD.md progress | proven (live build and debug cases, independent wrong/original replays and read-only diagnosis gate) | this slice
 
-## Deferred
+Verification scaling and efficiency: modular recipe composition (`include:`), path-aware affected slicing (`--affected`), flakiness stress-testing (`--stress`), machine-readable run reports (`--json`), token-efficient failure cause extraction, and syntax-safe AST mutation operators | proven (54 verify CLI checks, 18 challenge checks, full suite 361 passed) | this slice
 
-- Automatic mutation generation | one explicitly chosen mutation is enough for this mode | revisit when a requested challenge needs multiple mutation operators

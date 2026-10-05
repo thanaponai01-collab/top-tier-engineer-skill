@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.52.0 - 2026-10-06 - verify-loop scaling, efficiency, and AST mutation upgrades
+
+- **Sub-recipe composition (`include:`)**: Large codebases and monorepos can compose modular sub-recipes (`include: path/to/VERIFY.md`). The baseline freezes included sub-recipes alongside the root recipe, catching edits as `CHECK CHANGED`.
+- **Path-aware affected execution (`--affected`)**: Git diff and declared `- paths:` filter execution down to only affected features and adjacent member journeys, speeding up continuous agent cycles.
+- **Flakiness detection (`--stress N`)**: Repeatedly stress-runs checks to identify non-deterministic passes/failures (`FLAKY-CHECK`) before freezing baselines.
+- **Structured JSON output (`run --json`)**: Emits complete machine-readable test summaries, verdicts, and check details for automated agent pipelines and CI harnesses.
+- **Token-efficient failure cause extraction**: Automatically highlights assertion diffs and root causes (`CAUSE`) in failure logs to cut context token consumption.
+- **Syntax-safe AST mutation operators**: Expanded `mutate.py` with Python AST-validated operators (`return-to-none`, `mul-to-div`, `is-to-is-not`), filtering out syntax-breaking mutants automatically during `challenge --auto`.
+
 ## 4.51.0 - 2026-10-05 - callers use the verify-loop handoff
 
 - Nine skills (correctness-gate, wire-check, perf-optimize, threat-model, safe-release,

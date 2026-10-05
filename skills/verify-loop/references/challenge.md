@@ -62,17 +62,20 @@ sensitive output. One caught mutation proves detection of that mistake, not comp
 python <skill-base>/scripts/verify.py challenge . --feature Grade --auto app.py [--max 20] [--json]
 ```
 
-Generates standard one-line mutations for one product file (flip `==`/`!=`, move a `<`/`>=`
-boundary, swap `and`/`or`, flip booleans, swap `+`/`-`, off-by-one integers, drop `not`) and
-runs each through the same scratch-copy runner. It prints `caught/decided` as a score and lists
-each survivor with line and operator. Exit 0 all caught, 1 any survived, 2 nothing decided.
+Generates standard syntax-validated mutations for one product file (flip `==`/`!=`, move a `<`/`>=`
+boundary, swap `and`/`or`, flip booleans, swap `+`/`-`, swap `*`/`/`, invert `is`/`is not`, mutate
+`return` to `return None`, off-by-one integers, drop `not`) and runs each through the same scratch-copy runner.
+For Python files, candidate mutants are validated against Python AST to ensure syntax-breaking mutants
+are automatically excluded. It prints `caught/decided` as a score and lists each survivor with line and
+operator. Exit 0 all caught, 1 any survived, 2 nothing decided.
 
 Generated mutations come from the code, not the spec, so the survey **never records fail-proof
 receipts or touches .verify-state.json**. A survivor is a lead: judge it as a real gap (write a
 spec-backed check, then prove it with a normal `--mutation` challenge) or an equivalent mutation
 that changes no observable behavior. A high score on one file is not coverage of the feature.
 
-## Machine-readable status
+## Machine-readable reports
 
 `verify.py status --json` prints the same verdict and exit code as `status`, plus `failing`
 checks, `receipts`, `strict`, `rounds` and the last `challenge` verdict, for callers that gate on it.
+`verify.py run --json` outputs the full structured verification report, including feature summaries and check exit codes.

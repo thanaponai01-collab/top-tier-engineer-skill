@@ -668,5 +668,87 @@ class TestMap(unittest.TestCase):
             self.assertEqual(run("verify.py", "tests", tmp)[0], 2)
 
 
+class ScaleAndEfficiency(unittest.TestCase):
+    def test_include_composes_sub_recipes_and_baseline_freezes_them(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "packages/auth/VERIFY.md",
+                  "## Auth\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
+            write(tmp, "VERIFY.md",
+                  "include: packages/auth/VERIFY.md\n\n## Core\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 0)
+            self.assertIn("Auth", out)
+            self.assertIn("Core", out)
+            self.assertIn("2 features", out)
+
+            # Baseline freezes both recipes
+            run("verify.py", "baseline", tmp)
+            # Editing sub-recipe triggers CHECK CHANGED
+            write(tmp, "packages/auth/VERIFY.md",
+                  "## Auth\n- test: `python -c \"print('changed')\"`\n- fail-proof: x\n")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1)
+            self.assertIn("CHECK CHANGED", out)
+
+    def test_run_json_emits_structured_report(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", "## Ping\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
+            code, out, _ = run("verify.py", "run", tmp, "--json")
+            self.assertEqual(code, 0)
+            data = json.loads(out)
+            self.assertEqual(data["verdict"], "green")
+            self.assertEqual(data["summary"]["features"], 1)
+            self.assertEqual(data["summary"]["passed"], 1)
+            self.assertEqual(data["summary"]["failed"], 0)
+            self.assertEqual(len(data["results"]), 1)
+            self.assertEqual(data["results"][0]["feature"], "Ping")
+            self.assertTrue(data["results"][0]["ok"])
+
+    def test_stress_detects_flaky_checks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            flaky_py = os.path.join(tmp, "flaky.py").replace("\\", "/")
+            write(tmp, "flaky.py",
+                  "import sys, os\n"
+                  "cnt_f = 'cnt.txt'\n"
+                  "c = int(open(cnt_f).read()) if os.path.exists(cnt_f) else 0\n"
+                  "open(cnt_f, 'w').write(str(c + 1))\n"
+                  "sys.exit(0 if c % 2 == 0 else 1)\n")
+            write(tmp, "VERIFY.md", f"## FlakyFeat\n- test: `python {flaky_py}`\n- fail-proof: x\n")
+            code, out, _ = run("verify.py", "run", tmp, "--stress", "3")
+            self.assertEqual(code, 1)
+            self.assertIn("FLAKY", out)
+            self.assertIn("Non-deterministic check detected", out)
+
+    def test_cause_summary_extracted_on_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            fail_cmd = 'python -c "import sys; print(\'log 1\'); print(\'AssertionError: expected total == 100, got 99\'); sys.exit(1)"'
+            write(tmp, "VERIFY.md", f"## Total\n- test: `{fail_cmd}`\n- fail-proof: x\n")
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1)
+            self.assertIn("CAUSE  AssertionError: expected total == 100, got 99", out)
+
+    def test_affected_filters_features_by_declared_path_and_git_diff(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            import subprocess
+            subprocess.run(["git", "init", "-q"], cwd=tmp, check=True)
+            write(tmp, "src/cart.py", "def cart(): pass\n")
+            write(tmp, "src/auth.py", "def auth(): pass\n")
+            write(tmp, "VERIFY.md",
+                  "## Cart\n- path: src/cart.py\n- test: `python -c \"pass\"`\n- fail-proof: x\n\n"
+                  "## Auth\n- path: src/auth.py\n- test: `python -c \"pass\"`\n- fail-proof: x\n\n"
+                  "## Journey: Checkout\n- features: Cart, Auth\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
+            subprocess.run(["git", "add", "."], cwd=tmp, check=True)
+            subprocess.run(["git", "-c", "user.name=T", "-c", "user.email=t@example.com", "commit", "-qm", "init"],
+                           cwd=tmp, check=True)
+
+            write(tmp, "src/cart.py", "def cart(): return 1\n")
+            code, out, _ = run("verify.py", "run", tmp, "--affected")
+            self.assertEqual(code, 0, out)
+            self.assertIn("AFFECTED: running", out)
+            self.assertIn("Cart", out)
+            self.assertIn("Journey: Checkout", out)
+            self.assertNotIn("Auth\n  PASS", out)
+
+
 if __name__ == "__main__":
     unittest.main()

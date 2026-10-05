@@ -98,10 +98,13 @@ earlier pass is back. `scope --clear` when done.
 ```bash
 python <skill-base>/scripts/verify.py init        # optional draft from existing tests
 python <skill-base>/scripts/verify.py run         # run, retain failure evidence
+python <skill-base>/scripts/verify.py run --affected  # run only features affected by git diff
+python <skill-base>/scripts/verify.py run --stress 5  # detect flaky/non-deterministic checks
+python <skill-base>/scripts/verify.py run --json  # machine-readable run report
 python <skill-base>/scripts/verify.py baseline    # freeze checks and oracles
 python <skill-base>/scripts/verify.py run --strict && python <skill-base>/scripts/verify.py status
 python <skill-base>/scripts/verify.py status --json                       # same verdict, for callers
-python <skill-base>/scripts/verify.py challenge . --feature F --auto app.py  # mutation score; never proof
+python <skill-base>/scripts/verify.py challenge . --feature F --auto app.py  # AST mutation score; never proof
 ```
 
 Deeper oracles and mutation breadth: `correctness-gate`. Code nothing reaches: `wire-check`.

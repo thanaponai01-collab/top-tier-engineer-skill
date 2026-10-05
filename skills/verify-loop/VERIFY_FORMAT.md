@@ -5,7 +5,10 @@
 ## Format Overview
 
 ```markdown
+include: packages/auth/VERIFY.md
+
 ## Feature Name
+- path: src/feature/
 - test: `python -m pytest tests/test_feature.py -q`
 - run: `python scripts/smoke_driver.py`
 - oracle: SPEC.md, data/feature_cases.json, scripts/smoke_driver.py

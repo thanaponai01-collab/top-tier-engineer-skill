@@ -35,9 +35,10 @@ and a proposed runnable check; strict green is not its completion gate.
 
 ## This skill does
 
-Records the sections in VERIFY.md, retains the rejection receipt, freezes with `baseline`, and
-finishes with `run --strict` and `status`, as in the loop. If checks were repaired, it collects
-fresh rejection evidence; it never changes an expected result to match the fix.
+Records the sections in VERIFY.md (or composes via `include:` in monorepos), retains the rejection receipt,
+freezes with `baseline`, and finishes with `run --strict` (or `run --affected` during fast-feedback iterations) and
+`status`, as in the loop. If checks were repaired, it collects fresh rejection evidence; it never changes an
+expected result to match the fix.
 
 Rules that hold for every caller:
 

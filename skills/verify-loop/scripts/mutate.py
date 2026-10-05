@@ -11,6 +11,8 @@ import re
 import tempfile
 from pathlib import Path
 
+import ast
+
 # (name, pattern, replacement). Applied to the first match on a line; one mutation per operator per line.
 OPERATORS = [
     ("eq-to-ne", r"==", "!="),
@@ -25,14 +27,25 @@ OPERATORS = [
     ("false-to-true", r"\bFalse\b|\bfalse\b", lambda m: "True" if m.group(0) == "False" else "true"),
     ("plus-to-minus", r"(?<=\s)\+(?=\s)", "-"),
     ("minus-to-plus", r"(?<=\s)-(?=\s)", "+"),
+    ("mul-to-div", r"(?<=\s)\*(?=\s)", "/"),
     ("int-off-by-one", r"(?<![\w.])(\d+)(?![\w.])", lambda m: str(int(m.group(1)) + 1)),
     ("not-dropped", r"\bnot\s+", ""),
+    ("is-to-is-not", r"\bis\b(?!\s*not\b)", "is not"),
+    ("return-to-none", r"^\s*return\s+(?!None\b|\(\s*\)|$)(.+)$", lambda m: m.group(0).replace(m.group(1), "None")),
 ]
 COMMENT = re.compile(r"^\s*(#|//|\*|/\*)")
 STRING_ONLY = re.compile(r"""^\s*(['"]).*\1,?\s*$""")
 
 
-def generate(source, limit):
+def is_valid_syntax(source):
+    try:
+        ast.parse(source)
+        return True
+    except (SyntaxError, ValueError):
+        return False
+
+
+def generate(source, limit, is_py=False):
     lines = source.splitlines()
     out = []
     for no, line in enumerate(lines, 1):
@@ -41,6 +54,11 @@ def generate(source, limit):
         for name, pattern, repl in OPERATORS:
             mutated = re.sub(pattern, repl, line, count=1)
             if mutated != line:
+                if is_py:
+                    test_lines = list(lines)
+                    test_lines[no - 1] = mutated
+                    if not is_valid_syntax("\n".join(test_lines)):
+                        continue
                 out.append({"line": no, "operator": name, "before": line, "after": mutated})
                 if len(out) >= limit:
                     return out
@@ -54,7 +72,7 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json):
     except OSError as exc:
         print(f"CHALLENGE-AUTO: invalid ({exc})")
         return 2
-    candidates = generate(source, limit)
+    candidates = generate(source, limit, is_py=rel_file.endswith(".py"))
     if not candidates:
         print(f"CHALLENGE-AUTO: invalid (no mutable lines in {rel_file})")
         return 2

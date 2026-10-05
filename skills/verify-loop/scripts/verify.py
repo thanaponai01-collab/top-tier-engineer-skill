@@ -85,11 +85,36 @@ BUDGET = 5
 
 # ---- reading the recipe -------------------------------------------------------------------
 
-def parse(text):
-    """(features, blind_spots). A feature is {name, checks: [(kind, command)], proofs: [str],
-    journey: bool, members: [str]}. The `## Run` section is read by parse_run, not here."""
-    features, blind, cur, in_blind = [], [], None, False
+def find_includes(text):
+    """List relative paths of included sub-recipes from VERIFY.md text."""
+    includes = []
     for line in text.splitlines():
+        m = re.match(r"^(?:[-*]\s+)?include:\s*(.+)$", line.strip())
+        if m:
+            inc = m.group(1).strip().strip("`'\"")
+            if inc:
+                includes.append(inc)
+    return includes
+
+
+def parse(text, repo=None, seen=None):
+    """(features, blind_spots). A feature is {name, checks: [(kind, command)], proofs: [str],
+    journey: bool, members: [str], paths: [str]}. The `## Run` section is read by parse_run, not here."""
+    features, blind, cur, in_blind = [], [], None, False
+    seen = set() if seen is None else seen
+    for line in text.splitlines():
+        inc = re.match(r"^(?:[-*]\s+)?include:\s*(.+)$", line.strip())
+        if inc and not cur and not in_blind:
+            inc_path = inc.group(1).strip().strip("`'\"")
+            if repo and inc_path:
+                full_inc = os.path.normpath(os.path.join(repo, inc_path))
+                if full_inc not in seen and os.path.isfile(full_inc):
+                    seen.add(full_inc)
+                    sub_text = read(repo, inc_path)
+                    sub_f, sub_b = parse(sub_text, repo=repo, seen=seen)
+                    features.extend(sub_f)
+                    blind.extend(sub_b)
+            continue
         h = re.match(r"^##\s+(.+?)\s*$", line)
         if h:
             title = h.group(1)
@@ -100,7 +125,7 @@ def parse(text):
             else:
                 j = re.match(r"(?i)^journey:\s*(.+)$", title)
                 cur = {"name": j.group(1) if j else title, "checks": [], "proofs": [],
-                       "journey": bool(j), "members": [], "oracles": [], "signals": []}
+                       "journey": bool(j), "members": [], "oracles": [], "signals": [], "paths": []}
                 features.append(cur)
                 in_blind = False
             continue
@@ -127,6 +152,8 @@ def parse(text):
             cur["members"] = [m.strip() for m in val.split(",") if m.strip()]
         elif kind == "oracle":
             cur["oracles"].extend(p.strip() for p in val.split(",") if p.strip())
+        elif kind in ("path", "paths"):
+            cur["paths"].extend(p.strip() for p in val.split(",") if p.strip())
         elif val:
             cur["checks"].append((kind, val))
     return features, blind
@@ -180,6 +207,69 @@ def is_covered(rel, commands, repo):
             if rel.startswith(t + "/") and os.path.isdir(os.path.join(repo, t)):
                 return True
     return False
+
+
+def get_affected_files(repo, ref=None):
+    """Return set of repo-relative paths changed in git vs ref or uncommitted."""
+    changed = set()
+    try:
+        p = subprocess.run(["git", "-C", repo, "status", "--porcelain"],
+                           capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if p.returncode == 0:
+            for line in p.stdout.splitlines():
+                if len(line) >= 4:
+                    path = line[3:].strip().strip('"').replace("\\", "/")
+                    if " -> " in path:
+                        path = path.split(" -> ")[-1]
+                    changed.add(path)
+        if ref:
+            p_diff = subprocess.run(["git", "-C", repo, "diff", "--name-only", ref],
+                                    capture_output=True, text=True, encoding="utf-8", errors="replace")
+            if p_diff.returncode == 0:
+                for line in p_diff.stdout.splitlines():
+                    if line.strip():
+                        changed.add(line.strip().replace("\\", "/"))
+    except OSError:
+        pass
+    return changed
+
+
+def is_feature_affected(feature, changed_files, repo):
+    """True if feature's checks, oracles, declared paths, or test files intersect with changed_files."""
+    if not changed_files:
+        return True
+    all_cmds = [cmd for _, cmd in feature["checks"]]
+    for cf in changed_files:
+        for p in feature.get("paths", []):
+            p_norm = p.rstrip("/").replace("\\", "/")
+            if cf == p_norm or cf.startswith(p_norm + "/"):
+                return True
+        for o in feature["oracles"]:
+            o_norm = o.replace("\\", "/")
+            if cf == o_norm or cf.endswith("/" + o_norm):
+                return True
+        if is_covered(cf, all_cmds, repo):
+            return True
+        base = cf.rsplit("/", 1)[-1]
+        for cmd in all_cmds:
+            if base in cmd:
+                return True
+    return False
+
+
+def filter_affected(features, changed_files, repo):
+    affected_names = set()
+    for f in features:
+        if not f["journey"] and is_feature_affected(f, changed_files, repo):
+            affected_names.add(f["name"].lower())
+    filtered = []
+    for f in features:
+        if f["journey"]:
+            if any(m.lower() in affected_names for m in f["members"]):
+                filtered.append(f)
+        elif f["name"].lower() in affected_names:
+            filtered.append(f)
+    return filtered
 
 
 # ---- the per-test map ---------------------------------------------------------------------
@@ -267,7 +357,7 @@ def cmd_tests(repo, strict):
     if not os.path.isfile(path):
         print(f"no {RECIPE} in {repo}. Run `verify.py init` to draft one.")
         return 2
-    features, _ = parse(read(repo, RECIPE))
+    features, _ = parse(read(repo, RECIPE), repo=repo)
     if not features:
         print(f"{RECIPE} has no '## <feature>' sections; nothing to map.")
         return 2
@@ -480,6 +570,22 @@ if __name__ == "__main__":
 
 # ---- run ----------------------------------------------------------------------------------
 
+def extract_failure_summary(output):
+    """Find the core assertion or error line to provide fast, token-efficient diagnosis."""
+    patterns = [
+        re.compile(r"^\s*(?:AssertionError:?|assert\s+|FAIL:|Error:|Exception:?)\s*(.*)$", re.M),
+        re.compile(r"^\s*E\s+(?:assert\s+|)(.*)$", re.M),
+    ]
+    for pat in patterns:
+        m = pat.search(output)
+        if m:
+            summary = m.group(0).strip()
+            if len(summary) > 140:
+                summary = summary[:137] + "..."
+            return summary
+    return None
+
+
 def run_check(cmd, repo, timeout):
     """(ok, exit code or None, combined output, seconds)."""
     t0 = time.time()
@@ -549,21 +655,56 @@ def tail_of(path):
         return []
 
 
-def cmd_run(repo, only, timeout, strict, budget=BUDGET):
+def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1, as_json=False):
     path = os.path.join(repo, RECIPE)
     if not os.path.isfile(path):
-        print(f"no {RECIPE} in {repo}. Run `verify.py init` to draft one.")
+        if as_json:
+            print(json.dumps({"error": f"no {RECIPE} in {repo}", "exit": 2}))
+        else:
+            print(f"no {RECIPE} in {repo}. Run `verify.py init` to draft one.")
         return 2
-    features, blind = parse(read(repo, RECIPE))
+    features, blind = parse(read(repo, RECIPE), repo=repo)
     if not features:
-        print(f"{RECIPE} has no '## <feature>' sections; nothing to run.")
+        if as_json:
+            print(json.dumps({"error": f"{RECIPE} has no '## <feature>' sections; nothing to run.", "exit": 2}))
+        else:
+            print(f"{RECIPE} has no '## <feature>' sections; nothing to run.")
         track(repo, [], only, budget, 1, strict)
         return 2
+
+    if affected is not None:
+        changed_files = get_affected_files(repo, affected if affected != "HEAD" else None)
+        if not changed_files and affected == "HEAD":
+            changed_files = get_affected_files(repo, "HEAD")
+        if not changed_files:
+            if as_json:
+                print(json.dumps({
+                    "verdict": "green", "detail": f"no files changed vs {affected}", "exit": 0,
+                    "summary": {"features": 0, "passed": 0, "failed": 0}, "results": [],
+                }, indent=2))
+            else:
+                print(f"AFFECTED: no changed files detected vs {affected}; all mapped features current.")
+            return 0
+        features = filter_affected(features, changed_files, repo)
+        if not features:
+            if as_json:
+                print(json.dumps({
+                    "verdict": "green", "detail": f"{len(changed_files)} changed file(s) touched no mapped features",
+                    "exit": 0, "summary": {"features": 0, "passed": 0, "failed": 0}, "results": [],
+                }, indent=2))
+            else:
+                print(f"AFFECTED: {len(changed_files)} changed file(s) touched no mapped features or oracles.")
+            return 0
+        if not as_json:
+            print(f"AFFECTED: running {len(features)} feature(s) affected by {len(changed_files)} changed file(s).")
 
     try:
         check_hashes(repo)
     except (OSError, ValueError) as exc:
-        print(f"Run: invalid oracle: {exc}; no check was run.")
+        if as_json:
+            print(json.dumps({"error": f"Run: invalid oracle: {exc}", "exit": 1}))
+        else:
+            print(f"Run: invalid oracle: {exc}; no check was run.")
         track(repo, [], only, budget, 1, strict)
         return 1
 
@@ -573,36 +714,46 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET):
         for cmd in recipe["setup"]:
             ok, code, out, secs = run_check(cmd, repo, timeout)
             if not ok:
-                print(f"Run: setup failed ({cmd}); no check was run.")
-                for line in out.rstrip().splitlines()[-TAIL_LINES:]:
-                    print(f"        {line}")
+                if as_json:
+                    print(json.dumps({"error": f"Run: setup failed ({cmd})", "exit": 1, "output": out[-1000:]}))
+                else:
+                    print(f"Run: setup failed ({cmd}); no check was run.")
+                    for line in out.rstrip().splitlines()[-TAIL_LINES:]:
+                        print(f"        {line}")
                 track(repo, [], only, budget, 1, strict)
                 return 1
-        if recipe.get("login"):
+        if recipe.get("login") and not as_json:
             print(f"Login: {recipe['login']}")
         if recipe.get("start"):
             t0 = time.time()
             proc, log = start_app(recipe["start"], repo)
             ready, why = wait_ready(recipe.get("ready"), proc, repo, timeout)
             if not ready:
-                print(f"Run: app not ready: {why}; no check was run.")
-                for line in tail_of(log):
-                    print(f"        {line}")
+                if as_json:
+                    print(json.dumps({"error": f"Run: app not ready: {why}", "exit": 1}))
+                else:
+                    print(f"Run: app not ready: {why}; no check was run.")
+                    for line in tail_of(log):
+                        print(f"        {line}")
                 stop_app(proc, recipe.get("stop"), repo, timeout)
                 os.unlink(log)
                 track(repo, [], only, budget, 1, strict)
                 return 1
-            print(f"Run: app ready in {time.time() - t0:.1f}s ({recipe['start']})")
+            if not as_json:
+                print(f"Run: app ready in {time.time() - t0:.1f}s ({recipe['start']})")
     try:
         if recipe and recipe.get("doctor"):
             ok, _, out, _ = run_check(recipe["doctor"], repo, timeout)
             if not ok:
-                print("Run: doctor failed; no check was run.")
-                for line in out.rstrip().splitlines()[-TAIL_LINES:]:
-                    print(f"        {line}")
+                if as_json:
+                    print(json.dumps({"error": "Run: doctor failed", "exit": 1, "output": out[-1000:]}))
+                else:
+                    print("Run: doctor failed; no check was run.")
+                    for line in out.rstrip().splitlines()[-TAIL_LINES:]:
+                        print(f"        {line}")
                 track(repo, [], only, budget, 1, strict)
                 return 1
-        return run_checks(repo, features, blind, recipe, only, timeout, strict, budget)
+        return run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json)
     finally:
         if proc:
             stop_app(proc, recipe.get("stop"), repo, timeout)
@@ -612,16 +763,18 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET):
                 pass
 
 
-def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET):
+def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False):
     results = []
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
-    known = {f["name"].lower() for f in features if not f["journey"]}
+    recipe_features, _ = parse(read(repo, RECIPE), repo=repo)
+    known = {f["name"].lower() for f in (recipe_features or features) if not f["journey"]}
     passed = failed = unverified = unproven = journeys = broken = 0
+    flaky_checks = []
     state = load_state(repo)
     receipts = state.get("failures", {})
     missing_baseline = strict and not state.get("baseline")
-    if missing_baseline:
+    if missing_baseline and not as_json:
         print("  note  no baseline: freeze the finished checks before strict completion")
     signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
     challenge = state.get("challenge", {})
@@ -630,34 +783,52 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
             if key.startswith(challenge.get("feature", "") + "|") and not row.get("ok") and row.get("exit") is not None:
                 receipts[key] = {"signature": signature, "exit": row["exit"], "output": row["output"]}
     for f in shown:
-        print(("Journey: " if f["journey"] else "") + f["name"])
+        if not as_json:
+            print(("Journey: " if f["journey"] else "") + f["name"])
         if f["journey"]:
             journeys += 1
             if len(f["members"]) < 2:
                 broken += 1
-                print("  BROKEN  a journey names fewer than two features: that is a feature, not a journey")
+                if not as_json:
+                    print("  BROKEN  a journey names fewer than two features: that is a feature, not a journey")
             for m in f["members"]:
                 if m.lower() not in known:
                     broken += 1
-                    print(f"  BROKEN  journey names {m}: no such feature section in {RECIPE}")
+                    if not as_json:
+                        print(f"  BROKEN  journey names {m}: no such feature section in {RECIPE}")
         if not f["checks"]:
             unverified += 1
-            print("  UNVERIFIED  no checks")
+            if not as_json:
+                print("  UNVERIFIED  no checks")
             continue
         for kind, cmd in f["checks"]:
             ok, code, out, secs = run_check(cmd, repo, timeout)
+            check_passes = 1 if ok else 0
+            if stress > 1:
+                for _ in range(stress - 1):
+                    s_ok, _, _, _ = run_check(cmd, repo, timeout)
+                    if s_ok:
+                        check_passes += 1
+                if 0 < check_passes < stress:
+                    flaky_checks.append((f["name"], kind, cmd, check_passes, stress))
+                    ok = False
             results.append((f["name"], kind, cmd, ok, out, code))
             passed += ok
             failed += not ok
-            tag = "PASS" if ok else "FAIL"
-            extra = "" if ok else (" (timeout)" if code is None else f" (exit {code})")
-            print(f"  {tag}  {kind}  {cmd}  [{secs:.1f}s]{extra}")
-            if not ok:
-                for line in out.rstrip().splitlines()[-TAIL_LINES:]:
-                    print(f"        {line}")
+            if not as_json:
+                tag = "PASS" if ok else "FAIL"
+                extra = "" if ok else (" (timeout)" if code is None else f" (exit {code})")
+                print(f"  {tag}  {kind}  {cmd}  [{secs:.1f}s]{extra}")
+                if not ok:
+                    cause = extract_failure_summary(out)
+                    if cause:
+                        print(f"        CAUSE  {cause}")
+                    for line in out.rstrip().splitlines()[-TAIL_LINES:]:
+                        print(f"        {line}")
         if not f["proofs"]:
             unproven += 1
-            print("  note  no fail-proof recorded: nobody has shown these checks can go red")
+            if not as_json:
+                print("  note  no fail-proof recorded: nobody has shown these checks can go red")
         elif strict and not any(
                 receipts.get(f"{f['name']}|{cmd}", {}).get("signature") == signature
                 and f["signals"]
@@ -666,39 +837,70 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 and not HARNESS_FAILURE.search(receipts.get(f"{f['name']}|{cmd}", {}).get("output", ""))
                 for kind, cmd in f["checks"] if kind not in ("lint", "type", "types")):
             unproven += 1
-            print("  note  no recorded failing run matching fail-signal for the current checks; fail-proof prose alone is not evidence")
+            if not as_json:
+                print("  note  no recorded failing run matching fail-signal for the current checks; fail-proof prose alone is not evidence")
 
-    if not recipe and any(k == "run" for f in features for k, _ in f["checks"]):
+    for fn, k, c, p_cnt, tot in flaky_checks:
+        if not as_json:
+            print(f"  FLAKY  {fn} ({k}): passed {p_cnt}/{tot} runs. Non-deterministic check detected.")
+    if not recipe and any(k == "run" for f in features for k, _ in f["checks"]) and not as_json:
         print("note  'run' checks exist but there is no ## Run section: they assume the app is already up.")
     orphans = []
     if not only:
         orphans = [t for t in find_tests(repo) if not is_covered(t, all_cmds, repo)]
-        if orphans:
+        if orphans and not as_json:
             print("Orphan tests (no feature's command names them):")
             for t in orphans:
                 print(f"  {t}")
-    if blind:
-        print("Blind spots (a green run does not cover these):")
-        for b in blind:
-            print(f"  - {b}")
-    else:
-        print("Blind spots: none listed. A recipe that admits none has not looked.")
+    if not as_json:
+        if blind:
+            print("Blind spots (a green run does not cover these):")
+            for b in blind:
+                print(f"  - {b}")
+        else:
+            print("Blind spots: none listed. A recipe that admits none has not looked.")
 
     incomplete = strict and (unverified or unproven or orphans or missing_baseline)
     try:
         changed_during_run = signature != sha(json.dumps(check_hashes(repo), sort_keys=True))
     except (OSError, ValueError):
         changed_during_run = True
-    if changed_during_run:
+    if changed_during_run and not as_json:
         print("CHECK CHANGED DURING RUN  repeat verification with stable checks and oracles")
     notes, bad = track(repo, results, only, budget,
-                       failed + broken + bool(incomplete) + changed_during_run, strict, signature)
-    for n in notes:
-        print(n)
-    print(f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
-          f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
-          f"{journeys} journeys, {broken} broken")
-    if failed or broken or bad or incomplete or changed_during_run:
+                       failed + broken + bool(incomplete) + changed_during_run + bool(flaky_checks), strict, signature)
+    if not as_json:
+        for n in notes:
+            print(n)
+        print(f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
+              f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
+              f"{journeys} journeys, {broken} broken")
+    red = bool(failed or broken or bad or incomplete or changed_during_run or flaky_checks)
+    if as_json:
+        report = {
+            "verdict": "red" if red else "green",
+            "strict": strict,
+            "summary": {
+                "features": len(shown) - journeys,
+                "passed": passed,
+                "failed": failed,
+                "unverified": unverified,
+                "unproven": unproven,
+                "orphans": len(orphans),
+                "journeys": journeys,
+                "broken": broken,
+                "flaky": len(flaky_checks),
+            },
+            "results": [
+                {"feature": feat, "kind": kind, "command": cmd, "ok": ok, "exit": code}
+                for feat, kind, cmd, ok, out, code in results
+            ],
+            "blind_spots": blind,
+            "exit": 1 if red else 0,
+        }
+        print(json.dumps(report, indent=2))
+        return report["exit"]
+    if red:
         return 1
     return 0
 
@@ -749,7 +951,12 @@ def tree_sig(repo):
 def check_hashes(repo):
     """What the agent must not edit to get a pass: the test files, and the check commands in VERIFY.md."""
     hashes = {t: sha(read(repo, t)) for t in find_tests(repo)}
-    features, _ = parse(read(repo, RECIPE))
+    recipe_text = read(repo, RECIPE)
+    features, _ = parse(recipe_text, repo=repo)
+    for inc in find_includes(recipe_text):
+        inc_norm = os.path.normpath(inc).replace("\\", "/")
+        if os.path.isfile(os.path.join(repo, inc)):
+            hashes[inc_norm] = sha(read(repo, inc))
     for f in features:
         # Direct script paths are frozen automatically; imported helpers and data
         # still require explicit oracle entries. Do not parse inline program strings.
@@ -998,6 +1205,12 @@ def main():
                    help="require recorded failure evidence and reject unverified features or orphan tests")
     r.add_argument("--budget", type=int, default=BUDGET,
                    help="red runs in a row before the run says stop (default 5)")
+    r.add_argument("--affected", nargs="?", const="HEAD", default=None,
+                   help="run only features affected by changes against git ref (default: HEAD)")
+    r.add_argument("--stress", type=int, default=1,
+                   help="run checks N times to detect non-deterministic / flaky checks (default: 1)")
+    r.add_argument("--json", action="store_true",
+                   help="output run results and summary as JSON")
     b = sub.add_parser("baseline", help="freeze the check files; later edits to them fail the run")
     b.add_argument("repo", nargs="?", default=".")
     t = sub.add_parser("status", help="is the last run green and still true of the files? (exit 0/1/3)")
@@ -1056,7 +1269,7 @@ def main():
         sys.exit(cmd_status(repo, a.json))
     if a.cmd == "tests":
         sys.exit(cmd_tests(repo, a.strict))
-    sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget))
+    sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget, a.affected, a.stress, a.json))
 
 
 if __name__ == "__main__":

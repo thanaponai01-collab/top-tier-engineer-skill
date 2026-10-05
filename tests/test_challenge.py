@@ -197,6 +197,19 @@ class AutoChallenge(unittest.TestCase):
             self.assertEqual(code, 2, out)
             self.assertIn("score n/a", out)
 
+    def test_ast_operators_and_syntax_validation(self):
+        with tempfile.TemporaryDirectory() as root:
+            Path(root, "calc.py").write_text("def mul(a, b):\n    return a * b\n")
+            Path(root, "test_calc.py").write_text("from calc import mul\nassert mul(2, 3) == 6, 'expected 6'\n")
+            Path(root, "VERIFY.md").write_text("## Calc\n- test: `python test_calc.py`\n- fail-signal: expected\n")
+            code, out, err = run("verify.py", "challenge", root, "--feature", "Calc", "--auto", "calc.py", "--json")
+            self.assertEqual(code, 0, out + err)
+            summary = json.loads(out)
+            ops = [r["operator"] for r in summary["results"]]
+            self.assertIn("mul-to-div", ops)
+            self.assertIn("return-to-none", ops)
+            self.assertEqual(summary["survived"], 0)
+
 
 class StatusJson(unittest.TestCase):
     def test_json_matches_text_verdict_and_exit(self):
