@@ -8,7 +8,8 @@ import tempfile
 from pathlib import Path
 
 
-def cmd_challenge(v, repo, feature, mutation_file, timeout):
+def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
+    """record=False: survey only. No state write, no receipts, one-line output (used by --auto)."""
     try:
         if timeout <= 0:
             raise ValueError("timeout must be positive")
@@ -99,6 +100,9 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout):
     if v.tree_sig(repo) != original_tree or v.load_state(repo) != original_state:
         print("CHALLENGE: inconclusive (source files or verification state changed during challenge; evidence not saved)")
         return 2
+    if not record:
+        print(f"CHALLENGE: {report['verdict']} ({report['reason']})")
+        return {"caught": 0, "survived": 1, "inconclusive": 2}[report["verdict"]]
     original_state["challenge"] = report
     if report["verdict"] == "caught":
         receipts = original_state.setdefault("failures", {})

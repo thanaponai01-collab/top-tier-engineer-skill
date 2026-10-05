@@ -934,39 +934,54 @@ def cmd_baseline(repo):
     return 0
 
 
-def cmd_status(repo):
-    """One line for a hook or a human: is the last run green and still true of the files? Exit 0 yes,
-    1 red, 3 stale or never run. No VERIFY.md means this repo does not use it: 0, silent."""
+def status_verdict(repo):
+    """(state, detail, exit). Single decision path for text and --json output."""
     if not os.path.isfile(os.path.join(repo, RECIPE)):
-        return 0
+        return "none", "no VERIFY.md; this repo does not use verify-loop", 0
     state = load_state(repo)
     if not state.get("result"):
-        print("VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)")
-        return 3
+        return "never-run", "VERIFY.md exists, no run recorded", 3
     try:
         changed = tampered(repo, state)
     except (OSError, ValueError) as exc:
-        print(f"VERIFY-STATE: tampered ({exc})")
-        return 1
+        return "tampered", str(exc), 1
     if changed:
-        print(f"VERIFY-STATE: tampered ({', '.join(changed)} differs from the baseline)")
-        return 1
+        return "tampered", f"{', '.join(changed)} differs from the baseline", 1
     strays = out_of_scope(repo, state)
     if strays:
-        print(f"VERIFY-STATE: out-of-scope ({', '.join(strays[:3])}{' ...' if len(strays) > 3 else ''} "
-              "changed outside the declared scope)")
-        return 1
+        return ("out-of-scope", f"{', '.join(strays[:3])}{' ...' if len(strays) > 3 else ''} "
+                "changed outside the declared scope", 1)
     if state["result"] != "green":
-        print(f"VERIFY-STATE: red (red run {state.get('rounds', 0)} in a row)")
-        return 1
+        return "red", f"red run {state.get('rounds', 0)} in a row", 1
     if state.get("tree") != tree_sig(repo):
-        print("VERIFY-STATE: stale (files changed since the last green run)")
-        return 3
+        return "stale", "files changed since the last green run", 3
     if not state.get("strict"):
-        print("VERIFY-STATE: partial (last run was not strict; run --strict before claiming done)")
-        return 3
-    print("VERIFY-STATE: green")
-    return 0
+        return "partial", "last run was not strict; run --strict before claiming done", 3
+    return "green", "", 0
+
+
+def cmd_status(repo, as_json=False):
+    """One line for a hook or a human: is the last run green and still true of the files? Exit 0 yes,
+    1 red, 3 stale or never run. No VERIFY.md means this repo does not use it: 0, silent.
+    --json prints one object with the same verdict plus failing checks and the last challenge."""
+    name, detail, code = status_verdict(repo)
+    if as_json:
+        state = load_state(repo) if name != "none" else {}
+        checks = state.get("checks", {}) or {}
+        challenge = state.get("challenge") or {}
+        print(json.dumps({
+            "state": name, "detail": detail, "exit": code,
+            "strict": bool(state.get("strict")), "rounds": state.get("rounds", 0),
+            "failing": sorted(k for k, r in checks.items() if isinstance(r, dict) and not r.get("ok")),
+            "checks": len(checks), "receipts": sorted((state.get("failures") or {}).keys()),
+            "challenge": {"feature": challenge.get("feature"), "verdict": challenge.get("verdict")}
+            if challenge else None,
+        }, indent=2))
+        return code
+    if name == "none":
+        return 0
+    print(f"VERIFY-STATE: {name}" + (f" ({detail})" if detail else ""))
+    return code
 
 
 def main():
@@ -987,6 +1002,7 @@ def main():
     b.add_argument("repo", nargs="?", default=".")
     t = sub.add_parser("status", help="is the last run green and still true of the files? (exit 0/1/3)")
     t.add_argument("repo", nargs="?", default=".")
+    t.add_argument("--json", action="store_true", help="print one JSON object (same exit codes)")
     m = sub.add_parser("tests", help="map every test function to a feature; flag tests that cannot fail")
     m.add_argument("repo", nargs="?", default=".")
     m.add_argument("--strict", action="store_true",
@@ -1004,7 +1020,11 @@ def main():
     ch = sub.add_parser("challenge", help="challenge a feature check with one explicit mutation in scratch copies")
     ch.add_argument("repo", nargs="?", default=".")
     ch.add_argument("--feature", required=True, help="exact feature name in VERIFY.md")
-    ch.add_argument("--mutation", required=True, help="JSON file with file, before, after and claim")
+    ch.add_argument("--mutation", help="JSON file with file, before, after and claim")
+    ch.add_argument("--auto", metavar="FILE",
+                    help="generate standard mutations for this product file; report a mutation score")
+    ch.add_argument("--max", type=int, default=20, help="most mutations to try with --auto (default 20)")
+    ch.add_argument("--json", action="store_true", help="with --auto, print the score as JSON")
     ch.add_argument("--timeout", type=int, default=120, help="seconds per check")
     ci = sub.add_parser("ci", help="fresh proof from committed inputs; ignore local verification state")
     ci.add_argument("repo", nargs="?", default=".")
@@ -1017,6 +1037,11 @@ def main():
         from ci import cmd_ci
         sys.exit(cmd_ci(sys.modules[__name__], repo, a.plan, a.output, a.timeout))
     if a.cmd == "challenge":
+        if bool(a.mutation) == bool(a.auto):
+            ap.error("challenge needs exactly one of --mutation or --auto")
+        if a.auto:
+            from mutate import cmd_auto
+            sys.exit(cmd_auto(sys.modules[__name__], repo, a.feature, a.auto, a.timeout, a.max, a.json))
         from challenge import cmd_challenge
         sys.exit(cmd_challenge(sys.modules[__name__], repo, a.feature, a.mutation, a.timeout))
     if a.cmd == "scaffold-driver":
@@ -1028,7 +1053,7 @@ def main():
     if a.cmd == "baseline":
         sys.exit(cmd_baseline(repo))
     if a.cmd == "status":
-        sys.exit(cmd_status(repo))
+        sys.exit(cmd_status(repo, a.json))
     if a.cmd == "tests":
         sys.exit(cmd_tests(repo, a.strict))
     sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget))

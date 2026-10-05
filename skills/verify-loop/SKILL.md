@@ -100,6 +100,8 @@ python <skill-base>/scripts/verify.py init        # optional draft from existing
 python <skill-base>/scripts/verify.py run         # run, retain failure evidence
 python <skill-base>/scripts/verify.py baseline    # freeze checks and oracles
 python <skill-base>/scripts/verify.py run --strict && python <skill-base>/scripts/verify.py status
+python <skill-base>/scripts/verify.py status --json                       # same verdict, for callers
+python <skill-base>/scripts/verify.py challenge . --feature F --auto app.py  # mutation score; never proof
 ```
 
 Deeper oracles and mutation breadth: `correctness-gate`. Code nothing reaches: `wire-check`.

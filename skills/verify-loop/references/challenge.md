@@ -3,7 +3,8 @@
 Use when asked to challenge verification, or when a green check may not observe the product.
 Choose one plausible mistake that violates the claim: flip a sign, move a boundary, remove
 an authorization guard or return a wrong value. Use the spec to say why it is wrong.
-Do not generate a broad mutation campaign.
+Do not generate a broad mutation campaign for proof; use the auto survey below only when asked
+how strong a check is (a mutation score) or to hunt for weak spots.
 
 Read VERIFY.md and choose an exact feature name. Declare a literal `fail-signal:` that names
 the intended behavioral rejection. For reusable strict verification, also record `fail-proof:`
@@ -54,3 +55,24 @@ The runner rejects evidence if a trial overwrites its product mutation or change
 Copies provide filesystem separation, not an OS sandbox: absolute paths, external services,
 ports and credentials still need project-specific isolation. Use trusted recipes and redact
 sensitive output. One caught mutation proves detection of that mistake, not complete coverage.
+
+## Auto survey (mutation score)
+
+```bash
+python <skill-base>/scripts/verify.py challenge . --feature Grade --auto app.py [--max 20] [--json]
+```
+
+Generates standard one-line mutations for one product file (flip `==`/`!=`, move a `<`/`>=`
+boundary, swap `and`/`or`, flip booleans, swap `+`/`-`, off-by-one integers, drop `not`) and
+runs each through the same scratch-copy runner. It prints `caught/decided` as a score and lists
+each survivor with line and operator. Exit 0 all caught, 1 any survived, 2 nothing decided.
+
+Generated mutations come from the code, not the spec, so the survey **never records fail-proof
+receipts or touches .verify-state.json**. A survivor is a lead: judge it as a real gap (write a
+spec-backed check, then prove it with a normal `--mutation` challenge) or an equivalent mutation
+that changes no observable behavior. A high score on one file is not coverage of the feature.
+
+## Machine-readable status
+
+`verify.py status --json` prints the same verdict and exit code as `status`, plus `failing`
+checks, `receipts`, `strict`, `rounds` and the last `challenge` verdict, for callers that gate on it.

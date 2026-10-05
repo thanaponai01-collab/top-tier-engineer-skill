@@ -146,3 +146,70 @@ class Challenge(unittest.TestCase):
             code, out, err = run("verify.py", "run", root, "--strict")
             self.assertEqual(code, 0, out + err)
             self.assertEqual(run("verify.py", "status", root)[0], 0)
+
+
+class AutoChallenge(unittest.TestCase):
+    """challenge --auto: generated mutations, a score, and no receipts."""
+
+    def fixture(self, root, check):
+        Path(root, "app.py").write_text(
+            "def grade(score):\n    if score >= 50:\n        return 'pass'\n    return 'fail'\n")
+        Path(root, "test_grade.py").write_text("from app import grade\n" + check + "\n")
+        Path(root, "VERIFY.md").write_text(
+            "## Grade\n- test: `python test_grade.py`\n- fail-signal: expected\n")
+
+    def auto(self, root, *extra):
+        return run("verify.py", "challenge", root, "--feature", "Grade", "--auto", "app.py", *extra)
+
+    def test_strong_check_catches_every_generated_mutation(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "assert grade(50) == 'pass', 'expected pass at 50'\n"
+                               "assert grade(49) == 'fail', 'expected fail at 49'")
+            code, out, err = self.auto(root, "--json")
+            self.assertEqual(code, 0, out + err)
+            summary = json.loads(out)
+            self.assertGreaterEqual(summary["caught"], 2)
+            self.assertEqual(summary["survived"], 0)
+            self.assertEqual(summary["score"], 1.0)
+
+    def test_weak_check_reports_survivors_and_records_no_receipts(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "assert grade(90) == 'pass', 'expected pass at 90'")
+            code, out, err = self.auto(root)
+            self.assertEqual(code, 1, out + err)
+            self.assertIn("SURVIVED", out)
+            self.assertIn("ge-to-gt", out)  # boundary 50 is never tested
+            state = Path(root, ".verify-state.json")
+            self.assertFalse(state.exists() and json.loads(state.read_text()).get("failures"))
+            self.assertIn("score >= 50", Path(root, "app.py").read_text())
+
+    def test_needs_exactly_one_of_mutation_or_auto(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "assert True")
+            code, _, err = run("verify.py", "challenge", root, "--feature", "Grade")
+            self.assertEqual(code, 2, err)
+            self.assertIn("exactly one", err)
+
+    def test_unknown_feature_is_invalid_not_a_score(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "assert grade(50) == 'pass', 'expected'")
+            code, out, _ = run("verify.py", "challenge", root, "--feature", "Nope", "--auto", "app.py")
+            self.assertEqual(code, 2, out)
+            self.assertIn("score n/a", out)
+
+
+class StatusJson(unittest.TestCase):
+    def test_json_matches_text_verdict_and_exit(self):
+        with tempfile.TemporaryDirectory() as root:
+            code, out, _ = run("verify.py", "status", root, "--json")
+            self.assertEqual((code, json.loads(out)["state"]), (0, "none"))
+            Path(root, "VERIFY.md").write_text(
+                "## A\n- test: `python -c \"import sys; print('expected 1, got 2'); sys.exit(1)\"`\n")
+            code, out, _ = run("verify.py", "status", root, "--json")
+            self.assertEqual((code, json.loads(out)["state"]), (3, "never-run"))
+            run("verify.py", "run", root)
+            code, out, _ = run("verify.py", "status", root, "--json")
+            data = json.loads(out)
+            self.assertEqual((code, data["state"], data["exit"]), (1, "red", 1))
+            self.assertEqual(len(data["failing"]), 1)
+            self.assertEqual(run("verify.py", "status", root)[0], code)
