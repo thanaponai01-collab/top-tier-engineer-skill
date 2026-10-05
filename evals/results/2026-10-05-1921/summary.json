@@ -1,0 +1,173 @@
+[
+  {
+    "case": "verify-loop-change-shared-caller",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "A targeted mutation was caught using the unchanged feature checks.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The recipe still maps the adjacent behavior.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The finished discount check rejects the originally changed shared threshold.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The finished checks accept the spec-correct separated thresholds.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Direct independent checks confirm both boundaries on the finished product.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/commerce.py",
+        "fixture/test_discount.py",
+        "fixture/test_shipping.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.2569502,
+    "turns": 10,
+    "grade_text": "PASS  verify-loop-change-shared-caller  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   adjacent-discount-regression: The shared threshold change incorrectly enables the discount below 100.\n  found   shared-impact: The report explains that the changed shared threshold affects both behaviors.\n  found   coverage-boundary: The report states the limits of verification.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 41.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-make-it-verified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the finished checks were frozen with verify.py baseline",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/refund.py",
+        "fixture/test_refund.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.21657560000000003,
+    "turns": 8,
+    "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 32.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

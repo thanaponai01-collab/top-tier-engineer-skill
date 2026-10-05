@@ -1,0 +1,1 @@
+Both callers used the same threshold. Shipping can start at 50, but the discount still needs 100. The regression check now catches the incorrect discount, and final verification passes after repair. A mutation was rejected. Limits: no external services or exhaustive input testing were exercised.

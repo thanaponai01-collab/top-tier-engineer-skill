@@ -44,6 +44,9 @@ tree fingerprint, check signature, commands, exit codes and bounded output for b
 Caught evidence can satisfy strict rejection proof for unchanged checks; still run `baseline`,
 `run --strict` and `status` before claiming completion. Challenge alone does not mark the regular
 verification state green. Evidence becomes historical when files or check definitions change.
+Caught checks also retain individual receipts under `failures`, including their mutation and
+source fingerprint. Challenging another feature preserves these receipts; changing the frozen
+check signature invalidates them. The `challenge` object holds the latest full experiment.
 
 Scratch copies preserve uncommitted files and reject symlinks and directory junctions. Checks
 must use local copies of code and fixtures; live checks need a scratch-local Run start recipe.

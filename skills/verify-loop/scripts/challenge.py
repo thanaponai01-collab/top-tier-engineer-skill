@@ -49,6 +49,7 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout):
     original_state = v.load_state(repo)
     report = {"feature": feature, "mutation": mutation, "tree": original_tree,
               "check_signature": v.sha(json.dumps(frozen, sort_keys=True))}
+    caught_checks = {}
 
     def trial(scratch):
         output = io.StringIO()
@@ -76,17 +77,18 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout):
                 report["mutated"] = trial(copies[1])
                 mutated = report["mutated"]
                 mutated["mutation_unchanged"] = changed.read_text(encoding="utf-8") == wrong_source
-                rows = [(kind, mutated["checks"].get(f"{feature}|{cmd}"))
+                rows = [(kind, cmd, mutated["checks"].get(f"{feature}|{cmd}"))
                         for kind, cmd in selected[0]["checks"]]
+                caught_checks = {f"{feature}|{cmd}": row for kind, cmd, row in rows
+                                 if row and not row["ok"] and row["exit"] is not None
+                                 and kind not in ("lint", "type", "types")
+                                 and any(signal in row["output"] for signal in selected[0]["signals"])
+                                 and not v.HARNESS_FAILURE.search(row["output"])}
                 if not mutated["checks_unchanged"] or not mutated["mutation_unchanged"]:
                     reason = "check, oracle or mutated product changed during the run"
-                elif rows and all(row and row["ok"] for _, row in rows):
+                elif rows and all(row and row["ok"] for _, _, row in rows):
                     verdict, reason = "survived", "selected feature checks still pass on the wrong implementation"
-                elif any(row and not row["ok"] and row["exit"] is not None
-                         and kind not in ("lint", "type", "types")
-                         and any(signal in row["output"] for signal in selected[0]["signals"])
-                         and not v.HARNESS_FAILURE.search(row["output"])
-                         for kind, row in rows):
+                elif caught_checks:
                     verdict, reason = "caught", "selected behavioral check rejected the mutation with its declared signal"
                 else:
                     reason = "no expected behavioral rejection; inspect harness, timeout or signal mismatch"
@@ -98,6 +100,11 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout):
         print("CHALLENGE: inconclusive (source files or verification state changed during challenge; evidence not saved)")
         return 2
     original_state["challenge"] = report
+    if report["verdict"] == "caught":
+        receipts = original_state.setdefault("failures", {})
+        for key, row in caught_checks.items():
+            receipts[key] = {"signature": report["check_signature"], "exit": row["exit"],
+                             "output": row["output"], "mutation": mutation, "tree": original_tree}
     v.save_state(repo, original_state)
     print(f"CHALLENGE: {report['verdict']} ({report['reason']})")
     print(f"Claim: {mutation['claim']}; mutation: {mutation['file']}")

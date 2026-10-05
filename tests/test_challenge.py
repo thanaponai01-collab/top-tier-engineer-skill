@@ -31,7 +31,9 @@ class Challenge(unittest.TestCase):
             self.assertIn("CHALLENGE: caught", out)
             self.assertEqual(Path(root, "app.py").read_text(), "def answer(): return 42\n")
             after = json.loads(Path(root, ".verify-state.json").read_text())
-            self.assertEqual({k: v for k, v in after.items() if k != "challenge"}, before)
+            self.assertEqual({k: v for k, v in after.items() if k not in ("challenge", "failures")},
+                             {k: v for k, v in before.items() if k != "failures"})
+            self.assertIn("Answer|python test_answer.py", after["failures"])
             self.assertIn("expected 42", after["challenge"]["mutated"]["checks"]["Answer|python test_answer.py"]["output"])
 
     def test_reports_surviving_mutation(self):
@@ -127,3 +129,20 @@ class Challenge(unittest.TestCase):
             code, out, _ = run("verify.py", "run", root, "--strict")
             self.assertEqual(code, 1, out)
             self.assertIn("1 unproven", out)
+
+    def test_sequential_challenges_preserve_proof_for_both_features(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root)
+            Path(root, "test_second.py").write_text("from app import answer\nassert answer() == 42, 'expected 42'\n")
+            recipe = Path(root, "VERIFY.md")
+            recipe.write_text(recipe.read_text() + "- fail-proof: answer mutation\n"
+                              "## Second\n- test: `python test_second.py`\n"
+                              "- fail-signal: expected 42\n- fail-proof: second feature mutation\n")
+            run("verify.py", "baseline", root)
+            self.assertEqual(self.challenge(root)[0], 0)
+            code, out, err = run("verify.py", "challenge", root, "--feature", "Second",
+                                 "--mutation", str(Path(root, "mutation.json")))
+            self.assertEqual(code, 0, out + err)
+            code, out, err = run("verify.py", "run", root, "--strict")
+            self.assertEqual(code, 0, out + err)
+            self.assertEqual(run("verify.py", "status", root)[0], 0)

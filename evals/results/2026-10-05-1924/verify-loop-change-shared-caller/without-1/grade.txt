@@ -1,0 +1,13 @@
+PASS  verify-loop-change-shared-caller  [verify-loop]  3/3 found, score 1.00 (needs 1.00)
+  found   adjacent-discount-regression: The shared threshold change incorrectly enables the discount below 100.
+  found   shared-impact: The report explains that the changed shared threshold affects both behaviors.
+  found   coverage-boundary: The report states the limits of verification.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  A targeted mutation was caught using the unchanged feature checks. — .verify-state.json is not there
+  ok      The recipe still maps the adjacent behavior. — 
+  ok      The finished discount check rejects the originally changed shared threshold. — 
+  ok      The finished checks accept the spec-correct separated thresholds. — 
+  ok      Direct independent checks confirm both boundaries on the finished product. — 
+  FAILED  final helper status is strict, current and green — VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)

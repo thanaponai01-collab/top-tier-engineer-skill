@@ -1,5 +1,34 @@
 # Verification workflow evaluation
 
+Verify-this-change follow-up on 2026-10-05. The new case supplies a diff changing a
+shared threshold. The with-skill agent traced both callers, repaired the adjacent
+discount regression, added meaningful boundary checks, caught shipping and discount
+mutations, and completed current strict verification. It retained the intended
+shipping behavior and reported the supplied comparison point and coverage limits.
+
+| Case | Without skill | With skill |
+|---|---|---|
+| verify-loop-change-shared-caller | product and regression checks passed; no reusable strict/challenge evidence | 1/1 passed all artifact and independent outcome gates |
+| verify-loop-make-it-verified | not rerun in this pass | 1/1 completed strict verification |
+
+The plain agent also found and fixed the adjacent regression. The measured difference
+is completion of the reusable verification workflow, not superior diagnosis.
+The final baseline allows its related runner script; it still fails the evidence gates.
+These are smoke samples, not a reliability estimate. No semantic judge was used.
+
+- With-skill evidence: `evals/results/2026-10-05-1921/` (rescored against final case wording).
+- Final baseline: `evals/results/2026-10-05-1924/`.
+- Initial baseline pilot: `evals/results/2026-10-05-1919/`.
+- All 343 unit tests and the skill frontmatter validator pass.
+- Five grader regressions reject weak adjacent checks, missing evidence, incorrect product
+  behavior and removal of the adjacent feature; the executed reference solution passes.
+- Sequential challenge receipts now survive later feature challenges without crediting
+  unselected features. Changed check signatures still invalidate old proof.
+- The live case exercises a supplied diff in a non-Git folder. Git commit/range discovery
+  remains agent-guided; it was not separately measured in this smoke evaluation.
+
+## Earlier challenge evaluation
+
 Challenge mode follow-up on 2026-10-05. The final challenge smoke test loaded the
 skill, invoked the bundled helper and retained a surviving verdict with both
 trial results. Source files stayed unchanged. The grader independently replayed

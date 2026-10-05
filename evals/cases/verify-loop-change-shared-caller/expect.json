@@ -1,0 +1,113 @@
+{
+  "case": "verify-loop-change-shared-caller",
+  "skill": "verify-loop",
+  "question": "Does change verification follow a changed shared value into its adjacent caller and prove the repaired behavior?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "adjacent-discount-regression",
+      "what": "The shared threshold change incorrectly enables the discount below 100.",
+      "must_say_any": [
+        "discount",
+        "discounts"
+      ]
+    },
+    {
+      "id": "shared-impact",
+      "what": "The report explains that the changed shared threshold affects both behaviors.",
+      "must_say_any": [
+        "shared",
+        "both",
+        "coupled",
+        "same threshold"
+      ]
+    },
+    {
+      "id": "coverage-boundary",
+      "what": "The report states the limits of verification.",
+      "must_say_any": [
+        "non-numeric",
+        "negative",
+        "exhaustive",
+        "external services",
+        "full project",
+        "entire project",
+        "complete inventory"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "Fix the changed shared behavior without weakening the spec, retain the regression check, and finish strict verification.",
+    "verify_status": true,
+    "edits_allowed": [
+      "commerce.py",
+      "test_*.py",
+      "VERIFY.md",
+      ".verify-state.json",
+      ".gitignore",
+      "mutation*.json",
+      ".verify-evidence/*",
+      "run_checks.sh"
+    ],
+    "must_contain": [
+      {
+        "id": "caught-challenge",
+        "kind": "process",
+        "what": "A targeted mutation was caught using the unchanged feature checks.",
+        "path": ".verify-state.json",
+        "regex": "\"verdict\"\\s*:\\s*\"caught\""
+      },
+      {
+        "id": "scope-adjacent-claim",
+        "kind": "process",
+        "what": "The recipe still maps the adjacent behavior.",
+        "path": "VERIFY.md",
+        "regex": "(?im)^##\\s+Discount\\s*$"
+      }
+    ],
+    "replays": [
+      {
+        "id": "detects-shared-regression",
+        "kind": "outcome",
+        "what": "The finished discount check rejects the originally changed shared threshold.",
+        "replace": {
+          "commerce.py": "fixture/commerce.py"
+        },
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "test_discount.py"
+        ],
+        "expect": "fail"
+      },
+      {
+        "id": "accepts-intended-behaviors",
+        "kind": "outcome",
+        "what": "The finished checks accept the spec-correct separated thresholds.",
+        "replace": {
+          "commerce.py": "reference/commerce_correct.py"
+        },
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover"
+        ],
+        "expect": "pass"
+      },
+      {
+        "id": "finished-product-meets-spec",
+        "kind": "outcome",
+        "what": "Direct independent checks confirm both boundaries on the finished product.",
+        "replace": {},
+        "command": [
+          "python",
+          "-c",
+          "from commerce import shipping_fee, discount; assert [shipping_fee(x) for x in (49,50,99,100)] == [5,0,0,0]; assert [discount(x) for x in (49,50,99,100)] == [0,0,0,10]"
+        ],
+        "expect": "pass"
+      }
+    ]
+  }
+}

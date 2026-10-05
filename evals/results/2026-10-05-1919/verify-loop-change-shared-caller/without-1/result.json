@@ -1,0 +1,86 @@
+{
+  "case": "verify-loop-change-shared-caller",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left run_checks.sh alone",
+      "ok": false,
+      "workdir": true,
+      "detail": "added: outside the files this run may change"
+    },
+    {
+      "check": "A targeted mutation was caught using the unchanged feature checks.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "The recipe still maps the adjacent behavior.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The finished discount check rejects the originally changed shared threshold.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The finished checks accept the spec-correct separated thresholds.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Direct independent checks confirm both boundaries on the finished product.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "final helper status is strict, current and green",
+      "ok": false,
+      "detail": "VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/commerce.py",
+      "fixture/test_discount.py",
+      "fixture/test_shipping.py"
+    ],
+    "added": [
+      "fixture/run_checks.sh"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.159057,
+  "turns": 4,
+  "seconds": 24.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

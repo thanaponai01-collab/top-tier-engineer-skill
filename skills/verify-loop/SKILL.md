@@ -1,6 +1,6 @@
 ---
 name: verify-loop
-description: Build a runnable check from the requested outcome, prove it rejects a wrong result, then loop until it passes. Use when a task has no trustworthy check, "done" was claimed without a run, a project needs a reusable VERIFY.md recipe, or the user asks to challenge existing verification with a controlled mutation. Discovers the recipe from the repo; no manual seed or complete feature map required.
+description: Verify a requested outcome or code change with runnable checks and retained rejection evidence. Use for "verify this change", tasks without trustworthy checks, unproven completion claims, reusable VERIFY.md recipes, or challenging checks with controlled mutations. Discovers affected behavior from the task and repo; no manual seed or complete feature map required.
 ---
 
 # Verify Loop
@@ -32,6 +32,12 @@ evidence, cleanup. The file-backed loop below applies when saving a reusable rec
 3. **It does not come from the work.** Write expectations from the spec/claim, not the implementation.
 4. **Its failure is specific.** Pinpoint expected versus actual values.
 5. **It is cheap to rerun.** One fast command.
+
+## Verify a change
+
+For a task, diff, commit or branch verification request, read [verify this change](references/verify-change.md).
+Establish the comparison point, trace changed behavior and adjacent callers, reuse or extend the
+recipe, challenge the highest-risk check, and finish with strict evidence and a coverage report.
 
 ## Challenge existing verification
 

@@ -44,11 +44,16 @@ Every fixture runs. The green suites are really green, the symptoms really repro
 exception is `verify-loop-check-is-wrong`, whose suite is red on purpose: the red is the thing being
 judged.
 
-## Running the agents — `run.py`
+## Running the agents â€” `run.py`
 
 `verify-loop-challenge-survivor` exercises one controlled mutation against a check that does
 not observe the implementation. It requires retained original/mutated results and a verdict,
 leaves source files unchanged, and independently replays the check on the wrong implementation.
+
+`verify-loop-change-shared-caller` supplies a diff that lowers a shared threshold. Verification
+must follow the changed value into an adjacent caller, retain its regression test, challenge
+a behavioral check and finish with current strict evidence. Independent replays judge the
+finished product and the repaired check separately.
 
 ```
 python evals/run.py --dry-run          # what would run, and the worst-case cost
