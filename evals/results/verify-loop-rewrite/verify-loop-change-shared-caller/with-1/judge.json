@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "adjacent-discount-regression",
+      "what": "The shared threshold change incorrectly enables the discount below 100.",
+      "found": true,
+      "quote": "the change broke this. `discount` shared `QUALIFY`, so `discount(50)` through `discount(99)` returned 10 instead of 0.",
+      "quote_checked": true
+    },
+    {
+      "id": "shared-impact",
+      "what": "The report explains that the changed shared threshold affects both behaviors.",
+      "found": true,
+      "quote": "`discount` shared `QUALIFY`, so `discount(50)` through `discount(99)` returned 10 instead of 0.",
+      "quote_checked": true
+    },
+    {
+      "id": "coverage-boundary",
+      "what": "The report states the limits of verification.",
+      "found": true,
+      "quote": "Only these two functions are covered. No other callers exist in the folder, and there is no real-run or app-level check.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.09746260000000001,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,43 @@
+{
+  "case": "verify-loop-fake-check-and-decoy",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` computed `100 * 0.9` inside the test and compared it to 90. It never called `apply_discount`.\"\n  found   fail-proof-shows-it \u2014 \"I replaced `apply_discount` with a stub that returns the total unchanged, which means no discount at all, and both tests\"\n  found   needs-a-real-check \u2014 \"the SAVE10 test now asserts `apply_discount(100, \"SAVE10\") == 90`.\"\n  held    passthrough-test-is-real",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/test_discount.py"
+    ],
+    "added": [
+      "fixture/.verify-state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.23770999999999998,
+  "turns": 13,
+  "seconds": 46.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

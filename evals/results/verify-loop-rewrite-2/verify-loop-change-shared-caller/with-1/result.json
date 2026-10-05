@@ -1,0 +1,89 @@
+{
+  "case": "verify-loop-change-shared-caller",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   adjacent-discount-regression \u2014 \"Lowering it for shipping also dropped the discount threshold from 100 to 50.\"\n  found   shared-impact \u2014 \"`shipping_fee` and `discount` both read the one `QUALIFY` constant.\"\n  found   coverage-boundary \u2014 \"Strict green covers the mapped checks only.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "A targeted mutation was caught using the unchanged feature checks.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The recipe still maps the adjacent behavior.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The finished discount check rejects the originally changed shared threshold.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The finished checks accept the spec-correct separated thresholds.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Direct independent checks confirm both boundaries on the finished product.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "final helper status is strict, current and green",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/commerce.py",
+      "fixture/test_discount.py"
+    ],
+    "added": [
+      "fixture/.verify-state.json",
+      "fixture/mutation.json",
+      "fixture/mutation_shipping.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.24443400000000004,
+  "turns": 17,
+  "seconds": 40.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

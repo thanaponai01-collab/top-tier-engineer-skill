@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   survivor — "The test still passed, so the mutation survived."
+  found   freshness — "It contradicts the fresh result, so I treated it as context only."
+
+Phrase grader (grade.py), for comparison:
+PASS  verify-loop-ci-fresh-proof  [verify-loop]  2/2 found, score 1.00 (needs 1.00)
+  found   survivor: The selected check does not observe the implementation, so the deliberate mutation is not rejected.
+  found   freshness: Local green state is insufficient; evidence is newly generated.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      Independent CI report rejects the supplied check. — 
+  ok      The report identifies the tested committed inputs. — 
+  ok      Execution output records the mutation experiment. — 

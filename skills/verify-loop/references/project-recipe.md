@@ -28,6 +28,9 @@ good but UI/data state is wedged, reset to the documented baseline or relaunch t
 
 ## Drive and observe
 
+`verify.py scaffold-driver [--type web|api|cli]` drafts a driver to start from; a draft is not
+proof until it rejects a wrong result.
+
 Use the existing test/browser/PTY/HTTP harness with stable selectors and public entry points.
 Capture the action and observed result; assert a concrete expected value. Internal setters and
 test-only routes can skip the wiring you need to verify. Keep mocked boundaries explicit.

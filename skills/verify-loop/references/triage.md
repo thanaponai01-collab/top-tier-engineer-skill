@@ -1,4 +1,4 @@
-# Failure Triage Guide (pstack Taxonomy)
+# Failure Triage
 
 When `verify.py run` fails, never blindly modify product code. Triage the failure into one of three buckets:
 

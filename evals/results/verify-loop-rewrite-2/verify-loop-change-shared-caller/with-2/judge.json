@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "adjacent-discount-regression",
+      "what": "The shared threshold change incorrectly enables the discount below 100.",
+      "found": true,
+      "quote": "It also moved the discount threshold, so `discount(50..99)` started returning 10.",
+      "quote_checked": true
+    },
+    {
+      "id": "shared-impact",
+      "what": "The report explains that the changed shared threshold affects both behaviors.",
+      "found": true,
+      "quote": "The diff changed the shared constant `QUALIFY` from 100 to 50.",
+      "quote_checked": true
+    },
+    {
+      "id": "coverage-boundary",
+      "what": "The report states the limits of verification.",
+      "found": true,
+      "quote": "The checks are unit-level with no real-run driver, and there is no app here to drive.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0977006,
+  "model": "claude-sonnet-5-5"
+}

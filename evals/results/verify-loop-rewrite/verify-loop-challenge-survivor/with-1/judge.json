@@ -1,0 +1,27 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "survivor",
+      "what": "The mutation survives: the selected check passes on the wrong implementation.",
+      "found": true,
+      "quote": "**The check does not detect the mistake. Verdict: survived (exit 1).**",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "not-proof",
+      "what": "Do not certify the check or claim an expected rejection occurred.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0956926,
+  "model": "claude-sonnet-5-5"
+}

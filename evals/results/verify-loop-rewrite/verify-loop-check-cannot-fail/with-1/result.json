@@ -1,0 +1,44 @@
+{
+  "case": "verify-loop-check-cannot-fail",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   the-test-asserts-nothing \u2014 \"It loaded 0 cases, ran nothing and printed OK.\"\n  found   the-real-behaviour-is-wrong \u2014 \"the repaired check failed with `-30 != 30` and `-50 != 150`.\"\n  found   no-fail-proof \u2014 \"I added the oracle files, a fail-signal and a fail-proof note.\"\n  held    green-read-as-verified",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/refund.py",
+      "fixture/test_refund.py"
+    ],
+    "added": [
+      "fixture/.verify-state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.25051,
+  "turns": 17,
+  "seconds": 40.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

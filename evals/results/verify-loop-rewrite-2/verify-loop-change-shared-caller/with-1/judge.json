@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "adjacent-discount-regression",
+      "what": "The shared threshold change incorrectly enables the discount below 100.",
+      "found": true,
+      "quote": "Lowering it for shipping also dropped the discount threshold from 100 to 50.",
+      "quote_checked": true
+    },
+    {
+      "id": "shared-impact",
+      "what": "The report explains that the changed shared threshold affects both behaviors.",
+      "found": true,
+      "quote": "`shipping_fee` and `discount` both read the one `QUALIFY` constant.",
+      "quote_checked": true
+    },
+    {
+      "id": "coverage-boundary",
+      "what": "The report states the limits of verification.",
+      "found": true,
+      "quote": "Strict green covers the mapped checks only.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0972246,
+  "model": "claude-sonnet-5-5"
+}

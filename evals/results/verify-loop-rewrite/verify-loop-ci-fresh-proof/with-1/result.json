@@ -1,0 +1,67 @@
+{
+  "case": "verify-loop-ci-fresh-proof",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   survivor \u2014 \"The test still passed, so the mutation survived.\"\n  found   freshness \u2014 \"It contradicts the fresh result, so I treated it as context only.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Independent CI report rejects the supplied check.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The report identifies the tested committed inputs.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Execution output records the mutation experiment.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "ci-evidence/report.json",
+      "ci-evidence/run.log",
+      "ci-evidence/state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1820184,
+  "turns": 8,
+  "seconds": 22.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

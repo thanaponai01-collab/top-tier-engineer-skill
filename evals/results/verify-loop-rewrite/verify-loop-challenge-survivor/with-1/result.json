@@ -1,0 +1,59 @@
+{
+  "case": "verify-loop-challenge-survivor",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   survivor \u2014 \"**The check does not detect the mistake. Verdict: survived (exit 1).**\"\n  held    not-proof",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Saved challenge evidence includes both trial results and the surviving verdict.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The unchanged feature check also passes against the supplied wrong implementation.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.verify-state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.180071,
+  "turns": 11,
+  "seconds": 26.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,6 +1,6 @@
 # Compliance Checks Reference
 
-`scripts/compliance.py` provides deterministic, stdlib-only validation commands for `VERIFY.md`:
+`<skill-base>/scripts/compliance.py` provides deterministic, stdlib-only validation commands for `VERIFY.md`:
 
 | Kind | Command | Fails When |
 |---|---|---|

@@ -1,0 +1,14 @@
+  1. Skill: top-tier-engineer:verify-loop
+  2. Glob: fixture/**/*
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mi5jmjmh\fixture\VERIFY.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mi5jmjmh\fixture\test_legacy_import.py
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mi5jmjmh\fixture\test_cart.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mi5jmjmh\fixture\test_login.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mi5jmjmh\fixture\search.py
+  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mi5jmjmh\fixture\cart.py
+  9. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-mi5jmjmh\fixture\login.py
+ 10. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-mi5jmjmh/fixture && V="/c/Users/thana/AppData/Local/Temp/tte-plugin-s0as_gw_/top-tier-engineer/skills/verify-loop…
+ 11. Bash: V="/c/Users/thana/AppData/Local/Temp/tte-plugin-s0as_gw_/top-tier-engineer/skills/verify-loop/scripts/verify.py"; python "$V" run --strict 2>&1 | tail -15; pyt…
+ 12. Bash: V="/c/Users/thana/AppData/Local/Temp/tte-plugin-s0as_gw_/top-tier-engineer/skills/verify-loop/scripts/verify.py"; M=$(mktemp -d) echo '{"file":"login.py","befo…
+ 13. Bash: V="/c/Users/thana/AppData/Local/Temp/tte-plugin-s0as_gw_/top-tier-engineer/skills/verify-loop/scripts/verify.py" cat > VERIFY.md <<'EOF' ## Login - test: `pyth…
+ 14. Bash: cat login.py cart.py

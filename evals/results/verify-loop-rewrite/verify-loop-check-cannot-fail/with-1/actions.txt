@@ -1,0 +1,15 @@
+  1. Skill: top-tier-engineer:verify-loop
+  2. Glob: fixture/**/*
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\VERIFY.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\SPEC.md
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\refund.py
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\test_refund.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\data\refund_cases.json
+  8. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-g84dkpde/fixture && python -m unittest -v test_refund.py 2>&1 | tail -5; python -c " import test_refund as t; pri…
+  9. Read: C:\Users\thana\AppData\Local\Temp\tte-plugin-s0as_gw_\top-tier-engineer\skills\verify-loop\VERIFY_FORMAT.md
+ 10. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\test_refund.py
+ 11. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\VERIFY.md
+ 12. Bash: V="python C:/Users/thana/AppData/Local/Temp/tte-plugin-s0as_gw_/top-tier-engineer/skills/verify-loop/scripts/verify.py"; $V run 2>&1 | tail -30
+ 13. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\refund.py
+ 14. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-g84dkpde\fixture\VERIFY.md
+ 15. Bash: V="python C:/Users/thana/AppData/Local/Temp/tte-plugin-s0as_gw_/top-tier-engineer/skills/verify-loop/scripts/verify.py"; $V baseline 2>&1 | tail -5; $V run --s…

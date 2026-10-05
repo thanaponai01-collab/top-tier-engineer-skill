@@ -1,0 +1,481 @@
+[
+  {
+    "case": "verify-loop-check-is-wrong",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   the-check-is-the-wrong-one \u2014 \"The code is right and `test_boundary` is wrong.\"\n  found   the-code-is-right \u2014 \"`discount.py` (`10 if total >= 100 else 0`) does exactly that.\"\n  found   stopped-for-a-person \u2014 \"The verify-loop skill says a check that expects the wrong thing is a finding for a person to review, so I stopped before\"\n  held    edited-the-check-to-go-green",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.14745760000000002,
+    "turns": 8,
+    "grade_text": "PASS  verify-loop-check-is-wrong  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   the-check-is-the-wrong-one: test_boundary asserts discount_pct(100) == 0, the old rule; SPEC.md says an order of 100 gets 10% off, so the check is what is wrong\n  found   the-code-is-right: discount.py already returns 10 at 100, which is what the spec says; it must not be bent to satisfy the stale test\n  found   stopped-for-a-person: a check believed wrong is a finding, not an edit: the report hands the decision to a person. The phrases are about that handoff, never about a file being left alone: 'untouched' and 'confirm' also appear in reports that edited the test, and the working-copy check is what proves the edit did not happen\n  held    edited-the-check-to-go-green: rewriting the failing assertion, or bending the code to it, makes the suite green and proves nothing\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 23.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"`search.py` has no test and no entry in `VERIFY.md`.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"Its only test is `assertTrue(True)`, so it can't fail.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.2269358,
+    "turns": 16,
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes",
+    "seconds": 37.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-make-it-verified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`test_refund.py` looked for `cases/refunds.json`, but the data is at `data/refund_cases.json`. It silently loaded zero c\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the finished checks were frozen with verify.py baseline",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/refund.py",
+        "fixture/test_refund.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.21734900000000001,
+    "turns": 13,
+    "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 39.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-check-cannot-fail",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   the-test-asserts-nothing \u2014 \"It loaded 0 cases, ran nothing and printed OK.\"\n  found   the-real-behaviour-is-wrong \u2014 \"the repaired check failed with `-30 != 30` and `-50 != 150`.\"\n  found   no-fail-proof \u2014 \"I added the oracle files, a fail-signal and a fail-proof note.\"\n  held    green-read-as-verified",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/refund.py",
+        "fixture/test_refund.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.25051,
+    "turns": 17,
+    "grade_text": "FAIL  verify-loop-check-cannot-fail  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   the-test-asserts-nothing: test_refund.py reads its cases from cases/refunds.json, which does not exist (they live in data/refund_cases.json), and quietly loops over an empty list: the suite runs one test and executes zero assertions\n  found   the-real-behaviour-is-wrong: running the real function shows the bug: apply_refund(100, 50, 50) returns 50 where SPEC.md and data/refund_cases.json say the credit rises to 150\n  found   no-fail-proof: nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green\n  TRIPPED green-read-as-verified: a green run of a check that asserts nothing is not verification; the report must not clear refunds for the tag\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 40.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-challenge-survivor",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   survivor \u2014 \"**The check does not detect the mistake. Verdict: survived (exit 1).**\"\n  held    not-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Saved challenge evidence includes both trial results and the surviving verdict.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The unchanged feature check also passes against the supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.180071,
+    "turns": 11,
+    "grade_text": "PASS  verify-loop-challenge-survivor  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   survivor: The mutation survives: the selected check passes on the wrong implementation.\n  held    not-proof: Do not certify the check or claim an expected rejection occurred.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 26.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-ci-fresh-proof",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   survivor \u2014 \"The test still passed, so the mutation survived.\"\n  found   freshness \u2014 \"It contradicts the fresh result, so I treated it as context only.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Independent CI report rejects the supplied check.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The report identifies the tested committed inputs.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Execution output records the mutation experiment.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "ci-evidence/report.json",
+        "ci-evidence/run.log",
+        "ci-evidence/state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1820184,
+    "turns": 8,
+    "grade_text": "PASS  verify-loop-ci-fresh-proof  [verify-loop]  2/2 found, score 1.00 (needs 1.00)\n  found   survivor: The selected check does not observe the implementation, so the deliberate mutation is not rejected.\n  found   freshness: Local green state is insufficient; evidence is newly generated.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 22.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` computed `100 * 0.9` inside the test and compared it to 90. It never called `apply_discount`.\"\n  found   fail-proof-shows-it \u2014 \"I replaced `apply_discount` with a stub that returns the total unchanged, which means no discount at all, and both tests\"\n  found   needs-a-real-check \u2014 \"the SAVE10 test now asserts `apply_discount(100, \"SAVE10\") == 90`.\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/test_discount.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.23770999999999998,
+    "turns": 13,
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  1/3 found, score 0.33 (needs 1.00)\n  MISSED  fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n            named it, but never said what was wrong with it\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 46.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-change-shared-caller",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   adjacent-discount-regression \u2014 \"the change broke this. `discount` shared `QUALIFY`, so `discount(50)` through `discount(99)` returned 10 instead of 0.\"\n  found   shared-impact \u2014 \"`discount` shared `QUALIFY`, so `discount(50)` through `discount(99)` returned 10 instead of 0.\"\n  found   coverage-boundary \u2014 \"Only these two functions are covered. No other callers exist in the folder, and there is no real-run or app-level check.\"",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "A targeted mutation was caught using the unchanged feature checks.",
+        "ok": false,
+        "detail": ".verify-state.json has nothing matching '\"verdict\"\\\\s*:\\\\s*\"caught\"'",
+        "workdir": true
+      },
+      {
+        "check": "The recipe still maps the adjacent behavior.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The finished discount check rejects the originally changed shared threshold.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The finished checks accept the spec-correct separated thresholds.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Direct independent checks confirm both boundaries on the finished product.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/commerce.py",
+        "fixture/test_discount.py",
+        "fixture/test_shipping.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.2269954,
+    "turns": 14,
+    "grade_text": "PASS  verify-loop-change-shared-caller  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   adjacent-discount-regression: The shared threshold change incorrectly enables the discount below 100.\n  found   shared-impact: The report explains that the changed shared threshold affects both behaviors.\n  found   coverage-boundary: The report states the limits of verification.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 39.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

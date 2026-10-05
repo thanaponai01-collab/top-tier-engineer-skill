@@ -1,0 +1,38 @@
+{
+  "case": "verify-loop-green-with-unverified",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   search-has-no-check \u2014 \"`search.py` has no VERIFY.md section and no test.\"\n  found   the-checks-are-unproven \u2014 \"**No check has been seen failing.**\"\n  found   an-orphan-that-asserts-nothing \u2014 \"It only asserts `True`, and no VERIFY.md section names it.\"\n  held    green-read-as-every-feature",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1609736,
+  "turns": 12,
+  "seconds": 21.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.50.0 - 2026-10-05 - verify-loop rewritten, handoff contract
+
+- `verify-loop` SKILL.md 148 -> 108 lines: routing-first description, "done" defined once, one
+  mode table instead of scattered mode sections, the old step 4 split into prove-it-can-fail and
+  freeze. `fail-signal:`/`oracle:` detail lives only in VERIFY_FORMAT.md.
+- New `verify-loop/references/handoff.md`: the one contract a calling skill follows (what it
+  supplies, the wrong state each specialist provides, what it keeps, what comes back, fallback).
+  Callers are not yet collapsed onto it.
+- TRIAGE.md and COMPLIANCE.md moved to `references/triage.md` and `references/compliance.md`.
+- Evals (with-skill arm): first pass 6/8; the two misses traced to cut wording (challenge step for
+  change verification, unproven checks under green) which was restored; reruns 4/4.
+
 ## 4.49.0 - 2026-10-03 - drive loads first in unattended runs
 
 - New opt-in profile `hooks/autonomous.json`: philosophy at session start, `tools/drive-entry.py` on every prompt, verify stop-gate. The default `hooks.json` stays empty.

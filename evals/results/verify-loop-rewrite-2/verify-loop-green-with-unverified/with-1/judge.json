@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "search-has-no-check",
+      "what": "search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section",
+      "found": true,
+      "quote": "`search.py` has no test and no `VERIFY.md` section. Nothing checks it at all.",
+      "quote_checked": true
+    },
+    {
+      "id": "the-checks-are-unproven",
+      "what": "the checks that do exist were never shown able to go red: no fail-proof lines",
+      "found": true,
+      "quote": "`VERIFY.md` has no `fail-signal:` or `fail-proof:` lines, so Login and Cart pass but are *unproven*.",
+      "quote_checked": true
+    },
+    {
+      "id": "an-orphan-that-asserts-nothing",
+      "what": "test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing",
+      "found": true,
+      "quote": "`test_legacy_import.py` only asserts `True`, and no feature's command names it.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-read-as-every-feature",
+      "what": "two green checks do not cover three features; the report must not clear the release notes",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.09767060000000001,
+  "model": "claude-sonnet-5-5"
+}

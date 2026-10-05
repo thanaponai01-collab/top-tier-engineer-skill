@@ -1,148 +1,108 @@
 ---
 name: verify-loop
-description: Verify a requested outcome or code change with runnable checks and retained rejection evidence. Use for "verify this change", tasks without trustworthy checks, unproven completion claims, reusable VERIFY.md recipes, challenging checks with controlled mutations, or fresh CI verification. Discovers affected behavior from the task and repo; no manual seed or complete feature map required.
+description: Build a check that can fail before the work, then loop until it passes, with retained proof. Use for "verify this change", "is it actually done?", work with no trustworthy check, reusable VERIFY.md recipes, testing whether a check would catch a wrong result, or fresh CI proof. Other skills hand it their claim and the wrong state it must reject.
 ---
 
 # Verify Loop
 
 Build the check before the work, make it hard to fool, and loop until it passes.
 
-For a saved recipe, completion means a recorded expected rejection, a frozen baseline,
-`run --strict` and current green `status`. Repairing an empty check and fixing the requested
-product defect are authorized parts of this task; complete both before reporting done.
+**Done** means: one mapped check was seen rejecting a controlled wrong result, the checks are
+frozen with `baseline`, and `run --strict` then `status` print `VERIFY-STATE: green` on unchanged
+inputs. Repairing a check that cannot fail and fixing the requested product defect are both part
+of this task; finish both before reporting done.
 
-## Start with the task, grow the seed
+## Pick the mode
 
-Read existing project instructions, manifests, tests and real entry points. Reuse the project's
-harness. If VERIFY.md exists, check the affected recipe against the current app; if absent,
-create only the sections needed for the requested behavior and affected regressions. `init` is
-an optional draft from tests, not discovery of every feature. FEATURES.md is an optional inventory.
+| Situation | Read |
+|---|---|
+| Verify a task, diff, commit or branch | [verify this change](references/verify-change.md) |
+| Ask whether an existing check would catch a wrong result | [challenge mode](references/challenge.md) |
+| Set up CI or prove committed code fresh | [CI mode](references/ci.md) |
+| The check has to launch and drive an app | [project recipe](references/project-recipe.md) |
+| Schema, privacy, guardrail or repeatability checks | [compliance](references/compliance.md) |
+| Another skill is handing you its claim | [handoff](references/handoff.md) |
+| A reusable recipe, or none of the above | the loop below |
 
-The agent writes the seed; the user supplies the intended result. When VERIFY.md is absent,
-one-off direct checks and retained rejection/passing outputs may suffice. Save the recipe for reuse
-and grow it incrementally. A full map is useful for a requested audit or recurring verification.
-Strict green proves mapped claims, never that every feature was discovered. Report remaining gaps.
-For app driving, read [the project recipe](references/project-recipe.md): launch, doctor, drive,
-evidence, cleanup. The file-backed loop below applies when saving a reusable recipe.
+Verifying a change always means: fix the comparison point, trace the changed behavior into its
+adjacent callers, reuse or extend the recipe, **run `verify.py challenge` on the highest-risk
+check**, and finish with strict evidence and a coverage report.
+
+Start from the task, not a full feature map. Read project instructions, manifests, tests and real
+entry points, and reuse the project's harness. If VERIFY.md exists, check the affected sections
+against the current app; if not, create only the sections the requested behavior and its adjacent
+regressions need. A one-off request can end with direct checks and retained rejecting and passing
+output. Strict green covers mapped claims only, never that every feature was found: report gaps.
 
 ## What makes a check good
 
 1. **It can fail.** Observe rejection of a wrong result, restore, then observe a pass.
 2. **It watches the real thing.** Run the program, hit the endpoint, or drive the UI.
-3. **It does not come from the work.** Write expectations from the spec/claim, not the implementation.
-4. **Its failure is specific.** Pinpoint expected versus actual values.
+3. **It does not come from the work.** Expectations come from the spec or claim, not the code.
+4. **Its failure is specific.** It names expected versus actual.
 5. **It is cheap to rerun.** One fast command.
 
-## Verify a change
+## The loop
 
-For a task, diff, commit or branch verification request, read [verify this change](references/verify-change.md).
-Establish the comparison point, trace changed behavior and adjacent callers, reuse or extend the
-recipe, challenge the highest-risk check, and finish with strict evidence and a coverage report.
+Resolve this skill's base directory from the loaded skill and run
+`python <skill-base>/scripts/verify.py --help` before editing. The helper ships with the skill, not
+the project; pass the project as its repo argument. With a VERIFY.md, direct tests supplement the
+loop rather than replace it.
 
-## Challenge existing verification
+1. **Name the claim** in observable terms. "Refunds work" is a wish; "POST /refund on a paid order
+   returns 200 and the balance drops by the amount" is a claim.
+2. **Choose the strongest check you can afford.** Weakest to strongest: types and lint, unit,
+   integration, a real run of the built thing, a run on real data. Take the top rung this
+   environment can execute, plus one below it for a fast signal.
+3. **Record it in VERIFY.md** ([format](VERIFY_FORMAT.md)): commands, `oracle:` files and a literal
+   `fail-signal:`. `verify.py init` drafts a map from existing tests; finish it by regrouping by real
+   feature, giving each in-scope feature a real-run check and listing what is left. An unfinished
+   section stays unverified.
+4. **Prove it can fail.** From a clean `git status` or a scratch worktree, put the code in the
+   original bug or a deliberately wrong state and run `verify.py run`. The failure must be the
+   declared `fail-signal:`, not a startup error or timeout. Restore, confirm `git diff` is empty, run
+   again. The helper keeps the failing receipt; add a `fail-proof:` note describing the bad state.
+   Strict needs one such receipt per mapped feature; prose alone does not count.
+   A check that runs nothing (loads no cases, mocks what it tests, asserts nothing) is broken
+   machinery: repair it here, keep what it *expects* as the spec says, prove it fails, and list the
+   check files you changed for review.
+5. **Freeze it.** `verify.py baseline`. From here the loop changes code, never the check.
+6. **Work in slices, `verify.py run` after each.** Read the failure text and fix that.
+   `NEWLY RED`: your last change broke a pass; undo or fix it first. `SAME FAILURE x2`: your picture
+   is wrong; re-read code and output before a third try. `BUDGET` (five reds, `--budget` to tune):
+   stop and report what passes, what fails and what you would try next.
+7. **A check you believe expects the wrong thing is a finding, not an edit.** Say so and stop for a
+   person, who reviews it and re-runs `baseline`. Editing it yourself gets `CHECK CHANGED` and a red
+   run. (Repairing a check that never ran is step 4; changing what it expects is this step.)
+8. **Finish:** `verify.py run --strict`, then `verify.py status` must print `VERIFY-STATE: green`,
+   not `red`, `partial` (last run not strict), `stale` (inputs changed) or never-run. After adding or
+   changing tests, `verify.py tests --strict` flags tests with no assertion, ones that pass either
+   way, skipped ones and test files no feature names. Then look for what green cannot show: a
+   feature with no section, a check never seen red (no rejection receipt or `fail-proof:` line, so
+   unproven even when it passes), a deleted test, an output hardcoded to match.
 
-When asked to challenge a check, read [challenge mode](references/challenge.md). Choose one
-spec-backed product mutation and run `verify.py challenge` in scratch copies. Report caught,
-survived or inconclusive with actual output. A diagnosis request ends with the finding; an
-implementation request continues through check repair, the baseline and strict completion.
+## Fixing without disturbing
 
-## The 7-step loop
+`verify.py scope <files>` names what the fix may touch, its test included. `OUT OF SCOPE` means
+restore the stray edit or widen with `scope --add` and a reason; `KEEP-GREEN BROKEN` stays until the
+earlier pass is back. `scope --clear` when done.
 
-For CI setup or fresh committed-code proof, read [CI mode](references/ci.md). It reuses the recipe
-and challenge runner, generates new evidence and keeps deployment and other skills optional.
+## Triage and evidence
 
-Resolve this skill's base directory from the loaded skill, then run
-`python <skill-base>/scripts/verify.py --help` before implementation edits. Use that helper with
-the project as its repo argument; it is bundled with the skill, not necessarily in the project.
-With an existing VERIFY.md, direct tests supplement the loop, rather than replace it.
-
-
-1. **Name the claim.** What must be true when this is done, in terms you can observe. "Refunds work"
-   is a wish; "POST /refund on a paid order returns 200 and the balance drops by the amount" is a claim.
-2. **Choose the strongest check you can afford.** Weakest to strongest: types and lint, unit tests,
-   integration tests, a real run of the built thing, a run on real data. Take the top rung this
-   environment can execute, and add one below it for a fast signal.
-3. **Record it in VERIFY.md** (see [VERIFY_FORMAT.md](VERIFY_FORMAT.md)). If tests already exist, `python <this skill's base
-   directory>/scripts/verify.py init` drafts the feature map from them (it works in any folder, git or
-   not). Then finish the draft: read
-   the code behind relevant test files and regroup by real feature (one feature can span several
-   test files, one file can cover several features); give each in-scope feature a real-run check,
-   replace its TODOs and list the remaining gaps. An unfinished section stays unverified.
-4. **Prove it can fail.** Run the finished feature check through `verify.py run` on the original bug
-   or a deliberately wrong state. Read the failure: it must name the violated expectation, not a
-   startup error or timeout. Restore the good state and run again. The helper retains the failing
-   command, exit code, output and check hashes in .verify-state.json; strict verification requires
-   this receipt plus a fail-proof note explaining the bad state. Prose alone cannot satisfy it.
-   Prove at least one behavioral check per mapped feature; this does not certify every assertion.
-   Declare `fail-signal:` as a literal expected-versus-actual rejection message before the negative
-   run. Strict verification matches this against retained output and rejects common harness errors.
-   Add the finished commands and `oracle:` files before the negative run so the receipt describes
-   the same check that will judge the fix. Do this before the work, or on the working state,
-   from a clean `git status` or a scratch worktree, and confirm the revert left an empty `git diff`.
-   Then freeze the check: `verify.py baseline`. Include the spec, fixtures and smoke helpers under
-   `oracle:`; tests, directly named script paths, check commands, failure signals and the Run recipe are frozen
-   automatically. Imported helpers and expectation data must be listed explicitly; the runner cannot
-   infer every dependency. Keep implementation
-   files out of that list. From here the loop fixes code and never the check.
-   A check that cannot fail because it runs nothing (it loads no cases, mocks the thing it tests,
-   asserts nothing) is broken machinery, and repairing it before the freeze is part of this step, not
-   an edit to make it pass. Leave what it *expects* as it was: an expected value comes from the claim
-   or the spec, never from the code. Prove the repaired check can fail, freeze it, and list the check
-   files you changed in the report so a person can review them.
-5. **Do the work in slices, and run `verify.py run` after each.** Read the failure text and fix that.
-   The run remembers the last one (`.verify-state.json`, gitignored) and says what one run cannot:
-   `NEWLY RED` (your last change broke something that passed: undo or fix that first),
-   `SAME FAILURE x2` (the same output twice: stop, your picture is wrong, re-read the code and the
-   output before a third try), `BUDGET` (five red runs in a row, tune with `--budget`: stop and
-   report what passes, what fails and what you would try next).
-6. **A check you believe is wrong about what it expects is a finding, not an edit.** If the code is
-   right and the check is not, say so and stop for a person; they review it and run `verify.py
-   baseline` again. Editing it yourself gets `CHECK CHANGED` and a failed run, even when everything
-   else is green. Repairing a check that never really ran is step 4; changing what a check expects so
-   that it passes is this step.
-7. **Before you say done, run `verify.py run --strict`, then `verify.py status`.** Status must print
-   `VERIFY-STATE: green`: not `red`, `partial` (the last run was not strict),
-   `stale` (file contents changed since the last run: run again) or never-run. Then look for what a
-   green cannot show: a test skipped or deleted, an output hardcoded to match. `--strict` for "done".
-   After adding or changing tests, run `verify.py tests --strict`: it lists every test function under the
-   feature whose command names its file, and flags each with no assertion, each that catches its
-   exception and passes either way, each skipped, and each in a file no feature names. A test with
-   no row is one to give a row or to drop; a flagged one is a check that cannot go red (step 4).
-
-*Test:* the check was written before the change it judges, and you can name a moment it was red.
-
-## Fixing without disturbing (Scope Guard)
-
-1. `verify.py run` to record the state before the fix.
-2. `verify.py scope <files>` to name files the fix may touch, including its test.
-3. Fix in slices. `OUT OF SCOPE` requires restoring the stray edit or explicitly widening scope
-   with `scope --add` and a reason. `KEEP-GREEN BROKEN` remains until the previous pass is restored.
-4. `verify.py scope --clear` when complete.
-
-## Failure triage and evidence
-
-- Categorize failures as harness gap, doc drift or product gap before editing; [TRIAGE.md](TRIAGE.md).
-- Retain redacted runtime artifacts in `.verify-evidence/` or the project's existing location.
-  Recorded output tails survive teardown in .verify-state.json. Local state is evidence of runs,
-  not protection from a hostile writer; independently owned CI checks provide stronger separation.
-- For schema, privacy, guardrail and repeat checks, read [COMPLIANCE.md](COMPLIANCE.md).
-- Report verdict, the `VERIFY:` summary, meaningful rejection signals and coverage limits.
-
-## Quick command reference
+- Before editing on a red, sort it: harness gap, spec drift or product gap ([triage](references/triage.md)).
+- Keep redacted artifacts in `.verify-evidence/` or the project's own location; output tails
+  survive teardown in `.verify-state.json`. Local state records runs; it does not stop a hostile
+  writer. Independently owned CI does.
+- Report the verdict first, then the `VERIFY:` line, the rejection you observed and the gaps.
 
 ```bash
-python scripts/verify.py init              # Optional draft from disk
-python scripts/verify.py scaffold-driver   # Optional draft driver; not proof
-python scripts/verify.py run               # Run checks and retain failure evidence
-python scripts/verify.py baseline          # Freeze checks and declared oracles
-python scripts/verify.py challenge . --feature Refunds --mutation mutation.json
-python scripts/verify.py ci . --plan verification/ci.json --output ../verify-evidence
-python scripts/verify.py scope <files>     # Restrict allowed edit paths
-python scripts/verify.py run --strict      # Require proof and complete mapped coverage
-python scripts/verify.py status            # Require strict, green, current evidence
+python <skill-base>/scripts/verify.py init        # optional draft from existing tests
+python <skill-base>/scripts/verify.py run         # run, retain failure evidence
+python <skill-base>/scripts/verify.py baseline    # freeze checks and oracles
+python <skill-base>/scripts/verify.py run --strict && python <skill-base>/scripts/verify.py status
 ```
 
-For deeper oracles and mutation checks, use `correctness-gate`; for unreachable code, `wire-check`.
+Deeper oracles and mutation breadth: `correctness-gate`. Code nothing reaches: `wire-check`.
 
-*Test:* the same mapped check rejects a controlled wrong result, passes after restoration, and
-`run --strict` followed by `status` reports green for unchanged final inputs.
+*Test:* the check was written before the change it judges, you can name the moment it was red, and
+`status` reports green for unchanged final inputs.

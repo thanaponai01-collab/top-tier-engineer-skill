@@ -1,3 +1,24 @@
+# verify-loop rewrite (4.50.0)
+
+2026-10-05: SKILL.md restructured (148 -> 108 lines) and `references/handoff.md` added. All eight
+verify-loop cases ran once with the plugin (semantic judge, default model claude-sonnet-5-5).
+
+| case | first pass | after restoring two cut lines |
+|---|---|---|
+| verify-loop-check-is-wrong | pass | not rerun |
+| verify-loop-check-cannot-fail | pass | not rerun |
+| verify-loop-make-it-verified | pass | not rerun |
+| verify-loop-fake-check-and-decoy | pass | not rerun |
+| verify-loop-challenge-survivor | pass | not rerun |
+| verify-loop-ci-fresh-proof | pass | not rerun |
+| verify-loop-green-with-unverified | fail: missed "existing checks never shown red" | 2/2 pass |
+| verify-loop-change-shared-caller | fail: no `challenge` verdict recorded | 2/2 pass |
+
+The fixes added text only (an inline challenge step for change verification; unproven checks
+listed under what green cannot show), so the six first-pass results stand for the final text but
+were not re-sampled. Without-plugin arm not run. Evidence: `evals/results/verify-loop-rewrite/`,
+`evals/results/verify-loop-rewrite-2/`.
+
 # Verification handoffs across seven specialist skills
 
 Follow-up on 2026-10-05: added conditional verify-loop handoffs to correctness-gate,

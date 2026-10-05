@@ -1,0 +1,260 @@
+[
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-has-no-check \u2014 \"`search.py` has no VERIFY.md section and no test.\"\n  found   the-checks-are-unproven \u2014 \"**No check has been seen failing.**\"\n  found   an-orphan-that-asserts-nothing \u2014 \"It only asserts `True`, and no VERIFY.md section names it.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1609736,
+    "turns": 12,
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes",
+    "seconds": 21.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-has-no-check \u2014 \"`search.py` has no test and no `VERIFY.md` section. Nothing checks it at all.\"\n  found   the-checks-are-unproven \u2014 \"`VERIFY.md` has no `fail-signal:` or `fail-proof:` lines, so Login and Cart pass but are *unproven*.\"\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` only asserts `True`, and no feature's command names it.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.19302760000000005,
+    "turns": 14,
+    "grade_text": "PASS  verify-loop-green-with-unverified  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  found   the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes",
+    "seconds": 30.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-change-shared-caller",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   adjacent-discount-regression \u2014 \"It also moved the discount threshold, so `discount(50..99)` started returning 10.\"\n  found   shared-impact \u2014 \"The diff changed the shared constant `QUALIFY` from 100 to 50.\"\n  found   coverage-boundary \u2014 \"The checks are unit-level with no real-run driver, and there is no app here to drive.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "A targeted mutation was caught using the unchanged feature checks.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The recipe still maps the adjacent behavior.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The finished discount check rejects the originally changed shared threshold.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The finished checks accept the spec-correct separated thresholds.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Direct independent checks confirm both boundaries on the finished product.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/commerce.py",
+        "fixture/test_discount.py"
+      ],
+      "added": [
+        "fixture/.verify-evidence/mut-discount.json",
+        "fixture/.verify-evidence/mut-shipping.json",
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.233278,
+    "turns": 15,
+    "grade_text": "PASS  verify-loop-change-shared-caller  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   adjacent-discount-regression: The shared threshold change incorrectly enables the discount below 100.\n  found   shared-impact: The report explains that the changed shared threshold affects both behaviors.\n  found   coverage-boundary: The report states the limits of verification.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 38.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-change-shared-caller",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   adjacent-discount-regression \u2014 \"Lowering it for shipping also dropped the discount threshold from 100 to 50.\"\n  found   shared-impact \u2014 \"`shipping_fee` and `discount` both read the one `QUALIFY` constant.\"\n  found   coverage-boundary \u2014 \"Strict green covers the mapped checks only.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "A targeted mutation was caught using the unchanged feature checks.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The recipe still maps the adjacent behavior.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The finished discount check rejects the originally changed shared threshold.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The finished checks accept the spec-correct separated thresholds.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Direct independent checks confirm both boundaries on the finished product.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/commerce.py",
+        "fixture/test_discount.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json",
+        "fixture/mutation.json",
+        "fixture/mutation_shipping.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.24443400000000004,
+    "turns": 17,
+    "grade_text": "FAIL  verify-loop-change-shared-caller  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   adjacent-discount-regression: The shared threshold change incorrectly enables the discount below 100.\n  found   shared-impact: The report explains that the changed shared threshold affects both behaviors.\n  MISSED  coverage-boundary: The report states the limits of verification.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 40.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

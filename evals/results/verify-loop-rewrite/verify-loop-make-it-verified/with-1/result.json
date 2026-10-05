@@ -1,0 +1,81 @@
+{
+  "case": "verify-loop-make-it-verified",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   reports-what-was-wrong-with-the-old-check \u2014 \"`test_refund.py` looked for `cases/refunds.json`, but the data is at `data/refund_cases.json`. It silently loaded zero c\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:verify-loop"
+  ],
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the finished checks were frozen with verify.py baseline",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "final helper status is strict, current and green",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/refund.py",
+      "fixture/test_refund.py"
+    ],
+    "added": [
+      "fixture/.verify-state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.21734900000000001,
+  "turns": 13,
+  "seconds": 39.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}
