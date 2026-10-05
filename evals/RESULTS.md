@@ -18,7 +18,17 @@ local state to remain unchanged and never appear in the generated proof.
 - The real nested example exposed a Git archive working-directory prefix bug; a failing
   subdirectory regression was added and the export now runs at the Git root. The example
   passes from a clean clone. All 350 unit tests and 7 focused CI checks pass.
-- Hosted workflow validation is recorded separately once the pinned workflow runs.
+- [Hosted workflow run](https://github.com/thanaponai01-collab/top-tier-engineer-skill/actions/runs/37315843975)
+  passed both jobs, including all 350 tests on Ubuntu with Python 3.12.
+  Downloaded report, state and log identify candidate commit
+  `7011929684442d638a4996835e6244f343471dde` and project `examples/verify-ci`.
+  Baseline, challenge, strict run and status all exited zero; the mutation was caught
+  and the final state was strict green.
+- The workflow pins verifier commit `06f0e7a6b68a5a68b9c35835938bd93300425924`.
+  Its recorded verifier SHA256 matched the three scripts at that commit:
+  `8771d5a51b076ed4a613ce0c623b1776b6276ccddd9c9fd411adcb62840761e9`.
+  This proves the example's selected claim and mutation. Candidate-owned expectations
+  still require review; fresh execution does not establish independent oracle ownership.
 
 ## Earlier change verification evaluation
 

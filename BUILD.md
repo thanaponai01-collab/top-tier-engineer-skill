@@ -8,7 +8,7 @@
 
 Subdirectory archive export uses the Git root; correct committed example passes and tracked local green state is ignored | proven (7 CI checks; full suite 350 passed) | 06f0e7a
 
-Pinned GitHub Actions example executes fresh proof and uploads commit-bound artifacts | planned | uncommitted
+Pinned GitHub Actions example executes fresh proof and uploads commit-bound artifacts | proven ([hosted run](https://github.com/thanaponai01-collab/top-tier-engineer-skill/actions/runs/37315843975): strict green, caught mutation, inspected report/state/log; 350 tests pass on Ubuntu) | 7011929
 
 ## Deferred
 
