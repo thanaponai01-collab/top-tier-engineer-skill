@@ -1,6 +1,6 @@
 ---
 name: verify-loop
-description: Verify a requested outcome or code change with runnable checks and retained rejection evidence. Use for "verify this change", tasks without trustworthy checks, unproven completion claims, reusable VERIFY.md recipes, or challenging checks with controlled mutations. Discovers affected behavior from the task and repo; no manual seed or complete feature map required.
+description: Verify a requested outcome or code change with runnable checks and retained rejection evidence. Use for "verify this change", tasks without trustworthy checks, unproven completion claims, reusable VERIFY.md recipes, challenging checks with controlled mutations, or fresh CI verification. Discovers affected behavior from the task and repo; no manual seed or complete feature map required.
 ---
 
 # Verify Loop
@@ -47,6 +47,9 @@ survived or inconclusive with actual output. A diagnosis request ends with the f
 implementation request continues through check repair, the baseline and strict completion.
 
 ## The 7-step loop
+
+For CI setup or fresh committed-code proof, read [CI mode](references/ci.md). It reuses the recipe
+and challenge runner, generates new evidence and keeps deployment and other skills optional.
 
 Resolve this skill's base directory from the loaded skill, then run
 `python <skill-base>/scripts/verify.py --help` before implementation edits. Use that helper with
@@ -133,6 +136,7 @@ python scripts/verify.py scaffold-driver   # Optional draft driver; not proof
 python scripts/verify.py run               # Run checks and retain failure evidence
 python scripts/verify.py baseline          # Freeze checks and declared oracles
 python scripts/verify.py challenge . --feature Refunds --mutation mutation.json
+python scripts/verify.py ci . --plan verification/ci.json --output ../verify-evidence
 python scripts/verify.py scope <files>     # Restrict allowed edit paths
 python scripts/verify.py run --strict      # Require proof and complete mapped coverage
 python scripts/verify.py status            # Require strict, green, current evidence

@@ -1,0 +1,6 @@
+{
+  "file": "app.py",
+  "before": "return 42",
+  "after": "return 41",
+  "claim": "answer() returns 42"
+}

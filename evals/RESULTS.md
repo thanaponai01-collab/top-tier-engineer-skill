@@ -1,5 +1,24 @@
 # Verification workflow evaluation
 
+Fresh-CI follow-up on 2026-10-05. Both the plain agent and the with-skill agent rejected
+a weak check despite a copied local green state. The with-skill run invoked the new CI
+helper on locally committed inputs and produced a red report with the candidate commit,
+surviving mutation, stage results and output. No product, check or spec was edited.
+
+This is evidence that the mode is usable, not a diagnostic advantage over the baseline.
+The CI CLI regressions separately require correct committed inputs to pass and reject
+surviving mutations, bad products, dirty checkouts and empty plans. They also require
+local state to remain unchanged and never appear in the generated proof.
+
+- Plain evidence: `evals/results/2026-10-05-2007/`.
+- With-skill evidence: `evals/results/2026-10-05-2009/`.
+- Both runs passed the final case grading after removing a phrase that echoed the prompt.
+- No semantic judge was used. One run per arm is not a reliability estimate.
+- All 349 unit tests pass; the skill validator also passes.
+- Hosted workflow validation is recorded separately once the pinned workflow runs.
+
+## Earlier change verification evaluation
+
 Verify-this-change follow-up on 2026-10-05. The new case supplies a diff changing a
 shared threshold. The with-skill agent traced both callers, repaired the adjacent
 discount regression, added meaningful boundary checks, caught shipping and discount

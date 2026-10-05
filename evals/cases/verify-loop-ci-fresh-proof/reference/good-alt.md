@@ -1,0 +1,1 @@
+The test always passes on constant math, so changing the implementation does not detect the fault. New evidence was generated from committed inputs and local state was discarded. CI is red and the immutable fixture remains unchanged.

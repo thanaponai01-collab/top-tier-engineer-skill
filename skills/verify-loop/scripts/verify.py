@@ -1006,8 +1006,16 @@ def main():
     ch.add_argument("--feature", required=True, help="exact feature name in VERIFY.md")
     ch.add_argument("--mutation", required=True, help="JSON file with file, before, after and claim")
     ch.add_argument("--timeout", type=int, default=120, help="seconds per check")
+    ci = sub.add_parser("ci", help="fresh proof from committed inputs; ignore local verification state")
+    ci.add_argument("repo", nargs="?", default=".")
+    ci.add_argument("--plan", required=True, help="committed repo-relative JSON feature/mutation list")
+    ci.add_argument("--output", required=True, help="evidence directory outside the checkout")
+    ci.add_argument("--timeout", type=int, default=120, help="seconds per check")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
+    if a.cmd == "ci":
+        from ci import cmd_ci
+        sys.exit(cmd_ci(sys.modules[__name__], repo, a.plan, a.output, a.timeout))
     if a.cmd == "challenge":
         from challenge import cmd_challenge
         sys.exit(cmd_challenge(sys.modules[__name__], repo, a.feature, a.mutation, a.timeout))

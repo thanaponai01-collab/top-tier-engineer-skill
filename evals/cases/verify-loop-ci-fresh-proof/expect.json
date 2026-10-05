@@ -1,0 +1,62 @@
+{
+  "case": "verify-loop-ci-fresh-proof",
+  "skill": "verify-loop",
+  "question": "Does fresh CI proof reject a weak check despite copied local green state?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "survivor",
+      "what": "The selected check does not observe the implementation, so the deliberate mutation is not rejected.",
+      "must_say_any": [
+        "survived",
+        "survives",
+        "did not detect",
+        "does not detect",
+        "never calls",
+        "always passes"
+      ]
+    },
+    {
+      "id": "freshness",
+      "what": "Local green state is insufficient; evidence is newly generated.",
+      "must_say_any": [
+        "ignored",
+        "not trusted",
+        "not reused",
+        "discarded",
+        "context only",
+        "gitignored",
+        "not imported",
+        "did not use",
+        "excludes it"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "Diagnose with fresh evidence and leave the supplied checks and product intact.",
+    "edits_allowed": [],
+    "must_contain": [
+      {
+        "id": "fresh-ci-rejection",
+        "kind": "outcome",
+        "what": "Independent CI report rejects the supplied check.",
+        "path": "../ci-evidence/report.json",
+        "regex": "\"verdict\"\\s*:\\s*\"red\""
+      },
+      {
+        "id": "candidate-commit",
+        "kind": "process",
+        "what": "The report identifies the tested committed inputs.",
+        "path": "../ci-evidence/report.json",
+        "regex": "\"commit\"\\s*:\\s*\"[0-9a-f]{40}\""
+      },
+      {
+        "id": "executed-challenge",
+        "kind": "outcome",
+        "what": "Execution output records the mutation experiment.",
+        "path": "../ci-evidence/run.log",
+        "regex": "(?i)surviv|mutat"
+      }
+    ]
+  }
+}
