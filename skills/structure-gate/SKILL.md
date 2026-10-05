@@ -62,6 +62,10 @@ With a baseline, report only what's new, worse, or repaid. **Never regenerate th
 a regression**; regenerate it when debt has actually been paid down. A debt worth explaining gets
 a one-line comment at the code, where the next reader will see it.
 
+Reusable verification: to enforce structure continuously in a repo using `verify-loop`, record
+the check in `VERIFY.md` under a structural feature (e.g., `fail-signal: breach`), list `.structure-baseline.json`
+under `oracle:`, and run `verify.py baseline`. Any worsening triggers `NEWLY RED` or strict failure on `verify.py run --strict`.
+
 ## Report
 
 - Open with the plain answer: does it read as spaghetti, yes / in places / no.

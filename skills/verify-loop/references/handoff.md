@@ -26,6 +26,10 @@ and a proposed runnable check; strict green is not its completion gate.
   | wire-check | the connection removed, which must break the entry point |
   | safe-release | the change missing on the target, or the rollback not restoring data |
   | build-discipline, evolve-maintain | the slice's behavior absent, or the old behavior broken |
+  | latent-audit | the deleted candidate still reached by a caller, or dead code unflagged |
+  | structure-gate | a structural breach or complexity exceeding baseline threshold |
+  | agent-drift | the diverged input reproducing a below-band score |
+  | senior-review | the observed breakage or boundary gap reproduced |
 
 - **Adjacent regressions**: callers of what changed, which must stay green.
 

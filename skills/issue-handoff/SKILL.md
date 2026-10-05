@@ -60,7 +60,7 @@ An issue body must answer all five from itself, without the reader opening the s
 | **What changes**, in one line | nobody knows when it's done |
 | **Why** — what it costs today | it gets deprioritised forever, or done after it stopped mattering |
 | **Where** — paths with line numbers | the evidence is found again from scratch |
-| **Proof** — the command, and the output that counts as success | "done" becomes an opinion |
+| **Proof** — the command, and the output that counts as success (claim and failure signal per `verify-loop` contract) | "done" becomes an opinion |
 | **Order** — what must land first | moves land in an order that breaks the middle ones |
 
 Missing a field? Open the code and fill it **now**, while you're still here — that is cheaper than

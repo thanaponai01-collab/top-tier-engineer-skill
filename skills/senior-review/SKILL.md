@@ -68,3 +68,7 @@ biggest gap: cause unknown → `debug-protocol`; structure or duplication → `a
 slow → `perf-optimize`; abusable → `threat-model`; works but unproven → `correctness-gate`; written
 but nothing calls it → `wire-check`; tangled, and you want it measured → `structure-gate`; dead
 weight → `latent-audit`; requirements never pinned down → `problem-framing`.
+
+When turning a proven finding into a fix, pass the observable failure and reproduction to `verify-loop`
+(see `references/handoff.md`): capture the negative run before fixing, freeze expectations with `baseline`,
+and confirm resolution with `verify.py run --strict`.

@@ -60,6 +60,8 @@ that "monitoring."
 ## Next
 
 A confirmed regression that needs a fix: `evolve-maintain` (code) or `build-discipline` (agent
-build), then `agent-prove` against the same bar. Roll back, throttle or kill: `agent-release`. The
+build), then `agent-prove` against the same bar. If a reusable check recipe guards the agent or tool harness,
+hand the newly filed task to `verify-loop` (`references/handoff.md`) to retain negative rejection evidence
+before deploying code or prompt changes. Roll back, throttle or kill: `agent-release`. The
 exact divergence step in one bad live sample: `agent-trace`. Without those loaded, do the step
 plainly and say the skill was missing.

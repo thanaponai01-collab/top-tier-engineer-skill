@@ -53,8 +53,11 @@ end · **suspected** = neither.*
    All three pass → delete list. Any unfinished → *watch, don't delete*. There's no path from
    suspected to deleted.
 4. **Report only, unless asked to delete.** When asked, deletions ship small and reversible: one
-   candidate per commit (the component, its dead tests,
-   its dead config) with the proof attached, so any mistake reverts in one step.
+   candidate per commit (the component, its dead tests, its dead config) with the proof attached, so any mistake reverts in one step.
+   When VERIFY.md exists or reusable deletion proof is requested, verify the deletion with `verify-loop`:
+   follow its `references/handoff.md`. Proving the deleted candidate was unreached or that callers survive is checked
+   through `verify.py run --strict` and `verify.py status`. If testing whether an existing check catches dead code removal,
+   challenge mode (`verify.py challenge`) confirms whether tests fail when the component is removed.
 5. **Record bugs you pass, don't chase them.** Leaked resources, unhandled errors, races, injectable
    string building: note `file:line` and move on. This is not a full review.
 
