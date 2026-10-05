@@ -1,6 +1,6 @@
 ---
 name: verify-loop
-description: Build a runnable check from the requested outcome, prove it rejects a wrong result, then loop until it passes. Use when a task has no trustworthy check, "done" was claimed without a run, or a project needs a reusable VERIFY.md recipe. Discovers the recipe from the repo; no manual seed or complete feature map required.
+description: Build a runnable check from the requested outcome, prove it rejects a wrong result, then loop until it passes. Use when a task has no trustworthy check, "done" was claimed without a run, a project needs a reusable VERIFY.md recipe, or the user asks to challenge existing verification with a controlled mutation. Discovers the recipe from the repo; no manual seed or complete feature map required.
 ---
 
 # Verify Loop
@@ -32,6 +32,13 @@ evidence, cleanup. The file-backed loop below applies when saving a reusable rec
 3. **It does not come from the work.** Write expectations from the spec/claim, not the implementation.
 4. **Its failure is specific.** Pinpoint expected versus actual values.
 5. **It is cheap to rerun.** One fast command.
+
+## Challenge existing verification
+
+When asked to challenge a check, read [challenge mode](references/challenge.md). Choose one
+spec-backed product mutation and run `verify.py challenge` in scratch copies. Report caught,
+survived or inconclusive with actual output. A diagnosis request ends with the finding; an
+implementation request continues through check repair, the baseline and strict completion.
 
 ## The 7-step loop
 
@@ -119,6 +126,7 @@ python scripts/verify.py init              # Optional draft from disk
 python scripts/verify.py scaffold-driver   # Optional draft driver; not proof
 python scripts/verify.py run               # Run checks and retain failure evidence
 python scripts/verify.py baseline          # Freeze checks and declared oracles
+python scripts/verify.py challenge . --feature Refunds --mutation mutation.json
 python scripts/verify.py scope <files>     # Restrict allowed edit paths
 python scripts/verify.py run --strict      # Require proof and complete mapped coverage
 python scripts/verify.py status            # Require strict, green, current evidence

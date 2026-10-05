@@ -1,0 +1,57 @@
+{
+  "case": "verify-loop-challenge-survivor",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Saved challenge evidence includes both trial results and the surviving verdict.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "The unchanged feature check also passes against the supplied wrong implementation.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      ".verify-state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.16337219999999997,
+  "turns": 5,
+  "seconds": 30.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

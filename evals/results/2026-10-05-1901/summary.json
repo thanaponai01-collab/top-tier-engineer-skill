@@ -1,0 +1,55 @@
+[
+  {
+    "case": "verify-loop-challenge-survivor",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The bundled helper recorded a surviving mutation and both executed trial results.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "evidence.json",
+        "run_exp.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.154556,
+    "turns": 8,
+    "grade_text": "PASS  verify-loop-challenge-survivor  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   survivor: The mutation survives: the selected check passes on the wrong implementation.\n  held    not-proof: Do not certify the check or claim an expected rejection occurred.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 25.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

@@ -1,0 +1,10 @@
+PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)
+  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  VERIFY.md has a fail-proof line saying what was broken to make the check go red — VERIFY.md has nothing matching '(?im)^\\s*-\\s*fail-proof:\\s*\\S.{10,}'
+  FAILED  the finished checks were frozen with verify.py baseline — .verify-state.json is not there
+  FAILED  the copy's own tests go red when refund.py is the original sign-flipped version — exit 0, expected non-zero
+  ok      the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test — 
+  FAILED  final helper status is strict, current and green — VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)

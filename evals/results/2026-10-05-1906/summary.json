@@ -1,0 +1,120 @@
+[
+  {
+    "case": "verify-loop-challenge-survivor",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Saved challenge evidence includes both trial results and the surviving verdict.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "The unchanged feature check also passes against the supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        ".verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.16337219999999997,
+    "turns": 5,
+    "grade_text": "PASS  verify-loop-challenge-survivor  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   survivor: The mutation survives: the selected check passes on the wrong implementation.\n  held    not-proof: Do not certify the check or claim an expected rejection occurred.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 30.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-challenge-survivor",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Saved challenge evidence includes both trial results and the surviving verdict.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The unchanged feature check also passes against the supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1686414,
+    "turns": 10,
+    "grade_text": "PASS  verify-loop-challenge-survivor  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   survivor: The mutation survives: the selected check passes on the wrong implementation.\n  held    not-proof: Do not certify the check or claim an expected rejection occurred.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 19.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

@@ -1,0 +1,1 @@
+Challenge the verification in fixture/ using the supplied mutation.json for the Answer feature. Execute the experiment and retain machine-readable evidence. Diagnose only: leave the product, check, recipe and mutation unchanged. Report whether the check detects the deliberate mistake and the evidence limitations.

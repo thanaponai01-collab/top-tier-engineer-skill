@@ -624,6 +624,11 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if missing_baseline:
         print("  note  no baseline: freeze the finished checks before strict completion")
     signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
+    challenge = state.get("challenge", {})
+    if challenge.get("verdict") == "caught" and challenge.get("check_signature") == signature:
+        for key, row in challenge.get("mutated", {}).get("checks", {}).items():
+            if key.startswith(challenge.get("feature", "") + "|") and not row.get("ok") and row.get("exit") is not None:
+                receipts[key] = {"signature": signature, "exit": row["exit"], "output": row["output"]}
     for f in shown:
         print(("Journey: " if f["journey"] else "") + f["name"])
         if f["journey"]:
@@ -996,8 +1001,16 @@ def main():
     sd.add_argument("repo", nargs="?", default=".")
     sd.add_argument("--type", choices=["web", "api", "cli", "auto"], default="auto",
                     help="type of driver to scaffold (default: auto)")
+    ch = sub.add_parser("challenge", help="challenge a feature check with one explicit mutation in scratch copies")
+    ch.add_argument("repo", nargs="?", default=".")
+    ch.add_argument("--feature", required=True, help="exact feature name in VERIFY.md")
+    ch.add_argument("--mutation", required=True, help="JSON file with file, before, after and claim")
+    ch.add_argument("--timeout", type=int, default=120, help="seconds per check")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
+    if a.cmd == "challenge":
+        from challenge import cmd_challenge
+        sys.exit(cmd_challenge(sys.modules[__name__], repo, a.feature, a.mutation, a.timeout))
     if a.cmd == "scaffold-driver":
         sys.exit(cmd_scaffold_driver(repo, a.type))
     if a.cmd == "scope":

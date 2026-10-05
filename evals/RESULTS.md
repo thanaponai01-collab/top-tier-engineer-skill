@@ -1,5 +1,32 @@
 # Verification workflow evaluation
 
+Challenge mode follow-up on 2026-10-05. The final challenge smoke test loaded the
+skill, invoked the bundled helper and retained a surviving verdict with both
+trial results. Source files stayed unchanged. The grader independently replayed
+the unchanged check against the wrong implementation.
+
+| Case | Without skill | With skill |
+|---|---|---|
+| verify-loop-challenge-survivor | diagnosed correctly; required evidence was written outside fixture/ | 1/1 passed all artifact and outcome gates |
+| verify-loop-make-it-verified | 0/1 completed the workflow | 1/1 completed strict verification |
+
+The plain agent also detected the vacuous check. Its artifact failure is a workflow
+compliance difference, not evidence that the skill improves diagnosis. Earlier
+challenge pilots had a less explicit evidence schema; their failures likewise
+must not be presented as diagnostic wins. These are tiny smoke samples, not a
+reliability estimate. Phrase grading and artifact checks were used; no semantic judge.
+
+- Final challenge evidence: `evals/results/2026-10-05-1906/`.
+- Existing-loop regression and challenge pilot: `evals/results/2026-10-05-1903/`.
+- Initial baseline pilot: `evals/results/2026-10-05-1901/`.
+- All 337 unit tests pass, including 11 challenge CLI regressions.
+- CLI regressions cover caught, survived, inconclusive, frozen targets, invalid mutations,
+  overwritten mutations, unchanged source/state, strict receipt reuse and feature isolation.
+- One caught mutation proves detection of that mistake; external service isolation remains
+  the project's responsibility. Scratch copies are not an OS sandbox.
+
+## Earlier verification hardening evaluation
+
 Follow-up on 2026-10-05: the stricter case requires a frozen baseline and a current,
 strict green helper status, alongside broken/correct implementation replays.
 One with-skill run passed all gates; one without-skill run failed. The successful

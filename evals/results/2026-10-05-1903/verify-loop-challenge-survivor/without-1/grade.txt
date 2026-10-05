@@ -1,0 +1,7 @@
+PASS  verify-loop-challenge-survivor  [verify-loop]  1/1 found, score 1.00 (needs 1.00)
+  found   survivor: The mutation survives: the selected check passes on the wrong implementation.
+  held    not-proof: Do not certify the check or claim an expected rejection occurred.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  The bundled helper recorded a surviving mutation and both executed trial results. — .verify-state.json has nothing matching '(?s)(?=.*"challenge"\\s*:\\s*\\{)(?=.*"mutated"\\s*:\\s*\\{)(?=.*"original"\\s*:\\s*\\{)(?=.*"verdict"\\s*:\\s*"survived")'

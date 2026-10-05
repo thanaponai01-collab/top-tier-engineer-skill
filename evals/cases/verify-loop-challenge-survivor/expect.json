@@ -1,0 +1,61 @@
+{
+  "case": "verify-loop-challenge-survivor",
+  "skill": "verify-loop",
+  "question": "Does a controlled mutation reveal a check that does not observe the implementation?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "survivor",
+      "what": "The mutation survives: the selected check passes on the wrong implementation.",
+      "must_say_any": [
+        "survived",
+        "survives",
+        "still passes",
+        "still passed",
+        "stayed green"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "not-proof",
+      "what": "Do not certify the check or claim an expected rejection occurred.",
+      "must_not_say_any": [
+        "CHALLENGE: caught",
+        "verification is trustworthy",
+        "mutation was caught"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "Leave source and checks untouched, and retain executed challenge evidence.",
+    "edits_allowed": [
+      ".verify-state.json",
+      ".gitignore"
+    ],
+    "must_contain": [
+      {
+        "id": "executed-survivor",
+        "kind": "outcome",
+        "what": "Saved challenge evidence includes both trial results and the surviving verdict.",
+        "path": ".verify-state.json",
+        "regex": "(?s)(?=.*\"challenge\"\\s*:\\s*\\{)(?=.*\"mutated\"\\s*:\\s*\\{)(?=.*\"original\"\\s*:\\s*\\{)(?=.*\"verdict\"\\s*:\\s*\"survived\")"
+      }
+    ],
+    "replays": [
+      {
+        "id": "wrong-implementation-still-passes",
+        "kind": "outcome",
+        "what": "The unchanged feature check also passes against the supplied wrong implementation.",
+        "replace": {
+          "app.py": "reference/app_wrong.py"
+        },
+        "command": [
+          "python",
+          "test_answer.py"
+        ],
+        "expect": "pass"
+      }
+    ]
+  }
+}
