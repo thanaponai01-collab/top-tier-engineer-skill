@@ -1,0 +1,1 @@
+{"name": "checkout-example", "private": true, "scripts": {"test": "node tests/test_total.js"}}

@@ -1,0 +1,1 @@
+Local mapped checkout behavior is verified. The live payment gateway remains outside coverage. Existing manual notes and source behavior were preserved. A second setup left completed files unchanged.

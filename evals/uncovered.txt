@@ -19,6 +19,5 @@ issue-handoff
 onboard-system
 pick-skill
 problem-framing
-project-setup
 recall
 scrutinize

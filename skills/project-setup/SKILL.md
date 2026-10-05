@@ -1,96 +1,97 @@
 ---
 name: project-setup
-description: Set a fresh project up for these skills, once, so every later session finds its checks. Drafts VERIFY.md and FEATURES.md from whatever code is there and adds a pointer block to the project's CLAUDE.md. Only the checks and the pointer, not the full picture of an unfamiliar system (that is onboard-system, which runs this itself). Use when starting these skills in a new or different codebase, "set up this project for the skills", "start fresh here", or when a repo has code but no VERIFY.md or FEATURES.md.
+description: Set up or refresh reusable verification in an existing project across stacks. Discover real commands and entry points, preserve manual documentation, prepare a small project map and VERIFY.md, and validate readiness. Use for onboarding verification in another repo or refreshing stale setup. CI is optional when requested; full system explanation belongs to onboard-system.
 ---
 
 # Project Setup
 
-The skills create their own files on demand, but nothing tells a new project they exist. The next
-session, or an agent that never met these skills, has to rediscover the checks or never learns they
-are there. This skill runs once per project: draft the two files from the code, then leave a pointer
-where every session reads first.
+Prepare project inputs; let verify-loop execute and judge verification. Other skills remain usable
+without setup. The seed is a small map grown from evidence, not a complete inventory supplied by
+the user.
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
-end · **suspected** = neither.*
+*Evidence labels: **proven** = you ran it; **traced** = followed through code; **suspected** = neither.*
 
-## 1. Look before writing
+## Discover
 
-Read what is there: the top-level tree, the manifest (`package.json`, `pyproject.toml`, `go.mod`,
-`Cargo.toml`, `pom.xml`, a `Makefile`), the test folder, and whether `VERIFY.md`, `FEATURES.md` and
-`CLAUDE.md` already exist. Say in one line what kind of system this is (web app, CLI, library,
-service) and how you know. An empty repo has nothing to draft: say so and stop at step 4.
+Read project instructions, specifications, manifests, lockfiles, runtime configuration, test
+commands and existing CI. Identify the Git root and selected package working directory. For a
+monorepo, select the requested package and trace shared dependencies rather than onboarding all
+packages. Follow one user/caller entry point into the actual implementation and existing checks.
 
-## 2. Draft the two files
+Use the existing package manager, pinned runtime and harness. Discover commands from configuration
+and run them before calling them working. A manifest identifies a stack, not a valid test command.
+Lint, compilation and zero-test success alone do not prove behavior. Use documented dependency
+setup where authorized; do not migrate frameworks, rewrite lockfiles or install unrelated tools.
+Use disposable local services, never production seeds or deployment scripts.
 
-Both scripts read the code, write a draft, and refuse to overwrite (exit 2 if the file exists), so
-running them twice is safe. They belong to two other skills and sit in those skills' `scripts/`
-folders:
+Choose one requirement-backed behavior and adjacent regression checks. Establish expectations from
+specifications or user acceptance criteria, not current code. Ask for a missing requirement while
+continuing discovery; leave that behavior unverified. An empty repo supports a plan, not proof.
 
-```
-python <verify-loop base directory>/scripts/verify.py init <repo>      # VERIFY.md from the test files
-python <feature-map base directory>/scripts/features.py init <repo>    # FEATURES.md from the entry points
-```
+## Prepare the seed
 
-Where a file already exists, leave it and say so. Where the scripts are not available, write the
-file by hand: `VERIFY.md` is one `##` section per feature listing the command that proves it and one
-that breaks it on purpose; `FEATURES.md` is one `##` section per feature with the way a user
-reaches it (route, click, shortcut or command).
+Read existing VERIFY.md and FEATURES.md first. Reuse equivalent documents and link them where
+possible. Update missing or demonstrably stale setup; preserve manual notes, coverage limits and
+expectations. Conflicting expectations are a finding, not permission to match the implementation.
 
-A draft is a starting point, not a result. `features.py init` on a stack it cannot read reports
-"0 entry point(s)", and `verify.py init` leaves `TODO` lines. Do not fill those in here: list them.
-Making each check real is `verify-loop`; making the map true is `feature-map`.
+- FEATURES.md, when useful: selected behavior, requirement source, real entry point, implementation
+  and check paths, evidence status. Mark the map partial. Avoid copying every manifest command.
+- VERIFY.md: finished checks for the selected behavior, working directory expressed in commands,
+  stable behavioral failure signal, declared expectation inputs and blind spots. Add launch,
+  readiness, instance identity and cleanup only when checks require a running application.
+- verification/: a targeted product mutation for challenge. Add a CI plan only when CI is requested.
+- Ignore local .verify-state.json and private generated evidence using existing ignore conventions.
+  Reference secrets by location; never record values in these files.
 
-## 3. Leave the pointer
+Resolve verify-loop from the installed plugin/skill location; do not assume its scripts live in
+the target repo. Read its SKILL.md, VERIFY_FORMAT.md and relevant challenge reference and run the
+bundled helper's --help. Those files own the exact format and mutation schema. Optional init is a
+draft generator; finish the selected recipe instead of announcing readiness with TODOs. Trace
+unsupported stacks by hand; zero discovered entries does not mean zero features.
 
-Add this block to the project's `CLAUDE.md`. If there is no `CLAUDE.md`, create one holding only this
-block (the built-in `/init` writes the rest). If a `## Project checks` heading is already there,
-rewrite it only if its content differs, never append a second.
+## Validate
 
-```
-## Project checks
-- `VERIFY.md`: each feature and the command that proves it. Run every check before saying done;
-  `verify-loop` builds and maintains it.
-- `FEATURES.md`: what the system has and how a user reaches each feature. Read it before driving or
-  changing the app; `feature-map` keeps it true.
-- `docs/architecture.md`, if present: the system traced as a diagram; `arch-map` draws and updates it.
-- `WHY.md`, if present: recorded reasons behind decisions that took real digging to find;
-  `code-history` looks them up and adds to it before you change something that looks wrong.
-- Coming back after a gap, or "where were we": `recall` rebuilds the state from git and these files.
-- Something broken and the cause unknown: `debug-protocol`. Need the system explained plainly, not
-  changed: `explain`.
-- None of the files above exist yet and this is first contact with the system: `onboard-system` builds
-  the whole set in one pass, in the order that makes each one true.
-```
+Run the behavioral check on the unchanged product. Complete verify-loop's actual rejection proof,
+baseline, run --strict and current status with this project as the repo argument. Prefer challenge
+for a controlled product mistake in scratch copies, leaving source behavior unchanged. Declare
+all tests, fixtures, imported check helpers and expectation files before collecting proof. Every
+mapped feature needs its own rejection evidence; one caught mutation does not certify the others.
 
-Use the real names of the files that exist. If one was not created, leave its line out.
+Repair empty/disconnected checks only when their intended requirement is established, disclose
+check edits, and regenerate proof. A discovered product defect blocks readiness unless the user
+also requested its repair. Preserve unrelated failures and unmapped tests; never delete or weaken
+checks to obtain green. Retain outputs and state rather than writing prose-only proof.
 
-If the project also has a `GEMINI.md` or `AGENTS.md`, put the same block in each so other agents find
-the checks too. Never create either one.
+If verify-loop is unavailable, prepare a useful draft and execute existing checks directly.
+Report draft / verifier unavailable, not strict verified readiness. Explain which installed skill
+or reviewed runner is needed; do not silently fetch a moving runner.
 
-## 4. Report
+Repeat discovery after validation: re-read the instructions, manifests, selected entry point and
+recipe; compare setup-file hashes from the first completed pass. Re-running checks alone is not
+the second setup pass. An unchanged setup leaves completed files unchanged; reuse
+only current evidence. Changed inputs require updating affected recipes and regenerating stale
+proof. Compare original/final files, confirm source behavior remains unchanged, and disclose edits.
 
-Answer first: what now exists. Leave the files uncommitted and include the `git status` lines for
-them. Then what is still a draft, by file and count (`TODO` lines,
-entry points found), and the one skill that finishes each. Nothing here is verified yet, so do not
-call the project set up in the sense of *done*; call it *ready for* the skills.
+## Make it discoverable
 
-```
-CREATED: <files written>            KEPT: <files that were already there>
-DRAFT:   <file: N TODOs / N entry points>
-NEXT:    <one step, e.g. "verify-loop: replace the TODOs in VERIFY.md">
-```
+Use the existing agent instruction file (AGENTS.md, CLAUDE.md or equivalent). Add/refresh one concise
+Project checks pointer to files actually present, coverage boundaries, and the command/skill.
+Preserve other instructions and avoid duplicate blocks. If none exists, create one appropriate
+to the requested agent, not several. Do not impose a required plugin workflow.
 
-## Rules
+## Optional CI
 
-- **Once, then hands off.** A second run changes nothing that exists.
-- **No code changes.** This skill writes `VERIFY.md`, `FEATURES.md` and the pointer block (in `CLAUDE.md`, and in
-  `GEMINI.md` / `AGENTS.md` where they exist), and nothing else.
-- **Say what you could not see.** A stack the scripts do not read is a finding, not a failure.
+For requested CI setup, read [CI setup](references/ci-setup.md). Local readiness and hosted readiness
+are separate verdicts. Ordinary setup does not authorize commits, pushes or releases.
 
-*Test:* a second run on the same repo leaves every file byte-for-byte unchanged, and the report names
-every `TODO` still open.
+## Report
 
-Checks that an agent has run its own work is `verify-loop`; a map of what the system has is
-`feature-map`; why code is the way it is, is `code-history`. This skill stands without them: it
-drafts by hand and leaves the pointer. Called as step 2 of a full first-contact pass, it's
-`onboard-system`; run this skill directly when only the checks need setting up.
+List created/refreshed/kept files, runtime/package/working directory, commands actually executed,
+selected claim, rejection signal and current verdict. Name missing prerequisites, untested behavior,
+manual/check edits and the next actionable step. Local verified requires current strict green;
+otherwise report draft, blocked or failed with evidence. Never claim every feature or stack covered.
+BUILD.md stays progress evidence and RUN.json stays orchestration state; no shared protocol is added.
+
+*Test:* refresh a partial recipe without changing product behavior or manual expectations;
+reject a deliberate wrong result, pass the original and finish strict green. A second unchanged
+setup preserves completed files. Missing prerequisites remain explicit.

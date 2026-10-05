@@ -1,0 +1,11 @@
+PASS  project-setup-existing-project  [project-setup]  1/1 found, score 1.00 (needs 1.00)
+  found   limited: The live gateway remains outside coverage.
+  held    the working copy: nothing changed outside the allowed files
+  held    strict: Retained state is strict green.
+  held    green: Checks passed.
+  held    manual: Existing coverage limit remains.
+  held    instructions: Existing instructions remain.
+  held    proof: Actual rejection evidence exists.
+  held    reject-wrong-fee: The native check rejects an independently supplied wrong implementation.
+  held    pass-original: Native checks pass the unchanged original implementation.
+

@@ -1,0 +1,93 @@
+{
+  "case": "project-setup-node-project",
+  "skill": "project-setup",
+  "question": "Does setup refresh an existing partial recipe and prove readiness while preserving manual content?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "limited",
+      "what": "The live gateway remains outside coverage.",
+      "must_say_any": [
+        "gateway",
+        "payment",
+        "mapped",
+        "selected behavior"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "Setup preserves the product and existing notes and executes strict verification.",
+    "edits_allowed": [
+      "VERIFY.md",
+      "FEATURES.md",
+      "AGENTS.md",
+      ".gitignore",
+      ".verify-state.json",
+      "verification/*",
+      "tests/test_total.js"
+    ],
+    "must_contain": [
+      {
+        "id": "strict",
+        "kind": "outcome",
+        "what": "Retained state is strict green.",
+        "path": ".verify-state.json",
+        "regex": "\"strict\"\\s*:\\s*true"
+      },
+      {
+        "id": "green",
+        "kind": "outcome",
+        "what": "Checks passed.",
+        "path": ".verify-state.json",
+        "regex": "\"result\"\\s*:\\s*\"green\""
+      },
+      {
+        "id": "manual",
+        "kind": "outcome",
+        "what": "Existing coverage limit remains.",
+        "path": "VERIFY.md",
+        "regex": "MANUAL: live payment gateway"
+      },
+      {
+        "id": "instructions",
+        "kind": "outcome",
+        "what": "Existing instructions remain.",
+        "path": "AGENTS.md",
+        "regex": "MANUAL: Keep amounts in integer cents"
+      },
+      {
+        "id": "proof",
+        "kind": "outcome",
+        "what": "Actual rejection evidence exists.",
+        "path": ".verify-state.json",
+        "regex": "\"failures\"\\s*:\\s*\\{\\s*\""
+      }
+    ],
+    "replays": [
+      {
+        "id": "reject-wrong-fee",
+        "kind": "outcome",
+        "what": "The native check rejects an independently supplied wrong implementation.",
+        "command": [
+          "node",
+          "tests/test_total.js"
+        ],
+        "replace": {
+          "app.js": "reference/wrong.js"
+        },
+        "expect": "fail"
+      },
+      {
+        "id": "pass-original",
+        "kind": "outcome",
+        "what": "Native checks pass the unchanged original implementation.",
+        "replace": {},
+        "command": [
+          "node",
+          "tests/test_total.js"
+        ],
+        "expect": "pass"
+      }
+    ]
+  }
+}

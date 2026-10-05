@@ -55,7 +55,7 @@ the rest of this repo being loaded.
 | `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |
-| `project-setup` | "Set this project up for the skills": drafts VERIFY.md and FEATURES.md from the code and leaves a pointer in CLAUDE.md, once |
+| `project-setup` | "Set this project up for the skills": discovers native commands, refreshes a small verification seed, preserves manual notes and proves local readiness; optional CI setup |
 | `onboard-system` | "I've never seen this codebase, get me up to speed": runs project-setup, feature-map, arch-map and code-history in one pass, then checks the account against a real prediction, so the whole picture is on disk before the first real task starts |
 | `recall` | "Where were we / catch me up": a short capsule of the current state and the next step, rebuilt from disk |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |

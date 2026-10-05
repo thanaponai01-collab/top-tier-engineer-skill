@@ -10,6 +10,8 @@ Subdirectory archive export uses the Git root; correct committed example passes 
 
 Pinned GitHub Actions example executes fresh proof and uploads commit-bound artifacts | proven ([hosted run](https://github.com/thanaponai01-collab/top-tier-engineer-skill/actions/runs/37315843975): strict green, caught mutation, inspected report/state/log; 350 tests pass on Ubuntu) | 7011929
 
+Project setup refreshes partial recipes, preserves manual notes and obtains strict rejection proof using native Python and Node checks | proven (live cases, independent wrong/original replays, unchanged second-pass setup; 350 tests) | this slice
+
 ## Deferred
 
 - Automatic mutation generation | one explicitly chosen mutation is enough for this mode | revisit when a requested challenge needs multiple mutation operators

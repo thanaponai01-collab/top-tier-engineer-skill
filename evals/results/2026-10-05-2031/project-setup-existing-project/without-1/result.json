@@ -1,0 +1,78 @@
+{
+  "case": "project-setup-existing-project",
+  "skill": "project-setup",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Retained state is strict green.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "Checks passed.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "Existing coverage limit remains.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Existing instructions remain.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Actual rejection evidence exists.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/AGENTS.md",
+      "fixture/VERIFY.md"
+    ],
+    "added": [
+      "fixture/FEATURES.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.18566119999999997,
+  "turns": 13,
+  "seconds": 33.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

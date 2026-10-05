@@ -1,0 +1,10 @@
+PASS  project-setup-existing-project  [project-setup]  1/1 found, score 1.00 (needs 1.00)
+  found   limited: The live gateway remains outside coverage.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  Retained state is strict green. — .verify-state.json is not there
+  FAILED  Checks passed. — .verify-state.json is not there
+  ok      Existing coverage limit remains. — 
+  ok      Existing instructions remain. — 
+  FAILED  Actual rejection evidence exists. — .verify-state.json is not there

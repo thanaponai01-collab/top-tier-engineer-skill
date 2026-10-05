@@ -1,4 +1,29 @@
-# Verification workflow evaluation
+# Project setup evaluation
+
+Follow-up on 2026-10-05: project-setup now refreshes an existing partial recipe, discovers native
+commands, preserves manual notes and validates selected behavior through the unchanged verify-loop.
+
+| Case | Without skill | With skill |
+|---|---|---|
+| Python existing partial setup | preserved notes and ran native checks; no retained strict proof | passed strict/rejection/preservation gates |
+| Node CommonJS partial setup | not run | passed strict/rejection/preservation gates |
+
+The Python baseline is `evals/results/2026-10-05-2031/`; with-skill evidence is
+`evals/results/2026-10-05-2033/`. Node pilot evidence is `evals/results/2026-10-05-2035/`.
+The pilot repeated validation but did not fully repeat discovery; the instruction was clarified.
+The final Node run (`evals/results/2026-10-05-2037/`) re-read project inputs and confirmed unchanged
+setup hashes and a single instruction pointer. Both native checks independently rejected supplied
+wrong implementations and passed originals; final-workdir-grade.txt retains those replay results.
+Product files, original tests and manual notes were preserved in both successful runs.
+
+This shows completion of a reusable proof workflow, not superior diagnosis. The plain Python agent
+also preserved notes and made useful setup files. Samples are one run each, use phrase/artifact
+grading without a semantic judge, and do not establish reliability across arbitrary stacks.
+Go, Rust, dependency-bearing monorepos, missing prerequisites, services and CI provisioning were
+not live-tested in this setup evaluation; the skill reports such gaps explicitly. CI runner evidence
+below remains separate. All 350 repository tests, 37 focused eval-grader tests and skill validation pass.
+
+## Earlier verification workflow evaluation
 
 Fresh-CI follow-up on 2026-10-05. Both the plain agent and the with-skill agent rejected
 a weak check despite a copied local green state. The with-skill run invoked the new CI

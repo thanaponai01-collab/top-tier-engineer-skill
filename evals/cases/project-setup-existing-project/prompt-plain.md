@@ -1,0 +1,1 @@
+Make this existing project ready for reusable local verification. Update missing setup, validate the result, then run setup again to check it preserves completed work. Leave product behavior and existing manual notes intact. Do not commit, push, configure CI or deploy. Report what was executed, readiness and coverage limits.
