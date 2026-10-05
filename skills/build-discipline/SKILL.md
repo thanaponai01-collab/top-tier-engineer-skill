@@ -49,6 +49,15 @@ fact. A vague proof line gets sharpened out loud, never quietly swapped for an e
 
 *Test:* the proof line is in `BUILD.md` before the first edit, as a command plus expected output.
 
+When the project has VERIFY.md or the task asks for reusable verification, read the installed
+verify-loop SKILL.md and VERIFY_FORMAT.md if available. Put the slice's requirement-backed check,
+actual entry point, declared oracles and adjacent regressions in the affected recipe before the
+product change. BUILD.md records progress and evidence location; VERIFY.md owns check definitions.
+Keep the BUILD.md proof/status entry even for one slice; an existing recipe does not replace it.
+Use the bundled helper from the installed skill, not an assumed path in the target repository.
+Record the existing bug or missing behavior's specific rejection through the helper, then freeze
+the baseline. A missing dependency or startup failure cannot prove the behavioral check.
+
 ### 2. Build
 - **Smallest change that moves the proof line.** Delete or reuse before adding. Simple first; a known
   limit becomes a Deferred entry, not structure built on fear.
@@ -78,6 +87,15 @@ end · **suspected** = neither.*
   handle.
 - Never fix a failing proof by weakening it. Fix the code, or raise it if the requirement looks
   wrong.
+- For a reusable recipe, run verify-loop after each slice and finish with `run --strict`, then
+  current green `status`. If no behavioral rejection was retained, challenge a spec-backed product
+  mistake in scratch copies and finish strict verification again. Changed check definitions need
+  fresh proof and a new baseline under verify-loop's rules; a prose fail-proof note is insufficient.
+  Keep prior mapped behavior green and report unmapped coverage. New features may use a completed
+  check before implementation or a controlled mutation afterwards; never weaken expectations.
+- If verify-loop is unavailable, use native checks and retain real negative/passing outputs.
+  Report the missing strict evidence explicitly. Ordinary slices without a reusable recipe still
+  use their direct proof line; no mandatory setup or skill chain is introduced.
 - If nothing here can run it (no runtime, missing credentials), say so **in bold at the top** and add
   "prove in the first environment that can run it" to Deferred.
 
@@ -103,3 +121,5 @@ previous one is unproven.
 
 What now runs that didn't before, and what was deferred. A table: slice, proof line, proven or
 traced, what the user can now do. Diffs and proof output after.
+Before reporting completion, confirm BUILD.md contains this slice's command, result and commit
+or uncommitted status, alongside current verification evidence when a reusable recipe is used.

@@ -1,0 +1,97 @@
+{
+  "case": "debug-protocol-regression-proof",
+  "skill": "debug-protocol",
+  "question": "Does the skill carry a requested change through reusable rejection proof and strict completion?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "limited",
+      "what": "The live gateway remains outside coverage.",
+      "must_say_any": [
+        "gateway",
+        "payment",
+        "mapped",
+        "selected behavior"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "Setup preserves the product and existing notes and executes strict verification.",
+    "edits_allowed": [
+      "VERIFY.md",
+      "FEATURES.md",
+      "AGENTS.md",
+      ".gitignore",
+      ".verify-state.json",
+      "verification/*",
+      "tests/test_total.py",
+      "app.py",
+      "BUILD.md",
+      "tests/*",
+      "evidence/*",
+      ".verify-evidence/*"
+    ],
+    "must_contain": [
+      {
+        "id": "strict",
+        "kind": "outcome",
+        "what": "Retained state is strict green.",
+        "path": ".verify-state.json",
+        "regex": "\"strict\"\\s*:\\s*true"
+      },
+      {
+        "id": "green",
+        "kind": "outcome",
+        "what": "Checks passed.",
+        "path": ".verify-state.json",
+        "regex": "\"result\"\\s*:\\s*\"green\""
+      },
+      {
+        "id": "manual",
+        "kind": "outcome",
+        "what": "Existing coverage limit remains.",
+        "path": "VERIFY.md",
+        "regex": "MANUAL: live payment gateway"
+      },
+      {
+        "id": "proof",
+        "kind": "outcome",
+        "what": "Actual rejection evidence exists.",
+        "path": ".verify-state.json",
+        "regex": "\"failures\"\\s*:\\s*\\{\\s*\""
+      }
+    ],
+    "replays": [
+      {
+        "id": "reject-wrong-fee",
+        "kind": "outcome",
+        "what": "The native check rejects an independently supplied wrong implementation.",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "replace": {
+          "app.py": "reference/wrong.py"
+        },
+        "expect": "fail"
+      },
+      {
+        "id": "pass-original",
+        "kind": "outcome",
+        "what": "Native checks pass the unchanged original implementation.",
+        "replace": {},
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "expect": "pass"
+      }
+    ]
+  }
+}

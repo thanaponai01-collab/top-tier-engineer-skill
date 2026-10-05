@@ -1,0 +1,11 @@
+PASS  build-discipline-verified-slice  [build-discipline]  1/1 found, score 1.00 (needs 1.00)
+  found   limited: The live gateway remains outside coverage.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      Retained state is strict green. — 
+  ok      Checks passed. — 
+  ok      Existing coverage limit remains. — 
+  ok      Actual rejection evidence exists. — 
+  ok      The native check rejects an independently supplied wrong implementation. — 
+  ok      Native checks pass the unchanged original implementation. — 

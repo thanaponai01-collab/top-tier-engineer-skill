@@ -1,0 +1,135 @@
+[
+  {
+    "case": "debug-protocol-regression-proof",
+    "skill": "debug-protocol",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:debug-protocol"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Retained state is strict green.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Checks passed.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Actual rejection evidence exists.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Native checks pass the unchanged original implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json",
+        "fixture/tests/test_checkout_entry.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.2595442,
+    "turns": 18,
+    "grade_text": "PASS  debug-protocol-regression-proof  [debug-protocol]  1/1 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 44.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-distant-cause",
+    "skill": "debug-protocol",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:debug-protocol"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced the failure before changing any code",
+        "ok": true,
+        "detail": "ran it: cd fixture 2>/dev/null || cd C:/Users/thana/AppData/Local/Temp/tte-eval-0ukdq9mj/fixture; pwd; ls -la; python "
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.16309680000000001,
+    "turns": 6,
+    "grade_text": "PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)\n  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens\n  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it\n  found   proven-both-directions: the cause was proven in both directions, not just observed once\n  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made",
+    "seconds": 22.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

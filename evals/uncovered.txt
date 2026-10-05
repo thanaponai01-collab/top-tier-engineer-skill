@@ -10,7 +10,6 @@ agent-prove
 agent-release
 agent-trace
 arch-map
-build-discipline
 code-history
 evolve-maintain
 explain

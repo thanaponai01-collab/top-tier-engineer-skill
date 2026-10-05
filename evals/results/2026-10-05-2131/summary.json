@@ -1,0 +1,234 @@
+[
+  {
+    "case": "build-discipline-verified-slice",
+    "skill": "build-discipline",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:build-discipline"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Retained state is strict green.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Checks passed.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Actual rejection evidence exists.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Native checks pass the unchanged original implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py"
+      ],
+      "added": [
+        "fixture-evidence/after-fix.txt",
+        "fixture-evidence/before-entrypoint.txt",
+        "fixture-evidence/before-fix.txt",
+        "fixture-evidence/verify-rejected.txt",
+        "fixture-evidence/verify-strict-pass.txt",
+        "fixture/.verify-state.json",
+        "fixture/tests/test_checkout_entry.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.3306952,
+    "turns": 21,
+    "grade_text": "PASS  build-discipline-verified-slice  [build-discipline]  1/1 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 57.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-regression-proof",
+    "skill": "debug-protocol",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left evidence/pass-after-fix.txt alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "left evidence/rejection-before-fix.txt alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "Retained state is strict green.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Checks passed.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Actual rejection evidence exists.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Native checks pass the unchanged original implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py"
+      ],
+      "added": [
+        "fixture/evidence/pass-after-fix.txt",
+        "fixture/evidence/rejection-before-fix.txt",
+        "fixture/tests/test_checkout_entry.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.19853040000000002,
+    "turns": 14,
+    "grade_text": "PASS  debug-protocol-regression-proof  [debug-protocol]  1/1 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 35.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-distant-cause",
+    "skill": "debug-protocol",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced the failure before changing any code",
+        "ok": true,
+        "detail": "ran it before changing any code: cd fixture && python report.py"
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/parse.py",
+        "fixture/test_totals.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1692908,
+    "turns": 10,
+    "grade_text": "PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)\n  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens\n  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it\n  found   proven-both-directions: the cause was proven in both directions, not just observed once\n  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made",
+    "seconds": 28.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

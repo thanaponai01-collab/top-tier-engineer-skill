@@ -50,7 +50,7 @@ the rest of this repo being loaded.
 | `plan-work` | "Plan this / break it down / what can run in parallel?": ordered slices, each with a check and expected result worked out beforehand, the ones that are safe to run at the same time marked after opening the shared code, and a full-suite check after every merge |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
 | `issue-handoff` | "File these as issues": a work doc, or the chat, into tracked issues, nothing dropped |
-| `build-discipline` | "Build it": small, proven, wired increments |
+| `build-discipline` | "Build it": small, proven, wired increments; reusable recipes finish with verify-loop evidence while BUILD.md retains slice progress |
 | `verify-loop` | "Check your own work until it passes": discovers a project recipe without manual setup, records a real failed check before trusting a strict pass, keeps reusable checks in VERIFY.md, and flags stale evidence, changed oracles and unmapped tests (bundled scripts) |
 | `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
@@ -60,7 +60,7 @@ the rest of this repo being loaded.
 | `recall` | "Where were we / catch me up": a short capsule of the current state and the next step, rebuilt from disk |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |
-| `debug-protocol` | "It's broken and I don't know why" |
+| `debug-protocol` | "It's broken and I don't know why": proves the cause; an authorized fix carries the reproduction into reusable regression verification |
 | `perf-optimize` | "It's slow / feels clunky / will this query scale?" |
 | `threat-model` | "Is this secure / can it be abused?" |
 | `senior-review` | "Is this code good?", "what's the biggest gap?" |

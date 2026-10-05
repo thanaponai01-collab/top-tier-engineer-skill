@@ -1,0 +1,96 @@
+[
+  {
+    "case": "build-discipline-verified-slice",
+    "skill": "build-discipline",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left evidence/after-fix.txt alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "left evidence/before-fix.txt alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "Retained state is strict green.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Checks passed.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Actual rejection evidence exists.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Native checks pass the unchanged original implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py",
+        "fixture/tests/test_total.py"
+      ],
+      "added": [
+        "fixture/evidence/after-fix.txt",
+        "fixture/evidence/before-fix.txt",
+        "fixture/tests/test_checkout_entry.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1678838,
+    "turns": 5,
+    "grade_text": "PASS  build-discipline-verified-slice  [build-discipline]  1/1 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 29.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

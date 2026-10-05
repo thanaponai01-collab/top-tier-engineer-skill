@@ -1,4 +1,30 @@
-# Project setup evaluation
+# Build and debug verification integration
+
+Follow-up on 2026-10-05: build-discipline now keeps slice progress in BUILD.md while reusable
+VERIFY.md recipes finish through verify-loop. Debug-protocol separates diagnosis-only completion
+from authorized fixes, carrying the proven cause into retained regression rejection and strict proof.
+The verifier itself is unchanged; native-check fallbacks and independent skill use remain available.
+
+| Case | Without skill | Final with-skill |
+|---|---|---|
+| build-discipline-verified-slice | product checks passed; retained strict proof absent | passed strict proof, BUILD.md and independent wrong/original replays |
+| debug-protocol-regression-proof | not run | passed retained rejection, strict proof and independent wrong/original replays |
+| debug-protocol-distant-cause | not rerun | proved cause and left diagnosis-only source unchanged |
+
+Baseline: `evals/results/2026-10-05-2130/`. Pilot: `evals/results/2026-10-05-2131/`.
+The build pilot omitted BUILD.md; the instruction and artifact gate were tightened. Its initial
+pass predates that gate and is not the final acceptance result. The debug pilot did not load its
+skill because the existing description contained invalid YAML. That frontmatter was repaired.
+Final build: `evals/results/2026-10-05-2132/`; final debug cases:
+`evals/results/2026-10-05-2133/`. Diagnosis-only preservation was also checked against the retained
+workspace; final-workdir-grade.txt records that result. Existing gateway limits remain intact.
+
+These are workflow-completion smoke samples, not diagnostic superiority or a reliability estimate.
+The plain build agent also implemented working behavior. Phrase/artifact grading was used, without
+semantic judging. The new fixtures exercise a CLI entry point and native Python checks; service,
+security and performance integrations remain future work. All 350 unit tests, 37 focused eval-grader tests and skill frontmatter validation pass.
+
+## Earlier project setup evaluation
 
 Follow-up on 2026-10-05: project-setup now refreshes an existing partial recipe, discovers native
 commands, preserves manual notes and validates selected behavior through the unchanged verify-loop.

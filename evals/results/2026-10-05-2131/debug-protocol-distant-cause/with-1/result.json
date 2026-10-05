@@ -1,0 +1,45 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": true,
+      "detail": "ran it before changing any code: cd fixture && python report.py"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py",
+      "fixture/test_totals.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1692908,
+  "turns": 10,
+  "seconds": 28.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

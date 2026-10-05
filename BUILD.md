@@ -12,6 +12,8 @@ Pinned GitHub Actions example executes fresh proof and uploads commit-bound arti
 
 Project setup refreshes partial recipes, preserves manual notes and obtains strict rejection proof using native Python and Node checks | proven (live cases, independent wrong/original replays, unchanged second-pass setup; 350 tests) | this slice
 
+Build/debug handoffs retain rejection proof and finish strict green while preserving diagnosis-only scope and BUILD.md progress | proven (live build and debug cases, independent wrong/original replays and read-only diagnosis gate) | this slice
+
 ## Deferred
 
 - Automatic mutation generation | one explicitly chosen mutation is enough for this mode | revisit when a requested challenge needs multiple mutation operators
