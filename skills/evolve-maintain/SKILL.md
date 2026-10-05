@@ -1,6 +1,6 @@
 ---
 name: evolve-maintain
-description: Change a running system safely: bug fixes with a known cause, incidents, dependency upgrades, refactors, or deprecations. Use for "the system broke", "upgrade X", "refactor this", "remove this old API".
+description: 'Change a running system safely: bug fixes with a known cause, incidents, dependency upgrades, refactors, or deprecations. Use for "the system broke", "upgrade X", "refactor this", "remove this old API".'
 ---
 
 # Maintenance & Evolution
@@ -44,6 +44,14 @@ misclassified; go back to the table.
 
 *Test:* the reach you named matches the class you chose. A "fix" that reaches contracts or stored data was misclassified — go back to the table.
 
+When VERIFY.md exists or reusable regression verification is requested, read the installed
+`verify-loop` skill and its VERIFY_FORMAT.md alongside the build handoff. Map the affected
+contracts and adjacent callers before editing: the reproduced bug for Fix, compatibility cases
+for Adapt, and preserved behavior for Improve. Retain a meaningful rejection, freeze the checks,
+and finish with strict, current green status; the check baseline freezes expectations, not the
+implementation being refactored. Diagnosis-only work reports the cause and proposed regression.
+If verify-loop is unavailable, retain direct before/after and rejection evidence with its limits.
+
 ## 3. Treat
 The change is `build-discipline`'s work, and that phrase is also the fallback if the skill
 isn't loaded here: smallest slice, wired, proof line run, one revertable commit. Maintenance
@@ -67,6 +75,7 @@ run that shows it never loads.
 end · **suspected** = neither.*
 
 ## 4. Strengthen
+
 A fix that closes only this instance gets paid for again.
 - Every Fix leaves a regression test named after the bug.
 - Where the same *kind* of failure could happen elsewhere, raise it to an invariant or a contract

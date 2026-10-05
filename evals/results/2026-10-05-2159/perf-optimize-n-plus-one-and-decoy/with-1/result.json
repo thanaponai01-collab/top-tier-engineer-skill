@@ -1,0 +1,38 @@
+{
+  "case": "perf-optimize-n-plus-one-and-decoy",
+  "skill": "perf-optimize",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:perf-optimize"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.17354,
+  "turns": 9,
+  "seconds": 29.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

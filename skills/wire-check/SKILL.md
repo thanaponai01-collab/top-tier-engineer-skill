@@ -48,6 +48,14 @@ Walk them in order. The first broken link is the finding; later links are *block
    4. Fire the real trigger (request, CLI command, event) and watch the effect.
 3. **Repair.** Ship the connecting code in the same response.
 
+For a requested repair with an existing VERIFY.md, or requested reusable wiring checks, read
+the installed `verify-loop` skill and its VERIFY_FORMAT.md. Map a check that fires the real
+request, command or event and observes its effect; retain its rejection on the broken link
+before repair, then finish with strict, current green status. If the original break is no longer
+available, challenge the connection in a scratch copy under verify-loop's rules. An inventory
+or diagnosis alone ends with findings and proposed checks. If verify-loop is unavailable, retain
+direct failing/passing output and state the verification limit.
+
 *Test:* for every link you can name which of the four steps you actually reached.
 
 ## Whole-system mode

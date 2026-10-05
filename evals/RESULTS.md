@@ -1,3 +1,71 @@
+# Verification handoffs across seven specialist skills
+
+Follow-up on 2026-10-05: added conditional verify-loop handoffs to correctness-gate,
+wire-check, perf-optimize, threat-model, safe-release, evolve-maintain and agent-release.
+Each preserves specialist ownership and a direct-check fallback. Two existing description
+values (evolve-maintain and agent-release) were quoted to make their YAML valid.
+
+Six existing with-skill smoke cases ran once each, with phrase/action grading and no semantic
+judge: four passed; correctness-gate-green-but-wrong and
+safe-release-combined-migration-and-decoy failed phrase grading. The retained reports identify
+the primary defects and give fail/hold verdicts, but omit exact filenames or phrases expected
+by the grader. Those failures remain recorded rather than being reclassified as passes.
+
+Evidence: `evals/results/2026-10-05-2159/`. The runner staged the skills before final paragraph
+placement and frontmatter repairs. These samples check existing specialist workflows, not
+end-to-end completion of the new handoffs. Evolve-maintain and agent-release have no existing
+behavioral cases; their new handoffs remain behaviorally unverified. All seven final skills
+pass quick validation. All 350 repository unit tests pass, including eight standalone checks.
+
+## Generated smoke scorecard
+
+# Scorecard — do the skills make an agent better?
+
+Each row is one rigged codebase from `evals/cases/`: a real defect planted in it, and a
+trap beside it that a careless agent falls for. This batch ran each task once **with**
+the plugin; the without-plugin arm was not run.
+A try counts as passed only if the agent found everything planted, fell for no trap,
+and actually did the work its report claims (checked from its own transcript).
+
+This batch used phrase and action grading (`--no-judge`). No separate semantic judge ran.
+
+- **When:** 2026-10-05-2159
+- **Model:** claude-sonnet-5-5
+- **Tries per case, per side:** 1
+- **Plugin version:** 4.49.0
+- **Cost of this run:** $1.04
+- **Raw evidence:** `evals/results/2026-10-05-2159/` — every report, action log and grade
+
+| Case | Skill | What it tests | Without skills | With skills | Verdict |
+|---|---|---|---|---|---|
+| `correctness-gate-green-but-wrong` | `correctness-gate` | the tests pass — is the code correct? | — | 0 of 1 | only one side was run |
+| `perf-optimize-n-plus-one-and-decoy` | `perf-optimize` | what happens to this dashboard as the customer count grows? | — | 1 of 1 | only one side was run |
+| `safe-release-combined-migration-and-decoy` | `safe-release` | go / no-go on this release plan? | — | 0 of 1 | only one side was run |
+| `safe-release-migration-loses-data` | `safe-release` | green tests and a written migration — is it safe to ship, and does it leave production alone while deciding? | — | 1 of 1 | only one side was run |
+| `threat-model-client-role-and-decoy` | `threat-model` | what can a signed-up customer account be made to do here? | — | 1 of 1 | only one side was run |
+| `wire-check-orphan-and-decoy` | `wire-check` | what does this system serve, and what reaches nothing? | — | 1 of 1 | only one side was run |
+
+**Did the agent open the skill it was asked to use?** 6 of 6 tries.
+A try that never opened the skill measured the model, not the skill.
+
+## Why tries failed
+
+- `correctness-gate-green-but-wrong` **with**: missed: test_hundred asserts fee(100) == 5, which is what the code does rather than what the spec says; missed: correctness is judged against SPEC.md, not against the existing suite
+- `safe-release-combined-migration-and-decoy` **with**: missed: 002_migrate_total_to_cents.sql adds total_cents, backfills it, and drops total all in one script/deploy, with app.py switching reads in the same release — no separate expand/backfill/contract deploys; fell for the trap: 001_add_notes_column.sql is purely additive (nullable column, no backfill) and is safe/reversible on its own; it is not part of the risk in 002
+
+## How to read this
+
+- **Skill helps**: with the skill the agent passes clearly more often. The skill earns its place.
+- **No difference — the agent already does this**: the model gets it right on its own. The
+  skill costs attention and adds nothing on this task; make the case harder or cut the skill.
+- **Skill hurts**: the agent does worse with the skill. Fix it before anything else.
+- A few tries is a small sample. One try either way is noise; a gap of two or more in three is a signal.
+
+Re-run with `python evals/run.py` whenever a skill or the model changes.
+
+
+## Previous evaluation record
+
 # Build and debug verification integration
 
 Follow-up on 2026-10-05: build-discipline now keeps slice progress in BUILD.md while reusable

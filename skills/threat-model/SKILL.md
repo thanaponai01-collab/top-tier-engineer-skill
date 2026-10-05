@@ -66,6 +66,15 @@ not a limit:
   repeats an effect it shouldn't. `agent-prove` runs the resulting cases as tasks that must pass before
   release.
 
+For requested fixes with an existing VERIFY.md, or requested reusable abuse checks, read the
+installed `verify-loop` skill and its VERIFY_FORMAT.md. Map policy-backed assertions through
+the real access surfaces, including adjacent authorized behavior. Prove the defense check
+rejects a vulnerable implementation in the local/test instance, restore it, and retain strict,
+current green evidence. The attack being denied is the successful product result; the negative
+verification run must fail because the defense is broken. Controlled mutations stay in scratch
+copies with fake accounts and data. Assessment-only work reports findings and test specs. If
+verify-loop is unavailable, keep direct rejection/passing output and disclose coverage limits.
+
 ### 4. Prove
 For attacks on the most valuable assets, run them: forge the token, send the crafted input, fire
 the concurrent requests. Run them only against a local or test instance of the system you were asked

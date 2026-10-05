@@ -1,0 +1,42 @@
+{
+  "case": "safe-release-combined-migration-and-decoy",
+  "skill": "safe-release",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "phrases",
+  "phrase_passed": false,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:safe-release"
+  ],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "002_migrate_total_to_cents.sql adds total_cents, backfills it, and drops total all in one script/deploy, with app.py switching reads in the same release \u2014 no separate expand/backfill/contract deploys"
+  ],
+  "tripped": [
+    "001_add_notes_column.sql is purely additive (nullable column, no backfill) and is safe/reversible on its own; it is not part of the risk in 002"
+  ],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1648362,
+  "turns": 10,
+  "seconds": 25.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

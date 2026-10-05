@@ -1,6 +1,6 @@
 ---
 name: agent-release
-description: Ship an AI agent with the controls it needs and keep proving it after launch: kill switch, spend and step caps, pinned model, logged runs, staged rollout, and production failures turned into new evals. Use when an agent that passed its evals is about to go live, or when a live agent needs monitoring.
+description: 'Ship an AI agent with the controls it needs and keep proving it after launch: kill switch, spend and step caps, pinned model, logged runs, staged rollout, and production failures turned into new evals. Use when an agent that passed its evals is about to go live, or when a live agent needs monitoring.'
 ---
 
 # Agent Release
@@ -28,6 +28,15 @@ has met its bar.
    the agent's writable files; a recorded grant alone cannot enforce access.
 
 *Test:* you can turn it off and roll the prompt back, and say each in one sentence.
+
+When VERIFY.md exists or reusable release-control verification is requested, read the installed
+`verify-loop` skill and its VERIFY_FORMAT.md. Map executable checks for the real kill switch,
+step/spend caps and log redaction. Exercise cap hits and shutdown with fake tools and bounded
+test workloads; prove each mapped control check rejects a broken control in scratch before
+freezing it and finishing with strict, current green status. Keep secrets out of captured output.
+Agent-prove still owns repeated behavioral evaluation; safe-release owns deployment and rollback.
+A readiness review reports gaps without launching the agent. If verify-loop is unavailable,
+retain direct control-check rejection/passing output and name the missing strict evidence.
 
 ## After it is live
 

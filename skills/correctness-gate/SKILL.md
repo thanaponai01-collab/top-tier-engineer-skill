@@ -37,6 +37,15 @@ missing. Never invent an oracle that just describes what the code already does.
 row, counter, lock, queue slot), write the check-then-claim as its own property: "a concurrent
 caller sees the before state or the after state, never half of it."
 
+When VERIFY.md exists or reusable verification is requested, read the installed
+`verify-loop` skill and its VERIFY_FORMAT.md. Map this gate's requirement-backed oracles,
+real-run checks and adjacent regressions into the recipe; let verify-loop retain behavioral
+rejection evidence, freeze the checks and finish with strict, current green status. This gate
+still owns oracle quality, mutation breadth and the verdict; a green recipe covers only mapped
+claims. A review-only request reports findings without fixing the product. If verify-loop is
+unavailable, run the checks directly, retain rejection/passing output and disclose the missing
+strict evidence.
+
 ### 3. Attack
 Build tests as an adversary, in this priority order:
 1. **Invariant tests:** one per requirement that must never break.
@@ -64,6 +73,7 @@ For every error path the code claims to handle: trigger it and assert the struct
 *Test:* you can list the mutations you made and what the suite did for each. "I would have caught it" is not a mutation result.
 
 ### 5. Verdict
+
 - Open with pass or fail and the one reason that decided it.
 - What was proven, what was only reasoned, and what this gate can't see (environments not run,
   scale not reached, integrations stubbed).

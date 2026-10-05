@@ -53,6 +53,16 @@ return, and `git revert` doesn't un-corrupt a bad backfill.
    A rollback is a failed release, not successful completion. Missing signals or observation time
    leaves the release unverified. Record artifact, environment, window, signals and final outcome.
 
+When VERIFY.md exists or reusable release verification is requested, read the installed
+`verify-loop` skill and its VERIFY_FORMAT.md. Reuse behavior checks for step 7 against the target
+instance, with a read-only identity check for its artifact/version and configuration. Record the
+environment and tested identity in retained evidence; run only actions within the release grant.
+Prove checks can reject wrong behavior in a disposable test instance, never by breaking a live
+release. Finish with strict, current green status where executable; inaccessible target checks
+remain unverified. Safe-release still owns authority, rollback proof and the watch window. For a
+release review, report the go/no-go findings without deployment. If verify-loop is unavailable,
+retain direct target-check output and name the missing strict evidence.
+
 ## Changing stored data
 
 1. **Inventory.** Current shape, row count, constraints, foreign keys, and **every caller that reads

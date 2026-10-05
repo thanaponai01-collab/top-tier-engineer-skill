@@ -30,6 +30,16 @@ Pick the mode:
    revert. Record failed attempts so nobody repeats them.
 6. **Guard** every kept gain with a test, assertion or alert that fails when it slips.
 
+When VERIFY.md exists or reusable performance verification is requested, read the installed
+`verify-loop` skill and its VERIFY_FORMAT.md. Register the budget check with adjacent correctness
+checks, and freeze its expectation and workload inputs as declared oracles. Record input size,
+warm/cold state, concurrency and sampling conditions; retain a specific threshold rejection
+on the slow state or a controlled slowdown in scratch, then finish strict verification with
+current green status. Keep the measured performance baseline separate from verify-loop's check
+baseline. Noisy measurements remain inconclusive rather than being retried until green. Trace-only
+work ends with findings. If verify-loop is unavailable, retain direct measurements and rejection/
+passing output, with the conditions and evidence limits.
+
 *Test:* every target you changed came from a profile line you can quote.
 
 Stop when budgets are met, the next gain costs more complexity than it's worth, or the rest is out of

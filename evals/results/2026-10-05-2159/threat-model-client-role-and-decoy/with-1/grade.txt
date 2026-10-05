@@ -1,0 +1,6 @@
+PASS  threat-model-client-role-and-decoy  [threat-model]  3/3 found, score 1.00 (needs 1.00)
+  found   role-from-client-body: get_invoice reads role from body.get("role", user.role) instead of only trusting the session's own role, so the caller can supply its own role
+  found   idor-any-invoice: a plain authenticated customer, sending {"role": "admin"} in the body, can read another customer's invoice
+  found   fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends
+  held    prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md — a public catalog mirroring what's already posted in stores, not a finding
+

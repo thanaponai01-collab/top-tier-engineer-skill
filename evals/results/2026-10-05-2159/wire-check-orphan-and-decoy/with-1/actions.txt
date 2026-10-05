@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:wire-check
+  2. Glob: **/*
+  3. Bash: cd fixture; for f in app.py routes.py scheduler.py settings.py handlers/*.py; do echo "=== $f"; cat -n $f; done
+  4. Bash: cd fixture; python app.py; python -c " import app print(app.dispatch('/export'), app.dispatch('/digest'))"; python scheduler.py; echo rc=$?; python -c " import…

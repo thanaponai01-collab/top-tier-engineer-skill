@@ -1,0 +1,47 @@
+{
+  "case": "correctness-gate-green-but-wrong",
+  "skill": "correctness-gate",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "phrases",
+  "phrase_passed": false,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:correctness-gate"
+  ],
+  "found": 1,
+  "total": 3,
+  "missed": [
+    "test_hundred asserts fee(100) == 5, which is what the code does rather than what the spec says",
+    "correctness is judged against SPEC.md, not against the existing suite"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "ran the test suite itself before changing anything, instead of trusting that green means correct",
+      "ok": true,
+      "detail": "ran it: cd fixture && python -m unittest -q 2>&1 | tail -5; python -c \" from shipping import fee for t in (0,99.99,100"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.16372240000000002,
+  "turns": 8,
+  "seconds": 22.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

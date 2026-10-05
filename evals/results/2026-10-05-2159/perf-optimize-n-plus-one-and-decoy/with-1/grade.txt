@@ -1,0 +1,7 @@
+PASS  perf-optimize-n-plus-one-and-decoy  [perf-optimize]  3/3 found, score 1.00 (needs 1.00)
+  found   n-plus-one-customer-totals: customer_totals runs one SELECT SUM(...) per customer inside a Python loop instead of a single aggregate query
+  found   unbounded-even-if-fast-today: this is a finding regardless of today's speed, because query count grows with the customer count
+  found   fix-single-aggregate-query: the fix is one query with a JOIN/GROUP BY (or equivalent batch fetch) instead of a query per customer
+  held    recent-orders-is-fine: recent_orders sorts with ORDER BY ... LIMIT over an indexed column (idx_orders_created_at); EXPLAIN QUERY PLAN shows an index scan, not a full table sort, so it is not a scaling finding
+  held    not-excused-by-its-own-index: customer_totals hitting idx_orders_customer_id on each call does not excuse the N+1 pattern; the finding is about the number of round trips, not whether each one is indexed
+
