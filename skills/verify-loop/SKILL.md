@@ -7,6 +7,10 @@ description: Build a runnable check from the requested outcome, prove it rejects
 
 Build the check before the work, make it hard to fool, and loop until it passes.
 
+For a saved recipe, completion means a recorded expected rejection, a frozen baseline,
+`run --strict` and current green `status`. Repairing an empty check and fixing the requested
+product defect are authorized parts of this task; complete both before reporting done.
+
 ## Start with the task, grow the seed
 
 Read existing project instructions, manifests, tests and real entry points. Reuse the project's
@@ -54,11 +58,15 @@ With an existing VERIFY.md, direct tests supplement the loop, rather than replac
    command, exit code, output and check hashes in .verify-state.json; strict verification requires
    this receipt plus a fail-proof note explaining the bad state. Prose alone cannot satisfy it.
    Prove at least one behavioral check per mapped feature; this does not certify every assertion.
+   Declare `fail-signal:` as a literal expected-versus-actual rejection message before the negative
+   run. Strict verification matches this against retained output and rejects common harness errors.
    Add the finished commands and `oracle:` files before the negative run so the receipt describes
    the same check that will judge the fix. Do this before the work, or on the working state,
    from a clean `git status` or a scratch worktree, and confirm the revert left an empty `git diff`.
    Then freeze the check: `verify.py baseline`. Include the spec, fixtures and smoke helpers under
-   `oracle:`; tests, check commands and the Run recipe are frozen automatically. Keep implementation
+   `oracle:`; tests, directly named script paths, check commands, failure signals and the Run recipe are frozen
+   automatically. Imported helpers and expectation data must be listed explicitly; the runner cannot
+   infer every dependency. Keep implementation
    files out of that list. From here the loop fixes code and never the check.
    A check that cannot fail because it runs nothing (it loads no cases, mocks the thing it tests,
    asserts nothing) is broken machinery, and repairing it before the freeze is part of this step, not

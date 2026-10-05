@@ -387,10 +387,11 @@ class TestVerifyStopGate(unittest.TestCase):
         (Path(tmp) / "VERIFY.md").write_text(
             "## Thing\n- test: `python -c \"from pathlib import Path; "
             "assert Path('ok.flag').exists(), 'missing flag'\"`\n"
-            "- fail-proof: removed flag, assertion failed\n",
+            "- fail-signal: missing flag\n- fail-proof: removed flag, assertion failed\n",
             encoding="utf-8")
         subprocess.run([sys.executable, str(VERIFY), "run", tmp], capture_output=True)
         if green:
+            subprocess.run([sys.executable, str(VERIFY), "baseline", tmp], capture_output=True)
             (Path(tmp) / "ok.flag").write_text("ok", encoding="utf-8")
             subprocess.run([sys.executable, str(VERIFY), "run", tmp, "--strict"], capture_output=True)
 

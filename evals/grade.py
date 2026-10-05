@@ -281,6 +281,14 @@ def check_workdir(case, workdir):
         ok, detail = run_replay(workdir, case["dir"], item)
         checks.append({"id": item["id"], "what": item["what"], "kind": item.get("kind", ""),
                        "gate": item.get("gate", True), "ok": ok, "detail": detail})
+    if spec.get("verify_status"):
+        helper = os.path.join(os.path.dirname(CASES_DIR), "..", "skills", "verify-loop", "scripts", "verify.py")
+        proc = subprocess.run([sys.executable, helper, "status", workdir],
+                              capture_output=True, text=True, timeout=30)
+        checks.append({"id": "strict-current-green", "what": "final helper status is strict, current and green",
+                       "kind": "process", "gate": True,
+                       "ok": proc.returncode == 0 and "VERIFY-STATE: green" in proc.stdout,
+                       "detail": (proc.stdout + proc.stderr).strip()})
     return {"checked": True, "what": spec.get("what", ""), "violations": violations, "checks": checks}
 
 

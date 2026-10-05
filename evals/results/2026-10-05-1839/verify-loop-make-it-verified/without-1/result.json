@@ -1,0 +1,73 @@
+{
+  "case": "verify-loop-make-it-verified",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "VERIFY.md has a fail-proof line saying what was broken to make the check go red",
+      "ok": false,
+      "detail": "VERIFY.md has nothing matching '(?im)^\\\\s*-\\\\s*fail-proof:\\\\s*\\\\S.{10,}'",
+      "workdir": true
+    },
+    {
+      "check": "the finished checks were frozen with verify.py baseline",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "the copy's own tests go red when refund.py is the original sign-flipped version",
+      "ok": false,
+      "detail": "exit 0, expected non-zero",
+      "workdir": true
+    },
+    {
+      "check": "the copy's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "final helper status is strict, current and green",
+      "ok": false,
+      "detail": "VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1579114,
+  "turns": 9,
+  "seconds": 21.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -17,6 +17,7 @@ Two things have to stay true, and the second is the one that matters:
 
 Run them all with `python -m unittest discover tests`.
 """
+import subprocess
 import contextlib, io, os, shutil, sys, tempfile, unittest
 
 from _helpers import ROOT
@@ -337,6 +338,14 @@ class ActionChecks(unittest.TestCase):
     def solve(self):
         shutil.copytree(os.path.join(self.case["dir"], "reference", "solution"),
                         self.work, dirs_exist_ok=True)
+        helper = os.path.join(os.path.dirname(grade.CASES_DIR), "..", "skills", "verify-loop", "scripts", "verify.py")
+        correct = read(os.path.join(self.work, "refund.py"))
+        self.write("refund.py", read(os.path.join(self.case["dir"], "fixture", "refund.py")))
+        for command in ("run", "baseline"):
+            subprocess.run([sys.executable, helper, command, self.work], capture_output=True, check=False, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+        self.write("refund.py", correct)
+        proc = subprocess.run([sys.executable, helper, "run", self.work, "--strict"], capture_output=True, text=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
 
     def write(self, rel, text):
         path = os.path.join(self.work, *rel.split("/"))
@@ -360,7 +369,7 @@ class ActionChecks(unittest.TestCase):
         result = self.result()
         self.assertFalse(result["passed"])
         self.assertEqual(self.unmet(result),
-                         {"fail-proof-recorded", "check-was-frozen", "check-fails-on-the-broken-code"})
+                         {"fail-proof-recorded", "check-was-frozen", "check-fails-on-the-broken-code", "strict-current-green"})
 
     def test_writing_the_fail_proof_line_without_fixing_the_check_fails(self):
         with open(os.path.join(self.work, "VERIFY.md"), "a", encoding="utf-8") as fh:
@@ -380,7 +389,7 @@ class ActionChecks(unittest.TestCase):
                    "import unittest\nclass T(unittest.TestCase):\n    def test_x(self): self.fail('no')\n")
         result = self.result()
         self.assertFalse(result["passed"])
-        self.assertEqual(self.unmet(result), {"check-passes-on-correct-code"})
+        self.assertEqual(self.unmet(result), {"check-passes-on-correct-code", "strict-current-green"})
 
     def test_editing_the_oracle_to_fit_fails(self):
         self.solve()
@@ -389,15 +398,12 @@ class ActionChecks(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertEqual([v["path"] for v in result["workdir"]["violations"]], ["data/refund_cases.json"])
 
-    def test_an_unfrozen_check_is_reported_but_does_not_fail_the_case(self):
-        """check-was-frozen is advisory (gate: false): the skill is ambiguous about it."""
+    def test_an_unfrozen_check_fails_the_case(self):
         self.solve()
         os.remove(os.path.join(self.work, ".verify-state.json"))
         result = self.result()
-        self.assertEqual(self.unmet(result), {"check-was-frozen"}, "it must still be run and shown")
-        self.assertTrue(result["passed"], grade.render(result))
-        self.assertIn("note", grade.render(result))
-        self.assertNotIn("UNMET", grade.render(result))
+        self.assertEqual(self.unmet(result), {"check-was-frozen", "strict-current-green"})
+        self.assertFalse(result["passed"], grade.render(result))
 
     def test_a_gated_check_still_fails_the_case_next_to_an_advisory_one(self):
         self.solve()

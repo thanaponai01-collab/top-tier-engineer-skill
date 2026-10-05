@@ -100,7 +100,7 @@ def parse(text):
             else:
                 j = re.match(r"(?i)^journey:\s*(.+)$", title)
                 cur = {"name": j.group(1) if j else title, "checks": [], "proofs": [],
-                       "journey": bool(j), "members": [], "oracles": []}
+                       "journey": bool(j), "members": [], "oracles": [], "signals": []}
                 features.append(cur)
                 in_blind = False
             continue
@@ -120,6 +120,9 @@ def parse(text):
         if kind in ("fail-proof", "fail proof"):
             if val and not val.upper().startswith("TODO"):
                 cur["proofs"].append(val)
+        elif kind == "fail-signal":
+            if val and not val.upper().startswith("TODO"):
+                cur["signals"].append(val)
         elif kind == "features" and cur["journey"]:
             cur["members"] = [m.strip() for m in val.split(",") if m.strip()]
         elif kind == "oracle":
@@ -615,7 +618,11 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
     known = {f["name"].lower() for f in features if not f["journey"]}
     passed = failed = unverified = unproven = journeys = broken = 0
-    receipts = load_state(repo).get("failures", {})
+    state = load_state(repo)
+    receipts = state.get("failures", {})
+    missing_baseline = strict and not state.get("baseline")
+    if missing_baseline:
+        print("  note  no baseline: freeze the finished checks before strict completion")
     signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
     for f in shown:
         print(("Journey: " if f["journey"] else "") + f["name"])
@@ -648,9 +655,13 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
             print("  note  no fail-proof recorded: nobody has shown these checks can go red")
         elif strict and not any(
                 receipts.get(f"{f['name']}|{cmd}", {}).get("signature") == signature
+                and f["signals"]
+                and any(signal in receipts.get(f"{f['name']}|{cmd}", {}).get("output", "")
+                        for signal in f["signals"])
+                and not HARNESS_FAILURE.search(receipts.get(f"{f['name']}|{cmd}", {}).get("output", ""))
                 for kind, cmd in f["checks"] if kind not in ("lint", "type", "types")):
             unproven += 1
-            print("  note  no recorded failing run for the current checks; fail-proof prose alone is not evidence")
+            print("  note  no recorded failing run matching fail-signal for the current checks; fail-proof prose alone is not evidence")
 
     if not recipe and any(k == "run" for f in features for k, _ in f["checks"]):
         print("note  'run' checks exist but there is no ## Run section: they assume the app is already up.")
@@ -668,7 +679,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     else:
         print("Blind spots: none listed. A recipe that admits none has not looked.")
 
-    incomplete = strict and (unverified or unproven or orphans)
+    incomplete = strict and (unverified or unproven or orphans or missing_baseline)
     try:
         changed_during_run = signature != sha(json.dumps(check_hashes(repo), sort_keys=True))
     except (OSError, ValueError):
@@ -735,13 +746,23 @@ def check_hashes(repo):
     hashes = {t: sha(read(repo, t)) for t in find_tests(repo)}
     features, _ = parse(read(repo, RECIPE))
     for f in features:
-        for name in f["oracles"]:
+        # Direct script paths are frozen automatically; imported helpers and data
+        # still require explicit oracle entries. Do not parse inline program strings.
+        scripts = []
+        for _, cmd in f["checks"]:
+            if re.search(r"(?:^|\s)-c(?:\s|$)", cmd):
+                continue
+            tokens = re.findall(r'"[^"\n]*"|\'[^\'\n]*\'|[^\s]+', cmd)
+            scripts.extend(token.strip("\"'") for token in tokens
+                           if token.strip("\"'").lower().endswith((".py", ".js", ".mjs", ".cjs", ".sh", ".ps1")))
+        for name in f["oracles"] + [p for p in scripts if os.path.isfile(os.path.join(repo, p))]:
             path = os.path.realpath(os.path.join(repo, name))
             if os.path.commonpath([os.path.realpath(repo), path]) != os.path.realpath(repo):
                 raise ValueError(f"oracle must be inside the repo: {name}")
             with open(path, "rb") as fh:
                 hashes[name] = hashlib.sha256(fh.read()).hexdigest()[:16]
     hashes[RECIPE + " checks"] = sha("\n".join(f"{f['name']}|{k}|{c}" for f in features for k, c in f["checks"]))
+    hashes[RECIPE + " signals"] = sha(json.dumps([(f["name"], f["signals"]) for f in features]))
     hashes[RECIPE + " run"] = sha(json.dumps(parse_run(read(repo, RECIPE)), sort_keys=True))
     return hashes
 
@@ -752,6 +773,9 @@ def tampered(repo, state):
         return []
     cur = check_hashes(repo)
     return sorted(k for k in base if cur.get(k) != base[k])
+
+
+HARNESS_FAILURE = re.compile(r"ModuleNotFoundError|ImportError|FileNotFoundError|SyntaxError|missing dependency|command not found|not recognized as|can\'t open file", re.I)
 
 
 NOISE = re.compile(r"\S*[\\/](?:tmp|temp)[\\/]\S*|/tmp/\S+|0x[0-9a-f]+|\d+(?:\.\d+)?s\b|\d{2}:\d{2}:\d{2}", re.I)

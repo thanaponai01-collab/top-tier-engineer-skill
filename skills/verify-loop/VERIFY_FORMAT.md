@@ -11,11 +11,13 @@
 - oracle: SPEC.md, data/feature_cases.json, scripts/smoke_driver.py
 - schema: `python scripts/compliance.py schema schemas/feat.json out/feat.json --strict`
 - privacy: `python scripts/compliance.py privacy out/`
+- fail-signal: expected status 200, got 500
 - fail-proof: changed the return status, test went red, reverted
 
 ## Journey: Complete Flow
 - features: Feature A, Feature B
 - test: `python -m pytest tests/test_flow.py -q`
+- fail-signal: expected completed order, got pending
 - fail-proof: broke the handoff between A and B, flow test failed, reverted
 
 ## Run
@@ -39,8 +41,12 @@
 - A check passes when its command exits 0.
 - `fail-proof:` explains the controlled wrong state and intended failure signal. Strict runs also
   require a retained failing command/output for the current check hashes; a sentence alone fails.
+- `fail-signal:` is a literal behavioral rejection message matched against retained output.
+  Missing dependencies, syntax errors and startup failures cannot prove product behavior. Declare
+  the signal before the negative run; changing it invalidates earlier evidence.
 - `oracle:` lists comma-separated repo-relative spec, fixture and helper files to freeze, alongside
-  automatically frozen tests and commands. Missing files fail. Keep implementation files out.
+  automatically frozen tests, directly named script paths and commands. List imported helpers
+  and expectation data explicitly; dependency discovery is not exhaustive. Missing files fail. Keep implementation files out.
 - Failure receipts bind all mapped commands, tests, oracles and the Run recipe. After changing
   these definitions, demonstrate rejection again. A timeout is not a receipt.
 
@@ -65,7 +71,7 @@
 
 ## Completion
 
-`run --strict` rejects failed checks, unverified features, missing rejection evidence and orphan
+`run --strict` requires a baseline and rejects failed checks, unverified features, missing rejection evidence and orphan
 test files. Name each test file or its folder in a command so the map can attribute it. Strict
 green covers mapped claims only; it does not prove the feature inventory is complete.
 

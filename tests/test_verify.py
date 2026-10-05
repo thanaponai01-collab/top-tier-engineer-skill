@@ -4,6 +4,7 @@ verify.py — the feature-to-check map behind verify-loop.
 
 Run them all with `python -m unittest discover tests`.
 """
+from pathlib import Path
 import json, os, tempfile, unittest
 
 from _helpers import run
@@ -273,7 +274,7 @@ class LoopMemory(unittest.TestCase):
     FLAG = 'python -c "import os; assert os.path.exists(\'ok.flag\'), \'missing ok.flag\'"'
 
     def _repo(self, tmp, cmd=None):
-        write(tmp, "VERIFY.md", f"## Thing\n- test: `{cmd or self.FLAG}`\n- fail-proof: removed flag, went red\n")
+        write(tmp, "VERIFY.md", f"## Thing\n- test: `{cmd or self.FLAG}`\n- fail-signal: missing ok.flag\n- fail-proof: removed flag, went red\n")
 
     def test_same_failure_twice_says_stop_and_reobserve(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -336,6 +337,7 @@ class LoopMemory(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertIn("red", out)
             write(tmp, "ok.flag")
+            run("verify.py", "baseline", tmp)
             run("verify.py", "run", tmp, "--strict")
             code, out, _ = run("verify.py", "status", tmp)
             self.assertEqual(code, 0, out)
@@ -353,7 +355,44 @@ class EvidenceGate(unittest.TestCase):
         write(tmp, "check.py", "assert open('value.txt').read() == '42', 'expected 42'\n")
         write(tmp, "value.txt", "41")
         write(tmp, "VERIFY.md", "## Answer\n- test: `python check.py`\n"
-              "- oracle: check.py\n- fail-proof: input 41 rejected, expected 42\n")
+              "- oracle: check.py\n- fail-signal: expected 42\n- fail-proof: input 41 rejected, expected 42\n")
+
+    def test_undeclared_direct_helper_cannot_be_replaced_with_noop(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            recipe = Path(tmp, "VERIFY.md")
+            recipe.write_text(recipe.read_text().replace("- oracle: check.py\n", ""))
+            self.assertEqual(run("verify.py", "run", tmp)[0], 1)
+            self.assertEqual(run("verify.py", "baseline", tmp)[0], 0)
+            write(tmp, "check.py", "pass\n")
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("CHECK CHANGED", out)
+            self.assertEqual(Path(tmp, "value.txt").read_text(), "41")
+
+    def test_dependency_failure_cannot_prove_product_rejection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            write(tmp, "check.py", "from pathlib import Path\n"
+                  "if not Path('dependency.ready').exists(): raise SystemExit('missing dependency')\n")
+            self.assertEqual(run("verify.py", "run", tmp)[0], 1)
+            run("verify.py", "baseline", tmp)
+            write(tmp, "dependency.ready", "ready")
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("no recorded failing run", out)
+
+    def test_matching_harness_error_still_cannot_prove_behavior(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            recipe = Path(tmp, "VERIFY.md")
+            recipe.write_text(recipe.read_text().replace("fail-signal: expected 42", "fail-signal: missing dependency"))
+            write(tmp, "check.py", "from pathlib import Path\n"
+                  "if not Path('dependency.ready').exists(): raise SystemExit('missing dependency')\n")
+            run("verify.py", "run", tmp)
+            run("verify.py", "baseline", tmp)
+            write(tmp, "dependency.ready", "ready")
+            self.assertEqual(run("verify.py", "run", tmp, "--strict")[0], 1)
 
     def test_prose_alone_cannot_pass_strict_and_status_keeps_the_failure(self):
         with tempfile.TemporaryDirectory() as tmp:

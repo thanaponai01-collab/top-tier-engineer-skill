@@ -1,5 +1,19 @@
 # Verification workflow evaluation
 
+Follow-up on 2026-10-05: the stricter case requires a frozen baseline and a current,
+strict green helper status, alongside broken/correct implementation replays.
+One with-skill run passed all gates; one without-skill run failed. The successful
+agent repaired the empty check, recorded a behavioral rejection, froze its checks,
+fixed refunds and completed strict verification. This is a smoke test, not a
+reliability estimate. Phrase grading and artifact checks were used; no semantic judge.
+
+Evidence: `evals/results/2026-10-05-1839/`. Approximate cost: $0.37.
+All 326 unit tests pass, including the two reproduced false-green regressions.
+The runner now freezes directly named helpers and requires a declared failure signal.
+Imported helpers and expectation files still need explicit oracle declarations.
+
+## Earlier evaluation (weaker completion gates)
+
 Targeted evaluation on 2026-10-05 (Asia/Bangkok), using Claude Code's default model
 (`claude-sonnet-5-5`). This run used phrase grading (`--no-judge`), action/artifact checks,
 and replay of the agent's check against broken and correct implementations. No semantic judge

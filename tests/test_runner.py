@@ -10,7 +10,7 @@ the agent did, in what order, and whether that counts.
 The one that matters most: a report can claim "I reproduced it first". The
 transcript either shows the repro before the first edit, or it doesn't.
 """
-import json, os, sys, tempfile, unittest
+import json, os, sys, tempfile, unittest, subprocess
 
 from _helpers import ROOT
 
@@ -347,6 +347,21 @@ class StagedPlugin(unittest.TestCase):
         self.assertEqual(env["IS_SANDBOX"], "1")
 
 
+def complete_verify_loop(case, work):
+    helper = os.path.join(ROOT, "skills", "verify-loop", "scripts", "verify.py")
+    product = os.path.join(work, "refund.py")
+    correct = grade.read(product)
+    with open(product, "w", encoding="utf-8") as fh:
+        fh.write(grade.read(os.path.join(case["dir"], "fixture", "refund.py")))
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+    for command in ("run", "baseline"):
+        subprocess.run([sys.executable, helper, command, work], capture_output=True, env=env)
+    with open(product, "w", encoding="utf-8") as fh:
+        fh.write(correct)
+    subprocess.run([sys.executable, helper, "run", work, "--strict"],
+                   capture_output=True, env=env, check=True)
+
+
 class WorkdirChecksInTheRunner(unittest.TestCase):
     """A case that grades what the agent left behind must not pass on its report alone.
 
@@ -368,6 +383,7 @@ class WorkdirChecksInTheRunner(unittest.TestCase):
     def solve(self):
         self._shutil.copytree(os.path.join(self.case["dir"], "reference", "solution"), self.work,
                               dirs_exist_ok=True)
+        complete_verify_loop(self.case, self.work)
 
     def score(self):
         checks = run.workdir_checks(self.case, self.work)
@@ -385,12 +401,12 @@ class WorkdirChecksInTheRunner(unittest.TestCase):
         checks, r = self.score()
         self.assertTrue(r["passed"], r["action_checks"])
 
-    def test_an_advisory_miss_is_listed_but_does_not_fail_the_run(self):
+    def test_missing_verification_state_fails_the_run(self):
         self.solve()
         os.remove(os.path.join(self.work, ".verify-state.json"))
         checks, r = self.score()
-        self.assertTrue(r["passed"], r["action_checks"])
-        self.assertTrue(any(c["detail"].startswith("advisory") for c in checks))
+        self.assertFalse(r["passed"], r["action_checks"])
+        self.assertTrue(any(not c["ok"] for c in checks))
 
     def test_an_edit_outside_the_allowed_files_is_a_failed_check(self):
         self.solve()
@@ -446,6 +462,7 @@ class WorkdirChecksAreWiredIntoARun(unittest.TestCase):
         import shutil
         shutil.copytree(os.path.join(self.case["dir"], "reference", "solution"), fixture_dir,
                         dirs_exist_ok=True)
+        complete_verify_loop(self.case, fixture_dir)
 
     def test_an_agent_that_fixed_the_repo_passes(self):
         r = self.run_with_agent_that(self.solve)
