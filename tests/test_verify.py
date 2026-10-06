@@ -749,6 +749,105 @@ class ScaleAndEfficiency(unittest.TestCase):
             self.assertIn("Journey: Checkout", out)
             self.assertNotIn("Auth\n  PASS", out)
 
+    def test_triage_diagnoses_product_gap(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            fail_cmd = 'python -c "import sys; print(\'AssertionError: value mismatch\'); sys.exit(1)"'
+            write(tmp, "VERIFY.md", f"## Math\n- test: `{fail_cmd}`\n- fail-proof: x\n")
+            run("verify.py", "run", tmp)
+            code, out, _ = run("verify.py", "triage", tmp, "--json")
+            self.assertEqual(code, 0)
+            data = json.loads(out)
+            self.assertEqual(data["category"], "product-gap")
+            self.assertIn("AssertionError", data["summary"])
+            self.assertIn("scope", data["action"])
+
+    def test_triage_diagnoses_harness_gap(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            fail_cmd = 'python -c "import sys; print(\'Error: listen EADDRINUSE: address already in use :::8000\'); sys.exit(1)"'
+            write(tmp, "VERIFY.md", f"## Server\n- test: `{fail_cmd}`\n- fail-proof: x\n")
+            run("verify.py", "run", tmp)
+            code, out, _ = run("verify.py", "triage", tmp, "--json")
+            self.assertEqual(code, 0)
+            data = json.loads(out)
+            self.assertEqual(data["category"], "harness-gap")
+            self.assertIn("Port collision", data["summary"])
+            self.assertIn("Do NOT edit product logic", data["action"])
+
+    def test_triage_diagnoses_spec_drift(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", "## Feature\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
+            run("verify.py", "baseline", tmp)
+            # Edit check
+            write(tmp, "VERIFY.md", "## Feature\n- test: `python -c \"print(1)\"`\n- fail-proof: x\n")
+            run("verify.py", "run", tmp)
+            code, out, _ = run("verify.py", "triage", tmp, "--json")
+            self.assertEqual(code, 0)
+            data = json.loads(out)
+            self.assertEqual(data["category"], "spec-drift")
+            self.assertIn("baseline", data["action"])
+
+    def test_triage_on_green_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", "## Feature\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
+            run("verify.py", "run", tmp)
+            code, out, _ = run("verify.py", "triage", tmp, "--json")
+            self.assertEqual(code, 0)
+            data = json.loads(out)
+            self.assertEqual(data["verdict"], "green")
+            self.assertIsNone(data["category"])
+
+    def test_quarantine_isolates_flaky_checks_from_failing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            fail_cmd = 'python -c "import sys; sys.exit(1)"'
+            write(tmp, "VERIFY.md", f"## Unstable\n- test: `{fail_cmd}`\n- fail-proof: x\n")
+            # Populate state with quarantined entry
+            state_file = os.path.join(tmp, ".verify-state.json")
+            with open(state_file, "w", encoding="utf-8") as fh:
+                json.dump({"quarantined": [f"Unstable|{fail_cmd}"]}, fh)
+            # With --quarantine, it is isolated and does not exit 1
+            code, out, _ = run("verify.py", "run", tmp, "--quarantine")
+            self.assertEqual(code, 0, out)
+            self.assertIn("QUARANTINED", out)
+
+    def test_scaffold_oracle_generates_api_smoke_probe(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            openapi_spec = {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/v1/health": {"get": {"summary": "Health probe"}},
+                    "/api/v1/items": {"post": {"summary": "Create item"}}
+                }
+            }
+            spec_path = os.path.join(tmp, "openapi.json")
+            with open(spec_path, "w", encoding="utf-8") as fh:
+                json.dump(openapi_spec, fh)
+            code, out, _ = run("verify.py", "scaffold-oracle", "openapi.json", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertTrue(os.path.isfile(os.path.join(tmp, "scripts", "smoke_api.py")))
+            self.assertIn("Discovered 2 endpoint(s)", out)
+
+    def test_watch_detects_change_and_runs(self):
+        import threading, time
+        with tempfile.TemporaryDirectory() as tmp:
+            import subprocess
+            subprocess.run(["git", "init", "-q"], cwd=tmp, check=True)
+            write(tmp, "app.py", "x = 1\n")
+            write(tmp, "VERIFY.md", "## App\n- path: app.py\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
+            subprocess.run(["git", "add", "."], cwd=tmp, check=True)
+            subprocess.run(["git", "-c", "user.name=T", "-c", "user.email=t@example.com", "commit", "-qm", "init"],
+                           cwd=tmp, check=True)
+
+            def make_change():
+                time.sleep(0.3)
+                write(tmp, "app.py", "x = 2\n")
+
+            t = threading.Thread(target=make_change)
+            t.start()
+            code, out, _ = run("verify.py", "watch", tmp, "--interval", "0.1", "--max-runs", "1")
+            t.join()
+            self.assertEqual(code, 0, out)
+            self.assertIn("Change detected", out)
+
 
 if __name__ == "__main__":
     unittest.main()

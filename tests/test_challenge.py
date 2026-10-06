@@ -210,6 +210,17 @@ class AutoChallenge(unittest.TestCase):
             self.assertIn("return-to-none", ops)
             self.assertEqual(summary["survived"], 0)
 
+    def test_polyglot_mutation_operators(self):
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent.parent / "skills" / "verify-loop" / "scripts"))
+        from mutate import generate
+        js_code = "function check(a, b) {\n    if (a === b && a !== null) {\n        return true;\n    }\n    return false;\n}"
+        mutations = generate(js_code, limit=10, lang="js")
+        ops = [m["operator"] for m in mutations]
+        self.assertIn("strict-eq-to-ne", ops)
+        self.assertIn("strict-ne-to-eq", ops)
+        self.assertIn("true-to-false", ops)
+
 
 class StatusJson(unittest.TestCase):
     def test_json_matches_text_verdict_and_exit(self):

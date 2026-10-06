@@ -15,6 +15,8 @@ import ast
 
 # (name, pattern, replacement). Applied to the first match on a line; one mutation per operator per line.
 OPERATORS = [
+    ("strict-eq-to-ne", r"===", "!=="),
+    ("strict-ne-to-eq", r"!==", "==="),
     ("eq-to-ne", r"==", "!="),
     ("ne-to-eq", r"!=", "=="),
     ("le-to-lt", r"<=", "<"),
@@ -32,20 +34,70 @@ OPERATORS = [
     ("not-dropped", r"\bnot\s+", ""),
     ("is-to-is-not", r"\bis\b(?!\s*not\b)", "is not"),
     ("return-to-none", r"^\s*return\s+(?!None\b|\(\s*\)|$)(.+)$", lambda m: m.group(0).replace(m.group(1), "None")),
+    ("nullish-to-or", r"\?\?", "||"),
+    ("go-err-nil-flip", r"err\s*!=\s*nil", "err == nil"),
+    ("go-err-eq-flip", r"err\s*==\s*nil", "err != nil"),
+    ("rust-is-ok-flip", r"\.is_ok\(\)", ".is_err()"),
+    ("rust-is-err-flip", r"\.is_err\(\)", ".is_ok()"),
 ]
 COMMENT = re.compile(r"^\s*(#|//|\*|/\*)")
 STRING_ONLY = re.compile(r"""^\s*(['"]).*\1,?\s*$""")
 
 
-def is_valid_syntax(source):
-    try:
-        ast.parse(source)
-        return True
-    except (SyntaxError, ValueError):
-        return False
+def is_balanced_delimiters(code):
+    stack = []
+    pairs = {')': '(', '}': '{', ']': '['}
+    in_str = None
+    escaped = False
+    for ch in code:
+        if escaped:
+            escaped = False
+            continue
+        if ch == '\\':
+            escaped = True
+            continue
+        if in_str:
+            if ch == in_str:
+                in_str = None
+            continue
+        if ch in ('"', "'", '`'):
+            in_str = ch
+            continue
+        if ch in pairs.values():
+            stack.append(ch)
+        elif ch in pairs:
+            if not stack or stack[-1] != pairs[ch]:
+                return False
+            stack.pop()
+    return not stack and in_str is None
 
 
-def generate(source, limit, is_py=False):
+def is_valid_syntax(source, lang="py"):
+    if lang == "py":
+        try:
+            ast.parse(source)
+            return True
+        except (SyntaxError, ValueError):
+            return False
+    return is_balanced_delimiters(source)
+
+
+def detect_lang(filename):
+    ext = Path(filename).suffix.lower()
+    if ext == ".py":
+        return "py"
+    if ext in (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"):
+        return "js"
+    if ext == ".go":
+        return "go"
+    if ext == ".rs":
+        return "rs"
+    return "other"
+
+
+def generate(source, limit, is_py=False, lang=None):
+    if lang is None:
+        lang = "py" if is_py else "other"
     lines = source.splitlines()
     out = []
     for no, line in enumerate(lines, 1):
@@ -54,10 +106,10 @@ def generate(source, limit, is_py=False):
         for name, pattern, repl in OPERATORS:
             mutated = re.sub(pattern, repl, line, count=1)
             if mutated != line:
-                if is_py:
+                if lang in ("py", "js", "go", "rs"):
                     test_lines = list(lines)
                     test_lines[no - 1] = mutated
-                    if not is_valid_syntax("\n".join(test_lines)):
+                    if not is_valid_syntax("\n".join(test_lines), lang=lang):
                         continue
                 out.append({"line": no, "operator": name, "before": line, "after": mutated})
                 if len(out) >= limit:
@@ -72,7 +124,8 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json):
     except OSError as exc:
         print(f"CHALLENGE-AUTO: invalid ({exc})")
         return 2
-    candidates = generate(source, limit, is_py=rel_file.endswith(".py"))
+    lang = detect_lang(rel_file)
+    candidates = generate(source, limit, is_py=(lang == "py"), lang=lang)
     if not candidates:
         print(f"CHALLENGE-AUTO: invalid (no mutable lines in {rel_file})")
         return 2
