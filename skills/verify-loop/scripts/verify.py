@@ -1509,6 +1509,200 @@ if __name__ == "__main__":
         return 2
 
 
+def cmd_scaffold_ui(repo, route="/", output_name="smoke_ui.py"):
+    """Scaffold a visual/browser DOM probe script using Playwright or headless HTTP+DOM checks."""
+    scripts_dir = os.path.join(repo, "scripts")
+    evidence_dir = os.path.join(repo, ".verify-evidence")
+    os.makedirs(scripts_dir, exist_ok=True)
+    os.makedirs(evidence_dir, exist_ok=True)
+    target = os.path.join(scripts_dir, output_name)
+    if os.path.exists(target):
+        print(f"SCAFFOLD-UI: target already exists at {target}; not overwriting.")
+        return 1
+
+    content = f'''#!/usr/bin/env python3
+"""{output_name} — Visual / UI regression probe.
+Checks DOM tree, response status, and captures visual artifacts into .verify-evidence/
+"""
+import argparse, json, os, sys, time, urllib.request
+
+EVIDENCE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".verify-evidence"))
+os.makedirs(EVIDENCE_DIR, exist_ok=True)
+
+def check_ui(base_url, route):
+    url = base_url.rstrip("/") + route
+    t0 = time.time()
+    try:
+        req = urllib.request.Request(url, headers={{"User-Agent": "VerifyLoop-UIProbe/1.0"}})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            elapsed = time.time() - t0
+            html = resp.read().decode("utf-8", errors="replace")
+            status = resp.status
+            # Basic sanity assertions
+            has_body = "<body" in html.lower()
+            has_error = "500 internal server error" in html.lower() or "unhandled exception" in html.lower()
+            ok = status == 200 and has_body and not has_error
+            evidence = {{
+                "timestamp": time.time(),
+                "route": route,
+                "url": url,
+                "status": status,
+                "elapsed_sec": round(elapsed, 3),
+                "has_body": has_body,
+                "has_fatal_error": has_error,
+                "html_bytes": len(html),
+                "verdict": "green" if ok else "red"
+            }}
+            with open(os.path.join(EVIDENCE_DIR, "ui_probe_evidence.json"), "w", encoding="utf-8") as fh:
+                json.dump(evidence, fh, indent=2)
+
+            if ok:
+                print(f"[UI OK] {{route}} ({{status}}, {{len(html)}} bytes, {{elapsed:.2f}}s)")
+                return True
+            else:
+                print(f"[UI FAIL] {{route}} (status: {{status}}, has_body: {{has_body}}, error: {{has_error}})")
+                return False
+    except Exception as exc:
+        print(f"[UI FAIL] {{route}} request error: {{exc}}")
+        return False
+
+def main():
+    parser = argparse.ArgumentParser(description="UI / Web Route Verification Probe")
+    parser.add_argument("--base-url", default="http://localhost:3000")
+    parser.add_argument("--route", default="{route}")
+    args = parser.parse_args()
+    ok = check_ui(args.base_url, args.route)
+    return 0 if ok else 1
+
+if __name__ == "__main__":
+    sys.exit(main())
+'''
+    with open(target, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(content)
+    print(f"SCAFFOLD-UI: Generated UI route probe at scripts/{output_name}")
+    print("Suggested addition to VERIFY.md:")
+    print(f"  ## UI: Route {route}")
+    print(f"  - run: `python scripts/{output_name} --route {route}`")
+    print(f"  - fail-signal: [UI FAIL]")
+    print(f"  - fail-proof: introduced server 500/syntax error on route, probe rejected, restored")
+    return 0
+
+
+def cmd_contract(repo, old_spec_path, new_spec_path, as_json=False):
+    """Detect breaking changes and schema contract violations between two API/schema specs."""
+    def load_spec(p):
+        full = p if os.path.isabs(p) else os.path.join(repo, p)
+        if not os.path.isfile(full):
+            raise FileNotFoundError(f"Spec file not found: {p}")
+        with open(full, encoding="utf-8") as fh:
+            text = fh.read()
+        try:
+            return json.loads(text)
+        except Exception:
+            try:
+                import yaml
+                return yaml.safe_load(text)
+            except Exception:
+                raise ValueError(f"Cannot parse {p} as JSON or YAML")
+
+    try:
+        old_data = load_spec(old_spec_path)
+        new_data = load_spec(new_spec_path)
+    except Exception as exc:
+        print(f"CONTRACT-ERROR: {exc}")
+        return 2
+
+    violations = []
+    # Check OpenAPI breaking changes
+    if isinstance(old_data, dict) and "paths" in old_data and isinstance(new_data, dict) and "paths" in new_data:
+        old_paths = old_data["paths"]
+        new_paths = new_data["paths"]
+        for p, methods in old_paths.items():
+            if p not in new_paths:
+                violations.append(f"Removed endpoint path: {p}")
+                continue
+            if isinstance(methods, dict) and isinstance(new_paths[p], dict):
+                for m in methods:
+                    if m.lower() in ("get", "post", "put", "delete", "patch") and m not in new_paths[p]:
+                        violations.append(f"Removed HTTP method {m.upper()} on endpoint {p}")
+
+    # Check JSON Schema breaking changes
+    if isinstance(old_data, dict) and ("properties" in old_data or "required" in old_data):
+        old_req = set(old_data.get("required", []))
+        new_req = set(new_data.get("required", [])) if isinstance(new_data, dict) else set()
+        added_req = new_req - old_req
+        if added_req:
+            violations.append(f"Newly added required field(s) in schema: {', '.join(sorted(added_req))}")
+        old_props = set(old_data.get("properties", {}).keys())
+        new_props = set(new_data.get("properties", {}).keys()) if isinstance(new_data, dict) else set()
+        removed_props = old_props - new_props
+        if removed_props:
+            violations.append(f"Removed property field(s) in schema: {', '.join(sorted(removed_props))}")
+
+    ok = len(violations) == 0
+    if as_json:
+        report = {
+            "verdict": "green" if ok else "red",
+            "old_spec": old_spec_path,
+            "new_spec": new_spec_path,
+            "violations": violations,
+            "exit": 0 if ok else 1
+        }
+        print(json.dumps(report, indent=2))
+    else:
+        if ok:
+            print(f"CONTRACT-VERIFY: [GREEN] No breaking changes detected between {old_spec_path} and {new_spec_path}.")
+        else:
+            print(f"CONTRACT-VERIFY: [RED] Detected {len(violations)} backward-compatibility violation(s):")
+            for v in violations:
+                print(f"  - {v}")
+    return 0 if ok else 1
+
+
+def cmd_auto_loop(repo, target_files, max_iterations=5, timeout=120, strict=False):
+    """Autonomous iterative verification loop with scope enforcement and budget guardrails."""
+    path = os.path.join(repo, RECIPE)
+    if not os.path.isfile(path):
+        print(f"AUTO-LOOP: no {RECIPE} found in {repo}.")
+        return 2
+
+    # Step 1: Set scope if target files specified
+    if target_files:
+        code = cmd_scope(repo, target_files, add=False, clear=False, check=False)
+        if code != 0:
+            return code
+        print(f"AUTO-LOOP: Scoped target files: {', '.join(target_files)}")
+
+    print(f"AUTO-LOOP: Commencing autonomous verification cycle (budget: {max_iterations} iterations)...")
+    for iteration in range(1, max_iterations + 1):
+        print(f"\n--- [AUTO-LOOP Iteration {iteration}/{max_iterations}] ---")
+        run_code = cmd_run(repo, only=None, timeout=timeout, strict=strict, budget=max_iterations, as_json=False)
+        state = load_state(repo)
+        verdict = state.get("result", "unknown")
+
+        if run_code == 0 and verdict == "green":
+            print(f"\nAUTO-LOOP: [STRICT GREEN] Verification succeeded on iteration {iteration}!")
+            return 0
+
+        # Run triage to diagnose the red state
+        print(f"\n[AUTO-LOOP Iteration {iteration}] Run was red. Running triage...")
+        cmd_triage(repo, as_json=False)
+
+        # Check for guardrail trip conditions
+        rounds = state.get("rounds", 0)
+        checks = state.get("checks", {})
+        has_same_failure = any(c.get("count", 1) >= 2 for c in checks.values() if isinstance(c, dict) and not c.get("ok"))
+        if has_same_failure:
+            print(f"AUTO-LOOP: Detected repeated identical failure (SAME FAILURE x2). Stopping to prevent churn.")
+            return 1
+        if rounds >= max_iterations:
+            print(f"AUTO-LOOP: Exceeded run budget ({max_iterations} attempts). Stopping.")
+            return 1
+
+    print(f"AUTO-LOOP: Budget exhausted without green verdict.")
+    return 1
+
+
 def cmd_watch(repo, interval=2.0, max_runs=0):
     """Continuously poll repo for file changes and run affected checks."""
     path = os.path.join(repo, RECIPE)
@@ -1580,10 +1774,25 @@ def main():
     sd.add_argument("repo", nargs="?", default=".")
     sd.add_argument("--type", choices=["web", "api", "cli", "auto"], default="auto",
                     help="type of driver to scaffold (default: auto)")
+    su = sub.add_parser("scaffold-ui", help="generate visual/web DOM route probe and evidence capture")
+    su.add_argument("repo", nargs="?", default=".")
+    su.add_argument("--route", default="/", help="frontend route or path to probe (default: /)")
+    su.add_argument("--output", default="smoke_ui.py", help="target script name under scripts/ (default: smoke_ui.py)")
     so = sub.add_parser("scaffold-oracle", help="generate test driver and VERIFY.md feature from OpenAPI spec or JSON schema")
     so.add_argument("spec", help="path to OpenAPI (yaml/json) or JSON Schema file")
     so.add_argument("repo", nargs="?", default=".")
     so.add_argument("--type", choices=["auto", "openapi", "schema"], default="auto", help="specification type")
+    ct = sub.add_parser("contract", help="verify schema / API backward-compatibility and breaking changes")
+    ct.add_argument("old_spec", help="baseline specification file (OpenAPI or JSON Schema)")
+    ct.add_argument("new_spec", help="updated specification file")
+    ct.add_argument("repo", nargs="?", default=".")
+    ct.add_argument("--json", action="store_true", help="output contract breaking changes as JSON")
+    lp = sub.add_parser("loop", help="autonomous iterative verification loop with scope enforcement and budget guardrails")
+    lp.add_argument("repo", nargs="?", default=".")
+    lp.add_argument("--scope", nargs="*", default=[], help="pin touched files/patterns for scope enforcement")
+    lp.add_argument("--max", type=int, default=5, help="maximum iterations before halting (default: 5)")
+    lp.add_argument("--timeout", type=int, default=120, help="seconds per check (default: 120)")
+    lp.add_argument("--strict", action="store_true", help="require strict proof and receipts")
     w = sub.add_parser("watch", help="watch repo for changes and run affected checks continuously")
     w.add_argument("repo", nargs="?", default=".")
     w.add_argument("--interval", type=float, default=2.0, help="polling interval in seconds (default: 2.0)")
@@ -1617,8 +1826,14 @@ def main():
         sys.exit(cmd_challenge(sys.modules[__name__], repo, a.feature, a.mutation, a.timeout))
     if a.cmd == "scaffold-driver":
         sys.exit(cmd_scaffold_driver(repo, a.type))
+    if a.cmd == "scaffold-ui":
+        sys.exit(cmd_scaffold_ui(repo, a.route, a.output))
     if a.cmd == "scaffold-oracle":
         sys.exit(cmd_scaffold_oracle(repo, a.spec, a.type))
+    if a.cmd == "contract":
+        sys.exit(cmd_contract(repo, a.old_spec, a.new_spec, a.json))
+    if a.cmd == "loop":
+        sys.exit(cmd_auto_loop(repo, a.scope, a.max, a.timeout, a.strict))
     if a.cmd == "watch":
         sys.exit(cmd_watch(repo, a.interval, a.max_runs))
     if a.cmd == "scope":

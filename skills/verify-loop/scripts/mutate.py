@@ -39,6 +39,10 @@ OPERATORS = [
     ("go-err-eq-flip", r"err\s*==\s*nil", "err != nil"),
     ("rust-is-ok-flip", r"\.is_ok\(\)", ".is_err()"),
     ("rust-is-err-flip", r"\.is_err\(\)", ".is_ok()"),
+    ("in-to-not-in", r"\bin\b(?!\s*\(|\s*\{|\s*\[)", "not in"),
+    ("not-in-to-in", r"\bnot\s+in\b", "in"),
+    ("zero-to-one", r"(?<![\w.])0(?![\w.])", "1"),
+    ("empty-str-flip", r'""|\'\'', '"mutant"'),
 ]
 COMMENT = re.compile(r"^\s*(#|//|\*|/\*)")
 STRING_ONLY = re.compile(r"""^\s*(['"]).*\1,?\s*$""")

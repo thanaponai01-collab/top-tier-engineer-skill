@@ -848,6 +848,72 @@ class ScaleAndEfficiency(unittest.TestCase):
             self.assertEqual(code, 0, out)
             self.assertIn("Change detected", out)
 
+    def test_scaffold_ui_generates_route_probe(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out, _ = run("verify.py", "scaffold-ui", tmp, "--route", "/dashboard", "--output", "smoke_ui.py")
+            self.assertEqual(code, 0, out)
+            target = os.path.join(tmp, "scripts", "smoke_ui.py")
+            self.assertTrue(os.path.isfile(target))
+            with open(target, encoding="utf-8") as fh:
+                content = fh.read()
+            self.assertIn("/dashboard", content)
+            self.assertIn("VerifyLoop-UIProbe", content)
+            # Second call should not overwrite
+            code2, out2, _ = run("verify.py", "scaffold-ui", tmp, "--route", "/dashboard", "--output", "smoke_ui.py")
+            self.assertEqual(code2, 1)
+            self.assertIn("already exists", out2)
+
+    def test_contract_breaking_changes_detection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            old_spec = {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/v1/users": {"get": {}, "post": {}},
+                    "/api/v1/orders": {"get": {}}
+                }
+            }
+            new_spec_breaking = {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/v1/users": {"get": {}} # removed post and /api/v1/orders
+                }
+            }
+            old_p = os.path.join(tmp, "old.json")
+            new_p = os.path.join(tmp, "new.json")
+            with open(old_p, "w", encoding="utf-8") as fh:
+                json.dump(old_spec, fh)
+            with open(new_p, "w", encoding="utf-8") as fh:
+                json.dump(new_spec_breaking, fh)
+
+            code, out, _ = run("verify.py", "contract", "old.json", "new.json", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("Removed endpoint path: /api/v1/orders", out)
+            self.assertIn("Removed HTTP method POST", out)
+
+            # Test schema breaking change
+            old_schema = {"required": ["id"]}
+            new_schema = {"required": ["id", "secret_key"]}
+            with open(old_p, "w", encoding="utf-8") as fh:
+                json.dump(old_schema, fh)
+            with open(new_p, "w", encoding="utf-8") as fh:
+                json.dump(new_schema, fh)
+
+            code, out, _ = run("verify.py", "contract", "old.json", "new.json", tmp, "--json")
+            self.assertEqual(code, 1, out)
+            data = json.loads(out)
+            self.assertEqual(data["verdict"], "red")
+            self.assertTrue(any("secret_key" in v for v in data["violations"]))
+
+    def test_auto_loop_runs_and_trips_budget_or_guardrail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            fail_cmd = 'python -c "import sys; print(\'boom\'); sys.exit(1)"'
+            write(tmp, "VERIFY.md", f"## Feature\n- test: `{fail_cmd}`\n- fail-proof: x\n")
+            write(tmp, "app.py", "x = 1\n")
+            code, out, _ = run("verify.py", "loop", tmp, "--scope", "app.py", "--max", "2")
+            self.assertEqual(code, 1, out)
+            self.assertIn("AUTO-LOOP: Commencing autonomous verification cycle", out)
+            self.assertIn("TRIAGE:", out)
+
 
 if __name__ == "__main__":
     unittest.main()

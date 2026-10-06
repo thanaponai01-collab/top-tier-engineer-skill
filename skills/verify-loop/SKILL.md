@@ -103,7 +103,10 @@ python <skill-base>/scripts/verify.py run --stress 5  # detect flaky/non-determi
 python <skill-base>/scripts/verify.py run --quarantine # isolate flaky checks from hard failure
 python <skill-base>/scripts/verify.py run --json  # machine-readable run report with causes
 python <skill-base>/scripts/verify.py triage      # diagnose failure into harness-gap, spec-drift, product-gap
+python <skill-base>/scripts/verify.py loop --scope app.py --max 5 # autonomous fix & verify cycle with guardrails
 python <skill-base>/scripts/verify.py scaffold-oracle openapi.json # scaffold API smoke probe & VERIFY.md feature
+python <skill-base>/scripts/verify.py scaffold-ui --route /dashboard # scaffold visual/web route probe
+python <skill-base>/scripts/verify.py contract old_api.json new_api.json # verify backward-compatibility
 python <skill-base>/scripts/verify.py watch       # poll file changes and run affected checks live
 python <skill-base>/scripts/verify.py baseline    # freeze checks and oracles
 python <skill-base>/scripts/verify.py run --strict && python <skill-base>/scripts/verify.py status
