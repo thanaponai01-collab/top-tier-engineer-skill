@@ -1,6 +1,7 @@
 ---
 name: scrutinize
-description: An outsider's second opinion on a change before it lands: PR, diff, plan or design doc. Use for "scrutinize this", "second opinion", "sanity-check this PR / plan".
+description: >-
+  An outsider's second opinion on a change before it lands: PR, diff, plan or design doc. Use for "scrutinize this", "second opinion", "sanity-check this PR / plan".
 ---
 
 # Scrutinize

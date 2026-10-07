@@ -1,6 +1,7 @@
 ---
 name: agent-evals
-description: Build the check for an AI agent or model-driven feature before the agent exists: a task set, a grader the agent cannot touch, and proof the grader can fail. Use at the start of any agent or LLM feature, when "it worked when I tried it" is the only evidence, or when an agent's failures are hard to pin down.
+description: >-
+  Build the check for an AI agent or model-driven feature before the agent exists: a task set, a grader the agent cannot touch, and proof the grader can fail. Use at the start of any agent or LLM feature, when "it worked when I tried it" is the only evidence, or when an agent's failures are hard to pin down.
 ---
 
 # Agent Evals
