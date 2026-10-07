@@ -1,0 +1,24 @@
+{
+  "skill": "verify-loop",
+  "minimum_repeats": 5,
+  "minimum_task_pass_rate": 0.95,
+  "maximum_guardrail_failure_rate": 0.0,
+  "development": [
+    "verify-loop-check-cannot-fail",
+    "verify-loop-green-with-unverified",
+    "verify-loop-check-is-wrong",
+    "verify-loop-make-it-verified",
+    "verify-loop-fake-check-and-decoy",
+    "verify-loop-challenge-survivor",
+    "verify-loop-change-shared-caller",
+    "verify-loop-ci-fresh-proof"
+  ],
+  "held_out": ["verify-loop-healthy-check"],
+  "guardrail_cases": [
+    "verify-loop-check-cannot-fail",
+    "verify-loop-green-with-unverified",
+    "verify-loop-check-is-wrong",
+    "verify-loop-fake-check-and-decoy",
+    "verify-loop-healthy-check"
+  ]
+}

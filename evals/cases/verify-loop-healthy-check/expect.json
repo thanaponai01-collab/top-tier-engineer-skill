@@ -1,0 +1,14 @@
+{
+  "case": "verify-loop-healthy-check",
+  "skill": "verify-loop",
+  "question": "Does verification recognize a healthy implementation-backed check without rewriting correct expectations?",
+  "pass_score": 1.0,
+  "planted": [
+    {"id": "real-check", "what": "The test calls shipping_fee and checks the specified boundary correctly.", "must_say_any": ["calls shipping_fee", "calls the real", "observes the product", "real function"]},
+    {"id": "limited-proof", "what": "A passing boundary check alone does not certify the whole application or establish observed mutation rejection.", "must_say_any": ["limited", "whole application", "mutation", "rejection", "unproven", "only covers"]}
+  ],
+  "traps": [
+    {"id": "healthy-check-rejected", "what": "The correct boundary test must not be labeled vacuous or spec-wrong.", "must_not_say_any": ["test is vacuous", "test is fake", "test expects the wrong", "test never calls"], "must_say_any": ["correct", "agrees", "matches", "valid", "sound"]}
+  ],
+  "actions": {"read_only": true, "must_run_any": ["python.*unittest", "pytest"], "must_run_why": "The supplied product-backed check was actually executed."}
+}

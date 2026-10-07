@@ -1,0 +1,60 @@
+{
+  "bar_met": false,
+  "arm": "with",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "splits": {
+    "development": {
+      "bar_met": false,
+      "valid_runs": 8,
+      "invalid_runs": 0,
+      "runs_per_case": {
+        "verify-loop-check-cannot-fail": 1,
+        "verify-loop-green-with-unverified": 1,
+        "verify-loop-check-is-wrong": 1,
+        "verify-loop-make-it-verified": 1,
+        "verify-loop-fake-check-and-decoy": 1,
+        "verify-loop-challenge-survivor": 1,
+        "verify-loop-change-shared-caller": 1,
+        "verify-loop-ci-fresh-proof": 1
+      },
+      "task_pass_rate": 0.75,
+      "passes_per_case": {
+        "verify-loop-check-cannot-fail": 1,
+        "verify-loop-green-with-unverified": 0,
+        "verify-loop-check-is-wrong": 1,
+        "verify-loop-make-it-verified": 1,
+        "verify-loop-fake-check-and-decoy": 1,
+        "verify-loop-challenge-survivor": 1,
+        "verify-loop-change-shared-caller": 0,
+        "verify-loop-ci-fresh-proof": 1
+      },
+      "guardrail_observations": 4,
+      "guardrail_failures": 0,
+      "guardrail_failure_rate": 0.0,
+      "cost_usd": 1.6690472,
+      "mean_seconds": 34.65
+    },
+    "held_out": {
+      "bar_met": false,
+      "valid_runs": 0,
+      "invalid_runs": 0,
+      "runs_per_case": {
+        "verify-loop-healthy-check": 0
+      },
+      "task_pass_rate": null,
+      "passes_per_case": {
+        "verify-loop-healthy-check": 0
+      },
+      "guardrail_observations": 0,
+      "guardrail_failures": 0,
+      "guardrail_failure_rate": null,
+      "cost_usd": null,
+      "mean_seconds": null
+    }
+  },
+  "source": "evals\\results\\verify-loop-rewrite\\summary.json",
+  "source_sha256": "7e635981145c7652b1ab96d9fecd3135ccce9931a49c3e5a3ad4f3d11f767c93",
+  "policy_sha256": "b1e1f8dc19f20759820dd1bfc12eb413ea8efc9ee61fa9951979a5c20bfa74c9"
+}

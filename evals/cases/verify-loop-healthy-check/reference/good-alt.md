@@ -1,0 +1,1 @@
+This is a sound test: it calls the real shipping function and agrees with the documented price change at 50. All four examples pass. Only these boundary examples were exercised; mutation sensitivity remains unproven and other workflows were not assessed. No source or expected values need changing.

@@ -1,0 +1,1 @@
+Use verify-loop to assess the supplied check against SPEC.md. This is a read-only assessment of check quality. Run the check and explain what its result establishes. Preserve the code and expected values.

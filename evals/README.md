@@ -1,5 +1,9 @@
 # Evals — does a skill actually make an agent better?
 
+For verify-loop's predeclared trust bar, historical baseline, and held-out protocol,
+read [VERIFY_TRUST.md](VERIFY_TRUST.md). `verify_trust.py` summarizes one saved
+batch without running agents; insufficient evidence exits nonzero.
+
 These skills are behavioural instructions. The Python under `skills/*/scripts/` has unit tests, but
 the instructions are the product. This directory tests them the only honest way: hand a real agent a
 rigged codebase, with the skills and without, and count how often it gets it right.

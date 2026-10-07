@@ -1,0 +1,1 @@
+The check is valid and matches SPEC.md: test_boundary calls shipping_fee for 0, 49, 50, and 51 and expects 5, 5, 0, and 0. The supplied check passes. This only covers the specified examples; no mutation rejection has been observed, and this does not certify the whole application. Preserve these correct expectations.
