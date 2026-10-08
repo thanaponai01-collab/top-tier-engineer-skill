@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.54.0 - 2026-10-08 - skills stop firing on ordinary work
+
+- **Manual-only heavy skills**: `drive`, `drive-overnight`, `onboard-system`, `project-setup`,
+  `pick-skill` and `recall` carry `disable-model-invocation: true`; they run only when typed.
+- **Narrower descriptions** for build-discipline, correctness-gate, debug-protocol,
+  evolve-maintain, explain, senior-review, wire-check, plan-work, code-history and
+  problem-framing: catch-all triggers ("make it work", "explain how X works", "bug fixes with a
+  known cause", "after building a feature") are gone, and several name what they are *not* for.
+- evals: `routing.json` expects no auto-load for the manual-only skills. `ROUTING.md` is left at
+  the 2026-09-27 Opus run: the re-run (13/34) used Sonnet, so it is not comparable; it did show
+  no plugin skill loading on the three ordinary-work prompts.
+- tests: the frontmatter check accepts an optional `disable-model-invocation: true` line.
+
 ## 4.53.0 - 2026-10-08 - arch-design borrows four ideas from peer architecture skills
 
 - **Read recorded decisions first** (`docs/adr/`, `docs/architecture.md`, `WHY.md`); a move that

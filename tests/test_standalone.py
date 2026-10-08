@@ -51,7 +51,9 @@ class Standalone(unittest.TestCase):
     def test_frontmatter_names_the_folder(self):
         for name, f in SKILLS.items():
             # A description holding ": " must be a `>-` block to stay valid YAML; still one line.
-            m = re.match(r"---\nname: (.+)\ndescription: (?:>-\n  )?(.+)\n---\n", read(f))
+            # A heavy skill may add `disable-model-invocation: true` so it runs only when typed.
+            m = re.match(r"---\nname: (.+)\ndescription: (?:>-\n  )?(.+)\n"
+                         r"(?:disable-model-invocation: true\n)?---\n", read(f))
             self.assertIsNotNone(m, f"{name}: frontmatter is not name + one-line description")
             self.assertEqual(m.group(1), name)
 

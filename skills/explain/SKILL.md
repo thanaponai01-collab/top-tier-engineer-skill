@@ -1,6 +1,6 @@
 ---
 name: explain
-description: Teach a person what a thing in the codebase is, how it works and why it is built that way, in one plain account at their pace, changing nothing. Use for "explain how X works", "walk me through this", "teach me", "help me understand this system", "I don't get why it does that", or when someone is new to a codebase and needs to build a working picture. Also gives a subsystem overview, the account a senior engineer would give someone joining that area.
+description: Teach a person how a part of the codebase works and why it is built that way, changing nothing. Use when someone asks to be walked through or taught a system or subsystem ("walk me through", "teach me", "help me understand this system", "I'm new to this codebase"). Not for a quick question about one line or function.
 ---
 
 # Explain

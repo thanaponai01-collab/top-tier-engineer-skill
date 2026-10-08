@@ -1,6 +1,8 @@
 ---
 name: drive
-description: Carry a goal through engineering skills with a durable run record, evidence gates, recovery and scoped release authority. Use when one prompt should take work to a verified local, staging or production result, or to resume an interrupted run.
+description: >-
+  Carry a goal through engineering skills with a durable run record, evidence gates, recovery and scoped release authority. Use when one prompt should take work to a verified local, staging or production result, or to resume an interrupted run. Manual: run /drive.
+disable-model-invocation: true
 ---
 
 # Drive

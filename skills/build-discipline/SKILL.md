@@ -1,6 +1,6 @@
 ---
 name: build-discipline
-description: Build in small, proven, fully-wired increments. Use when writing or generating code for a feature, tool or system, or resuming a half-finished build. Trigger on "build it", "implement this", "add the feature", "make it work".
+description: Build in small, proven, fully-wired increments. Use for a multi-file feature, tool or system built from scratch, or resuming a half-finished build. Not for one-line or single-function edits.
 ---
 
 # Build Discipline

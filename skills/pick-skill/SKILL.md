@@ -1,6 +1,8 @@
 ---
 name: pick-skill
-description: Choose which engineering skill the work in front of you needs, and say what each one will and will not do. Use when more than one could apply, when the ask is broad ("look at my codebase", "make this better", "is this good?", "what should I do next?"), when you don't know where to start, or when someone asks which skill to run.
+description: >-
+  Choose which engineering skill fits the work and say what each one will and will not do. Manual: run /pick-skill when you don't know which skill to use.
+disable-model-invocation: true
 ---
 
 # Pick a Skill

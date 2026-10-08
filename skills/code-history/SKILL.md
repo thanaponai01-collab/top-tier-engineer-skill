@@ -1,6 +1,6 @@
 ---
 name: code-history
-description: Find out why code is the way it is, from the records people left, before changing it. Discovers which evidence sources are connected (source control, issue tracker, docs, chat, error tracking, observability, analytics), queries each in parallel, and returns a cited read on the decision, the tradeoff and whether the reason still holds. Use for "why does X work this way", "why did we pick Y", design rationale, past regressions, postmortems, "where does this number come from", or before touching code that looks wrong.
+description: Find out why code is the way it is, from the records people left. Discovers which evidence sources are connected (source control, issue tracker, docs, chat, error tracking, observability, analytics), queries each in parallel, and returns a cited read on the decision, the tradeoff and whether the reason still holds. Use for "why does X work this way", "why did we pick Y", "who decided this", design rationale, past regressions, postmortems, or "where does this number come from".
 ---
 
 # Code History

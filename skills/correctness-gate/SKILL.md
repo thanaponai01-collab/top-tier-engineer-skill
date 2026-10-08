@@ -1,6 +1,6 @@
 ---
 name: correctness-gate
-description: Prove built software is correct with evidence, not plausibility. Use before any release, merge or "it's done", when asked "does this actually work / test this", after building a feature, or after a bug fix to stop it coming back.
+description: Prove built software is correct with evidence, not plausibility. Use when asked "does this actually work?" or "test this properly", or before a release or merge the user wants proven.
 ---
 
 # Correctness Gate

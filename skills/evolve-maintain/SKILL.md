@@ -1,6 +1,7 @@
 ---
 name: evolve-maintain
-description: 'Change a running system safely: bug fixes with a known cause, incidents, dependency upgrades, refactors, or deprecations. Use for "the system broke", "upgrade X", "refactor this", "remove this old API".'
+description: >-
+  Change a running system safely: dependency upgrades, removing an old API, deprecations, large refactors, incidents, or a change the user says must not break something live. Use for "upgrade X", "remove this old API", "refactor this module". Not for small edits or renames.
 ---
 
 # Maintenance & Evolution
