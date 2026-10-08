@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "three-date-formatters-one-job",
+      "what": "web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format",
+      "found": true,
+      "quote": "The copies are `web/views.py:1` (`fmt_date`), `api/serializers.py:1` (`format_date`) and `jobs/export.py:1` (`date_str`). All use `%d/%m/%Y`.",
+      "quote_checked": true
+    },
+    {
+      "id": "provider-interface-one-implementation",
+      "what": "providers/base.py is an abstraction with exactly one implementation and no second caller paying for it",
+      "found": true,
+      "quote": "`providers/base.py:1`, `registry.py:3` and `smtp.py:4` form a base class, a registry and one implementer.",
+      "quote_checked": true
+    },
+    {
+      "id": "move-has-a-proof-line",
+      "what": "the top move is written out with the callers it changes and the check that behaviour did not",
+      "found": true,
+      "quote": "Before step 1, add a test pinning `invoice_date` to `2026-10-08` and a test pinning the display format to `08/10/2026`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "billing-looks-alike-but-changes-for-another-reason",
+      "what": "billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0758616,
+  "model": "claude-sonnet-5-5"
+}

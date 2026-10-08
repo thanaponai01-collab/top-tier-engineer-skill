@@ -1,0 +1,3 @@
+  1. Skill: arch-design
+  2. Glob: fixture/**/*
+  3. Bash: cd fixture && for f in web/views.py api/serializers.py jobs/export.py billing/invoice.py providers/*.py; do echo "=== $f"; cat -n $f; done

@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"The copies are `api/serializers.py:1`, `web/views.py:1` and `jobs/export.py:1`, all `%d/%m/%Y`.\"\n  found   provider-interface-one-implementation \u2014 \"`providers/base.py` is an interface that says \"Implemented once\", `providers/smtp.py` is its one implementer\"\n  found   move-has-a-proof-line \u2014 \"Proof: a test that the API and the page render the same date string for one order.\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1158496,
+  "turns": 5,
+  "seconds": 21.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -75,8 +75,21 @@ def stage_plugin(dest, hooks_profile=None):
     return dest
 
 
+def claude_bin():
+    """The `claude` executable. On Windows an npm install puts only a claude.cmd shim on PATH,
+    which subprocess can't start by bare name and cmd.exe would mangle a multi-line prompt
+    through, so resolve the shim to the claude.exe it wraps."""
+    found = shutil.which("claude")
+    if found and found.lower().endswith(".cmd"):
+        exe = os.path.join(os.path.dirname(found), "node_modules", "@anthropic-ai",
+                           "claude-code", "bin", "claude.exe")
+        if os.path.isfile(exe):
+            return exe
+    return found or "claude"
+
+
 def build_command(prompt, plugin_dir=None, model=None, budget_usd=None, max_turns=None):
-    cmd = ["claude", "-p", prompt, "--output-format", "stream-json", "--verbose",
+    cmd = [claude_bin(), "-p", prompt, "--output-format", "stream-json", "--verbose",
            "--permission-mode", "bypassPermissions", "--no-session-persistence"]
     if plugin_dir:
         cmd += ["--plugin-dir", plugin_dir]

@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "gonna-need-seam-one-implementation",
+      "what": "shipping/base.py is an interface with exactly one implementation, FlatRateCalculator, and no second carrier is asked for by any requirement here",
+      "found": true,
+      "quote": "The class has 1 implementer (`FlatRateCalculator`) and 0 other references.",
+      "quote_checked": true
+    },
+    {
+      "id": "second-caller-hides-behind-an-alias",
+      "what": "jobs/reprice.py reaches the same seam through `from shipping.registry import get_calculator as pick_calc`, so a plain text search for `get_calculator(` finds checkout/cart.py and misses this one",
+      "found": true,
+      "quote": "`reprice.py` aliases it as `pick_calc`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "undercounts-to-one-caller",
+      "what": "a report that greps only the literal text `get_calculator(` finds checkout/cart.py, calls it the only caller, and clears the seam to inline directly \u2014 breaking jobs/reprice.py, which calls the same function under its aliased name",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0748576,
+  "model": "claude-sonnet-5-5"
+}

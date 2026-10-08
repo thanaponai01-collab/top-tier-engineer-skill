@@ -1,0 +1,12 @@
+{
+  "started": "2026-10-08-1228",
+  "repeats": 3,
+  "arms": [
+    "with"
+  ],
+  "version": "4.53.0",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "out_rel": "evals/results/arch-design-4.53"
+}

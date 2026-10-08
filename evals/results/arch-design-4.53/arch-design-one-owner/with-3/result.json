@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"The copies are `web/views.py:1` (`fmt_date`), `api/serializers.py:1` (`format_date`) and `jobs/export.py:1` (`date_str`)\"\n  found   provider-interface-one-implementation \u2014 \"`providers/base.py:1`, `registry.py:3` and `smtp.py:4` form a base class, a registry and one implementer.\"\n  found   move-has-a-proof-line \u2014 \"Before step 1, add a test pinning `invoice_date` to `2026-10-08` and a test pinning the display format to `08/10/2026`.\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.11452999999999999,
+  "turns": 5,
+  "seconds": 18.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.53.0 - 2026-10-08 - arch-design borrows four ideas from peer architecture skills
+
+- **Read recorded decisions first** (`docs/adr/`, `docs/architecture.md`, `WHY.md`); a move that
+  reopens one says why its reason no longer holds.
+- **Ports only where earned**: inject a port for what crosses a network or isn't yours; a dependency
+  with a local stand-in (SQLite, a temp dir) gets none.
+- **Design new pins the deciding numbers** (load, data size, latency, consistency, who runs it)
+  instead of designing for "scale" in general.
+- **Tests move with the seam**: a move's tests go to the new interface and the old parts' tests go.
+- **ADR on a settled door or a lasting rejection**, so the next review doesn't re-propose it.
+- Replace-a-part now spells out the strangler path (stable interface, move callers, delete old path).
+- Reuse-before-add now names the second store *not* added and its cost, even when nobody proposed it.
+- evals: `agent.py` resolves the Windows npm `claude.cmd` shim to `claude.exe`, so `run.py` starts agents there.
+
 ## 4.52.0 - 2026-10-06 - verify-loop scaling, efficiency, and AST mutation upgrades
 
 - **Sub-recipe composition (`include:`)**: Large codebases and monorepos can compose modular sub-recipes (`include: path/to/VERIFY.md`). The baseline freezes included sub-recipes alongside the root recipe, catching edits as `CHECK CHANGED`.

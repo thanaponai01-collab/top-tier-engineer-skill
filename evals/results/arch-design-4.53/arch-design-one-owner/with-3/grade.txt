@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   three-date-formatters-one-job — "The copies are `web/views.py:1` (`fmt_date`), `api/serializers.py:1` (`format_date`) and `jobs/export.py:1` (`date_str`)"
+  found   provider-interface-one-implementation — "`providers/base.py:1`, `registry.py:3` and `smtp.py:4` form a base class, a registry and one implementer."
+  found   move-has-a-proof-line — "Before step 1, add a test pinning `invoice_date` to `2026-10-08` and a test pinning the display format to `08/10/2026`."
+  held    billing-looks-alike-but-changes-for-another-reason
+
+Phrase grader (grade.py), for comparison:
+PASS  arch-design-one-owner  [arch-design]  3/3 found, score 1.00 (needs 1.00)
+  found   three-date-formatters-one-job: web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format
+  found   provider-interface-one-implementation: providers/base.py is an abstraction with exactly one implementation and no second caller paying for it
+  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not
+  held    billing-looks-alike-but-changes-for-another-reason: billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move
+
+  ok      left the code untouched (a report-only task) — no code file changed

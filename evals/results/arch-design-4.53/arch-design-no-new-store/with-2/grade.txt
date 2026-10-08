@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  1/3 found
+  found   existing-db-is-the-one-owner — "`app/db.py:11` `execute()` is the only DB path. Use it for the history too, and don't add a second store."
+  MISSED  no-plugin-for-one-format
+  MISSED  cost-of-a-new-store-named
+  held    new-datastore-for-history
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-no-new-store  [arch-design]  2/3 found, score 0.67 (needs 1.00)
+  found   existing-db-is-the-one-owner: app/db.py is already the single place reports/models.py and users/models.py persist through; export history belongs there, not in new storage
+  MISSED  no-plugin-for-one-format: only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for
+            named it, but never said what was wrong with it
+  found   cost-of-a-new-store-named: the report names what a separate new datastore would cost if it turned out wrong — a migration, a second thing to secure and back up — as the reason for reusing the existing database
+  held    new-datastore-for-history: standing up a separate datastore for export history instead of a table in the database the app already has
+
+  ok      left the code untouched (a report-only task) — no code file changed

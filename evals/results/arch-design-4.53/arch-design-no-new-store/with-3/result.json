@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-no-new-store",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   existing-db-is-the-one-owner \u2014 \"`db.execute` (`db.py:11`) already owns queries.\"\n  found   no-plugin-for-one-format \u2014 \"Don't add a package, a service or a plugin seam.\"\n  found   cost-of-a-new-store-named \u2014 \"A second store, a log file or a cache would add something to back up and secure for no gain.\"\n  held    new-datastore-for-history",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.14170760000000002,
+  "turns": 8,
+  "seconds": 37.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

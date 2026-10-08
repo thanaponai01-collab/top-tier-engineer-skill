@@ -1,0 +1,4 @@
+  1. Skill: arch-design
+  2. Glob: fixture/**/*
+  3. Bash: cd fixture; for f in checkout/cart.py jobs/reprice.py shipping/*.py; do echo "=== $f"; cat -n $f; done
+  4. Grep: ShippingCalculator|shipping\.base|shipping import|importlib|getattr|__import__

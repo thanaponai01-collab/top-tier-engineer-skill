@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-no-new-store",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  2/3 found\n  found   existing-db-is-the-one-owner \u2014 \"`app/db.py:11` `execute()` is the one place that runs queries, and `app/reports/models.py` owns report reads.\"\n  found   no-plugin-for-one-format \u2014 \"Don't add a new layer, a service class or an exporter plugin interface. There is one format, so it's one function.\"\n  MISSED  cost-of-a-new-store-named\n  held    new-datastore-for-history",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "the report names what a separate new datastore would cost if it turned out wrong \u2014 a migration, a second thing to secure and back up \u2014 as the reason for reusing the existing database"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.13454480000000002,
+  "turns": 8,
+  "seconds": 32.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

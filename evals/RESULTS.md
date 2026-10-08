@@ -1,3 +1,21 @@
+# arch-design borrows from peer skills (4.53.0)
+
+2026-10-08: SKILL.md gains: read recorded decisions first, ports only where earned, pin the deciding
+numbers for a new design, tests move with the seam, ADR on a settled door, and the rejected second
+store named with its cost. With-plugin arm only, semantic judge, claude-sonnet-5-5.
+
+| case | result | before (2026-09-30) |
+|---|---|---|
+| arch-design-graph-shape | 1/1 pass | 2/2 |
+| arch-design-verify-caller-count | 1/1 pass | 2/2 |
+| arch-design-one-owner | 3/4 pass (one run proposed no merge, so no proof line) | 2/2 |
+| arch-design-no-new-store | 1/4 pass (1/3 after the reworded reuse line) | 0/8 |
+
+no-new-store still fails mostly on not naming what a second store would cost as the reason for
+reusing the database; the runs that miss it do reuse `db.py`. Without-plugin arm not run. Also
+fixed: `evals/agent.py` now resolves the Windows npm `claude.cmd` shim to `claude.exe`. Evidence:
+`evals/results/arch-design-4.53/`.
+
 # Callers on the verify-loop handoff (4.51.0)
 
 2026-10-05: nine caller skills now point to `verify-loop/references/handoff.md` instead of each

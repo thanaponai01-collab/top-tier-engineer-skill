@@ -1,0 +1,46 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  2/3 found\n  found   three-date-formatters-one-job \u2014 \"`%d/%m/%Y` is written out 3 times: `web/views.py:2`, `api/serializers.py:2` and `jobs/export.py:2`.\"\n  found   provider-interface-one-implementation \u2014 \"`base.py:2` says it's \"implemented once, by SmtpProvider\". `registry.py:3` is a one-entry dict, so there are 3 files for\"\n  MISSED  move-has-a-proof-line\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "the top move is written out with the callers it changes and the check that behaviour did not"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1182358,
+  "turns": 5,
+  "seconds": 24.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}
