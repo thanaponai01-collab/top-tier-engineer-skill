@@ -1,5 +1,15 @@
 # Build evidence
 
+Setup captures discoverable intent and Next; updates share handoff upkeep, unfinished areas remain
+current, and context completeness rejects missing/broken structure | proven (411 repository tests;
+Python and Node live setup 1/1 each after explicit manual invocation; live build decision upkeep
+1/1; installed reference/checker hashes match) | uncommitted
+
+Context handoffs keep active area decisions discoverable, compact completed history to bounded milestones,
+and distinguish implemented behavior from owner intent | proven (401 repository tests; live
+build-discipline-keeps-decisions regression 1/1; artifact check retains 35 decisions and 200 controlled
+replay receipts and rejects a missing decision) | uncommitted
+
 `python -m unittest discover tests -p test_challenge.py`: real CLI catches a source mutation, reports a survivor and rejects a harness failure without changing the source tree | proven (11 focused CLI checks; full suite 337 passed) | 179a62e
 
 `python -m unittest discover tests -p test_challenge.py`: sequential feature challenges retain both receipts and finish strict green; live change evaluation detects a shared-caller regression and completes verification | proven (12 challenge checks, 5 grader checks and full suite 343 passed; live case passed) | 7b89281

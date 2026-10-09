@@ -1,0 +1,12 @@
+{
+  "started": "2026-10-09-1737",
+  "repeats": 1,
+  "arms": [
+    "with"
+  ],
+  "version": "4.55.0",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "out_rel": "evals/results/context-setup-explicit"
+}

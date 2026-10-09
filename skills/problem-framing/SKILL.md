@@ -82,12 +82,15 @@ only this skill.
   it replaced: `- 2026-10-09 · Export is JSON only: new bookkeeping tool. Replaces CSV (2026-09-02).`
   Move the old line, dated and with why it was retired, to `BRIEF.archive.md`. The same goes for an
   invariant or preference the decision overturns. `BRIEF.md` lists only what is true now.
-- **Stay readable.** About 120 lines and 25 decisions at most. Past that, retire what no longer
-  constrains the work to the archive. `context_budget.py` (in `recall`'s scripts) measures it.
+- **Stay readable.** About 120 lines and 25 project-wide decisions at most. Archive superseded
+  decisions. When more decisions remain active, move area-specific requirements and decisions to
+  `brief/<area>.md`; leave an `include: brief/<area>.md` line stating when to read it. Each area has
+  the same budgets and may split further. Active requirements remain discoverable; age or a full
+  budget alone is no reason to archive them. `context_budget.py` measures the brief and its areas.
 - **Make it found.** The project's agent instruction file (`CLAUDE.md`, `AGENTS.md`) needs a
   start-here block that sends a fresh session to `BRIEF.md` first; `project-setup` owns its shape.
 
-*Test:* every decision the owner stated this session is a line in `BRIEF.md`, and no line there
+*Test:* every decision the owner stated this session is in `BRIEF.md` or a linked current area, and no current line
 contradicts it.
 
 ## Rules

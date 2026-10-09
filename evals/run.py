@@ -65,6 +65,17 @@ def prompt_for(case_dir, arm):
     return grade.read(path).strip()
 
 
+def explicit_manual_skill(prompt, case, plugin_dir):
+    """Explicit test invocation, without relying on discovery of a manual-only skill."""
+    if not plugin_dir:
+        return prompt
+    entry = os.path.join(plugin_dir, "skills", case["skill"], "SKILL.md")
+    if os.path.isfile(entry) and re.search(r"(?m)^disable-model-invocation:\s*true\s*$", grade.read(entry)):
+        return prompt + (f"\n\nThe explicitly requested {case['skill']} skill is at "
+                         f"{entry}. Read and follow that SKILL.md before starting.")
+    return prompt
+
+
 # ---------------------------------------------------------------- action checks
 
 def check_actions(spec, parsed, changes, end_output=None, arm="with"):
@@ -330,6 +341,8 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
                         ignore=shutil.ignore_patterns(*agent.IGNORED_DIRS))
         before = agent.snapshot(workdir)
         prompt = prompt_for(case["dir"], arm)
+        if arm == "with":
+            prompt = explicit_manual_skill(prompt, case, plugin_dir)
         say(f"start  {tag}")
         raw = agent.run_agent(prompt, workdir, plugin_dir if arm == "with" else None,
                               model=args.model, timeout=args.timeout, budget_usd=args.budget_usd)

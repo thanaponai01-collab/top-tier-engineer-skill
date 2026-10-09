@@ -1,4 +1,37 @@
+# Setup and update context upkeep (4.56.0)
+
+2026-10-09: project-setup now saves missing intent/work context, preserves equivalent documents,
+and checks structural completeness; maintenance/build workflows link one shared upkeep reference.
+The context checker keeps legacy budget mode and adds --check-handoff for startup markers,
+nonempty intent/work, Next and local document/include links. Unfinished areas remain current
+through work/ includes rather than being archived as completed proof.
+
+Live setup runs initially failed because project-setup is manual-only and the agents reported
+the skill unavailable. The evaluation harness now supplies the staged SKILL.md path for explicitly
+requested manual-only skills, without exposing answer keys or findings. This preserves the skill's
+invocation policy. The initial failures are retained in evals/results/context-setup-upkeep/.
+Its model-invoked build-discipline-keeps-decisions run passed 1/1 ($0.19).
+
+With explicit invocation, project-setup-existing-project and project-setup-node-project passed
+1/1 each ($0.26 and $0.22). Their strengthened finished-workspace checks require saved intent,
+an actionable Next section and startup pointers, in addition to existing product-preservation,
+strict verification and independently replayed wrong/original checks. Both agents retained manual
+coverage limits. Evidence: evals/results/context-setup-explicit/. Phrase grading was used with
+finished-workspace checks, without a semantic judge. These single runs are not a reliability estimate.
+Final full suite: 411 tests passed. Seven related installed Codex skills were backed up and synced;
+the installed shared reference and context checker match the repository hashes.
+
 # Decisions outlive the session (4.55.0)
+
+2026-10-09 follow-up (unreleased): `build-discipline-keeps-decisions` passed 1/1 with the updated
+skills, using phrase grading and finished-workspace checks; $0.20, 40 seconds. Evidence:
+`evals/results/context-handoff-regression/`. No semantic judge was used. A separate two-session
+volume/intent handoff is documented in `evals/context-handoff/README.md`; the artifact checker
+retains 35 active decisions and 200 controlled replay receipts, and rejects a missing active
+decision. All 401 repository tests passed. This small sample is not a reliability estimate.
+The independent fresh reader recovered the intended JSON behavior and identified that the green
+CSV baseline did not establish JSON acceptance; its sourced capsule is retained in
+`evals/context-handoff/reader-report.md`. Startup notes were 26/120 and 19/80 lines after compaction.
 
 2026-10-09: new case `build-discipline-keeps-decisions`. Mid-build, the user mentions in passing
 that the export format changed (CSV → JSON). The case is graded on the brief left behind: it states

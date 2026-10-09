@@ -134,7 +134,25 @@ A decision said in chat, even in passing, is written to `BRIEF.md` before the wo
 one that overrides another replaces its line, and the old line moves to `BRIEF.archive.md`. Notes grow
 by sending old detail down a layer, never by getting longer at the top. `recall`'s
 `scripts/context_budget.py` names every note over budget and the move that fixes it; `/recall`
-rebuilds where things stand from all of it.
+rebuilds where things stand from all of it. Active area requirements and decisions can live in
+`brief/<area>.md`, linked with `include:` from the brief; archives hold superseded material.
+Completed build history stays in its archive, with at most five milestone summaries at startup.
+Code describes implemented behavior; current owner requirements describe intended behavior.
+Recall reports discrepancies instead of replacing the requirements with what the code does.
+Setup also saves missing intent and next-work context. Existing document names are selected by
+`intent:` and `work:` pointers in the startup block. Run recall's `context_budget.py <repo>
+--check-handoff` to check structural completeness as well as sizes. A pass establishes discoverable
+files and links, not product correctness or fidelity to the owner's wishes. Detailed unfinished
+work can split through `include: work/<area>.md`, while Next and urgent blockers stay in the index.
+
+Typical requests:
+
+- "Use project-setup to save this project's intent and next step and refresh verification."
+- "Use build-discipline to add this feature and keep the project handoff current."
+- "Use evolve-maintain for this upgrade and refresh affected context."
+- "Use recall, then continue the next step."
+
+The agent maintains the notes during the work; the owner supplies the goal and decisions.
 
 ## Hooks
 

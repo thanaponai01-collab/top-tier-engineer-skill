@@ -32,6 +32,11 @@ continuing discovery; leave that behavior unverified. An empty repo supports a p
 
 ## Prepare the seed
 
+Prepare project context using [the context handoff](references/context-handoff.md): preserve
+existing intent/work documents, or save a brief and current next step when absent. Capture intent
+from the owner or documented requirements, marking unknowns explicitly. This also applies to an
+empty repo: context can be ready while product verification remains unverified.
+
 Read existing VERIFY.md and FEATURES.md first. Reuse equivalent documents and link them where
 possible. Update missing or demonstrably stale setup; preserve manual notes, coverage limits and
 expectations. Conflicting expectations are a finding, not permission to match the implementation.
@@ -81,8 +86,11 @@ every session loads without being asked. Add or refresh one start-here block bet
 `<!-- start-here -->` and `<!-- /start-here -->`, at most 30 lines: the goal in one line, then links
 in reading order to the files actually present (`BRIEF.md` for what the owner wants and the decisions
 in force, `BUILD.md` for the next step, `FEATURES.md`, `VERIFY.md` with its coverage boundary and
-command), and one line saying a changed decision replaces its line in `BRIEF.md`. Links and one-line
-summaries only; detail stays in the linked files. Preserve other instructions and never write a
+command), and one line saying a changed decision replaces its line in the brief or its linked area.
+State when to read linked areas and identify equivalent documents with `intent:` and `work:`
+pointers. Include one upkeep line: authorized updates refresh affected intent, evidence and Next;
+read-only reviews report gaps. Links and one-line summaries only; detail stays in the linked files.
+Preserve other instructions and never write a
 second block. If no instruction file exists, create one appropriate to the requested agent, not
 several. Do not impose a required plugin workflow.
 
@@ -92,6 +100,9 @@ For requested CI setup, read [CI setup](references/ci-setup.md). Local readiness
 are separate verdicts. Ordinary setup does not authorize commits, pushes or releases.
 
 ## Report
+
+Run recall's `context_budget.py <repo> --check-handoff` as described in the context handoff.
+Report context completeness separately from verification readiness; unknown intent stays partial.
 
 List created/refreshed/kept files, runtime/package/working directory, commands actually executed,
 selected claim, rejection signal and current verdict. Name missing prerequisites, untested behavior,

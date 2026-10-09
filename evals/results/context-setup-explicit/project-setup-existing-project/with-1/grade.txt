@@ -1,0 +1,15 @@
+PASS  project-setup-existing-project  [project-setup]  1/1 found, score 1.00 (needs 1.00)
+  found   limited: The live gateway remains outside coverage.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      Retained state is strict green. — 
+  ok      Checks passed. — 
+  ok      Existing coverage limit remains. — 
+  ok      Existing instructions remain. — 
+  ok      Actual rejection evidence exists. — 
+  ok      Setup leaves sourced intent rather than only verification files. — 
+  ok      The next session has an actionable next-work section. — 
+  ok      Startup points to the saved intent and work records. — 
+  ok      The native check rejects an independently supplied wrong implementation. — 
+  ok      Native checks pass the unchanged original implementation. — 

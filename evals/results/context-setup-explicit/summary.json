@@ -1,0 +1,229 @@
+[
+  {
+    "case": "project-setup-node-project",
+    "skill": "project-setup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Retained state is strict green.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Checks passed.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing instructions remain.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Actual rejection evidence exists.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Setup leaves sourced intent rather than only verification files.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The next session has an actionable next-work section.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Startup points to the saved intent and work records.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Native checks pass the unchanged original implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/AGENTS.md",
+        "fixture/VERIFY.md"
+      ],
+      "added": [
+        "fixture/.gitignore",
+        "fixture/.verify-state.json",
+        "fixture/BRIEF.md",
+        "fixture/BUILD.md",
+        "fixture/verification/mutation.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.22004619999999997,
+    "turns": 9,
+    "grade_text": "PASS  project-setup-node-project  [project-setup]  1/1 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 38.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "project-setup-existing-project",
+    "skill": "project-setup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Retained state is strict green.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Checks passed.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing instructions remain.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Actual rejection evidence exists.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Setup leaves sourced intent rather than only verification files.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The next session has an actionable next-work section.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Startup points to the saved intent and work records.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Native checks pass the unchanged original implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/AGENTS.md",
+        "fixture/VERIFY.md"
+      ],
+      "added": [
+        "fixture/.gitignore",
+        "fixture/.verify-state.json",
+        "fixture/BRIEF.md",
+        "fixture/BUILD.md",
+        "fixture/FEATURES.md",
+        "fixture/verification/fee_mutation.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.26210520000000004,
+    "turns": 11,
+    "grade_text": "PASS  project-setup-existing-project  [project-setup]  1/1 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 54.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

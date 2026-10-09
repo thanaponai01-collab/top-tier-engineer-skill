@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.56.0 - 2026-10-09 - discoverable project intent and bounded handoffs
+
+- Setup saves missing intent and next-work context while preserving existing equivalent documents.
+  Build and maintenance workflows share one context-upkeep reference; onboarding refreshes stale setup.
+- `context_budget.py --check-handoff` checks startup markers, nonempty intent/work, Next and local
+  context links. Legacy size-only mode remains available; equivalent documents use intent/work pointers.
+- Active requirements and unfinished work split by area. Completed history keeps at most five
+  milestone summaries. Recall distinguishes owner intent from implemented behavior.
+- Startup hooks follow equivalent intent/work documents and expose relevant area pointers.
+- The evaluation harness explicitly locates requested manual-only skills without changing their
+  invocation policy. Setup evaluations now require retained intent, Next and startup pointers.
+- Evidence: 411 tests passed; Python and Node live setup each passed 1/1 after explicit invocation;
+  live decision upkeep passed 1/1. An independent fresh-session handoff retained 35 active decisions
+  and 200 controlled history receipts. See evals/RESULTS.md for scope and retained initial failures.
+
 ## 4.55.0 - 2026-10-09 - context that outlives the session, and stays small
 
 - **Decisions live in `BRIEF.md`, not the chat** (`problem-framing`, `build-discipline`): a decision

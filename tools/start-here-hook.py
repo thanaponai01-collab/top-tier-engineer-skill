@@ -32,7 +32,8 @@ MAX_LINES = 25
 
 HEADER = ("Project notes loaded by the top-tier-engineer start-here hook. Decisions in force "
           "override older code, comments and notes; change one only by replacing its line in "
-          "BRIEF.md and moving the old one to BRIEF.archive.md.")
+          "the current brief or its linked area and archiving the superseded entry. "
+          "Read linked brief areas relevant to the next task; this summary contains only root decisions.")
 
 
 def read(path):
@@ -53,12 +54,17 @@ def section(text, title):
     return "\n".join(body)
 
 
+def context_module():
+    spec = importlib.util.spec_from_file_location("context_budget", BUDGET_SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def over_budget(repo):
     """Lines naming each note over budget, via recall's context_budget.py; [] if unavailable."""
     try:
-        spec = importlib.util.spec_from_file_location("context_budget", BUDGET_SCRIPT)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
+        mod = context_module()
         rows = mod.measure(str(repo))
     except Exception:
         return []
@@ -68,12 +74,22 @@ def over_budget(repo):
 def summary(repo):
     repo = Path(repo)
     parts = []
-    decisions = section(read(repo / "BRIEF.md"), "Decisions")
+    try:
+        paths = context_module().roles(str(repo))
+    except Exception:
+        paths = {"intent": "BRIEF.md", "work": "BUILD.md"}
+    decisions = section(read(repo / paths["intent"]), "Decisions")
     if decisions:
-        parts.append("## Decisions in force (BRIEF.md)\n" + decisions)
-    nxt = section(read(repo / "BUILD.md"), "Next")
+        parts.append(f"## Decisions in force ({paths['intent']})\n" + decisions)
+    links = [line for line in read(repo / paths["intent"]).splitlines()
+             if re.match(r"^\s*(?:[-*]\s+)?include:", line, re.I)]
+    if links:
+        parts.append("## Current brief areas (read those relevant to Next)\n" +
+                     "\n".join(links[:MAX_LINES]) +
+                     (f"\nSee {paths['intent']} for remaining area links." if len(links) > MAX_LINES else ""))
+    nxt = section(read(repo / paths["work"]), "Next")
     if nxt:
-        parts.append("## Next (BUILD.md)\n" + nxt)
+        parts.append(f"## Next ({paths['work']})\n" + nxt)
     over = over_budget(repo)
     if over:
         parts.append("## Notes over their line budget — trim before adding to them\n" + "\n".join(over))

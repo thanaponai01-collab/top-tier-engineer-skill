@@ -34,6 +34,24 @@ def read(path):
 
 
 class Cases(unittest.TestCase):
+    def test_manual_skill_invocation_points_only_to_its_entry_not_answer_keys(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("eval_runner", os.path.join(EVALS, "run.py"))
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        with tempfile.TemporaryDirectory() as tmp:
+            entry = os.path.join(tmp, "skills", "manual", "SKILL.md")
+            os.makedirs(os.path.dirname(entry))
+            with open(entry, "w", encoding="utf-8") as fh:
+                fh.write("---\nname: manual\ndisable-model-invocation: true\n---\n")
+            prompt = runner.explicit_manual_skill("Use manual.", {"skill": "manual"}, tmp)
+            self.assertIn(entry, prompt)
+            self.assertNotIn("expect.json", prompt)
+            self.assertEqual(runner.explicit_manual_skill("Use manual.", {"skill": "manual"}, None), "Use manual.")
+            with open(entry, "w", encoding="utf-8") as fh:
+                fh.write("---\nname: manual\n---\n")
+            self.assertEqual(runner.explicit_manual_skill("Use manual.", {"skill": "manual"}, tmp), "Use manual.")
+
     def test_there_are_cases(self):
         self.assertTrue(grade.case_names(), "evals/cases/ holds no case with an expect.json")
 

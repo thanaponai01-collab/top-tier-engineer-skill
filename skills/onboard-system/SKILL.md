@@ -29,9 +29,9 @@ this one, and it already refuses to overwrite.
 
 ## 2. Set the project up — `project-setup`
 
-Run it if `VERIFY.md`, `FEATURES.md` or the `CLAUDE.md` pointer block is missing. This gives every
-later step, and every later session, the two files everything else builds on. Skip it if all three
-are already there.
+Run it if verification, the feature map, the agent startup block or intent/work context is missing
+or stale. Follow existing equivalent documents through startup pointers. Skip setup only when
+the relevant inputs are current; file existence alone does not establish readiness.
 
 ## 3. Map what it has — `feature-map`
 

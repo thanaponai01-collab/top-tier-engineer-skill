@@ -24,7 +24,11 @@
       ".gitignore",
       ".verify-state.json",
       "verification/*",
-      "tests/test_total.py"
+      "tests/test_total.py",
+      "BRIEF.md",
+      "BUILD.md",
+      "brief/*",
+      "work/*"
     ],
     "must_contain": [
       {
@@ -61,6 +65,27 @@
         "what": "Actual rejection evidence exists.",
         "path": ".verify-state.json",
         "regex": "\"failures\"\\s*:\\s*\\{\\s*\""
+      },
+      {
+        "id": "intent-saved",
+        "kind": "process",
+        "what": "Setup leaves sourced intent rather than only verification files.",
+        "path": "BRIEF.md",
+        "regex": "(?is)(checkout|fee|cents)"
+      },
+      {
+        "id": "next-saved",
+        "kind": "process",
+        "what": "The next session has an actionable next-work section.",
+        "path": "BUILD.md",
+        "regex": "(?is)##\\s+Next\\s*\\n\\s*\\S"
+      },
+      {
+        "id": "context-pointers",
+        "kind": "process",
+        "what": "Startup points to the saved intent and work records.",
+        "path": "AGENTS.md",
+        "regex": "(?s)<!-- start-here -->.*BRIEF\\.md.*BUILD\\.md.*<!-- /start-here -->"
       }
     ],
     "replays": [

@@ -71,6 +71,8 @@ For every case, side and try, `run.py`:
 1. copies only `fixture/` into a fresh temp folder — the agent never sees `expect.json` or
    `reference/`, and a run whose transcript reaches for them is thrown out;
 2. runs Claude Code headless: **with** = Claude Code + this plugin, given `prompt.md`;
+   for a manual-only requested skill, the harness supplies its staged SKILL.md path as an explicit
+   invocation, because ordinary model discovery excludes it; no expected findings are supplied;
    **without** = plain Claude Code, given `prompt-plain.md` (the same task in plain words — naming
    a skill the agent doesn't have would measure its confusion, not the skill);
 3. grades what the agent **wrote** on meaning with `judge.py` (below), and what it **did** from its

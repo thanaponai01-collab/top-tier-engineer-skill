@@ -64,6 +64,31 @@ def run_hook(script, payload):
     return proc.returncode, proc.stdout, proc.stderr
 
 
+class TestBriefAreaPointers(unittest.TestCase):
+    def test_hook_uses_existing_intent_and_work_documents(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "AGENTS.md").write_text("<!-- start-here -->\nintent: PRODUCT.md\nwork: CURRENT.md\n<!-- /start-here -->", encoding="utf-8")
+            (root / "PRODUCT.md").write_text("## Decisions\n- Tenant data stays separate.\n", encoding="utf-8")
+            (root / "CURRENT.md").write_text("## Next\nCheck tenant isolation.\n", encoding="utf-8")
+            code, out, err = run_hook(START_HERE_HOOK, {"cwd": tmp})
+            self.assertEqual(code, 0, err)
+            self.assertIn("Tenant data stays separate", out)
+            self.assertIn("Check tenant isolation", out)
+            self.assertIn("CURRENT.md", out)
+
+    def test_hook_links_current_areas_without_loading_their_contents(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "brief").mkdir()
+            (root / "BRIEF.md").write_text("include: brief/billing.md — billing work\n", encoding="utf-8")
+            (root / "brief/billing.md").write_text("AREA_DETAIL_NOT_FOR_STARTUP", encoding="utf-8")
+            code, out, err = run_hook(START_HERE_HOOK, {"cwd": tmp})
+            self.assertEqual(code, 0, err)
+            self.assertIn("brief/billing.md", out)
+            self.assertNotIn("AREA_DETAIL_NOT_FOR_STARTUP", out)
+
+
 class TestRunDetection(unittest.TestCase):
     def test_test_runners_count_as_running(self):
         for command in ("pytest -q", "npm test", "go test ./...",

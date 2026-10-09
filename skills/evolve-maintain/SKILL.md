@@ -87,6 +87,10 @@ A fix that closes only this instance gets paid for again.
 *Test:* the regression test fails against the old code. One that passes either way guards nothing.
 
 ## 5. Record
+Keep owner intent, affected documentation and the next step current using
+[the context handoff](../project-setup/references/context-handoff.md). Run its structural check;
+report unrelated pre-existing gaps rather than expanding a maintenance task to repair them.
+
 If the project keeps a maintenance log, append:
 `date | class | symptom | root cause | treatment | reach | guarded by | follow-ups`, written so a
 future symptom can be matched to a past cause in one read.

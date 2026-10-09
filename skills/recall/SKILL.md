@@ -31,21 +31,23 @@ Everything here is on disk or one command away; nothing is changed.
   last CI run.
 
 "Recent" is since the last stretch of work: the last few days of commits, or what the user says.
-Do not read the whole repo. Say what you left unread. Of a split note (`FEATURES.md` or `VERIFY.md`
-as an index of `include:` lines), read the index and only the areas the recent work touched;
+Do not read the whole repo. Say what you left unread. Of a split note (`BRIEF.md`, `FEATURES.md` or `VERIFY.md`
+as an index of `include:` lines), read the index and only the areas recent work or NEXT touches;
 archives (`*.archive.md`) only when an index line sends you there.
 
-Run `python <skill-base>/scripts/context_budget.py <repo>`. It names each note over its line
-budget and the move that brings it back; carry those into the capsule, since a note too long to read
-is how the next session misses what is in it.
+Run `python <skill-base>/scripts/context_budget.py <repo> --check-handoff`. It names structural gaps
+and budget overruns; carry those into the capsule. Follow `intent:` and `work:` pointers for existing
+equivalent documents. The check establishes structure, not fidelity to the owner's wishes.
 
 ## 2. Check what can be checked
 
 A note that says "proven" is a claim from an earlier session. Reconcile unknown external actions
 against the actual provider before any retry; an applied action must not be repeated. Then rerun the last check it names (the
 test, the `VERIFY.md` section, the build) before you repeat the claim. Rerun only what is safe to
-repeat; a check that writes data or calls a live service stays "from the notes". Where the notes and the code
-disagree, the code wins: say which line of the notes is stale.
+repeat; a check that writes data or calls a live service stays "from the notes". Code and checks establish
+implemented behavior; owner requirements in the current brief and linked areas establish intended
+behavior. Report a mismatch as a gap. Correct stale descriptions of implementation, while preserving
+owner intent until the owner changes it; green tests alone cannot supersede a requirement.
 
 *Test:* every "done" in the capsule was either rerun now or is labelled as from the notes.
 
@@ -55,7 +57,7 @@ Answer first. About ten lines, each with its source:
 
 ```
 GOAL:      <what this work is for, one line>
-DECISIONS: <the decisions in force from BRIEF.md that bear on NEXT, or "none recorded">
+DECISIONS: <the decisions in force from BRIEF.md and relevant linked areas that bear on NEXT, or "none recorded">
 DONE:      <finished and proven; what you reran> [proven]
 IN FLIGHT: <uncommitted or half-built, by file> [traced]
 OPEN:      <decisions and questions nobody answered>
