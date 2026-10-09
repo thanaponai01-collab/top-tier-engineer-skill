@@ -1,0 +1,10 @@
+  1. Bash: cd fixture && ls -la && cat *.md 2>/dev/null | head -100 && git log 2>/dev/null | head
+  2. Bash: cd fixture && cat cli.py invoices.py; ls tests; cat tests/*
+  3. Bash: cd fixture && cat > invoices.py <<'EOF' """Invoices and the export accounting imports each month.""" import json INVOICES = [ {"id": "INV-101", "date": "2026-0…
+  4. Bash: cd fixture && python - <<'EOF' p='BRIEF.md'; s=open(p).read() s=s.replace("- 2026-09-02 · Export format is CSV: the bookkeeping tool imports CSV.\n", "- 2026-0…
+  5. Bash: cd fixture && cat BRIEF.md; cat BUILD.md | head -8
+  6. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-su5u8jg4\fixture\BRIEF.md
+  7. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-su5u8jg4\fixture\BUILD.md
+  8. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-su5u8jg4\fixture\CLAUDE.md
+  9. Bash: cd fixture && cat -A BUILD.md | sed -n 1,14p | cut -c1-120
+ 10. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-su5u8jg4\fixture\BUILD.md

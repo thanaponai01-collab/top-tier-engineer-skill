@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   decision-recorded — "I recorded the switch to JSON in `BRIEF.md` (Preferences #1) and moved the old CSV line to a new `BRIEF.archive.md`."
+  held    csv-kept-alive
+
+Phrase grader (grade.py), for comparison:
+PASS  build-discipline-keeps-decisions  [build-discipline]  1/1 found, score 1.00 (needs 1.00)
+  found   decision-recorded: The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.
+  held    csv-kept-alive: Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      BRIEF.md names JSON as the export format. — 
+  ok      No line of BRIEF.md still states CSV as the output format; CSV may appear only as what was replaced, or in passing (e.g. 'the same fields as the CSV columns'). — 
+  ok      The agent instruction file a fresh session loads first points at BRIEF.md. — 
+  ok      The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history. — 
+  ok      BUILD.md records the slice it built (the JSON switch or the month filter) with a status. — 
+  ok      The project's own tests pass on the finished copy. — 
+  ok      Through the real CLI, the full export is JSON holding all four invoices. Advisory: with the new tool's JSON shape unknown, recording the decision and scheduling the switch as the next slice is sound. — advisory, not met: exit 1, expected 0
+  ok      --month 2026-09 keeps exactly INV-103 and INV-104. Advisory: doing the JSON switch as its own slice first, and leaving the month filter next, is equally sound slicing. — advisory, not met: exit 1, expected 0

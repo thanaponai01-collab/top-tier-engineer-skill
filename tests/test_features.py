@@ -290,5 +290,43 @@ class JourneySections(unittest.TestCase):
             self.assertNotIn("linked from no feature", out)
 
 
+class SplitMap(unittest.TestCase):
+    """A map past its budget becomes an index of area files; check must read through it."""
+
+    def split(self, tmp):
+        head, rest = MAP.split("## Open file", 1)
+        write(tmp, "features/checkout.md", head.replace("# FEATURES\n", ""))
+        write(tmp, "features/desktop.md", "## Open file" + rest)
+        write(tmp, "verify/all.md", VERIFY.replace("# VERIFY\n", ""))
+
+    def test_an_index_of_included_area_files_checks_like_one_map(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp, features="# FEATURES\n- include: `features/checkout.md` (pay)\n"
+                                "- include: features/desktop.md\n",
+                  verify="# VERIFY\ninclude: verify/all.md\n")
+            self.split(tmp)
+            code, out, err = run("features.py", "check", tmp, "--strict")
+            self.assertEqual(code, 0, out + err)
+            self.assertIn("3 features", out)
+
+    def test_staleness_inside_an_included_file_is_still_caught(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp, features="include: features/checkout.md\ninclude: features/desktop.md\n")
+            self.split(tmp)
+            write(tmp, "src/cart.html", "<button>Pay</button>\n")
+            code, out, _ = run("features.py", "check", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("pay-btn", out)
+
+    def test_an_include_cycle_does_not_hang(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            setup(tmp, features="include: features/a.md\n")
+            write(tmp, "features/a.md", "include: FEATURES.md\n" + MAP.replace("# FEATURES\n", ""))
+            code, out, err = run("features.py", "check", tmp, "--strict")
+            self.assertEqual(code, 0, out + err)
+
+
 if __name__ == "__main__":
     unittest.main()
+
+

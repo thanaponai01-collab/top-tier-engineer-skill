@@ -114,6 +114,11 @@ run `check`. It is the drift alarm.
 - **Never invent an entry point.** An anchor you did not see in the code or on screen is wrong until
   shown otherwise.
 - **Keep it short.** One line per fact. A map too long to read is a map nobody opens.
+- **Split by area past about 150 lines.** `FEATURES.md` becomes an index, one line per area:
+  `- include: features/<area>.md (what the area covers)`, and each area's features move to that file
+  verbatim. `check` and `impact` read through the includes. A session working on billing reads the
+  index and `features/billing.md`, nothing else. `context_budget.py` (in `recall`'s scripts) says
+  when a file is over.
 
 Mapping every feature to its checks is `verify-loop`; a feature whose entry point exists but does
 nothing is `wire-check`; a picture of the structure is `arch-map`. This skill stands without them:

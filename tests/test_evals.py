@@ -448,6 +448,65 @@ class ActionChecks(unittest.TestCase):
                                     f"{name}/{item['id']}: replay source {source} is missing")
 
 
+class DecisionsOutliveTheSession(unittest.TestCase):
+    """`build-discipline-keeps-decisions` is graded on the brief the agent leaves behind.
+
+    The brief must state the new decision, keep no line presenting the old one as current, and be
+    linked from CLAUDE.md. The sentences below are what real agents wrote; the grader once failed
+    two correct ones ("was CSV", "the same fields as the CSV columns"), so they stay as tests.
+    """
+
+    CASE = "build-discipline-keeps-decisions"
+
+    def setUp(self):
+        self.case = grade.load_case(self.CASE)
+        self.good = read(os.path.join(self.case["dir"], "reference", "good.md"))
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.work = os.path.join(self._tmp.name, "work")
+        shutil.copytree(os.path.join(self.case["dir"], "fixture"), self.work)
+
+    def write(self, rel, text):
+        with open(os.path.join(self.work, rel), "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(text)
+
+    def brief(self):
+        return read(os.path.join(self.work, "BRIEF.md"))
+
+    def failed(self):
+        result = grade.grade(self.case, self.good, self.work)
+        return {c["id"] for c in result["workdir"]["checks"] if c["gate"] and not c["ok"]}
+
+    def solve(self):
+        shutil.copytree(os.path.join(self.case["dir"], "reference", "solution"), self.work, dirs_exist_ok=True)
+
+    def test_the_reference_solution_passes(self):
+        self.solve()
+        result = grade.grade(self.case, self.good, self.work)
+        self.assertTrue(result["passed"], grade.render(result))
+
+    def test_the_untouched_fixture_fails_on_the_decision(self):
+        self.assertTrue({"decision-json", "start-here-points-at-brief"} <= self.failed())
+
+    def test_a_new_decision_beside_the_old_preference_is_a_contradiction(self):
+        self.solve()
+        self.write("BRIEF.md", read(os.path.join(self.case["dir"], "fixture", "BRIEF.md"))
+                   + "\n## Decisions\n- 2026-10-09 · Export is JSON.\n")
+        self.assertIn("csv-not-current", self.failed())
+
+    def test_how_real_agents_retired_csv_passes(self):
+        self.solve()
+        for line in ("1. JSON output: the new tool imports JSON (changed 2026-10-09; was CSV).",
+                     "New tool's JSON shape | array with the same fields as the CSV columns | reshape"):
+            self.write("BRIEF.md", self.brief() + line + "\n")
+            self.assertNotIn("csv-not-current", self.failed(), line)
+
+    def test_a_brief_nobody_links_fails(self):
+        self.solve()
+        self.write("CLAUDE.md", "# Invoice export\n")
+        self.assertIn("start-here-points-at-brief", self.failed())
+
+
 class NegationGuard(unittest.TestCase):
     """A forbidden phrase names a wrong answer; denying it is the right one.
 

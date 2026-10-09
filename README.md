@@ -119,18 +119,36 @@ Along the way:
   the conversation itself, as issues, verbatim, so it reaches you from any machine.
 - **About to merge?** `scrutinize` for an outside opinion.
 
+## Context that outlives the session
+
+A new session knows only what it can read, so the skills keep a project's memory in a few files,
+in three layers:
+
+| Layer | Read | Budget | Files |
+|---|---|---|---|
+| Always loaded | every session, by Claude Code itself | 30 lines | the start-here block in `CLAUDE.md` / `AGENTS.md` (`project-setup`) |
+| Read at start | when work begins | 120 / 80 lines | `BRIEF.md`: the goal and `## Decisions` in force (`problem-framing`); `BUILD.md`: proven slices and `## Next` (`build-discipline`) |
+| On demand | when a task touches it | per file | `FEATURES.md` / `VERIFY.md` areas via `include:`, `WHY.md` entries, every `*.archive.md` |
+
+A decision said in chat, even in passing, is written to `BRIEF.md` before the work that acts on it;
+one that overrides another replaces its line, and the old line moves to `BRIEF.archive.md`. Notes grow
+by sending old detail down a layer, never by getting longer at the top. `recall`'s
+`scripts/context_budget.py` names every note over budget and the move that fixes it; `/recall`
+rebuilds where things stand from all of it.
+
 ## Hooks
 
 The default `hooks/hooks.json` has no active hooks. Installing the plugin does not route
 prompts, inject instructions, or block the agent from ending a turn. `drive` works without hooks.
 
-For one-prompt runs nobody watches, copy `hooks/autonomous.json` instead (philosophy, `drive` loaded first, one stop-block on a red verify run). If you explicitly want the hooks, copy `hooks/optional.json` over `hooks/hooks.json` in your
+For one-prompt runs nobody watches, copy `hooks/autonomous.json` instead (philosophy and the project's decisions at start, `drive` loaded first, one stop-block on a red verify run). If you explicitly want the hooks, copy `hooks/optional.json` over `hooks/hooks.json` in your
 plugin checkout and reload the plugin. To return to the default, restore `hooks/hooks.json`
 to `{"hooks": {}}`. Hook configuration is separate from choosing `drive`.
 
 | Optional hook | Event | What it does |
 |---|---|---|
 | `philosophy-hook.py` | `SessionStart` | Loads the optional engineering guidelines in `PHILOSOPHY.md` |
+| `start-here-hook.py` | `SessionStart` | Hands the session the project's `## Decisions` (BRIEF.md) and `## Next` (BUILD.md), and names any note over its line budget; silent when there are none |
 | `drive-entry.py` | `UserPromptSubmit` | Autonomous profile only (`hooks/autonomous.json`): on a task-shaped prompt, tells the agent to load `drive` before any other tool call |
 | `route-hint.py` | `UserPromptSubmit` | Suggests a relevant skill; using it is optional and skipping it needs no justification |
 | `unproven-gate.py` | `UserPromptSubmit` | Reminds the agent when source files changed without anything being run since |

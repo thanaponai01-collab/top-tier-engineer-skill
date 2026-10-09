@@ -1,0 +1,27 @@
+{
+  "ok": true,
+  "found": 0,
+  "total": 1,
+  "score": 0.0,
+  "planted": [
+    {
+      "id": "decision-recorded",
+      "what": "The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "csv-kept-alive",
+      "what": "Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.0694896,
+  "model": "claude-sonnet-5-5"
+}

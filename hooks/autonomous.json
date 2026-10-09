@@ -1,5 +1,5 @@
 {
-  "description": "Autonomous profile for one-prompt runs nobody watches: philosophy at session start, drive loaded first on any task-shaped prompt, and one block on a stop while the verify run is red or stale. Opt-in: copy over hooks/hooks.json.",
+  "description": "Autonomous profile for one-prompt runs nobody watches: philosophy, decisions in force and the next step at session start, drive loaded first on any task-shaped prompt, and one block on a stop while the verify run is red or stale. Opt-in: copy over hooks/hooks.json.",
   "hooks": {
     "SessionStart": [
       {
@@ -7,6 +7,11 @@
           {
             "type": "command",
             "command": "if command -v python3 >/dev/null 2>&1; then python3 \"${CLAUDE_PLUGIN_ROOT}/tools/philosophy-hook.py\"; else python \"${CLAUDE_PLUGIN_ROOT}/tools/philosophy-hook.py\"; fi",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "if command -v python3 >/dev/null 2>&1; then python3 \"${CLAUDE_PLUGIN_ROOT}/tools/start-here-hook.py\"; else python \"${CLAUDE_PLUGIN_ROOT}/tools/start-here-hook.py\"; fi",
             "timeout": 10
           }
         ]

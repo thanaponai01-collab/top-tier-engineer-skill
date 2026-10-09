@@ -1,0 +1,13 @@
+{
+  "started": "2026-10-09-1623",
+  "repeats": 3,
+  "arms": [
+    "without",
+    "with"
+  ],
+  "version": "4.55.0",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "out_rel": "evals/results/keeps-decisions-final"
+}

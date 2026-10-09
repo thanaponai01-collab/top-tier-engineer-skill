@@ -22,6 +22,7 @@ GATE = TOOLS / "unproven-gate.py"
 PHILOSOPHY_HOOK = TOOLS / "philosophy-hook.py"
 ROUTE_HINT = TOOLS / "route-hint.py"
 STOP_GATE = TOOLS / "verify-stop-gate.py"
+START_HERE_HOOK = TOOLS / "start-here-hook.py"
 VERIFY = ROOT / "skills" / "verify-loop" / "scripts" / "verify.py"
 
 # The hooks are hyphenated CLI scripts, so they are loaded by path rather than
@@ -353,6 +354,42 @@ class TestPhilosophyHook(unittest.TestCase):
         self.assertEqual(proc.returncode, 0)
 
 
+class TestStartHereHook(unittest.TestCase):
+    def project(self, files):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        for rel, text in files.items():
+            (Path(tmp.name) / rel).write_text(text, encoding="utf-8")
+        return tmp.name
+
+    def test_hands_over_decisions_and_the_next_step(self):
+        repo = self.project({
+            "BRIEF.md": "# Brief\n## Decisions\n- 2026-10-09 · Export is JSON only\n## Not building\n- UI\n",
+            "BUILD.md": "# Build\n## Next\nSlice 5: --month filter\n## Deferred\n",
+        })
+        code, out, _ = run_hook(START_HERE_HOOK, {"hook_event_name": "SessionStart", "cwd": repo})
+        self.assertEqual(code, 0)
+        self.assertIn("Export is JSON only", out)
+        self.assertIn("Slice 5: --month filter", out)
+        self.assertNotIn("Not building", out)
+
+    def test_names_a_note_over_budget(self):
+        repo = self.project({"BUILD.md": "".join(f"- slice {i}\n" for i in range(90))})
+        code, out, _ = run_hook(START_HERE_HOOK, {"hook_event_name": "SessionStart", "cwd": repo})
+        self.assertEqual(code, 0)
+        self.assertIn("BUILD.md: 90/80", out)
+
+    def test_silent_in_a_project_with_no_notes(self):
+        repo = self.project({"README.md": "hello\n"})
+        code, out, _ = run_hook(START_HERE_HOOK, {"hook_event_name": "SessionStart", "cwd": repo})
+        self.assertEqual((code, out), (0, ""))
+
+    def test_exits_zero_on_garbage(self):
+        proc = subprocess.run([sys.executable, str(START_HERE_HOOK)],
+                              input="garbage", capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 0)
+
+
 class TestHooksManifest(unittest.TestCase):
     def test_default_install_runs_no_hooks(self):
         manifest = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8-sig"))
@@ -365,7 +402,7 @@ class TestHooksManifest(unittest.TestCase):
         self.assertIn("SessionStart", events)
         self.assertIn("UserPromptSubmit", events)
         referenced = json.dumps(manifest)
-        for script in ("philosophy-hook.py", "unproven-gate.py", "route-hint.py"):
+        for script in ("philosophy-hook.py", "start-here-hook.py", "unproven-gate.py", "route-hint.py"):
             self.assertIn(script, referenced)
             self.assertTrue((TOOLS / script).is_file(), script)
 

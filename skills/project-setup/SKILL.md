@@ -76,10 +76,15 @@ proof. Compare original/final files, confirm source behavior remains unchanged, 
 
 ## Make it discoverable
 
-Use the existing agent instruction file (AGENTS.md, CLAUDE.md or equivalent). Add/refresh one concise
-Project checks pointer to files actually present, coverage boundaries, and the command/skill.
-Preserve other instructions and avoid duplicate blocks. If none exists, create one appropriate
-to the requested agent, not several. Do not impose a required plugin workflow.
+Use the existing agent instruction file (AGENTS.md, CLAUDE.md or equivalent): it is the one file
+every session loads without being asked. Add or refresh one start-here block between
+`<!-- start-here -->` and `<!-- /start-here -->`, at most 30 lines: the goal in one line, then links
+in reading order to the files actually present (`BRIEF.md` for what the owner wants and the decisions
+in force, `BUILD.md` for the next step, `FEATURES.md`, `VERIFY.md` with its coverage boundary and
+command), and one line saying a changed decision replaces its line in `BRIEF.md`. Links and one-line
+summaries only; detail stays in the linked files. Preserve other instructions and never write a
+second block. If no instruction file exists, create one appropriate to the requested agent, not
+several. Do not impose a required plugin workflow.
 
 ## Optional CI
 

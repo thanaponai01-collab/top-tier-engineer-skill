@@ -1,3 +1,25 @@
+# Decisions outlive the session (4.55.0)
+
+2026-10-09: new case `build-discipline-keeps-decisions`. Mid-build, the user mentions in passing
+that the export format changed (CSV → JSON). The case is graded on the brief left behind: it states
+JSON, no line still presents CSV as current, and `CLAUDE.md` sends a fresh session to it. Building
+the JSON export is advisory. Both arms, semantic judge, claude-sonnet-5-5, 3 tries each.
+
+| run | without skills | with skills |
+|---|---|---|
+| skills before this release | 0/3 | 0/3 (1 of 3 recorded the decision; none linked the brief) |
+| first draft of the new text | not rerun | 0/3 on the old grader; under the corrected one, 2/3 (the third added no `CLAUDE.md` link) |
+| final text | **0/3**: brief left saying CSV, nothing links it | **3/3** |
+
+Plain agents built the month slice, said in the report that JSON was pending, and left `BRIEF.md`
+still preferring CSV. That is the forgetting this release targets. Two grader fixes came from real
+reports, not from wanting a pass: the "no line still says CSV" check had rejected "(changed …; was
+CSV)" and an assumptions row about "the same fields as the CSV columns". Both sentences are now unit
+tests. Neither fix changes a plain-arm result, since those failed the "brief names JSON" check
+anyway. A first draft of the prompt ("I don't want the next session drifting back to CSV") gave the
+answer away: plain agents passed it 2/2, so it was rewritten. Evidence:
+`evals/results/keeps-decisions-{v1-leaky-prompt,before,after,final}/`.
+
 # arch-design borrows from peer skills (4.53.0)
 
 2026-10-08: SKILL.md gains: read recorded decisions first, ports only where earned, pin the deciding

@@ -65,9 +65,30 @@ build from it: then write it to `BRIEF.md` at the repo root, so it survives the 
 5. Not building
 6. Open questions the owner must eventually answer
 7. Assumptions: `assumption | default chosen | cost if wrong`
+8. `## Decisions`: one line each, `- YYYY-MM-DD · decision: reason`, for every choice the owner made
+   that the code alone would not tell a stranger (a format, a vendor, a scope cut)
 
 Open with the job and the assumption that costs most if wrong. The acceptance criteria are what
 `verify-loop` turns into the exit check; name that as the next step.
+
+## Keeping the brief current
+
+A brief written once and never touched is how a project forgets what its owner wants. Whenever the
+owner states or changes a decision, even in passing ("FYI, they take JSON now"), write it into
+`BRIEF.md` in the same sitting, before the work that acts on it. Whoever is working does this, not
+only this skill.
+
+- **Replace, don't pile up.** A decision that overrides an older one replaces its line and names what
+  it replaced: `- 2026-10-09 · Export is JSON only: new bookkeeping tool. Replaces CSV (2026-09-02).`
+  Move the old line, dated and with why it was retired, to `BRIEF.archive.md`. The same goes for an
+  invariant or preference the decision overturns. `BRIEF.md` lists only what is true now.
+- **Stay readable.** About 120 lines and 25 decisions at most. Past that, retire what no longer
+  constrains the work to the archive. `context_budget.py` (in `recall`'s scripts) measures it.
+- **Make it found.** The project's agent instruction file (`CLAUDE.md`, `AGENTS.md`) needs a
+  start-here block that sends a fresh session to `BRIEF.md` first; `project-setup` owns its shape.
+
+*Test:* every decision the owner stated this session is a line in `BRIEF.md`, and no line there
+contradicts it.
 
 ## Rules
 
@@ -78,4 +99,4 @@ Open with the job and the assumption that costs most if wrong. The acceptance cr
 ## Common mistakes
 
 Feature lists posing as requirements; twenty questions when three would change the build; specs
-silent on failure; assumptions that live only in the chat.
+silent on failure; assumptions and decisions that live only in the chat.

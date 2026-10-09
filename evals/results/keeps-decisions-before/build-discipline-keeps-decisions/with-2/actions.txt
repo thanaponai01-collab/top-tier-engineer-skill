@@ -1,0 +1,17 @@
+  1. Skill: top-tier-engineer:build-discipline
+  2. Glob: fixture/**
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\BUILD.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\BRIEF.md
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\CLAUDE.md
+  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\invoices.py
+  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\cli.py
+  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\tests\test_export.py
+  9. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-_73b2s_i/fixture && python -m unittest discover tests 2>&1 | tail -5
+ 10. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\tests\test_export.py
+ 11. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\tests\test_export.py
+ 12. Bash: python -m unittest discover tests 2>&1 | tail -8
+ 13. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\invoices.py
+ 14. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\cli.py
+ 15. Bash: python -m unittest discover tests 2>&1 | tail -6; python cli.py export /tmp/o.csv --month 2026-09; cat /tmp/o.csv; python cli.py export /tmp/o2.csv --month 202…
+ 16. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\BUILD.md
+ 17. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-_73b2s_i\fixture\BRIEF.md

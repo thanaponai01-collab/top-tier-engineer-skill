@@ -1,5 +1,27 @@
 # Changelog
 
+## 4.55.0 - 2026-10-09 - context that outlives the session, and stays small
+
+- **Decisions live in `BRIEF.md`, not the chat** (`problem-framing`, `build-discipline`): a decision
+  the owner states, even in passing, is written to `## Decisions` before the work that acts on it.
+  One that overrides another replaces its line, naming what it replaced; the old line moves to
+  `BRIEF.archive.md`. build-discipline's report says where each decision was written.
+- **Start-here block** (`project-setup`): the agent instruction file gets one block between
+  `<!-- start-here -->` markers, at most 30 lines: the goal, then `BRIEF.md` → `BUILD.md` →
+  `FEATURES.md` → `VERIFY.md` in reading order. build-discipline adds it when a build has none.
+- **`BUILD.md` keeps `## Next`** so a fresh session finds the next slice without reading the log.
+- **Split by area past ~150 lines**: `FEATURES.md` and `VERIFY.md` become an index of
+  `include: <area file>` lines. `features.py check`/`impact` now read through includes in both
+  files (verify.py already did).
+- **`recall/scripts/context_budget.py`**: line budgets per note (start-here 30, BRIEF 120 with
+  ≤25 decisions, BUILD 80, FEATURES/VERIFY 150 per file, WHY 300; archives exempt), each overrun
+  named with its fix. `recall` runs it and adds `DECISIONS` and `UPKEEP` lines to the capsule.
+- **Optional `start-here-hook.py`** (`SessionStart`, in `optional.json` and `autonomous.json`):
+  prints the decisions in force, the next step and any note over budget; silent otherwise.
+- evals: new case `build-discipline-keeps-decisions`. A first draft whose prompt said "I don't want
+  the next session drifting back" was passed by plain agents, so it was rewritten to mention the
+  change in passing; see `RESULTS.md` for before/after.
+
 ## 4.54.0 - 2026-10-08 - skills stop firing on ordinary work
 
 - **Manual-only heavy skills**: `drive`, `drive-overnight`, `onboard-system`, `project-setup`,

@@ -15,8 +15,17 @@ nothing.
 A build outlives one sitting, so keep one file, `BUILD.md` at the repo root (or the brief's own file
 if it has one). One line per slice: `proof line | status | commit`. Under it, a **Deferred** list:
 `what | why | trigger that makes it due`, the trigger a check a machine can run (an assert, a test,
-`p95 > 300 ms at 10k rows`); a deferral without one is a wish. Read it first every session; update
-it in the same commit as the slice.
+`p95 > 300 ms at 10k rows`); a deferral without one is a wish. Keep the next slice under a
+`## Next` heading, one or two lines, so a fresh session finds it without reading the log. Read it
+first every session, with the `## Decisions` in `BRIEF.md`; update it in the same commit as the slice.
+
+**What the owner wants lives in `BRIEF.md`, not in the chat.** When the owner states or changes a
+decision mid-build, even in passing, record it there before the slice that acts on it: replace the
+line it overrides and move the old one to `BRIEF.archive.md` (`problem-framing`, "Keeping the brief
+current"). No `BRIEF.md` yet: create one with the job in a line and a `## Decisions` section. Then
+check the project's agent instruction file (`CLAUDE.md`, `AGENTS.md`) has a start-here block linking
+`BRIEF.md` and `BUILD.md`; add one if not (`project-setup`, "Make it discoverable"). A decision
+honoured in the code but written nowhere is lost the next time a session starts.
 
 `BUILD.md` is a log of every slice ever proven, so it grows for the life of the project unless
 something takes lines back out. Once it passes about 40 slice lines, archive the ones that are
@@ -120,4 +129,7 @@ previous one is unproven.
 What now runs that didn't before, and what was deferred. A table: slice, proof line, proven or
 traced, what the user can now do. Diffs and proof output after.
 Before reporting completion, confirm BUILD.md contains this slice's command, result and commit
-or uncommitted status, alongside current verification evidence when a reusable recipe is used.
+or uncommitted status, alongside current verification evidence when a reusable recipe is used, and
+that every decision the owner stated this session is a line in `BRIEF.md`, with nothing left there
+contradicting it, and that the agent instruction file's start-here block links `BRIEF.md`. Say in
+the report where each one was written.

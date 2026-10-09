@@ -1,0 +1,601 @@
+[
+  {
+    "case": "build-discipline-keeps-decisions",
+    "skill": "build-discipline",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  0/1 found\n  MISSED  decision-recorded\n  held    csv-kept-alive",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "BRIEF.md names JSON as the export format.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?im)^.*\\\\bjson\\\\b'",
+        "workdir": true
+      },
+      {
+        "check": "No line of BRIEF.md still presents CSV as the format; a mention of CSV only survives as what was replaced.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?ism)\\\\A(?!.*?^(?![^\\\\n]*(?:replac|supersed|dropp|no longer|instead of|retire|remov|not csv|never|archiv|->|\u2192))[^\\\\n]*\\\\bcsv\\\\b)'",
+        "workdir": true
+      },
+      {
+        "check": "The agent instruction file a fresh session loads first points at BRIEF.md.",
+        "ok": false,
+        "detail": "CLAUDE.md has nothing matching 'BRIEF\\\\.md'",
+        "workdir": true
+      },
+      {
+        "check": "The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history.",
+        "ok": true,
+        "detail": "advisory, not met: BRIEF.archive.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "BUILD.md records the slice it built (the JSON switch or the month filter) with a status.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The project's own tests pass on the finished copy.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Through the real CLI, the full export is JSON holding all four invoices.",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      },
+      {
+        "check": "--month 2026-09 keeps exactly INV-103 and INV-104. Advisory: doing the JSON switch as its own slice first, and leaving the month filter next, is equally sound slicing.",
+        "ok": true,
+        "detail": "advisory, not met: exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/BUILD.md",
+        "fixture/cli.py",
+        "fixture/invoices.py",
+        "fixture/tests/test_export.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.14078840000000004,
+    "turns": 6,
+    "grade_text": "PASS  build-discipline-keeps-decisions  [build-discipline]  1/1 found, score 1.00 (needs 1.00)\n  found   decision-recorded: The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.\n  held    csv-kept-alive: Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 31.4,
+    "timed_out": false,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "build-discipline-keeps-decisions",
+    "skill": "build-discipline",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  0/1 found\n  MISSED  decision-recorded\n  held    csv-kept-alive",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:build-discipline"
+    ],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "BRIEF.md names JSON as the export format.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?im)^.*\\\\bjson\\\\b'",
+        "workdir": true
+      },
+      {
+        "check": "No line of BRIEF.md still presents CSV as the format; a mention of CSV only survives as what was replaced.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?ism)\\\\A(?!.*?^(?![^\\\\n]*(?:replac|supersed|dropp|no longer|instead of|retire|remov|not csv|never|archiv|->|\u2192))[^\\\\n]*\\\\bcsv\\\\b)'",
+        "workdir": true
+      },
+      {
+        "check": "The agent instruction file a fresh session loads first points at BRIEF.md.",
+        "ok": false,
+        "detail": "CLAUDE.md has nothing matching 'BRIEF\\\\.md'",
+        "workdir": true
+      },
+      {
+        "check": "The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history.",
+        "ok": true,
+        "detail": "advisory, not met: BRIEF.archive.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "BUILD.md records the slice it built (the JSON switch or the month filter) with a status.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The project's own tests pass on the finished copy.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Through the real CLI, the full export is JSON holding all four invoices.",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      },
+      {
+        "check": "--month 2026-09 keeps exactly INV-103 and INV-104. Advisory: doing the JSON switch as its own slice first, and leaving the month filter next, is equally sound slicing.",
+        "ok": true,
+        "detail": "advisory, not met: exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/BUILD.md",
+        "fixture/cli.py",
+        "fixture/invoices.py",
+        "fixture/tests/test_export.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.18422639999999998,
+    "turns": 20,
+    "grade_text": "PASS  build-discipline-keeps-decisions  [build-discipline]  1/1 found, score 1.00 (needs 1.00)\n  found   decision-recorded: The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.\n  held    csv-kept-alive: Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 46.8,
+    "timed_out": false,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "build-discipline-keeps-decisions",
+    "skill": "build-discipline",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  0/1 found\n  MISSED  decision-recorded\n  held    csv-kept-alive",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "BRIEF.md names JSON as the export format.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?im)^.*\\\\bjson\\\\b'",
+        "workdir": true
+      },
+      {
+        "check": "No line of BRIEF.md still presents CSV as the format; a mention of CSV only survives as what was replaced.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?ism)\\\\A(?!.*?^(?![^\\\\n]*(?:replac|supersed|dropp|no longer|instead of|retire|remov|not csv|never|archiv|->|\u2192))[^\\\\n]*\\\\bcsv\\\\b)'",
+        "workdir": true
+      },
+      {
+        "check": "The agent instruction file a fresh session loads first points at BRIEF.md.",
+        "ok": false,
+        "detail": "CLAUDE.md has nothing matching 'BRIEF\\\\.md'",
+        "workdir": true
+      },
+      {
+        "check": "The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history.",
+        "ok": true,
+        "detail": "advisory, not met: BRIEF.archive.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "BUILD.md records the slice it built (the JSON switch or the month filter) with a status.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The project's own tests pass on the finished copy.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Through the real CLI, the full export is JSON holding all four invoices.",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      },
+      {
+        "check": "--month 2026-09 keeps exactly INV-103 and INV-104. Advisory: doing the JSON switch as its own slice first, and leaving the month filter next, is equally sound slicing.",
+        "ok": true,
+        "detail": "advisory, not met: exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/BUILD.md",
+        "fixture/cli.py",
+        "fixture/invoices.py",
+        "fixture/tests/test_export.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.14797860000000002,
+    "turns": 7,
+    "grade_text": "PASS  build-discipline-keeps-decisions  [build-discipline]  1/1 found, score 1.00 (needs 1.00)\n  found   decision-recorded: The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.\n  held    csv-kept-alive: Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 37.7,
+    "timed_out": false,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "build-discipline-keeps-decisions",
+    "skill": "build-discipline",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  0/1 found\n  MISSED  decision-recorded\n  held    csv-kept-alive",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "BRIEF.md names JSON as the export format.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?im)^.*\\\\bjson\\\\b'",
+        "workdir": true
+      },
+      {
+        "check": "No line of BRIEF.md still presents CSV as the format; a mention of CSV only survives as what was replaced.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?ism)\\\\A(?!.*?^(?![^\\\\n]*(?:replac|supersed|dropp|no longer|instead of|retire|remov|not csv|never|archiv|->|\u2192))[^\\\\n]*\\\\bcsv\\\\b)'",
+        "workdir": true
+      },
+      {
+        "check": "The agent instruction file a fresh session loads first points at BRIEF.md.",
+        "ok": false,
+        "detail": "CLAUDE.md has nothing matching 'BRIEF\\\\.md'",
+        "workdir": true
+      },
+      {
+        "check": "The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history.",
+        "ok": true,
+        "detail": "advisory, not met: BRIEF.archive.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "BUILD.md records the slice it built (the JSON switch or the month filter) with a status.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The project's own tests pass on the finished copy.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Through the real CLI, the full export is JSON holding all four invoices.",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      },
+      {
+        "check": "--month 2026-09 keeps exactly INV-103 and INV-104. Advisory: doing the JSON switch as its own slice first, and leaving the month filter next, is equally sound slicing.",
+        "ok": true,
+        "detail": "advisory, not met: exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/BUILD.md",
+        "fixture/cli.py",
+        "fixture/invoices.py",
+        "fixture/tests/test_export.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.15356760000000003,
+    "turns": 16,
+    "grade_text": "PASS  build-discipline-keeps-decisions  [build-discipline]  1/1 found, score 1.00 (needs 1.00)\n  found   decision-recorded: The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.\n  held    csv-kept-alive: Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 34.8,
+    "timed_out": false,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "build-discipline-keeps-decisions",
+    "skill": "build-discipline",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   decision-recorded \u2014 \"The brief listed CSV as a tradeable preference, so I marked it superseded in `BRIEF.md`.\"\n  held    csv-kept-alive",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:build-discipline"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "BRIEF.md names JSON as the export format.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "No line of BRIEF.md still presents CSV as the format; a mention of CSV only survives as what was replaced.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent instruction file a fresh session loads first points at BRIEF.md.",
+        "ok": false,
+        "detail": "CLAUDE.md has nothing matching 'BRIEF\\\\.md'",
+        "workdir": true
+      },
+      {
+        "check": "The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history.",
+        "ok": true,
+        "detail": "advisory, not met: BRIEF.archive.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "BUILD.md records the slice it built (the JSON switch or the month filter) with a status.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The project's own tests pass on the finished copy.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Through the real CLI, the full export is JSON holding all four invoices.",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      },
+      {
+        "check": "--month 2026-09 keeps exactly INV-103 and INV-104. Advisory: doing the JSON switch as its own slice first, and leaving the month filter next, is equally sound slicing.",
+        "ok": true,
+        "detail": "advisory, not met: exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/BRIEF.md",
+        "fixture/BUILD.md",
+        "fixture/cli.py",
+        "fixture/invoices.py",
+        "fixture/tests/test_export.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.20067120000000005,
+    "turns": 19,
+    "grade_text": "PASS  build-discipline-keeps-decisions  [build-discipline]  1/1 found, score 1.00 (needs 1.00)\n  found   decision-recorded: The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.\n  held    csv-kept-alive: Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 49.2,
+    "timed_out": false,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "build-discipline-keeps-decisions",
+    "skill": "build-discipline",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  0/1 found\n  MISSED  decision-recorded\n  held    csv-kept-alive",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:build-discipline"
+    ],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "BRIEF.md names JSON as the export format.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?im)^.*\\\\bjson\\\\b'",
+        "workdir": true
+      },
+      {
+        "check": "No line of BRIEF.md still presents CSV as the format; a mention of CSV only survives as what was replaced.",
+        "ok": false,
+        "detail": "BRIEF.md has nothing matching '(?ism)\\\\A(?!.*?^(?![^\\\\n]*(?:replac|supersed|dropp|no longer|instead of|retire|remov|not csv|never|archiv|->|\u2192))[^\\\\n]*\\\\bcsv\\\\b)'",
+        "workdir": true
+      },
+      {
+        "check": "The agent instruction file a fresh session loads first points at BRIEF.md.",
+        "ok": false,
+        "detail": "CLAUDE.md has nothing matching 'BRIEF\\\\.md'",
+        "workdir": true
+      },
+      {
+        "check": "The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history.",
+        "ok": true,
+        "detail": "advisory, not met: BRIEF.archive.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "BUILD.md records the slice it built (the JSON switch or the month filter) with a status.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The project's own tests pass on the finished copy.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Through the real CLI, the full export is JSON holding all four invoices.",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      },
+      {
+        "check": "--month 2026-09 keeps exactly INV-103 and INV-104. Advisory: doing the JSON switch as its own slice first, and leaving the month filter next, is equally sound slicing.",
+        "ok": true,
+        "detail": "advisory, not met: exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/BUILD.md",
+        "fixture/cli.py",
+        "fixture/invoices.py",
+        "fixture/tests/test_export.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.190066,
+    "turns": 19,
+    "grade_text": "PASS  build-discipline-keeps-decisions  [build-discipline]  1/1 found, score 1.00 (needs 1.00)\n  found   decision-recorded: The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.\n  held    csv-kept-alive: Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 39.0,
+    "timed_out": false,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  }
+]

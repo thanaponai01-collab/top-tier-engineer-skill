@@ -20,6 +20,8 @@ Everything here is on disk or one command away; nothing is changed.
 
 - **Git:** `git status`, `git log -n 15 --stat`, the uncommitted diff, the branch and how far it is
   from the main branch. The last commits say what was finished; the diff says what was in flight.
+- **The start-here block** in `CLAUDE.md` / `AGENTS.md`: it names the notes this project keeps
+  and the order to read them in. Follow it before the list below.
 - **Notes the project keeps:** RUN.json first: the authoritative goal, target, steps, evidence,
   authority and unresolved action journal. If it exists, use `drive`'s `run.py next` and `status`;
   without the helper, inspect the same fields and label enforcement manual. Then the run notes (`OVERNIGHT.md`,
@@ -29,7 +31,13 @@ Everything here is on disk or one command away; nothing is changed.
   last CI run.
 
 "Recent" is since the last stretch of work: the last few days of commits, or what the user says.
-Do not read the whole repo. Say what you left unread.
+Do not read the whole repo. Say what you left unread. Of a split note (`FEATURES.md` or `VERIFY.md`
+as an index of `include:` lines), read the index and only the areas the recent work touched;
+archives (`*.archive.md`) only when an index line sends you there.
+
+Run `python <skill-base>/scripts/context_budget.py <repo>`. It names each note over its line
+budget and the move that brings it back; carry those into the capsule, since a note too long to read
+is how the next session misses what is in it.
 
 ## 2. Check what can be checked
 
@@ -47,13 +55,18 @@ Answer first. About ten lines, each with its source:
 
 ```
 GOAL:      <what this work is for, one line>
+DECISIONS: <the decisions in force from BRIEF.md that bear on NEXT, or "none recorded">
 DONE:      <finished and proven; what you reran> [proven]
 IN FLIGHT: <uncommitted or half-built, by file> [traced]
 OPEN:      <decisions and questions nobody answered>
 BROKEN:    <failing or unverified, with the command that shows it>
 NEXT:      <one step, and the check that says it is done>
 NOT READ:  <what you did not look at>
+UPKEEP:    <notes over budget or missing a start-here block, with the fix; omit when none>
 ```
+
+A decision the user states while you are catching them up goes into `BRIEF.md` the way
+`problem-framing` says ("Keeping the brief current"); that one write is allowed here.
 
 If nothing is recorded, a clean tree and no notes, say "nothing recorded" and ask what the work
 is. Do not reconstruct a plausible history. A repo you have never seen, with no `VERIFY.md`,

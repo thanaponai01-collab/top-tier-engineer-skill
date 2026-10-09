@@ -15,7 +15,9 @@ click target, shortcut, CLI command. Two commands:
 
 An entry point is `kind: `anchor` @ file :: needle`. The check looks for the needle in the file (or
 anywhere in the repo when no file is given). The needle defaults from the anchor by kind; write
-`:: needle` when the default does not fit. Stdlib only.
+`:: needle` when the default does not fit. A big map is an index: `include: features/<area>.md`
+lines, each read in place (paths from the repo root; VERIFY.md includes are followed the same way).
+Stdlib only.
 
 FEATURES.md format:
 
@@ -121,6 +123,24 @@ def read(path):
             return fh.read()
     except OSError:
         return ""
+
+
+INCLUDE = re.compile(r"^(?:[-*]\s+)?include:\s*`?([^`\s]+)`?", re.I)
+
+
+def load(repo, rel, seen=None):
+    """A map file's text with every `include: <path>` line replaced by that file's text, so an
+    index can list one area file per line. Paths are from the repo root, as in VERIFY.md."""
+    seen = set() if seen is None else seen
+    full = os.path.normpath(os.path.join(repo, rel))
+    if full in seen:
+        return ""
+    seen.add(full)
+    out = []
+    for line in read(full).splitlines():
+        m = INCLUDE.match(line.strip())
+        out.append(load(repo, m.group(1).strip("'\""), seen) if m else line)
+    return "\n".join(out)
 
 
 def parse(text):
@@ -263,7 +283,7 @@ STATUS_COMMIT = re.compile(r"^\w+\s*@\s*([0-9a-fA-F]{4,40})")
 
 
 def cmd_impact(repo, files, base):
-    features = parse(read(os.path.join(repo, MAP)))
+    features = parse(load(repo, MAP))
     if not features:
         print(f"no {MAP} with features in {repo}; run `features.py init`.")
         return 2
@@ -351,11 +371,11 @@ def cmd_check(repo, strict):
     if not os.path.isfile(path):
         print(f"no {MAP} in {repo}. Run `features.py init` to draft one.")
         return 2
-    features = parse(read(path))
+    features = parse(load(repo, MAP))
     if not features:
         print(f"{MAP} has no '## <feature>' sections; nothing to check.")
         return 2
-    vtext = read(os.path.join(repo, VERIFY))
+    vtext = load(repo, VERIFY)
     vnames = {m.lower(): m for m in re.findall(r"(?m)^##\s+(.+?)\s*$", vtext) if m.lower() not in ("blind spots", "run") and not m.lower().startswith("journey:")}
 
     cache, mapped = {}, set()

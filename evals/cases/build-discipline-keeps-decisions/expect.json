@@ -1,0 +1,141 @@
+{
+  "case": "build-discipline-keeps-decisions",
+  "skill": "build-discipline",
+  "question": "When the user mentions in passing that a decision changed, does the change outlive the session: written where the next session reads it, the old one retired rather than left beside it, and the brief reachable from the file a fresh session loads first?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "decision-recorded",
+      "what": "The report says the JSON decision was written down in a project file the next session reads (BRIEF.md, or the agent instruction file), not only applied in code.",
+      "must_say_any": [
+        "brief.md",
+        "decisions section",
+        "recorded the decision",
+        "wrote the decision",
+        "decision is recorded",
+        "decision is written"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "csv-kept-alive",
+      "what": "Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.",
+      "must_not_say_any": [
+        "csv fallback",
+        "kept csv",
+        "keep csv as",
+        "still supports csv",
+        "--format csv",
+        "csv is still available"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "The changed decision is durable: JSON is the format the brief states, the CSV preference is retired, and the project's instruction file points a fresh session at the brief. Building the JSON export now is not required.",
+    "edits_allowed": [
+      "invoices.py",
+      "cli.py",
+      "tests/*",
+      "BRIEF.md",
+      "BRIEF.archive.md",
+      "BUILD.md",
+      "BUILD.archive.md",
+      "CLAUDE.md",
+      "AGENTS.md",
+      "README.md",
+      "VERIFY.md",
+      "FEATURES.md",
+      "features/*",
+      "verification/*",
+      "evidence/*",
+      ".verify-evidence/*",
+      ".verify-state.json",
+      ".gitignore",
+      "*.json",
+      "*.csv"
+    ],
+    "must_contain": [
+      {
+        "id": "decision-json",
+        "kind": "outcome",
+        "what": "BRIEF.md names JSON as the export format.",
+        "path": "BRIEF.md",
+        "regex": "(?im)^.*\\bjson\\b"
+      },
+      {
+        "id": "csv-not-current",
+        "kind": "outcome",
+        "what": "No line of BRIEF.md still states CSV as the output format; CSV may appear only as what was replaced, or in passing (e.g. 'the same fields as the CSV columns').",
+        "path": "BRIEF.md",
+        "regex": "(?im)\\A(?![\\s\\S]*^(?![^\\n]*(?:replac|supersed|dropp|no longer|instead|retire|remov|not csv|never|archiv|was csv|changed|->|\\u2192))[^\\n]*(?:csv output|(?:format|output|export)\\s+(?:is|:)\\s+csv))"
+      },
+      {
+        "id": "start-here-points-at-brief",
+        "kind": "process",
+        "what": "The agent instruction file a fresh session loads first points at BRIEF.md.",
+        "path": "CLAUDE.md",
+        "regex": "BRIEF\\.md"
+      },
+      {
+        "id": "old-decision-archived",
+        "kind": "process",
+        "gate": false,
+        "what": "The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history.",
+        "path": "BRIEF.archive.md",
+        "regex": "(?i)csv"
+      },
+      {
+        "id": "slice-recorded",
+        "kind": "process",
+        "what": "BUILD.md records the slice it built (the JSON switch or the month filter) with a status.",
+        "path": "BUILD.md",
+        "regex": "(?im)^.*(json|--month).*\\|\\s*(proven|traced|uncommitted)"
+      }
+    ],
+    "replays": [
+      {
+        "id": "suite-passes",
+        "kind": "outcome",
+        "what": "The project's own tests pass on the finished copy.",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "replace": {},
+        "expect": "pass"
+      },
+      {
+        "id": "export-is-json",
+        "kind": "outcome",
+        "what": "Through the real CLI, the full export is JSON holding all four invoices. Advisory: with the new tool's JSON shape unknown, recording the decision and scheduling the switch as the next slice is sound.",
+        "command": [
+          "python",
+          "_probe.py"
+        ],
+        "replace": {
+          "_probe.py": "reference/probe_json.py"
+        },
+        "expect": "pass",
+        "gate": false
+      },
+      {
+        "id": "month-filter",
+        "kind": "outcome",
+        "gate": false,
+        "what": "--month 2026-09 keeps exactly INV-103 and INV-104. Advisory: doing the JSON switch as its own slice first, and leaving the month filter next, is equally sound slicing.",
+        "command": [
+          "python",
+          "_probe.py"
+        ],
+        "replace": {
+          "_probe.py": "reference/probe_month.py"
+        },
+        "expect": "pass"
+      }
+    ]
+  }
+}

@@ -15,6 +15,7 @@ SCRIPTS = {
     "arch-design.py": os.path.join(ROOT, "skills", "arch-design", "scripts"),
     "features.py": os.path.join(ROOT, "skills", "feature-map", "scripts"),
     "history.py": os.path.join(ROOT, "skills", "code-history", "scripts"),
+    "context_budget.py": os.path.join(ROOT, "skills", "recall", "scripts"),
 }
 
 

@@ -1,0 +1,19 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   decision-recorded — "`BRIEF.md` Decisions now has a 2026-10-09 entry saying JSON is the format, CSV is removed, and CSV must not be reintrodu"
+  held    csv-kept-alive
+
+Phrase grader (grade.py), for comparison:
+PASS  build-discipline-keeps-decisions  [build-discipline]  1/1 found, score 1.00 (needs 1.00)
+  found   decision-recorded: The report says the JSON-only decision was written down in a project file the next session reads (BRIEF.md's decisions, or the agent instruction file), not only applied in code.
+  held    csv-kept-alive: Keeping CSV around as an option or fallback, which is exactly the drift the user asked to stop.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      BRIEF.md states JSON as the export format in a list entry. — 
+  ok      No line of BRIEF.md still presents CSV as the format; a mention of CSV only survives as what was replaced. — 
+  ok      The agent instruction file a fresh session loads first points at BRIEF.md. — 
+  ok      The retired CSV decision is kept, dated, in BRIEF.archive.md. Advisory: a replacing line that names what it replaced also keeps the history. — advisory, not met: BRIEF.archive.md is not there
+  ok      BUILD.md records the month slice with a status. — 
+  ok      The project's own tests pass on the finished copy. — 
+  ok      Through the real CLI, the export is JSON and --month 2026-09 keeps exactly INV-103 and INV-104. — 
