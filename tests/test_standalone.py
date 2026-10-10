@@ -52,9 +52,12 @@ class Standalone(unittest.TestCase):
         for name, f in SKILLS.items():
             # A description holding ": " must be a `>-` block to stay valid YAML; still one line.
             # A heavy skill may add `disable-model-invocation: true` so it runs only when typed.
+            # metadata.stage/card feed tools/catalog.py, the one source for every skill list.
             m = re.match(r"---\nname: (.+)\ndescription: (?:>-\n  )?(.+)\n"
-                         r"(?:disable-model-invocation: true\n)?---\n", read(f))
-            self.assertIsNotNone(m, f"{name}: frontmatter is not name + one-line description")
+                         r"(?:disable-model-invocation: true\n)?"
+                         r"metadata:\n  stage: [a-z]+\n  card: \"[^\"\n]+\"\n---\n", read(f))
+            self.assertIsNotNone(m, f"{name}: frontmatter is not name + one-line description "
+                                    f"+ metadata stage/card")
             self.assertEqual(m.group(1), name)
 
     def test_philosophy_lives_outside_skills(self):

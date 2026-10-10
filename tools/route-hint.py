@@ -42,16 +42,14 @@ from pathlib import Path
 
 MAX_PROMPT = 20_000  # a pasted stack trace is not a routing question
 
-# Every skill in this plugin. A prompt that already says one of these needs no
-# help choosing, so the hook stays out of the way.
-SKILLS = (
-    "agent-design", "agent-drift", "agent-evals", "agent-prove", "agent-release", "agent-trace", "arch-design", "arch-map", "build-discipline", "correctness-gate",
-    "plan-work",
-    "code-history", "debug-protocol", "drive", "evolve-maintain", "explain", "feature-map",
-    "issue-handoff", "latent-audit", "onboard-system", "perf-optimize", "pick-skill",
-    "drive-overnight", "problem-framing", "project-setup", "recall", "safe-release", "scrutinize", "senior-review",
-    "structure-gate", "threat-model", "verify-loop", "wire-check",
-)
+# Every skill in this plugin, read from skills/ so a new or renamed skill needs
+# no edit here. A prompt that already says one of these needs no help choosing,
+# so the hook stays out of the way.
+SKILLS_DIR = Path(__file__).resolve().parent.parent / "skills"
+try:
+    SKILLS = tuple(sorted(p.name for p in SKILLS_DIR.iterdir() if (p / "SKILL.md").is_file()))
+except OSError:
+    SKILLS = ()
 # Word-boundary matchers for SKILLS, so a prompt containing "driven" or
 # "recalled" isn't mistaken for one that already named "drive" or "recall".
 _SKILL_NAME_RE = tuple(

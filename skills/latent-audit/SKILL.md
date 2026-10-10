@@ -1,6 +1,9 @@
 ---
 name: latent-audit
 description: Sweep an existing codebase with no reported symptom for dead code, layer violations, and dormant bugs, and prove anything is dead before suggesting deletion. Use for "find dead code", "delete unused components", "check the layers are respected", "clean up the codebase".
+metadata:
+  stage: review
+  card: "dead code and layer violations"
 ---
 
 # Latent Audit

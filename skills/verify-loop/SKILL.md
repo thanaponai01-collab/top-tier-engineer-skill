@@ -1,6 +1,9 @@
 ---
 name: verify-loop
 description: Build a check that can fail before the work, then loop until it passes, with retained proof. Use for "verify this change", "is it actually done?", work with no trustworthy check, reusable VERIFY.md recipes, testing whether a check would catch a wrong result, or fresh CI proof. Other skills hand it their claim and the wrong state it must reject.
+metadata:
+  stage: prove
+  card: "check your own work until it really passes"
 ---
 
 # Verify Loop

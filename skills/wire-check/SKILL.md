@@ -1,6 +1,9 @@
 ---
 name: wire-check
 description: Check that code is actually connected to the running system, not just written. Use when something "was built but isn't working", "is this hooked up?", or for "what do we actually serve / what did I build that nothing calls?" across a whole system.
+metadata:
+  stage: prove
+  card: "built, but nothing happens"
 ---
 
 # Wire Check

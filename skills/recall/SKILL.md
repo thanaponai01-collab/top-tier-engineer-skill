@@ -3,6 +3,9 @@ name: recall
 description: >-
   Rebuild the recent working context from what is on disk and hand back a tight capsule of where things stand and what to do next. Manual: run /recall for "where were we", "catch me up", "what was I working on".
 disable-model-invocation: true
+metadata:
+  stage: orient
+  card: "where were we? resume work"
 ---
 
 # Recall

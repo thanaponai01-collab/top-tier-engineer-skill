@@ -1,6 +1,9 @@
 ---
 name: plan-work
 description: Cut a brief into ordered slices, each with its own runnable check, and say which can safely run at the same time. Use when work with several pieces is about to be split up or handed to other agents, or for "plan this", "break this down", "what can run in parallel".
+metadata:
+  stage: plan
+  card: "split work into ordered, checked slices"
 ---
 
 # Plan Work

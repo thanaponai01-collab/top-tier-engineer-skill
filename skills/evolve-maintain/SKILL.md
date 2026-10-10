@@ -2,6 +2,9 @@
 name: evolve-maintain
 description: >-
   Change a running system safely: dependency upgrades, removing an old API, deprecations, large refactors, incidents, or a change the user says must not break something live. Use for "upgrade X", "remove this old API", "refactor this module". Not for small edits or renames.
+metadata:
+  stage: build
+  card: "upgrade, refactor or deprecate on a live system"
 ---
 
 # Maintenance & Evolution

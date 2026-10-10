@@ -1,6 +1,9 @@
 ---
 name: structure-gate
 description: Measure a codebase's structural shape (complexity, nesting, function and file length, import cycles, duplication) and say in plain words whether it reads as spaghetti and whether it got worse. Use for "is this code a mess / spaghetti?" or as a CI structural check.
+metadata:
+  stage: review
+  card: "is it spaghetti, measured"
 ---
 
 # Structure Gate

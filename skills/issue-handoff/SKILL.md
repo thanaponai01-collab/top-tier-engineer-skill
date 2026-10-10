@@ -1,6 +1,9 @@
 ---
 name: issue-handoff
 description: Turn planned work — a document, or something said in the chat — into tracked issues without losing what made it buildable. Use for "file these as issues", "put this in GitHub", "open an issue for this bug", "make issues from this doc / from the audit / from the plan", or picking up a moves file written in another session.
+metadata:
+  stage: plan
+  card: "turn a plan into tracked issues"
 ---
 
 # Issue Handoff

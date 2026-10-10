@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.57.0 - 2026-10-10 - one source for every skill list
+
+- **Frontmatter is the catalog**: every SKILL.md gains `metadata.stage` (where in the work it
+  belongs) and `metadata.card` (one short trigger). `metadata` is the Agent Skills field for custom
+  keys; a fresh `claude -p --plugin-dir` session loaded the same 27 auto-invocable skills, all with
+  descriptions, before and after the change.
+- **`tools/catalog.py`**: `--write` generates `CATALOG.md` (a one-screen card, manual-only skills shown
+  as their slash command) and the skill count in plugin.json, README and marketplace.json;
+  `--check` also requires the README table and pick-skill to name exactly the skills that exist.
+  It caught marketplace.json still saying "Twenty-five" skills; that description now copies plugin.json.
+- **`route-hint.py`** reads skill names from `skills/` at import instead of a hand-typed tuple.
+- tests: `test_catalog.py` (repo current, and the check fails on an unlisted skill or a folder/name
+  mismatch); the frontmatter test requires the metadata block.
+
 ## 4.56.0 - 2026-10-09 - discoverable project intent and bounded handoffs
 
 - Setup saves missing intent and next-work context while preserving existing equivalent documents.

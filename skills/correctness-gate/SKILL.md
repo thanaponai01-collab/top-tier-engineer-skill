@@ -1,6 +1,9 @@
 ---
 name: correctness-gate
 description: Prove built software is correct with evidence, not plausibility. Use when asked "does this actually work?" or "test this properly", or before a release or merge the user wants proven.
+metadata:
+  stage: prove
+  card: "does it actually work, before merge or release?"
 ---
 
 # Correctness Gate

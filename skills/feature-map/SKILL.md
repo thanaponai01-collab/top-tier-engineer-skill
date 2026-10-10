@@ -1,6 +1,9 @@
 ---
 name: feature-map
 description: Map what a system has and how a user reaches each feature (route, click target, shortcut, CLI command), in a FEATURES.md the next session reads instead of rediscovering. Use to learn an unfamiliar app, before driving or testing one, when an agent asks "what can this do / how do I get to X", or to keep that map from going stale. Web, CLI and desktop apps.
+metadata:
+  stage: orient
+  card: "what can this app do, how do I reach X?"
 ---
 
 # Feature Map

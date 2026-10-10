@@ -1,6 +1,9 @@
 ---
 name: agent-design
 description: Design an AI agent's tool surface, reversibility per tool, and context/memory strategy before any agent code or eval exists. Use when nobody has written down what tools the agent gets, what untrusted content flows into its context, or what it must never be allowed to do without a human confirm.
+metadata:
+  stage: design
+  card: "design an agent's tools before any code"
 ---
 
 # Agent Design

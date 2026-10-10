@@ -1,6 +1,9 @@
 ---
 name: safe-release
 description: Release a change, or change the shape of stored data, with a proven way back. Use at deploy time ("deploy", "release", "ship it", "push to prod", "cut a version") and for data changes ("migration", "alter table", "change the schema", "backfill", "rename this column").
+metadata:
+  stage: ship
+  card: "deploy, or change the shape of stored data"
 ---
 
 # Safe Release

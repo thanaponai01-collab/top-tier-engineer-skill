@@ -3,6 +3,9 @@ name: pick-skill
 description: >-
   Choose which engineering skill fits the work and say what each one will and will not do. Manual: run /pick-skill when you don't know which skill to use.
 disable-model-invocation: true
+metadata:
+  stage: run
+  card: "unsure which skill fits"
 ---
 
 # Pick a Skill

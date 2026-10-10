@@ -1,6 +1,9 @@
 ---
 name: arch-design
 description: Improve, redesign or design a backend's structure. Looks at the code (or the requirements, if there is none), finds what is worth improving, says whether to patch a part or replace it, and gives simple, ordered moves using sound engineering technique. Use for "how can we improve this codebase / architecture?", "is my backend bloated?", "why does every change touch six files?", module or API boundaries, restructuring, "should we rewrite this part?", choosing a stack or pattern, or designing a new backend.
+metadata:
+  stage: design
+  card: "how should this be structured? which stack?"
 ---
 
 # Architecture & Design

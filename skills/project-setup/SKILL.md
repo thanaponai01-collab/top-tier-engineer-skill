@@ -3,6 +3,9 @@ name: project-setup
 description: >-
   Set up or refresh reusable verification in an existing project across stacks. Discover real commands and entry points, preserve manual documentation, prepare a small project map and VERIFY.md, and validate readiness. Use for onboarding verification in another repo or refreshing stale setup. CI is optional when requested; full system explanation belongs to onboard-system. Manual: run /project-setup.
 disable-model-invocation: true
+metadata:
+  stage: orient
+  card: "set a project up: start-here block, VERIFY.md"
 ---
 
 # Project Setup

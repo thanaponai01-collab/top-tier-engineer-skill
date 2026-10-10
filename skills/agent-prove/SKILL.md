@@ -1,6 +1,9 @@
 ---
 name: agent-prove
 description: Prove an AI agent meets a stated bar over repeated runs, not one, and catch regressions when it changes. Use after an agent's evals exist and the build is in place, before shipping one, when an agent is "flaky", or after any model, prompt or tool change.
+metadata:
+  stage: prove
+  card: "does the agent work, over repeated runs?"
 ---
 
 # Agent Prove

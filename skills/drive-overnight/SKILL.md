@@ -3,6 +3,9 @@ name: drive-overnight
 description: >-
   Carry a goal unattended with durable evidence, budgets, a decision log and scoped upfront authority; park actions outside that scope and leave a morning report. Use for "work on this overnight", "run this while I sleep", "keep going until the tests pass, unattended". Manual: run /drive-overnight.
 disable-model-invocation: true
+metadata:
+  stage: run
+  card: "the same, unattended, with a morning report"
 ---
 
 # Drive, overnight

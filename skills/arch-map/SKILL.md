@@ -1,6 +1,9 @@
 ---
 name: arch-map
 description: Draw a codebase or architecture as a diagram traced from the real code, marking what's added, removed, changed or wrong. Use for "show me the architecture", "visualize this codebase", "draw what this change does", "before and after", or "show where the problems are".
+metadata:
+  stage: orient
+  card: "draw the architecture or what a change does"
 ---
 
 # Architecture Map

@@ -1,6 +1,9 @@
 ---
 name: agent-release
 description: 'Ship an AI agent with the controls it needs and keep proving it after launch: kill switch, spend and step caps, pinned model, logged runs, staged rollout, and production failures turned into new evals. Use when an agent that passed its evals is about to go live, or when a live agent needs monitoring.'
+metadata:
+  stage: ship
+  card: "ship an agent with kill switch and caps"
 ---
 
 # Agent Release

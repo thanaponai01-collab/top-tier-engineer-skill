@@ -2,6 +2,9 @@
 name: debug-protocol
 description: >-
   Find the proven root cause of a failure before fixing it. Use when something is broken and the cause is still unknown after a first look: wrong output, crashes, hangs, flaky behavior, "it worked yesterday", or a previous fix that didn't hold. Not for an error whose cause is already clear.
+metadata:
+  stage: fix
+  card: "broken and the cause is unknown"
 ---
 
 # Debug Protocol
