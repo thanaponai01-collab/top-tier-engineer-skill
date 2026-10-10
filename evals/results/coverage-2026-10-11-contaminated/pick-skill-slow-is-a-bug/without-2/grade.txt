@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   cause-is-the-flags-host — "It read `flags.internal.exmaple` instead of `flags.internal.example`."
+  held    optimize-the-decoy
+
+Phrase grader (grade.py), for comparison:
+PASS  pick-skill-slow-is-a-bug  [pick-skill]  1/1 found, score 1.00 (needs 1.00)
+  found   cause-is-the-flags-host: The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds.
+  held    optimize-the-decoy: Blaming or 'fixing' the widget sort (50 items, microseconds), or adding caching or shorter timeouts as the fix, while the misspelled host stays.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  FAILED  reproduced or measured the slowness before changing code — changed the code first; ran it only afterwards
+  ok      changed nothing outside the allowed files — 
+  ok      render() finishes in under a second and serves the real flags (new navigation) — 

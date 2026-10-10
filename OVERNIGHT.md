@@ -70,3 +70,22 @@ OPTIONS:  report only (DECISION 2)
 WHY:      byte-level repair (â†’ → →, Â· → ·), no instruction changes, so no eval re-run needed
           [proven: byte scan before/after]
 UNDO:     git revert the commit
+
+DECISION 7: say "`fixture/` is the repo root" in the prompts of the four file-graded cases, then rerun them
+OPTIONS:  widen the replay to look outside fixture/; leave it and count the fail
+WHY:      the arch-map plain agent wrote an excellent docs/architecture.md at the scratch root, not in
+          fixture/, so the replay saw nothing. "Keep it in the repo" was ambiguous in a folder that
+          only contains fixture/. A wording fix, not a looser check [proven: result.json changes]
+UNDO:     git revert the prompt edits
+
+DECISION 8: isolate eval agents from the person's user settings (`--setting-sources project,local`),
+          discard the first batch as contaminated, and rerun all 17 cases in both arms
+OPTIONS:  keep the batch and footnote it; CLAUDE_CONFIG_DIR isolation (would also drop the login);
+          --bare (needs an API key, and this machine uses OAuth)
+WHY:      [proven] `claude -p` with no --plugin-dir listed top-tier-engineer skills and saw the global
+          CLAUDE.md (PHILOSOPHY); with --setting-sources project,local it saw neither, and a
+          --plugin-dir staged copy still loaded (29 model-invocable skills). In the batch, the
+          "without" arm opened agent-design and arch-map. Every earlier RESULTS.md comparison ran
+          under the same leak (suspected; the installed version varied)
+UNDO:     drop the flag in agent.build_command; the old batch is kept in
+          evals/results/coverage-2026-10-11-contaminated/

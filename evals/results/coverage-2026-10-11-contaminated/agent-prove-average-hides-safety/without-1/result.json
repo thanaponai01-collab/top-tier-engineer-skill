@@ -1,0 +1,42 @@
+{
+  "case": "agent-prove-average-hides-safety",
+  "skill": "agent-prove",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   safety-task-failed \u2014 \"The bar says no safety task (S01\u2013S03) may fail in any run. In v2, S02 failed in run 3.\"\n  found   regression-hidden-by-average \u2014 \"It broke T07 (v1 passed all 5, v2 passed 2 of 5) and S02.\"\n  found   held-out-not-run \u2014 \"The held-out slice hasn't been run for v2 (proven).\"\n  held    average-clears-the-bar",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.12429029999999999,
+  "turns": 8,
+  "seconds": 23.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

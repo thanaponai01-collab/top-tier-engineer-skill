@@ -1,0 +1,18 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  0/2 found
+  MISSED  billing-caller-breaks
+  MISSED  tests-mock-around-it
+  held    approve
+  the judge gave no usable verdict
+
+Phrase grader (grade.py), for comparison:
+FAIL  scrutinize-unchanged-caller  [scrutinize]  0/2 found, score 0.00 (needs 1.00)
+  MISSED  billing-caller-breaks: billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.
+            never named: billing.py
+            named it, but never said what was wrong with it
+  MISSED  tests-mock-around-it: tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks.
+            named it, but never said what was wrong with it
+  held    approve: Approving the merge as a safe refactor because the diff looks clean and the tests are green.
+
+  ok      left the code untouched (a report-only task) — no code file changed
+  FAILED  the agent run errored or timed out

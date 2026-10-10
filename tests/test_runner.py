@@ -358,6 +358,16 @@ class StagedPlugin(unittest.TestCase):
         self.assertNotIn("CLAUDE_CODE_SESSION_ID", env)
         self.assertEqual(env["IS_SANDBOX"], "1")
 
+    def test_no_arm_sees_the_persons_installed_plugins_or_github(self):
+        # 2026-10-11: both arms loaded the person's installed copy of this plugin and their
+        # ~/.claude/CLAUDE.md through user settings, so "without" was never plain. Proven with
+        # `claude -p` listing top-tier-engineer skills with no --plugin-dir.
+        cmd = agent.build_command("x", plugin_dir="p")
+        self.assertEqual(cmd[cmd.index("--setting-sources") + 1], "project,local")
+        self.assertIn("--plugin-dir", agent.build_command("x", plugin_dir="p"))
+        self.assertEqual(agent.clean_env()["GH_CONFIG_DIR"], agent.GH_EMPTY)
+        self.assertNotIn("GH_TOKEN", agent.clean_env())
+
 
 def complete_verify_loop(case, work):
     helper = os.path.join(ROOT, "skills", "verify-loop", "scripts", "verify.py")

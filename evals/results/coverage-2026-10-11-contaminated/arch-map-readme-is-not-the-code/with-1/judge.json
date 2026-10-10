@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "reports-skips-layers",
+      "what": "api/reports.py imports db and runs SQL directly, skipping services/ and repo/. The README says nothing skips a layer. The diagram draws the real arrow.",
+      "found": true,
+      "quote": "The README says nothing skips a layer, but `api/reports.py:5-7` queries the database directly.",
+      "quote_checked": true
+    },
+    {
+      "id": "plugin-loaded-by-name",
+      "what": "plugins/slack_notify.py is reached only through a string in settings.ENABLED_PLUGINS and importlib, with no import to trace. The arrow is drawn as inferred (dashed/suspected), or its config wiring is named.",
+      "found": true,
+      "quote": "The plugin is loaded by name with `importlib`, and its Slack post is a `pass` stub.",
+      "quote_checked": true
+    },
+    {
+      "id": "arrows-cite-lines",
+      "what": "Arrows are backed by file:line evidence from the code, not folder names.",
+      "found": true,
+      "quote": "| main \u2192 api/orders, api/reports | main.py:4, 8-10 |",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "readme-layering",
+      "what": "Drawing or stating the README's strict layering as true.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0881532,
+  "model": "claude-sonnet-5-5"
+}

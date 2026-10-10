@@ -97,8 +97,13 @@ def claude_bin():
 
 
 def build_command(prompt, plugin_dir=None, model=None, budget_usd=None, max_turns=None):
+    # User settings are where a person's installed plugins are enabled, and their user memory
+    # (~/.claude/CLAUDE.md) rides along with them. Without this, an installed copy of this very
+    # plugin loads in the "without" arm and beside the staged one in the "with" arm, and the
+    # comparison measures nothing. Project and local settings of the scratch folder still apply.
     cmd = [claude_bin(), "-p", prompt, "--output-format", "stream-json", "--verbose",
-           "--permission-mode", "bypassPermissions", "--no-session-persistence"]
+           "--permission-mode", "bypassPermissions", "--no-session-persistence",
+           "--setting-sources", "project,local"]
     if plugin_dir:
         cmd += ["--plugin-dir", plugin_dir]
     if model:

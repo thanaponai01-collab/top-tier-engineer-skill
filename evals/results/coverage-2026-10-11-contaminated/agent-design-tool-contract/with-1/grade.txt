@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   order-fields-are-untrusted — "`lookup_order` returns the shopper-typed `gift_message` and `delivery_instructions`, which are now omitted unless asked "
+  found   each-one-way-tool-own-confirm — "A different tool, different args, or a second call needs its own card."
+  found   merchant-boundary-testable — "Session B's messages, tool results and action log never appear in session A's context, on shared workers (no shared muta"
+  held    one-gate-for-all
+
+Phrase grader (grade.py), for comparison:
+PASS  agent-design-tool-contract  [agent-design]  3/3 found, score 1.00 (needs 1.00)
+  found   order-fields-are-untrusted: lookup_order returns gift_message and delivery_instructions, free text the shopper typed. That is attacker-shapeable content flowing into the agent's context, so it needs an injection case, the same as the carrier page from fetch_tracking. Treating lookup_order as a trusted internal lookup misses it.
+  found   each-one-way-tool-own-confirm: cancel_order, issue_refund and send_email are one-way. Each needs its own confirmation or refusal case; a yes for one call does not cover the next.
+  found   merchant-boundary-testable: All merchants' sessions share workers and a database. The design must state a checkable boundary: one merchant's (and one shopper's) orders and tool results never reach another session's context, and every tool is scoped by merchant_id.
+  held    one-gate-for-all: A single human approval that covers all one-way actions in a session (approve once, then the agent refunds, cancels and emails freely).
+
+  ok      left the code untouched (a report-only task) — no code file changed

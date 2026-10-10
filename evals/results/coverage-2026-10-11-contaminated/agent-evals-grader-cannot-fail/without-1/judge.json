@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "grader-passes-wrong-agent",
+      "what": "grade.py checks only that the answer is one of the known queues, never that it matches the task's expected queue. The stub that always answers billing scores 8/8; any constant answer scores 8/8. The grader cannot fail.",
+      "found": true,
+      "quote": "It only checked that the answer was a known queue.",
+      "quote_checked": true
+    },
+    {
+      "id": "set-too-small-and-happy",
+      "what": "8 tasks, all plain routing. Nothing hostile, nothing to escalate, no instruction-injection ticket, no ambiguous ones, and no held-out slice. Below the dozen-plus a non-deterministic agent needs, and missing the refusal cases the README itself names.",
+      "found": true,
+      "quote": "Before building, I suggest adding about 8\u201310 tasks: 3\u20134 `escalate`, 2\u20133 injection, and 2\u20133 ambiguous.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "harness-works",
+      "what": "Accepting that 8/8 on the stub proves the harness works and building can start. A stub scoring perfect is the evidence the grader is broken.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.08428920000000001,
+  "model": "claude-sonnet-5-5"
+}

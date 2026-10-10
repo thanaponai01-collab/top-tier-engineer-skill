@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "unpinned-model-and-prompt",
+      "what": "Neither the model nor the prompt is pinned. model: sonnet is an alias, and prompt: latest picks whichever file is newest in prompts/, so the version that passed the proving round is not guaranteed to be the one that runs.",
+      "found": true,
+      "quote": "`model: sonnet` is an alias, so a provider update changes behaviour silently.",
+      "quote_checked": true
+    },
+    {
+      "id": "kill-switch-needs-deploy",
+      "what": "The only off switch is enabled: in config.yaml, read once at process start, so turning the agent off takes a redeploy of about 25 minutes. A kill switch must work without a deploy.",
+      "found": true,
+      "quote": "**The kill switch takes about 25 minutes, not seconds.**",
+      "quote_checked": true
+    },
+    {
+      "id": "logs-unredacted-no-version",
+      "what": "runlog.py stores customer email, address and full message text unredacted, and does not record the model/prompt version or the cost of a run, so a bad run can neither be stored safely nor replayed against the version that produced it.",
+      "found": true,
+      "quote": "`runlog.py` writes customer email and address to `logs/runs.jsonl`.",
+      "quote_checked": true
+    },
+    {
+      "id": "all-at-once-rollout",
+      "what": "The launch turns the agent on for all customers at once. There should be a shadow or read-only stage, then a slice of traffic, with the comparison rate named beforehand.",
+      "found": true,
+      "quote": "The plan has no shadow or read-only stage and no slice.",
+      "quote_checked": true
+    },
+    {
+      "id": "no-daily-cap",
+      "what": "There is a per-run cost cap but no daily spend cap (about $1,200 a day expected, with nothing that stops a runaway), and the refund tool can pay up to $200 per run with no human.",
+      "found": true,
+      "quote": "**There is no daily spend cap, and the per-run cap is checked too late.**",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "step-cap-exists",
+      "what": "A per-run step cap exists and is enforced (max_steps: 12, checked in loop.py, stops and logs). Calling it missing is wrong.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.08957319999999999,
+  "model": "claude-sonnet-5-5"
+}

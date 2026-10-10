@@ -1,0 +1,5 @@
+  1. Bash: cd fixture && ls -la && git log --oneline 2>/dev/null | head; find . -type f -not -path './.git/*' -not -path './node_modules/*' | head -100
+  2. Bash: cd fixture && for f in BRIEF.md BUILD.md CLAUDE.md api.py store.py billing/*.py docs/architecture.md tests/*.py; do echo "=== $f"; cat "$f"; echo; done
+  3. Bash: cd fixture && python -m unittest 2>&1 | tail -5
+  4. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-lexmcmih\fixture\docs\architecture.md
+  5. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-lexmcmih\fixture\BUILD.md

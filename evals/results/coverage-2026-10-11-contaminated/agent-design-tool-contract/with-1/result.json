@@ -1,0 +1,46 @@
+{
+  "case": "agent-design-tool-contract",
+  "skill": "agent-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   order-fields-are-untrusted \u2014 \"`lookup_order` returns the shopper-typed `gift_message` and `delivery_instructions`, which are now omitted unless asked \"\n  found   each-one-way-tool-own-confirm \u2014 \"A different tool, different args, or a second call needs its own card.\"\n  found   merchant-boundary-testable \u2014 \"Session B's messages, tool results and action log never appear in session A's context, on shared workers (no shared muta\"\n  held    one-gate-for-all",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:agent-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "docs/agent-design.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1820417,
+  "turns": 5,
+  "seconds": 63.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

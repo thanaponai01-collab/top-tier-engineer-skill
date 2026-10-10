@@ -1,0 +1,27 @@
+{
+  "ok": false,
+  "found": 0,
+  "total": 1,
+  "score": 0.0,
+  "planted": [
+    {
+      "id": "cause-is-the-flags-host",
+      "what": "The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds.",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "optimize-the-decoy",
+      "what": "Blaming or 'fixing' the widget sort (50 items, microseconds), or adding caching or shorter timeouts as the fix, while the misspelled host stays.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0,
+  "model": "claude-sonnet-5-5"
+}

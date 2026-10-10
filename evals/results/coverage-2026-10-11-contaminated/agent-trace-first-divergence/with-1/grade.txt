@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   first-divergence-step-2 — "**Divergence: step 2.** The agent ignored the order ID in the ticket (A-1093) and ran a fuzzy `search_orders` on the nam"
+  found   cause-category — "The cause is a wrong tool choice."
+  held    blame-where-it-showed
+
+Phrase grader (grade.py), for comparison:
+PASS  agent-trace-first-divergence  [agent-trace]  2/2 found, score 1.00 (needs 1.00)
+  found   first-divergence-step-2: The first divergence is step 2. The ticket names order A-1093, but the agent calls search_orders by customer name instead of get_order('A-1093'), and gets a different customer's order (A-1187, Jane Smith, $500). Every later step compounds that one.
+  found   cause-category: The cause at step 2 is the wrong tool, or a misread instruction: the order id was in the input and was ignored. The search tool's result was correct for the query it was given.
+  held    blame-where-it-showed: Naming the refund call (step 6/7) or the $500 amount choice as the first divergence. That is where the bad outcome appeared. A $500 refund is consistent with the wrong order fetched at step 2. Also wrong: blaming the search tool for returning bad data.
+
+  ok      left the code untouched (a report-only task) — no code file changed

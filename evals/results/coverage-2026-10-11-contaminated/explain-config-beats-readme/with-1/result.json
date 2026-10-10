@@ -1,0 +1,44 @@
+{
+  "case": "explain-config-beats-readme",
+  "skill": "explain",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   five-attempts \u2014 \"The code makes 5 attempts, which is 4 retries (`settings.py:4`).\"\n  found   declined-vs-transient \u2014 \"A transient error is retried up to 5 times, then moved to a dead-letter list that ops reviews by hand.\"\n  found   idempotency-key \u2014 \"Double charges are prevented by the idempotency key. It's created once per charge and reused on every attempt (`enqueue.\"\n  held    readme-count",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:explain"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1348968,
+  "turns": 13,
+  "seconds": 31.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

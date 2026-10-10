@@ -1,0 +1,69 @@
+{
+  "case": "onboard-system-stale-architecture",
+  "skill": "onboard-system",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "phrases",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  0/2 found\n  MISSED  architecture-stale\n  MISSED  invariant-carried\n  the judge gave no usable verdict",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": true,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 0,
+  "total": 2,
+  "missed": [
+    "docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.",
+    "The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes."
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "checked the understanding against the code by running its check, not only reading notes",
+      "ok": false,
+      "detail": "never ran it \u2014 read or asserted only"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "docs/architecture.md names billing/notify.py, the module that sends customer email today",
+      "ok": false,
+      "detail": "docs/architecture.md has nothing matching 'notify'",
+      "workdir": true
+    },
+    {
+      "check": "docs/architecture.md includes credit_notes.py",
+      "ok": false,
+      "detail": "docs/architecture.md has nothing matching 'credit_notes'",
+      "workdir": true
+    },
+    {
+      "check": "no line of docs/architecture.md still presents mailer.py as a current module (it may appear only as what was renamed)",
+      "ok": false,
+      "detail": "docs/architecture.md has nothing matching '(?im)\\\\A(?![\\\\s\\\\S]*^(?![^\\\\n]*(?:renam|formerly|previous|was |old |replac|no longer|until))[^\\\\n]*mailer)'",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0808152,
+  "turns": 3,
+  "seconds": 10.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

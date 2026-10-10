@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  1/2 found
+  found   architecture-stale — "`docs/architecture.md` was stale. It named `billing/mailer.py`, which was renamed to `notify.py` on 2026-09-02, and it l"
+  MISSED  invariant-carried
+
+Phrase grader (grade.py), for comparison:
+FAIL  onboard-system-stale-architecture  [onboard-system]  1/2 found, score 0.50 (needs 1.00)
+  found   architecture-stale: docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.
+  MISSED  invariant-carried: The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes.
+            named it, but never said what was wrong with it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      checked the understanding against the code by running its check, not only reading notes — ran it: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-vb0wajnk/fixture" && python -m unittest 2>&1 | tail -5; python 
+  ok      changed nothing outside the allowed files — 
+  ok      docs/architecture.md names billing/notify.py, the module that sends customer email today — 
+  ok      docs/architecture.md includes credit_notes.py — 
+  ok      no line of docs/architecture.md still presents mailer.py as a current module (it may appear only as what was renamed) — 

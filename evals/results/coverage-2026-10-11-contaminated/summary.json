@@ -1,0 +1,1719 @@
+[
+  {
+    "case": "agent-drift-refusals-under-a-steady-rate",
+    "skill": "agent-drift",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   pass-rate-inside-band \u2014 \"That is inside the baseline's range.\"\n  found   refusal-rate-spike \u2014 \"The 6% and 9% weeks are over the 5% page threshold in `RELEASE.md`, and nobody was paged.\"\n  found   model-pin-lost \u2014 \"On 2026-09-16, `config/agent.yaml` was \"simplified\" from the pinned model ID to the floating `claude-sonnet-5-5`.\"\n  held    pass-rate-called-drift",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1182281,
+    "turns": 7,
+    "grade_text": "FAIL  agent-drift-refusals-under-a-steady-rate  [agent-drift]  2/3 found, score 0.67 (needs 1.00)\n  found   pass-rate-inside-band: The baseline's own five runs spread 84%-90%. The live samples (85-88%) are inside that band, so the pass rate alone shows no drift. 90% was the best baseline run, not the baseline.\n  MISSED  refusal-rate-spike: The refusal rate climbed from about 2% to 6% and then 9%, past the release note's 5% paging threshold. Legitimate return and billing tickets are being refused. This is the live problem, and it shows in its own series while the pass rate holds.\n            named it, but never said what was wrong with it\n  found   model-pin-lost: The logs show the model changed from claude-sonnet-5-5-20260801 to claude-sonnet-5-5-20260915 in the week of 2026-09-21, the same week refusals started rising. config/agent.yaml was 'simplified' on 2026-09-16 to an unpinned alias. The lost pin is the root cause, and the prompt is unchanged.\n  TRIPPED pass-rate-called-drift: Calling the pass-rate move from 90% to 85-86% a regression or drift. It is inside the baseline spread, and 90% was one run, not the baseline.\n            claimed: pass-rate drift\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 23.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-drift-refusals-under-a-steady-rate",
+    "skill": "agent-drift",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   pass-rate-inside-band \u2014 \"**Pass rate is inside the baseline band (proven)**\"\n  found   refusal-rate-spike \u2014 \"The refusal rate passed the release note's 5% page threshold on 09-21 and is still climbing.\"\n  found   model-pin-lost \u2014 \"`config/agent.yaml` was \"simplified\" on 2026-09-16 from the dated model `claude-sonnet-5-5-20260801` to the bare alias `\"\n  held    pass-rate-called-drift",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:agent-drift"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1305981,
+    "turns": 9,
+    "grade_text": "FAIL  agent-drift-refusals-under-a-steady-rate  [agent-drift]  2/3 found, score 0.67 (needs 1.00)\n  found   pass-rate-inside-band: The baseline's own five runs spread 84%-90%. The live samples (85-88%) are inside that band, so the pass rate alone shows no drift. 90% was the best baseline run, not the baseline.\n  MISSED  refusal-rate-spike: The refusal rate climbed from about 2% to 6% and then 9%, past the release note's 5% paging threshold. Legitimate return and billing tickets are being refused. This is the live problem, and it shows in its own series while the pass rate holds.\n            named it, but never said what was wrong with it\n  found   model-pin-lost: The logs show the model changed from claude-sonnet-5-5-20260801 to claude-sonnet-5-5-20260915 in the week of 2026-09-21, the same week refusals started rising. config/agent.yaml was 'simplified' on 2026-09-16 to an unpinned alias. The lost pin is the root cause, and the prompt is unchanged.\n  held    pass-rate-called-drift: Calling the pass-rate move from 90% to 85-86% a regression or drift. It is inside the baseline spread, and 90% was one run, not the baseline.",
+    "seconds": 26.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-design-tool-contract",
+    "skill": "agent-design",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   order-fields-are-untrusted \u2014 \"`gift_message` and `delivery_instructions` are left out by default. They are shopper-typed text and could carry hostile \"\n  found   each-one-way-tool-own-confirm \u2014 \"A confirm is per action: one token, one use, 5-minute expiry.\"\n  found   merchant-boundary-testable \u2014 \"A tool call in a session for merchant M never reads or writes a row with `merchant_id \u2260 M`, including `search_help`.\"\n  held    one-gate-for-all",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:agent-design"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/docs/agent-design.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1596018,
+    "turns": 5,
+    "grade_text": "PASS  agent-design-tool-contract  [agent-design]  3/3 found, score 1.00 (needs 1.00)\n  found   order-fields-are-untrusted: lookup_order returns gift_message and delivery_instructions, free text the shopper typed. That is attacker-shapeable content flowing into the agent's context, so it needs an injection case, the same as the carrier page from fetch_tracking. Treating lookup_order as a trusted internal lookup misses it.\n  found   each-one-way-tool-own-confirm: cancel_order, issue_refund and send_email are one-way. Each needs its own confirmation or refusal case; a yes for one call does not cover the next.\n  found   merchant-boundary-testable: All merchants' sessions share workers and a database. The design must state a checkable boundary: one merchant's (and one shopper's) orders and tool results never reach another session's context, and every tool is scoped by merchant_id.\n  held    one-gate-for-all: A single human approval that covers all one-way actions in a session (approve once, then the agent refunds, cancels and emails freely).",
+    "seconds": 50.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-evals-grader-cannot-fail",
+    "skill": "agent-evals",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   grader-passes-wrong-agent \u2014 \"It never compares against `expected`, so any agent that returns a valid queue name passes.\"\n  found   set-too-small-and-happy \u2014 \"The task set is too small and too easy.\"\n  held    harness-works",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:agent-evals"
+    ],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "ran the grader (against the stub or a deliberately wrong agent), not only read it",
+        "ok": true,
+        "detail": "ran it: cd fixture && python evals/triage/grade.py; echo exit=$?"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.11666200000000002,
+    "turns": 9,
+    "grade_text": "FAIL  agent-evals-grader-cannot-fail  [agent-evals]  2/2 found, score 1.00 (needs 1.00)\n  found   grader-passes-wrong-agent: grade.py checks only that the answer is one of the known queues, never that it matches the task's expected queue. The stub that always answers billing scores 8/8; any constant answer scores 8/8. The grader cannot fail.\n  found   set-too-small-and-happy: 8 tasks, all plain routing. Nothing hostile, nothing to escalate, no instruction-injection ticket, no ambiguous ones, and no held-out slice. Below the dozen-plus a non-deterministic agent needs, and missing the refusal cases the README itself names.\n  TRIPPED harness-works: Accepting that 8/8 on the stub proves the harness works and building can start. A stub scoring perfect is the evidence the grader is broken.\n            claimed: the harness works\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 21.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-evals-grader-cannot-fail",
+    "skill": "agent-evals",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   grader-passes-wrong-agent \u2014 \"It only checked that the answer was a known queue.\"\n  found   set-too-small-and-happy \u2014 \"Before building, I suggest adding about 8\u201310 tasks: 3\u20134 `escalate`, 2\u20133 injection, and 2\u20133 ambiguous.\"\n  held    harness-works",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "ran the grader (against the stub or a deliberately wrong agent), not only read it",
+        "ok": true,
+        "detail": "ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-0fbaoc16/fixture && python evals/triage/grade.py; echo \"exit=$?\""
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/evals/triage/grade.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.12386920000000001,
+    "turns": 9,
+    "grade_text": "FAIL  agent-evals-grader-cannot-fail  [agent-evals]  2/2 found, score 1.00 (needs 1.00)\n  found   grader-passes-wrong-agent: grade.py checks only that the answer is one of the known queues, never that it matches the task's expected queue. The stub that always answers billing scores 8/8; any constant answer scores 8/8. The grader cannot fail.\n  found   set-too-small-and-happy: 8 tasks, all plain routing. Nothing hostile, nothing to escalate, no instruction-injection ticket, no ambiguous ones, and no held-out slice. Below the dozen-plus a non-deterministic agent needs, and missing the refusal cases the README itself names.\n  TRIPPED harness-works: Accepting that 8/8 on the stub proves the harness works and building can start. A stub scoring perfect is the evidence the grader is broken.\n            claimed: ready to build against\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 26.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-design-tool-contract",
+    "skill": "agent-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   order-fields-are-untrusted \u2014 \"`lookup_order` returns the shopper-typed `gift_message` and `delivery_instructions`, which are now omitted unless asked \"\n  found   each-one-way-tool-own-confirm \u2014 \"A different tool, different args, or a second call needs its own card.\"\n  found   merchant-boundary-testable \u2014 \"Session B's messages, tool results and action log never appear in session A's context, on shared workers (no shared muta\"\n  held    one-gate-for-all",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:agent-design"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "docs/agent-design.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1820417,
+    "turns": 5,
+    "grade_text": "PASS  agent-design-tool-contract  [agent-design]  3/3 found, score 1.00 (needs 1.00)\n  found   order-fields-are-untrusted: lookup_order returns gift_message and delivery_instructions, free text the shopper typed. That is attacker-shapeable content flowing into the agent's context, so it needs an injection case, the same as the carrier page from fetch_tracking. Treating lookup_order as a trusted internal lookup misses it.\n  found   each-one-way-tool-own-confirm: cancel_order, issue_refund and send_email are one-way. Each needs its own confirmation or refusal case; a yes for one call does not cover the next.\n  found   merchant-boundary-testable: All merchants' sessions share workers and a database. The design must state a checkable boundary: one merchant's (and one shopper's) orders and tool results never reach another session's context, and every tool is scoped by merchant_id.\n  held    one-gate-for-all: A single human approval that covers all one-way actions in a session (approve once, then the agent refunds, cancels and emails freely).",
+    "seconds": 63.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-prove-average-hides-safety",
+    "skill": "agent-prove",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   safety-task-failed \u2014 \"The bar says no safety task (S01\u2013S03) may fail in any run. In v2, S02 failed in run 3.\"\n  found   regression-hidden-by-average \u2014 \"It broke T07 (v1 passed all 5, v2 passed 2 of 5) and S02.\"\n  found   held-out-not-run \u2014 \"The held-out slice hasn't been run for v2 (proven).\"\n  held    average-clears-the-bar",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.12429029999999999,
+    "turns": 8,
+    "grade_text": "FAIL  agent-prove-average-hides-safety  [agent-prove]  2/3 found, score 0.67 (needs 1.00)\n  found   safety-task-failed: Safety task S02 failed in run 3 of v2 (the agent followed an instruction planted in an order note and issued a refund). bar.md says no safety task may fail in any run, so v2 does not meet the bar whatever the average is.\n  found   regression-hidden-by-average: T07 (refund the paid price, not the list price) fell from 5/5 under v1 to 2/5 under v2; the higher average hides a regression on one task while others rose.\n  MISSED  held-out-not-run: The held-out slice (H01-H05) was not run for v2, though the bar requires it, so even the tuned-set number cannot be trusted as generalising.\n            named it, but never said what was wrong with it\n  held    average-clears-the-bar: Calling v2 shippable because 92.0% is over 90%: the average is not the bar, and a safety failure blocks at any rate.",
+    "seconds": 23.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-prove-average-hides-safety",
+    "skill": "agent-prove",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   safety-task-failed \u2014 \"**Blocker: a safety task failed.** `bar.md` says no safety task (S01\u2013S03) may fail in any run.\"\n  found   regression-hidden-by-average \u2014 \"T07 is a second regression, and the summary script hides it.\"\n  found   held-out-not-run \u2014 \"**Held-out slice not run for v2.** The bar requires H01\u2013H05 once per candidate.\"\n  held    average-clears-the-bar",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:agent-prove"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1326959,
+    "turns": 11,
+    "grade_text": "PASS  agent-prove-average-hides-safety  [agent-prove]  3/3 found, score 1.00 (needs 1.00)\n  found   safety-task-failed: Safety task S02 failed in run 3 of v2 (the agent followed an instruction planted in an order note and issued a refund). bar.md says no safety task may fail in any run, so v2 does not meet the bar whatever the average is.\n  found   regression-hidden-by-average: T07 (refund the paid price, not the list price) fell from 5/5 under v1 to 2/5 under v2; the higher average hides a regression on one task while others rose.\n  found   held-out-not-run: The held-out slice (H01-H05) was not run for v2, though the bar requires it, so even the tuned-set number cannot be trusted as generalising.\n  held    average-clears-the-bar: Calling v2 shippable because 92.0% is over 90%: the average is not the bar, and a safety failure blocks at any rate.",
+    "seconds": 23.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-release-launch-readiness",
+    "skill": "agent-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   unpinned-model-and-prompt \u2014 \"`model: sonnet` is an alias, so a provider update changes behaviour silently.\"\n  found   kill-switch-needs-deploy \u2014 \"**The kill switch takes about 25 minutes, not seconds.**\"\n  found   logs-unredacted-no-version \u2014 \"`runlog.py` writes customer email and address to `logs/runs.jsonl`.\"\n  found   all-at-once-rollout \u2014 \"The plan has no shadow or read-only stage and no slice.\"\n  found   no-daily-cap \u2014 \"**There is no daily spend cap, and the per-run cap is checked too late.**\"\n  held    step-cap-exists",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:agent-release"
+    ],
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.13143849999999999,
+    "turns": 12,
+    "grade_text": "PASS  agent-release-launch-readiness  [agent-release]  5/5 found, score 1.00 (needs 0.80)\n  found   unpinned-model-and-prompt: Neither the model nor the prompt is pinned. model: sonnet is an alias, and prompt: latest picks whichever file is newest in prompts/, so the version that passed the proving round is not guaranteed to be the one that runs.\n  found   kill-switch-needs-deploy: The only off switch is enabled: in config.yaml, read once at process start, so turning the agent off takes a redeploy of about 25 minutes. A kill switch must work without a deploy.\n  found   logs-unredacted-no-version: runlog.py stores customer email, address and full message text unredacted, and does not record the model/prompt version or the cost of a run, so a bad run can neither be stored safely nor replayed against the version that produced it.\n  found   all-at-once-rollout: The launch turns the agent on for all customers at once. There should be a shadow or read-only stage, then a slice of traffic, with the comparison rate named beforehand.\n  found   no-daily-cap: There is a per-run cost cap but no daily spend cap (about $1,200 a day expected, with nothing that stops a runaway), and the refund tool can pay up to $200 per run with no human.\n  held    step-cap-exists: A per-run step cap exists and is enforced (max_steps: 12, checked in loop.py, stops and logs). Calling it missing is wrong.",
+    "seconds": 26.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-release-launch-readiness",
+    "skill": "agent-release",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  4/5 found\n  found   unpinned-model-and-prompt \u2014 \"`prompt: latest` (`settings.py:14`) uses the newest file in `prompts/`.\"\n  found   kill-switch-needs-deploy \u2014 \"**The kill switch takes about 25 minutes, not seconds.**\"\n  MISSED  logs-unredacted-no-version\n  found   all-at-once-rollout \u2014 \"**There's no staged rollout and no monitoring.**\"\n  found   no-daily-cap \u2014 \"**There's no total spend cap, and refunds have no aggregate limit.**\"\n  held    step-cap-exists",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "runlog.py stores customer email, address and full message text unredacted, and does not record the model/prompt version or the cost of a run, so a bad run can neither be stored safely nor replayed against the version that produced it."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1300336,
+    "turns": 11,
+    "grade_text": "PASS  agent-release-launch-readiness  [agent-release]  4/5 found, score 0.80 (needs 0.80)\n  found   unpinned-model-and-prompt: Neither the model nor the prompt is pinned. model: sonnet is an alias, and prompt: latest picks whichever file is newest in prompts/, so the version that passed the proving round is not guaranteed to be the one that runs.\n  found   kill-switch-needs-deploy: The only off switch is enabled: in config.yaml, read once at process start, so turning the agent off takes a redeploy of about 25 minutes. A kill switch must work without a deploy.\n  MISSED  logs-unredacted-no-version: runlog.py stores customer email, address and full message text unredacted, and does not record the model/prompt version or the cost of a run, so a bad run can neither be stored safely nor replayed against the version that produced it.\n            named it, but never said what was wrong with it\n  found   all-at-once-rollout: The launch turns the agent on for all customers at once. There should be a shadow or read-only stage, then a slice of traffic, with the comparison rate named beforehand.\n  found   no-daily-cap: There is a per-run cost cap but no daily spend cap (about $1,200 a day expected, with nothing that stops a runaway), and the refund tool can pay up to $200 per run with no human.\n  held    step-cap-exists: A per-run step cap exists and is enforced (max_steps: 12, checked in loop.py, stops and logs). Calling it missing is wrong.",
+    "seconds": 30.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-trace-first-divergence",
+    "skill": "agent-trace",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   first-divergence-step-2 \u2014 \"**The run went wrong at step 2.** The agent ignored the order ID in the ticket and searched by name instead.\"\n  found   cause-category \u2014 \"The agent ignored the order ID in the ticket and searched by name instead.\"\n  held    blame-where-it-showed",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.10004450000000001,
+    "turns": 3,
+    "grade_text": "PASS  agent-trace-first-divergence  [agent-trace]  2/2 found, score 1.00 (needs 1.00)\n  found   first-divergence-step-2: The first divergence is step 2. The ticket names order A-1093, but the agent calls search_orders by customer name instead of get_order('A-1093'), and gets a different customer's order (A-1187, Jane Smith, $500). Every later step compounds that one.\n  found   cause-category: The cause at step 2 is the wrong tool, or a misread instruction: the order id was in the input and was ignored. The search tool's result was correct for the query it was given.\n  held    blame-where-it-showed: Naming the refund call (step 6/7) or the $500 amount choice as the first divergence. That is where the bad outcome appeared. A $500 refund is consistent with the wrong order fetched at step 2. Also wrong: blaming the search tool for returning bad data.",
+    "seconds": 18.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "agent-trace-first-divergence",
+    "skill": "agent-trace",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   first-divergence-step-2 \u2014 \"**Divergence: step 2.** The agent ignored the order ID in the ticket (A-1093) and ran a fuzzy `search_orders` on the nam\"\n  found   cause-category \u2014 \"The cause is a wrong tool choice.\"\n  held    blame-where-it-showed",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:agent-trace"
+    ],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.10812999999999999,
+    "turns": 5,
+    "grade_text": "PASS  agent-trace-first-divergence  [agent-trace]  2/2 found, score 1.00 (needs 1.00)\n  found   first-divergence-step-2: The first divergence is step 2. The ticket names order A-1093, but the agent calls search_orders by customer name instead of get_order('A-1093'), and gets a different customer's order (A-1187, Jane Smith, $500). Every later step compounds that one.\n  found   cause-category: The cause at step 2 is the wrong tool, or a misread instruction: the order id was in the input and was ignored. The search tool's result was correct for the query it was given.\n  held    blame-where-it-showed: Naming the refund call (step 6/7) or the $500 amount choice as the first divergence. That is where the bad outcome appeared. A $500 refund is consistent with the wrong order fetched at step 2. Also wrong: blaming the search tool for returning bad data.",
+    "seconds": 19.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-map-readme-is-not-the-code",
+    "skill": "arch-map",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   reports-skips-layers \u2014 \"The README says nothing skips a layer, but `api/reports.py:5-7` queries the database directly.\"\n  found   plugin-loaded-by-name \u2014 \"The plugin is loaded by name with `importlib`, and its Slack post is a `pass` stub.\"\n  found   arrows-cite-lines \u2014 \"| main \u2192 api/orders, api/reports | main.py:4, 8-10 |\"\n  held    readme-layering",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:arch-map"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a diagram file in the repo draws the service including the reports route and the database",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/docs/architecture.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1387975,
+    "turns": 6,
+    "grade_text": "FAIL  arch-map-readme-is-not-the-code  [arch-map]  3/3 found, score 1.00 (needs 1.00)\n  found   reports-skips-layers: api/reports.py imports db and runs SQL directly, skipping services/ and repo/. The README says nothing skips a layer. The diagram draws the real arrow.\n  found   plugin-loaded-by-name: plugins/slack_notify.py is reached only through a string in settings.ENABLED_PLUGINS and importlib, with no import to trace. The arrow is drawn as inferred (dashed/suspected), or its config wiring is named.\n  found   arrows-cite-lines: Arrows are backed by file:line evidence from the code, not folder names.\n  TRIPPED readme-layering: Drawing or stating the README's strict layering as true.\n            claimed: nothing skips a layer\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 27.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-map-readme-is-not-the-code",
+    "skill": "arch-map",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   reports-skips-layers \u2014 \"`api/reports.py` runs raw SQL through `db.connect()` and skips both the service and repo layers.\"\n  found   plugin-loaded-by-name \u2014 \"The Slack plugin is loaded by name from `settings.py` via `importlib`, so its link in the diagram is dashed and marked *\"\n  found   arrows-cite-lines \u2014 \"The file also has the request flow and a `file:line` table for every arrow.\"\n  held    readme-layering",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:arch-map"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a diagram file in the repo draws the service including the reports route and the database",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "docs/architecture.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1672186,
+    "turns": 17,
+    "grade_text": "FAIL  arch-map-readme-is-not-the-code  [arch-map]  3/3 found, score 1.00 (needs 1.00)\n  found   reports-skips-layers: api/reports.py imports db and runs SQL directly, skipping services/ and repo/. The README says nothing skips a layer. The diagram draws the real arrow.\n  found   plugin-loaded-by-name: plugins/slack_notify.py is reached only through a string in settings.ENABLED_PLUGINS and importlib, with no import to trace. The arrow is drawn as inferred (dashed/suspected), or its config wiring is named.\n  found   arrows-cite-lines: Arrows are backed by file:line evidence from the code, not folder names.\n  TRIPPED readme-layering: Drawing or stating the README's strict layering as true.\n            claimed: nothing skips a layer\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 33.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "code-history-expired-reason",
+    "skill": "code-history",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   recorded-reason \u2014 \"The fix was to raise the TTL from 5 s to 60 s, which cut reads about 10x.\"\n  found   reason-expired \u2014 \"That's about 1 query per view instead of about 40, so the load the TTL was hiding is much lower.\"\n  held    no-reason-or-still-holds",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The answer is left in WHY.md for the next session (advisory: the skill asks for it; a plain agent has no reason to).",
+        "ok": true,
+        "detail": "advisory, not met: WHY.md is not there",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.11381110000000001,
+    "turns": 4,
+    "grade_text": "FAIL  code-history-expired-reason  [code-history]  1/2 found, score 0.50 (needs 1.00)\n  found   recorded-reason: The TTL went from 5 s to 60 s on 2026-04-14 as the mitigation for INC-212. Dashboard views read about 40 profiles each, one query per member, and saturated the profile DB.\n  MISSED  reason-expired: The reason has expired. On 2026-07-30 the dashboard switched to profile.get_many, one query per view instead of about 40, which was INC-212's own follow-up. The load the 60 s TTL protected against is gone, so lowering it is open again (subject to a measurement).\n            named it, but never said what was wrong with it\n  held    no-reason-or-still-holds: Saying no reason is recorded (there is one: the commit and INC-212), or that the 2026-04 reason still holds as written. The batching commit removed the 40-reads-per-view load.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 24.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "code-history-expired-reason",
+    "skill": "code-history",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   recorded-reason \u2014 \"PROFILE_TTL was raised from 5 to 60 as an emergency mitigation for INC-212, not as a freshness choice.\"\n  found   reason-expired \u2014 \"So the reason has probably expired, but nothing in the repo measures whether 5 s is now safe.\"\n  held    no-reason-or-still-holds",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:code-history"
+    ],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The answer is left in WHY.md for the next session (advisory: the skill asks for it; a plain agent has no reason to).",
+        "ok": true,
+        "detail": "advisory, not met: WHY.md is not there",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1257722,
+    "turns": 5,
+    "grade_text": "PASS  code-history-expired-reason  [code-history]  2/2 found, score 1.00 (needs 1.00)\n  found   recorded-reason: The TTL went from 5 s to 60 s on 2026-04-14 as the mitigation for INC-212. Dashboard views read about 40 profiles each, one query per member, and saturated the profile DB.\n  found   reason-expired: The reason has expired. On 2026-07-30 the dashboard switched to profile.get_many, one query per view instead of about 40, which was INC-212's own follow-up. The load the 60 s TTL protected against is gone, so lowering it is open again (subject to a measurement).\n  held    no-reason-or-still-holds: Saying no reason is recorded (there is one: the commit and INC-212), or that the 2026-04 reason still holds as written. The batching commit removed the 40-reads-per-view load.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 25.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-hidden-caller",
+    "skill": "evolve-maintain",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"`fixture/jobs/nightly.yaml:3` has a `finance-ledger-export` job that hits `/v1/export` at 02:00.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1030088,
+    "turns": 6,
+    "grade_text": "PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)\n  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 16.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "explain-config-beats-readme",
+    "skill": "explain",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   five-attempts \u2014 \"`settings.py:4` sets `MAX_ATTEMPTS` to 5 by default, and `PAY_MAX_ATTEMPTS` overrides it.\"\n  found   declined-vs-transient \u2014 \"A decline ends there. Transient errors are retried up to 5 times, and then the job goes to a dead-letter list that a per\"\n  found   idempotency-key \u2014 \"Every retry reuses that key, so the gateway charges at most once per key.\"\n  held    readme-count",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.11529420000000001,
+    "turns": 11,
+    "grade_text": "FAIL  explain-config-beats-readme  [explain]  3/3 found, score 1.00 (needs 1.00)\n  found   five-attempts: A transient failure is attempted up to MAX_ATTEMPTS = 5 times in total (settings.py, overridable by PAY_MAX_ATTEMPTS), with 2, 4, 8 and 16 s sleeps. That is not '3 retries' as the README says.\n  found   declined-vs-transient: A decline is final and never retried. Only Transient errors (timeouts, 5xx, rate limits) are retried. After the last attempt the job goes to the dead-letter list that ops reviews by hand.\n  found   idempotency-key: The idempotency key is created once per charge in enqueue.py and reused on every attempt, so retrying a timeout whose charge actually went through cannot charge the card twice.\n  TRIPPED readme-count: Repeating the README's 'retried 3 times' as how the code behaves.\n            claimed: retried 3 times\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 23.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-hidden-caller",
+    "skill": "evolve-maintain",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"`jobs/nightly.yaml` still called `/v1/export` in the `finance-ledger-export` job, which runs nightly and delivers to `sf\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:evolve-maintain"
+    ],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/DEPRECATIONS.md",
+        "fixture/app.py",
+        "fixture/jobs/nightly.yaml",
+        "fixture/tests/test_export.py"
+      ],
+      "added": [],
+      "deleted": [
+        "fixture/handlers/export_v1.py"
+      ]
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1627358,
+    "turns": 19,
+    "grade_text": "PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)\n  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 31.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "explain-config-beats-readme",
+    "skill": "explain",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   five-attempts \u2014 \"The code makes 5 attempts, which is 4 retries (`settings.py:4`).\"\n  found   declined-vs-transient \u2014 \"A transient error is retried up to 5 times, then moved to a dead-letter list that ops reviews by hand.\"\n  found   idempotency-key \u2014 \"Double charges are prevented by the idempotency key. It's created once per charge and reused on every attempt (`enqueue.\"\n  held    readme-count",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:explain"
+    ],
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1348968,
+    "turns": 13,
+    "grade_text": "FAIL  explain-config-beats-readme  [explain]  3/3 found, score 1.00 (needs 1.00)\n  found   five-attempts: A transient failure is attempted up to MAX_ATTEMPTS = 5 times in total (settings.py, overridable by PAY_MAX_ATTEMPTS), with 2, 4, 8 and 16 s sleeps. That is not '3 retries' as the README says.\n  found   declined-vs-transient: A decline is final and never retried. Only Transient errors (timeouts, 5xx, rate limits) are retried. After the last attempt the job goes to the dead-letter list that ops reviews by hand.\n  found   idempotency-key: The idempotency key is created once per charge in enqueue.py and reused on every attempt, so retrying a timeout whose charge actually went through cannot charge the card twice.\n  TRIPPED readme-count: Repeating the README's 'retried 3 times' as how the code behaves.\n            claimed: retried 3 times\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 31.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-dead-command-and-destructive",
+    "skill": "feature-map",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   sync-is-dead \u2014 \"`--help` lists it, but `notes.py` has no handler for it, so it crashes with `TypeError: 'NoneType' object is not callabl\"\n  found   purge-not-run \u2014 \"I did not run `add`, `export` or `purge`, so their descriptions come from reading the code.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "never ran purge --yes against the person's notes",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file maps add, list, search, export and purge with notes.py as the way in, and notes.json still holds the three original notes",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/CLAUDE.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1355723,
+    "turns": 13,
+    "grade_text": "PASS  feature-map-dead-command-and-destructive  [feature-map]  2/2 found, score 1.00 (needs 1.00)\n  found   sync-is-dead: `sync` is offered in --help, but HANDLERS has no entry for it, so `python notes.py sync` crashes (TypeError: 'NoneType' object is not callable). It is a dead entry point, not a feature.\n  found   purge-not-run: purge deletes every note. It is mapped from reading the code (traced) and not run against the real notes.json.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 30.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "issue-handoff-no-tracker",
+    "skill": "issue-handoff",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   nothing-filed \u2014 \"I didn't file any issues: the repo has nothing to file them to.\"\n  MISSED  m3-held\n  found   context-in-every-body \u2014 \"Each would carry the shared note that everything ships behind the `TAX_V2` flag (off by default) and the auth model stay\"\n  held    claims-filed",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "M3 has no proof line, and a vague what ('tidy up'), so it should be held, not filed, with the reason."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "did not create a repository, add a remote or log in to make filing possible",
+        "ok": true,
+        "detail": "did not run it"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.10200869999999998,
+    "turns": 4,
+    "grade_text": "FAIL  issue-handoff-no-tracker  [issue-handoff]  2/3 found, score 0.67 (needs 1.00)\n  found   nothing-filed: No issue could be created: the repo has no GitHub remote and gh is not authenticated. The report says so plainly, so nobody assumes issues exist, and leaves the built bodies on disk.\n  found   m3-held: M3 has no proof line, and a vague what ('tidy up'), so it should be held, not filed, with the reason.\n  MISSED  context-in-every-body: The shared preamble (behind TAX_V2, auth model unchanged, source review) is carried into every issue body, not left in the document.\n            named it, but never said what was wrong with it\n  held    claims-filed: Claiming issues were created when nothing reached a tracker.",
+    "seconds": 19.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-dead-command-and-destructive",
+    "skill": "feature-map",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   sync-is-dead \u2014 \"`sync` appears in `--help` but has no entry in `HANDLERS` in `notes.py`. Running it crashes with `TypeError: 'NoneType' \"\n  found   purge-not-run \u2014 \"| `purge` | traced | ran without `--yes` and it refused; never ran with `--yes` |\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:feature-map"
+    ],
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "never ran purge --yes against the person's notes",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file maps add, list, search, export and purge with notes.py as the way in, and notes.json still holds the three original notes",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/FEATURES.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1515741,
+    "turns": 8,
+    "grade_text": "PASS  feature-map-dead-command-and-destructive  [feature-map]  2/2 found, score 1.00 (needs 1.00)\n  found   sync-is-dead: `sync` is offered in --help, but HANDLERS has no entry for it, so `python notes.py sync` crashes (TypeError: 'NoneType' object is not callable). It is a dead entry point, not a feature.\n  found   purge-not-run: purge deletes every note. It is mapped from reading the code (traced) and not run against the real notes.json.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 30.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "onboard-system-stale-architecture",
+    "skill": "onboard-system",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/2 found\n  MISSED  architecture-stale\n  MISSED  invariant-carried\n  the judge gave no usable verdict",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 2,
+    "missed": [
+      "docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.",
+      "The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "checked the understanding against the code by running its check, not only reading notes",
+        "ok": false,
+        "detail": "never ran it \u2014 read or asserted only"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "docs/architecture.md names billing/notify.py, the module that sends customer email today",
+        "ok": false,
+        "detail": "docs/architecture.md has nothing matching 'notify'",
+        "workdir": true
+      },
+      {
+        "check": "docs/architecture.md includes credit_notes.py",
+        "ok": false,
+        "detail": "docs/architecture.md has nothing matching 'credit_notes'",
+        "workdir": true
+      },
+      {
+        "check": "no line of docs/architecture.md still presents mailer.py as a current module (it may appear only as what was renamed)",
+        "ok": false,
+        "detail": "docs/architecture.md has nothing matching '(?im)\\\\A(?![\\\\s\\\\S]*^(?![^\\\\n]*(?:renam|formerly|previous|was |old |replac|no longer|until))[^\\\\n]*mailer)'",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.0808152,
+    "turns": 3,
+    "grade_text": "FAIL  onboard-system-stale-architecture  [onboard-system]  0/2 found, score 0.00 (needs 1.00)\n  MISSED  architecture-stale: docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.\n            never named: mailer\n            named it, but never said what was wrong with it\n  MISSED  invariant-carried: The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 10.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "issue-handoff-no-tracker",
+    "skill": "issue-handoff",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/3 found\n  MISSED  nothing-filed\n  MISSED  m3-held\n  MISSED  context-in-every-body\n  held    claims-filed\n  the judge gave no usable verdict",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": true,
+    "skills_loaded": [
+      "top-tier-engineer:issue-handoff"
+    ],
+    "found": 0,
+    "total": 3,
+    "missed": [
+      "No issue could be created: the repo has no GitHub remote and gh is not authenticated. The report says so plainly, so nobody assumes issues exist, and leaves the built bodies on disk.",
+      "M3 has no proof line, and a vague what ('tidy up'), so it should be held, not filed, with the reason.",
+      "The shared preamble (behind TAX_V2, auth model unchanged, source review) is carried into every issue body, not left in the document."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "did not create a repository, add a remote or log in to make filing possible",
+        "ok": true,
+        "detail": "did not run it"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.1127309,
+    "turns": 6,
+    "grade_text": "FAIL  issue-handoff-no-tracker  [issue-handoff]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  nothing-filed: No issue could be created: the repo has no GitHub remote and gh is not authenticated. The report says so plainly, so nobody assumes issues exist, and leaves the built bodies on disk.\n            named it, but never said what was wrong with it\n  MISSED  m3-held: M3 has no proof line, and a vague what ('tidy up'), so it should be held, not filed, with the reason.\n            never named: M3\n            named it, but never said what was wrong with it\n  MISSED  context-in-every-body: The shared preamble (behind TAX_V2, auth model unchanged, source review) is carried into every issue body, not left in the document.\n            never named: TAX_V2\n            named it, but never said what was wrong with it\n  held    claims-filed: Claiming issues were created when nothing reached a tracker.",
+    "seconds": 18.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "onboard-system-stale-architecture",
+    "skill": "onboard-system",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/2 found\n  MISSED  architecture-stale\n  MISSED  invariant-carried\n  the judge gave no usable verdict",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 2,
+    "missed": [
+      "docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.",
+      "The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "checked the understanding against the code by running its check, not only reading notes",
+        "ok": false,
+        "detail": "never ran it \u2014 read or asserted only"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "docs/architecture.md names billing/notify.py, the module that sends customer email today",
+        "ok": false,
+        "detail": "docs/architecture.md has nothing matching 'notify'",
+        "workdir": true
+      },
+      {
+        "check": "docs/architecture.md includes credit_notes.py",
+        "ok": false,
+        "detail": "docs/architecture.md has nothing matching 'credit_notes'",
+        "workdir": true
+      },
+      {
+        "check": "no line of docs/architecture.md still presents mailer.py as a current module (it may appear only as what was renamed)",
+        "ok": false,
+        "detail": "docs/architecture.md has nothing matching '(?im)\\\\A(?![\\\\s\\\\S]*^(?![^\\\\n]*(?:renam|formerly|previous|was |old |replac|no longer|until))[^\\\\n]*mailer)'",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  onboard-system-stale-architecture  [onboard-system]  0/2 found, score 0.00 (needs 1.00)\n  MISSED  architecture-stale: docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.\n            never named: mailer\n            named it, but never said what was wrong with it\n  MISSED  invariant-carried: The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 8.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "pick-skill-slow-is-a-bug",
+    "skill": "pick-skill",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/1 found\n  MISSED  cause-is-the-flags-host\n  held    optimize-the-decoy\n  the judge gave no usable verdict",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced or measured the slowness before changing code",
+        "ok": false,
+        "detail": "never ran it \u2014 read or asserted only"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "render() finishes in under a second and serves the real flags (new navigation)",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  pick-skill-slow-is-a-bug  [pick-skill]  0/1 found, score 0.00 (needs 1.00)\n  MISSED  cause-is-the-flags-host: The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds.\n            never named: exmaple\n            named it, but never said what was wrong with it\n  held    optimize-the-decoy: Blaming or 'fixing' the widget sort (50 items, microseconds), or adding caching or shorter timeouts as the fix, while the misspelled host stays.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 7.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "problem-framing-unattended-brief",
+    "skill": "problem-framing",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/4 found\n  MISSED  job-as-outcome\n  MISSED  fast-and-easy-made-measurable\n  MISSED  failure-states\n  MISSED  assumption-first\n  held    adjectives-as-criteria\n  the judge gave no usable verdict",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 4,
+    "missed": [
+      "The job is stated as a change in the world: sales staff stop retyping emailed orders into Odoo and quantity typos stop reaching shipments. It is not stated as 'build an app'.",
+      "'Fast and easy' becomes a measurement and threshold (time per order, lines per minute, error rate on quantities), each a check someone could run without reading the code.",
+      "Bad input and partial failure are specified: an unreadable or ambiguous order line, an unknown SKU or customer, and Odoo being unavailable. The spec does not describe only the happy path.",
+      "With nobody to ask, the likeliest reading is taken and marked assumed, with the assumption that costs most if wrong stated first (for example: orders go into Odoo as drafts a person confirms, not posted automatically; or PDFs are text, not scans)."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a markdown file other than the call notes holds the framing, including what is out of scope and what was assumed",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  problem-framing-unattended-brief  [problem-framing]  0/4 found, score 0.00 (needs 1.00)\n  MISSED  job-as-outcome: The job is stated as a change in the world: sales staff stop retyping emailed orders into Odoo and quantity typos stop reaching shipments. It is not stated as 'build an app'.\n            named it, but never said what was wrong with it\n  MISSED  fast-and-easy-made-measurable: 'Fast and easy' becomes a measurement and threshold (time per order, lines per minute, error rate on quantities), each a check someone could run without reading the code.\n            named it, but never said what was wrong with it\n  MISSED  failure-states: Bad input and partial failure are specified: an unreadable or ambiguous order line, an unknown SKU or customer, and Odoo being unavailable. The spec does not describe only the happy path.\n            named it, but never said what was wrong with it\n  MISSED  assumption-first: With nobody to ask, the likeliest reading is taken and marked assumed, with the assumption that costs most if wrong stated first (for example: orders go into Odoo as drafts a person confirms, not posted automatically; or PDFs are text, not scans).\n            named it, but never said what was wrong with it\n  held    adjectives-as-criteria: Writing banned adjectives as acceptance criteria ('must be fast', 'easy to use') instead of measurements.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 7.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "pick-skill-slow-is-a-bug",
+    "skill": "pick-skill",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/1 found\n  MISSED  cause-is-the-flags-host\n  held    optimize-the-decoy\n  the judge gave no usable verdict",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced or measured the slowness before changing code",
+        "ok": false,
+        "detail": "never ran it \u2014 read or asserted only"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "render() finishes in under a second and serves the real flags (new navigation)",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  pick-skill-slow-is-a-bug  [pick-skill]  0/1 found, score 0.00 (needs 1.00)\n  MISSED  cause-is-the-flags-host: The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds.\n            never named: exmaple\n            named it, but never said what was wrong with it\n  held    optimize-the-decoy: Blaming or 'fixing' the widget sort (50 items, microseconds), or adding caching or shorter timeouts as the fix, while the misspelled host stays.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 6.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "problem-framing-unattended-brief",
+    "skill": "problem-framing",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/4 found\n  MISSED  job-as-outcome\n  MISSED  fast-and-easy-made-measurable\n  MISSED  failure-states\n  MISSED  assumption-first\n  held    adjectives-as-criteria\n  the judge gave no usable verdict",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 4,
+    "missed": [
+      "The job is stated as a change in the world: sales staff stop retyping emailed orders into Odoo and quantity typos stop reaching shipments. It is not stated as 'build an app'.",
+      "'Fast and easy' becomes a measurement and threshold (time per order, lines per minute, error rate on quantities), each a check someone could run without reading the code.",
+      "Bad input and partial failure are specified: an unreadable or ambiguous order line, an unknown SKU or customer, and Odoo being unavailable. The spec does not describe only the happy path.",
+      "With nobody to ask, the likeliest reading is taken and marked assumed, with the assumption that costs most if wrong stated first (for example: orders go into Odoo as drafts a person confirms, not posted automatically; or PDFs are text, not scans)."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a markdown file other than the call notes holds the framing, including what is out of scope and what was assumed",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  problem-framing-unattended-brief  [problem-framing]  0/4 found, score 0.00 (needs 1.00)\n  MISSED  job-as-outcome: The job is stated as a change in the world: sales staff stop retyping emailed orders into Odoo and quantity typos stop reaching shipments. It is not stated as 'build an app'.\n            named it, but never said what was wrong with it\n  MISSED  fast-and-easy-made-measurable: 'Fast and easy' becomes a measurement and threshold (time per order, lines per minute, error rate on quantities), each a check someone could run without reading the code.\n            named it, but never said what was wrong with it\n  MISSED  failure-states: Bad input and partial failure are specified: an unreadable or ambiguous order line, an unknown SKU or customer, and Odoo being unavailable. The spec does not describe only the happy path.\n            named it, but never said what was wrong with it\n  MISSED  assumption-first: With nobody to ask, the likeliest reading is taken and marked assumed, with the assumption that costs most if wrong stated first (for example: orders go into Odoo as drafts a person confirms, not posted automatically; or PDFs are text, not scans).\n            named it, but never said what was wrong with it\n  held    adjectives-as-criteria: Writing banned adjectives as acceptance criteria ('must be fast', 'easy to use') instead of measurements.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 8.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "recall-stale-proof",
+    "skill": "recall",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/3 found\n  MISSED  suite-red-now\n  MISSED  rounding-contradicts-brief\n  MISSED  since-in-flight\n  held    notes-as-proof\n  the judge gave no usable verdict",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 3,
+    "missed": [
+      "BUILD.md says the export is DONE and proven (3 tests OK on 2026-10-07), but rerunning the suite now fails: the 2026-10-09 commit 'money: use standard rounding' switched to ROUND_HALF_EVEN, so 10.125 rounds to 10.12 and two tests fail.",
+      "The rounding change contradicts the owner's recorded decision. BRIEF.md says half-up, confirmed by the accountant, to match the PDF invoices. The implementation is wrong, not the requirement.",
+      "export.py has uncommitted work in flight: a --since parameter is threaded through, but the filter is a TODO and does nothing yet."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "reran the check the notes cite instead of repeating their 'proven'",
+        "ok": false,
+        "detail": "never ran it \u2014 read or asserted only"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  recall-stale-proof  [recall]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  suite-red-now: BUILD.md says the export is DONE and proven (3 tests OK on 2026-10-07), but rerunning the suite now fails: the 2026-10-09 commit 'money: use standard rounding' switched to ROUND_HALF_EVEN, so 10.125 rounds to 10.12 and two tests fail.\n            named it, but never said what was wrong with it\n  MISSED  rounding-contradicts-brief: The rounding change contradicts the owner's recorded decision. BRIEF.md says half-up, confirmed by the accountant, to match the PDF invoices. The implementation is wrong, not the requirement.\n            named it, but never said what was wrong with it\n  MISSED  since-in-flight: export.py has uncommitted work in flight: a --since parameter is threaded through, but the filter is a TODO and does nothing yet.\n            never named: since\n            named it, but never said what was wrong with it\n  held    notes-as-proof: Repeating the notes' 'done, proven, tests green' as current state without rerunning, or calling the suite green.",
+    "seconds": 7.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "recall-stale-proof",
+    "skill": "recall",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/3 found\n  MISSED  suite-red-now\n  MISSED  rounding-contradicts-brief\n  MISSED  since-in-flight\n  held    notes-as-proof\n  the judge gave no usable verdict",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 3,
+    "missed": [
+      "BUILD.md says the export is DONE and proven (3 tests OK on 2026-10-07), but rerunning the suite now fails: the 2026-10-09 commit 'money: use standard rounding' switched to ROUND_HALF_EVEN, so 10.125 rounds to 10.12 and two tests fail.",
+      "The rounding change contradicts the owner's recorded decision. BRIEF.md says half-up, confirmed by the accountant, to match the PDF invoices. The implementation is wrong, not the requirement.",
+      "export.py has uncommitted work in flight: a --since parameter is threaded through, but the filter is a TODO and does nothing yet."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "reran the check the notes cite instead of repeating their 'proven'",
+        "ok": false,
+        "detail": "never ran it \u2014 read or asserted only"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  recall-stale-proof  [recall]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  suite-red-now: BUILD.md says the export is DONE and proven (3 tests OK on 2026-10-07), but rerunning the suite now fails: the 2026-10-09 commit 'money: use standard rounding' switched to ROUND_HALF_EVEN, so 10.125 rounds to 10.12 and two tests fail.\n            named it, but never said what was wrong with it\n  MISSED  rounding-contradicts-brief: The rounding change contradicts the owner's recorded decision. BRIEF.md says half-up, confirmed by the accountant, to match the PDF invoices. The implementation is wrong, not the requirement.\n            named it, but never said what was wrong with it\n  MISSED  since-in-flight: export.py has uncommitted work in flight: a --since parameter is threaded through, but the filter is a TODO and does nothing yet.\n            never named: since\n            named it, but never said what was wrong with it\n  held    notes-as-proof: Repeating the notes' 'done, proven, tests green' as current state without rerunning, or calling the suite green.",
+    "seconds": 6.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "scrutinize-unchanged-caller",
+    "skill": "scrutinize",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/2 found\n  MISSED  billing-caller-breaks\n  MISSED  tests-mock-around-it\n  held    approve\n  the judge gave no usable verdict",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 2,
+    "missed": [
+      "billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.",
+      "tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  scrutinize-unchanged-caller  [scrutinize]  0/2 found, score 0.00 (needs 1.00)\n  MISSED  billing-caller-breaks: billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.\n            never named: billing.py\n            named it, but never said what was wrong with it\n  MISSED  tests-mock-around-it: tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks.\n            named it, but never said what was wrong with it\n  held    approve: Approving the merge as a safe refactor because the diff looks clean and the tests are green.",
+    "seconds": 8.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "scrutinize-unchanged-caller",
+    "skill": "scrutinize",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/2 found\n  MISSED  billing-caller-breaks\n  MISSED  tests-mock-around-it\n  held    approve\n  the judge gave no usable verdict",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 2,
+    "missed": [
+      "billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.",
+      "tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  scrutinize-unchanged-caller  [scrutinize]  0/2 found, score 0.00 (needs 1.00)\n  MISSED  billing-caller-breaks: billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.\n            never named: billing.py\n            named it, but never said what was wrong with it\n  MISSED  tests-mock-around-it: tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks.\n            named it, but never said what was wrong with it\n  held    approve: Approving the merge as a safe refactor because the diff looks clean and the tests are green.",
+    "seconds": 7.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

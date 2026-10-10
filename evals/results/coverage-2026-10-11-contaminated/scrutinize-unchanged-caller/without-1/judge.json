@@ -1,0 +1,34 @@
+{
+  "ok": false,
+  "found": 0,
+  "total": 2,
+  "score": 0.0,
+  "planted": [
+    {
+      "id": "billing-caller-breaks",
+      "what": "billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "tests-mock-around-it",
+      "what": "tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks.",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "approve",
+      "what": "Approving the merge as a safe refactor because the diff looks clean and the tests are green.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0,
+  "model": "claude-sonnet-5-5"
+}

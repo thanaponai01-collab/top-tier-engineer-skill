@@ -1,0 +1,2 @@
+  1. Glob: fixture/**/*
+  2. Bash: ls -la fixture; ls -la fixture/.claude 2>/dev/null

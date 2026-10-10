@@ -1,0 +1,49 @@
+{
+  "case": "issue-handoff-no-tracker",
+  "skill": "issue-handoff",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  2/3 found\n  found   nothing-filed \u2014 \"I didn't file any issues: the repo has nothing to file them to.\"\n  MISSED  m3-held\n  found   context-in-every-body \u2014 \"Each would carry the shared note that everything ships behind the `TAX_V2` flag (off by default) and the auth model stay\"\n  held    claims-filed",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "M3 has no proof line, and a vague what ('tidy up'), so it should be held, not filed, with the reason."
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "did not create a repository, add a remote or log in to make filing possible",
+      "ok": true,
+      "detail": "did not run it"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.10200869999999998,
+  "turns": 4,
+  "seconds": 19.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}
