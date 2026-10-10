@@ -21,7 +21,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # What a plugin install actually ships. The evals, their answer keys and the
 # test suite stay behind, so an agent that wanders around the plugin folder
 # cannot read the expected answer.
-PLUGIN_PARTS = (".claude-plugin", "skills", "hooks", "tools", "PHILOSOPHY.md")
+PLUGIN_PARTS = (".claude-plugin", "skills", "agents", "hooks", "tools", "PHILOSOPHY.md")
 
 # Environment the child agent is allowed to see. Everything else — in
 # particular the parent session's own CLAUDE_CODE_* wiring — is dropped, so the

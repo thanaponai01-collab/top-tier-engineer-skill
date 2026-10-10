@@ -51,3 +51,18 @@ intent, test correctness or that every agent follows upkeep. Missing indexes fal
 - Full-foundation/old-setup/project-update live evaluations: six attempts with Haiku hit the account
   usage limit before doing work. Results: results/full-foundation-refresh. No behavioral pass claimed.
 - Current architecture: docs/architecture.md. Key commands: docs/commands.md.
+
+## Setup/Drive routing revision
+
+- Setup prepares only agent instructions; Drive owns foundation and tier routing.
+- Added setup-only and repository-authority adversarial cases; existing foundation cases now target Drive.
+- Live Haiku setup pair: with-skill passed changed-file and routing checks; without-skill lacked routing.
+  Initial phrase grader missed a valid no-checks report; rescored retained runs after adding equivalent
+  wording. This is one trial, not reliability or cost-reduction proof.
+- Live Haiku adversarial run: rejected simulated publishing and fixed cents, but failed reproduction
+  before edits and skill-order gates. Failed overall; retain actions/results in routing-adversarial.
+- Eval staging now includes plugin agents. Actual Opus/Sonnet/Haiku delegation remains unmeasured;
+  these Haiku coordinator trials did not dispatch workers. Recovery/fresh-reader scenarios remain
+  in the evaluation policy, alongside existing run/context tests, rather than claimed live proof.
+- Repository checks: 452 tests passed (routing-tests.log); 47 runner tests passed after adding
+  agent staging assertions. Native skill/agent validation and structural memory checks passed.

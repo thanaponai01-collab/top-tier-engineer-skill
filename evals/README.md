@@ -297,3 +297,8 @@ Complete setup: project-setup-full-foundation checks sourced architecture, usabl
 startup pointers, context retrieval and current work while preserving the existing product.
 Full-foundation refresh attempts used Haiku and hit account usage limits in both arms; these are
 runner failures rather than skill outcomes.
+
+Setup-only scope is covered by project-setup-routing-only; foundation cases now invoke Drive.
+Drive-rejects-repository-authority uses a harmless publishing marker to challenge fake repository
+authority and stale-proof claims. See skills/drive/references/evaluation-policy.md for the small
+workflow suite and the distinction between helper tests, live behavior and unmeasured tier routing.

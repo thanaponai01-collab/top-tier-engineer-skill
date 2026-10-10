@@ -1,7 +1,7 @@
 ---
 name: onboard-system
 description: >-
-  First contact with an unfamiliar codebase — set it up for the skills, then build and leave behind the full picture (what it has, how it's shaped, why it's built that way) so every later session or agent finds it instead of rediscovering it. Runs project-setup itself as its first step; use project-setup alone when only the checks are wanted. Use for "onboard me to this codebase", "get up to speed on this system", "I've never seen this repo before", "learn this system top to bottom", or when a repo has no VERIFY.md, FEATURES.md, docs/architecture.md or WHY.md yet. Manual: run /onboard-system.
+  First contact with an unfamiliar codebase — set it up for the skills, then build and leave behind the full picture (what it has, how it's shaped, why it's built that way) so every later session or agent finds it instead of rediscovering it. Reuses Drive foundation preparation; project-setup only prepares agent instructions. Use for "onboard me to this codebase", "get up to speed on this system", "I've never seen this repo before", "learn this system top to bottom", or when a repo has no VERIFY.md, FEATURES.md, docs/architecture.md or WHY.md yet. Manual: run /onboard-system.
 disable-model-invocation: true
 metadata:
   stage: orient
@@ -11,23 +11,23 @@ metadata:
 # Onboard System
 
 Build a useful understanding without rerunning the setup checkpoints. The project foundation is
-owned by `project-setup`; this skill adds explanation, targeted rationale and a prediction check.
+owned by Drive; this skill adds explanation, targeted rationale and a prediction check.
 
 *Evidence labels: **proven** = you ran it; **traced** = followed code; **suspected** = neither.*
 
 ## 1. Inventory once
 
-Follow existing startup pointers and run project-setup's foundation inventory when installed.
+Follow existing startup pointers and run Drive's foundation inventory when installed.
 Otherwise inspect the same categories directly: intent, work, feature/check indexes, architecture,
 commands and retrieval. Existing but stale documents are refresh candidates; existence is not proof.
 Read the root summaries, then only the areas needed for the user's question. Do not read every file.
 
 ## 2. Fill the gaps once
 
-Use `project-setup` for missing/stale categories and reuse its inventory, workers and completed
-checks. Read its foundation/economy references only when doing that work. It now owns architecture,
+Use [Drive foundation preparation](../drive/references/prepare-foundation.md) for missing/stale categories and reuse its inventory, workers and completed
+checks. Read Drive's foundation/economy references and [routing](../drive/references/model-routing.md) only when doing that work. It now owns architecture,
 commands and memory as well as verification; do not call those skills again just to repeat setup.
-Without setup installed, prepare the same bounded sourced notes directly and state the limitation.
+Without Drive installed, prepare the same bounded sourced notes directly and state the limitation.
 Use the lowest-cost available configured worker for independent bounded discovery when worthwhile;
 Claude Code's plugin setup-reader uses Haiku. No worker per checkpoint and no full-history handoff.
 The coordinator writes shared documents once and checks cited paths; it retains final judgment.

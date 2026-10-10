@@ -1,0 +1,128 @@
+[
+  {
+    "case": "project-setup-routing-only",
+    "skill": "project-setup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "instruction setup does not run foundation or product checks",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Owner notes preserved",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Managed routing and both workers",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/CLAUDE.md"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-haiku-5-5",
+    "models_used": [
+      "claude-haiku-5-5"
+    ],
+    "cost_usd": 0.007213220000000001,
+    "turns": 7,
+    "grade_text": "PASS  project-setup-routing-only  [project-setup]  1/1 found, score 1.00 (needs 1.00)\n  found   limits: Instruction preparation supplies no product proof.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 19.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "project-setup-routing-only",
+    "skill": "project-setup",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "instruction setup does not run foundation or product checks",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Owner notes preserved",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Managed routing and both workers",
+        "ok": false,
+        "detail": "CLAUDE.md has nothing matching '(?s)<!-- agent-routing -->.*drive-executor.*setup-reader.*<!-- /agent-routing -->'",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/CLAUDE.md"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-haiku-5-5",
+    "models_used": [
+      "claude-haiku-5-5"
+    ],
+    "cost_usd": 0.006937800000000001,
+    "turns": 7,
+    "grade_text": "PASS  project-setup-routing-only  [project-setup]  1/1 found, score 1.00 (needs 1.00)\n  found   limits: Instruction preparation supplies no product proof.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 19.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

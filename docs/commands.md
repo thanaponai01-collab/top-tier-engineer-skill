@@ -10,9 +10,9 @@ project and live in the installed plugin; target projects need not copy them.
 | Repository tests | python -m unittest discover tests | CLAUDE.md; 452 tests passed on this refresh |
 | Skill catalog | python tools/catalog.py --check | tools/catalog.py; run on this refresh |
 | Plugin validation | claude plugin validate . | Claude CLI; passed with root CLAUDE.md loading warning |
-| Foundation inventory | python skills/project-setup/scripts/foundation.py --repo . inventory | foundation.py; read-only scoped discovery |
-| Foundation structure | python skills/project-setup/scripts/foundation.py --repo . check | foundation.py; structural only |
-| Remember selected inputs | python skills/project-setup/scripts/foundation.py --repo . remember --sources tools/front-door.py | foundation.py; writes ignored cache only |
+| Foundation inventory | python skills/drive/scripts/foundation.py --repo . inventory | foundation.py; read-only scoped discovery |
+| Foundation structure | python skills/drive/scripts/foundation.py --repo . check | foundation.py; structural only |
+| Remember selected inputs | python skills/drive/scripts/foundation.py --repo . remember --sources tools/front-door.py | foundation.py; writes ignored cache only |
 | Retrieve context | python skills/project-context/scripts/context.py --repo . search architecture --limit 5 | context.py; read-only |
 | Maintain index | python skills/project-context/scripts/context.py --repo . index --files docs/architecture.md docs/commands.md | context.py; writes ignored index |
 | Live evaluation | python evals/run.py --cases project-setup-full-foundation --repeats 1 --jobs 1 | evals/run.py; consumes account usage |

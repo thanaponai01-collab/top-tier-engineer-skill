@@ -9,15 +9,23 @@
 - Decisions: working agent maintains affected records; read-only retrieval; no mandatory database.
 
 ## Foundation refresh
-- Setup now owns all context categories, including architecture/commands and memory by default.
+- Earlier setup version owned all context categories, including architecture/commands and memory by default.
 - Onboarding reuses the foundation; a bounded Haiku worker gathers evidence without writing notes.
 - Foundation inventory/check/remember preserves equivalents and detects selected-input changes.
 - Evidence: 452 repository tests passed; 7 foundation and 15 context tests passed.
 - Native skills/agent configuration validates; six live Haiku runs hit the account usage limit.
 - Current refresh is recorded on codex/project-memory; behavioral validation remains pending.
 
+## Routing revision
+- Setup now writes only agent instructions; Drive owns foundation preparation and task upkeep.
+- Plugin workers: Sonnet executor and read-only Haiku reader; host support/overrides apply.
+- Added setup-only and repository-authority cases plus adversarial evaluation policy.
+- One live setup trial passed; adversarial trial rejected publishing but failed diagnosis/order gates.
+- Checks: 452 repository tests passed; updated runner tests (47) and native skill/agent validation passed.
+- Actual tier routing and cost reduction remain unmeasured; evidence: evals/PROJECT_MEMORY.md.
+
 ## Next
-After Claude usage is available, rerun the complete-foundation and existing setup evaluations,
+After Claude usage is available, run setup-only and Drive foundation evaluations,
 then a bounded onboarding prediction check; done when sourced context and preserved requirements
 are demonstrated by actual agent work. Unit/structural passes alone do not establish this.
 

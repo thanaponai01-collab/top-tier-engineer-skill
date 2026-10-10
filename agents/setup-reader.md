@@ -1,6 +1,6 @@
 ---
 name: setup-reader
-description: Gather bounded source evidence for an assigned project-setup or onboarding area.
+description: Gather bounded source evidence for an assigned Drive foundation or onboarding area.
 tools: Read, Grep, Glob
 model: haiku
 ---

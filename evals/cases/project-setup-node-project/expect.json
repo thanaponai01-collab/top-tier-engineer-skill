@@ -1,6 +1,6 @@
 {
   "case": "project-setup-node-project",
-  "skill": "project-setup",
+  "skill": "drive",
   "question": "Does setup refresh an existing partial recipe and prove readiness while preserving manual content?",
   "pass_score": 1.0,
   "planted": [
@@ -30,7 +30,9 @@
       "brief/*",
       "work/*",
       "docs/*",
-      ".project-context/*"
+      ".project-context/*",
+      "RUN.json",
+      "DRIVE.md"
     ],
     "must_contain": [
       {

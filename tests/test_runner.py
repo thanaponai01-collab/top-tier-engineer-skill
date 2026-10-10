@@ -330,6 +330,8 @@ class StagedPlugin(unittest.TestCase):
             self.assertTrue(os.path.isfile(os.path.join(dest, "skills", "debug-protocol", "SKILL.md")))
             self.assertTrue(os.path.isfile(os.path.join(dest, ".claude-plugin", "plugin.json")))
             self.assertTrue(os.path.isfile(os.path.join(dest, "hooks", "hooks.json")))
+            self.assertTrue(os.path.isfile(os.path.join(dest, "agents", "drive-executor.md")))
+            self.assertTrue(os.path.isfile(os.path.join(dest, "agents", "setup-reader.md")))
             self.assertFalse(os.path.exists(os.path.join(dest, "evals")))
             self.assertFalse(os.path.exists(os.path.join(dest, "tests")))
 

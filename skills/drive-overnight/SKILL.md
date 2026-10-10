@@ -85,3 +85,6 @@ The branch and `OVERNIGHT.md` are the handoff. `recall` reads them the next day.
 Project memory: retrieve missing facts with `project-context`; after authorized changes use
 `project-update` for affected records. Without helpers, follow/update existing notes directly;
 read-only reviews report gaps. Skip upkeep when no durable fact changed.
+
+Use [Drive model routing](../drive/references/model-routing.md) for workers; the current session
+retains authority, budgets and evidence gates. Worker dispatch does not widen unattended scope.

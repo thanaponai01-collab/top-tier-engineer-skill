@@ -1,1 +1,1 @@
-Use project-setup to prepare the full working foundation for this project. Preserve manual notes and product behavior, use bounded discovery, and report what is ready and what remains outside coverage.
+Use drive to prepare the full working foundation for this project. Preserve manual notes and product behavior, use bounded discovery, and report what is ready and what remains outside coverage.

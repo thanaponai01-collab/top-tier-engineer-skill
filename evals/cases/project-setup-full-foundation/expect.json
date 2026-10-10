@@ -1,6 +1,6 @@
 {
   "case": "project-setup-full-foundation",
-  "skill": "project-setup",
+  "skill": "drive",
   "question": "Does one setup prepare linked sourced architecture, commands and bounded memory alongside existing verification without changing the product?",
   "pass_score": 1.0,
   "planted": [
@@ -30,7 +30,9 @@
       ".project-context/*",
       ".verify-state.json",
       "verification/*",
-      "tests/test_total.py"
+      "tests/test_total.py",
+      "RUN.json",
+      "DRIVE.md"
     ],
     "must_contain": [
       {
