@@ -54,7 +54,7 @@ def project_summary(repo):
         spec = importlib.util.spec_from_file_location("start_here_hook", START_HERE_HOOK)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        return mod.summary(str(repo))
+        return mod.compact_summary(str(repo))
     except Exception:
         return ""
 

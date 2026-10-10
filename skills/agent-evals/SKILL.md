@@ -51,3 +51,7 @@ held-out slice; fewer than 12 tasks, where one flake moves the score by several 
 The tools and prompt are built against this set with `build-discipline`. Proof over repeated runs is
 `agent-prove`. Without `verify-loop` loaded, keep the task set and graders in one file the agent
 cannot edit, and say so in the report.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

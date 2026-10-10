@@ -365,3 +365,9 @@ reliability from the earlier successful runs. The final merged code passed all 3
 - Every with-skill run loaded the skill; transcripts stay local per .gitignore.
 
 Reproduce with `python evals/run.py --cases verify-loop-make-it-verified --repeats 1`.
+
+## Project memory evaluation attempts
+
+Baseline and with-skill runs could not execute: Claude session usage limit.
+See results/project-memory-baseline and results/project-memory-with. These runner failures
+provide no behavioral validation. Updated cases require a fresh baseline and with-skill run.

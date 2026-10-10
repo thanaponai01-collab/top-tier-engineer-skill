@@ -170,3 +170,7 @@ Boxes from the folder names alone without reading imports; drawing the intended 
 the real one; 40 boxes in one picture; color as the only signal; before and after with different
 layouts so the diff is invisible; problems marked without a `file:line` behind them; a diagram written
 to a file and then pasted into the chat as well; a change view saved over the as-is map.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

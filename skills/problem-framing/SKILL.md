@@ -107,3 +107,7 @@ contradicts it.
 
 Feature lists posing as requirements; twenty questions when three would change the build; specs
 silent on failure; assumptions and decisions that live only in the chat.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

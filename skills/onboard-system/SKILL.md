@@ -95,3 +95,7 @@ it can't.
 Verifying the checks stay green is `verify-loop`; something breaking after onboarding is
 `debug-protocol`; a question this pass didn't cover is `code-history` or `explain`, run directly.
 This skill is only the first pass and the order to run the others in.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

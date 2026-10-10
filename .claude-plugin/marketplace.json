@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "top-tier-engineer",
-      "description": "Thirty-three engineering skills. Work directly for small changes, load the skill that fits for multi-step work, or choose drive to orchestrate the full workflow. One session-start hook shows the skill card and the project's next step; other hooks are opt-in.",
+      "description": "Thirty-five engineering skills. Work directly for small changes, load the skill that fits for multi-step work, or choose drive to orchestrate the full workflow. One session-start hook shows the skill card and the project's next step; other hooks are opt-in.",
       "author": {
         "name": "Thanaponai01"
       },

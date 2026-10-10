@@ -1,0 +1,61 @@
+{
+  "case": "project-update-preserves-intent",
+  "skill": "project-update",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "phrases",
+  "phrase_passed": false,
+  "judge_text": "",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": true,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 0,
+  "total": 1,
+  "missed": [
+    "The fix is recorded but verification did not run."
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Expired sessions still cannot bypass authentication.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Session expiry is still unfinished.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The next step is verification.",
+      "ok": false,
+      "detail": "BUILD.md has nothing matching '(?is)## Next.*(?:verify|check|test)'",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [],
+  "cost_usd": 0,
+  "turns": 1,
+  "seconds": 6.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

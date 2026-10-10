@@ -102,3 +102,7 @@ Treating green tests as permission to deploy; "we'll just revert" with no tested
 once for a change that's only reversible in theory; no health signal; migrations riding along
 unplanned; destructive one-step migrations; backfills nobody checked; dropping the old column in
 the same deploy that switches reads.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

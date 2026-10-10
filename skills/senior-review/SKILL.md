@@ -76,3 +76,7 @@ weight → `latent-audit`; requirements never pinned down → `problem-framing`.
 When turning a proven finding into a fix, pass the observable failure and reproduction to `verify-loop`
 (see `references/handoff.md`): capture the negative run before fixing, freeze expectations with `baseline`,
 and confirm resolution with `verify.py run --strict`.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

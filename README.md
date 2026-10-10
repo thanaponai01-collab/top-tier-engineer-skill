@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Thirty-three engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+Thirty-five engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
 do for a task; `PHILOSOPHY.md` offers optional engineering guidelines.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
@@ -59,6 +59,8 @@ the rest of this repo being loaded.
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |
 | `project-setup` | "Set this project up for the skills": discovers native commands, refreshes a small verification seed, preserves manual notes and proves local readiness; optional CI setup |
 | `onboard-system` | "I've never seen this codebase, get me up to speed": runs project-setup, feature-map, arch-map and code-history in one pass, then checks the account against a real prediction, so the whole picture is on disk before the first real task starts |
+| `project-context` | Ask project memory using bounded, sourced retrieval; optional SQLite index |
+| `project-update` | Maintain affected context after work or reconcile missed updates |
 | `recall` | "Where were we / catch me up": a short capsule of the current state and the next step, rebuilt from disk |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |
@@ -218,3 +220,18 @@ reference reports — two correct ones written differently, one plausible wrong 
 has stopped telling good from bad, or has started grading phrasing, fails here rather than sitting
 green. And every skill must have an eval case, or be listed in
 `evals/uncovered.txt`, a list that may only shrink.
+
+## Searchable project memory
+
+Working skills maintain affected context before completion; read-only reviews report gaps.
+Ask project-context about goals, finished work, decisions, commands or evidence. Project-update
+repairs missed updates. Existing Markdown and structured receipts remain authoritative; SQLite
+is a disposable local index, ignored by Git. No setup is required for ordinary small edits.
+
+The helper lives at skills/project-context/scripts/context.py in the installed plugin, not the
+project. Run it with --repo pointing at the project. Commands: next, search WORDS --limit 5,
+show ID, affected PATHS, index, index --files CHANGED_CONTEXT_FILES, check, and index --rebuild.
+Queries do not write the cache. Missing/corrupt indexes fall back to bounded file retrieval.
+See [the memory convention](skills/project-context/references/memory.md) for ownership, record
+metadata, budgets and freshness limits. New/unindexed content requires upkeep before SQL search
+can discover it. Path associations supplement feature-map; they are not a dependency graph.

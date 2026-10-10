@@ -81,3 +81,7 @@ NEXT:      <the one step to take first>
 ```
 
 The branch and `OVERNIGHT.md` are the handoff. `recall` reads them the next day.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

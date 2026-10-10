@@ -48,3 +48,7 @@ gaps within the task's scope; otherwise report them. A structural pass does not 
 quality, product correctness or that every agent obeys the pointers. Preserve unresolved intent
 and label context as partial instead of declaring it complete. Other skills remain usable when
 this helper is unavailable; inspect the same handoff manually and disclose that limitation.
+
+For optional indexed memory, use ../../project-context/references/memory.md. Routine upkeep
+is performed by the working agent; project-update reconciles missed updates. Index only changed
+context files, preserve receipt baselines, and do not copy verification logs into summaries.

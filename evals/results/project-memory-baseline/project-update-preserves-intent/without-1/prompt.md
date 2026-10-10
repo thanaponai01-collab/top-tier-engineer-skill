@@ -1,0 +1,1 @@
+Reconcile the completed login fix into project memory. Login now retains the return URL; no verification ran. Keep session expiry unfinished and preserve the requirement that expired sessions cannot bypass authentication. Update only context documents, keep the current summary short, and report the evidence gap and next step.

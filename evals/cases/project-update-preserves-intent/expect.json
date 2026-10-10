@@ -1,0 +1,52 @@
+{
+  "case": "project-update-preserves-intent",
+  "skill": "project-update",
+  "question": "Does upkeep preserve unresolved intent without inventing verification?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "gap",
+      "what": "The fix is recorded but verification did not run.",
+      "must_say_any": [
+        "unverified",
+        "not run",
+        "no verification"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "edits_allowed": [
+      "BUILD.md",
+      "BRIEF.md",
+      "AGENTS.md",
+      "work/*",
+      ".project-context/*",
+      ".gitignore"
+    ],
+    "must_contain": [
+      {
+        "id": "intent",
+        "kind": "outcome",
+        "what": "Expired sessions still cannot bypass authentication.",
+        "path": "BRIEF.md",
+        "regex": "(?i)expired sessions cannot bypass authentication"
+      },
+      {
+        "id": "expiry-open",
+        "kind": "outcome",
+        "what": "Session expiry is still unfinished.",
+        "path": "BUILD.md",
+        "regex": "(?i)expiry"
+      },
+      {
+        "id": "next",
+        "kind": "outcome",
+        "what": "The next step is verification.",
+        "path": "BUILD.md",
+        "regex": "(?is)## Next.*(?:verify|check|test)"
+      }
+    ],
+    "what": "Preserve intent and unfinished expiry; record the completed fix without inventing verification."
+  }
+}

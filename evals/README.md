@@ -282,3 +282,13 @@ grader files once the command can actually be run.
 `fixture/` directories contain deliberately defective code: an unrouted handler, a layer breach, an
 off-by-one, a file full of JavaScript in a string. That is the point. Don't lint them, don't fix
 them, and don't let a repo-wide sweep count them as findings.
+
+## Project memory cases
+
+- project-context-stale-evidence: distinguish historical login checks from current proof; retain
+  unfinished expiry work and answer from sources without changes.
+- project-update-preserves-intent: update a completed task while retaining owner requirements,
+  unfinished work and the fact that no check ran.
+
+The initial runner attempts hit Claude's session limit in both arms. They establish no behavioral
+improvement. Replay both arms after usage is available; existing helper tests are separate evidence.

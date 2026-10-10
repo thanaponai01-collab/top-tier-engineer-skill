@@ -10,12 +10,10 @@ metadata:
 # Architecture & Design
 
 Take a backend from where it is to a simpler, better-organized place, or design a new one that
-starts there. Prefer the smallest structure that does the job. Design for a maintainer you'll never
-meet, often an AI: the structure must be navigable from the files alone.
+starts there. Prefer the smallest structure that does the job. Design for a maintainer you'll never meet, often an AI: the structure must be navigable from the files alone.
 
 *Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to end, or
-opened the source this session · **suspected** = neither. Only *proven* and *traced* can carry a
-one-way door.*
+opened the source this session · **suspected** = neither. Only *proven* and *traced* can carry a one-way door.*
 
 ## 1. Pick the outcome
 
@@ -23,8 +21,7 @@ Say which one you chose and why; the user can override it.
 - **Improve**: the structure is basically sound and the problems are local. Make targeted moves.
 - **Replace a part**: one area's foundation is wrong (its data model, or a core everything bends
   around) and patching would cost more than rebuilding it. Put a stable interface in front, move
-  callers over one at a time, delete the old path when none remain. Ask the user first; never
-  propose replacing the whole system unless asked.
+  callers over one at a time, delete the old path when none remain. Ask the user first; never   propose replacing the whole system unless asked.
 - **Design new**: no code yet, or a new system or module. Get the requirements, or state what you
   assume; a structural choice with no requirement behind it is *speculative*.
 
@@ -34,8 +31,7 @@ Read recorded decisions first (`docs/adr/`, `docs/architecture.md`, `WHY.md`): a
 one says why its reason no longer holds. Then read from the entry points inward and trace the main
 flows; only the parts the question reaches. Name the three changes most likely to come next and
 where each came from (recent `git log`, the tracker, the user, the requirements): that is your
-yardstick, and it breaks ties when ranking. Repo too big to read, or a question about history: see
-`references/instruments.md`.
+yardstick, and it breaks ties when ranking. Repo too big to read, or a question about history: see `references/instruments.md`.
 
 ## 3. Judge
 
@@ -108,3 +104,7 @@ doesn't re-propose it.
 
 *Test:* every finding has a number or `file:line`, each recommendation has a second option, a door
 and a proof, and a stranger could start the first move from your answer alone.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

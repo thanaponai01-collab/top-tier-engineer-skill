@@ -1,0 +1,43 @@
+{
+  "case": "project-context-stale-evidence",
+  "skill": "project-context",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "phrases",
+  "phrase_passed": false,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": true,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 0,
+  "total": 2,
+  "missed": [
+    "Login evidence is historical and does not establish current verification.",
+    "Session expiry is unverified and the next step is to verify expiry and return URLs."
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [],
+  "cost_usd": 0,
+  "turns": 1,
+  "seconds": 7.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

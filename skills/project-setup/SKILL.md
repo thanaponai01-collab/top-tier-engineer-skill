@@ -97,6 +97,14 @@ Preserve other instructions and never write a
 second block. If no instruction file exists, create one appropriate to the requested agent, not
 several. Do not impose a required plugin workflow.
 
+## Optional searchable memory
+
+When searchable memory is requested, read project-context's memory reference and helper --help.
+Reuse current documents and include links. Add one retrieval/upkeep line in the existing startup
+block with the installed helper path; ignore .project-context/ using existing conventions.
+Run the helper's index once, then check. Later upkeep uses index --files for changed context only.
+Do not make the index a prerequisite for setup or claim it validates product behavior.
+
 ## Optional CI
 
 For requested CI setup, read [CI setup](references/ci-setup.md). Local readiness and hosted readiness
@@ -111,8 +119,12 @@ List created/refreshed/kept files, runtime/package/working directory, commands a
 selected claim, rejection signal and current verdict. Name missing prerequisites, untested behavior,
 manual/check edits and the next actionable step. Local verified requires current strict green;
 otherwise report draft, blocked or failed with evidence. Never claim every feature or stack covered.
-BUILD.md stays progress evidence and RUN.json stays orchestration state; no shared protocol is added.
+BUILD.md stays progress evidence and RUN.json stays orchestration state; the memory convention remains optional.
 
 *Test:* refresh a partial recipe without changing product behavior or manual expectations;
 reject a deliberate wrong result, pass the original and finish strict green. A second unchanged
 setup preserves completed files. Missing prerequisites remain explicit.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

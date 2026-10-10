@@ -2,7 +2,7 @@
 
 This repo is the `top-tier-engineer` Claude Code plugin: independent skills under `skills/<name>/SKILL.md`.
 
-- No shared protocol file, no required setup. A skill may name another skill to hand off to.
+- No required setup. The optional memory convention lives in skills/project-context/references/memory.md; it governs storage/retrieval only. A skill may name another skill to hand off to.
 - The shared philosophy lives once, in `PHILOSOPHY.md`. Skills hold only their own work.
 - A skill's helper scripts live in its own `scripts/` folder and are stdlib-only Python.
 - Every list of skills comes from each SKILL.md's frontmatter (`metadata.stage`, `metadata.card`).
@@ -17,3 +17,13 @@ This repo is the `top-tier-engineer` Claude Code plugin: independent skills unde
   tests prove the grader works; only `run.py` shows whether the skill does. Commit the refreshed
   `evals/RESULTS.md`.
 - Version lives in `.claude-plugin/plugin.json`; bump it and add a `CHANGELOG.md` entry per release.
+
+<!-- start-here -->
+Goal: independent engineering skills with reliable, bounded project context.
+intent: BRIEF.md
+work: BUILD.md
+Read BRIEF.md and BUILD.md first; open linked areas only for the task.
+Retrieve: python skills/project-context/scripts/context.py --repo . search WORDS --limit 5
+Upkeep: update affected records after authorized work; index --files CHANGED_CONTEXT_FILES.
+Index is disposable; facts stay in files. Read-only reviews report gaps.
+<!-- /start-here -->

@@ -122,3 +122,7 @@ Deeper oracles and mutation breadth: `correctness-gate`. Code nothing reaches: `
 
 *Test:* the check was written before the change it judges, you can name the moment it was red, and
 `status` reports green for unchanged final inputs.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

@@ -98,3 +98,7 @@ credentials/tools if the agent must be unable to bypass them.
 
 Working with no one to ask, on a goal that may take hours? That is `drive-overnight`, which adds a
 decision log and a budget.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.
