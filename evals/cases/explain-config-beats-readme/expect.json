@@ -1,0 +1,62 @@
+{
+  "case": "explain-config-beats-readme",
+  "skill": "explain",
+  "question": "does the account come from the code, with the real numbers and the non-obvious invariant, rather than from the README?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "five-attempts",
+      "what": "A transient failure is attempted up to MAX_ATTEMPTS = 5 times in total (settings.py, overridable by PAY_MAX_ATTEMPTS), with 2, 4, 8 and 16 s sleeps. That is not '3 retries' as the README says.",
+      "must_name": [
+        "MAX_ATTEMPTS"
+      ],
+      "must_say_any": [
+        "5 attempts",
+        "five attempts",
+        "up to 5",
+        "up to five",
+        "4 retries",
+        "four retries",
+        "5 tries",
+        "five tries",
+        "= 5",
+        "defaults to 5",
+        "default of 5",
+        "default 5"
+      ]
+    },
+    {
+      "id": "declined-vs-transient",
+      "what": "A decline is final and never retried. Only Transient errors (timeouts, 5xx, rate limits) are retried. After the last attempt the job goes to the dead-letter list that ops reviews by hand.",
+      "must_say_any": [
+        "dead letter",
+        "dead-letter",
+        "dead_letter"
+      ]
+    },
+    {
+      "id": "idempotency-key",
+      "what": "The idempotency key is created once per charge in enqueue.py and reused on every attempt, so retrying a timeout whose charge actually went through cannot charge the card twice.",
+      "must_say_any": [
+        "idempotency"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "readme-count",
+      "what": "Repeating the README's 'retried 3 times' as how the code behaves.",
+      "must_not_say_any": [
+        "it retries 3 times",
+        "retried 3 times",
+        "retries three times",
+        "retried three times",
+        "three retries",
+        "3 retries"
+      ]
+    }
+  ],
+  "actions": {
+    "read_only": true
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "case": "pick-skill-slow-is-a-bug",
+  "skill": "pick-skill",
+  "question": "is 'slow since yesterday, cause unknown' routed to finding the cause, and the work started, rather than to optimizing whatever looks slow?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "cause-is-the-flags-host",
+      "what": "The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds.",
+      "must_name": [
+        "exmaple"
+      ],
+      "must_say_any": [
+        "typo",
+        "misspel",
+        "wrong host",
+        "misspelt",
+        "never answers",
+        "times out",
+        "timeout",
+        "timing out"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "optimize-the-decoy",
+      "what": "Blaming or 'fixing' the widget sort (50 items, microseconds), or adding caching or shorter timeouts as the fix, while the misspelled host stays.",
+      "must_not_say_any": [
+        "the sort is the bottleneck",
+        "selection sort is slow",
+        "o(n^2) sort is the cause",
+        "o(n²) sort is the cause",
+        "replaced the selection sort",
+        "cache the flags to fix",
+        "lowered the timeout to fix"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "The page is fast again because the flag service is reached, not because the timeout was hidden.",
+    "edits_allowed": [
+      "settings.py",
+      "*.md",
+      "tests/*",
+      "test_*.py"
+    ],
+    "replays": [
+      {
+        "id": "fast-and-flags-served",
+        "kind": "outcome",
+        "what": "render() finishes in under a second and serves the real flags (new navigation)",
+        "replace": {
+          "_check_fast.py": "reference/check_fast.py"
+        },
+        "command": [
+          "python",
+          "_check_fast.py"
+        ],
+        "expect": "pass"
+      }
+    ]
+  },
+  "actions": {
+    "must_run_any": [
+      "dashboard\\.py",
+      "render\\(",
+      "fetch_flags",
+      "cProfile",
+      "time\\.time",
+      "timeit"
+    ],
+    "must_run_before_edit": true,
+    "must_run_why": "reproduced or measured the slowness before changing code"
+  }
+}

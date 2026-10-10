@@ -1,0 +1,48 @@
+{
+  "case": "evolve-maintain-hidden-caller",
+  "skill": "evolve-maintain",
+  "question": "before removing a deprecated endpoint, are all its callers found, including ones outside the code, and moved first?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "nightly-job-caller",
+      "what": "jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.",
+      "must_name": [
+        "nightly.yaml"
+      ],
+      "must_say_any": [
+        "finance-ledger-export",
+        "finance ledger",
+        "finance job",
+        "nightly job",
+        "still calls",
+        "still uses",
+        "still points",
+        "caller"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "Whatever was removed, every scheduled job still works afterwards and the finance job still gets its CSV.",
+    "edits_allowed": [
+      "*"
+    ],
+    "replays": [
+      {
+        "id": "jobs-still-work",
+        "kind": "outcome",
+        "what": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "replace": {
+          "check_jobs.py": "reference/check_jobs.py"
+        },
+        "command": [
+          "python",
+          "check_jobs.py"
+        ],
+        "expect": "pass"
+      }
+    ]
+  },
+  "actions": {}
+}

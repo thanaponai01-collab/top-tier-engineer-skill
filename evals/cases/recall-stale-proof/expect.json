@@ -1,0 +1,72 @@
+{
+  "case": "recall-stale-proof",
+  "skill": "recall",
+  "question": "what is the true state of the work: what the notes claim, checked against what can be rerun now?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "suite-red-now",
+      "what": "BUILD.md says the export is DONE and proven (3 tests OK on 2026-10-07), but rerunning the suite now fails: the 2026-10-09 commit 'money: use standard rounding' switched to ROUND_HALF_EVEN, so 10.125 rounds to 10.12 and two tests fail.",
+      "must_say_any": [
+        "fail",
+        "failing",
+        "red",
+        "broken",
+        "no longer pass"
+      ]
+    },
+    {
+      "id": "rounding-contradicts-brief",
+      "what": "The rounding change contradicts the owner's recorded decision. BRIEF.md says half-up, confirmed by the accountant, to match the PDF invoices. The implementation is wrong, not the requirement.",
+      "must_say_any": [
+        "half-up",
+        "half up",
+        "round_half_up"
+      ]
+    },
+    {
+      "id": "since-in-flight",
+      "what": "export.py has uncommitted work in flight: a --since parameter is threaded through, but the filter is a TODO and does nothing yet.",
+      "must_name": [
+        "since"
+      ],
+      "must_say_any": [
+        "uncommitted",
+        "in flight",
+        "in-flight",
+        "half-done",
+        "half done",
+        "half-built",
+        "not committed",
+        "work in progress",
+        "wip",
+        "todo",
+        "unfinished",
+        "not implemented"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "notes-as-proof",
+      "what": "Repeating the notes' 'done, proven, tests green' as current state without rerunning, or calling the suite green.",
+      "must_not_say_any": [
+        "all tests pass",
+        "all 3 tests pass",
+        "tests are passing",
+        "everything is green",
+        "export is done and proven",
+        "export is complete and tested"
+      ]
+    }
+  ],
+  "actions": {
+    "read_only": true,
+    "must_run_any": [
+      "unittest",
+      "pytest",
+      "test_export"
+    ],
+    "must_run_why": "reran the check the notes cite instead of repeating their 'proven'"
+  }
+}

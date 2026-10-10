@@ -77,6 +77,34 @@ class Cases(unittest.TestCase):
                 self.assertTrue(item.get("what"), f"{name}/{item.get('id')}: no plain-words description")
 
 
+class CaseHistories(unittest.TestCase):
+    """A case's setup.py builds the git history its skill digs through (evals/history.py).
+
+    The agent must start from exactly fixture/, so the workdir rules see no setup edits, and
+    the history must really be there: a setup that silently builds nothing tests nothing.
+    """
+
+    def test_setup_ends_on_the_fixture_with_history(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("eval_runner", os.path.join(EVALS, "run.py"))
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        cases = [n for n in grade.case_names()
+                 if os.path.isfile(os.path.join(grade.CASES_DIR, n, "setup.py"))]
+        self.assertTrue(cases, "no case uses setup.py")
+        for name in cases:
+            case_dir = os.path.join(grade.CASES_DIR, name)
+            with tempfile.TemporaryDirectory() as tmp:
+                copy = os.path.join(tmp, "fixture")
+                shutil.copytree(os.path.join(case_dir, "fixture"), copy)
+                runner.prepare_fixture(case_dir, copy)
+                self.assertEqual(grade.snapshot(copy), grade.snapshot(os.path.join(case_dir, "fixture")),
+                                 f"{name}: setup.py left the working tree different from fixture/")
+                log = subprocess.run(["git", "log", "--oneline", "--all"], cwd=copy,
+                                     capture_output=True, text=True, check=True).stdout
+                self.assertTrue(log.strip(), f"{name}: setup.py built no history")
+
+
 class PromptsDoNotLeak(unittest.TestCase):
     """A prompt states the symptom. It must not state the finding.
 

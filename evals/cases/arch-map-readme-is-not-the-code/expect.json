@@ -1,0 +1,90 @@
+{
+  "case": "arch-map-readme-is-not-the-code",
+  "skill": "arch-map",
+  "question": "does the diagram show the system the code is, with every arrow traceable, rather than the one the README describes?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "reports-skips-layers",
+      "what": "api/reports.py imports db and runs SQL directly, skipping services/ and repo/. The README says nothing skips a layer. The diagram draws the real arrow.",
+      "must_name": [
+        "reports.py"
+      ],
+      "must_say_any": [
+        "directly",
+        "skips",
+        "bypass",
+        "straight to",
+        "goes around",
+        "not through the service",
+        "doesn't go through",
+        "does not go through",
+        "violat"
+      ]
+    },
+    {
+      "id": "plugin-loaded-by-name",
+      "what": "plugins/slack_notify.py is reached only through a string in settings.ENABLED_PLUGINS and importlib, with no import to trace. The arrow is drawn as inferred (dashed/suspected), or its config wiring is named.",
+      "must_name": [
+        "slack_notify"
+      ],
+      "must_say_any": [
+        "dashed",
+        "suspected",
+        "importlib",
+        "by name",
+        "enabled_plugins",
+        "config",
+        "dynamic",
+        "string"
+      ]
+    },
+    {
+      "id": "arrows-cite-lines",
+      "what": "Arrows are backed by file:line evidence from the code, not folder names.",
+      "must_say_any": [
+        ".py:"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "readme-layering",
+      "what": "Drawing or stating the README's strict layering as true.",
+      "must_not_say_any": [
+        "nothing skips a layer",
+        "every request goes through the service layer",
+        "strict layering is respected",
+        "all routes go through services",
+        "layering is clean"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "A diagram is saved in the repo, and the code is not changed.",
+    "edits_allowed": [
+      "*.md",
+      "docs/*",
+      "*.html",
+      "*.mmd",
+      "*.svg",
+      "*.txt"
+    ],
+    "replays": [
+      {
+        "id": "diagram-saved",
+        "kind": "outcome",
+        "what": "a diagram file in the repo draws the service including the reports route and the database",
+        "replace": {
+          "_check_diagram.py": "reference/check_diagram.py"
+        },
+        "command": [
+          "python",
+          "_check_diagram.py"
+        ],
+        "expect": "pass"
+      }
+    ]
+  },
+  "actions": {}
+}

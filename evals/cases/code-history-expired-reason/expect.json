@@ -1,0 +1,85 @@
+{
+  "case": "code-history-expired-reason",
+  "skill": "code-history",
+  "question": "why is the profile cache TTL 60 s, from the record, and does the reason still hold against today's code?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "recorded-reason",
+      "what": "The TTL went from 5 s to 60 s on 2026-04-14 as the mitigation for INC-212. Dashboard views read about 40 profiles each, one query per member, and saturated the profile DB.",
+      "must_name": [
+        "INC-212"
+      ],
+      "must_say_any": [
+        "40 reads",
+        "40 profile",
+        "~40",
+        "about 40",
+        "40 members",
+        "one read per member",
+        "saturat",
+        "100% cpu",
+        "overload"
+      ]
+    },
+    {
+      "id": "reason-expired",
+      "what": "The reason has expired. On 2026-07-30 the dashboard switched to profile.get_many, one query per view instead of about 40, which was INC-212's own follow-up. The load the 60 s TTL protected against is gone, so lowering it is open again (subject to a measurement).",
+      "must_name": [
+        "get_many"
+      ],
+      "must_say_any": [
+        "expired",
+        "no longer holds",
+        "no longer stands",
+        "doesn't hold",
+        "does not hold",
+        "doesn't stand",
+        "does not stand",
+        "no longer applies",
+        "no longer true",
+        "still holds: no",
+        "has gone away",
+        "went away",
+        "is gone",
+        "no longer the case"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "no-reason-or-still-holds",
+      "what": "Saying no reason is recorded (there is one: the commit and INC-212), or that the 2026-04 reason still holds as written. The batching commit removed the 40-reads-per-view load.",
+      "must_not_say_any": [
+        "no recorded reason",
+        "no reason recorded",
+        "no reason is recorded",
+        "the reason still holds",
+        "reason still stands",
+        "still holds: yes",
+        "keep it at 60 because the db"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "History questions leave the code alone. WHY.md is the one note this kind of digging may add, and it is advisory.",
+    "edits_allowed": [
+      "WHY.md",
+      "WHY.archive.md",
+      "*.md"
+    ],
+    "must_contain": [
+      {
+        "id": "why-recorded",
+        "kind": "process",
+        "gate": false,
+        "what": "The answer is left in WHY.md for the next session (advisory: the skill asks for it; a plain agent has no reason to).",
+        "path": "WHY.md",
+        "regex": "INC-212"
+      }
+    ]
+  },
+  "actions": {
+    "read_only": true
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "case": "problem-framing-unattended-brief",
+  "skill": "problem-framing",
+  "question": "with nobody to ask, does the vague ask become testable requirements, with the costly assumption up front and no question list in place of framing?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "job-as-outcome",
+      "what": "The job is stated as a change in the world: sales staff stop retyping emailed orders into Odoo and quantity typos stop reaching shipments. It is not stated as 'build an app'.",
+      "must_say_any": [
+        "stop retyping",
+        "stop re-typing",
+        "no longer retype",
+        "no longer re-type",
+        "without retyping",
+        "without re-typing",
+        "instead of retyping",
+        "instead of re-typing",
+        "no retyping",
+        "no manual retyping",
+        "eliminate retyping",
+        "eliminate manual",
+        "end the retyping"
+      ]
+    },
+    {
+      "id": "fast-and-easy-made-measurable",
+      "what": "'Fast and easy' becomes a measurement and threshold (time per order, lines per minute, error rate on quantities), each a check someone could run without reading the code.",
+      "must_say_any": [
+        "seconds",
+        "minutes per order",
+        "per order",
+        "under ",
+        "within ",
+        "at most",
+        "≤",
+        "<=",
+        "%"
+      ]
+    },
+    {
+      "id": "failure-states",
+      "what": "Bad input and partial failure are specified: an unreadable or ambiguous order line, an unknown SKU or customer, and Odoo being unavailable. The spec does not describe only the happy path.",
+      "must_say_any": [
+        "can't be parsed",
+        "cannot be parsed",
+        "unparseable",
+        "fails to parse",
+        "parse fail",
+        "could not be read",
+        "can't be read",
+        "unreadable",
+        "unknown sku",
+        "unknown product",
+        "not found in odoo",
+        "odoo is down",
+        "odoo is unavailable",
+        "odoo unavailable",
+        "low confidence",
+        "ambiguous"
+      ]
+    },
+    {
+      "id": "assumption-first",
+      "what": "With nobody to ask, the likeliest reading is taken and marked assumed, with the assumption that costs most if wrong stated first (for example: orders go into Odoo as drafts a person confirms, not posted automatically; or PDFs are text, not scans).",
+      "must_say_any": [
+        "assumed",
+        "assumption"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "adjectives-as-criteria",
+      "what": "Writing banned adjectives as acceptance criteria ('must be fast', 'easy to use') instead of measurements.",
+      "must_not_say_any": [
+        "must be fast",
+        "should be fast",
+        "must be easy to use",
+        "should be easy to use",
+        "must be intuitive",
+        "should be intuitive",
+        "must be user-friendly",
+        "should be user-friendly"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "The framing is saved in the repo for Monday, and nothing is built yet.",
+    "edits_allowed": [
+      "*.md",
+      "docs/*"
+    ],
+    "replays": [
+      {
+        "id": "brief-saved",
+        "kind": "outcome",
+        "what": "a markdown file other than the call notes holds the framing, including what is out of scope and what was assumed",
+        "replace": {
+          "_check_brief.py": "reference/check_brief.py"
+        },
+        "command": [
+          "python",
+          "_check_brief.py"
+        ],
+        "expect": "pass"
+      }
+    ]
+  },
+  "actions": {}
+}
