@@ -1,0 +1,482 @@
+[
+  {
+    "case": "project-setup-full-foundation",
+    "skill": "project-setup",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "Live gateway remains outside verified coverage."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Architecture records actual module boundaries with sources.",
+        "ok": false,
+        "detail": "docs/architecture.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "Command index records a usable Python check.",
+        "ok": false,
+        "detail": "docs/commands.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "Startup links architecture, commands and current work.",
+        "ok": false,
+        "detail": "AGENTS.md has nothing matching '(?s)<!-- start-here -->.*architecture:.*commands:.*<!-- /start-here -->'",
+        "workdir": true
+      },
+      {
+        "check": "Startup explains retrieval or upkeep.",
+        "ok": false,
+        "detail": "AGENTS.md has nothing matching '(?i)(project-context|context.py|retriev|index)'",
+        "workdir": true
+      },
+      {
+        "check": "Current work has a concrete Next.",
+        "ok": false,
+        "detail": "BUILD.md is not there",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-haiku-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  project-setup-full-foundation  [project-setup]  0/1 found, score 0.00 (needs 1.00)\n  MISSED  coverage: Live gateway remains outside verified coverage.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 8.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "project-setup-full-foundation",
+    "skill": "project-setup",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "Live gateway remains outside verified coverage."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Architecture records actual module boundaries with sources.",
+        "ok": false,
+        "detail": "docs/architecture.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "Command index records a usable Python check.",
+        "ok": false,
+        "detail": "docs/commands.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "Startup links architecture, commands and current work.",
+        "ok": false,
+        "detail": "AGENTS.md has nothing matching '(?s)<!-- start-here -->.*architecture:.*commands:.*<!-- /start-here -->'",
+        "workdir": true
+      },
+      {
+        "check": "Startup explains retrieval or upkeep.",
+        "ok": false,
+        "detail": "AGENTS.md has nothing matching '(?i)(project-context|context.py|retriev|index)'",
+        "workdir": true
+      },
+      {
+        "check": "Current work has a concrete Next.",
+        "ok": false,
+        "detail": "BUILD.md is not there",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-haiku-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  project-setup-full-foundation  [project-setup]  0/1 found, score 0.00 (needs 1.00)\n  MISSED  coverage: Live gateway remains outside verified coverage.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 6.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "project-setup-existing-project",
+    "skill": "project-setup",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The live gateway remains outside coverage."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Retained state is strict green.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Checks passed.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing instructions remain.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Actual rejection evidence exists.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Setup leaves sourced intent rather than only verification files.",
+        "ok": false,
+        "detail": "BRIEF.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "The next session has an actionable next-work section.",
+        "ok": false,
+        "detail": "BUILD.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "Startup points to the saved intent and work records.",
+        "ok": false,
+        "detail": "AGENTS.md has nothing matching '(?s)<!-- start-here -->.*BRIEF\\\\.md.*BUILD\\\\.md.*<!-- /start-here -->'",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Native checks pass the unchanged original implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-haiku-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  project-setup-existing-project  [project-setup]  0/1 found, score 0.00 (needs 1.00)\n  MISSED  limited: The live gateway remains outside coverage.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 6.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "project-setup-existing-project",
+    "skill": "project-setup",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The live gateway remains outside coverage."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Retained state is strict green.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Checks passed.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing instructions remain.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Actual rejection evidence exists.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "Setup leaves sourced intent rather than only verification files.",
+        "ok": false,
+        "detail": "BRIEF.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "The next session has an actionable next-work section.",
+        "ok": false,
+        "detail": "BUILD.md is not there",
+        "workdir": true
+      },
+      {
+        "check": "Startup points to the saved intent and work records.",
+        "ok": false,
+        "detail": "AGENTS.md has nothing matching '(?s)<!-- start-here -->.*BRIEF\\\\.md.*BUILD\\\\.md.*<!-- /start-here -->'",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Native checks pass the unchanged original implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-haiku-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  project-setup-existing-project  [project-setup]  0/1 found, score 0.00 (needs 1.00)\n  MISSED  limited: The live gateway remains outside coverage.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 7.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "project-update-preserves-intent",
+    "skill": "project-update",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The fix is recorded but verification did not run."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Expired sessions still cannot bypass authentication.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Session expiry is still unfinished.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The next step is verification.",
+        "ok": false,
+        "detail": "BUILD.md has nothing matching '(?is)## Next.*(?:verify|check|test)'",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-haiku-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  project-update-preserves-intent  [project-update]  0/1 found, score 0.00 (needs 1.00)\n  MISSED  gap: The fix is recorded but verification did not run.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 6.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "project-update-preserves-intent",
+    "skill": "project-update",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": true,
+    "used_skill": false,
+    "skills_loaded": [],
+    "found": 0,
+    "total": 1,
+    "missed": [
+      "The fix is recorded but verification did not run."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Expired sessions still cannot bypass authentication.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Session expiry is still unfinished.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The next step is verification.",
+        "ok": false,
+        "detail": "BUILD.md has nothing matching '(?is)## Next.*(?:verify|check|test)'",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-haiku-5-5",
+    "models_used": [],
+    "cost_usd": 0,
+    "turns": 1,
+    "grade_text": "FAIL  project-update-preserves-intent  [project-update]  0/1 found, score 0.00 (needs 1.00)\n  MISSED  gap: The fix is recorded but verification did not run.\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 6.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

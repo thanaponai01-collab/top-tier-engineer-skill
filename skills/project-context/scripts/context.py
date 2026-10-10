@@ -51,7 +51,7 @@ def pointers(repo):
         text = read(repo, path)
         block = re.search(r'<!-- start-here -->(.*?)<!-- /start-here -->', text, re.S)
         if block:
-            for role, value in re.findall(r'^\s*(intent|work):\s*(\S+)', block[1], re.M):
+            for role, value in re.findall(r'^\s*(intent|work|features|verify|architecture|commands):\s*(\S+)', block[1], re.M):
                 local(repo, value)
                 result[role] = value
             break
@@ -350,6 +350,8 @@ def main():
             if local(repo, 'RUN.json').is_file():
                 result['execution_state_source'] = 'RUN.json is authoritative; inspect it before acting on summary Next'
             for role, path in pointers(repo).items():
+                if role not in ('intent', 'work'):
+                    continue
                 if local(repo, path).is_file():
                     text = read(repo, path)
                     result['sources'].append(dict(role=role, path=path, excerpt=text[:4000],

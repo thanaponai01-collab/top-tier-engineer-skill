@@ -38,3 +38,16 @@ A cached query cannot discover new unindexed text; upkeep must index changed con
 Path associations do not replace dependency/caller tracing. Structural checks cannot prove user
 intent, test correctness or that every agent follows upkeep. Missing indexes fall back to at most
 50 files; full discovery is bounded to 500 and reports truncation. Larger stores use explicit areas.
+
+## Complete foundation refresh
+- project-setup prepares all categories by default and defers verification detail to a reference.
+- onboard-system reuses setup; architecture changes update affected boundaries rather than all code.
+- agents/setup-reader.md is read-only and configured for Haiku; host overrides/availability apply.
+- Foundation helper inventories equivalent paths, checks structural completeness and remembers
+  scoped input hashes without treating them as product evidence.
+- Full suite: 452 tests passed in 111.881 seconds; focused foundation 7 and context 15 tests passed.
+- Claude native validators accepted skills and agents; Codex's standalone validator rejects the
+  existing Claude-specific disable-model-invocation field, so native validation was used.
+- Full-foundation/old-setup/project-update live evaluations: six attempts with Haiku hit the account
+  usage limit before doing work. Results: results/full-foundation-refresh. No behavioral pass claimed.
+- Current architecture: docs/architecture.md. Key commands: docs/commands.md.

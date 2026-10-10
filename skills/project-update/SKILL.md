@@ -24,7 +24,9 @@ their evidence files. Link to them, do not copy logs. Record command, result and
 available; otherwise say unverified. Never upgrade a past pass to current proof without running
 the relevant check. RUN.json retains execution authority; summaries must agree with it.
 
-Update only affected feature/command/design entries. Keep current summaries small, split active
+Update only affected feature/command/design entries. Refresh architecture edges when boundaries,
+entry wiring, storage or integrations change; internal edits need no overview rewrite. Follow
+architecture/commands pointers and inspect impacted context-paths before treating a map as current. Keep current summaries small, split active
 detail by area, and move completed history out of startup reading without losing unresolved work
 or superseded decision links. Preserve existing archive eligibility rules. Changed source with no
 mapped record is a coverage gap, not permission to call the memory complete.

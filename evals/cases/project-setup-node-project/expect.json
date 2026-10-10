@@ -28,7 +28,9 @@
       "BRIEF.md",
       "BUILD.md",
       "brief/*",
-      "work/*"
+      "work/*",
+      "docs/*",
+      ".project-context/*"
     ],
     "must_contain": [
       {

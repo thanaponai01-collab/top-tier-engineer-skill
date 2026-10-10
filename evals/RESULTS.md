@@ -371,3 +371,10 @@ Reproduce with `python evals/run.py --cases verify-loop-make-it-verified --repea
 Baseline and with-skill runs could not execute: Claude session usage limit.
 See results/project-memory-baseline and results/project-memory-with. These runner failures
 provide no behavioral validation. Updated cases require a fresh baseline and with-skill run.
+
+## Complete foundation refresh attempt
+
+Six Haiku runs (without/with for full-foundation, existing-project setup and project-update) all
+returned Claude's session usage limit before performing work. See results/full-foundation-refresh.
+No behavioral baseline failure or skill improvement is established. Native plugin validation and
+helper/unit tests are separate evidence; rerun the final cases after account usage is available.

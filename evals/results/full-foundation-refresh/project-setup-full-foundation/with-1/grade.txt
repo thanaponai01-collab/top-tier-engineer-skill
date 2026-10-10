@@ -1,0 +1,12 @@
+FAIL  project-setup-full-foundation  [project-setup]  0/1 found, score 0.00 (needs 1.00)
+  MISSED  coverage: Live gateway remains outside verified coverage.
+            named it, but never said what was wrong with it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files —
+  FAILED  Architecture records actual module boundaries with sources. — docs/architecture.md is not there
+  FAILED  Command index records a usable Python check. — docs/commands.md is not there
+  FAILED  Startup links architecture, commands and current work. — AGENTS.md has nothing matching '(?s)<!-- start-here -->.*architecture:.*commands:.*<!-- /start-here -->'
+  FAILED  Startup explains retrieval or upkeep. — AGENTS.md has nothing matching '(?i)(project-context|context.py|retriev|index)'
+  FAILED  Current work has a concrete Next. — BUILD.md is not there
+  FAILED  the agent run errored or timed out

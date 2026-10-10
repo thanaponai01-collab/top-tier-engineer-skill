@@ -10,92 +10,50 @@ metadata:
 
 # Onboard System
 
-The first agent into an unfamiliar system either does the work of understanding it and keeps that
-work to itself, or skips the work and guesses. Neither leaves anything for the next session. This
-skill runs the other skills that each hold one piece of the picture, in the order that lets each one
-use the last one's output, and ends with every piece written to a file a fresh agent can find with no
-chat history at all.
+Build a useful understanding without rerunning the setup checkpoints. The project foundation is
+owned by `project-setup`; this skill adds explanation, targeted rationale and a prediction check.
 
-This skill does not replace the skills it calls — it is the sequence and the handoffs between them.
-Each step below names the skill that does the real work; read that skill's own file for how it does
-it.
+*Evidence labels: **proven** = you ran it; **traced** = followed code; **suspected** = neither.*
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
-end · **suspected** = neither.*
+## 1. Inventory once
 
-## 1. Check what already exists
+Follow existing startup pointers and run project-setup's foundation inventory when installed.
+Otherwise inspect the same categories directly: intent, work, feature/check indexes, architecture,
+commands and retrieval. Existing but stale documents are refresh candidates; existence is not proof.
+Read the root summaries, then only the areas needed for the user's question. Do not read every file.
 
-Look for `VERIFY.md`, `FEATURES.md`, `docs/architecture.md` and `WHY.md` at the repo root before
-doing anything. Say in one line what is already there. Skip straight to the step whose file is
-missing; never redraft a file that already exists — that is the job of the skill that owns it, not
-this one, and it already refuses to overwrite.
+## 2. Fill the gaps once
 
-## 2. Set the project up — `project-setup`
+Use `project-setup` for missing/stale categories and reuse its inventory, workers and completed
+checks. Read its foundation/economy references only when doing that work. It now owns architecture,
+commands and memory as well as verification; do not call those skills again just to repeat setup.
+Without setup installed, prepare the same bounded sourced notes directly and state the limitation.
+Use the lowest-cost available configured worker for independent bounded discovery when worthwhile;
+Claude Code's plugin setup-reader uses Haiku. No worker per checkpoint and no full-history handoff.
+The coordinator writes shared documents once and checks cited paths; it retains final judgment.
 
-Run it if verification, the feature map, the agent startup block or intent/work context is missing
-or stale. Follow existing equivalent documents through startup pointers. Skip setup only when
-the relevant inputs are current; file existence alone does not establish readiness.
+## 3. Explain and investigate only relevant why
 
-## 3. Map what it has — `feature-map`
+Use the feature traces, architecture overview and command index to explain the main flow, ownership
+and important constraints. Follow relevant area links. If a surprising boundary matters, consult
+`code-history` or inspect available records directly. Save supported rationale in existing WHY/decision
+records only when useful; unknown reasons remain unknown. No exhaustive history pass or new store.
 
-Fills in `FEATURES.md` for real: one entry per feature, each with the way a user reaches it and how
-that entry is known. `project-setup` only drafts this file's shape; this step is what makes it true.
+## 4. Check one prediction
 
-## 4. Draw how it's built — `arch-map`
+Choose one requirement-backed example. Predict the outcome from the saved notes, then trace it
+against relevant source or use a replay-safe existing check. Do not rerun setup verification merely
+to demonstrate understanding; reuse its receipt with baseline and historical/current distinction.
+A mismatch is a context or product finding, not permission to rewrite requirements. If external
+access is needed, keep the example unverified and identify the missing prerequisite.
 
-As-is view, system altitude, traced from the entry points `feature-map` just found. One diagram, one
-headline sentence, to `docs/architecture.md`. This is the shape of the system — it does not explain
-why any of it looks this way; that is the next step.
+## 5. Report and maintain
 
-## 5. Get the why — `code-history`
+Give a short system account, sourced facts, categories created/refreshed/kept, scope not read,
+current verification boundary and one Next. Update affected records after authorized changes and
+index those files only; use `project-update` or direct notes if unavailable. Read-only onboarding
+questions explain findings without editing the project. RUN.json owns driven execution state.
 
-For the two or three things step 4 turned up that look surprising, wrong, or load-bearing (a
-box everything points into, a layer that shouldn't call the one above it, a piece with no obvious
-reason to exist), ask why. Add each answer to `WHY.md`, cited. Skip anything ordinary — this is not
-a pass over every file, only the parts the map just flagged.
-
-## 6. Prove you actually understand it
-
-Give the account from `explain`, overview mode, using `FEATURES.md`'s `trace:` lines and
-`docs/architecture.md` instead of re-tracing from scratch. If someone is present, run its step 4 and
-have them catch you on a case you didn't cover. No one to answer: trace one case yourself and say
-what the code does there. This is the check that step 2–5 produced a real picture and not four files
-nobody read back.
-
-*Test:* you can give the overview cold, then get one prediction check right, using only the files
-just written — no memory of steps 2–5.
-
-## 7. Report
-
-Answer first: what now exists, one line each, `CREATED` vs `KEPT` vs `SKIPPED` (and why skipped —
-usually "already there"). Then the one thing from step 5 most worth remembering, and the one gap
-still open (a `TODO` in `VERIFY.md`, an entry point `feature-map` couldn't reach, a `docs/` diagram
-still marked *suspected*).
-
-```
-FILES:  VERIFY.md (kept) · FEATURES.md (created) · docs/architecture.md (created) · WHY.md (created)
-KNOW:   <the one surprising thing from step 5, with its file:line or record>
-GAP:    <what's still open, and which skill closes it>
-```
-
-## Rules
-
-- **Sequence, not a rerun.** Never redo a step whose file already exists and is current — that skill
-  owns keeping it true, not this one.
-- **Proportional depth.** Step 5 is bounded to what step 4 flagged. This skill onboards to a working
-  picture, not to a complete history of every decision ever made — that is `code-history` run again,
-  later, on demand.
-- **Every claim in the files this step touches still needs its evidence label or `file:line`.** This
-  skill inherits each called skill's own test; it does not relax any of them.
-
-*Test:* a fresh session with no chat history, pointed only at the repo, can answer "what does this do,
-how is it shaped, and why" from the files alone — and can name which skill to run next for anything
-it can't.
-
-Verifying the checks stay green is `verify-loop`; something breaking after onboarding is
-`debug-protocol`; a question this pass didn't cover is `code-history` or `explain`, run directly.
-This skill is only the first pass and the order to run the others in.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.
+*Test:* a fresh reader can explain the relevant flow and check one prediction from saved sources;
+current categories are reused, changed architecture is refreshed, unknown rationale is preserved,
+and discovery/checks are not repeated for each checkpoint.

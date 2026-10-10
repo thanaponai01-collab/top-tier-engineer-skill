@@ -130,6 +130,15 @@ class ProjectContext(unittest.TestCase):
         self.assertNotEqual(rows[0]['id'], 'fake')
         self.assertEqual(context.links('guide.md', text), [])
 
+    def test_architecture_and_command_equivalents_are_discoverable(self):
+        self.put('AGENTS.md','<!-- start-here -->\nintent: BRIEF.md\nwork: BUILD.md\n'
+                 'architecture: notes/system.md\ncommands: notes/run.md\n<!-- /start-here -->')
+        self.put('notes/system.md','# System\nBoundaries.\n')
+        self.put('notes/run.md','# Commands\npython check.py\n')
+        files,_=context.discover(self.repo)
+        self.assertIn('notes/system.md',files)
+        self.assertIn('notes/run.md',files)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -292,3 +292,8 @@ them, and don't let a repo-wide sweep count them as findings.
 
 The initial runner attempts hit Claude's session limit in both arms. They establish no behavioral
 improvement. Replay both arms after usage is available; existing helper tests are separate evidence.
+
+Complete setup: project-setup-full-foundation checks sourced architecture, usable command notes,
+startup pointers, context retrieval and current work while preserving the existing product.
+Full-foundation refresh attempts used Haiku and hit account usage limits in both arms; these are
+runner failures rather than skill outcomes.

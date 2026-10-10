@@ -22,6 +22,10 @@ This repo is the `top-tier-engineer` Claude Code plugin: independent skills unde
 Goal: independent engineering skills with reliable, bounded project context.
 intent: BRIEF.md
 work: BUILD.md
+features: CATALOG.md
+verify: evals/PROJECT_MEMORY.md
+architecture: docs/architecture.md
+commands: docs/commands.md
 Read BRIEF.md and BUILD.md first; open linked areas only for the task.
 Retrieve: python skills/project-context/scripts/context.py --repo . search WORDS --limit 5
 Upkeep: update affected records after authorized work; index --files CHANGED_CONTEXT_FILES.

@@ -1,0 +1,17 @@
+FAIL  project-setup-existing-project  [project-setup]  0/1 found, score 0.00 (needs 1.00)
+  MISSED  limited: The live gateway remains outside coverage.
+            named it, but never said what was wrong with it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files —
+  FAILED  Retained state is strict green. — .verify-state.json is not there
+  FAILED  Checks passed. — .verify-state.json is not there
+  ok      Existing coverage limit remains. —
+  ok      Existing instructions remain. —
+  FAILED  Actual rejection evidence exists. — .verify-state.json is not there
+  FAILED  Setup leaves sourced intent rather than only verification files. — BRIEF.md is not there
+  FAILED  The next session has an actionable next-work section. — BUILD.md is not there
+  FAILED  Startup points to the saved intent and work records. — AGENTS.md has nothing matching '(?s)<!-- start-here -->.*BRIEF\\.md.*BUILD\\.md.*<!-- /start-here -->'
+  ok      The native check rejects an independently supplied wrong implementation. —
+  ok      Native checks pass the unchanged original implementation. —
+  FAILED  the agent run errored or timed out

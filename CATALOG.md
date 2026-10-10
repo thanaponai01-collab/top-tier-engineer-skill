@@ -6,7 +6,7 @@ Thirty-five top-tier-engineer skills, by where the work is. Small changes need n
 for multi-step work, check here first. Load one with the Skill tool by name; a `/command`
 is manual-only: suggest it to the user, who types it.
 
-- **Orient:** `arch-map` draw the architecture or what a change does; `code-history` why is it built this way, who decided?; `explain` walk me through how this works; `feature-map` what can this app do, how do I reach X?; `/top-tier-engineer:onboard-system` first time in this codebase, build the whole picture; `project-context` ask the project's memory; `/top-tier-engineer:project-setup` set a project up: start-here block, VERIFY.md; `/top-tier-engineer:recall` where were we? resume work
+- **Orient:** `arch-map` draw the architecture or what a change does; `code-history` why is it built this way, who decided?; `explain` walk me through how this works; `feature-map` what can this app do, how do I reach X?; `/top-tier-engineer:onboard-system` first time in this codebase, build the whole picture; `project-context` ask the project's memory; `/top-tier-engineer:project-setup` prepare the complete project foundation; `/top-tier-engineer:recall` where were we? resume work
 - **Frame:** `problem-framing` vague idea to testable requirements
 - **Design:** `agent-design` design an agent's tools before any code; `arch-design` how should this be structured? which stack?; `threat-model` can this be abused?
 - **Plan:** `issue-handoff` turn a plan into tracked issues; `plan-work` split work into ordered, checked slices

@@ -57,8 +57,8 @@ the rest of this repo being loaded.
 | `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |
-| `project-setup` | "Set this project up for the skills": discovers native commands, refreshes a small verification seed, preserves manual notes and proves local readiness; optional CI setup |
-| `onboard-system` | "I've never seen this codebase, get me up to speed": runs project-setup, feature-map, arch-map and code-history in one pass, then checks the account against a real prediction, so the whole picture is on disk before the first real task starts |
+| `project-setup` | Prepare or refresh intent, work, features, verification, architecture, commands, one agent entry point and searchable context; optional CI |
+| `onboard-system` | Reuse the foundation, fill missing/stale categories once, explain relevant flows and check one prediction |
 | `project-context` | Ask project memory using bounded, sourced retrieval; optional SQLite index |
 | `project-update` | Maintain affected context after work or reconcile missed updates |
 | `recall` | "Where were we / catch me up": a short capsule of the current state and the next step, rebuilt from disk |
@@ -235,3 +235,18 @@ Queries do not write the cache. Missing/corrupt indexes fall back to bounded fil
 See [the memory convention](skills/project-context/references/memory.md) for ownership, record
 metadata, budgets and freshness limits. New/unindexed content requires upkeep before SQL search
 can discover it. Path associations supplement feature-map; they are not a dependency graph.
+
+### Complete setup with bounded discovery
+
+/project-setup prepares the full foundation by default, reusing existing equivalents and recording
+unknowns. /onboard-system reuses that foundation and fills only missing/stale categories before
+explaining the system. Architecture stays a small sourced overview, updated for boundary/wiring
+changes; key commands live in a compact command index. Project-context queries this project memory.
+
+The plugin ships a read-only setup-reader worker configured with model: haiku for Claude Code.
+Use at most two distinct area assignments when delegation saves work; small projects use one agent.
+Workers return cited facts only, the coordinator writes shared documents once and verifies the
+selected behavior. Model availability/host overrides apply; no globally cheapest price is promised.
+See [foundation](skills/project-setup/references/foundation.md) and
+[economy policy](skills/project-setup/references/economy.md). Other hosts use their supported
+configured economical model or the single-agent fallback.
