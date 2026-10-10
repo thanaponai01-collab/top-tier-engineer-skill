@@ -333,6 +333,16 @@ class StagedPlugin(unittest.TestCase):
             self.assertFalse(os.path.exists(os.path.join(dest, "evals")))
             self.assertFalse(os.path.exists(os.path.join(dest, "tests")))
 
+    def test_the_staged_front_door_prints_the_card(self):
+        # 2026-10-10: CATALOG.md was not staged, so every eval agent got an empty front door
+        # while a real install (the whole repo) got the card. Run the hook from the staged copy.
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = agent.stage_plugin(os.path.join(tmp, "p"))
+            proc = subprocess.run([sys.executable, os.path.join(dest, "tools", "front-door.py")],
+                                  input='{"cwd": "%s"}' % tmp.replace("\\", "/"),
+                                  capture_output=True, text=True, encoding="utf-8")
+            self.assertIn("by where the work is", proc.stdout)
+
     def test_saved_evidence_carries_no_email_address(self):
         self.assertEqual(agent.redact("git -c user.email=someone.01@example.co.uk commit -m x"),
                          "git -c user.email=<email> commit -m x")

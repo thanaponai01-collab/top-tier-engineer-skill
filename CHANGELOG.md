@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.58.1 - 2026-10-10 - evals stage the skill card; routing measured
+
+- **Harness fix**: `evals/agent.py` did not stage `CATALOG.md`, so every eval agent got an empty
+  front door while a real install (the whole repo) gets the card. A test now runs `front-door.py`
+  from a staged copy; it failed before the fix.
+- **Routing with the card** (`route_live.py`, Sonnet, owner's settings, full 34): 11 of 34. The 7
+  rows that should load nothing (3 ordinary-work, 4 manual-only) stayed silent. Of the 27 rows that
+  expect a skill, 4 loaded one (agent-evals, feature-map, issue-handoff, scrutinize), up from 1 load
+  in about 21 such rows before the card and the PHILOSOPHY change. Far below the >= 26 target.
+- What the misses look like: the agent reads the fixture and answers directly. Asked to list its
+  skill instructions before starting, the same agent loaded structure-gate correctly, so the skill
+  is visible; nothing makes it stop and choose at the moment of decision.
+
 ## 4.58.0 - 2026-10-10 - a fresh session can see the skills: listing fit and a front door
 
 - **Why skills went bare**: Claude Code lists auto-invocable skills inside 1% of the context window
