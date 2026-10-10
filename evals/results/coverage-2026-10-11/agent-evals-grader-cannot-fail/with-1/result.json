@@ -1,0 +1,47 @@
+{
+  "case": "agent-evals-grader-cannot-fail",
+  "skill": "agent-evals",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   grader-passes-wrong-agent \u2014 \"It never compared the answer to `expected`.\"\n  found   set-too-small-and-happy \u2014 \"It had no `escalate`, hostile or injection cases, which are the behaviours the README calls out.\"\n  held    harness-works",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:agent-evals"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "ran the grader (against the stub or a deliberately wrong agent), not only read it",
+      "ok": true,
+      "detail": "ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-3qsqw62y/fixture && python evals/triage/grade.py; cat > /tmp/wro"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/evals/triage/grade.py",
+      "fixture/evals/triage/tasks.jsonl"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.10959769999999999,
+  "turns": 10,
+  "seconds": 29.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

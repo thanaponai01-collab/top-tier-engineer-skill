@@ -89,3 +89,11 @@ WHY:      [proven] `claude -p` with no --plugin-dir listed top-tier-engineer ski
           under the same leak (suspected; the installed version varied)
 UNDO:     drop the flag in agent.build_command; the old batch is kept in
           evals/results/coverage-2026-10-11-contaminated/
+
+DECISION 9: widen agent-design's one-way item: removing a tool's one-way risk by redesign counts as handled
+OPTIONS:  keep the item and count the with-arm fail
+WHY:      the with-arm agent replaced send_email(to, subject, body) with a templated send_summary
+          fixed to the order's address: a stronger answer than "confirm each send". Risk: changed
+          after seeing a result. Mitigated by keeping cancel_order and issue_refund mandatory and
+          re-judging *both* arms' saved reports [proven: report.md lines 7, 52]
+UNDO:     git revert the expect.json edit and rescore

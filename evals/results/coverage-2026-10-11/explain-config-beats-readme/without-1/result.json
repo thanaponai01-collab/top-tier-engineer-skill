@@ -1,0 +1,42 @@
+{
+  "case": "explain-config-beats-readme",
+  "skill": "explain",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   five-attempts \u2014 \"`settings.py:4` defaults `PAY_MAX_ATTEMPTS` to 5 (4 retries)\"\n  found   declined-vs-transient \u2014 \"`process` returns `\"declined\"` immediately, with no retry (`worker.py:13-14`).\"\n  found   idempotency-key \u2014 \"The key is created once in `enqueue.py`, and per its comment the gateway charges at most once per key.\"\n  held    readme-count",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0681399,
+  "turns": 10,
+  "seconds": 18.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

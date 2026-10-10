@@ -1,0 +1,53 @@
+{
+  "case": "arch-map-readme-is-not-the-code",
+  "skill": "arch-map",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   reports-skips-layers \u2014 \"The README says no request skips a layer, but `/reports/daily` does: `api/reports.py:6` queries the database directly\"\n  found   plugin-loaded-by-name \u2014 \"The Slack plugin is loaded by name from `settings.py` at runtime, so I drew that arrow dashed as suspected.\"\n  found   arrows-cite-lines \u2014 \"| api/reports \u2192 db | api/reports.py:1, 6 |\"\n  held    readme-layering",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-map"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a diagram file in the repo draws the service including the reports route and the database",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/docs/architecture.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.10311650000000001,
+  "turns": 6,
+  "seconds": 20.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

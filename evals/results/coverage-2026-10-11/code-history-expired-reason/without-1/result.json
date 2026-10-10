@@ -1,0 +1,54 @@
+{
+  "case": "code-history-expired-reason",
+  "skill": "code-history",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   recorded-reason \u2014 \"Commit `7590712` raised it to 60 s as a mitigation, cutting reads about 10x.\"\n  found   reason-expired \u2014 \"That is about 1 query per view instead of about 40, so the load that caused the incident should be much lower.\"\n  held    no-reason-or-still-holds",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The answer is left in WHY.md for the next session (advisory: the skill asks for it; a plain agent has no reason to).",
+      "ok": true,
+      "detail": "advisory, not met: WHY.md is not there",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0676968,
+  "turns": 5,
+  "seconds": 17.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

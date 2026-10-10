@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && cat INCIDENT.md && ls -R . | head -100
+  2. Bash: cd fixture && cat TOOLS.md && wc -l runs/run-4471.jsonl && cat runs/run-4471.jsonl

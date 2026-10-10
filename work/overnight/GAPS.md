@@ -17,6 +17,16 @@ About 4k tokens before any work: lean. The problems are in what is *missing*, no
 
 ## Gaps
 
+### G0. The evals measured the installed plugin, not the repo's [proven] (fixed tonight)
+Every eval agent inherited the person's user settings: `enabledPlugins` (with
+top-tier-engineer@4.58.1 from the marketplace cache) and `~/.claude/CLAUDE.md` (which imports
+PHILOSOPHY.md). The "without" arm was never plain. In the first batch tonight it opened
+`agent-design` and `arch-map` itself. The "with" arm loaded the staged copy *beside* the installed
+one, so two copies of every skill were listed. That likely affects every with/without row in RESULTS.md
+and the routing numbers in ROUTING.md (route_live uses the same runner), which ran with duplicate
+skill listings [suspected: not rerun]. Fixed with `--setting-sources project,local` in
+`agent.build_command`, plus a regression test. Re-measure routing before acting on the 11/34.
+
 ### G1. SessionStart never mentions an active driven run [traced]
 `RUN.json` is declared authoritative for execution state (drive, recall, pick-skill). But the
 SessionStart path (`front-door.py` → `start-here-hook.compact_summary`) reads only the intent and
@@ -67,4 +77,56 @@ works at 35 skills but doesn't scale cleanly. **Fix direction:** one role table 
 owner skill → when to read) in project-setup's handoff reference, read by recall and the front door,
 instead of each skill naming files.
 
-(Behavioural gaps from the live evals: see "Evals" below, filled in when the runs finish.)
+### G7. code-history finds the reason but never leaves it for the next session [proven: 0 of 2 runs]
+Both clean and contaminated plugin-arm runs traced INC-212 and the batching commit correctly and wrote
+no `WHY.md`, though step 6 says to when the answer took digging. This is exactly the
+context a fresh session needs ("why is this 60?"), and it evaporates with the chat. The
+trigger ("real digging") is a judgement call the agent always resolves as "no". **Fix:** make it
+unconditional when the trail had more than one record, or when the answer is *expired*.
+
+### G8. scrutinize says "scratch checkout" but gives no way to make one [proven: 1 run]
+The plugin-arm agent switched the person's own checkout between branches to run the code, and left
+it on `main` rather than the branch it was handed. The plain arm read the diff and never switched.
+The skill's "Run things… from a scratch checkout" has no command behind it. **Fix:** name it:
+`git worktree add <tmp> <branch>` (remove afterwards), and never `checkout` in the person's tree.
+
+### G9. Files written outside the repo the person named [proven: 3 runs]
+In a folder containing the repo, agents wrote deliverables beside it: arch-map's plain arm
+(`docs/architecture.md`), issue-handoff's plugin arm (`issue-bodies.md`), agent-design's plain arm.
+A fresh session opening the repo never sees them. Mostly a case-wording issue (fixed by naming the
+repo root), but the skills that save context (arch-map, issue-handoff, feature-map, code-history)
+never say "inside the repository root you were given". **Fix:** one line in each skill that saves
+context.
+
+## Evals: the 17 new cases, isolated (claude-sonnet-5-5)
+
+| case | without | with | reading |
+|---|---|---|---|
+| `agent-design-tool-contract` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `agent-drift-refusals-under-a-steady-rate` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `agent-evals-grader-cannot-fail` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `agent-prove-average-hides-safety` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `agent-release-launch-readiness` | 0/2 | 1/1 | **helps**: plain missed the unredacted logs and the all-at-once rollout (both tries) |
+| `agent-trace-first-divergence` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `arch-map-readme-is-not-the-code` | 0/2 | 1/1 | **helps**: plain drew a good map but cited no `file:line` per arrow (both tries) |
+| `code-history-expired-reason` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `evolve-maintain-hidden-caller` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `explain-config-beats-readme` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `feature-map-dead-command-and-destructive` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `issue-handoff-no-tracker` | 0/2 | 1/1 | **helps**: plain would file M3 with no proof line (both tries) |
+| `onboard-system-stale-architecture` | 0/1 | 0/1 | no measured difference: both refresh the stale doc; the judge flips on the invariant item |
+| `pick-skill-slow-is-a-bug` | 0/2 | 1/1 | **helps**: routed to debug-protocol, measured before editing; plain edited first (both tries) |
+| `problem-framing-unattended-brief` | 0/2 | 1/1 | **helps**: plain wrote a brief with no outcome-shaped job, no measurable criteria and no failure states (both tries) |
+| `recall-stale-proof` | 1/1 | 1/1 | no difference: Sonnet 5.5 already does this unaided |
+| `scrutinize-unchanged-caller` | 1/1 | 1/2 | **hurts once**: 1 of 2 runs switched the person's checkout and left it on `main` (G8) |
+
+Total spend on the clean batch and reruns: $3.42. One or two tries per arm: a direction, not a rate.
+
+**What this says about the skills.** Where the skill helps, it's the same pattern: a **checklist the
+plain agent half-remembers** (agent-release's five controls, problem-framing's measurable criteria
+and failure states, issue-handoff's "no proof line, don't file", arch-map's evidence per arrow) or
+**an order of operations** (pick-skill: measure, then edit). Where the plain agent already wins, the
+case hinges on spotting one planted defect in a small repo, and Sonnet 5.5 does that unaided. Those
+10 cases still guard against regressions, but they don't show value. Making them discriminate
+needs scale (a decoy buried in a bigger repo) or persistence checks (G7: did the next session get
+the answer?), not cleverer decoys.

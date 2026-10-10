@@ -1,0 +1,47 @@
+{
+  "case": "recall-stale-proof",
+  "skill": "recall",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   suite-red-now \u2014 \"`python -m pytest -q` gives 2 failed, 1 passed.\"\n  found   rounding-contradicts-brief \u2014 \"That contradicts the confirmed 2026-10-02 decision, and no note records a new decision.\"\n  found   since-in-flight \u2014 \"The filter itself is only a TODO comment, so `since` currently does nothing.\"\n  held    notes-as-proof",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "reran the check the notes cite instead of repeating their 'proven'",
+      "ok": true,
+      "detail": "ran it: cd fixture && for f in CLAUDE.md BRIEF.md BUILD.md money.py export.py test_export.py; do echo \"=== $f\"; cat $f"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.090569,
+  "turns": 5,
+  "seconds": 16.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

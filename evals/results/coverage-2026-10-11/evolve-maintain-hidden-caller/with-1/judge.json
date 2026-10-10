@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "nightly-job-caller",
+      "what": "jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.",
+      "found": true,
+      "quote": "`jobs/nightly.yaml` had `finance-ledger-export` hitting `/v1/export` at 02:00",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0387212,
+  "model": "claude-sonnet-5-5"
+}

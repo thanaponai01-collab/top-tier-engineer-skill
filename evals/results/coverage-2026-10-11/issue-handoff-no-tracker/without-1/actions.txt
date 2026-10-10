@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && cat AUDIT.md; git remote -v; gh auth status
+  2. Bash: cd fixture && git rev-parse --is-inside-work-tree; git remote -v; env | grep -i -E 'GH_TOKEN|GITHUB_TOKEN' | sed 's/=.*/=<set>/'

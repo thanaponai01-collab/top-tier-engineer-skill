@@ -1,0 +1,6 @@
+  1. Glob: fixture/**/*
+  2. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xba5z5q7\fixture\RELEASE.md
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xba5z5q7\fixture\config\agent.yaml
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-xba5z5q7\fixture\evals\support-agent\graders.py
+  5. Bash: cd C:/Users/thana/AppData/Local/Temp/tte-eval-xba5z5q7/fixture; wc -c evals/support-agent/runs/* live/*; head -c 1500 evals/support-agent/runs/*.json; echo; he…
+  6. Bash: cd C:/Users/thana/AppData/Local/Temp/tte-eval-xba5z5q7/fixture/live; for f in sample-*; do echo $f; grep -E 'pass_rate|refusal|retry|cost|p50|model|prompt' $f …

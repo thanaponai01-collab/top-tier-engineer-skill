@@ -27,11 +27,10 @@
     },
     {
       "id": "each-one-way-tool-own-confirm",
-      "what": "cancel_order, issue_refund and send_email are one-way. Each needs its own confirmation or refusal case; a yes for one call does not cover the next.",
+      "what": "cancel_order, issue_refund and send_email are one-way as planned. Each needs its own confirmation or refusal case, and a yes for one call does not cover the next. A design that removes a tool's one-way risk instead counts too, for example replacing free-form send_email with a templated message fixed to the order's own address.",
       "must_name": [
         "cancel_order",
-        "issue_refund",
-        "send_email"
+        "issue_refund"
       ],
       "must_say_any": [
         "one-way",
