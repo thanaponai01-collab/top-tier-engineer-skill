@@ -1,6 +1,7 @@
 ---
 name: senior-review
-description: Review a whole codebase or project the way a senior engineer would and say what matters most. Use for "review this repo", "is this codebase any good?", "is it production-ready?", "what's the biggest gap / what should I fix next?". Not for a single diff (scrutinize does that) or a quick question.
+description: >-
+  Review a whole codebase like a senior engineer and rank what matters. Use for "is this codebase any good?", "is it production-ready?", "biggest gap?"
 metadata:
   stage: review
   card: "is this codebase good, what is the biggest gap?"

@@ -1,6 +1,7 @@
 ---
 name: explain
-description: Teach a person how a part of the codebase works and why it is built that way, changing nothing. Use when someone asks to be walked through or taught a system or subsystem ("walk me through", "teach me", "help me understand this system", "I'm new to this codebase"). Not for a quick question about one line or function.
+description: >-
+  Teach how part of a codebase works and why, changing nothing. Use for "walk me through", "help me understand this system". Not for one-line questions.
 metadata:
   stage: orient
   card: "walk me through how this works"

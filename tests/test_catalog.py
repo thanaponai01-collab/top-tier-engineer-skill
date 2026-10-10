@@ -48,6 +48,23 @@ class Catalog(unittest.TestCase):
         skills[0] = dict(skills[0], dir="renamed-folder")
         self.assertTrue(any("frontmatter name is" in p for p in catalog.problems(skills)))
 
+    def test_a_long_description_is_caught(self):
+        skills = catalog.load_skills()
+        i = next(i for i, s in enumerate(skills) if not s["manual"])
+        skills[i] = dict(skills[i], description="x" * (catalog.DESC_MAX + 1))
+        self.assertTrue(any("cap 160" in p for p in catalog.problems(skills)))
+
+    def test_a_listing_over_budget_is_caught(self):
+        skills = catalog.load_skills()
+        extra = [dict(skills[0], manual=False, description="x" * 150, name=f"pad-{i}", dir=f"pad-{i}")
+                 for i in range(5)]
+        self.assertTrue(any("skill listing is" in p for p in catalog.problems(skills + extra)))
+
+    def test_manual_skills_cost_nothing_in_the_listing(self):
+        skills = catalog.load_skills()
+        manual = [dict(skills[0], manual=True, description="x" * 999, name="m", dir="m")]
+        self.assertEqual(catalog.listing_chars(skills + manual), catalog.listing_chars(skills))
+
     def test_bad_frontmatter_is_named(self):
         with self.assertRaisesRegex(ValueError, "no stage"):
             catalog.frontmatter('---\nname: x\ndescription: y\nmetadata:\n  card: "z"\n---\n')

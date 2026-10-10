@@ -1,7 +1,7 @@
 ---
 name: scrutinize
 description: >-
-  An outsider's second opinion on a change before it lands: PR, diff, plan or design doc. Use for "scrutinize this", "second opinion", "sanity-check this PR / plan".
+  An outsider's second opinion on a PR, diff, plan or design doc before it lands. Use for "second opinion", "sanity-check this PR".
 metadata:
   stage: review
   card: "second opinion on a PR, diff or plan"

@@ -1,6 +1,7 @@
 ---
 name: problem-framing
-description: Turn a vague idea into a buildable, testable problem brief before any architecture or code exists. Use when a new project's goal is still vague, requirements feel fuzzy or contradictory, or a build drifted and nobody can say what "done" means.
+description: >-
+  Turn a vague idea into testable requirements before design or code. Use for "I want an app that...", fuzzy goals, or when nobody can say what done means.
 metadata:
   stage: frame
   card: "vague idea to testable requirements"

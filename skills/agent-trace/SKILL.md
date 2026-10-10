@@ -1,6 +1,7 @@
 ---
 name: agent-trace
-description: Reconstruct one AI agent run — its inputs, tool calls, results and reasoning — into a step-by-step chain and name the exact step where it diverged from what was wanted. Use for "why did the agent do that", "walk me through this run", "trace this transcript", or any single agent trajectory that looks wrong.
+description: >-
+  Walk one AI agent run step by step to the exact step it went wrong. Use for "why did the agent do that?" or a transcript that looks wrong.
 metadata:
   stage: fix
   card: "why did the agent do that?"

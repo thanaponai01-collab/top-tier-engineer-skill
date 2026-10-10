@@ -1,6 +1,7 @@
 ---
 name: perf-optimize
-description: Make a system measurably faster or cheaper, or trace a felt complaint ("navigation takes 3 seconds", "the app feels clunky", "this report takes forever") to its real cause. Also judges whether a query will scale. Use for slow/laggy, "optimize", "speed up", "reduce cost", "make it scale", "is this an N+1 / should I add an index". Never optimize by intuition.
+description: >-
+  Make a system measurably faster or cheaper by finding the real cause. Use for slow, laggy, "speed up", "reduce cost", "will this query scale?"
 metadata:
   stage: fix
   card: "slow, clunky or expensive"

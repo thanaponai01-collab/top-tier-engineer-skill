@@ -1,6 +1,7 @@
 ---
 name: build-discipline
-description: Build in small, proven, fully-wired increments. Use for a multi-file feature, tool or system built from scratch, or resuming a half-finished build. Not for one-line or single-function edits.
+description: >-
+  Build a multi-file feature, tool or system in small, proven, wired slices, or resume a half-finished build. Not for one-line or single-function edits.
 metadata:
   stage: build
   card: "build a multi-file feature in proven slices"

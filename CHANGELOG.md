@@ -1,5 +1,30 @@
 # Changelog
 
+## 4.58.0 - 2026-10-10 - a fresh session can see the skills: listing fit and a front door
+
+- **Why skills went bare**: Claude Code lists auto-invocable skills inside 1% of the context window
+  in characters (8,000 at 200k tokens), shared by every installed skill. Over budget, skills are
+  ranked by recent use (7-day half-life) and the rest lose their description, so a never-used skill
+  can never trigger by itself (traced in Claude Code 2.1.296). This plugin alone took 8,991 chars.
+- **27 descriptions rewritten** to lead with what the skill does and the phrases people type, at most
+  160 chars each: the listing drops from 8,991 to 4,926 chars. Manual-only skills are not listed and
+  are unchanged.
+- **`catalog.py --check` holds the size**: a description over 160 chars or a listing over 5,000 fails.
+- **Default hook: `tools/front-door.py`** (SessionStart only, never on a prompt): prints the skill
+  card from CATALOG.md, then start-here-hook's summary (decisions in force, Next, notes over budget),
+  or in a git project with no start-here block one line pointing at `/top-tier-engineer:project-setup`,
+  plus a warning when this plugin's source checkout is ahead of the installed copy. `hooks/hooks.json`
+  runs it; `optional.json` and `autonomous.json` run it in place of start-here-hook.
+- **PHILOSOPHY.md**: "Work directly by default" becomes "work directly for small changes; for
+  multi-step work, check the skill card first". plugin.json and README say the same.
+- Routing (`route_live.py`, Sonnet, real user settings, stopped after ~24 of 34 runs each): old and new
+  descriptions both loaded one skill in ~24 runs. With everything else equal, descriptions were not
+  the bottleneck; the agent answered directly. Front door and PHILOSOPHY are measured next.
+- Fresh session with the owner's settings (Vercel enabled per project only, `skillListingBudgetFraction`
+  0.03): the model reports all 97 listed skills with a description (was 8 of this plugin's bare).
+- evals harness: on Windows, run `route_live.py` with `PYTHONIOENCODING=utf-8`; the progress line's
+  arrow crashes cp1252 output before any result is saved.
+
 ## 4.57.0 - 2026-10-10 - one source for every skill list
 
 - **Frontmatter is the catalog**: every SKILL.md gains `metadata.stage` (where in the work it

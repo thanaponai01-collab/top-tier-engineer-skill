@@ -1,6 +1,7 @@
 ---
 name: threat-model
-description: Find what an attacker can make a system do that it must not, and turn each abuse into a test. Use for auth, sessions, secrets, untrusted input, deserialization, third-party dependencies, or "is this secure / can this be abused?".
+description: >-
+  Find what an attacker can make a system do, and turn each abuse into a test. Use for auth, secrets, untrusted input, "is this secure?", "can this be abused?"
 metadata:
   stage: design
   card: "can this be abused?"

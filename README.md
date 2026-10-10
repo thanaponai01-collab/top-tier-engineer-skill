@@ -15,12 +15,14 @@ git clone https://github.com/thanaponai01-collab/top-tier-engineer-skill
 /plugin install top-tier-engineer@thanaponai01-skills
 ```
 
-That is the whole install. No hooks run by default, and no philosophy or workflow is
-injected into the session. Skills are available when useful; ordinary work can proceed directly.
+That is the whole install. One hook runs by default: at session start, `front-door.py` prints the
+skill card ([CATALOG.md](CATALOG.md)), the project's decisions and next step, or one line saying the
+project has not been set up. It never fires on a prompt. No philosophy or workflow is injected;
+ordinary work can proceed directly.
 
 Use `/top-tier-engineer:drive` with a goal when you want the full workflow. It chooses and runs
 the relevant skills, so you do not need to invoke each one. You can also call an individual
-skill by name, e.g. `/top-tier-engineer:debug-protocol`. Skipping a skill needs no justification.
+skill by name, e.g. `/top-tier-engineer:debug-protocol`. Small changes need no skill.
 
 **Starting in a project:** no manual seed is required. Give the task and its expected result;
 the agent discovers existing commands, entry points and tests, then verifies the relevant behavior.
@@ -156,17 +158,21 @@ The agent maintains the notes during the work; the owner supplies the goal and d
 
 ## Hooks
 
-The default `hooks/hooks.json` has no active hooks. Installing the plugin does not route
-prompts, inject instructions, or block the agent from ending a turn. `drive` works without hooks.
+The default `hooks/hooks.json` runs one hook, `front-door.py`, at session start. Claude Code's
+skill listing is a shared budget (1% of the context window); over it, rarely used skills lose their
+description and manual-only ones are never listed, so a fresh agent cannot see the skills it most
+needs. The card goes around that. The default install does not route prompts, inject instructions,
+or block the agent from ending a turn. `drive` works without hooks.
 
 For one-prompt runs nobody watches, copy `hooks/autonomous.json` instead (philosophy and the project's decisions at start, `drive` loaded first, one stop-block on a red verify run). If you explicitly want the hooks, copy `hooks/optional.json` over `hooks/hooks.json` in your
 plugin checkout and reload the plugin. To return to the default, restore `hooks/hooks.json`
-to `{"hooks": {}}`. Hook configuration is separate from choosing `drive`.
+from git. Hook configuration is separate from choosing `drive`.
 
 | Optional hook | Event | What it does |
 |---|---|---|
 | `philosophy-hook.py` | `SessionStart` | Loads the optional engineering guidelines in `PHILOSOPHY.md` |
-| `start-here-hook.py` | `SessionStart` | Hands the session the project's `## Decisions` (BRIEF.md) and `## Next` (BUILD.md), and names any note over its line budget; silent when there are none |
+| `front-door.py` | `SessionStart` | Default and both profiles: the skill card from CATALOG.md, then start-here-hook's summary, or one setup line in a git project with no start-here block, plus a warning when this plugin's source checkout is ahead of the installed copy |
+| `start-here-hook.py` | `SessionStart` | Used by front-door, not wired on its own: hands the session the project's `## Decisions` (BRIEF.md) and `## Next` (BUILD.md), and names any note over its line budget; silent when there are none |
 | `drive-entry.py` | `UserPromptSubmit` | Autonomous profile only (`hooks/autonomous.json`): on a task-shaped prompt, tells the agent to load `drive` before any other tool call |
 | `route-hint.py` | `UserPromptSubmit` | Suggests a relevant skill; using it is optional and skipping it needs no justification |
 | `unproven-gate.py` | `UserPromptSubmit` | Reminds the agent when source files changed without anything being run since |
@@ -174,7 +180,8 @@ to `{"hooks": {}}`. Hook configuration is separate from choosing `drive`.
 
 Prompt/session hooks fail open. The optional Stop hook checks RUN.json strictly when present,
 allowing successful evidence or an explicit failed/blocked handoff. Without RUN.json it retains the
-one-time VERIFY.md reminder. Hooks remain opt-in; invoking drive does not enable them.
+one-time VERIFY.md reminder. Hooks other than front-door remain opt-in; invoking drive does not
+enable them.
 
 ## Does it work?
 

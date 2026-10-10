@@ -1,6 +1,7 @@
 ---
 name: agent-drift
-description: Watch a live agent for drift after it ships — pass rate, cost, latency and refusal/retry rate slipping from the bar `agent-prove` set, on a live schedule instead of a one-time check — and turn every real drop into a new eval task before it's dismissed as noise. Use once an agent is live, on a recurring drift check-in, when a live agent "used to work" or complaints are rising with no code change, or after a provider silently updates a model.
+description: >-
+  Check a live AI agent against its shipped baseline on a schedule. Use when it "used to work", complaints rise with no code change, or after a model update.
 metadata:
   stage: watch
   card: "is the live agent still what we shipped?"

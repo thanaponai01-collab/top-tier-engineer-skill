@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "top-tier-engineer",
-      "description": "Thirty-three optional engineering skills. Work directly by default, invoke an individual skill when useful, or choose drive to orchestrate the full workflow. Hooks are opt-in.",
+      "description": "Thirty-three engineering skills. Work directly for small changes, load the skill that fits for multi-step work, or choose drive to orchestrate the full workflow. One session-start hook shows the skill card and the project's next step; other hooks are opt-in.",
       "author": {
         "name": "Thanaponai01"
       },

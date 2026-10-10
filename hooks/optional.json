@@ -1,5 +1,5 @@
 {
-  "description": "Top-Tier Engineer — loads PHILOSOPHY.md and the project's decisions and next step at session start, names the skill a prompt is asking for, flags source edits that were never run, and blocks a stop once when the verify run is red or stale.",
+  "description": "Top-Tier Engineer — loads PHILOSOPHY.md, the skill card and the project's decisions and next step at session start, names the skill a prompt is asking for, flags source edits that were never run, and blocks a stop once when the verify run is red or stale.",
   "hooks": {
     "SessionStart": [
       {
@@ -11,7 +11,7 @@
           },
           {
             "type": "command",
-            "command": "if command -v python3 >/dev/null 2>&1; then python3 \"${CLAUDE_PLUGIN_ROOT}/tools/start-here-hook.py\"; else python \"${CLAUDE_PLUGIN_ROOT}/tools/start-here-hook.py\"; fi",
+            "command": "if command -v python3 >/dev/null 2>&1; then python3 \"${CLAUDE_PLUGIN_ROOT}/tools/front-door.py\"; else python \"${CLAUDE_PLUGIN_ROOT}/tools/front-door.py\"; fi",
             "timeout": 10
           }
         ]
