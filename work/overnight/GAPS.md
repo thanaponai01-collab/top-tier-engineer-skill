@@ -24,8 +24,13 @@ PHILOSOPHY.md). The "without" arm was never plain. In the first batch tonight it
 `agent-design` and `arch-map` itself. The "with" arm loaded the staged copy *beside* the installed
 one, so two copies of every skill were listed. That likely affects every with/without row in RESULTS.md
 and the routing numbers in ROUTING.md (route_live uses the same runner), which ran with duplicate
-skill listings [suspected: not rerun]. Fixed with `--setting-sources project,local` in
-`agent.build_command`, plus a regression test. Re-measure routing before acting on the 11/34.
+skill listings. Fixed with `--setting-sources project,local` in `agent.build_command`, plus a
+regression test. **Re-measured: routing is 21 of 34 isolated, against 11 of 34 under the leak**
+[proven: ROUTING.md, $2.51]. All 13 remaining misses open *no* skill, never a wrong one: debug-protocol
+(2), problem-framing, arch-design, correctness-gate, perf-optimize, senior-review, latent-audit,
+code-history, explain, verify-loop, agent-trace, evolve-maintain. The route-hint hook stays at 13/34
+and points the wrong way on 6 rows, three of them toward manual-only skills (recall, onboard-system,
+drive-overnight) that the model can't open.
 
 ### G1. SessionStart never mentions an active driven run [traced]
 `RUN.json` is declared authoritative for execution state (drive, recall, pick-skill). But the
@@ -130,3 +135,18 @@ case hinges on spotting one planted defect in a small repo, and Sonnet 5.5 does 
 10 cases still guard against regressions, but they don't show value. Making them discriminate
 needs scale (a decoy buried in a bigger repo) or persistence checks (G7: did the next session get
 the answer?), not cleverer decoys.
+
+## What to do, in order
+
+| # | move | gap | cost | proof it worked |
+|---|---|---|---|---|
+| 1 | Front door prints RUN.json status (active/blocked, next stage, unresolved actions) | G1 | ~20 lines in start-here-hook + a test | hook test with an active RUN.json fixture |
+| 2 | Triggers ("Use for…") in the 5 bare descriptions, starting with code-history and build-discipline | G4 | 5 frontmatter lines + `catalog.py --write` | `route_live.py`: code-history and verify-loop rows turn right |
+| 3 | code-history: WHY.md entry unconditional when the trail had >1 record or the reason expired | G7 | 2 lines | `code-history-expired-reason` with a gated WHY.md check, 3 tries |
+| 4 | plan-work and agent-design link their file from the work doc (`include:`) | G2 | 1 line each | a recall case whose NEXT lives in PLAN.md |
+| 5 | scrutinize names the scratch checkout (`git worktree add`, never `checkout` in place) | G8 | 1 line | `scrutinize-unchanged-caller` 3 tries, read_only holds |
+| 6 | Move the 31× memory paragraph to PHILOSOPHY.md/front door; one evidence-label definition | G5 | mechanical, 31 files | catalog check + suite |
+| 7 | One context role table (role → file → owner → when to read) used by recall and the front door | G6 | design change | recall case over a repo with every role present |
+| 8 | Harder or longer variants of the 10 no-difference cases (scale, persistence) | evals | a case each | plain arm fails ≥2 of 3 |
+
+Each skill change re-runs its case with `--repeats 3` (CLAUDE.md), now isolated.

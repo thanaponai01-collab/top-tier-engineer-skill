@@ -97,3 +97,24 @@ WHY:      the with-arm agent replaced send_email(to, subject, body) with a templ
           after seeing a result. Mitigated by keeping cancel_order and issue_refund mandatory and
           re-judging *both* arms' saved reports [proven: report.md lines 7, 52]
 UNDO:     git revert the expect.json edit and rescore
+
+## Morning report
+
+VERDICT:   passed. `python work/overnight/exit_check.py` → "EXIT CHECK: every skill covered, suite green,
+           every new case run live"; `run.py status` → RUN: complete
+DONE:      17 new eval cases, one per uncovered skill; `evals/uncovered.txt` is empty [proven: suite 455 OK,
+           judge calibration 51/51]. All 17 run live in both arms, isolated [proven: results/coverage-2026-10-11/].
+           Skill helps on 5 (agent-release, arch-map, issue-handoff, pick-skill, problem-framing: plain failed
+           2/2 each), no difference on 10, hurt once on scrutinize, onboard unmeasured (judge noise).
+           Harness: eval agents were loading the person's installed plugin and global CLAUDE.md, fixed and
+           regression-tested. Routing re-measured: 21/34 isolated, against 11/34 before [proven].
+           Also: setup.py/history.py for git-history cases, gh isolation, route_live UTF-8 crash fix,
+           non-hermetic hook test fixed, mojibake repaired in 3 skills.
+NEEDS YOU: nothing parked. Nothing was pushed or merged. To land: review branch
+           `claude/skills-evals-coverage-gaps-b11be8`, then merge, and bump version + CHANGELOG (a release).
+DECIDED:   suspected-basis first: DECISION 3 (one case per skill). The rest rest on proven facts: 1, 2, 4–9.
+           Watch DECISION 9 (widened agent-design's expectation after seeing a run; both arms re-judged).
+FAILED:    first live batch: contaminated by user settings (hypothesis "the plain arm is plain": false);
+           hit the usage limit mid-batch; route_live crashed on a cp1252 print. All three redone.
+NEXT:      fix G1 (the front door shows RUN.json state). It's the gap that most hurts a fresh session, and the
+           check is a hook unit test. Full ranked list: work/overnight/GAPS.md.

@@ -39,9 +39,48 @@
   "contract_hash": "d7073ef94cd3cf6cb7460c870380102ac3ef7f8fdab579c314a6552f507fb0aa",
   "oracle_hash": "dcf5ce779f343df0b242f34781c6c8e9ae691ae85a70ad9901433ba18a9f72ef",
   "started_at": 1791654294.716458,
-  "status": "active",
-  "proofs": {},
-  "attempts": {},
+  "status": "complete",
+  "proofs": {
+    "prove": {
+      "command": [
+        "python",
+        "work/overnight/exit_check.py"
+      ],
+      "exit": 0,
+      "output": "EXIT CHECK: every skill covered, suite green, every new case run live\n",
+      "at": 1791663635.5518198,
+      "seconds": 90.193,
+      "inputs_hash": "2293959a46e90b587b082624cdcb437a49028b6a5df989a7378bf5116b9632f7"
+    }
+  },
+  "attempts": {
+    "prove": 2
+  },
   "journal": {},
-  "history": []
+  "history": [
+    {
+      "stage": "prove",
+      "command": [
+        "python",
+        "work/overnight/exit_check.py"
+      ],
+      "exit": 0,
+      "output": "EXIT CHECK: every skill covered, suite green, every new case run live\n",
+      "at": 1791663542.8724837,
+      "seconds": 92.261,
+      "inputs_hash": "2293959a46e90b587b082624cdcb437a49028b6a5df989a7378bf5116b9632f7"
+    },
+    {
+      "stage": "prove",
+      "command": [
+        "python",
+        "work/overnight/exit_check.py"
+      ],
+      "exit": 0,
+      "output": "EXIT CHECK: every skill covered, suite green, every new case run live\n",
+      "at": 1791663635.5518198,
+      "seconds": 90.193,
+      "inputs_hash": "2293959a46e90b587b082624cdcb437a49028b6a5df989a7378bf5116b9632f7"
+    }
+  ]
 }
