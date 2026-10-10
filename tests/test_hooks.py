@@ -84,7 +84,8 @@ class TestFrontDoor(unittest.TestCase):
             (Path(tmp) / ".git").mkdir()
             code, out, _ = run_hook(FRONT_DOOR, {"cwd": tmp})
             self.assertEqual(code, 0)
-            self.assertIn("/top-tier-engineer:project-setup once", out)
+            self.assertIn("/top-tier-engineer:project-setup for instructions", out)
+        self.assertIn("/top-tier-engineer:drive for context", out)
 
     def test_a_set_up_project_gets_its_state_not_the_setup_line(self):
         with tempfile.TemporaryDirectory() as tmp:

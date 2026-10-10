@@ -1,0 +1,12 @@
+{
+  "started": "2026-10-10-1506",
+  "repeats": 1,
+  "arms": [
+    "with"
+  ],
+  "version": "4.58.0",
+  "models": [
+    "claude-haiku-5-5"
+  ],
+  "out_rel": "evals/results/routing-adversarial"
+}

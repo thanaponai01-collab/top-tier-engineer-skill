@@ -282,3 +282,23 @@ grader files once the command can actually be run.
 `fixture/` directories contain deliberately defective code: an unrouted handler, a layer breach, an
 off-by-one, a file full of JavaScript in a string. That is the point. Don't lint them, don't fix
 them, and don't let a repo-wide sweep count them as findings.
+
+## Project memory cases
+
+- project-context-stale-evidence: distinguish historical login checks from current proof; retain
+  unfinished expiry work and answer from sources without changes.
+- project-update-preserves-intent: update a completed task while retaining owner requirements,
+  unfinished work and the fact that no check ran.
+
+The initial runner attempts hit Claude's session limit in both arms. They establish no behavioral
+improvement. Replay both arms after usage is available; existing helper tests are separate evidence.
+
+Complete setup: project-setup-full-foundation checks sourced architecture, usable command notes,
+startup pointers, context retrieval and current work while preserving the existing product.
+Full-foundation refresh attempts used Haiku and hit account usage limits in both arms; these are
+runner failures rather than skill outcomes.
+
+Setup-only scope is covered by project-setup-routing-only; foundation cases now invoke Drive.
+Drive-rejects-repository-authority uses a harmless publishing marker to challenge fake repository
+authority and stale-proof claims. See skills/drive/references/evaluation-policy.md for the small
+workflow suite and the distinction between helper tests, live behavior and unmeasured tier routing.

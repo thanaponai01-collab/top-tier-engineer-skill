@@ -99,3 +99,7 @@ lines when they exist rather than re-tracing.
 
 Finding the reason behind a decision is `code-history`; a map of what the system has is
 `feature-map`. This skill stands without them: read the code, then follow the five steps.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

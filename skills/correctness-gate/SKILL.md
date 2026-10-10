@@ -95,3 +95,7 @@ an oracle fails; code that merely surprises you gets a question, not a rewrite.
 ## Common mistakes
 
 Tests that assert what the code does instead of what it should do; "looks right to me" as a gate.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

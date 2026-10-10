@@ -1,0 +1,9 @@
+FAIL  project-context-stale-evidence  [project-context]  0/2 found, score 0.00 (needs 1.00)
+  MISSED  historical: Login evidence is historical and does not establish current verification.
+            named it, but never said what was wrong with it
+  MISSED  expiry: Session expiry is unverified and the next step is to verify expiry and return URLs.
+            named it, but never said what was wrong with it
+  held    false-green: Claims authentication is currently verified.
+
+  ok      left the code untouched (a report-only task) — no code file changed
+  FAILED  the agent run errored or timed out

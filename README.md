@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Thirty-three engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
+Thirty-five engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
 do for a task; `PHILOSOPHY.md` offers optional engineering guidelines.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
@@ -27,7 +27,7 @@ skill by name, e.g. `/top-tier-engineer:debug-protocol`. Small changes need no s
 **Starting in a project:** no manual seed is required. Give the task and its expected result;
 the agent discovers existing commands, entry points and tests, then verifies the relevant behavior.
 `verify-loop` saves a small reusable recipe in VERIFY.md and grows it as needed. A complete
-FEATURES.md map is optional; `project-setup` is available when you want those starter files upfront.
+FEATURES.md map is optional; `drive` prepares those records; `project-setup` prepares agent instructions.
 The map records what was found, while executed checks establish what worked.
 
 **Other agents:** every `skills/<name>/SKILL.md` is plain markdown. Copy the one you need and
@@ -57,8 +57,10 @@ the rest of this repo being loaded.
 | `feature-map` | "What does this app have / how do I reach X?": a FEATURES.md of every feature and its entry points, checked against the code (bundled script) |
 | `code-history` | "Why does X work this way / why did we pick Y / where does this number come from?": a cited read from git, tickets, docs and chat, saying so when no reason was recorded (bundled script) |
 | `explain` | "Walk me through how this works": what it is, how, and why, at your pace, changing nothing |
-| `project-setup` | "Set this project up for the skills": discovers native commands, refreshes a small verification seed, preserves manual notes and proves local readiness; optional CI setup |
-| `onboard-system` | "I've never seen this codebase, get me up to speed": runs project-setup, feature-map, arch-map and code-history in one pass, then checks the account against a real prediction, so the whole picture is on disk before the first real task starts |
+| `project-setup` | Prepare compact agent instructions and worker routing; Drive owns foundation preparation |
+| `onboard-system` | Reuse the foundation, fill missing/stale categories once, explain relevant flows and check one prediction |
+| `project-context` | Ask project memory using bounded, sourced retrieval; optional SQLite index |
+| `project-update` | Maintain affected context after work or reconcile missed updates |
 | `recall` | "Where were we / catch me up": a short capsule of the current state and the next step, rebuilt from disk |
 | `wire-check` | "I built it but it isn't working / is this hooked up? / what does nothing call?" |
 | `correctness-gate` | "Does this actually work? Test it." |
@@ -128,7 +130,7 @@ in three layers:
 
 | Layer | Read | Budget | Files |
 |---|---|---|---|
-| Always loaded | every session, by Claude Code itself | 30 lines | the start-here block in `CLAUDE.md` / `AGENTS.md` (`project-setup`) |
+| Always loaded | every session, by Claude Code itself | 30 lines | the start-here block in `CLAUDE.md` / `AGENTS.md` (Drive foundation preparation) |
 | Read at start | when work begins | 120 / 80 lines | `BRIEF.md`: the goal and `## Decisions` in force (`problem-framing`); `BUILD.md`: proven slices and `## Next` (`build-discipline`) |
 | On demand | when a task touches it | per file | `FEATURES.md` / `VERIFY.md` areas via `include:`, `WHY.md` entries, every `*.archive.md` |
 
@@ -149,7 +151,7 @@ work can split through `include: work/<area>.md`, while Next and urgent blockers
 
 Typical requests:
 
-- "Use project-setup to save this project's intent and next step and refresh verification."
+- "Use drive to save this project's intent and next step and refresh verification."
 - "Use build-discipline to add this feature and keep the project handoff current."
 - "Use evolve-maintain for this upgrade and refresh affected context."
 - "Use recall, then continue the next step."
@@ -218,3 +220,34 @@ reference reports — two correct ones written differently, one plausible wrong 
 has stopped telling good from bad, or has started grading phrasing, fails here rather than sitting
 green. And every skill must have an eval case, or be listed in
 `evals/uncovered.txt`, a list that may only shrink.
+
+## Searchable project memory
+
+Working skills maintain affected context before completion; read-only reviews report gaps.
+Ask project-context about goals, finished work, decisions, commands or evidence. Project-update
+repairs missed updates. Existing Markdown and structured receipts remain authoritative; SQLite
+is a disposable local index, ignored by Git. No setup is required for ordinary small edits.
+
+The helper lives at skills/project-context/scripts/context.py in the installed plugin, not the
+project. Run it with --repo pointing at the project. Commands: next, search WORDS --limit 5,
+show ID, affected PATHS, index, index --files CHANGED_CONTEXT_FILES, check, and index --rebuild.
+Queries do not write the cache. Missing/corrupt indexes fall back to bounded file retrieval.
+See [the memory convention](skills/project-context/references/memory.md) for ownership, record
+metadata, budgets and freshness limits. New/unindexed content requires upkeep before SQL search
+can discover it. Path associations supplement feature-map; they are not a dependency graph.
+
+### Complete setup with bounded discovery
+
+/project-setup prepares only agent instructions and routing. /drive prepares the foundation, reusing existing equivalents and recording
+unknowns. /onboard-system reuses that foundation and fills only missing/stale categories before
+explaining the system. Architecture stays a small sourced overview, updated for boundary/wiring
+changes; key commands live in a compact command index. Project-context queries this project memory.
+
+Select Opus in Claude Code if desired, then invoke /drive. The plugin ships drive-executor
+(model: sonnet) and read-only setup-reader (model: haiku); Drive dispatches bounded assignments.
+Use at most two distinct area assignments when delegation saves work; small projects use one agent.
+Readers return cited facts; executors implement and retain check outputs. The coordinator checks the
+selected behavior. Model availability/host overrides apply; no globally cheapest price is promised.
+See [foundation](skills/drive/references/foundation.md) and
+[economy policy](skills/drive/references/model-routing.md). Other hosts use their supported
+configured economical model or the single-agent fallback.

@@ -64,12 +64,15 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Learning what a system has and how to reach each feature (route, click, shortcut, command), or keeping that map current | `feature-map` |
 | Why is it built this way, why was Y picked, where does this number come from, before changing code that looks wrong | `code-history` |
 | Someone needs to understand a system: what it is, how it works, why (nothing gets changed) | `explain` |
-| A new or different project needs these skills set up: VERIFY.md, FEATURES.md, a pointer in CLAUDE.md | `project-setup` |
-| First time in this codebase, nothing documented yet, want the whole picture (setup, features, architecture, why, an account you can check) built and left behind in one pass | `onboard-system` |
+| Prepare agent instructions and worker routing | `project-setup` |
+| Prepare or refresh project foundation, architecture, commands and memory | `drive` |
+| Understand an unfamiliar system, reuse its foundation, fill only gaps and check one prediction | `onboard-system` |
 | You know the goal but not the skills, and want it carried through to done | `drive` (unattended, with a decision log: `drive-overnight`) |
 | Starting or resuming work: "where were we?", what is the state and the next step | `recall` |
 | "Does it actually work?" before a merge or release | `correctness-gate` |
 | Deploying, or changing the shape of stored data | `safe-release` |
+| Questions about saved goals, work, commands or evidence | `project-context` |
+| Maintain context after work or reconcile missed updates | `project-update` |
 
 ## The Relay: nine checkpoints
 
@@ -130,3 +133,7 @@ first. Route on what is known, not on the adjective.
 
 One line: the skill, and the question it is going to answer. Then run it. If two skills genuinely
 both apply, say which one runs first and why the other waits — never run both at once.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

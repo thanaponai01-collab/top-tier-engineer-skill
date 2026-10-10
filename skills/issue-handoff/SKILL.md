@@ -112,3 +112,7 @@ missing a proof line; filing from the conversation when a document exists, or wr
 first when the conversation is all there is; filing what you concluded in the chat rather than what
 the user said and the code shows; second copies on a re-run; shared assumptions left in the preamble and carried into no issue; `--body` eating the
 formatting; stamping numbers back only at the end, so a crash leaves two disagreeing lists.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

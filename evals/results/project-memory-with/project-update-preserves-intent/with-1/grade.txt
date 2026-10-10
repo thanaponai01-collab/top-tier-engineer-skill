@@ -1,0 +1,10 @@
+FAIL  project-update-preserves-intent  [project-update]  0/1 found, score 0.00 (needs 1.00)
+  MISSED  gap: The fix is recorded but verification did not run.
+            named it, but never said what was wrong with it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files —
+  ok      Expired sessions still cannot bypass authentication. —
+  ok      Session expiry is still unfinished. —
+  FAILED  The next step is verification. — BUILD.md has nothing matching '(?is)## Next.*(?:verify|check|test)'
+  FAILED  the agent run errored or timed out

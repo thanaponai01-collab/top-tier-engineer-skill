@@ -62,3 +62,7 @@ The task set and grader built against this contract: `agent-evals`. The tool-sur
 contract makes concrete: `threat-model`. Building the tools and the loop: `build-discipline`. Without
 `agent-evals` or `threat-model` loaded, keep the tool contract in `docs/agent-design.md` anyway and say
 in the report which of the two steps above was done from it by hand instead.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

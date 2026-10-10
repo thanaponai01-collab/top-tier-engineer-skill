@@ -1,0 +1,49 @@
+{
+  "case": "project-setup-routing-only",
+  "skill": "project-setup",
+  "question": "Does setup only prepare compact routing instructions while preserving owner intent?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "limits",
+      "what": "Instruction preparation supplies no product proof.",
+      "must_say_any": [
+        "verification remains unmeasured",
+        "no tests or checks",
+        "didn't run anything",
+        "no product checks",
+        "no readiness claim"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "Only the instruction file changes; owner notes survive and routing is discoverable.",
+    "edits_allowed": [
+      "CLAUDE.md"
+    ],
+    "must_contain": [
+      {
+        "id": "manual",
+        "kind": "outcome",
+        "what": "Owner notes preserved",
+        "path": "CLAUDE.md",
+        "regex": "Amounts must preserve cents"
+      },
+      {
+        "id": "routing",
+        "kind": "outcome",
+        "what": "Managed routing and both workers",
+        "path": "CLAUDE.md",
+        "regex": "(?s)<!-- agent-routing -->.*drive-executor.*setup-reader.*<!-- /agent-routing -->"
+      }
+    ]
+  },
+  "actions": {
+    "must_not_run_any": [
+      "python[0-9.]*\\s+.*(?:foundation\\.py|context\\.py|verify\\.py)",
+      "python[0-9.]*\\s+-m\\s+(?:unittest|pytest)"
+    ],
+    "must_not_run_why": "instruction setup does not run foundation or product checks"
+  }
+}

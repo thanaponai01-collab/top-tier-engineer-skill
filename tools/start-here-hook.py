@@ -74,6 +74,11 @@ def over_budget(repo):
 def summary(repo):
     repo = Path(repo)
     parts = []
+    memory = repo / '.project-context' / 'index.sqlite'
+    if memory.exists():
+        parts.append('Searchable project memory is available: use project-context for bounded retrieval; '
+                     'after authorized work use project-update to maintain affected records. '
+                     'The index is a cache, not verification evidence.')
     try:
         paths = context_module().roles(str(repo))
     except Exception:
@@ -94,6 +99,29 @@ def summary(repo):
     if over:
         parts.append("## Notes over their line budget — trim before adding to them\n" + "\n".join(over))
     return HEADER + "\n\n" + "\n\n".join(parts) if parts else ""
+
+
+def compact_summary(repo):
+    """Default startup stays bounded; full context is retrieved when needed."""
+    repo = Path(repo)
+    paths = context_module().roles(str(repo))
+    decisions = section(read(repo / paths['intent']), 'Decisions')
+    nxt = section(read(repo / paths['work']), 'Next')
+    oversized = over_budget(repo)
+    indexed = (repo / '.project-context/index.sqlite').exists()
+    if not (decisions or nxt or oversized or indexed):
+        return ''
+    parts = [f"Project context: intent: {paths['intent']}; work: {paths['work']}. Read relevant linked areas."]
+    if nxt:
+        parts.append('Next: ' + ' '.join(nxt.split())[:300] + f" [{paths['work']}]")
+    if decisions:
+        parts.append('Decisions excerpt: ' + ' '.join(decisions.split())[:300] +
+                     f" [read {paths['intent']} for all current decisions]")
+    if indexed:
+        parts.append('Memory: project-context retrieves; project-update maintains. Index is a cache, not proof.')
+    if oversized:
+        parts.append(f'Context upkeep: {len(oversized)} notes over budget; inspect linked context before adding detail.')
+    return '\n'.join(parts)
 
 
 def main():

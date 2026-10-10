@@ -93,3 +93,7 @@ the capsule and let them choose.
 Why something is the way it is, is `code-history`; walking a person through it is `explain`;
 building the next slice is `build-discipline`. This skill stands without them: the capsule above is
 the whole job.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

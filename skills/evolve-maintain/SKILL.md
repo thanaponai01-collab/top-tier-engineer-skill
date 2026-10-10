@@ -108,3 +108,7 @@ sentence, proven, traced or suspected; what now stops it coming back; what you l
 Treating a cause nobody proved; a migration triaged as a fix; scope growth wearing a maintenance
 label; deleting code something still calls; closing a fix with no regression test; stale docs left
 to mislead the next maintainer.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

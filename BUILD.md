@@ -1,28 +1,33 @@
-# Build evidence
+# Current build
 
-Setup captures discoverable intent and Next; updates share handoff upkeep, unfinished areas remain
-current, and context completeness rejects missing/broken structure | proven (411 repository tests;
-Python and Node live setup 1/1 each after explicit manual invocation; live build decision upkeep
-1/1; installed reference/checker hashes match) | uncommitted
+## Project memory
+- Goal: independent skills share bounded, searchable context; files own facts and SQLite indexes them.
+- Proof: python -m unittest discover tests -p test_project_context.py; then full suite and live evals.
+- Status: implementation built; 444 repository tests passed and 14 focused helper tests passed.
+- Evidence: .project-context/full-tests-final.log; evals/PROJECT_MEMORY.md. Changes recorded on codex/project-memory; Git identifies the commit.
+- Live evaluation: both arms blocked by Claude session limit; no behavioral pass claimed.
+- Decisions: working agent maintains affected records; read-only retrieval; no mandatory database.
 
-Context handoffs keep active area decisions discoverable, compact completed history to bounded milestones,
-and distinguish implemented behavior from owner intent | proven (401 repository tests; live
-build-discipline-keeps-decisions regression 1/1; artifact check retains 35 decisions and 200 controlled
-replay receipts and rejects a missing decision) | uncommitted
+## Foundation refresh
+- Earlier setup version owned all context categories, including architecture/commands and memory by default.
+- Onboarding reuses the foundation; a bounded Haiku worker gathers evidence without writing notes.
+- Foundation inventory/check/remember preserves equivalents and detects selected-input changes.
+- Evidence: 452 repository tests passed; 7 foundation and 15 context tests passed.
+- Native skills/agent configuration validates; six live Haiku runs hit the account usage limit.
+- Current refresh is recorded on codex/project-memory; behavioral validation remains pending.
 
-`python -m unittest discover tests -p test_challenge.py`: real CLI catches a source mutation, reports a survivor and rejects a harness failure without changing the source tree | proven (11 focused CLI checks; full suite 337 passed) | 179a62e
+## Routing revision
+- Setup now writes only agent instructions; Drive owns foundation preparation and task upkeep.
+- Plugin workers: Sonnet executor and read-only Haiku reader; host support/overrides apply.
+- Added setup-only and repository-authority cases plus adversarial evaluation policy.
+- One live setup trial passed; adversarial trial rejected publishing but failed diagnosis/order gates.
+- Checks: 452 repository tests passed; updated runner tests (47) and native skill/agent validation passed.
+- Actual tier routing and cost reduction remain unmeasured; evidence: evals/PROJECT_MEMORY.md.
 
-`python -m unittest discover tests -p test_challenge.py`: sequential feature challenges retain both receipts and finish strict green; live change evaluation detects a shared-caller regression and completes verification | proven (12 challenge checks, 5 grader checks and full suite 343 passed; live case passed) | 7b89281
+## Next
+After Claude usage is available, run setup-only and Drive foundation evaluations,
+then a bounded onboarding prediction check; done when sourced context and preserved requirements
+are demonstrated by actual agent work. Unit/structural passes alone do not establish this.
 
-`python -m unittest discover tests -p test_ci.py`: fresh CI proof ignores local state, rejects a survivor and bad product, and records checkout identity | proven (6 CLI checks; full suite 349 passed; live mode passed) | b4456bb
-
-Subdirectory archive export uses the Git root; correct committed example passes and tracked local green state is ignored | proven (7 CI checks; full suite 350 passed) | 06f0e7a
-
-Pinned GitHub Actions example executes fresh proof and uploads commit-bound artifacts | proven ([hosted run](https://github.com/thanaponai01-collab/top-tier-engineer-skill/actions/runs/37315843975): strict green, caught mutation, inspected report/state/log; 350 tests pass on Ubuntu) | 7011929
-
-Project setup refreshes partial recipes, preserves manual notes and obtains strict rejection proof using native Python and Node checks | proven (live cases, independent wrong/original replays, unchanged second-pass setup; 350 tests) | this slice
-
-Build/debug handoffs retain rejection proof and finish strict green while preserving diagnosis-only scope and BUILD.md progress | proven (live build and debug cases, independent wrong/original replays and read-only diagnosis gate) | this slice
-
-Verification scaling and efficiency: modular recipe composition (`include:`), path-aware affected slicing (`--affected`), flakiness stress-testing (`--stress`), machine-readable run reports (`--json`), token-efficient failure cause extraction, and syntax-safe AST mutation operators | proven (54 verify CLI checks, 18 challenge checks, full suite 361 passed) | this slice
-
+## Existing work
+- include: work/plugin-baseline.md (existing evidence claims, including uncommitted work; not proof of this change)

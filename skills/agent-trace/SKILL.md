@@ -66,3 +66,7 @@ missing tool result instead of naming it missing; reading only the final assista
 A fix for the named cause: `debug-protocol` (code) or `build-discipline` (agent build). Whether this
 is a one-off or a pattern across runs: `agent-prove`. If the task or grader itself looks wrong, not
 the agent: `agent-evals`.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

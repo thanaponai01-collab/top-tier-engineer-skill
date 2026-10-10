@@ -80,3 +80,7 @@ Fast on a thousand rows can be fatal at a million; it shows in the plan, not on 
 
 Open with before, after and what was traded, or in trace mode the symptom, its cause in one sentence,
 and what the user notices after which phase. Then the table. Profiles and dead ends last.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

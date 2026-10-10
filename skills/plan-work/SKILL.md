@@ -75,3 +75,7 @@ merge.
 Building a slice: `build-discipline`. Filing the slices as tracked issues: `issue-handoff`.
 Running the plan with nobody there: `drive-overnight`. Without `problem-framing` or `verify-loop`
 loaded, step 1 is done by hand as written.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

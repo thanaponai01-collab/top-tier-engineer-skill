@@ -20,6 +20,14 @@ not optional background reading. RUN.json is authoritative; a todo tool is only 
 *Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
 end · **suspected** = neither.*
 
+## Coordinator and workers
+
+The current session coordinates. Read [model routing](references/model-routing.md) before
+worker dispatch; respect host support and project overrides. For foundation work, read
+[prepare foundation](references/prepare-foundation.md); it owns context, architecture, commands
+and verification preparation. Setup only prepares agent instructions. For workflow changes,
+read [evaluation policy](references/evaluation-policy.md) before claiming routing reliable.
+
 ## 1. Match, once
 
 Read the goal, say in one line which playbook it is and what you read it as (and not as), then
@@ -42,8 +50,8 @@ them and start on what it does not block.
 | "Is it a mess?", restructure, module boundaries | `structure-gate` to measure, `arch-design` to decide, `evolve-maintain` → `correctness-gate` per move |
 | Resume, or "where were we?" | `recall`, then match the goal it surfaces |
 | Plans to file as tickets | `issue-handoff` (it writes to the tracker: ask first unless the goal itself said to file) |
-| A new repo, or "set this up for the skills" | `project-setup` |
-| An unfamiliar codebase, or "get me up to speed" | `onboard-system` (it runs `project-setup` itself) |
+| A new repo, or "set this up for the skills" | `project-setup` for instructions, then the foundation procedure |
+| An unfamiliar codebase, or "get me up to speed" | `onboard-system` (it reuses the foundation procedure) |
 | Deploy, or change stored data | `safe-release` |
 | Big, vague, or matches nothing | `problem-framing` to make the goal checkable, then match again |
 
@@ -98,3 +106,7 @@ credentials/tools if the agent must be unable to bypass them.
 
 Working with no one to ask, on a goal that may take hours? That is `drive-overnight`, which adds a
 decision log and a budget.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

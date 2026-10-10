@@ -93,3 +93,7 @@ and coverage limits separately from the diagnosis experiments.
 
 Fixing where the symptom shows up instead of where it starts; closing as "cannot reproduce";
 reading the same code harder instead of running an experiment.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

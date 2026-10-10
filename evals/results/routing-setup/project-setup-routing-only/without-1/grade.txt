@@ -1,0 +1,8 @@
+PASS  project-setup-routing-only  [project-setup]  1/1 found, score 1.00 (needs 1.00)
+  found   limits: Instruction preparation supplies no product proof.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      instruction setup does not run foundation or product checks — did not run it
+  ok      changed nothing outside the allowed files —
+  ok      Owner notes preserved —
+  FAILED  Managed routing and both workers — CLAUDE.md has nothing matching '(?s)<!-- agent-routing -->.*drive-executor.*setup-reader.*<!-- /agent-routing -->'

@@ -54,7 +54,7 @@ def project_summary(repo):
         spec = importlib.util.spec_from_file_location("start_here_hook", START_HERE_HOOK)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        return mod.summary(str(repo))
+        return mod.compact_summary(str(repo))
     except Exception:
         return ""
 
@@ -69,7 +69,7 @@ def setup_line(repo):
     if not (repo / ".git").exists() or has_start_here(repo):
         return ""
     return (f"This project has no start-here block, so the next session starts cold. For work that "
-            f"will span sessions, run /{PLUGIN}:project-setup once.")
+            f"will span sessions, run /{PLUGIN}:project-setup for instructions, then /{PLUGIN}:drive for context.")
 
 
 def version_of(plugin_json):

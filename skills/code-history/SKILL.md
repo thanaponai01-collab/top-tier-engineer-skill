@@ -1,7 +1,7 @@
 ---
 name: code-history
 description: >-
-  Find why code is the way it is from git, issues, docs and chat, with citations. Use for "why does X work this way?", "who decided this?"
+  Find why code is the way it is from recorded decisions before changing it.
 metadata:
   stage: orient
   card: "why is it built this way, who decided?"
@@ -14,8 +14,8 @@ behind it, the incident that tuned it, the chat where it was argued. An agent th
 without them either deletes a fix that was there for a reason, or defends a choice nobody remembers
 making. This skill goes and gets the reason, and says plainly when there is none.
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
-end · **suspected** = neither.*
+*Evidence labels: **proven** = you ran it Â· **traced** = you read the whole chain, start to
+end Â· **suspected** = neither.*
 
 ## 1. Pin the question
 
@@ -93,7 +93,7 @@ file to answer one question.
 An entry that has sat unread for a long time is a cost every session pays and nobody spends. Once
 `WHY.md` passes about 30 entries, move the oldest ones whose **STILL HOLDS** is `yes` or `cannot
 tell` (an `expired` one stays, since it warns against the same dead reason twice) into
-`WHY.archive.md`, verbatim, keeping their index lines in `WHY.md` but marked `→ archive`. Do this in
+`WHY.archive.md`, verbatim, keeping their index lines in `WHY.md` but marked `â†’ archive`. Do this in
 the same sitting you add an entry that would push the file over the line, never as a separate pass.
 `WHY.archive.md` is opened only when its own index line is the one you need; it is never read start
 to end.
@@ -110,3 +110,7 @@ to end.
 
 Why a live failure happens is `debug-protocol`; teaching what you found to a person is `explain`.
 This skill stands without them: the report above is the whole job.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

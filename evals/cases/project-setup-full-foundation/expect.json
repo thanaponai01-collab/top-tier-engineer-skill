@@ -1,0 +1,75 @@
+{
+  "case": "project-setup-full-foundation",
+  "skill": "drive",
+  "question": "Does one setup prepare linked sourced architecture, commands and bounded memory alongside existing verification without changing the product?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "coverage",
+      "what": "Live gateway remains outside verified coverage.",
+      "must_say_any": [
+        "gateway",
+        "payment"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "The full foundation is discoverable, sourced and preserves owner intent and product behavior.",
+    "edits_allowed": [
+      "AGENTS.md",
+      "CLAUDE.md",
+      "BRIEF.md",
+      "BUILD.md",
+      "FEATURES.md",
+      "VERIFY.md",
+      "docs/*",
+      "work/*",
+      "brief/*",
+      ".gitignore",
+      ".project-context/*",
+      ".verify-state.json",
+      "verification/*",
+      "tests/test_total.py",
+      "RUN.json",
+      "DRIVE.md"
+    ],
+    "must_contain": [
+      {
+        "id": "architecture",
+        "kind": "outcome",
+        "what": "Architecture records actual module boundaries with sources.",
+        "path": "docs/architecture.md",
+        "regex": "(?is)(checkout|pricing|total).*\\.py"
+      },
+      {
+        "id": "commands",
+        "kind": "outcome",
+        "what": "Command index records a usable Python check.",
+        "path": "docs/commands.md",
+        "regex": "(?is)python.*(unittest|test|verify)"
+      },
+      {
+        "id": "all-pointers",
+        "kind": "process",
+        "what": "Startup links architecture, commands and current work.",
+        "path": "AGENTS.md",
+        "regex": "(?s)<!-- start-here -->.*architecture:.*commands:.*<!-- /start-here -->"
+      },
+      {
+        "id": "memory-upkeep",
+        "kind": "process",
+        "what": "Startup explains retrieval or upkeep.",
+        "path": "AGENTS.md",
+        "regex": "(?i)(project-context|context.py|retriev|index)"
+      },
+      {
+        "id": "next",
+        "kind": "outcome",
+        "what": "Current work has a concrete Next.",
+        "path": "BUILD.md",
+        "regex": "(?is)## Next\\s*\\n\\s*\\S"
+      }
+    ]
+  }
+}

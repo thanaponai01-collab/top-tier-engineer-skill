@@ -1,0 +1,1 @@
+Use project-update to Reconcile the completed task described in CHANGE.md into project memory. Preserve owner requirements and unfinished work. Update only context documents, keep the summary short, and explain the result and next step.

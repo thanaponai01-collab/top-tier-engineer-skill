@@ -107,3 +107,7 @@ test specs, the asset table, and how many boundaries were modelled and held.
 Checklists with no asset behind them; the happy path as evidence; findings as prose that fades;
 claiming "secure"; skipping secrets-in-source as too obvious; fixing one door and leaving the others
 open.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

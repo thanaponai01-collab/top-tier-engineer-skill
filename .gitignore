@@ -5,3 +5,5 @@ trace.out
 # Raw agent transcripts stay local: large, and they carry the session's account details.
 # Each run's report.md, actions.txt, grade.txt and result.json are the committed evidence.
 evals/results/**/transcript.jsonl
+
+.project-context/

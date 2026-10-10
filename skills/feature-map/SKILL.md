@@ -1,7 +1,7 @@
 ---
 name: feature-map
 description: >-
-  Map what an app can do and how to reach each feature (route, click, command) in FEATURES.md. Use for "what can this do?", "how do I get to X?"
+  Map features to their entry points, code paths and checks; detect affected features after changes.
 metadata:
   stage: orient
   card: "what can this app do, how do I reach X?"
@@ -45,8 +45,8 @@ One `##` section per feature in `FEATURES.md` at the repo root. Each bullet is `
 - Also worth a line when true: **needs** (login, a flag, a role, seeded data) and **effect** (what
   changes: a row, a file, a request).
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
-end · **suspected** = neither.*
+*Evidence labels: **proven** = you ran it Â· **traced** = you read the whole chain, start to
+end Â· **suspected** = neither.*
 
 *Test:* an agent that has read only this file could open the feature, with no searching.
 
@@ -127,3 +127,7 @@ run `check`. It is the drift alarm.
 Mapping every feature to its checks is `verify-loop`; a feature whose entry point exists but does
 nothing is `wire-check`; a picture of the structure is `arch-map`. This skill stands without them:
 without them, the file above is the whole job.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

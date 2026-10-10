@@ -83,3 +83,7 @@ under `oracle:`, and run `verify.py baseline`. Any worsening triggers `NEWLY RED
 
 This skill stops at shape. Whether a flagged shape is acceptable, correct, or connected is a
 separate question.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

@@ -72,3 +72,7 @@ the next session.
 how many attempts the check deserves; when you hit it, stop and report what you know, what failed
 and what you'd try next, instead of grinding on or declaring success.
 *Test:* the run ends in a passing check or a stated stop, never a silent trail-off.
+
+Project memory is optional and file-backed. Use project-context for bounded retrieval and
+project-update for upkeep after authorized changes. The working agent saves affected facts while
+it knows the task; the SQLite index is rebuildable, and read-only reviews report gaps.

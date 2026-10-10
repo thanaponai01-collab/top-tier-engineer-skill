@@ -53,3 +53,7 @@ only the score; skipping the held-out slice; re-running until it passes.
 
 Ready to ship: `agent-release`. Wider software correctness around the agent: `correctness-gate`.
 Without those loaded, do the step plainly and say the skill was missing.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

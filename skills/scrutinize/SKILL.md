@@ -54,3 +54,7 @@ Verdict first, **ship / fix-then-ship / rework / reject**, with the biggest reas
 major → minor: `file:line`, consequence, evidence (proven / traced / suspected), smallest fix. A clean
 pass lists what you traced and ran; "LGTM" is not an answer. Drop nitpicks when there are real
 problems.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

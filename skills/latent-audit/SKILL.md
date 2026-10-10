@@ -90,3 +90,7 @@ end · **suspected** = neither.*
 Deleting a module a cron job loads by name; removing plugin-registry targets because no import
 mentions them; calling layers clean when none were declared; a 40-file cleanup commit nobody can
 revert; handing over the script's suspect list as a safe-to-delete list.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

@@ -90,3 +90,7 @@ When no single component is named ("what do we serve, what does nothing reach?")
   proposed outcome.
 - The connecting code.
 - One recommendation: the check that stops this kind of gap coming back.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.

@@ -69,3 +69,7 @@ hand the newly filed task to `verify-loop` (`references/handoff.md`) to retain n
 before deploying code or prompt changes. Roll back, throttle or kill: `agent-release`. The
 exact divergence step in one bad live sample: `agent-trace`. Without those loaded, do the step
 plainly and say the skill was missing.
+
+Project memory: retrieve missing facts with `project-context`; after authorized changes use
+`project-update` for affected records. Without helpers, follow/update existing notes directly;
+read-only reviews report gaps. Skip upkeep when no durable fact changed.
