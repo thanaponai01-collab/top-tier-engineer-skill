@@ -14,8 +14,8 @@ behind it, the incident that tuned it, the chat where it was argued. An agent th
 without them either deletes a fix that was there for a reason, or defends a choice nobody remembers
 making. This skill goes and gets the reason, and says plainly when there is none.
 
-*Evidence labels: **proven** = you ran it Â· **traced** = you read the whole chain, start to
-end Â· **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
 ## 1. Pin the question
 
@@ -93,7 +93,7 @@ file to answer one question.
 An entry that has sat unread for a long time is a cost every session pays and nobody spends. Once
 `WHY.md` passes about 30 entries, move the oldest ones whose **STILL HOLDS** is `yes` or `cannot
 tell` (an `expired` one stays, since it warns against the same dead reason twice) into
-`WHY.archive.md`, verbatim, keeping their index lines in `WHY.md` but marked `â†’ archive`. Do this in
+`WHY.archive.md`, verbatim, keeping their index lines in `WHY.md` but marked `→ archive`. Do this in
 the same sitting you add an entry that would push the file over the line, never as a separate pass.
 `WHY.archive.md` is opened only when its own index line is the one you need; it is never read start
 to end.

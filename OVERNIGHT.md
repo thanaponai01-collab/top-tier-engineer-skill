@@ -51,3 +51,22 @@ WHY:      code-history, recall and scrutinize are about history and diffs, so th
 UNDO:     revert the run.py/agent.py commit
 
 ## Log
+- 2026-10-11: harness: `setup.py` hook + `evals/history.py` (git history ending on fixture/), gh isolated
+  (empty GH_CONFIG_DIR). Unit test added: every setup.py ends on its fixture with history [proven].
+- 17 cases written; every reference set discriminates on the phrase grader (good/good-alt pass, bad
+  fails) [proven: tests/test_evals.py, 44 OK]. Judge calibration on the new cases: 51/51 [proven].
+- Full suite exposed a non-hermetic hook test (`test_every_malformed_payload_exits_zero_and_silent` ran
+  the Stop gate in the checkout's cwd and saw this run's RUN.json). Fixed the test to run from an
+  empty dir; hook unchanged.
+
+DECISION 5: live runs use `--no-scorecard`, and RESULTS.md gets a hand-written section
+OPTIONS:  let run.py rewrite RESULTS.md
+WHY:      RESULTS.md is a curated history of releases; run.py would replace it with this batch only
+          [traced: run.py "rewrites RESULTS.md"; current file is hand-edited sections]
+UNDO:     rerun with the scorecard, or rescore the results folder
+
+DECISION 6: repair the double-encoded UTF-8 in build-discipline, code-history, feature-map (G3)
+OPTIONS:  report only (DECISION 2)
+WHY:      byte-level repair (â†’ → →, Â· → ·), no instruction changes, so no eval re-run needed
+          [proven: byte scan before/after]
+UNDO:     git revert the commit

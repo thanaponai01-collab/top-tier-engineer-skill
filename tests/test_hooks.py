@@ -55,12 +55,12 @@ def bash(command):
     return tool_use("Bash", {"command": command})
 
 
-def run_hook(script, payload):
+def run_hook(script, payload, cwd=None):
     """Invoke a hook through its CLI the way Claude Code does."""
     proc = subprocess.run(
         [sys.executable, str(script)],
         input=json.dumps(payload), capture_output=True, text=True,
-        encoding="utf-8",
+        encoding="utf-8", cwd=cwd,
     )
     return proc.returncode, proc.stdout, proc.stderr
 
@@ -574,10 +574,13 @@ class TestVerifyStopGate(unittest.TestCase):
             self.assertEqual(proc.returncode, 0)
 
     def test_every_malformed_payload_exits_zero_and_silent(self):
-        for payload in ({}, {"transcript_path": "/nonexistent/x.jsonl"}, {"transcript_path": None},
-                        {"session_id": "x", "cwd": "/nonexistent"}):
-            code, _, err = run_hook(STOP_GATE, payload)
-            self.assertEqual((code, err.strip()), (0, ""), payload)
+        # A payload without cwd falls back to the process's own directory; run from an empty one, so
+        # an active RUN.json in whatever checkout runs the suite is not what this test measures.
+        with tempfile.TemporaryDirectory() as empty:
+            for payload in ({}, {"transcript_path": "/nonexistent/x.jsonl"}, {"transcript_path": None},
+                            {"session_id": "x", "cwd": "/nonexistent"}):
+                code, _, err = run_hook(STOP_GATE, payload, cwd=empty)
+                self.assertEqual((code, err.strip()), (0, ""), payload)
         proc = subprocess.run([sys.executable, str(STOP_GATE)], input="not json", capture_output=True, text=True)
         self.assertEqual(proc.returncode, 0)
 
