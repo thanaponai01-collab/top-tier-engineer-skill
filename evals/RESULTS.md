@@ -5,7 +5,8 @@ set discriminates on the phrase grader, and the semantic judge read 51/51 new re
 
 **The harness was measuring the installed plugin.** Each eval agent inherited user settings:
 the person's enabled top-tier-engineer (marketplace 4.58.1) and `~/.claude/CLAUDE.md`. The
-"without" arm opened skills on its own, and the "with" arm listed two copies of every skill.
+"without" arm opened skills on its own, and both arms got PHILOSOPHY.md's "work directly" nudge.
+Isolated, live routing rose from 11/34 to 21/34 (ROUTING.md).
 `agent.build_command` now passes `--setting-sources project,local` (regression-tested). The first
 batch is kept as `results/coverage-2026-10-11-contaminated/`. Earlier rows in this file ran under
 the same leak and should be read with that in mind.

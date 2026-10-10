@@ -21,12 +21,13 @@ About 4k tokens before any work: lean. The problems are in what is *missing*, no
 Every eval agent inherited the person's user settings: `enabledPlugins` (with
 top-tier-engineer@4.58.1 from the marketplace cache) and `~/.claude/CLAUDE.md` (which imports
 PHILOSOPHY.md). The "without" arm was never plain. In the first batch tonight it opened
-`agent-design` and `arch-map` itself. The "with" arm loaded the staged copy *beside* the installed
-one, so two copies of every skill were listed. That likely affects every with/without row in RESULTS.md
-and the routing numbers in ROUTING.md (route_live uses the same runner), which ran with duplicate
-skill listings. Fixed with `--setting-sources project,local` in `agent.build_command`, plus a
+`agent-design` and `arch-map` itself. Both arms also got PHILOSOPHY.md, whose "work directly for small changes" is a standing nudge
+not to open a skill. (The with arm's staged copy overrides the installed one of the same name, a
+host fact traced on 2026-10-10, so it was not listing two copies.) That affects every with/without
+row in RESULTS.md and the routing numbers (route_live uses the same runner). Fixed with `--setting-sources project,local` in `agent.build_command`, plus a
 regression test. **Re-measured: routing is 21 of 34 isolated, against 11 of 34 under the leak**
-[proven: ROUTING.md, $2.51]. All 13 remaining misses open *no* skill, never a wrong one: debug-protocol
+[proven: ROUTING.md, $2.51]. Which of the two leaks drove the jump is *suspected* (likely PHILOSOPHY's "work directly",
+as suspected on 2026-10-10). All 13 remaining misses open *no* skill, never a wrong one: debug-protocol
 (2), problem-framing, arch-design, correctness-gate, perf-optimize, senior-review, latent-audit,
 code-history, explain, verify-loop, agent-trace, evolve-maintain. The route-hint hook stays at 13/34
 and points the wrong way on 6 rows, three of them toward manual-only skills (recall, onboard-system,
