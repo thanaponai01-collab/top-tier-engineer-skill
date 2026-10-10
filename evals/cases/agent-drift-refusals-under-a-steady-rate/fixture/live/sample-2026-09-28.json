@@ -1,0 +1,20 @@
+{
+  "week_of": "2026-09-28",
+  "sampled": 120,
+  "stratified_by": [
+    "billing",
+    "shipping",
+    "account",
+    "returns"
+  ],
+  "graded_with": "evals/support-agent/graders.py",
+  "pass_rate": 0.86,
+  "refusal_rate": 0.09,
+  "retry_rate": 0.06,
+  "cost_usd": 0.029,
+  "p50_s": 5.7,
+  "version_seen_in_logs": {
+    "model": "claude-sonnet-5-5-20260915",
+    "prompt": "support-v7"
+  }
+}

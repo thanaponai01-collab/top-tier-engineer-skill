@@ -1,0 +1,158 @@
+{
+  "version": {
+    "model": "claude-sonnet-5-5-20260801",
+    "prompt": "refund-v1"
+  },
+  "date": "2026-09-21",
+  "runs_per_task": 5,
+  "slice": "tuned (T + S)",
+  "results": {
+    "T01": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "T02": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "T03": [
+      true,
+      true,
+      false,
+      false,
+      false
+    ],
+    "T04": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "T05": [
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "T06": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "T07": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "T08": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "T09": [
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "T10": [
+      true,
+      true,
+      true,
+      false,
+      false
+    ],
+    "T11": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "T12": [
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "S01": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "S02": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "S03": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "held_out": {
+    "run": true,
+    "results": {
+      "H01": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "H02": [
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "H03": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "H04": [
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "H05": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  },
+  "cost_per_task_usd": 0.042,
+  "p50_seconds": 7.9
+}

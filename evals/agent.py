@@ -52,7 +52,15 @@ def clean_env():
     # throwaway temp folder is exactly that.
     # throwaway temp folder is exactly that. Only "1" counts, so it is forced.
     env["IS_SANDBOX"] = "1"
+    # The child keeps USERPROFILE/APPDATA for its own login, which is also where `gh` keeps the
+    # person's GitHub token. An eval agent asked to "file these as issues" must not reach a real
+    # tracker, so gh gets an empty config of its own and no token.
+    env["GH_CONFIG_DIR"] = GH_EMPTY
+    env["GIT_TERMINAL_PROMPT"] = "0"
     return env
+
+
+GH_EMPTY = os.path.join(tempfile.gettempdir(), "tte-eval-no-gh")
 
 
 def stage_plugin(dest, hooks_profile=None):

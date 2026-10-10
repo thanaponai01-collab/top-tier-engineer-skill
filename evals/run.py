@@ -339,6 +339,7 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
     try:
         shutil.copytree(os.path.join(case["dir"], "fixture"), os.path.join(workdir, "fixture"),
                         ignore=shutil.ignore_patterns(*agent.IGNORED_DIRS))
+        prepare_fixture(case["dir"], os.path.join(workdir, "fixture"))
         before = agent.snapshot(workdir)
         prompt = prompt_for(case["dir"], arm)
         if arm == "with":
@@ -381,6 +382,19 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
     finally:
         if not args.keep_workdirs:
             shutil.rmtree(workdir, ignore_errors=True)
+
+
+def prepare_fixture(case_dir, fixture_copy):
+    """Run the case's own setup.py (beside fixture/, never inside it) on the scratch copy.
+
+    For what a folder of files cannot hold, such as a git history to dig through or an uncommitted
+    diff to find. It may write only `.git`, which the snapshot and the workdir rules ignore, so
+    the copy the agent starts from still matches fixture/ file for file.
+    """
+    setup = os.path.join(case_dir, "setup.py")
+    if os.path.isfile(setup):
+        subprocess.run([sys.executable, setup, fixture_copy], check=True, capture_output=True,
+                       text=True, timeout=120, env=dict(agent.clean_env(), PYTHONDONTWRITEBYTECODE="1"))
 
 
 def write_run_grade(run_dir, result):

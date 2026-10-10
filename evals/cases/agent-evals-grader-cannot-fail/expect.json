@@ -1,0 +1,78 @@
+{
+  "case": "agent-evals-grader-cannot-fail",
+  "skill": "agent-evals",
+  "question": "can this task set and grader tell a good triage agent from a wrong one, before anyone builds against them?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "grader-passes-wrong-agent",
+      "what": "grade.py checks only that the answer is one of the known queues, never that it matches the task's expected queue. The stub that always answers billing scores 8/8; any constant answer scores 8/8. The grader cannot fail.",
+      "must_name": [
+        "grade.py"
+      ],
+      "must_say_any": [
+        "never compares",
+        "doesn't compare",
+        "does not compare",
+        "not compared",
+        "ignores the expected",
+        "ignores expected",
+        "never checks the expected",
+        "doesn't check the expected",
+        "does not check the expected",
+        "never looks at expected",
+        "only checks that",
+        "only checks the queue is valid",
+        "any valid queue",
+        "always returns billing",
+        "always answers billing",
+        "constant",
+        "passes a wrong",
+        "scores a wrong",
+        "cannot fail",
+        "can't fail"
+      ]
+    },
+    {
+      "id": "set-too-small-and-happy",
+      "what": "8 tasks, all plain routing. Nothing hostile, nothing to escalate, no instruction-injection ticket, no ambiguous ones, and no held-out slice. Below the dozen-plus a non-deterministic agent needs, and missing the refusal cases the README itself names.",
+      "must_say_any": [
+        "only 8",
+        "8 tasks",
+        "eight tasks",
+        "too few",
+        "too small",
+        "fewer than 12",
+        "no escalat",
+        "no hostile",
+        "no injection",
+        "no adversarial",
+        "happy path",
+        "happy-path",
+        "no held-out",
+        "held-out"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "harness-works",
+      "what": "Accepting that 8/8 on the stub proves the harness works and building can start. A stub scoring perfect is the evidence the grader is broken.",
+      "must_not_say_any": [
+        "yes, you can start building",
+        "ready to build against",
+        "good to start building",
+        "the harness works",
+        "evals are ready",
+        "the evals look good",
+        "evals look solid"
+      ]
+    }
+  ],
+  "actions": {
+    "must_run_any": [
+      "grade\\.py"
+    ],
+    "must_run_why": "ran the grader (against the stub or a deliberately wrong agent), not only read it"
+  }
+}

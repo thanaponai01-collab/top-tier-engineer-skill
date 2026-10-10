@@ -1,0 +1,7 @@
+# order-assistant runtime settings (read once at process start)
+enabled: true
+model: sonnet
+prompt: latest            # newest file in prompts/
+max_steps: 12
+max_cost_per_run_usd: 0.40
+refund_limit_usd: 200     # refunds up to this go out without a human
