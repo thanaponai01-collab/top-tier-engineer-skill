@@ -438,3 +438,13 @@ small run would have replaced the tables above.
 
 The scorecard's "opened the skill 2 of 4" counts only Skill-tool calls; the two manual skills
 (project-foundation, recall) were opened by reading their SKILL.md, as `actions.txt` shows.
+
+## 4.60.1 re-run (2026-10-11, claude-opus-5-5, 1 try, $1.66)
+
+| case | without | with | reading |
+|---|---|---|---|
+| `project-foundation-after-setup` (now gates `features.py check` and `.verify-state.json`) | 0/1 | 1/1 | plain wrote FEATURES.md without running the check |
+
+Caveat: the plain arm was not plain. `~/.claude/CLAUDE.md` still loads under
+`--setting-sources project,local`, and the agent followed its PHILOSOPHY.md path into this repo's
+skills. Evidence: `evals/results/2026-10-11-foundation-skills/`.

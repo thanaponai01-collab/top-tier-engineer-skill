@@ -58,8 +58,11 @@ Read existing VERIFY.md and FEATURES.md first. Reuse equivalent documents and li
 possible. Update missing or demonstrably stale setup; preserve manual notes, coverage limits and
 expectations. Conflicting expectations are a finding, not permission to match the implementation.
 
-- FEATURES.md (or equivalent): selected behavior, requirement source, real entry point, implementation
-  and check paths, evidence status. Mark the map partial. Avoid copying every manifest command.
+- FEATURES.md (or equivalent): load the `feature-map` skill and follow it: draft with its bundled
+  `features.py init`, trace each feature to its effect, then `features.py check --strict` must exit 0.
+  Record selected behavior, requirement source, entry point, implementation and check paths, and
+  evidence status. Mark the map partial. Write it by hand only when feature-map is not installed,
+  and say so in the list.
 - VERIFY.md: finished checks for the selected behavior, working directory expressed in commands,
   stable behavioral failure signal, declared expectation inputs and blind spots. Add launch,
   readiness, instance identity and cleanup only when checks require a running application.
@@ -84,8 +87,10 @@ count by linking area indexes. Record placement conventions where contributors a
 
 ## 4. Validate without repeated checkpoints
 
-For new/stale recipes or evidence, read [verification](references/verification.md), resolve the
-installed verify-loop helper, and complete requirement-backed rejection/baseline/strict proof.
+For new/stale recipes or evidence, load the `verify-loop` skill and follow it, recording through its
+bundled `verify.py` (direct check output only when verify-loop is not installed, and say so); read
+[verification](references/verification.md) for the foundation rules. Complete requirement-backed
+rejection/baseline/strict proof.
 For unchanged inputs, reuse only receipts the verifier establishes as current; setup snapshots
 alone do not certify anything. Run selected checks once, not once per document or worker.
 Report unverified features, unknown requirements and missing prerequisites separately.

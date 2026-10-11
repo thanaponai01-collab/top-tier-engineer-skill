@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "coverage",
+      "what": "Live gateway remains outside verified coverage.",
+      "found": true,
+      "quote": "**Out of scope:** the live payment gateway, which is not part of this folder.",
+      "quote_checked": true
+    },
+    {
+      "id": "category-list",
+      "what": "The report lists every category with its state.",
+      "found": true,
+      "quote": "| startup | `AGENTS.md` | present |",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0479572,
+  "model": "claude-sonnet-5-5"
+}

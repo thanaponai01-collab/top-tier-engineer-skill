@@ -44,6 +44,11 @@
   skill (no measured difference yet); code-history (WHY.md now gated), scrutinize and recall passed.
 - Evidence: evals/results/2026-10-11-gaps/; RUN.json for the run record.
 
+## project-foundation loads skills (4.60.1)
+- FEATURES.md through feature-map (features.py check --strict); VERIFY.md through verify-loop by name.
+- Eval now gates both; with passed, without failed the features check ($1.66,
+  evals/results/2026-10-11-foundation-skills/). Plain arm read the repo via the leaked CLAUDE.md path.
+
 ## Next
 Strengthen fresh-reader/repeated-upkeep trials with independent action evidence and larger area
 fixtures; done when bounded loading and unchanged second-pass files are demonstrated across runs.

@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.60.1 - 2026-10-11 - project-foundation loads feature-map and verify-loop
+
+- project-foundation now loads `feature-map` for FEATURES.md (`features.py init`, trace, then
+  `features.py check --strict` must exit 0) and loads `verify-loop` by name for VERIFY.md, recording
+  through its `verify.py`. Architecture is unchanged (arch-map stays optional).
+- Eval `project-foundation-after-setup` now requires that `features.py check` ran and that
+  `.verify-state.json` exists. Re-run: with skill passed; without failed on the features check.
+- **Eval isolation leak, still open:** `--setting-sources project,local` does not stop
+  `~/.claude/CLAUDE.md` from loading. Its PHILOSOPHY.md import line gives the plain arm this repo's
+  path, and in this run the plain agent read the plugin's skills from it. Plain-arm results remain
+  contaminated whenever the agent follows that path.
+
 ## 4.60.0 - 2026-10-11 - project-foundation, and the fresh-session gaps closed
 
 - **New skill `project-foundation`** (manual: `/project-foundation`), the step after `/project-setup`.

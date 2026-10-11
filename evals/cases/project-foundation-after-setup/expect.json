@@ -102,7 +102,20 @@
         "what": "The routing block setup wrote is preserved.",
         "path": "AGENTS.md",
         "regex": "(?s)<!-- agent-routing -->.*<!-- /agent-routing -->"
+      },
+      {
+        "id": "verify-recorded",
+        "kind": "process",
+        "what": "Verification was recorded through verify-loop's verify.py, which keeps its state file.",
+        "path": ".verify-state.json",
+        "regex": "\\S"
       }
     ]
+  },
+  "actions": {
+    "must_run_any": [
+      "features\\.py[\\\"']?\\s+check"
+    ],
+    "must_run_why": "checked FEATURES.md against the code with feature-map's features.py, instead of writing the map by hand"
   }
 }
