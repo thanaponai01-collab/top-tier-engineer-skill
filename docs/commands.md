@@ -7,7 +7,7 @@ project and live in the installed plugin; target projects need not copy them.
 
 | Purpose | Command | Source / execution status |
 |---|---|---|
-| Repository tests | python -m unittest discover tests | CLAUDE.md; 452 tests passed on this refresh |
+| Repository tests | python -m unittest discover tests | CLAUDE.md; pass count changes, run it |
 | Skill catalog | python tools/catalog.py --check | tools/catalog.py; run on this refresh |
 | Plugin validation | claude plugin validate . | Claude CLI; passed with root CLAUDE.md loading warning |
 | Foundation inventory | python skills/project-foundation/scripts/foundation.py --repo . inventory | foundation.py; read-only scoped discovery |

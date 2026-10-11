@@ -2,6 +2,21 @@
 
 Extend the existing independent-skills plugin with bounded, searchable project memory.
 
+## What this repo is
+- A Claude Code plugin of independent engineering skills: `skills/<name>/SKILL.md`, each one question
+  to one procedure, with optional stdlib-only helpers in its own `scripts/`. No skill requires another.
+- Where each fact lives (one home per fact; link, do not copy):
+  - skill list and one-line cards: each SKILL.md frontmatter; `tools/catalog.py --write` generates
+    `CATALOG.md` (what a fresh session sees) and the README table.
+  - which skill for which job, flows, the nine-checkpoint Relay: `skills/pick-skill/SKILL.md`.
+  - driven-run state and evidence: `RUN.json` via `skills/drive`; unattended variant: `drive-overnight`.
+  - shared engineering philosophy: `PHILOSOPHY.md` (imported by the user's global CLAUDE.md, not by skills).
+  - project-memory convention: `skills/project-context/references/memory.md`; setup categories:
+    `skills/project-foundation/references/foundation.md`.
+  - proof that a skill changes agent behaviour: `evals/` (`cases/`, `RESULTS.md`); helper tests: `tests/`.
+  - session-start hook and install: `tools/front-door.py`, `hooks/hooks.json`; version: `.claude-plugin/plugin.json`.
+- Rules for changing it are in `CLAUDE.md`; `AGENTS.md` points other agents there.
+
 ## Decisions
 - Existing Markdown and structured receipts own facts; SQLite is a rebuildable local index.
 - The working agent maintains affected context after authorized tasks; no second agent is needed.

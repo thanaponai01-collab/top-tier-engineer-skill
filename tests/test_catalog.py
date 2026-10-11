@@ -40,7 +40,7 @@ class Catalog(unittest.TestCase):
         found = "\n".join(catalog.problems(skills + [ghost]))
         self.assertIn("CATALOG.md: stale", found)
         self.assertIn("plugin.json: stale", found)
-        self.assertIn("table has no row for ghost-skill", found)
+        self.assertIn("README.md: stale", found)
         self.assertIn("never names `ghost-skill`", found)
 
     def test_a_folder_and_name_mismatch_is_caught(self):
