@@ -24,6 +24,11 @@ their evidence files. Link to them, do not copy logs. Record command, result and
 available; otherwise say unverified. Never upgrade a past pass to current proof without running
 the relevant check. RUN.json retains execution authority; summaries must agree with it.
 
+Apply the memory convention's Scaling by area rules to the actual change range: inspect shared
+callers for changed interfaces/dependencies, then reconcile affected area records and placement
+notes. Existing path associations are starting points; report unmapped impact. Preserve unrelated
+area records and use each fact's authoritative home rather than appending another summary.
+
 Update only affected feature/command/design entries. Refresh architecture edges when boundaries,
 entry wiring, storage or integrations change; internal edits need no overview rewrite. Follow
 architecture/commands pointers and inspect impacted context-paths before treating a map as current. Keep current summaries small, split active

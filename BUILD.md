@@ -24,10 +24,21 @@
 - Checks: 452 repository tests passed; updated runner tests (47) and native skill/agent validation passed.
 - Actual tier routing and cost reduction remain unmeasured; evidence: evals/PROJECT_MEMORY.md.
 
+## Context scaling
+- Setup remains instructions-only; foundation, retrieval and upkeep own the five scaling rules.
+- Area records reuse existing homes; shared boundary changes expand discovery to actual callers.
+- Placement conventions and affected-record cleanup keep context navigable as modules grow.
+- Expanded upkeep fixture preserves unrelated invoice work and replaces stale area summaries.
+- Checks: 454 repository tests passed; catalog, affected-context and handoff checks passed.
+- Test receipt: .project-context/scalable-context-tests.log (local ignored evidence).
+- Evidence: evals/results/2026-10-11-0008/ and evals/results/2026-10-11-0009/.
+- Live results: foundation with skill passed, without failed; retrieval/upkeep both arms passed.
+- Repeat upkeep is requested by the case; this run's report claims no edits on repeat, but its
+  action log does not independently demonstrate a separate post-edit re-read.
+
 ## Next
-After Claude usage is available, run setup-only and Drive foundation evaluations,
-then a bounded onboarding prediction check; done when sourced context and preserved requirements
-are demonstrated by actual agent work. Unit/structural passes alone do not establish this.
+Strengthen fresh-reader/repeated-upkeep trials with independent action evidence and larger area
+fixtures; done when bounded loading and unchanged second-pass files are demonstrated across runs.
 
 ## Existing work
 - include: work/plugin-baseline.md (existing evidence claims, including uncommitted work; not proof of this change)

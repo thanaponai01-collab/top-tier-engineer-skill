@@ -11,6 +11,8 @@ Extend the existing independent-skills plugin with bounded, searchable project m
 - RUN.json remains authoritative for driven execution state.
 - Setup prepares agent instructions only; Drive prepares foundation and searchable context; skills remain usable
   without setup, and small edits do not require a database.
+- Context scales through task-conditioned area links, one home per fact, shared-dependency tracing,
+  change-driven upkeep and existing placement conventions; setup remains instructions-only.
 - Architecture is a bounded as-is map refreshed for boundary changes; command notes are source-linked.
 - Onboarding reuses Drive foundation preparation; bounded read-only workers may use a supported economical model.
 

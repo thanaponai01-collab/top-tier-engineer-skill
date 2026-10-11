@@ -1,7 +1,7 @@
 {
   "case": "project-update-preserves-intent",
   "skill": "project-update",
-  "question": "Does upkeep preserve unresolved intent without inventing verification?",
+  "question": "Does area upkeep trace shared impact, preserve unrelated work and avoid invented verification?",
   "pass_score": 1.0,
   "planted": [
     {
@@ -12,6 +12,18 @@
         "not run",
         "no verification"
       ]
+    },
+    {
+      "id": "dependency",
+      "what": "The report identifies shared impact beyond the initial module.",
+      "must_name": [
+        "src/shared/redirect.py",
+        "src/billing/checkout.py"
+      ],
+      "must_say_any": [
+        "traced",
+        "shared impact"
+      ]
     }
   ],
   "traps": [],
@@ -20,7 +32,8 @@
       "BUILD.md",
       "BRIEF.md",
       "AGENTS.md",
-      "work/*",
+      "work/auth.md",
+      "work/redirect.md",
       ".project-context/*",
       ".gitignore"
     ],
@@ -45,6 +58,41 @@
         "what": "The next step is verification.",
         "path": "BUILD.md",
         "regex": "(?is)## Next.*(?:verify|check|test)"
+      },
+      {
+        "id": "shared-impact",
+        "kind": "outcome",
+        "what": "The shared record retains both real callers.",
+        "path": "work/redirect.md",
+        "regex": "(?s)src/auth/login\\.py.*src/billing/checkout\\.py"
+      },
+      {
+        "id": "shared-result",
+        "kind": "outcome",
+        "what": "The stale shared behavior is replaced with return-target behavior.",
+        "path": "work/redirect.md",
+        "regex": "(?i)(retains|preserves|returns|keeps).*\\b(target|return URL|supplied|requested)"
+      },
+      {
+        "id": "auth-result",
+        "kind": "outcome",
+        "what": "The affected auth record describes the completed result.",
+        "path": "work/auth.md",
+        "regex": "(?i)(retains|preserves|keeps).*return URL"
+      },
+      {
+        "id": "area-links",
+        "kind": "outcome",
+        "what": "Root work still points to both areas.",
+        "path": "BUILD.md",
+        "regex": "(?s)work/auth\\.md.*work/billing\\.md"
+      },
+      {
+        "id": "stale-removed",
+        "kind": "outcome",
+        "what": "Superseded shared behavior leaves the current area summary.",
+        "path": "work/redirect.md",
+        "regex": "(?is)\\A(?!.*helper always returns /).*\\Z"
       }
     ],
     "what": "Preserve intent and unfinished expiry; record the completed fix without inventing verification."

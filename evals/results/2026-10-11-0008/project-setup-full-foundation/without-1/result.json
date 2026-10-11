@@ -1,0 +1,75 @@
+{
+  "case": "project-setup-full-foundation",
+  "skill": "drive",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   coverage \u2014 \"**Live payment gateway:** it is outside this local project, as your manual blind-spot note says. Nothing here exercises \"",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Architecture records actual module boundaries with sources.",
+      "ok": false,
+      "detail": "docs/architecture.md is not there",
+      "workdir": true
+    },
+    {
+      "check": "Command index records a usable Python check.",
+      "ok": false,
+      "detail": "docs/commands.md is not there",
+      "workdir": true
+    },
+    {
+      "check": "Startup links architecture, commands and current work.",
+      "ok": false,
+      "detail": "AGENTS.md has nothing matching '(?s)<!-- start-here -->.*architecture:.*commands:.*<!-- /start-here -->'",
+      "workdir": true
+    },
+    {
+      "check": "Startup explains retrieval or upkeep.",
+      "ok": false,
+      "detail": "AGENTS.md has nothing matching '(?i)(project-context|context.py|retriev|index)'",
+      "workdir": true
+    },
+    {
+      "check": "Current work has a concrete Next.",
+      "ok": false,
+      "detail": "BUILD.md is not there",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1234841,
+  "turns": 6,
+  "seconds": 26.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

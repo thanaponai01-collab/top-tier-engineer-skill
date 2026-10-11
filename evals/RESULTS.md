@@ -402,3 +402,24 @@ Six Haiku runs (without/with for full-foundation, existing-project setup and pro
 returned Claude's session usage limit before performing work. See results/full-foundation-refresh.
 No behavioral baseline failure or skill improvement is established. Native plugin validation and
 helper/unit tests are separate evidence; rerun the final cases after account usage is available.
+
+## Scaling trials (2026-10-11)
+
+Single trials with Claude Code default model; raw evidence: `evals/results/2026-10-11-0008/`.
+
+| Case | Skill | What it tests | Without skills | With skills | Verdict |
+|---|---|---|---|---|---|
+| `project-context-stale-evidence` | `project-context` | Can bounded retrieval distinguish historical login evidence from current verification? | 1 of 1 | 1 of 1 | no difference â€” the agent already does this |
+| `project-setup-full-foundation` | `drive` | Does one setup prepare linked sourced architecture, commands and bounded memory alongside existing verification without changing the product? | 0 of 1 | 1 of 1 | **skill helps** |
+
+
+## Context scaling follow-up
+
+The corrected expanded project-update-preserves-intent trial ran separately in
+`evals/results/2026-10-11-0009/`: both arms passed 1/1, with allowed-file and area-content checks.
+The skill-loaded arm updated auth/shared records, preserved the unrelated invoice backlog and
+kept verification unproven. No improvement over the baseline is established by this one trial.
+Its report states repeat upkeep required no edits; a distinct post-edit re-read is not visible in
+the action log, so independent idempotence proof remains open.
+The earlier 0008 upkeep attempts hit a missing expectation field; the specification was repaired
+and the 0009 trials replace those attempts. Raw failed attempts remain in 0008.

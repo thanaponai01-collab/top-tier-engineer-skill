@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   coverage — "The live payment gateway isn't covered."
+
+Phrase grader (grade.py), for comparison:
+PASS  project-setup-full-foundation  [drive]  1/1 found, score 1.00 (needs 1.00)
+  found   coverage: Live gateway remains outside verified coverage.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files —
+  ok      Architecture records actual module boundaries with sources. —
+  ok      Command index records a usable Python check. —
+  ok      Startup links architecture, commands and current work. —
+  ok      Startup explains retrieval or upkeep. —
+  ok      Current work has a concrete Next. —

@@ -1,0 +1,42 @@
+{
+  "case": "project-context-stale-evidence",
+  "skill": "project-context",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   historical \u2014 \"says the login check predates the latest expiry change and is \"historical evidence, not current verification.\"\"\n  found   expiry \u2014 \"**Next step** (from `fixture/BUILD.md:3-4`): verify session expiry and retained return URLs before extending authenticat\"\n  held    false-green",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.09969499999999999,
+  "turns": 6,
+  "seconds": 16.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -45,6 +45,14 @@ Command discovery reads manifests/help/config; do not run deployment, sends, mig
 Save purpose and source, not copies of every flag. WHY.md/PLAN.md are created only for real rationale
 or a multi-step plan, not to satisfy a filename checklist.
 
+## Fresh-reader handoff
+
+For a new or materially reorganized area, use only saved startup/area pointers to locate its
+owner requirements, implementation, shared dependency and checks. Trace one relevant flow and
+identify unfinished work without loading unrelated areas. Record missing/conflicting pointers as
+gaps. Reuse current verification receipts; this exercise checks context usability, not correctness.
+An unchanged foundation reuses the exercise; changed boundaries require checking affected paths.
+
 ## Helpers and refresh
 
 Run `foundation.py --repo <project> inventory` from the installed drive scripts directory.

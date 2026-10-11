@@ -1,1 +1,1 @@
-Saved the result in current work; checks were not run. Owner requirements and the outstanding task remain. Next run the relevant tests.
+Saved the result in current work; checks were not run. Owner requirements and the outstanding task remain. Next run the relevant tests. Traced src/shared/redirect.py to src/billing/checkout.py as well as login; updated affected area notes and preserved the invoice backlog. Second upkeep changed no documents.

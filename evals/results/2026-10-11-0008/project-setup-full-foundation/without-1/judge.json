@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "coverage",
+      "what": "Live gateway remains outside verified coverage.",
+      "found": true,
+      "quote": "**Live payment gateway:** it is outside this local project, as your manual blind-spot note says. Nothing here exercises it.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.08312069999999999,
+  "model": "claude-sonnet-5-5"
+}

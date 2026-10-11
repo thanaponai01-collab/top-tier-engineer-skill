@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   coverage — "**Live payment gateway:** it is outside this local project, as your manual blind-spot note says. Nothing here exercises "
+
+Phrase grader (grade.py), for comparison:
+PASS  project-setup-full-foundation  [drive]  1/1 found, score 1.00 (needs 1.00)
+  found   coverage: Live gateway remains outside verified coverage.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files —
+  FAILED  Architecture records actual module boundaries with sources. — docs/architecture.md is not there
+  FAILED  Command index records a usable Python check. — docs/commands.md is not there
+  FAILED  Startup links architecture, commands and current work. — AGENTS.md has nothing matching '(?s)<!-- start-here -->.*architecture:.*commands:.*<!-- /start-here -->'
+  FAILED  Startup explains retrieval or upkeep. — AGENTS.md has nothing matching '(?i)(project-context|context.py|retriev|index)'
+  FAILED  Current work has a concrete Next. — BUILD.md is not there
