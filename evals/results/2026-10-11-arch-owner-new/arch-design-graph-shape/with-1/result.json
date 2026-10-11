@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"The import graph has a cycle:\"\n  found   pricing-does-network-io \u2014 \"`pricing/quote.py:10-15` fetches a margin from `https://rates.example.internal` every time it prices a line\"\n  found   pass-through-order-service \u2014 \"It's 5 lines that only call `orders.place.place_order` with the same arguments.\"\n  found   move-has-a-proof-line \u2014 \"**Proof:** run the probe I used (block sockets, place a 3-line order with `FakeGateway`).\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.34962119999999997,
+  "turns": 6,
+  "seconds": 77.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

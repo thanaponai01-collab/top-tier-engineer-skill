@@ -1,108 +1,110 @@
 ---
 name: arch-design
 description: >-
-  Improve or design a backend's structure: boundaries, patterns, stack, patch or rewrite. Use for "how should this be structured?", "is my backend bloated?"
+  Improve or design a codebase's architecture, shown as before/after pictures. Use for "could the architecture be better?", "how should this be structured?"
 metadata:
   stage: design
-  card: "how should this be structured? which stack?"
+  card: "could the architecture be better? how should it be structured?"
 ---
 
 # Architecture & Design
 
-Take a backend from where it is to a simpler, better-organized place, or design a new one that
-starts there. Prefer the smallest structure that does the job. Design for a maintainer you'll never meet, often an AI: the structure must be navigable from the files alone.
+Take a codebase to a simpler, better-shaped place: the smallest structure that does the job,
+navigable from the files alone by a maintainer you'll never meet, often an AI. The reader may not
+read code; owners often only feel symptoms (checkout is slow, a small change takes a week). Show
+what hurts, which chain of calls causes it, and what better looks like, in pictures and plain
+words; engineers get the same story plus `file:line`.
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
-end · **suspected** = neither.*
-Here, a source opened this session also counts as *traced*. Only *proven* and *traced* can carry a
-one-way door.
+*Evidence: **proven** = you ran it · **traced** = you read the whole chain (a source opened this
+session counts) · **suspected** = neither.* Only proven and traced can carry a one-way door.
 
-## 1. Pick the outcome
+Five steps: **map, scope, candidates, deep dive, record**. A review stops after step 3 and asks; it
+changes no code or docs, not even the map. Designing new, or replacing a part: `references/design-new.md`.
 
-Say which one you chose and why; the user can override it.
-- **Improve**: the structure is basically sound and the problems are local. Make targeted moves.
-- **Replace a part**: one area's foundation is wrong (its data model, or a core everything bends
-  around) and patching would cost more than rebuilding it. Put a stable interface in front, move
-  callers over one at a time, delete the old path when none remain. Ask the user first; never   propose replacing the whole system unless asked.
-- **Design new**: no code yet, or a new system or module. Get the requirements, or state what you
-  assume; a structural choice with no requirement behind it is *speculative*.
+## 1. Map
 
-## 2. Look
+Start from the project's map: `docs/architecture.md` (or the `architecture:` pointer in CLAUDE.md)
+and recorded decisions (`docs/adr/`, `WHY.md`); a move that reopens a decision says why its reason
+no longer holds. No map: sketch one from the entry points as you read, suggest `/project-foundation`
+for next time, and go on. A map is a claim: check every edge you rely on against the code. A map
+that says what the code does not do goes **first** in the report, with the line in each, because
+every reader, human or AI, will believe a problem is solved that isn't.
 
-Read recorded decisions first (`docs/adr/`, `docs/architecture.md`, `WHY.md`): a move that reopens
-one says why its reason no longer holds. Then read from the entry points inward and trace the main
-flows; only the parts the question reaches. Name the three changes most likely to come next and
-where each came from (recent `git log`, the tracker, the user, the requirements): that is your
-yardstick, and it breaks ties when ranking. Repo too big to read, or a question about history: see `references/instruments.md`.
+## 2. Scope
 
-## 3. Judge
+Look where it hurts. Take the area or symptom the user named; otherwise the hotspots (recent
+`git log`, files that change together, the tracker). Name the three changes most likely next and
+where each came from: that is your yardstick for ranking. Follow the user-visible flows into the
+scope from their entry points. Repo too big to read, or a history question: `references/instruments.md`.
 
-Check what you read against these techniques. Each is a lead until it passes the two tests below.
+## 3. Candidates
+
+Each of these is a lead until it passes the two tests below.
+- **Chains and bottlenecks.** Follow one user action end to end. Something slow, fallible or not
+  yours (network, email, an outside API) inside the user's wait is a lead; after a step you can't
+  undo (a charge), its failure shows as an error after the damage. Count ripples: one change, N edits.
 - **One owner per job.** Two API clients, three date helpers, config read five ways: count the copies.
 - **Dependencies point one way**, toward the stable side. A cycle means its modules change together.
-- **Logic apart from I/O.** Decision code that calls the network, database or clock itself can't run
-  or be tested without them; inject the dependency at that edge. A port is earned only by what
-  crosses a network or isn't yours; a dependency with a local stand-in (SQLite, a temp dir) gets none.
-- **Small interface, a lot behind it.** A layer that only forwards calls, or a module whose
-  interface is as large as its body, is a lead.
-- **Clear boundaries.** Each module has one sentence of responsibility: what it owns, what it must
-  never know.
-- **Data model first.** A wrong schema or contract costs more than any code around it.
+- **Logic apart from I/O.** Decision code that calls the network, database or clock can't run or be
+  tested without them; inject at that edge. A port is earned only by what crosses a network or isn't
+  yours; a dependency with a local stand-in (SQLite, a temp dir) gets none.
+- **Small interface, a lot behind it.** Leads: a layer that only forwards, one concept chased
+  across many tiny modules. **Clear boundaries**: one sentence per module, what it owns and must
+  never know. **Data model first**: a wrong schema costs more than any code around it.
 - **No structure nobody needs.** An interface with one implementer, a plugin system with one plugin,
   options nobody sets. One implementer is a guess, two is a fact (a test fake counts).
 - **Hidden coupling.** Files in different modules that always change together with no import
-  between them share an assumption nobody named; give it one owner.
-- **Consistent errors, config and logging**, and seams you can test across.
+  between them share an unnamed assumption; give it one owner.
 
-Two tests turn a lead into a finding:
-- **Deletion test.** Undo it in your head: merge the duplicates, inline the layer, drop the
-  interface. If the complexity collapses, it's a finding; if it just moves, it isn't.
-- **Same-reason test**, before any merge. Ask what would make each of the two change. The same
-  answer means one owner; different answers mean they only look alike. A display date and a tax
-  date can be byte-identical today.
+**Deletion test**: undo it in your head (merge, inline, drop the interface). If the complexity
+collapses, it's a finding; if it just moves, it isn't. **Same-reason test**, before any merge: ask
+what would make each change. Different answers mean they only look alike; a display date and a tax
+date can be byte-identical today.
 
 Don't flag what only looks bad: a module imported by many that imports nothing is a stable
-foundation. Put a number or a `file:line` next to every finding. Before proposing to delete, merge
-or inline something, find out why it exists (`git log -S` on the symbol, or `code-history` if
-available); a recorded reason is a force, and no proof it's dead means propose no deletion. Proving
-code dead is `latent-audit`'s job; without it available, call it suspected.
+foundation; a queue one flow skips may be one another flow needs. Before proposing to delete, merge
+or inline, find why it exists (`git log -S`, or `code-history`) and every user, counting aliases
+and string lookups. No proof it's dead, no deletion; proving it is `latent-audit`'s job, and
+without it available, call it suspected.
 
-## 4. Shape
+**Reuse before you add.** When the better shape needs something (a table, a store, a queue, a
+dependency), find who already owns that job, with `file:line`, and reuse it unless a requirement
+rules it out. Name the second one you are *not* adding and what it would cost if wrong (a migration,
+another thing to secure, back up and run). One format asked for is one function, not a plugin seam.
 
-**Reuse before you add.** When the work needs something new (a table, a store, a module, a
-dependency), find who already owns that job, with `file:line`. Reuse it unless a requirement rules
-it out. Name the second one you are *not* adding and what it would cost if wrong (a migration,
-another thing to secure, back up and run), even when nobody proposed it: that cost is the reason. Build for the cases asked for: one format is one function, not a plugin seam.
+**Present**, answer first: the verdict (*clean / messy in places / tangled*) in one plain sentence
+tied to the symptoms. Then 3–5 candidates, best first by cost counted × chance the change comes ÷
+effort, each as a card (`references/visual-report.md`): the problem as the user feels it, the
+chain behind it with `file:line` and a number, **before and after diagrams** (Mermaid, plain labels,
+bottleneck marked), what gets cheaper or safer (counted), and a strength: *Strong*, *Worth
+exploring* or *Speculative*. A move that makes nothing cheaper is tidying: drop it. Write the top
+candidate out as a move: landing steps that each keep behavior unchanged, the **proof** (a command
+showing it still works), and its door. Host can show a page: also build the HTML report, outside
+the repo. A whole-codebase picture: `arch-map` if available, else draw Mermaid yourself.
+Then **stop and ask which candidate to explore.** Change nothing yet.
 
-For every structural choice, give **two real options**, one being the simplest thing that meets
-every requirement (often the existing owner), and the forces that push each way. Then the **door**:
-a library or folder layout is two-way, decide it in a line. A stored data shape, public API,
-datastore or auth model is one-way: check its facts this session, and give the user the options and
-the cost of being wrong before it becomes a move. Write dependencies you'd use under ~10% of, or
-could write in ~100 lines, yourself; inline a seam with one caller and under ~100 lines.
+## 4. Deep dive
 
-Design new: first pin the numbers that decide shape (load, data size, latency, consistency, who runs
-it); a missing one is assumed and labelled, never designed for "scale" in general. Give module
-boundaries and contracts, not technologies: each module's one-sentence responsibility, its data and
-error shapes, who may call whom. Then a pre-mortem ("a year on this
-failed: the three likeliest reasons") with a design change or accepted risk for each.
+Work the chosen candidate through with the user, one question at a time: constraints, the new
+interface, what sits behind it, which tests survive. Ask the owner only what they can answer ("is
+it fine if the receipt arrives a minute later?"); decide technical questions yourself and say so.
 
-## 5. Recommend
+Give **two real options**, one the simplest thing that meets every requirement (often the existing
+owner), with the forces each way. Then the **door**: a library or folder layout is two-way, decide
+it in a line. A stored data shape, public API, datastore or auth model is one-way: check its facts
+this session and give the user the options and the cost of being wrong first. Write dependencies
+you'd use under ~10% of, or could write in ~100 lines, yourself; inline a seam with one caller and
+under ~100 lines. Tests move to the new interface; the old parts' tests go. Re-count every number
+before handing over. To build it, hand off to `build-discipline` or `evolve-maintain`.
 
-Answer first: the verdict (*clean / messy in places / tangled*) and the one move that pays most.
-Then a ranked list, best first. Each move states:
-- **what's wrong** (`file:line`, counted) and the **better shape**, tagged improve or replace
-- **steps** in landing order, each landing alone with behavior unchanged
-- **proof**: the command that shows it still works, and what should get cheaper ("add a report
-  field: 6 files → 2"). Tests move to the new interface; the old parts' tests go, not both.
+## 5. Record
 
-Rank by cost counted × chance the change comes ÷ effort. A move that makes nothing cheaper is
-tidying: drop it or say so. Re-count every number before handing over. If every finding is
-speculative, the verdict is *clean*; say so. A file only if asked (format in the reference file);
-for a picture, hand the moves to `arch-map`, or draw Mermaid if it isn't available. When the user
-settles a one-way door, or rejects a move for a reason that will last, offer a short ADR
-(`docs/adr/NNNN-<slug>.md`: context, decision, options rejected, consequences) so the next review
-doesn't re-propose it.
+After the user decides or a move lands, update `docs/architecture.md` to match the code, in its own
+format (small, as-is, every edge sourced); a stale map gets fixed here, with the user's OK. When the
+user settles a one-way door, or rejects a move for a lasting reason, offer a short ADR
+(`docs/adr/NNNN-<slug>.md`: context, decision, options rejected, consequences) so no later review
+re-proposes it. A `docs/arch-design.md` handoff file only if asked (`references/instruments.md`).
 
-*Test:* every finding has a number or `file:line`, each recommendation has a second option, a door
-and a proof, and a stranger could start the first move from your answer alone.
+*Test:* someone who can't read code can say what hurts, why, and what better looks like from your
+pictures; every finding has a number or `file:line`; the top move has a second option, a door and a
+proof; and you stopped to ask before changing anything.

@@ -48,7 +48,7 @@ the rest of this repo being loaded.
 | `agent-release` | "Ship the agent": kill switch, caps, pinned model, logged runs, staged rollout, production failures back into evals |
 | `agent-drift` | "Is the live agent still what we shipped?": scheduled sampling against the frozen baseline, a noise band so a normal bad day isn't a false alarm, and every real drop filed as a new eval task |
 | `problem-framing` | "I want an app that…": turns a vague idea into testable requirements |
-| `arch-design` | "How should this be structured / which stack?" |
+| `arch-design` | "Could the architecture be better? How should it be structured?" (before/after pictures, plain words) |
 | `plan-work` | "Plan this / break it down / what can run in parallel?": ordered slices, each with a check and expected result worked out beforehand, the ones that are safe to run at the same time marked after opening the shared code, and a full-suite check after every merge |
 | `arch-map` | "Show me the architecture / draw what this change does / where are the problems?" |
 | `issue-handoff` | "File these as issues": a work doc, or the chat, into tracked issues, nothing dropped |

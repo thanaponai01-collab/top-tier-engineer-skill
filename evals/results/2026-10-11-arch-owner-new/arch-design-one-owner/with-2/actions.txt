@@ -1,0 +1,5 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd fixture && find . -type f | grep -v node_modules | head -100 && wc -l $(find . -type f -name '*.*' | grep -v node_modules) | tail -50
+  3. Bash: cd fixture && for f in $(find . -type f); do echo "=== $f"; cat -n $f; done; ls -la; ls -la ..
+  4. Bash: cd fixture && python -I -c " import sys; sys.path.insert(0,'.') import datetime as dt from api.serializers import order_json; from web.views import order_page;…
+  5. Bash: cd fixture && find . -name __pycache__ -type d -exec rm -rf {} + ; find . -type f

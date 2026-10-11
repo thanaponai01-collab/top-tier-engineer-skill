@@ -1,3 +1,20 @@
+# arch-design for an owner who can't read code (4.61.0)
+
+2026-10-11: SKILL.md becomes map, scope, candidates, deep dive, record, with before/after pictures
+and a stop to ask. New case `arch-design-stale-map-owner-view`. Isolated, semantic judge.
+
+| case | before | after (final SKILL.md) |
+|---|---|---|
+| arch-design-stale-map-owner-view | old skill 0/2, no skill 0/2 | 7/7 after the opener fix (one earlier run left Windows cache files in the repo; judge 5/5 on its report) |
+| arch-design-graph-shape | 1/1 (4.53) | 2/2 |
+| arch-design-one-owner | 3/4 (4.53) | 2/2 |
+| arch-design-verify-caller-count | 1/1 (4.53) | 2/2 |
+| arch-design-no-new-store | 1/4 (4.53) | 1/2, still misses naming the cost of a second store |
+
+Baseline misses: no before/after picture (3 of 4) and no question back to the owner (3 of 4); all
+four found the email chain. Plain-arm transcripts checked: neither read the plugin. Evidence:
+`evals/results/2026-10-11-arch-owner-{baseline,new,final}/`.
+
 # Every skill has a case; evals isolated from the person's install (unreleased)
 
 2026-10-11: 17 new cases cover the last uncovered skills (`uncovered.txt` is empty). Every reference

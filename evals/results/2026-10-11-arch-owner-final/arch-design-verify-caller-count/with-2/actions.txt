@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd fixture && find . -type f | head -100 && cat CLAUDE.md docs/architecture.md 2>/dev/null; ls docs docs/adr 2>/dev/null
+  3. Bash: cd fixture && for f in $(find . -type f); do echo "=== $f"; cat -n $f; done
+  4. Bash: cd fixture && grep -rn "ShippingCalculator\|shipping.base\|base\b\|isinstance\|issubclass\|__subclasses__\|getattr\|import_module" . ; echo ---; T=$(mktemp -d)…

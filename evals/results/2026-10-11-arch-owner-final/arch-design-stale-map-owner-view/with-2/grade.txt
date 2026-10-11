@@ -1,0 +1,22 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   map-is-stale — "### First: your architecture document is wrong"
+  found   charge-then-email-chain — "And if the email server is down, the customer sees an error page **after their card has already been charged**."
+  found   reuse-existing-queue — "Refund emails already go through this to-do list, so you'd be reusing something you already run."
+  found   before-after-picture — "There's a visual version with the same diagrams side by side at `C:\Users\thana\AppData\Local\Temp\architecture-review-s"
+  found   owner-decides-next — "**Which one would you like to explore further?**"
+  held    queue-is-not-dead
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-stale-map-owner-view  [arch-design]  2/5 found, score 0.40 (needs 1.00)
+  MISSED  map-is-stale: docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date
+            never named: architecture.md
+  found   charge-then-email-chain: checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain
+  MISSED  reuse-existing-queue: the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure
+            named it, but never said what was wrong with it
+  MISSED  before-after-picture: the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose
+            named it, but never said what was wrong with it
+  found   owner-decides-next: the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done
+  held    queue-is-not-dead: the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong
+
+  FAILED  left the code untouched (a report-only task) — changed: %SystemDrive%/ProgramData/Microsoft/Windows/Caches/cversions.2.db, %SystemDrive%/ProgramData/Microsoft/Windows/Caches/{6AF0698E-D558-4F6E-9B3C-3716689AF493}.2.ver0x0000000000000001.db, %SystemDrive%/ProgramData/Microsoft/Windows/Caches/{DDF571F2-BE98-426D-8288-1A9A39C3FDA2}.2.ver0x0000000000000001.db

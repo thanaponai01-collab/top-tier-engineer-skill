@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"`ShippingCalculator` (`shipping/base.py:8`) is a seam with one implementer that nothing reads.\"\n  found   second-caller-hides-behind-an-alias \u2014 \"The nightly job calls it at `jobs/reprice.py:2,6` under an alias, `pick_calc`, so searching for `get_calculator(` only f\"\n  held    undercounts-to-one-caller",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.20967400000000003,
+  "turns": 6,
+  "seconds": 29.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

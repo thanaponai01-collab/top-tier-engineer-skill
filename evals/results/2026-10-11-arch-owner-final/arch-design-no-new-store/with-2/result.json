@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-no-new-store",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   existing-db-is-the-one-owner \u2014 \"`db.py` is the only module that touches SQL. It's a solid foundation and the new work should reuse it rather than add an\"\n  found   no-plugin-for-one-format \u2014 \"Don't build a format registry or plugin seam. One format was requested, so one function is enough.\"\n  found   cost-of-a-new-store-named \u2014 \"SQLite already handles storage here, and a second store would be one more thing to migrate, back up and secure.\"\n  held    new-datastore-for-history",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.22289319999999999,
+  "turns": 5,
+  "seconds": 45.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

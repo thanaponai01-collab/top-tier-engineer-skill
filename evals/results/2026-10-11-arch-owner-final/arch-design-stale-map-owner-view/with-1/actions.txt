@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd fixture && find . -type f | grep -v node_modules | head -100 && echo && wc -l $(find . -type f -not -path '*/node_modules/*' | head -100)
+  3. Bash: cd fixture && for f in README.md docs/architecture.md shop/*.py shop/jobs/*.py; do echo "=== $f"; cat -n "$f"; done
+  4. Bash: mkdir -p /tmp/archproof && cat > /tmp/archproof/prove.py <<'EOF' import sys, smtplib sys.path.insert(0, sys.argv[1]) from shop import checkout, inventory, db, …

@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-stale-map-owner-view",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  4/5 found\n  found   map-is-stale \u2014 \"The problem is that the code doesn't follow its own plan\"\n  found   charge-then-email-chain \u2014 \"Step 4 is where both of your problems come from.\"\n  found   reuse-existing-queue \u2014 \"Refunds already work this way.\"\n  found   before-after-picture \u2014 \"The checkout code skips the outbox. The cashier sends the receipt email personally, while the customer waits:\"\n  MISSED  owner-decides-next\n  held    queue-is-not-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 4,
+  "total": 5,
+  "missed": [
+    "the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.14205679999999998,
+  "turns": 3,
+  "seconds": 26.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"**The cause:** `orders/status.py:1,9` imports `shipping.tracking` to build a label.\"\n  found   pricing-does-network-io \u2014 \"`pricing/quote.py:19` calls `_fetch_margin()` for every line.\"\n  found   pass-through-order-service \u2014 \"`services/order_service.py:4-5` passes its arguments straight through to `orders.place.place_order` and does nothing els\"\n  found   move-has-a-proof-line \u2014 \"a 3-line order placed with `FakeGateway` and `margin=1.0` with the network disabled should finish in under 0.1 s (it too\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.36011940000000003,
+  "turns": 8,
+  "seconds": 87.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

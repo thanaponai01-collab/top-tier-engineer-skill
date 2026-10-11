@@ -8,7 +8,7 @@ is manual-only: suggest it to the user, who types it.
 
 - **Orient:** `arch-map` draw the architecture or what a change does; `code-history` why is it built this way, who decided?; `explain` walk me through how this works; `feature-map` what can this app do, how do I reach X?; `/top-tier-engineer:onboard-system` first time in this codebase, build the whole picture; `project-context` ask the project's memory; `/top-tier-engineer:project-foundation` create, trace and check the project's context files, then list them; `/top-tier-engineer:project-setup` prepare agent instructions and routing; `/top-tier-engineer:recall` where were we? resume work
 - **Frame:** `problem-framing` vague idea to testable requirements
-- **Design:** `agent-design` design an agent's tools before any code; `arch-design` how should this be structured? which stack?; `threat-model` can this be abused?
+- **Design:** `agent-design` design an agent's tools before any code; `arch-design` could the architecture be better? how should it be structured?; `threat-model` can this be abused?
 - **Plan:** `issue-handoff` turn a plan into tracked issues; `plan-work` split work into ordered, checked slices
 - **Build:** `agent-evals` evals and a grader before building an agent; `build-discipline` build a multi-file feature in proven slices; `evolve-maintain` upgrade, refactor or deprecate on a live system; `project-update` keep project memory current after work
 - **Prove:** `agent-prove` does the agent work, over repeated runs?; `correctness-gate` does it actually work, before merge or release?; `verify-loop` check your own work until it really passes; `wire-check` built, but nothing happens
