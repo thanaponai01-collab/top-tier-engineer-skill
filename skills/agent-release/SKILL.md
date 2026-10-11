@@ -13,7 +13,8 @@ metadata:
 can shift without anyone changing the code. Run this alongside `safe-release`, after `agent-prove`
 has met its bar.
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain · **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
 ## Before it goes live
 
@@ -66,7 +67,3 @@ its test.
 The release itself and any stored-data change: `safe-release`. The ongoing drift check once it's
 live: `agent-drift`. A failure to trace: `debug-protocol`. Without those loaded, do the step plainly
 and say the skill was missing.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

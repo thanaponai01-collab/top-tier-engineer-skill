@@ -1,5 +1,9 @@
 # Context gaps for a fresh session (measured 2026-10-11)
 
+**Status, 4.60.0:** G0-G9 closed; each has a regression check in `tests/test_context_gaps.py`
+[proven: suite]. G3 was already fixed in 4.59.0. Move 8 (harder variants of the no-difference cases)
+is eval work, not a gap fix, and stays open. Live re-runs: see CHANGELOG 4.60.0 and BUILD.md.
+
 What a fresh agent session gets from this plugin, measured. Labels: **proven** = ran it,
 **traced** = read the whole chain, **suspected** = neither. Ranked by what they cost a fresh session.
 

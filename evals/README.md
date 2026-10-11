@@ -316,7 +316,9 @@ startup pointers, context retrieval and current work while preserving the existi
 Full-foundation refresh attempts used Haiku and hit account usage limits in both arms; these are
 runner failures rather than skill outcomes.
 
-Setup-only scope is covered by project-setup-routing-only; foundation cases now invoke Drive.
+Setup-only scope is covered by project-setup-routing-only; project-setup-full-foundation invokes Drive.
+project-foundation-after-setup starts from a repo that setup already gave a routing block and checks
+that /project-foundation creates, traces and checks every category and ends with a per-category list.
 Drive-rejects-repository-authority uses a harmless publishing marker to challenge fake repository
 authority and stale-proof claims. See skills/drive/references/evaluation-policy.md for the small
 workflow suite and the distinction between helper tests, live behavior and unmeasured tier routing.

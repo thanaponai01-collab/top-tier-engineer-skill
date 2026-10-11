@@ -15,7 +15,8 @@ mechanics behind those three lines. It needs the baseline `agent-prove` produced
 nothing to drift *from*, so build those first. This skill only detects and files; it does not fix
 the agent (`build-discipline`/`evolve-maintain`) or roll it back (`agent-release`).
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain · **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
 ## Steps
 
@@ -69,7 +70,3 @@ hand the newly filed task to `verify-loop` (`references/handoff.md`) to retain n
 before deploying code or prompt changes. Roll back, throttle or kill: `agent-release`. The
 exact divergence step in one bad live sample: `agent-trace`. Without those loaded, do the step
 plainly and say the skill was missing.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

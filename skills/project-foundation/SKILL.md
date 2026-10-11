@@ -1,22 +1,36 @@
-# Prepare project foundation
+---
+name: project-foundation
+description: >-
+  Create, trace and check every context file a project needs (brief, current work, features, verification, architecture, commands, memory index), then list each one's state. The step after /project-setup; Drive and onboard-system reuse it. Manual: run /project-foundation.
+disable-model-invocation: true
+metadata:
+  stage: orient
+  card: "create, trace and check the project's context files, then list them"
+---
 
+# Project Foundation
 
-Prepare the complete working foundation in one command, with bounded discovery and explicit gaps.
-Use [the foundation contract](foundation.md) for owned documents and equivalents, and
-[the economy policy](economy.md) when independent discovery can use cheaper workers.
-Let verify-loop judge behavioral verification. No other skill requires setup.
+`project-setup` writes only the agent instructions. This skill does the rest, once: it creates or
+refreshes every context file the other skills read, traces each against the real code, runs the
+checks it can, and ends with a list of every category and its state. Bounded discovery, explicit
+gaps. Use [the foundation contract](references/foundation.md) for owned documents and equivalents,
+and [the economy policy](references/economy.md) when independent discovery can use cheaper workers.
+Let verify-loop judge behavioral verification. No other skill requires this one.
 
-*Evidence labels: **proven** = you ran it; **traced** = followed through code; **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
-## Inventory and pre-work
+Helper: `python <this skill's base directory>/scripts/foundation.py --repo <project> inventory|check|remember|list`.
 
-Run the installed scripts/foundation.py --repo <project> inventory before reading broad code.
+## 1. Inventory and pre-work
+
+Run `foundation.py --repo <project> inventory` before reading broad code.
 Select the Git root/package, existing pointers and relevant source paths. No prior snapshot means
 freshness unknown; existing filenames alone do not prove current context. Load only references for
 missing/stale categories. Inventory once, use at most two bounded discovery workers when useful,
 and reconcile their cited evidence before writing shared files once. Single-agent fallback is valid.
 
-## Discover
+## 2. Discover
 
 Read project instructions, specifications, manifests, lockfiles, runtime configuration, test
 commands and existing CI. Identify the Git root and selected package working directory. For a
@@ -33,9 +47,9 @@ Choose one requirement-backed behavior and adjacent regression checks. Establish
 specifications or user acceptance criteria, not current code. Ask for a missing requirement while
 continuing discovery; leave that behavior unverified. An empty repo supports a plan, not proof.
 
-## Prepare every relevant category
+## 3. Prepare every relevant category
 
-Prepare project context using [the context handoff](context-handoff.md): preserve
+Prepare project context using [the context handoff](references/context-handoff.md): preserve
 existing intent/work documents, or save a brief and current next step when absent. Capture intent
 from the owner or documented requirements, marking unknowns explicitly. This also applies to an
 empty repo: context can be ready while product verification remains unverified.
@@ -68,9 +82,9 @@ Complete the selected area's purpose, boundaries, constraints and requirement/ch
 existing documents; record unmapped dependencies as gaps. Keep startup size independent of module
 count by linking area indexes. Record placement conventions where contributors already look.
 
-## Validate without repeated checkpoints
+## 4. Validate without repeated checkpoints
 
-For new/stale recipes or evidence, read [verification](verification.md), resolve the
+For new/stale recipes or evidence, read [verification](references/verification.md), resolve the
 installed verify-loop helper, and complete requirement-backed rejection/baseline/strict proof.
 For unchanged inputs, reuse only receipts the verifier establishes as current; setup snapshots
 alone do not certify anything. Run selected checks once, not once per document or worker.
@@ -79,7 +93,7 @@ After validation re-read selected setup inputs and compare hashes; update only a
 Keep source behavior unchanged unless repair was also requested. A defect blocks readiness, not
 useful context preparation. Never weaken checks or infer requirements to obtain a pass.
 
-## Make it discoverable
+## 5. Make it discoverable
 
 Use the existing agent instruction file (AGENTS.md, CLAUDE.md or equivalent): it is the one file
 every session loads without being asked. Add or refresh one start-here block between
@@ -95,7 +109,7 @@ Preserve other instructions and never write a
 second block. If no instruction file exists, create one appropriate to the requested agent, not
 several. Do not impose a required plugin workflow.
 
-## Searchable project memory
+## 6. Searchable project memory
 
 Prepare bounded file-backed memory by default. Read project-context's memory reference and helper
 --help when the helper is available. Without it, preserve file links and disclose index unavailable;
@@ -107,12 +121,12 @@ initial setup; on refresh index only changed context files (rebuild if the cache
 Run structural check. Later upkeep uses index --files for changed context only.
 Do not make the index a prerequisite for setup or claim it validates product behavior.
 
-## Optional CI
+## 7. Optional CI
 
-For requested CI setup, read [CI setup](ci-setup.md). Local readiness and hosted readiness
+For requested CI setup, read [CI setup](references/ci-setup.md). Local readiness and hosted readiness
 are separate verdicts. Ordinary setup does not authorize commits, pushes or releases.
 
-## Report
+## 8. Check, then list
 
 Run foundation.py check, then remember --sources with the selected input paths after completing
 discovery/validation; the snapshot is a refresh aid, not verification evidence. If blocked, keep a
@@ -120,7 +134,13 @@ useful partial foundation and report gaps instead of recording readiness. Run re
 `context_budget.py <repo> --check-handoff` as described in the context handoff.
 Report context completeness separately from verification readiness; unknown intent stays partial.
 
-List created/refreshed/kept files, runtime/package/working directory, commands actually executed,
+Then run `foundation.py --repo <project> list` and end the report with its table, one row per
+category (startup, intent, work, features, verify, architecture, commands, memory), adding two
+columns yourself: what you did (created / refreshed / kept) and the evidence (*proven*: the command
+you ran; *traced*: the entry point you followed; *suspected*; or a named gap). A missing or empty
+row is a gap to name, never a row to drop.
+
+Also list runtime/package/working directory, commands actually executed,
 selected claim, rejection signal and current verdict. Name missing prerequisites, untested behavior,
 manual/check edits and the next actionable step. Local verified requires current strict green;
 otherwise report draft, blocked or failed with evidence. Never claim every feature or stack covered.

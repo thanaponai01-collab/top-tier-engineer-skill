@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "coverage",
+      "what": "Live gateway remains outside verified coverage.",
+      "found": true,
+      "quote": "the live gateway is out of scope, as the MANUAL note says, and isn't covered by any check.",
+      "quote_checked": true
+    },
+    {
+      "id": "category-list",
+      "what": "The report lists every category with its state.",
+      "found": true,
+      "quote": "| memory | .project-context/index.sqlite | present | created (6 documents indexed) |",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0485192,
+  "model": "claude-sonnet-5-5"
+}

@@ -42,7 +42,7 @@ nothing: split it yourself, and say how you split it.
 A chat source has one advantage a document doesn't — the person who wrote it is still here. Before
 creating, put the split and the titles in front of them in one line each and wait. That costs a
 message now; a wrong public issue costs an awkward close later. No one to answer (an unattended
-run): write the bodies to a file, file nothing, and say the split is unconfirmed.
+run): write the bodies to a file inside the repository root you were given, file nothing, and say the split is unconfirmed.
 
 ## 2. Lift what's shared
 
@@ -112,7 +112,3 @@ missing a proof line; filing from the conversation when a document exists, or wr
 first when the conversation is all there is; filing what you concluded in the chat rather than what
 the user said and the code shows; second copies on a re-run; shared assumptions left in the preamble and carried into no issue; `--body` eating the
 formatting; stamping numbers back only at the end, so a crash leaves two disagreeing lists.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

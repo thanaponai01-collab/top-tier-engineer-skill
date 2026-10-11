@@ -46,7 +46,8 @@ surprise; that's where the bugs are.
 - **The tests:** do they run the path you traced, or mock around it?
 
 Run things wherever it's cheap, from a scratch checkout, and not code from an author you have no
-reason to trust. Post nothing on the PR or ticket unless asked.
+reason to trust. Make the scratch checkout with `git worktree add <temp dir> <branch>` and remove
+it afterwards (`git worktree remove <temp dir>`); never switch the person's own checkout to another branch. Post nothing on the PR or ticket unless asked.
 
 ## Report
 
@@ -54,7 +55,3 @@ Verdict first, **ship / fix-then-ship / rework / reject**, with the biggest reas
 major → minor: `file:line`, consequence, evidence (proven / traced / suspected), smallest fix. A clean
 pass lists what you traced and ran; "LGTM" is not an answer. Drop nitpicks when there are real
 problems.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

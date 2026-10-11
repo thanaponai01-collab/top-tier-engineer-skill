@@ -1,7 +1,7 @@
 ---
 name: build-discipline
 description: >-
-  Build features in small, proven slices, wired from entry point to effect.
+  Use for building a multi-file feature in small slices, each wired and proven.
 metadata:
   stage: build
   card: "build a multi-file feature in proven slices"
@@ -17,7 +17,7 @@ nothing.
 ## Where the build lives
 
 For context discovery, current-work scaling and completion upkeep, follow
-[the context handoff](../project-setup/references/context-handoff.md), preserving existing equivalents.
+[the context handoff](../project-foundation/references/context-handoff.md), preserving existing equivalents.
 
 A build outlives one sitting, so keep one file, `BUILD.md` at the repo root (or the brief's own file
 if it has one). One line per slice: `proof line | status | commit`. Under it, a **Deferred** list:
@@ -33,7 +33,7 @@ decision mid-build, even in passing, record it there before the slice that acts 
 line it overrides and move the old one to `BRIEF.archive.md` (`problem-framing`, "Keeping the brief
 current"). No `BRIEF.md` yet: create one with the job in a line and a `## Decisions` section. Then
 check the project's agent instruction file (`CLAUDE.md`, `AGENTS.md`) has a start-here block linking
-`BRIEF.md` and `BUILD.md`; add one if not (`project-setup`, "Make it discoverable"). A decision
+`BRIEF.md` and `BUILD.md`; add one if not (`project-foundation`, "Make it discoverable"). A decision
 honoured in the code but written nowhere is lost the next time a session starts.
 
 `BUILD.md` is a log of every slice ever proven, so it grows for the life of the project unless
@@ -144,7 +144,3 @@ or uncommitted status, alongside current verification evidence when a reusable r
 that every decision the owner stated this session is in `BRIEF.md` or a linked current area, with nothing left there
 contradicting it, and that the agent instruction file's start-here block links `BRIEF.md`. Say in
 the report where each one was written.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

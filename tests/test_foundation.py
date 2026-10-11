@@ -6,7 +6,7 @@ import sys
 import tempfile
 import unittest
 
-SCRIPT=Path(__file__).resolve().parents[1]/'skills/project-setup/scripts/foundation.py'
+SCRIPT=Path(__file__).resolve().parents[1]/'skills/project-foundation/scripts/foundation.py'
 spec=importlib.util.spec_from_file_location('foundation',SCRIPT)
 foundation=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(foundation)

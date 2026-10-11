@@ -11,7 +11,8 @@ metadata:
 # Project Setup
 
 Prepare the instructions that future sessions need. Setup does not discover the full codebase,
-create foundation documents, build an index, run tests, or start workers. Drive owns that work.
+create foundation documents, build an index, run tests, or start workers. `project-foundation`
+owns that work.
 No other skill requires setup.
 
 Read existing project instructions and the root directory listing only. Use the existing host
@@ -23,7 +24,7 @@ Add or refresh one managed block, at most 30 lines, between `<!-- agent-routing 
 - Coordinator: the current session model. The user selects Opus in Claude Code if desired.
 - Execution: plugin agent `agents/drive-executor.md` (Sonnet), for bounded implementation and local checks.
 - Discovery: plugin agent `agents/setup-reader.md` (Haiku), for bounded read-only evidence collection.
-- Drive owns foundation preparation, execution gates and task context upkeep.
+- project-foundation owns foundation preparation; Drive owns execution gates and task context upkeep.
 - Workers receive assigned paths, acceptance checks, allowed edits and limits; no full chat dump.
 - Workers cannot change acceptance oracles or authorize external actions. Coordinator judges proof.
 - Honor host overrides; report actual routing or single-agent fallback rather than claiming a switch.
@@ -38,7 +39,9 @@ cannot switch the current session model or provide a delegation API. If the host
 configured workers, record that limitation; do not substitute unsupported model names.
 
 Report the instruction file changed, configured worker roles and any host limitations. Setup
-alone makes no claim about product readiness or verification.
+alone makes no claim about product readiness or verification. End by naming the next step: run
+`/project-foundation` to create, trace, check and list the context files (brief, work, features,
+verification, architecture, commands, memory index).
 
 *Test:* setup changes only the selected instruction file, preserves manual notes, creates one
 routing block and performs no worker dispatch or product checks. Repeating it is a no-op.

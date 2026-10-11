@@ -101,6 +101,25 @@ def summary(repo):
     return HEADER + "\n\n" + "\n\n".join(parts) if parts else ""
 
 
+def run_line(repo):
+    """One line for an unfinished driven run in RUN.json; '' when there is none or it is complete."""
+    path = Path(repo) / 'RUN.json'
+    if not path.exists():
+        return ''
+    try:
+        state = json.loads(read(path))
+        status = state['status']
+        if status == 'complete':
+            return ''
+        done = state.get('proofs', {})
+        stage = next((s['id'] for s in state['contract']['stages'] if s['id'] not in done), 'finish')
+        unknown = sum(1 for r in state.get('journal', {}).values() if r.get('result') == 'unknown')
+    except (ValueError, KeyError, TypeError, AttributeError):
+        return "Driven run: unreadable RUN.json; run drive's run.py status before acting."
+    line = f'Driven run: {status} | next: {stage} | unresolved actions: {unknown}'
+    return line + (' (reconcile first; never replay)' if unknown else '') + ' [RUN.json]'
+
+
 def compact_summary(repo):
     """Default startup stays bounded; full context is retrieved when needed."""
     repo = Path(repo)
@@ -109,9 +128,12 @@ def compact_summary(repo):
     nxt = section(read(repo / paths['work']), 'Next')
     oversized = over_budget(repo)
     indexed = (repo / '.project-context/index.sqlite').exists()
+    run = run_line(repo)
     if not (decisions or nxt or oversized or indexed):
-        return ''
+        return run
     parts = [f"Project context: intent: {paths['intent']}; work: {paths['work']}. Read relevant linked areas."]
+    if run:
+        parts.append(run)
     if nxt:
         parts.append('Next: ' + ' '.join(nxt.split())[:300] + f" [{paths['work']}]")
     if decisions:

@@ -12,8 +12,10 @@ metadata:
 Take a backend from where it is to a simpler, better-organized place, or design a new one that
 starts there. Prefer the smallest structure that does the job. Design for a maintainer you'll never meet, often an AI: the structure must be navigable from the files alone.
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to end, or
-opened the source this session · **suspected** = neither. Only *proven* and *traced* can carry a one-way door.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
+Here, a source opened this session also counts as *traced*. Only *proven* and *traced* can carry a
+one-way door.
 
 ## 1. Pick the outcome
 
@@ -104,7 +106,3 @@ doesn't re-propose it.
 
 *Test:* every finding has a number or `file:line`, each recommendation has a second option, a door
 and a proof, and a stranger could start the first move from your answer alone.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.
