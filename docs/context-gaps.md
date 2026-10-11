@@ -1,4 +1,4 @@
-# Skill gaps: fresh-session context (2026-10-11)
+# Context gaps for a fresh session (measured 2026-10-11)
 
 What a fresh agent session gets from this plugin, measured. Labels: **proven** = ran it,
 **traced** = read the whole chain, **suspected** = neither. Ranked by what they cost a fresh session.
@@ -40,7 +40,7 @@ work documents and the decisions excerpt. It never reads `RUN.json`. A fresh ses
 active or blocked run is not told: the run exists, its next stage, and above all **unresolved
 external actions** (journaled "unknown", which must be reconciled, never replayed). Only `/recall`
 (manual-only) or the Stop gate surface it, and the Stop gate fires at the end of the session.
-Observed tonight: this repo's own active RUN.json was invisible in the front-door output.
+Observed 2026-10-11: this repo's own active RUN.json (during an overnight run) was invisible in the front-door output.
 **Fix:** one line from `run.py status` in the front door when RUN.json exists:
 `Driven run: active | next: <stage> | unresolved actions: <n> (reconcile first)`.
 

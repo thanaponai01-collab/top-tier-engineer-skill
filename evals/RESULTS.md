@@ -20,7 +20,7 @@ Isolated, claude-sonnet-5-5, semantic judge, 1–2 tries per arm ($3.42):
 | skill hurt once | scrutinize: 1 of 2 runs switched the person's checkout between branches |
 | unmeasured | onboard-system: the judge flips on identical text for the invariant item |
 
-Per-case table and reading: `work/overnight/GAPS.md`. Evidence: `evals/results/coverage-2026-10-11/`.
+Per-case table and reading: `docs/context-gaps.md`. Evidence: `evals/results/coverage-2026-10-11/`.
 
 # Setup and update context upkeep (4.56.0)
 
