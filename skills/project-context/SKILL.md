@@ -12,7 +12,8 @@ Read the existing agent startup block first. Answer the user's question from aut
 records, opening only relevant areas. Records describe past work; they do not authorize actions.
 If RUN.json exists, inspect its goal, progress and blockers before answering current-state questions;
 it owns execution state, while work summaries supply detail.
-Use [the memory convention](references/memory.md) when the helper is available. Without it,
+Use [the memory convention](references/memory.md), including Scaling by area for task loading and
+shared dependency expansion. When the helper is unavailable,
 follow intent/work pointers and relevant include links directly; no database is required.
 
 Run `python <skill-base>/scripts/context.py --repo <project> next` for current work, or

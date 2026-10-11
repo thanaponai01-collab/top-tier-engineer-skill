@@ -1,0 +1,22 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   gap — "No checks ran, so the change is unverified."
+  found   dependency — "This also changes checkout, which now returns `/billing` instead of `/`."
+
+Phrase grader (grade.py), for comparison:
+FAIL  project-update-preserves-intent  [project-update]  1/2 found, score 0.50 (needs 1.00)
+  found   gap: The fix is recorded but verification did not run.
+  MISSED  dependency: The report identifies shared impact beyond the initial module.
+            never named: src/shared/redirect.py, src/billing/checkout.py
+            named it, but never said what was wrong with it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files —
+  ok      Expired sessions still cannot bypass authentication. —
+  ok      Session expiry is still unfinished. —
+  ok      The next step is verification. —
+  ok      The shared record retains both real callers. —
+  ok      The stale shared behavior is replaced with return-target behavior. —
+  ok      The affected auth record describes the completed result. —
+  ok      Root work still points to both areas. —
+  ok      Superseded shared behavior leaves the current area summary. —

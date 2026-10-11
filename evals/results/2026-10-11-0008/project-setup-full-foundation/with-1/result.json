@@ -1,0 +1,87 @@
+{
+  "case": "project-setup-full-foundation",
+  "skill": "drive",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   coverage \u2014 \"The live payment gateway isn't covered.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Architecture records actual module boundaries with sources.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Command index records a usable Python check.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Startup links architecture, commands and current work.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Startup explains retrieval or upkeep.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Current work has a concrete Next.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/AGENTS.md",
+      "fixture/VERIFY.md"
+    ],
+    "added": [
+      "fixture/.gitignore",
+      "fixture/.project-context/foundation.json",
+      "fixture/.project-context/index.sqlite",
+      "fixture/.verify-state.json",
+      "fixture/BRIEF.md",
+      "fixture/BUILD.md",
+      "fixture/FEATURES.md",
+      "fixture/docs/architecture.md",
+      "fixture/docs/commands.md",
+      "fixture/verification/fee_mutation.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.3245089,
+  "turns": 18,
+  "seconds": 76.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

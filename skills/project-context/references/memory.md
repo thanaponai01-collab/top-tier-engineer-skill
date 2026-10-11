@@ -18,6 +18,21 @@ Setup adds one retrieval/upkeep line to the existing startup block, naming the i
 location. Do not assume the helper lives in the target project or create a second instruction file.
 Agents without tools follow the same file links. Hooks may print a bounded summary, never the store.
 
+## Scaling by area
+Keep one authoritative home per durable fact; summaries link to it. Read startup and the task's
+area, expanding through actual callers/dependencies when a shared boundary is involved. Query
+limits bound retrieval, not investigation; disclose truncated results or missing mappings and
+inspect relevant source before concluding impact is complete.
+Reuse module notes; create an area record only for durable detail without an existing home.
+Record purpose, owned paths, boundary dependencies, constraints, requirement/check links, sources
+and unknowns. Root indexes give area links task conditions; small projects retain root records.
+Record source/test/doc placement and generated/temporary artifact locations in existing architecture
+or contributor notes, citing observed conventions; unsettled placement stays unknown.
+During affected-record upkeep, replace obsolete summaries/links, merge duplicate facts into their
+home and split detail by useful area when navigation or budgets require it. Archive eligible
+completed history with retrieval links; retain unresolved work, dependencies and decision sources.
+Generated evidence stays in its declared location. Unchanged upkeep leaves documents unchanged.
+
 ## Record format
 
 Existing files work without migration. Sections become records automatically. New area records may
@@ -60,7 +75,6 @@ Code impact is a path association, not a complete dependency graph: use feature-
 shared callers when necessary. Structural checks never certify owner intent or product correctness.
 
 ## Skill participation
-
 Working skills keep affected owned records current before completion. Read-only reviews report gaps;
 they do not write project state unless requested. Direct edits update only changed facts. Search is
 available to every skill, but never a mandatory extra step when its context is already known.

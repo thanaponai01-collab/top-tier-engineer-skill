@@ -63,6 +63,11 @@ Inventory all relevant entry-point families for the selected package; trace/veri
 record coverage gaps and Next. Empty projects get meaningful observed state and unknowns, not
 fictional entry points or empty headings. Intent/work are always prepared; no WHY/PLAN placeholders.
 
+Use the memory convention's Scaling by area rules when preparing area links and placement notes.
+Complete the selected area's purpose, boundaries, constraints and requirement/check pointers in
+existing documents; record unmapped dependencies as gaps. Keep startup size independent of module
+count by linking area indexes. Record placement conventions where contributors already look.
+
 ## Validate without repeated checkpoints
 
 For new/stale recipes or evidence, read [verification](verification.md), resolve the

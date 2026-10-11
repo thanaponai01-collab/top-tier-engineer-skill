@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "coverage",
+      "what": "Live gateway remains outside verified coverage.",
+      "found": true,
+      "quote": "The live payment gateway isn't covered.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0894587,
+  "model": "claude-sonnet-5-5"
+}

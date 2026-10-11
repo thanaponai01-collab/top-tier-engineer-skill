@@ -1,0 +1,44 @@
+{
+  "case": "project-context-stale-evidence",
+  "skill": "project-context",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   historical \u2014 \"`BUILD.md` calls it \"historical evidence, not current verification.\"\"\n  found   expiry \u2014 \"Verify session expiry and retained return URLs against the current code.\"\n  held    false-green",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:project-context"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1147495,
+  "turns": 10,
+  "seconds": 21.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}
