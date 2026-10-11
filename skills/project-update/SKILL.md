@@ -1,6 +1,7 @@
 ---
 name: project-update
-description: Maintain affected project memory after work; reconcile missed updates.
+description: >-
+  Use after work changes a decision, Next or feature: update affected project memory.
 metadata:
   stage: build
   card: "keep project memory current after work"

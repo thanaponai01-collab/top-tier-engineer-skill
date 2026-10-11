@@ -36,6 +36,14 @@
 - Repeat upkeep is requested by the case; this run's report claims no edits on repeat, but its
   action log does not independently demonstrate a separate post-edit re-read.
 
+## Fresh-session gaps and project-foundation (4.60.0)
+- G1-G9 from docs/context-gaps.md closed; regression checks in tests/test_context_gaps.py.
+- New manual skill project-foundation owns the foundation procedure (moved from drive references);
+  `foundation.py list` prints one row per category. Setup, drive, onboard and the front door point to it.
+- Live (isolated, 1 try each, $2.42): project-foundation-after-setup passed with and without the
+  skill (no measured difference yet); code-history (WHY.md now gated), scrutinize and recall passed.
+- Evidence: evals/results/2026-10-11-gaps/; RUN.json for the run record.
+
 ## Next
 Strengthen fresh-reader/repeated-upkeep trials with independent action evidence and larger area
 fixtures; done when bounded loading and unchanged second-pass files are demonstrated across runs.

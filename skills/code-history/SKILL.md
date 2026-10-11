@@ -1,7 +1,7 @@
 ---
 name: code-history
 description: >-
-  Find why code is the way it is from recorded decisions before changing it.
+  Use for "why is it built this way, who decided?": the recorded reason, before changing it.
 metadata:
   stage: orient
   card: "why is it built this way, who decided?"
@@ -80,9 +80,10 @@ gets defended.
 
 ## 6. Leave it where the next session finds it
 
-When the answer took real digging, add it to `WHY.md` at the repo root: the question, the answer,
-the sources (sha, ticket, link), the date and the label. Read that file first next time. An entry
-whose file has changed since is a lead, not an answer.
+Add an entry to `WHY.md`, inside the repository root you were given, whenever the trail used
+more than one record or the answer is *expired*; skip it only for a one-record answer that holds.
+The entry holds the question, the answer, the sources (sha, ticket, link), the date and the label.
+Read that file first next time. An entry whose file has changed since is a lead, not an answer.
 
 `WHY.md` opens with an index, one line per entry: `question | label | date`. Read only the index
 first; open the full entry below it only for the question you came for. Never re-read the whole
@@ -110,7 +111,3 @@ to end.
 
 Why a live failure happens is `debug-protocol`; teaching what you found to a person is `explain`.
 This skill stands without them: the report above is the whole job.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

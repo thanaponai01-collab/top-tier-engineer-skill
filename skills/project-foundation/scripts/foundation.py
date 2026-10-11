@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inventory/check setup documents and remember scoped input hashes; never verify behavior."""
+"""Inventory/check/list setup documents and remember scoped input hashes; never verify behavior."""
 import argparse
 import hashlib
 import json
@@ -95,16 +95,37 @@ def check(repo, sources=()):
     return result
 
 
+def listing(repo):
+    """One Markdown row per foundation category: file and structural state, never correctness."""
+    result = inventory(repo)
+    changed = set(result['changed_inputs'])
+    paths, blocks = roles(repo)
+    rows = ['| category | file | state |', '|---|---|---|']
+    startup = ', '.join(dict.fromkeys(name for name, _ in blocks)) or 'AGENTS.md or CLAUDE.md'
+    rows.append(f"| startup | {startup} | {'present' if len(blocks) == 1 else 'missing' if not blocks else 'duplicate blocks'} |")
+    for role, doc in result['documents'].items():
+        state = doc['state'] + (', changed since snapshot' if doc['path'] in changed else '')
+        rows.append(f"| {role} | {doc['path']} | {state} |")
+    index = safe(repo, '.project-context/index.sqlite')
+    rows.append(f"| memory | .project-context/index.sqlite | {'present' if index.is_file() else 'missing'} |")
+    rows.append('')
+    rows.append('freshness: ' + result['freshness'] + '; ' + result['coverage'])
+    return '\n'.join(rows)
+
+
 def main():
     if hasattr(sys.stdout,'reconfigure'):
         sys.stdout.reconfigure(encoding='utf-8')
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo',type=Path,default=Path.cwd())
-    parser.add_argument('action',choices=('inventory','check','remember'))
+    parser.add_argument('action',choices=('inventory','check','remember','list'))
     parser.add_argument('--sources',nargs='*',default=[])
     args = parser.parse_args()
     try:
         repo=args.repo.resolve()
+        if args.action=='list':
+            print(listing(repo))
+            return 0
         result=check(repo,args.sources) if args.action in ('check','remember') else inventory(repo,args.sources)
         if args.action=='remember' and not result['issues']:
             cache=snapshot(repo)

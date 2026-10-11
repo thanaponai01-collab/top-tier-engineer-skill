@@ -13,7 +13,8 @@ One pass is an anecdote. An agent is proven when the same task set, run several 
 written down before the run. Needs the task set and graders from `agent-evals`; if they do not exist,
 build those first.
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain · **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
 ## Steps
 
@@ -53,7 +54,3 @@ only the score; skipping the held-out slice; re-running until it passes.
 
 Ready to ship: `agent-release`. Wider software correctness around the agent: `correctness-gate`.
 Without those loaded, do the step plainly and say the skill was missing.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

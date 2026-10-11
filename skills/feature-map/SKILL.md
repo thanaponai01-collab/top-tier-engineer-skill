@@ -1,7 +1,7 @@
 ---
 name: feature-map
 description: >-
-  Map features to their entry points, code paths and checks; detect affected features after changes.
+  Map features to entry points and checks. Use for "what can this app do, how do I reach X?"
 metadata:
   stage: orient
   card: "what can this app do, how do I reach X?"
@@ -16,7 +16,8 @@ can check against the code, and every feature says how it is known.
 
 ## What goes in a feature
 
-One `##` section per feature in `FEATURES.md` at the repo root. Each bullet is `key: value`:
+One `##` section per feature in `FEATURES.md` at the repo root, inside the repository root you were
+given. Each bullet is `key: value`:
 
 ```
 ## Checkout
@@ -127,7 +128,3 @@ run `check`. It is the drift alarm.
 Mapping every feature to its checks is `verify-loop`; a feature whose entry point exists but does
 nothing is `wire-check`; a picture of the structure is `arch-map`. This skill stands without them:
 without them, the file above is the whole job.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

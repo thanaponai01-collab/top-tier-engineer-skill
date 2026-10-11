@@ -15,7 +15,8 @@ can call, what each one can do to the world, and what content flows back into th
 each. Skip this and the tool surface gets designed by accident, one `if` statement at a time, as the
 agent is built.
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain · **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
 ## Steps
 
@@ -38,6 +39,8 @@ agent is built.
 4. **Write the tool contract to one file**, `docs/agent-design.md`: the loop shape, the tool table from
    step 2, and the context boundary from step 3. This is the file `agent-evals` step 1 and
    `threat-model`'s tool-surface pass both read instead of re-deriving the tool list from the code.
+   Link it from the work document (`BUILD.md` or its equivalent) with one line,
+   `include: docs/agent-design.md (tool contract)`, so a resuming session reads it.
 
 5. **Draw the must-refuse list from the contract, not from imagination.** Every one-way tool earns at
    least one refusal case (the agent declines, or stops for confirm, when the task tries to use it
@@ -62,7 +65,3 @@ The task set and grader built against this contract: `agent-evals`. The tool-sur
 contract makes concrete: `threat-model`. Building the tools and the loop: `build-discipline`. Without
 `agent-evals` or `threat-model` loaded, keep the tool contract in `docs/agent-design.md` anyway and say
 in the report which of the two steps above was done from it by hand instead.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

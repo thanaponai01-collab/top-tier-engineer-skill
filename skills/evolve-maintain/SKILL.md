@@ -91,7 +91,7 @@ A fix that closes only this instance gets paid for again.
 
 ## 5. Record
 Keep owner intent, affected documentation and the next step current using
-[the context handoff](../project-setup/references/context-handoff.md). Run its structural check;
+[the context handoff](../project-foundation/references/context-handoff.md). Run its structural check;
 report unrelated pre-existing gaps rather than expanding a maintenance task to repair them.
 
 If the project keeps a maintenance log, append:
@@ -108,7 +108,3 @@ sentence, proven, traced or suspected; what now stops it coming back; what you l
 Treating a cause nobody proved; a migration triaged as a fix; scope growth wearing a maintenance
 label; deleting code something still calls; closing a fix with no regression test; stale docs left
 to mislead the next maintainer.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

@@ -423,3 +423,18 @@ Its report states repeat upkeep required no edits; a distinct post-edit re-read 
 the action log, so independent idempotence proof remains open.
 The earlier 0008 upkeep attempts hit a missing expectation field; the specification was repaired
 and the 0009 trials replace those attempts. Raw failed attempts remain in 0008.
+
+## 4.60.0 re-runs (2026-10-11, claude-opus-5-5, isolated, 1 try, $2.42)
+
+Evidence: `evals/results/2026-10-11-gaps/`. Added as a section; the generated scorecard for this
+small run would have replaced the tables above.
+
+| case | without | with | reading |
+|---|---|---|---|
+| `project-foundation-after-setup` (new) | 1/1 | 1/1 | no difference yet: the plain agent also listed every category |
+| `code-history-expired-reason` | not run | 1/1 | WHY.md check now gated; the agent wrote it |
+| `scrutinize-unchanged-caller` | not run | 1/1 | used `git worktree add`; the person's checkout stayed put |
+| `recall-stale-proof` | not run | 1/1 | still passes with the Context roles table in place of recall's own list |
+
+The scorecard's "opened the skill 2 of 4" counts only Skill-tool calls; the two manual skills
+(project-foundation, recall) were opened by reading their SKILL.md, as `actions.txt` shows.

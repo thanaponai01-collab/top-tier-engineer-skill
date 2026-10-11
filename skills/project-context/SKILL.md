@@ -1,6 +1,7 @@
 ---
 name: project-context
-description: Answer project-memory questions with bounded, sourced retrieval.
+description: >-
+  Use for "what did we decide, where is X recorded?": bounded, sourced memory retrieval.
 metadata:
   stage: orient
   card: "ask the project's memory"

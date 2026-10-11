@@ -128,7 +128,8 @@ The file holds, in this order:
 4. Evidence table: `arrow | file:line`, with *suspected* arrows marked.
 5. Problems view only: the numbered problem table.
 
-**Name it for the view**, unless a path was named for you: `docs/architecture.md` for an as-is map,
+Save it inside the repository root you were given, never beside it. **Name it for the view**,
+unless a path was named for you: `docs/architecture.md` for an as-is map,
 `docs/arch-change-<what>.md` for a change, `docs/arch-problems-<what>.md` for problems — so a
 one-off change view never overwrites the map of how things are today. Markdown by default: GitHub
 renders the Mermaid block, editors preview it, and it diffs as text when the code moves under it.
@@ -170,10 +171,6 @@ Boxes from the folder names alone without reading imports; drawing the intended 
 the real one; 40 boxes in one picture; color as the only signal; before and after with different
 layouts so the diff is invisible; problems marked without a `file:line` behind them; a diagram written
 to a file and then pasted into the chat as well; a change view saved over the as-is map.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.
 
 For setup, keep the as-is overview in docs/architecture.md or the startup architecture: equivalent.
 Record representative boundary inputs with context-paths metadata before the first heading.

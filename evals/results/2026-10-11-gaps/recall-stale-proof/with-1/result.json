@@ -1,0 +1,47 @@
+{
+  "case": "recall-stale-proof",
+  "skill": "recall",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   suite-red-now \u2014 \"`python -m unittest` \u2192 2 of 3 tests FAIL (10.12 != 10.13).\"\n  found   rounding-contradicts-brief \u2014 \"That breaks BRIEF invariant 1 and would make the export disagree with the PDFs.\"\n  found   since-in-flight \u2014 \"`rows()`/`main()` accept `since`, but the filter is only a\"\n  held    notes-as-proof",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "reran the check the notes cite instead of repeating their 'proven'",
+      "ok": true,
+      "detail": "ran it: for f in CLAUDE.md BRIEF.md BUILD.md money.py export.py test_export.py; do echo \"=== $f\"; cat $f; done; git sh"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.20115219999999998,
+  "turns": 5,
+  "seconds": 22.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

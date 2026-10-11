@@ -27,9 +27,9 @@ Everything here is on disk or one command away; nothing is changed.
   and the order to read them in. Follow it before the list below.
 - **Notes the project keeps:** RUN.json first: the authoritative goal, target, steps, evidence,
   authority and unresolved action journal. If it exists, use `drive`'s `run.py next` and `status`;
-  without the helper, inspect the same fields and label enforcement manual. Then the run notes (`OVERNIGHT.md`,
-  `DRIVE.md`), then `BUILD.md`, `BRIEF.md`, `VERIFY.md`, `FEATURES.md`, `docs/arch-design.md`,
-  `docs/architecture.md`, `WHY.md`, a `TODO` or handoff file, and your memory directory if there is one.
+  without the helper, inspect the same fields and label enforcement manual. Then the other files in
+  the Context roles table of `project-context`'s `references/memory.md`, in its order and only when
+  its "Read when" applies, then a `TODO` or handoff file and your memory directory if there is one.
 - **Open work outside the repo,** only if a tool for it is connected: open issues and PRs, the
   last CI run.
 
@@ -93,7 +93,3 @@ the capsule and let them choose.
 Why something is the way it is, is `code-history`; walking a person through it is `explain`;
 building the next slice is `build-discipline`. This skill stands without them: the capsule above is
 the whole job.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

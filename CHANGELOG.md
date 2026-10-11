@@ -1,5 +1,28 @@
 # Changelog
 
+## 4.60.0 - 2026-10-11 - project-foundation, and the fresh-session gaps closed
+
+- **New skill `project-foundation`** (manual: `/project-foundation`), the step after `/project-setup`.
+  It creates or refreshes every context file (brief, work, features, verification, architecture,
+  commands, memory index), traces and checks them, and ends with `foundation.py list`: one row per
+  category and its state. The procedure moved out of drive's references, and drive, onboard-system,
+  pick-skill and the front door's cold-project hint now point to it. project-setup's stub
+  references and compatibility script are gone.
+- **G1**: the SessionStart summary prints `Driven run: <status> | next: <stage> | unresolved
+  actions: <n>` when RUN.json holds an unfinished run (and fails open on a malformed one).
+- **G2**: plan-work and agent-design link PLAN.md / docs/agent-design.md from the work document.
+- **G4**: build-discipline, code-history, feature-map, project-context and project-update descriptions
+  say when to use them (listing held at the 5000-char cap).
+- **G5**: the 31 copies of the project-memory paragraph are removed (PHILOSOPHY.md and the front door
+  carry it); one evidence-label definition across skills.
+- **G6**: one Context roles table in project-context's memory reference; recall reads it.
+- **G7**: code-history writes WHY.md whenever the trail used more than one record or the reason
+  expired; the eval's WHY.md check is now gated.
+- **G8**: scrutinize makes its scratch checkout with `git worktree add`, never switching the person's.
+- **G9**: arch-map, issue-handoff, feature-map and code-history save inside the repository root.
+- G3 (mojibake) was already fixed in 4.59.0; a regression test now guards it.
+- Regression checks: `tests/test_context_gaps.py`. New eval case `project-foundation-after-setup`.
+
 ## 4.59.1 - 2026-10-11 - scalable project context
 
 - Keep project-setup instructions-only; foundation, retrieval and upkeep own area context,

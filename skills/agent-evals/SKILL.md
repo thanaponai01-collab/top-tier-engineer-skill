@@ -14,7 +14,8 @@ does hold is a fixed set of tasks and a grader that did not come from the agent.
 the agent, and keep them out of its reach. This is `verify-loop`'s "build the check first" applied
 to something non-deterministic; read that skill for the VERIFY.md format and the baseline.
 
-*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain · **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
 ## Steps
 
@@ -51,7 +52,3 @@ held-out slice; fewer than 12 tasks, where one flake moves the score by several 
 The tools and prompt are built against this set with `build-discipline`. Proof over repeated runs is
 `agent-prove`. Without `verify-loop` loaded, keep the task set and graders in one file the agent
 cannot edit, and say so in the report.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

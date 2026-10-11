@@ -18,6 +18,27 @@ Setup adds one retrieval/upkeep line to the existing startup block, naming the i
 location. Do not assume the helper lives in the target project or create a second instruction file.
 Agents without tools follow the same file links. Hooks may print a bounded summary, never the store.
 
+## Context roles
+
+Every file a skill may leave for the next session, in the order a resuming session reads them.
+A skill that adds a context file adds its row here; readers (recall, the start-here block) use this
+table instead of listing files themselves. Existing equivalents replace the default name.
+
+| Role | Default file | Owner | Read when |
+|---|---|---|---|
+| run state | RUN.json (+ OVERNIGHT.md, DRIVE.md) | drive, drive-overnight | first, if present: next stage and unresolved actions |
+| work | BUILD.md (+ work/<area>.md) | any building skill | always: current result, blockers, Next |
+| intent | BRIEF.md (+ brief/<area>.md) | problem-framing, project-foundation | always: goal and decisions in force |
+| plan | PLAN.md | plan-work | the work document includes it, or Next names a slice |
+| agent contract | docs/agent-design.md | agent-design | the task touches an agent's tools |
+| verification | VERIFY.md and receipts | verify-loop, project-foundation | before claiming a check passes |
+| features | FEATURES.md (+ features/<area>.md) | feature-map, project-foundation | to find an entry point or what a change affects |
+| architecture | docs/architecture.md (+ docs/arch-change-*.md) | arch-map, project-foundation | the task crosses a boundary |
+| design decision | docs/arch-design.md | arch-design | changing structure |
+| commands | docs/commands.md | project-foundation | to run, build or check anything |
+| rationale | WHY.md (+ WHY.archive.md) | code-history | before changing code that looks wrong |
+| memory index | .project-context/ (ignored cache) | project-context, project-update | a fact the files above do not surface quickly |
+
 ## Scaling by area
 Keep one authoritative home per durable fact; summaries link to it. Read startup and the task's
 area, expanding through actual callers/dependencies when a shared boundary is involved. Query

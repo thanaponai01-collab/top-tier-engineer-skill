@@ -43,7 +43,9 @@ end · **suspected** = neither.*
    they apply in is settled in one sentence before either starts.
 
 5. **Write `PLAN.md`:** the table, one line on what runs together and why, and the integration check
-   (the exit check from step 1, run after every merge).
+   (the exit check from step 1, run after every merge). Then add one line to the work document
+   (`BUILD.md` or its equivalent) so a resuming session finds it: `include: PLAN.md (slices, order,
+   checks)`.
 
 6. **Hand work out only when it pays.** At least two slices that can run together, each bigger than
    the brief it takes to hand over. A brief stands alone: the goal, the slice's check, the files it
@@ -75,7 +77,3 @@ merge.
 Building a slice: `build-discipline`. Filing the slices as tracked issues: `issue-handoff`.
 Running the plan with nobody there: `drive-overnight`. Without `problem-framing` or `verify-loop`
 loaded, step 1 is done by hand as written.
-
-Project memory: retrieve missing facts with `project-context`; after authorized changes use
-`project-update` for affected records. Without helpers, follow/update existing notes directly;
-read-only reviews report gaps. Skip upkeep when no durable fact changed.

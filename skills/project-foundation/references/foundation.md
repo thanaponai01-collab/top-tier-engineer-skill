@@ -55,7 +55,7 @@ An unchanged foundation reuses the exercise; changed boundaries require checking
 
 ## Helpers and refresh
 
-Run `foundation.py --repo <project> inventory` from the installed drive scripts directory.
+Run `foundation.py --repo <project> inventory` from this skill's scripts directory.
 Use --sources with selected implementation/config paths; it compares the previous setup snapshot
 when present. No snapshot means freshness unknown. `check` checks document structure only.
 After completing discovery and validation, `remember --sources <paths>` records hashes of selected

@@ -72,8 +72,8 @@
       {
         "id": "why-recorded",
         "kind": "process",
-        "gate": false,
-        "what": "The answer is left in WHY.md for the next session (advisory: the skill asks for it; a plain agent has no reason to).",
+        "gate": true,
+        "what": "The answer is left in WHY.md for the next session: the trail used more than one record and the reason expired, so the skill requires it.",
         "path": "WHY.md",
         "regex": "INC-212"
       }
