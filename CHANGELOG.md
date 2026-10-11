@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.59.1 - 2026-10-11 - scalable project context
+
+- Keep project-setup instructions-only; foundation, retrieval and upkeep own area context,
+  task-specific loading, authoritative fact locations, change-driven maintenance and placement rules.
+- Add a fresh-reader handoff exercise and expand upkeep evaluation to shared callers, stale area
+  summaries and preservation of unrelated work. Grader tests reject stale notes and unrelated edits.
+- Validation: 456 repository tests passed after merging. Earlier live trials predate the isolated
+  evaluation harness; retain them as historical evidence, not proof of improvement. Independent
+  repeated-upkeep action evidence remains open.
+
 ## 4.59.0 - 2026-10-11 - every skill has an eval case; evals isolated from the person's install
 
 - **17 new eval cases**, one per previously uncovered skill: `evals/uncovered.txt` is empty. Every
