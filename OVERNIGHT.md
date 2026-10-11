@@ -33,3 +33,13 @@ DECISION: Moved BUILD.md release history to BUILD.archive.md rather than deletin
 OPTIONS:  Delete (CHANGELOG has releases); keep.
 WHY:      The history holds evidence paths CHANGELOG lacks [traced: compared sections]; archive is the memory convention's home and is not loaded at start.
 UNDO:     `git checkout main -- BUILD.md; rm BUILD.archive.md`.
+
+## Morning report
+VERDICT:   passed. `run.py finish` -> RUN: complete (484 tests OK, catalog current, 4 of 5 attempts used incl. the contract fix).
+DONE:      README table generated; flows have one home; README 3012 -> 1873 words; BRIEF/BUILD/AGENTS.md current; merge analysis in docs/merge-proposals.md [proven].
+NEEDS YOU: Skill merges (public names): drive-overnight into drive; latent-audit + structure-gate; arch-map into arch-design; project-context + project-update. Say which, then do the steps in docs/merge-proposals.md.
+           Release (not done): version bump + CHANGELOG entry; push/merge of branch consolidate-skills-agent-context.
+           Live evals for the changed entry files (cost account usage): `python evals/run.py --cases project-foundation-after-setup`.
+DECIDED:   see Decisions above; none rests on a suspected fact.
+FAILED:    Attempt 1: wrong test command in my own contract (ImportError). Attempt 2: old test asserted the hand-table message; updated for the generated table.
+NEXT:      Decide the four parked merges.
