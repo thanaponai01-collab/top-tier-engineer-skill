@@ -1,5 +1,25 @@
 # Changelog
 
+## 4.59.0 - 2026-10-11 - every skill has an eval case; evals isolated from the person's install
+
+- **17 new eval cases**, one per previously uncovered skill: `evals/uncovered.txt` is empty. Every
+  reference set discriminates (good/good-alt pass, bad fails), and the judge reads all 51 new
+  references correctly.
+- **Evals measured the installed plugin**: every eval agent inherited user settings, i.e. the person's
+  enabled top-tier-engineer and `~/.claude/CLAUDE.md`, so the "without" arm was never plain.
+  `evals/agent.py` now passes `--setting-sources project,local` (regression-tested). Isolated live
+  routing: **21 of 34** (4.58.1 recorded 11 of 34 under the leak). Treat earlier with/without rows in
+  RESULTS.md as contaminated.
+- **Isolated results** (Sonnet, 1-2 tries per arm): the skill helps on agent-release, arch-map,
+  issue-handoff, pick-skill and problem-framing; no difference on 10; scrutinize once switched the
+  person's checkout. Per-case reading and eight ranked fixes for fresh-session context:
+  `docs/context-gaps.md`.
+- **Harness**: per-case `setup.py` with `evals/history.py` builds git history for history-based cases
+  (tested to end identical to `fixture/`); eval agents get an empty `gh` config; `route_live.py` no
+  longer dies printing to a redirected cp1252 stdout.
+- **Fixes**: double-encoded UTF-8 repaired in build-discipline, code-history and feature-map (bytes
+  only); a Stop-gate hook test no longer depends on the checkout having no active `RUN.json`.
+
 ## 4.58.1 - 2026-10-10 - evals stage the skill card; routing measured
 
 - **Harness fix**: `evals/agent.py` did not stage `CATALOG.md`, so every eval agent got an empty
