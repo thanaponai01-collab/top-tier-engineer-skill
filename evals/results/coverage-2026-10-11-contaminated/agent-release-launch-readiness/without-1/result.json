@@ -1,0 +1,44 @@
+{
+  "case": "agent-release-launch-readiness",
+  "skill": "agent-release",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/5 found\n  found   unpinned-model-and-prompt \u2014 \"`prompt: latest` (`settings.py:14`) uses the newest file in `prompts/`.\"\n  found   kill-switch-needs-deploy \u2014 \"**The kill switch takes about 25 minutes, not seconds.**\"\n  MISSED  logs-unredacted-no-version\n  found   all-at-once-rollout \u2014 \"**There's no staged rollout and no monitoring.**\"\n  found   no-daily-cap \u2014 \"**There's no total spend cap, and refunds have no aggregate limit.**\"\n  held    step-cap-exists",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 4,
+  "total": 5,
+  "missed": [
+    "runlog.py stores customer email, address and full message text unredacted, and does not record the model/prompt version or the cost of a run, so a bad run can neither be stored safely nor replayed against the version that produced it."
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1300336,
+  "turns": 11,
+  "seconds": 30.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

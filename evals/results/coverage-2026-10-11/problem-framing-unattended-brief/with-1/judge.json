@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "job-as-outcome",
+      "what": "The job is stated as a change in the world: sales staff stop retyping emailed orders into Odoo and quantity typos stop reaching shipments. It is not stated as 'build an app'.",
+      "found": true,
+      "quote": "Six sales staff stop retyping emailed customer orders into Odoo line by line.",
+      "quote_checked": true
+    },
+    {
+      "id": "fast-and-easy-made-measurable",
+      "what": "'Fast and easy' becomes a measurement and threshold (time per order, lines per minute, error rate on quantities), each a check someone could run without reading the code.",
+      "found": true,
+      "quote": "A typical 5\u201320 line order takes the reviewer less than 2 minutes from opening the draft to confirming, measured with 2 staff on 10 real orders, against a baseline timed first.",
+      "quote_checked": true
+    },
+    {
+      "id": "failure-states",
+      "what": "Bad input and partial failure are specified: an unreadable or ambiguous order line, an unknown SKU or customer, and Odoo being unavailable. The spec does not describe only the happy path.",
+      "found": true,
+      "quote": "Unreadable PDF, unknown customer, unmatched product, or Odoo being down produces a flagged item with a reason, never a guessed value or a crash.",
+      "quote_checked": true
+    },
+    {
+      "id": "assumption-first",
+      "what": "With nobody to ask, the likeliest reading is taken and marked assumed, with the assumption that costs most if wrong stated first (for example: orders go into Odoo as drafts a person confirms, not posted automatically; or PDFs are text, not scans).",
+      "found": true,
+      "quote": "**Costliest assumption:** we can create orders in Odoo through its API (version, hosting and credentials are",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "adjectives-as-criteria",
+      "what": "Writing banned adjectives as acceptance criteria ('must be fast', 'easy to use') instead of measurements.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.05151119999999999,
+  "model": "claude-sonnet-5-5"
+}

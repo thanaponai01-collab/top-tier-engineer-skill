@@ -1,0 +1,42 @@
+{
+  "case": "agent-drift-refusals-under-a-steady-rate",
+  "skill": "agent-drift",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   pass-rate-inside-band \u2014 \"85\u201386% is inside the baseline band, though at its low end.\"\n  found   refusal-rate-spike \u2014 \"The runbook says to page when it exceeds 5%, and that threshold has been crossed two weeks running.\"\n  found   model-pin-lost \u2014 \"It went from the pinned `claude-sonnet-5-5-20260801` to the unpinned alias `claude-sonnet-5-5`.\"\n  held    pass-rate-called-drift",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0715704,
+  "turns": 7,
+  "seconds": 20.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

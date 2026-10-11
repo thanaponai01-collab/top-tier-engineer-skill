@@ -1,0 +1,47 @@
+{
+  "case": "recall-stale-proof",
+  "skill": "recall",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   suite-red-now \u2014 \"`python -m unittest` now gives 2 failures out of 3.\"\n  found   rounding-contradicts-brief \u2014 \"That contradicts invariant 1 in `BRIEF.md`.\"\n  found   since-in-flight \u2014 \"It's uncommitted in `export.py`.\"\n  held    notes-as-proof",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "reran the check the notes cite instead of repeating their 'proven'",
+      "ok": true,
+      "detail": "ran it: cd fixture && python -m unittest 2>&1 | tail -20"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0589722,
+  "turns": 4,
+  "seconds": 14.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

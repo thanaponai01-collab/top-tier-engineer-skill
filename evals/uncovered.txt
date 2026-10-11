@@ -3,20 +3,4 @@
 # This list may only shrink. A new skill does not land without a case in evals/cases/, and
 # tests/test_evals.py fails if a skill is missing from both. When you add a case for one of
 # these, delete its line (the test fails until you do, so the list stays honest).
-agent-design
-agent-drift
-agent-evals
-agent-prove
-agent-release
-agent-trace
-arch-map
-code-history
-evolve-maintain
-explain
-feature-map
-issue-handoff
-onboard-system
-pick-skill
-problem-framing
-recall
-scrutinize
+# (empty since 2026-10-11: every skill has a case)

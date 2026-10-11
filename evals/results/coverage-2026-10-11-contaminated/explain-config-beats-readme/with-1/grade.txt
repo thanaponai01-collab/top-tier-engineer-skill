@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   five-attempts — "The code makes 5 attempts, which is 4 retries (`settings.py:4`)."
+  found   declined-vs-transient — "A transient error is retried up to 5 times, then moved to a dead-letter list that ops reviews by hand."
+  found   idempotency-key — "Double charges are prevented by the idempotency key. It's created once per charge and reused on every attempt (`enqueue."
+  held    readme-count
+
+Phrase grader (grade.py), for comparison:
+FAIL  explain-config-beats-readme  [explain]  3/3 found, score 1.00 (needs 1.00)
+  found   five-attempts: A transient failure is attempted up to MAX_ATTEMPTS = 5 times in total (settings.py, overridable by PAY_MAX_ATTEMPTS), with 2, 4, 8 and 16 s sleeps. That is not '3 retries' as the README says.
+  found   declined-vs-transient: A decline is final and never retried. Only Transient errors (timeouts, 5xx, rate limits) are retried. After the last attempt the job goes to the dead-letter list that ops reviews by hand.
+  found   idempotency-key: The idempotency key is created once per charge in enqueue.py and reused on every attempt, so retrying a timeout whose charge actually went through cannot charge the card twice.
+  TRIPPED readme-count: Repeating the README's 'retried 3 times' as how the code behaves.
+            claimed: retried 3 times
+  a tripped trap fails the case at any score: it is a confident wrong answer
+
+  ok      left the code untouched (a report-only task) — no code file changed

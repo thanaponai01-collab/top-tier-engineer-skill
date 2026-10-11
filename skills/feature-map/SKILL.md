@@ -45,8 +45,8 @@ One `##` section per feature in `FEATURES.md` at the repo root. Each bullet is `
 - Also worth a line when true: **needs** (login, a flag, a role, seeded data) and **effect** (what
   changes: a row, a file, a request).
 
-*Evidence labels: **proven** = you ran it Â· **traced** = you read the whole chain, start to
-end Â· **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
 *Test:* an agent that has read only this file could open the feature, with no searching.
 

@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 2,
+  "score": 0.5,
+  "planted": [
+    {
+      "id": "architecture-stale",
+      "what": "docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.",
+      "found": true,
+      "quote": "`docs/architecture.md` was stale. It still referenced `billing/mailer.py`, which was renamed to `notify.py` on 2026-09-02, and it left out credit notes.",
+      "quote_checked": true
+    },
+    {
+      "id": "invariant-carried",
+      "what": "The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes.",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [],
+  "passed": false,
+  "cost_usd": 0.039651200000000004,
+  "model": "claude-sonnet-5-5"
+}

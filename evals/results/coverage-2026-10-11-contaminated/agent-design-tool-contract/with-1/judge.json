@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "order-fields-are-untrusted",
+      "what": "lookup_order returns gift_message and delivery_instructions, free text the shopper typed. That is attacker-shapeable content flowing into the agent's context, so it needs an injection case, the same as the carrier page from fetch_tracking. Treating lookup_order as a trusted internal lookup misses it.",
+      "found": true,
+      "quote": "`lookup_order` returns the shopper-typed `gift_message` and `delivery_instructions`, which are now omitted unless asked for.",
+      "quote_checked": true
+    },
+    {
+      "id": "each-one-way-tool-own-confirm",
+      "what": "cancel_order, issue_refund and send_email are one-way. Each needs its own confirmation or refusal case; a yes for one call does not cover the next.",
+      "found": true,
+      "quote": "A different tool, different args, or a second call needs its own card.",
+      "quote_checked": true
+    },
+    {
+      "id": "merchant-boundary-testable",
+      "what": "All merchants' sessions share workers and a database. The design must state a checkable boundary: one merchant's (and one shopper's) orders and tool results never reach another session's context, and every tool is scoped by merchant_id.",
+      "found": true,
+      "quote": "Session B's messages, tool results and action log never appear in session A's context, on shared workers (no shared mutable state or caches keyed without session id).",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "one-gate-for-all",
+      "what": "A single human approval that covers all one-way actions in a session (approve once, then the agent refunds, cancels and emails freely).",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.1009072,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,12 @@
+{
+  "started": "2026-10-11-0312",
+  "repeats": 1,
+  "arms": [
+    "with"
+  ],
+  "version": "4.58.1",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "out_rel": "evals/results/coverage-2026-10-11"
+}

@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "five-attempts",
+      "what": "A transient failure is attempted up to MAX_ATTEMPTS = 5 times in total (settings.py, overridable by PAY_MAX_ATTEMPTS), with 2, 4, 8 and 16 s sleeps. That is not '3 retries' as the README says.",
+      "found": true,
+      "quote": "`settings.py:4` sets `MAX_ATTEMPTS` to 5 by default, and `PAY_MAX_ATTEMPTS` overrides it.",
+      "quote_checked": true
+    },
+    {
+      "id": "declined-vs-transient",
+      "what": "A decline is final and never retried. Only Transient errors (timeouts, 5xx, rate limits) are retried. After the last attempt the job goes to the dead-letter list that ops reviews by hand.",
+      "found": true,
+      "quote": "A decline ends there. Transient errors are retried up to 5 times, and then the job goes to a dead-letter list that a person has to review.",
+      "quote_checked": true
+    },
+    {
+      "id": "idempotency-key",
+      "what": "The idempotency key is created once per charge in enqueue.py and reused on every attempt, so retrying a timeout whose charge actually went through cannot charge the card twice.",
+      "found": true,
+      "quote": "Every retry reuses that key, so the gateway charges at most once per key.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "readme-count",
+      "what": "Repeating the README's 'retried 3 times' as how the code behaves.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.08779920000000001,
+  "model": "claude-sonnet-5-5"
+}

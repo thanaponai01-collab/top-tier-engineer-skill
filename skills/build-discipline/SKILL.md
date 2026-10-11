@@ -55,7 +55,7 @@ start at **Build**. Two checks first: the proof line runs from a real entry poin
 names still look the way the brief says. A brief older than the last few commits is a claim, not a
 fact. A vague proof line gets sharpened out loud, never quietly swapped for an easier one.
 
-## Per slice: Aim â†’ Build â†’ Connect â†’ Prove â†’ Commit
+## Per slice: Aim → Build → Connect → Prove → Commit
 
 ### 1. Aim
 - Pick the smallest change with observable behavior reachable from the real entry point. "Half a
@@ -92,13 +92,13 @@ entry and evidence location, even for one slice; VERIFY.md owns the check defini
 
 ### 3. Connect
 Trace what the slice added from the real entry point through five links:
-**Exists â†’ Registered â†’ Routed â†’ Invoked â†’ Reachable** (the effect actually lands). Code nothing can
+**Exists → Registered → Routed → Invoked → Reachable** (the effect actually lands). Code nothing can
 reach means the slice failed.
 
 *Test:* for each link you can say what you did to check it, not that you believe it holds.
 
-*Evidence labels: **proven** = you ran it Â· **traced** = you read the whole chain, start to
-end Â· **suspected** = neither.*
+*Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
+end · **suspected** = neither.*
 
 ### 4. Prove
 - Run the proof line and keep the real output. Exercise at least one error path the slice claims to

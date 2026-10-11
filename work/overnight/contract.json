@@ -1,0 +1,13 @@
+{
+  "goal": "Every skill has an eval case that discriminates, each new case run live in both arms, and a gap report on the skills for fresh-session context",
+  "target": "local",
+  "max_attempts": 6,
+  "timeout_seconds": 900,
+  "max_seconds": 43200,
+  "criteria": [{"statement": "uncovered.txt empty, suite green, every newly covered case has a completed live run in both arms", "stage": "prove"}],
+  "oracle_files": ["work/overnight/exit_check.py"],
+  "stages": [{"id": "prove", "skill": "verify-loop",
+              "command": ["python", "work/overnight/exit_check.py"],
+              "inputs": ["evals/cases", "evals/uncovered.txt", "evals/run.py", "evals/agent.py", "evals/grade.py", "tests", "work/overnight/exit_check.py"]}],
+  "actions": []
+}

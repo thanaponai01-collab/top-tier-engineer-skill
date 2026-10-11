@@ -52,7 +52,15 @@ def clean_env():
     # throwaway temp folder is exactly that.
     # throwaway temp folder is exactly that. Only "1" counts, so it is forced.
     env["IS_SANDBOX"] = "1"
+    # The child keeps USERPROFILE/APPDATA for its own login, which is also where `gh` keeps the
+    # person's GitHub token. An eval agent asked to "file these as issues" must not reach a real
+    # tracker, so gh gets an empty config of its own and no token.
+    env["GH_CONFIG_DIR"] = GH_EMPTY
+    env["GIT_TERMINAL_PROMPT"] = "0"
     return env
+
+
+GH_EMPTY = os.path.join(tempfile.gettempdir(), "tte-eval-no-gh")
 
 
 def stage_plugin(dest, hooks_profile=None):
@@ -89,8 +97,13 @@ def claude_bin():
 
 
 def build_command(prompt, plugin_dir=None, model=None, budget_usd=None, max_turns=None):
+    # User settings are where a person's installed plugins are enabled, and their user memory
+    # (~/.claude/CLAUDE.md) rides along with them. Without this, an installed copy of this very
+    # plugin loads in the "without" arm and beside the staged one in the "with" arm, and the
+    # comparison measures nothing. Project and local settings of the scratch folder still apply.
     cmd = [claude_bin(), "-p", prompt, "--output-format", "stream-json", "--verbose",
-           "--permission-mode", "bypassPermissions", "--no-session-persistence"]
+           "--permission-mode", "bypassPermissions", "--no-session-persistence",
+           "--setting-sources", "project,local"]
     if plugin_dir:
         cmd += ["--plugin-dir", plugin_dir]
     if model:

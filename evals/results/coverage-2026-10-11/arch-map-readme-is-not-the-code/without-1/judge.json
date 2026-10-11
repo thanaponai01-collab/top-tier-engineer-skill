@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 3,
+  "score": 0.667,
+  "planted": [
+    {
+      "id": "reports-skips-layers",
+      "what": "api/reports.py imports db and runs SQL directly, skipping services/ and repo/. The README says nothing skips a layer. The diagram draws the real arrow.",
+      "found": true,
+      "quote": "`api/reports.py` (`/reports/daily`) runs raw SQL through `db.connect()` directly.",
+      "quote_checked": true
+    },
+    {
+      "id": "plugin-loaded-by-name",
+      "what": "plugins/slack_notify.py is reached only through a string in settings.ENABLED_PLUGINS and importlib, with no import to trace. The arrow is drawn as inferred (dashed/suspected), or its config wiring is named.",
+      "found": true,
+      "quote": "Event handlers listed in `settings.ENABLED_PLUGINS`, imported dynamically by `plugins.load_enabled()`.",
+      "quote_checked": true
+    },
+    {
+      "id": "arrows-cite-lines",
+      "what": "Arrows are backed by file:line evidence from the code, not folder names.",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "readme-layering",
+      "what": "Drawing or stating the README's strict layering as true.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.0444432,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,55 @@
+{
+  "case": "arch-map-readme-is-not-the-code",
+  "skill": "arch-map",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  2/3 found\n  found   reports-skips-layers \u2014 \"`api/reports.py` queries the database directly through `db.connect()`.\"\n  found   plugin-loaded-by-name \u2014 \"It imports each module named in\n`settings.ENABLED_PLUGINS`.\"\n  MISSED  arrows-cite-lines\n  held    readme-layering",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "Arrows are backed by file:line evidence from the code, not folder names."
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a diagram file in the repo draws the service including the reports route and the database",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/README.md"
+    ],
+    "added": [
+      "fixture/docs/ARCHITECTURE.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0757638,
+  "turns": 6,
+  "seconds": 19.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

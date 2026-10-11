@@ -1,3 +1,27 @@
+# Every skill has a case; evals isolated from the person's install (unreleased)
+
+2026-10-11: 17 new cases cover the last uncovered skills (`uncovered.txt` is empty). Every reference
+set discriminates on the phrase grader, and the semantic judge read 51/51 new references correctly.
+
+**The harness was measuring the installed plugin.** Each eval agent inherited user settings:
+the person's enabled top-tier-engineer (marketplace 4.58.1) and `~/.claude/CLAUDE.md`. The
+"without" arm opened skills on its own, and both arms got PHILOSOPHY.md's "work directly" nudge.
+Isolated, live routing rose from 11/34 to 21/34 (ROUTING.md).
+`agent.build_command` now passes `--setting-sources project,local` (regression-tested). The first
+batch is kept as `results/coverage-2026-10-11-contaminated/`. Earlier rows in this file ran under
+the same leak and should be read with that in mind.
+
+Isolated, claude-sonnet-5-5, semantic judge, 1–2 tries per arm ($3.42):
+
+| result | cases |
+|---|---|
+| skill helps (plain arm failed both tries) | agent-release, arch-map, issue-handoff, pick-skill, problem-framing |
+| no difference (both pass) | agent-design, agent-drift, agent-evals, agent-prove, agent-trace, code-history, evolve-maintain, explain, feature-map, recall |
+| skill hurt once | scrutinize: 1 of 2 runs switched the person's checkout between branches |
+| unmeasured | onboard-system: the judge flips on identical text for the invariant item |
+
+Per-case table and reading: `work/overnight/GAPS.md`. Evidence: `evals/results/coverage-2026-10-11/`.
+
 # Setup and update context upkeep (4.56.0)
 
 2026-10-09: project-setup now saves missing intent/work context, preserves equivalent documents,

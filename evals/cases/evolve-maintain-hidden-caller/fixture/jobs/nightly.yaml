@@ -1,0 +1,6 @@
+# Nightly jobs. scheduler.py calls each url through the app router at 02:00.
+- name: finance-ledger-export
+  url: /v1/export
+  deliver_to: sftp://finance.example.internal/ledger/
+- name: health-probe
+  url: /health

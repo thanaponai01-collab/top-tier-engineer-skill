@@ -1,0 +1,42 @@
+{
+  "case": "scrutinize-unchanged-caller",
+  "skill": "scrutinize",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   billing-caller-breaks \u2014 \"With the PR, `get_user(\"nobody\")` returns `None`. Then `None[\"tier\"]` raises `TypeError`, which the `except KeyError` do\"\n  found   tests-mock-around-it \u2014 \"`tests/test_billing.py::test_guest_pays_list` patches `billing.get_user` with `side_effect=KeyError`.\"\n  held    approve",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.05846230000000001,
+  "turns": 4,
+  "seconds": 14.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

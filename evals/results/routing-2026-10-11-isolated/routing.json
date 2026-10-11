@@ -1,0 +1,608 @@
+{
+  "meta": {
+    "started": "2026-10-11-0316",
+    "models": [
+      "claude-sonnet-5-5"
+    ]
+  },
+  "results": [
+    {
+      "prompt": "The nightly digest stopped going out after yesterday's deploy and I have no idea why.",
+      "expect": [
+        "debug-protocol"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "safe-release",
+      "hint_right": false,
+      "actions": "  1. Glob: **/*\n  2. Grep: digest\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ozmc2_v4\\handlers\\digest.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ozmc2_v4\\scheduler.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ozmc2_v4\\settings.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ozmc2_v4\\app.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ozmc2_v4\\routes.py\n  8. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ozmc2_v4\\handlers\\__init__.py\n  9. Bash: python -I scheduler.py; echo \"exit=$?\"\n 10. Bash: python scheduler.py; echo \"exit=$?\"; python -c \"import handlers.digest as d; print(d.run())\"",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.08350729999999999,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "The export sometimes returns the wrong totals. Figure out what's going on.",
+      "expect": [
+        "debug-protocol"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Glob: **/*\n  2. Grep: export\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vx9umu5q\\handlers\\export.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vx9umu5q\\handlers\\__init__.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vx9umu5q\\routes.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vx9umu5q\\app.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vx9umu5q\\scheduler.py\n  8. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vx9umu5q\\handlers\\digest.py\n  9. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vx9umu5q\\settings.py",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.07422530000000001,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Change scheduler.py to import the digest job directly instead of loading it by name from settings. Don't break the nightly run.",
+      "expect": [
+        "evolve-maintain",
+        "build-discipline"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Glob: **/scheduler.py\n  2. Grep: digest\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-w71bqk98\\scheduler.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-w71bqk98\\settings.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-w71bqk98\\handlers\\digest.py\n  6. Grep: SCHEDULED_JOBS|settings\n  7. Write: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-w71bqk98\\scheduler.py\n  8. Bash: python -I -c \"import sys; sys.path.insert(0,'.'); import scheduler; print(scheduler.run_digest()); \u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0769294,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "I want to turn this into an app where my team can log which customers they called this week. Where do we start?",
+      "expect": [
+        "problem-framing"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la\n  2. Bash: for f in app.py routes.py scheduler.py settings.py; do echo \"== $f\"; cat $f; done; ls -R handlers",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.065217,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "We need a real job queue for the digest instead of cron. How should this be structured: Postgres queue or Redis?",
+      "expect": [
+        "arch-design"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0585832,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Draw me a picture of how the pieces of this service connect.",
+      "expect": [
+        "arch-map"
+      ],
+      "pick": "top-tier-engineer:arch-map",
+      "right": true,
+      "hint": "arch-map",
+      "hint_right": true,
+      "actions": "  1. Glob: **/*\n  2. Skill: top-tier-engineer:arch-map\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\app.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\routes.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\scheduler.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\settings.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\handlers\\__init__.py\n  8. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\handlers\\digest.py\n  9. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\handlers\\export.py\n 10. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\handlers\\health.py\n 11. Write: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-obydyy_0\\docs\\architecture.md",
+      "all_skills": [
+        "top-tier-engineer:arch-map"
+      ],
+      "try": 1,
+      "cost_usd": 0.1035798,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "I wrote the export handler but hitting it does nothing. Is it even hooked up?",
+      "expect": [
+        "wire-check"
+      ],
+      "pick": "top-tier-engineer:wire-check",
+      "right": true,
+      "hint": "wire-check",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:wire-check\n  2. Grep: export\n  3. Glob: *\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-hd8dhlm_\\app.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-hd8dhlm_\\routes.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-hd8dhlm_\\handlers\\__init__.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-hd8dhlm_\\handlers\\export.py\n  8. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-hd8dhlm_\\handlers\\health.py\n  9. Edit: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-hd8dhlm_\\routes.py\n 10. Bash: python -c \"import app; print(app.dispatch('/export')); print(app.dispatch('/health'))\"",
+      "all_skills": [
+        "top-tier-engineer:wire-check"
+      ],
+      "try": 1,
+      "cost_usd": 0.09191189999999999,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Before this goes out: does the health check actually do what it should? Test it properly.",
+      "expect": [
+        "correctness-gate"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Glob: **/*\n  2. Grep: health\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ov4shc9o\\handlers\\health.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ov4shc9o\\routes.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ov4shc9o\\app.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ov4shc9o\\settings.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-ov4shc9o\\handlers\\__init__.py\n  8. PowerShell: python -I -c \"import sys; sys.path.insert(0,'.'); from app import dispatch; print(dispatch('/health\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0739114,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "The health check takes eight seconds to answer under load. Make it fast.",
+      "expect": [
+        "perf-optimize"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Grep: health\n  2. Glob: **/*\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-tru565l_\\handlers\\health.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-tru565l_\\settings.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-tru565l_\\app.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-tru565l_\\routes.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-tru565l_\\scheduler.py\n  8. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-tru565l_\\handlers\\__init__.py\n  9. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-tru565l_\\handlers\\digest.py\n 10. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-tru565l_\\handlers\\export.py",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.07634509999999999,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "We're about to expose the export endpoint to anonymous users on the internet. Can someone abuse it?",
+      "expect": [
+        "threat-model"
+      ],
+      "pick": "top-tier-engineer:threat-model",
+      "right": true,
+      "hint": "threat-model",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:threat-model\n  2. Glob: **/*\n  3. Grep: export\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-cys5_ts9\\handlers\\export.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-cys5_ts9\\routes.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-cys5_ts9\\app.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-cys5_ts9\\settings.py\n  8. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-cys5_ts9\\handlers\\__init__.py",
+      "all_skills": [
+        "top-tier-engineer:threat-model"
+      ],
+      "try": 1,
+      "cost_usd": 0.0904968,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Be honest: is this codebase any good? What's the biggest problem?",
+      "expect": [
+        "senior-review"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Glob: **/*\n  2. Bash: cd C:/Users/thana/AppData/Local/Temp/tte-route-tq6vfv_i && wc -l app.py routes.py scheduler.py sett\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.06626119999999999,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Can you give me a second opinion on this code before I merge it?",
+      "expect": [
+        "scrutinize",
+        "senior-review"
+      ],
+      "pick": "top-tier-engineer:scrutinize",
+      "right": true,
+      "hint": "scrutinize",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:scrutinize\n  2. Glob: **/*\n  3. Bash: cd C:/Users/thana/AppData/Local/Temp/tte-route-74e1ldg0 && for f in app.py routes.py scheduler.py s\u2026",
+      "all_skills": [
+        "top-tier-engineer:scrutinize"
+      ],
+      "try": 1,
+      "cost_usd": 0.07883960000000001,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "The handlers folder feels like spaghetti. Is it, or is it just me?",
+      "expect": [
+        "structure-gate"
+      ],
+      "pick": "top-tier-engineer:structure-gate",
+      "right": true,
+      "hint": "structure-gate",
+      "hint_right": true,
+      "actions": "  1. Skill: top-tier-engineer:structure-gate\n  2. Glob: **/handlers*/**\n  3. Glob: **/*handler*\n  4. Bash: python \"C:/Users/thana/AppData/Local/Temp/tte-plugin-naq0ztyu/top-tier-engineer/skills/structure-ga\u2026",
+      "all_skills": [
+        "top-tier-engineer:structure-gate"
+      ],
+      "try": 1,
+      "cost_usd": 0.0703671,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "What code in here is dead and safe to delete?",
+      "expect": [
+        "latent-audit"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "latent-audit",
+      "hint_right": true,
+      "actions": "  1. Glob: **/*\n  2. Bash: cd C:/Users/thana/AppData/Local/Temp/tte-route-r5e1z1fo && for f in app.py routes.py scheduler.py s\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0641551,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Ship this to production tonight.",
+      "expect": [
+        "safe-release"
+      ],
+      "pick": "top-tier-engineer:safe-release",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la\n  2. Skill: top-tier-engineer:safe-release\n  3. Bash: for f in app.py routes.py scheduler.py settings.py; do echo \"=== $f\"; cat $f; done; ls -R handlers\n  4. Bash: cd handlers; for f in *.py; do echo \"=== $f\"; cat $f; done; cd ..; python -I app.py\n  5. Bash: python app.py; python scheduler.py; echo rc=$?",
+      "all_skills": [
+        "top-tier-engineer:safe-release"
+      ],
+      "try": 1,
+      "cost_usd": 0.0855856,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "I need to rename the email column to contact_email in the users table on the live database.",
+      "expect": [
+        "safe-release",
+        "evolve-maintain"
+      ],
+      "pick": "top-tier-engineer:safe-release",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:safe-release",
+      "all_skills": [
+        "top-tier-engineer:safe-release"
+      ],
+      "try": 1,
+      "cost_usd": 0.0691286,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Upgrade this service to the newest Python version without breaking anything.",
+      "expect": [
+        "evolve-maintain"
+      ],
+      "pick": "top-tier-engineer:evolve-maintain",
+      "right": true,
+      "hint": "evolve-maintain",
+      "hint_right": true,
+      "actions": "  1. Glob: **/*\n  2. Skill: top-tier-engineer:evolve-maintain\n  3. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*.py; do echo \"=== $f\"; cat $f; done; p\u2026\n  4. Bash: py -0p 2>&1 | head; grep -rnE \"python|3\\.[0-9]+\" --include=* . -I | grep -v \"^./.git\" | head\n  5. PowerShell: py -0p; Get-Command python* | Select Source; winget list Python.Python 2>$null | Select -First 8\n  6. Bash: python -W error -I app.py; python -W error -c \"import scheduler;print(scheduler.run_all())\"; python\u2026\n  7. Bash: python -W error app.py; python -W error scheduler.py; echo exit=$?",
+      "all_skills": [
+        "top-tier-engineer:evolve-maintain"
+      ],
+      "try": 1,
+      "cost_usd": 0.09863659999999999,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Get the export handler routed and working. Keep going on it overnight, I'm going to sleep.",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": "drive-overnight",
+      "hint_right": false,
+      "actions": "  1. Glob: **/*\n  2. Grep: export\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vywj554r\\routes.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vywj554r\\handlers\\export.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vywj554r\\handlers\\__init__.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vywj554r\\app.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vywj554r\\handlers\\digest.py\n  8. Edit: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-vywj554r\\routes.py\n  9. Bash: python -I -c \" import sys; sys.path.insert(0,'.') import app print(app.dispatch('/export')); print(\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.07574430000000001,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Where were we? Catch me up on this project.",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": "recall",
+      "hint_right": false,
+      "actions": "  1. Bash: ls -la . ; ls -la \"C:/Users/thana/.claude/projects/C--Users-thana-AppData-Local-Temp-tte-route-9v5p\u2026\n  2. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*; do echo \"=== $f\"; cat \"$f\"; done",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0649348,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Why does the scheduler load digest by name from settings instead of importing it? Who decided that?",
+      "expect": [
+        "code-history",
+        "explain"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "code-history",
+      "hint_right": true,
+      "actions": "  1. Grep: digest\n  2. Glob: **/*\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mhtuo_ry\\scheduler.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mhtuo_ry\\settings.py\n  5. Grep: importlib|decid|because|ADR|TODO|NOTE|why",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0686184,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Walk me through how a request travels through this app. Don't change anything.",
+      "expect": [
+        "explain",
+        "feature-map"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": "explain",
+      "hint_right": true,
+      "actions": "  1. Glob: **/*\n  2. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-srls6sr_\\app.py\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-srls6sr_\\routes.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-srls6sr_\\settings.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-srls6sr_\\scheduler.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-srls6sr_\\handlers\\__init__.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-srls6sr_\\handlers\\digest.py\n  8. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-srls6sr_\\handlers\\export.py\n  9. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-srls6sr_\\handlers\\health.py",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0735499,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "What features does this app actually have, and how do I reach each one?",
+      "expect": [
+        "feature-map"
+      ],
+      "pick": "top-tier-engineer:feature-map",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:feature-map\n  2. Glob: **/*\n  3. Bash: ls -la\n  4. Bash: for f in app.py routes.py scheduler.py settings.py handlers/*.py; do echo \"=== $f\"; cat -n $f; done",
+      "all_skills": [
+        "top-tier-engineer:feature-map"
+      ],
+      "try": 1,
+      "cost_usd": 0.082453,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Here's the plan: 1) route the export handler, 2) add a test for the digest, 3) add auth to export. File these as tracked issues.",
+      "expect": [
+        "issue-handoff"
+      ],
+      "pick": "top-tier-engineer:issue-handoff",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:issue-handoff\n  2. Bash: cd \"C:/Users/thana/AppData/Local/Temp/tte-route-e19mriks\" && ls -la && gh --version | head -1; git \u2026\n  3. Bash: cd \"C:/Users/thana/AppData/Local/Temp/tte-route-e19mriks\" && for f in app.py routes.py scheduler.py\u2026",
+      "all_skills": [
+        "top-tier-engineer:issue-handoff"
+      ],
+      "try": 1,
+      "cost_usd": 0.0841739,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Set this repo up so the engineering skills work well in it.",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": null,
+      "hint_right": true,
+      "actions": "  1. Bash: ls -la",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.054618200000000006,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "I've never seen this codebase before. Get me fully up to speed: what it has, how it's built, and why.",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": "onboard-system",
+      "hint_right": false,
+      "actions": "  1. Glob: **/*\n  2. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mxoylw17\\app.py\n  3. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mxoylw17\\routes.py\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mxoylw17\\scheduler.py\n  5. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mxoylw17\\settings.py\n  6. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mxoylw17\\handlers\\__init__.py\n  7. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mxoylw17\\handlers\\digest.py\n  8. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mxoylw17\\handlers\\export.py\n  9. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-mxoylw17\\handlers\\health.py",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0788921,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Add a header comment to export.py, and check your own work until it really passes.",
+      "expect": [
+        "verify-loop",
+        "build-discipline"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Glob: **/export.py\n  2. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-zq3vqgyf\\handlers\\export.py\n  3. Glob: **/*.py\n  4. Edit: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-zq3vqgyf\\handlers\\export.py\n  5. Bash: python -I -c \" import sys; sys.path.insert(0,'handlers') import export assert export.__doc__.starts\u2026",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0680459,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "I want to add an LLM agent that writes the nightly digest. How do I know if it's any good before I build it?",
+      "expect": [
+        "agent-evals"
+      ],
+      "pick": "top-tier-engineer:agent-evals",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:agent-evals",
+      "all_skills": [
+        "top-tier-engineer:agent-evals"
+      ],
+      "try": 1,
+      "cost_usd": 0.0651276,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Our support agent passes sometimes and fails other times. Does it actually work?",
+      "expect": [
+        "agent-prove"
+      ],
+      "pick": "top-tier-engineer:agent-prove",
+      "right": true,
+      "hint": "correctness-gate",
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:agent-prove\n  2. Glob: **/*\n  3. Grep: support|agent|anthropic|llm|eval",
+      "all_skills": [
+        "top-tier-engineer:agent-prove"
+      ],
+      "try": 1,
+      "cost_usd": 0.0689601,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "My coding agent deleted handlers/health.py last night when I asked it to clean up imports. Why did it do that?",
+      "expect": [
+        "agent-trace"
+      ],
+      "pick": null,
+      "right": false,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Glob: **/*\n  2. Grep: health\\.py\n  3. Grep: health\n  4. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-q8ibhjd4\\handlers\\__init__.py",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0763957,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "We're about to put our AI agent in front of real customers. What do we need first?",
+      "expect": [
+        "agent-release"
+      ],
+      "pick": "top-tier-engineer:agent-release",
+      "right": true,
+      "hint": null,
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:agent-release",
+      "all_skills": [
+        "top-tier-engineer:agent-release"
+      ],
+      "try": 1,
+      "cost_usd": 0.0646363,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "I need to add per-user quiet hours, a second export format, and a configurable timeout on the health check. Break it down so different agents can take the pieces. What can go at the same time?",
+      "expect": [
+        "plan-work"
+      ],
+      "pick": "top-tier-engineer:plan-work",
+      "right": true,
+      "hint": "debug-protocol",
+      "hint_right": false,
+      "actions": "  1. Skill: top-tier-engineer:plan-work\n  2. Glob: **/*\n  3. Bash: cd C:/Users/thana/AppData/Local/Temp/tte-route-aeuf6l4u && for f in app.py routes.py scheduler.py s\u2026\n  4. Write: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-aeuf6l4u\\PLAN.md",
+      "all_skills": [
+        "top-tier-engineer:plan-work"
+      ],
+      "try": 1,
+      "cost_usd": 0.0999133,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Fix the typo in health.py's docstring if there is one, otherwise add one that says 'Liveness probe.'",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": null,
+      "hint_right": true,
+      "actions": "  1. Glob: **/health.py\n  2. Read: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-n2s_keyq\\handlers\\health.py\n  3. Edit: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-n2s_keyq\\handlers\\health.py",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.0588245,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "What does HTTP status 418 mean?",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": null,
+      "hint_right": true,
+      "actions": "",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.037881200000000004,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    },
+    {
+      "prompt": "Rename the function check() in handlers/health.py to ping() and update its caller.",
+      "expect": [],
+      "pick": null,
+      "right": true,
+      "hint": null,
+      "hint_right": true,
+      "actions": "  1. Grep: \\bcheck\\b\n  2. Edit: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-o25n6ilr\\handlers\\health.py\n  3. Edit: C:\\Users\\thana\\AppData\\Local\\Temp\\tte-route-o25n6ilr\\routes.py",
+      "all_skills": [],
+      "try": 1,
+      "cost_usd": 0.057659300000000004,
+      "models_used": [
+        "claude-sonnet-5-5"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "case": "agent-trace-first-divergence",
+  "skill": "agent-trace",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   first-divergence-step-2 \u2014 \"**Divergence: step 2.** The agent ignored the order ID in the ticket (A-1093) and ran a fuzzy `search_orders` on the nam\"\n  found   cause-category \u2014 \"The cause is a wrong tool choice.\"\n  held    blame-where-it-showed",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:agent-trace"
+  ],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.10812999999999999,
+  "turns": 5,
+  "seconds": 19.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

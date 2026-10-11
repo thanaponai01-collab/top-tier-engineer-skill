@@ -1,0 +1,42 @@
+{
+  "case": "agent-trace-first-divergence",
+  "skill": "agent-trace",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   first-divergence-step-2 \u2014 \"**1. Step 2: it searched by name when the ticket gave an order ID.**\"\n  found   cause-category \u2014 \"The agent never called `get_order(\"A-1093\")`. It ran `search_orders(\"J. Smith\")` instead, which is a fuzzy name match.\"\n  held    blame-where-it-showed",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0526894,
+  "turns": 3,
+  "seconds": 12.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

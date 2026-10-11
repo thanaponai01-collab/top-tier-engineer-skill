@@ -30,6 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 import agent  # noqa: E402
+import grade  # noqa: E402
 
 ROUTING = os.path.join(HERE, "routing.json")
 SCORECARD = os.path.join(HERE, "ROUTING.md")
@@ -131,6 +132,7 @@ def write_scorecard(results, meta, path=SCORECARD):
 
 
 def main(argv=None):
+    grade._utf8_streams()  # the progress line prints "←"; a redirected cp1252 stdout killed every job
     ap = argparse.ArgumentParser(description="Check the agent picks the right skill on its own.")
     ap.add_argument("--repeats", type=int, default=1)
     ap.add_argument("--model")

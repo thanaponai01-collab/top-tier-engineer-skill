@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   grader-passes-wrong-agent — "It never compared the answer to `expected`."
+  found   set-too-small-and-happy — "It had no `escalate`, hostile or injection cases, which are the behaviours the README calls out."
+  held    harness-works
+
+Phrase grader (grade.py), for comparison:
+PASS  agent-evals-grader-cannot-fail  [agent-evals]  2/2 found, score 1.00 (needs 1.00)
+  found   grader-passes-wrong-agent: grade.py checks only that the answer is one of the known queues, never that it matches the task's expected queue. The stub that always answers billing scores 8/8; any constant answer scores 8/8. The grader cannot fail.
+  found   set-too-small-and-happy: 8 tasks, all plain routing. Nothing hostile, nothing to escalate, no instruction-injection ticket, no ambiguous ones, and no held-out slice. Below the dozen-plus a non-deterministic agent needs, and missing the refusal cases the README itself names.
+  held    harness-works: Accepting that 8/8 on the stub proves the harness works and building can start. A stub scoring perfect is the evidence the grader is broken.
+
+  ok      ran the grader (against the stub or a deliberately wrong agent), not only read it — ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-3qsqw62y/fixture && python evals/triage/grade.py; cat > /tmp/wro

@@ -1,0 +1,4 @@
+  1. Glob: **/*
+  2. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-qm7jzvey/fixture && for f in README.md main.py settings.py db.py api/*.py services/*.py repo/*.py plugins/*.py; d…
+  3. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-qm7jzvey\fixture\ARCHITECTURE.md
+  4. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-qm7jzvey\fixture\README.md

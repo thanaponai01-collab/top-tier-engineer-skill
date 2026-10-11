@@ -1,0 +1,44 @@
+{
+  "case": "explain-config-beats-readme",
+  "skill": "explain",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   five-attempts \u2014 \"The code makes 5 attempts in total, which is 4 retries, and `PAY_MAX_ATTEMPTS` can override that (`settings.py:4`).\"\n  found   declined-vs-transient \u2014 \"`process` returns `\"declined\"` immediately (`worker.py:13-14`). It doesn't retry, which is correct, because retrying a d\"\n  found   idempotency-key \u2014 \"The retry is only safe because the gateway charges at most once per key.\"\n  held    readme-count",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:explain"
+  ],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1011527,
+  "turns": 13,
+  "seconds": 26.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,69 @@
+{
+  "case": "onboard-system-stale-architecture",
+  "skill": "onboard-system",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  0/2 found\n  MISSED  architecture-stale\n  MISSED  invariant-carried\n  the judge gave no usable verdict",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "checked the understanding against the code by running its check, not only reading notes",
+      "ok": true,
+      "detail": "ran it: cd fixture && python -m unittest 2>&1 | tail -5"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "docs/architecture.md names billing/notify.py, the module that sends customer email today",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "docs/architecture.md includes credit_notes.py",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "no line of docs/architecture.md still presents mailer.py as a current module (it may appear only as what was renamed)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/BUILD.md",
+      "fixture/docs/architecture.md"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1310779,
+  "turns": 6,
+  "seconds": 27.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}
