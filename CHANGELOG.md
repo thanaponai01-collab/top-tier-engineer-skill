@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.61.0 - 2026-10-11 - arch-design: map, scope, candidates, deep dive, record
+
+- arch-design is rebuilt around improving an existing codebase for a reader who may not read code:
+  **map** (start from `docs/architecture.md`, check every edge relied on; a stale map is reported
+  first), **scope** (the named symptom or the hotspots), **candidates** (3-5 cards: the problem as
+  the user feels it, the call chain behind it, before/after diagrams, what gets cheaper, a
+  Strong / Worth exploring / Speculative badge), then **stop and ask**; **deep dive** on the pick
+  (two options, door, landing steps, proof); **record** (update the map, offer an ADR).
+- New lead: chains and bottlenecks (something slow or fallible inside the user's wait, worse after
+  a step you can't undo). New references: `visual-report.md` (self-contained HTML report written
+  outside the repo) and `design-new.md` (design new / replace a part, moved out to keep the
+  110-line cap).
+- New eval case `arch-design-stale-map-owner-view`. Before: 0/4 (old skill 0/2, no skill 0/2;
+  misses were the before/after picture and stopping to ask). After: 7/7 on the final skill once the
+  report opener runs from the temp dir (one earlier run opened the HTML from the repo and Windows
+  left cache files there). Other arch-design cases unchanged or better: graph-shape 2/2,
+  one-owner 2/2, verify-caller-count 2/2, no-new-store 1/2.
+
 ## 4.60.1 - 2026-10-11 - project-foundation loads feature-map and verify-loop
 
 - project-foundation now loads `feature-map` for FEATURES.md (`features.py init`, trace, then

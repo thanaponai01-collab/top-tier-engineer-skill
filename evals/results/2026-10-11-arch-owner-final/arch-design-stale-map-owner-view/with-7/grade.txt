@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   map-is-stale — "`docs/architecture.md` says the receipt email goes onto a background list and that "the customer never waits for email.""
+  found   charge-then-email-chain — "If all three tries fail, checkout shows an error, but the charge has already gone through."
+  found   reuse-existing-queue — "Your shop already has a background helper that sends refund emails, so nothing new needs to be added."
+  found   before-after-picture — "I've opened an illustrated version in your browser:"
+  found   owner-decides-next — "Which of these would you like to look at in more detail?"
+  held    queue-is-not-dead
+
+Phrase grader (grade.py), for comparison:
+PASS  arch-design-stale-map-owner-view  [arch-design]  5/5 found, score 1.00 (needs 1.00)
+  found   map-is-stale: docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date
+  found   charge-then-email-chain: checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain
+  found   reuse-existing-queue: the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure
+  found   before-after-picture: the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose
+  found   owner-decides-next: the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done
+  held    queue-is-not-dead: the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong
+            named to reject it, not counted: add celery
+
+  ok      left the code untouched (a report-only task) — no code file changed

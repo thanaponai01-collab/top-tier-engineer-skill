@@ -1,0 +1,6 @@
+  1. Skill: top-tier-engineer:arch-design
+  2. Bash: cd fixture && find . -type f | grep -v node_modules | head -100 && wc -l $(find . -type f -not -path '*/node_modules/*' | head -100)
+  3. Bash: cd fixture && for f in docs/architecture.md README.md shop/*.py shop/jobs/*.py; do echo "=== $f"; cat -n "$f"; done
+  4. Bash: mkdir -p /tmp/archproof && cat > /tmp/archproof/proof.py <<'EOF' import sys, smtplib, time sys.path.insert(0, sys.argv[1]) from shop import web, inventory, db,…
+  5. Bash: cat > /tmp/archproof/shop-architecture-report.html <<'EOF' <!doctype html><html><head><meta charset="utf-8"><title>Shop architecture review</title> <script typ…
+  6. Bash: cygpath -w /tmp/archproof/shop-architecture-report.html

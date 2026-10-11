@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-stale-map-owner-view",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   map-is-stale \u2014 \"## First: your design document is wrong\"\n  found   charge-then-email-chain \u2014 \"**checkout waits for the email server before it shows the customer the thank-you page.** That one problem explains both \"\n  found   reuse-existing-queue \u2014 \"Your shop already has this job queue, and it's used for refund emails (`refunds.py:7`), so nothing new needs to be added\"\n  found   before-after-picture \u2014 \"I also opened a visual version of this report in your browser\"\n  found   owner-decides-next \u2014 \"**Which one would you like to explore?**\"\n  held    queue-is-not-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.5183222,
+  "turns": 11,
+  "seconds": 105.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

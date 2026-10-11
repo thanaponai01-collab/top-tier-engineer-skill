@@ -1,0 +1,44 @@
+{
+  "case": "arch-design-stale-map-owner-view",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   map-is-stale \u2014 \"Your design document (`docs/architecture.md`) says checkout puts the receipt on a to-do list and *\"the customer never wa\"\n  found   charge-then-email-chain \u2014 \"When email is down, the card has already been charged and the customer sees an error page.\"\n  found   reuse-existing-queue \u2014 \"your shop already has this to-do list and a background helper, and refund emails already use them.\"\n  found   before-after-picture \u2014 \"I opened an illustrated version of this report in your browser.\"\n  found   owner-decides-next \u2014 \"Which one would you like to look at in detail?\"\n  held    queue-is-not-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:arch-design"
+  ],
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.5441028,
+  "turns": 10,
+  "seconds": 115.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

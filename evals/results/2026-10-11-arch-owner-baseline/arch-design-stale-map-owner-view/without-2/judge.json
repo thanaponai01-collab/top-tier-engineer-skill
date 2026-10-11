@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 5,
+  "score": 0.8,
+  "planted": [
+    {
+      "id": "map-is-stale",
+      "what": "docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date",
+      "found": true,
+      "quote": "The problem is that the code doesn't follow its own plan",
+      "quote_checked": true
+    },
+    {
+      "id": "charge-then-email-chain",
+      "what": "checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain",
+      "found": true,
+      "quote": "Step 4 is where both of your problems come from.",
+      "quote_checked": true
+    },
+    {
+      "id": "reuse-existing-queue",
+      "what": "the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure",
+      "found": true,
+      "quote": "Refunds already work this way.",
+      "quote_checked": true
+    },
+    {
+      "id": "before-after-picture",
+      "what": "the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose",
+      "found": true,
+      "quote": "The checkout code skips the outbox. The cashier sends the receipt email personally, while the customer waits:",
+      "quote_checked": true
+    },
+    {
+      "id": "owner-decides-next",
+      "what": "the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "queue-is-not-dead",
+      "what": "the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.0444692,
+  "model": "claude-sonnet-5-5"
+}

@@ -33,7 +33,7 @@ real answer to a question nobody asked.
 |---|---|---|
 | What should I fix first? | `senior-review` | everything that matters, ranked by consequence, and the skill to run on the biggest gap |
 | Should this change land? | `scrutinize` | one diff, PR or plan read cold: ship / fix-then-ship / rework / reject |
-| Is the structure itself wrong? | `arch-design` (audit mode) | duplicated systems, layers built for a future that never came, the moves that fix the most |
+| Is the structure itself wrong? Could the architecture be better? | `arch-design` (audit mode) | a stale map, the call chain behind a symptom, duplicated systems, layers built for a future that never came; before/after pictures an owner can follow |
 | Is it tangled — with numbers? | `structure-gate` | measured complexity, nesting, length, cycles, duplication, and how much was too opaque to measure |
 | What can I safely delete? | `latent-audit` | dead code proven dead before anything is deleted, plus layer breaches |
 
