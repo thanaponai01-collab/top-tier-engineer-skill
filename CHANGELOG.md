@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.61.1 - 2026-10-12 - one home per list; current entry files for a fresh agent
+
+- The README skill table is now generated from each SKILL.md's frontmatter by `tools/catalog.py`
+  (same source as `CATALOG.md`); a skill can no longer be listed in one place and missed in another.
+  The flows table and Relay live only in `pick-skill`; README 3012 -> about 1870 words.
+- `BRIEF.md` says what the whole repo is and where each fact lives; `BUILD.md` is current state plus
+  Next (history moved to `BUILD.archive.md`); new `AGENTS.md` points other agents at `CLAUDE.md`.
+- `docs/merge-proposals.md`: measured overlap between skills is 0.7-6.4%, so no skill was merged,
+  renamed or removed. Four merges are parked for the owner.
+- No skill procedure changed; live evals were not re-run.
+
 ## 4.61.0 - 2026-10-11 - arch-design: map, scope, candidates, deep dive, record
 
 - arch-design is rebuilt around improving an existing codebase for a reader who may not read code:
