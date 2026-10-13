@@ -545,3 +545,24 @@ The scorecard's "opened the skill 2 of 4" counts only Skill-tool calls; the two 
 Caveat: the plain arm was not plain. `~/.claude/CLAUDE.md` still loads under
 `--setting-sources project,local`, and the agent followed its PHILOSOPHY.md path into this repo's
 skills. Evidence: `evals/results/2026-10-11-foundation-skills/`.
+
+## Skill composition regression trials - 2026-10-13
+
+One bounded with-plugin trial per case; phrase grading plus case action checks, no rubric judge.
+No no-plugin comparison; context/cost savings and routing reliability remain unmeasured.
+
+| Case | Result | Cost | Seconds |
+|---|---|---|---|
+| pick-skill-slow-is-a-bug | pass | $0.22 | 36 |
+| drive-bug-through-skills | pass | $0.26 | 42 |
+| project-foundation-after-setup | fail | $0.30 | 50 |
+| onboard-system-stale-architecture | pass | $0.24 | 39 |
+| verify-loop-healthy-check | pass | $0.18 | 22 |
+| correctness-gate-green-but-wrong | pass | $0.17 | 23 |
+
+Evidence: `results/2026-10-13-1224/`. Foundation failed required helper/evidence actions,
+although its report passed. After tightening wording, the replay passed every action check
+(including both helpers and retained verification state), but hit the 90-second timeout:
+overall not passed, cost unavailable. Evidence: `results/skill-composition-foundation-replay/`.
+The first batch reported $1.37 total; unavailable replay usage is not zero cost.
+Helper checks: 485 tests passed; final standalone checks 8/8; catalog check passed.

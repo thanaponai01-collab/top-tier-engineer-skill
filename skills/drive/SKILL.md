@@ -28,6 +28,11 @@ worker dispatch; respect host support and project overrides. For foundation work
 it owns context, architecture, commands and verification preparation. Setup only prepares agent instructions. For workflow changes,
 read [evaluation policy](references/evaluation-policy.md) before claiming routing reliable.
 
+Use the smallest route: direct work for a small task, otherwise load the current step only.
+Add a skill when it supplies missing evidence or handles a named risk; reuse current outputs
+and checks instead of loading every Next suggestion. Read references only for the active branch.
+A handoff carries the claim, source, affected paths and evidence/gaps, not the whole history.
+
 ## 1. Match, once
 
 Read the goal, say in one line which playbook it is and what you read it as (and not as), then
@@ -40,7 +45,7 @@ them and start on what it does not block.
 | Broken, cause unknown | `debug-protocol` → fix with `evolve-maintain` → `correctness-gate` |
 | Broken, cause known; refactor; upgrade | `evolve-maintain` → `correctness-gate` |
 | New behavior | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `plan-work` (only if it has more than one piece) → `build-discipline` → `correctness-gate` |
-| An AI agent or model-driven feature | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `agent-evals` (before any agent code) → `plan-work` (only if it has more than one piece) → `build-discipline` → `agent-prove` (includes the `threat-model` abuse cases) → `safe-release` + `agent-release` when it goes out → `agent-drift` on the schedule once it's live |
+| An AI agent or model-driven feature | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `agent-design` (create or refresh a missing/stale tool contract) → `threat-model` (derive missing abuse cases for that surface) → `agent-evals` (before any agent code) → `plan-work` (only if it has more than one piece) → `build-discipline` → `agent-prove` (includes the `threat-model` abuse cases) → `safe-release` + `agent-release` when it goes out → `agent-drift` on the schedule once it's live |
 | An agent is flaky, or a model or prompt changed | `agent-prove` → fix with `build-discipline` → `agent-prove` |
 | A live agent might have drifted, or a check-in is due | `agent-drift` → `agent-prove` + fix if it's real |
 | Slow or expensive | `perf-optimize` → `correctness-gate` |

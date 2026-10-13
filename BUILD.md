@@ -25,6 +25,7 @@ Implementation committed on codex/p01-behavior-evidence; RUN.json owns execution
 in docs/RUN.pre-p01.json.
 
 ## Existing work
+- include: work/skill-composition.md (conditional handoffs, scope fixes and validation)
 - include: work/pstack-handoff.md (PStack comparison and adoption status; P01 implementation and pilot)
 - include: work/task-context.md (shared task retrieval and cross-skill discovery; live evidence and gaps)
 - include: work/recall-improvement.md (catch-up scope and evidence clarification; live trial limitations)

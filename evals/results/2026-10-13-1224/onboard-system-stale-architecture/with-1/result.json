@@ -1,0 +1,92 @@
+{
+  "case": "onboard-system-stale-architecture",
+  "skill": "onboard-system",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 3633,
+      "cacheReadInputTokens": 123371,
+      "cacheCreationInputTokens": 17336,
+      "webSearchRequests": 0,
+      "costUSD": 0.2360622,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 351,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "checked the understanding against the code by running its check, not only reading notes",
+      "ok": true,
+      "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-_8514tbc/fixture\" && python -m unittest 2>&1 | tail -3; python "
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "docs/architecture.md names billing/notify.py, the module that sends customer email today",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "docs/architecture.md includes credit_notes.py",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "no line of docs/architecture.md still presents mailer.py as a current module (it may appear only as what was renamed)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/CLAUDE.md",
+      "fixture/docs/architecture.md"
+    ],
+    "added": [
+      "fixture/docs/features.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2360622,
+  "turns": 5,
+  "seconds": 39.0,
+  "timed_out": false,
+  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+  "stderr_tail": "",
+  "end_output": null
+}

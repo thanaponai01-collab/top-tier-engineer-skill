@@ -41,11 +41,12 @@ missing. Never invent an oracle that just describes what the code already does.
 row, counter, lock, queue slot), write the check-then-claim as its own property: "a concurrent
 caller sees the before state or the after state, never half of it."
 
-Reusable proof: when VERIFY.md exists or reusable verification is requested, hand the claim to
-`verify-loop`: load that skill, follow its references/handoff.md and record the rejection and strict
-green through its bundled `verify.py`. Direct output files are the fallback only when verify-loop is
-not installed. This gate supplies the requirement-backed oracles and a mutation of the rule as the
-wrong state; it keeps oracle quality, mutation breadth and the verdict.
+Reusable proof: for missing/stale evidence in an applicable VERIFY.md, or requested reusable
+verification, hand the claim to `verify-loop` using its references/handoff.md. Reuse current
+receipts for covered claims. The handoff records rejection and strict green through bundled
+`verify.py`; direct output is the fallback when unavailable. This gate supplies the oracle and
+wrong state and keeps mutation breadth and the verdict. An assessment returns failures;
+product repair belongs to an authorized build/maintenance task.
 
 ### 3. Attack
 Build tests as an adversary, in this priority order:

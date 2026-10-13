@@ -1,0 +1,81 @@
+{
+  "case": "pick-skill-slow-is-a-bug",
+  "skill": "pick-skill",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [
+    "debug-protocol"
+  ],
+  "skill_calls": [
+    "top-tier-engineer:debug-protocol"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 1696,
+      "cacheReadInputTokens": 169119,
+      "cacheCreationInputTokens": 19468,
+      "webSearchRequests": 0,
+      "costUSD": 0.2235358,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 219,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced or measured the slowness before changing code",
+      "ok": true,
+      "detail": "ran it before changing any code: cd fixture && echo \"--- as-is\"; python dashboard.py; python -c \"import dashboard;print(dashboard.render()[:30]"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "render() finishes in under a second and serves the real flags (new navigation)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/settings.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2235358,
+  "turns": 7,
+  "seconds": 35.6,
+  "timed_out": false,
+  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+  "stderr_tail": "",
+  "end_output": null
+}

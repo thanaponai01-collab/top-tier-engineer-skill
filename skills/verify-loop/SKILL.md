@@ -13,8 +13,9 @@ Build the check before the work, make it hard to fool, and loop until it passes.
 
 **Done** means: one mapped check was seen rejecting a controlled wrong result, the checks are
 frozen with `baseline`, and `run --strict` then `status` print `VERIFY-STATE: green` on unchanged
-inputs. Repairing a check that cannot fail and fixing the requested product defect are both part
-of this task; finish both before reporting done.
+inputs. For an authorized repair, fix the requested defect and any disconnected check before
+reporting done. An assessment reports the observed verdict and gaps; product edits require a
+repair request. A specialist handoff keeps the caller's verdict and scope.
 
 ## Pick the mode
 
