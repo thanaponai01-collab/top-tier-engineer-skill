@@ -1,0 +1,40 @@
+{
+ "baseline": {
+  "VERIFY.md checks": "920b7a1c6b172036",
+  "VERIFY.md run": "bc611688f0fffe1f",
+  "VERIFY.md signals": "6aecc32ecfe5f0c2",
+  "probe.py": "a7b60db3de07267c"
+ },
+ "checks": {
+  "Persistence|python probe.py api": {
+   "count": 1,
+   "exit": 1,
+   "fp": "f97b2c530ef189f4",
+   "ok": false,
+   "output": "Traceback (most recent call last):\n  File \"C:\\Users\\thana\\AppData\\Local\\Temp\\tmpr0pgy29p\\probe.py\", line 39, in <module>\n    assert actual == expected, 'expected persisted note, got ' + repr(actual)\n           ^^^^^^^^^^^^^^^^^^\nAssertionError: expected persisted note, got None\n"
+  }
+ },
+ "cleanup": {
+  "exit": 0,
+  "ok": true,
+  "output": "",
+  "seconds": 0.1346139907836914
+ },
+ "doctor": {
+  "exit": 0,
+  "ok": true,
+  "output": "{\"build\": \"p02-v1\", \"owner\": \"2e8cc307364c485ca64751ba66177818\", \"pid\": 49832}\n",
+  "seconds": 0.14457011222839355
+ },
+ "failures": {
+  "Persistence|python probe.py api": {
+   "exit": 1,
+   "output": "Traceback (most recent call last):\n  File \"C:\\Users\\thana\\AppData\\Local\\Temp\\tmpr0pgy29p\\probe.py\", line 39, in <module>\n    assert actual == expected, 'expected persisted note, got ' + repr(actual)\n           ^^^^^^^^^^^^^^^^^^\nAssertionError: expected persisted note, got None\n",
+   "signature": "a3919c01e520c588"
+  }
+ },
+ "result": "red",
+ "rounds": 1,
+ "strict": false,
+ "tree": "1553a7ae6d093b44"
+}

@@ -1,0 +1,11 @@
+{
+  "wrongState": {
+    "ack": "Saved",
+    "reopened": "null"
+  },
+  "restored": {
+    "reopened": "\"P02 browser persisted note\""
+  },
+  "surface": "Codex in-app browser",
+  "procedure": "fill Note, Save, reload, Reopen; same expectation both trials"
+}

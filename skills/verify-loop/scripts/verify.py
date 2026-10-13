@@ -621,9 +621,10 @@ def start_app(cmd, repo):
 
 
 def stop_app(proc, stop_cmd, repo, timeout):
+    result = (True, 0, "", 0)
     if stop_cmd:
-        run_check(stop_cmd, repo, timeout)
-    if proc.poll() is None:
+        result = run_check(stop_cmd, repo, timeout)
+    if proc is not None and proc.poll() is None:
         if os.name == "nt":
             subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True)
         else:
@@ -631,10 +632,12 @@ def stop_app(proc, stop_cmd, repo, timeout):
                 os.killpg(proc.pid, signal.SIGKILL)
             except OSError:
                 pass
-    try:
-        proc.wait(timeout=10)
-    except subprocess.TimeoutExpired:
-        pass
+    if proc is not None:
+        try:
+            proc.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            return False, None, "owned process did not stop", 10
+    return result
 
 
 def wait_ready(cmd, proc, repo, timeout):
@@ -746,29 +749,52 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
                 return 1
             if not as_json:
                 print(f"Run: app ready in {time.time() - t0:.1f}s ({recipe['start']})")
+    verdict = 1
+    reports = []
     try:
         if recipe and recipe.get("doctor"):
-            ok, _, out, _ = run_check(recipe["doctor"], repo, timeout)
+            ok, code, out, secs = run_check(recipe["doctor"], repo, timeout)
+            state = load_state(repo)
+            state["doctor"] = {"ok": ok, "exit": code, "output": out[-4000:], "seconds": secs}
+            save_state(repo, state)
             if not ok:
                 if as_json:
-                    print(json.dumps({"error": "Run: doctor failed", "exit": 1, "output": out[-1000:]}))
+                    reports.append({"error": "Run: doctor failed", "exit": 1, "output": out[-1000:]})
                 else:
                     print("Run: doctor failed; no check was run.")
                     for line in out.rstrip().splitlines()[-TAIL_LINES:]:
                         print(f"        {line}")
                 track(repo, [], only, budget, 1, strict)
-                return 1
-        return run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine)
+            else:
+                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports)
+        else:
+            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports)
     finally:
-        if proc:
-            stop_app(proc, recipe.get("stop"), repo, timeout)
+        if proc or (recipe and recipe.get("stop")):
+            ok, code, out, secs = stop_app(proc, recipe.get("stop"), repo, timeout)
+            state = load_state(repo)
+            state["cleanup"] = {"ok": ok, "exit": code, "output": out[-4000:], "seconds": secs}
+            if not ok:
+                state["result"] = "red"
+                verdict = 1
+                if not as_json:
+                    print("Run: cleanup failed")
+                    print(out[-4000:])
+                elif reports:
+                    reports[-1].update({"verdict": "red", "exit": 1, "error": "Run: cleanup failed",
+                                        "cleanup": state["cleanup"]})
+            save_state(repo, state)
+        if log:
             try:
                 os.unlink(log)
             except OSError:
                 pass
+    if as_json and reports:
+        print(json.dumps(reports[-1], indent=2))
+    return verdict
 
 
-def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False):
+def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None):
     results = []
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
@@ -928,7 +954,10 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
             "blind_spots": blind,
             "exit": 1 if red else 0,
         }
-        print(json.dumps(report, indent=2))
+        if reports is None:
+            print(json.dumps(report, indent=2))
+        else:
+            reports.append(report)
         return report["exit"]
     if red:
         return 1

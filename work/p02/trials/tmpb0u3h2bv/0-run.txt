@@ -1,0 +1,8 @@
+Run: app ready in 0.2s (python app.py serve)
+Persistence
+  PASS  run  python probe.py api  [0.1s]
+Blind spots: none listed. A recipe that admits none has not looked.
+VERIFY: 1 features | 1 checks pass, 0 fail | 0 unverified | 0 unproven | 0 orphan tests | 0 journeys, 0 broken
+Run: cleanup failed
+cleanup deliberately failed
+

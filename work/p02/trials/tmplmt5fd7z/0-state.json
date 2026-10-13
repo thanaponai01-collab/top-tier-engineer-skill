@@ -1,0 +1,20 @@
+{
+ "checks": {},
+ "cleanup": {
+  "exit": 0,
+  "ok": true,
+  "output": "",
+  "seconds": 0.12450194358825684
+ },
+ "doctor": {
+  "exit": 1,
+  "ok": false,
+  "output": "Traceback (most recent call last):\n  File \"C:\\Users\\thana\\AppData\\Local\\Temp\\tmplmt5fd7z\\probe.py\", line 21, in <module>\n    assert identity['owner'] == config['owner'] and identity['build'] == 'p02-v1', 'wrong owned build'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: wrong owned build\n",
+  "seconds": 0.16745996475219727
+ },
+ "failures": {},
+ "result": "red",
+ "rounds": 1,
+ "strict": false,
+ "tree": "619b826e9015229e"
+}

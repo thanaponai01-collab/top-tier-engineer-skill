@@ -1,0 +1,5 @@
+Persistence
+  PASS  run  python probe.py cli  [0.3s]
+Blind spots: none listed. A recipe that admits none has not looked.
+NEWLY GREEN  Persistence (run)
+VERIFY: 1 features | 1 checks pass, 0 fail | 0 unverified | 0 unproven | 0 orphan tests | 0 journeys, 0 broken

@@ -1,0 +1,36 @@
+{
+  "verdict": "red",
+  "strict": false,
+  "summary": {
+    "features": 1,
+    "passed": 1,
+    "failed": 0,
+    "unverified": 0,
+    "unproven": 0,
+    "orphans": 0,
+    "journeys": 0,
+    "broken": 0,
+    "flaky": 0,
+    "quarantined": 0
+  },
+  "results": [
+    {
+      "feature": "Persistence",
+      "kind": "run",
+      "command": "python probe.py api",
+      "ok": true,
+      "exit": 0,
+      "cause": null,
+      "quarantined": false
+    }
+  ],
+  "blind_spots": [],
+  "exit": 1,
+  "error": "Run: cleanup failed",
+  "cleanup": {
+    "ok": false,
+    "exit": 1,
+    "output": "cleanup deliberately failed\n",
+    "seconds": 0.12621259689331055
+  }
+}

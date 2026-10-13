@@ -566,3 +566,12 @@ although its report passed. After tightening wording, the replay passed every ac
 overall not passed, cost unavailable. Evidence: `results/skill-composition-foundation-replay/`.
 The first batch reported $1.37 total; unavailable replay usage is not zero cost.
 Helper checks: 485 tests passed; final standalone checks 8/8; catalog check passed.
+
+## P02 application recipe replay — 2026-10-13
+
+One bounded with-skill replay of verify-loop-make-it-verified: **0/1 overall**, report 1/1,
+skill loaded 1/1; outcome discrimination passed, baseline and final strict green failed.
+Model claude-opus-5-5; $0.26, 35 seconds. No baseline arm or reliability claim.
+[Retained scorecard](../work/p02/replay-scorecard.md),
+[raw evidence](results/p02-replay/verify-loop-make-it-verified/with-1/result.json),
+[P02 application trials and limits](../work/p02/evidence.md).
