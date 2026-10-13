@@ -1,0 +1,115 @@
+{
+  "case": "arch-design-competing-candidates",
+  "skill": "arch-design",
+  "question": "does the design expose and compare bounded structural options for a consequential fork?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "criteria-first",
+      "what": "sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost",
+      "must_say_any": [
+        "criteria first",
+        "before comparing",
+        "decision criteria",
+        "rank the criteria",
+        "first set",
+        "numbers that set the shape",
+        "before the two options"
+      ]
+    },
+    {
+      "id": "structurally-distinct-options",
+      "what": "shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape",
+      "must_name": [
+        "orders/service.py",
+        "payments/gateway.py"
+      ],
+      "must_say_any": [
+        "synchronous",
+        "inline",
+        "in request",
+        "queue",
+        "outbox",
+        "asynchronous"
+      ]
+    },
+    {
+      "id": "simplest-viable-option",
+      "what": "includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative",
+      "must_say_any": [
+        "simplest viable",
+        "simplest option",
+        "least moving parts",
+        "fewest moving parts",
+        "lower operating cost",
+        "one table",
+        "only one table",
+        "one new table"
+      ]
+    },
+    {
+      "id": "selection-tied-to-criteria",
+      "what": "recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste",
+      "must_say_any": [
+        "choose",
+        "select",
+        "because",
+        "decisive tradeoff"
+      ]
+    },
+    {
+      "id": "one-way-contract",
+      "what": "flags stored idempotency or external refund status/response semantics as costly to change",
+      "must_say_any": [
+        "idempotency",
+        "refund status",
+        "response contract",
+        "one-way",
+        "public contract"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "claims-unavailable-diversity",
+      "what": "claims independent model review despite a single-model host with no dispatch capability",
+      "must_not_say_any": [
+        "independent models reviewed",
+        "cross-model review completed",
+        "two models independently",
+        "second model agreed",
+        "model-diverse review"
+      ],
+      "must_say_any": [
+        "single model",
+        "same model",
+        "no worker",
+        "not model-diverse",
+        "cannot claim model diversity",
+        "one-model fallback"
+      ]
+    },
+    {
+      "id": "unbounded-arena",
+      "what": "launches an open-ended candidate contest or adds unnecessary systems without a bound",
+      "must_not_say_any": [
+        "keep exploring until",
+        "unlimited candidates",
+        "full matrix",
+        "add a new queue and database",
+        "every option gets a prototype"
+      ],
+      "must_say_any": [
+        "two candidates",
+        "one round",
+        "bounded",
+        "$8",
+        "25-minute",
+        "two options"
+      ]
+    }
+  ],
+  "actions": {
+    "read_only": true
+  }
+}

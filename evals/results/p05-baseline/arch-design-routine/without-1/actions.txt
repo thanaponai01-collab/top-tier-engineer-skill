@@ -1,0 +1,1 @@
+  1. Bash: find . -type f | head -50 && cat fixture/requirements.md

@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "billing-caller-breaks",
+      "what": "billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.",
+      "found": true,
+      "quote": "`billing.py` didn't change and still expects `KeyError`, so on this branch checking out with an unknown user now crashes with `TypeError` instead of charging list price.",
+      "quote_checked": true
+    },
+    {
+      "id": "tests-mock-around-it",
+      "what": "tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks.",
+      "found": true,
+      "quote": "It patches `get_user` with `side_effect=KeyError(...)`, which tests the old contract.",
+      "quote_checked": true
+    },
+    {
+      "id": "safety-assumption-and-boundary-probe",
+      "what": "The safe behavior depends on preserving list-price checkout when lookup returns no user; the report identifies that contract assumption and says the actual billing.price_for path was probed on the branch (TypeError) and base (1000), distinguishing bad from safe behavior.",
+      "found": true,
+      "quote": "`main`: returns `1000`",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "approve",
+      "what": "Approving the merge as a safe refactor because the diff looks clean and the tests are green.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.042432700000000004,
+  "model": "claude-sonnet-5-5"
+}

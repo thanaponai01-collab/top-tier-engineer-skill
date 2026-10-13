@@ -1,0 +1,80 @@
+{
+  "case": "drive-program-delivery",
+  "skill": "drive",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  7/8 found\n  found   shared-contract-first \u2014 \"Finish and prove A (valid, empty and malformed records) before anything else.\"\n  MISSED  safe-parallel-lanes\n  found   docs-independent \u2014 \"**E (docs)** has no code dependency, but its check (\"examples match the accepted schema\") needs A's schema.\"\n  found   integration-last \u2014 \"**F last**, on the integrated result. Rerun it after each slice is integrated.\"\n  found   stack-ceiling \u2014 \"## Highest verified PR: #201\"\n  found   stale-rebased-verdict \u2014 \"PASS from reviewer-2, but the verdict targets head `b202-old`. The PR is now at `b202-rebased`.\"\n  found   prefix-stops-at-gap \u2014 \"It sits above the gap, and its verdict was made against #203's current head, which has no verdict of its own.\"\n  found   independent-pr \u2014 \"Independent of the stack. It is fine on its own and does not repair the gap.\"\n  held    do-not-land-descendant\n  held    ci-is-not-verdict\n  held    no-external-action",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "drive"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "drive",
+      "path": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-raxr20o6\\top-tier-engineer\\skills\\drive\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-raxr20o6\\top-tier-engineer\\skills\\drive\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 2157,
+      "cacheReadInputTokens": 67263,
+      "cacheCreationInputTokens": 18599,
+      "webSearchRequests": 0,
+      "costUSD": 0.1027043,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 419,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 7,
+  "total": 8,
+  "missed": [
+    "CLI and API can proceed in parallel after the record and parser because their owned paths and tests are separate"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "this is a read-only review with no forge authority",
+      "ok": true,
+      "detail": "did not run it"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1027043,
+  "turns": 7,
+  "seconds": 20.4,
+  "timed_out": false,
+  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-raxr20o6\\top-tier-engineer",
+  "stderr_tail": "",
+  "end_output": null
+}

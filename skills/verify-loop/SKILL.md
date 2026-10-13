@@ -13,8 +13,9 @@ Build the check before the work, make it hard to fool, and loop until it passes.
 
 **Done** means: one mapped check was seen rejecting a controlled wrong result, the checks are
 frozen with `baseline`, and `run --strict` then `status` print `VERIFY-STATE: green` on unchanged
-inputs. Repairing a check that cannot fail and fixing the requested product defect are both part
-of this task; finish both before reporting done.
+inputs. For an authorized repair, fix the requested defect and any disconnected check before
+reporting done. An assessment reports the observed verdict and gaps; product edits require a
+repair request. A specialist handoff keeps the caller's verdict and scope.
 
 ## Pick the mode
 
@@ -37,6 +38,13 @@ entry points, and reuse the project's harness. If VERIFY.md exists, check the af
 against the current app; if not, create only the sections the requested behavior and its adjacent
 regressions need. A one-off request can end with direct checks and retained rejecting and passing
 output. Strict green covers mapped claims only, never that every feature was found: report gaps.
+
+When a Run doctor must identify a particular build, use the [running artifact identity guidance](VERIFY_FORMAT.md#run)
+to bind the live process to material source and runtime settings. A responsive endpoint, PID or HEAD alone
+cannot identify uncommitted source or distinguish a stale build with changed flags, roles or mocked
+boundaries. Update the affected VERIFY.md procedure with the identity check and run it through
+verify.py; a manual scratch probe alone does not leave reusable project evidence. In the report, say
+that a healthy old process was rejected and name the expected-versus-observed identity mismatch.
 
 ## What makes a check good
 

@@ -33,6 +33,9 @@ Extend the existing independent-skills plugin with bounded, searchable project m
 - Architecture is a bounded as-is map refreshed for boundary changes; command notes are source-linked.
 - Onboarding reuses project-foundation; bounded read-only workers may use a supported economical model.
 
+- Skill composition stays task-sized: direct work or one skill first, conditional handoffs,
+  scoped references and reuse of current evidence; small tasks do not require setup or a chain.
+
 ## Acceptance
 - Missing/corrupt indexes fall back to file retrieval; incremental indexing handles deletion.
 - A fresh reader finds goal, completed work, blockers and Next without chat history.

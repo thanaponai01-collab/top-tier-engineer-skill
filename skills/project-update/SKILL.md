@@ -15,7 +15,9 @@ records and the task's actual diff. Choose an explicit change range for reconcil
 does not identify already committed work. If the range is unknown, report that limitation.
 
 Follow [the memory convention](../project-context/references/memory.md). Without the helper,
-update existing Markdown directly and check links/size by hand. Never require setup for a typo.
+update existing Markdown directly and check links/size by hand. If the reference is unavailable,
+use the startup pointers and affected existing records, preserve unresolved owner intent, and report
+that the scaling rules could not be checked. Never require setup for a typo.
 Reuse existing documents; create detail records only when their information outlives the task.
 
 Update the observable result, unfinished work, blockers and one Next with a completion check.

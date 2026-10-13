@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "gap",
+      "what": "The fix is recorded but verification did not run.",
+      "found": true,
+      "quote": "the login fix is marked done with no checks run",
+      "quote_checked": true
+    },
+    {
+      "id": "dependency",
+      "what": "The report identifies shared impact beyond the initial module.",
+      "found": true,
+      "quote": "The callers that rely on it are login and checkout.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0374347,
+  "model": "claude-sonnet-5-5"
+}

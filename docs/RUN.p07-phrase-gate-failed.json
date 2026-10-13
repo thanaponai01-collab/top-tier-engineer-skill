@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "contract": {
+    "goal": "Complete P07 running artifact identity implementation and retained behavior/repository validation",
+    "target": "local",
+    "max_attempts": 3,
+    "timeout_seconds": 2400,
+    "max_seconds": 10800,
+    "criteria": [
+      {
+        "statement": "P07 focused tests reject a healthy same-HEAD process after dirty source, config digest, flags, role, or mock-boundary changes and retain current identity",
+        "stage": "build"
+      },
+      {
+        "statement": "The isolated behavioral evaluation has a passing clean baseline and at least one skill run passes the semantic report and independent live replay checks; earlier failures remain preserved",
+        "stage": "behavior"
+      },
+      {
+        "statement": "The full repository unit suite passes",
+        "stage": "prove"
+      },
+      {
+        "statement": "The skill catalog validates",
+        "stage": "catalog"
+      }
+    ],
+    "oracle_files": [
+      "docs/pstack/adoption-plan.md",
+      "docs/pstack/validation.md",
+      "tests/test_p07.py",
+      "work/p07/check_results.py",
+      "evals/cases/p07-running-artifact-identity",
+      "evals/fixtures/p07",
+      "evals/run.py"
+    ],
+    "stages": [
+      {
+        "id": "build",
+        "skill": "build-discipline",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_p07.py"
+        ],
+        "inputs": [
+          "skills/verify-loop",
+          "tests/test_p07.py",
+          "evals/cases/p07-running-artifact-identity",
+          "evals/fixtures/p07"
+        ]
+      },
+      {
+        "id": "behavior",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "evals/run.py",
+          "--cases",
+          "p07-running-artifact-identity",
+          "--repeats",
+          "1",
+          "--arms",
+          "without,with",
+          "--jobs",
+          "1",
+          "--budget-usd",
+          "2",
+          "--out",
+          "evals/results/p07-run2",
+          "--no-scorecard"
+        ],
+        "inputs": [
+          "evals/run.py",
+          "evals/agent.py",
+          "evals/cases/p07-running-artifact-identity",
+          "evals/fixtures/p07",
+          "skills/verify-loop"
+        ]
+      },
+      {
+        "id": "behavior-gate",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "work/p07/check_results.py",
+          "evals/results/p07-run2"
+        ],
+        "inputs": [
+          "work/p07/check_results.py",
+          "evals/results/p07-run2",
+          "evals/results/p07-replay/summary.json"
+        ]
+      },
+      {
+        "id": "prove",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "inputs": [
+          "skills/verify-loop",
+          "evals/cases/p07-running-artifact-identity",
+          "tests",
+          "evals/RESULTS.md"
+        ]
+      },
+      {
+        "id": "catalog",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "tools/catalog.py",
+          "--check"
+        ],
+        "inputs": [
+          "skills/verify-loop",
+          "CATALOG.md",
+          "README.md",
+          "tools/catalog.py"
+        ]
+      }
+    ],
+    "actions": []
+  },
+  "contract_hash": "4cc0092f8749997c08ecedf70208e2681f4768372bd4833f437e74730320d5ec",
+  "oracle_hash": "7f1e307c74e209cc7f085cbee0a39ec3fbbe416ab23090c5f077f3a80e02dffd",
+  "started_at": 1791887778.5506327,
+  "status": "failed",
+  "proofs": {
+    "build": {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_p07.py"
+      ],
+      "exit": 0,
+      "output": ".warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n..\n----------------------------------------------------------------------\nRan 6 tests in 5.083s\n\nOK\n",
+      "at": 1791887784.3520253,
+      "seconds": 5.231,
+      "inputs_hash": "cbd17bebb5487bc06c31c002eedda29e67244e897624fd52c47860e24606fe20"
+    },
+    "behavior": {
+      "command": [
+        "python",
+        "evals/run.py",
+        "--cases",
+        "p07-running-artifact-identity",
+        "--repeats",
+        "1",
+        "--arms",
+        "without,with",
+        "--jobs",
+        "1",
+        "--budget-usd",
+        "2",
+        "--out",
+        "evals/results/p07-run2",
+        "--no-scorecard"
+      ],
+      "exit": 0,
+      "output": "start  p07-running-artifact-identity [without #1]\nPASS   p07-running-artifact-identity [without #1]  2/2 found, $0.09, 28s\nstart  p07-running-artifact-identity [with #1]\nPASS   p07-running-artifact-identity [with #1]  2/2 found, $0.17, 46s\n2 of 2 runs passed; evidence in evals/results/p07-run2/\n",
+      "at": 1791887795.3955698,
+      "seconds": 91.869,
+      "inputs_hash": "8ed5cd4b86aac89d85d963027b8a6f4af07362c32e50e9fa167f2a006237ff84"
+    }
+  },
+  "attempts": {
+    "build": 1,
+    "behavior": 1,
+    "behavior-gate": 1
+  },
+  "journal": {},
+  "history": [
+    {
+      "stage": "build",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_p07.py"
+      ],
+      "exit": 0,
+      "output": ".warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n..\n----------------------------------------------------------------------\nRan 6 tests in 5.083s\n\nOK\n",
+      "at": 1791887784.3520253,
+      "seconds": 5.231,
+      "inputs_hash": "cbd17bebb5487bc06c31c002eedda29e67244e897624fd52c47860e24606fe20"
+    },
+    {
+      "stage": "behavior",
+      "command": [
+        "python",
+        "evals/run.py",
+        "--cases",
+        "p07-running-artifact-identity",
+        "--repeats",
+        "1",
+        "--arms",
+        "without,with",
+        "--jobs",
+        "1",
+        "--budget-usd",
+        "2",
+        "--out",
+        "evals/results/p07-run2",
+        "--no-scorecard"
+      ],
+      "exit": 0,
+      "output": "start  p07-running-artifact-identity [without #1]\nPASS   p07-running-artifact-identity [without #1]  2/2 found, $0.09, 28s\nstart  p07-running-artifact-identity [with #1]\nPASS   p07-running-artifact-identity [with #1]  2/2 found, $0.17, 46s\n2 of 2 runs passed; evidence in evals/results/p07-run2/\n",
+      "at": 1791887795.3955698,
+      "seconds": 91.869,
+      "inputs_hash": "8ed5cd4b86aac89d85d963027b8a6f4af07362c32e50e9fa167f2a006237ff84"
+    },
+    {
+      "stage": "behavior-gate",
+      "command": [
+        "python",
+        "work/p07/check_results.py",
+        "evals/results/p07-run2"
+      ],
+      "exit": 1,
+      "output": "P07 has no skill run passing the report and independent behavior gates\n",
+      "at": 1791887891.9951339,
+      "seconds": 0.062,
+      "inputs_hash": "9f363506a82016f785def35463f42f61602eaf0ea6c0adac5132058786623223"
+    }
+  ],
+  "reason": "Behavior-gate check incorrectly required phrase_passed although evals/run.py uses the meaning judge as its verdict; the P07 expectation and alternate reference were also being calibrated.",
+  "next_action": "Preserve this run and initialize the contract with calibrated references and meaning-judge acceptance."
+}

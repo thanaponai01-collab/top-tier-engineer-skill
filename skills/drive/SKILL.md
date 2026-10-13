@@ -28,6 +28,14 @@ worker dispatch; respect host support and project overrides. For foundation work
 it owns context, architecture, commands and verification preparation. Setup only prepares agent instructions. For workflow changes,
 read [evaluation policy](references/evaluation-policy.md) before claiming routing reliable.
 
+Use the smallest route: direct work for a small task, otherwise load the current step only.
+Add a skill when it supplies missing evidence or handles a named risk; reuse current outputs
+and checks instead of loading every Next suggestion. Read references only for the active branch.
+A handoff carries the claim, source, affected paths and evidence/gaps, not the whole history.
+For multiple dependent workstreams or a dependent PR stack, read
+[program delivery](references/program-delivery.md). It supplies bounded planning and stack checks;
+it does not dispatch workers or authorize forge actions.
+
 ## 1. Match, once
 
 Read the goal, say in one line which playbook it is and what you read it as (and not as), then
@@ -40,7 +48,7 @@ them and start on what it does not block.
 | Broken, cause unknown | `debug-protocol` → fix with `evolve-maintain` → `correctness-gate` |
 | Broken, cause known; refactor; upgrade | `evolve-maintain` → `correctness-gate` |
 | New behavior | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `plan-work` (only if it has more than one piece) → `build-discipline` → `correctness-gate` |
-| An AI agent or model-driven feature | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `agent-evals` (before any agent code) → `plan-work` (only if it has more than one piece) → `build-discipline` → `agent-prove` (includes the `threat-model` abuse cases) → `safe-release` + `agent-release` when it goes out → `agent-drift` on the schedule once it's live |
+| An AI agent or model-driven feature | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `agent-design` (create or refresh a missing/stale tool contract) → `threat-model` (derive missing abuse cases for that surface) → `agent-evals` (before any agent code) → `plan-work` (only if it has more than one piece) → `build-discipline` → `agent-prove` (includes the `threat-model` abuse cases) → `safe-release` + `agent-release` when it goes out → `agent-drift` on the schedule once it's live |
 | An agent is flaky, or a model or prompt changed | `agent-prove` → fix with `build-discipline` → `agent-prove` |
 | A live agent might have drifted, or a check-in is due | `agent-drift` → `agent-prove` + fix if it's real |
 | Slow or expensive | `perf-optimize` → `correctness-gate` |
@@ -85,7 +93,9 @@ On resume, inspect the branch, diff, RUN.json and remote state; preserve other p
 Release work uses `safe-release`: verified artifact, tested rollback, version and journey checks,
 then a bounded watch window with explicit thresholds. Roll back only within recorded authority.
 
-Where a named skill is not installed, do that step plainly and say the skill was missing.
+When a named skill is missing, use the calling step's stated fallback. If it has none, do the
+relevant bounded work directly, keep the native output, and state which specialist evidence or
+capability was unavailable.
 
 ## 4. Keep going, switch, finish
 

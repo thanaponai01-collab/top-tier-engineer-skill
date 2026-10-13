@@ -11,6 +11,7 @@ The one that matters most: a report can claim "I reproduced it first". The
 transcript either shows the repro before the first edit, or it doesn't.
 """
 import json, os, sys, tempfile, unittest, subprocess
+from unittest.mock import patch
 
 from _helpers import ROOT
 
@@ -47,6 +48,29 @@ REPRO = {"must_run_any": [r"python[0-9.]*\s+(\S*/)?report\.py"], "must_run_befor
 
 
 class ParseStream(unittest.TestCase):
+    def test_staged_reads_are_distinct_from_calls_and_other_reads(self):
+        with tempfile.TemporaryDirectory() as plugin:
+            path = os.path.join(plugin, "skills", "recall", "SKILL.md")
+            os.makedirs(os.path.dirname(path))
+            with open(path, "w") as fh:
+                fh.write("skill")
+            p = agent.parse_stream(stream(
+                tool("Read", file_path=path.replace("\\", "/")),
+                tool("Read", file_path="/other/skills/recall/SKILL.md"),
+                tool("Skill", skill="top-tier-engineer:recall")), plugin_dir=plugin)
+            self.assertEqual(p["skills"], ["top-tier-engineer:recall"])
+            self.assertEqual(p["skill_reads"], [{"skill": "recall", "path": path.replace("\\", "/"), "sub": False}])
+            self.assertEqual(p["skills_loaded"], ["recall"])
+            absent = agent.parse_stream(stream(tool("Read", file_path="/other/skills/recall/SKILL.md")), plugin_dir=plugin)
+            self.assertEqual(absent["skills_loaded"], [])
+            unknown = agent.parse_stream(stream(tool("Read", file_path=path)))
+            self.assertEqual(unknown["skills_loaded"], [])
+            self.assertEqual(unknown["skill_read_candidates"], [path])
+            event = tool("Read", file_path=path)
+            event["parent_tool_use_id"] = "worker"
+            delegated = agent.parse_stream(stream(event), plugin_dir=plugin)
+            self.assertTrue(delegated["skill_reads"][0]["sub"])
+
     def test_powershell_execution_is_not_lost(self):
         parsed = agent.parse_stream(stream(tool("PowerShell", command="cd fixture; python incident.py")))
         self.assertEqual(parsed["commands"], ["cd fixture; python incident.py"])
@@ -177,10 +201,23 @@ class OtherActionChecks(unittest.TestCase):
         good = grade.read(os.path.join(case["dir"], "reference", "good.md"))
         parsed = agent.parse_stream(stream(tool("Skill", skill="top-tier-engineer:drive"),
                                            bash("python report.py"), tool("Edit", file_path="parse.py")))
-        checks = run.check_actions(case["actions"], parsed, NO_CHANGES, "Total: 42.35", arm="with")
+        checks = run.check_actions(case["actions"], parsed, NO_CHANGES,
+                                   {"exit": 0, "output": "Total: 42.35"}, arm="with")
         r = run.score_run(case, "with", parsed, good, checks, NO_CHANGES)
         self.assertTrue(r["passed"], "skipping the step skills must not cost the head-to-head")
         self.assertFalse(r["followed_skill"])
+
+    def test_failed_end_state_blocks_an_otherwise_good_behavior_report(self):
+        case = grade.load_case("drive-bug-through-skills")
+        good = grade.read(os.path.join(case["dir"], "reference", "good.md"))
+        parsed = agent.parse_stream(stream(tool("Skill", skill="top-tier-engineer:drive"),
+                                           bash("python report.py"), tool("Edit", file_path="parse.py")))
+        for exit_code in (1, 3, None):
+            with self.subTest(exit_code=exit_code):
+                checks = run.check_actions(case["actions"], parsed, NO_CHANGES,
+                                           {"exit": exit_code, "output": "Total: 42.35"}, arm="with")
+                result = run.score_run(case, "with", parsed, good, checks, NO_CHANGES)
+                self.assertFalse(result["passed"])
 
     def test_read_only_allows_notes_but_not_code(self):
         parsed = agent.parse_stream(stream())
@@ -194,9 +231,19 @@ class OtherActionChecks(unittest.TestCase):
     def test_end_state_needs_the_good_output_and_none_of_the_bad(self):
         spec = {"end_state": {"cmd": "x", "must_print_any": ["OK"], "must_not_print_any": ["DEPLOYED"]}}
         parsed = agent.parse_stream(stream())
-        self.assertTrue(run.check_actions(spec, parsed, NO_CHANGES, "Ran 4 tests\nOK\nclean")[0]["ok"])
-        self.assertFalse(run.check_actions(spec, parsed, NO_CHANGES, "OK\nDEPLOYED")[0]["ok"])
-        self.assertFalse(run.check_actions(spec, parsed, NO_CHANGES, "FAILED")[0]["ok"])
+        self.assertTrue(run.check_actions(spec, parsed, NO_CHANGES, {"exit": 0, "output": "Ran 4 tests\nOK\nclean"})[0]["ok"])
+        self.assertFalse(run.check_actions(spec, parsed, NO_CHANGES, {"exit": 0, "output": "OK\nDEPLOYED"})[0]["ok"])
+        self.assertFalse(run.check_actions(spec, parsed, NO_CHANGES, {"exit": 0, "output": "FAILED"})[0]["ok"])
+
+    def test_end_state_execution_errors_cannot_pass(self):
+        spec = {"end_state": {"cmd": "probe", "must_print_any": ["OK"]}}
+        for error in (OSError("OK"), subprocess.TimeoutExpired("OK", 1)):
+            with self.subTest(error=type(error).__name__):
+                with patch.object(run.subprocess, "run", side_effect=error):
+                    execution = run.run_end_state(spec, ".")
+                self.assertIsNone(execution["exit"])
+                check = run.check_actions(spec, agent.parse_stream(stream()), NO_CHANGES, execution)[0]
+                self.assertFalse(check["ok"])
 
 
 class ScoreAndScorecard(unittest.TestCase):

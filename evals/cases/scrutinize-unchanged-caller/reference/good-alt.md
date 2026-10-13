@@ -11,3 +11,5 @@ behaviour the branch just removed.
 
 Verdict: rework the billing caller (and its test to use the real function) before merging. Or keep
 the raising version and add a separate optional lookup.
+
+The key safety condition is preserving list-price checkout for absent users. I exercised the unchanged billing.price_for boundary: the branch throws TypeError, and main produces 1000, so the branch does not preserve that condition.

@@ -1,7 +1,7 @@
 ---
 name: onboard-system
 description: >-
-  First contact with an unfamiliar codebase — set it up for the skills, then build and leave behind the full picture (what it has, how it's shaped, why it's built that way) so every later session or agent finds it instead of rediscovering it. Reuses project-foundation; project-setup only prepares agent instructions. Use for "onboard me to this codebase", "get up to speed on this system", "I've never seen this repo before", "learn this system top to bottom", or when a repo has no VERIFY.md, FEATURES.md, docs/architecture.md or WHY.md yet. Manual: run /onboard-system.
+  Understand an unfamiliar codebase, reuse current foundation and fill needed context gaps, then explain its flow and check one prediction. Manual: run /onboard-system.
 disable-model-invocation: true
 metadata:
   stage: orient
@@ -20,12 +20,15 @@ end · **suspected** = neither.*
 
 Follow existing startup pointers and run project-foundation's `foundation.py inventory` when installed.
 Otherwise inspect the same categories directly: intent, work, feature/check indexes, architecture,
-commands and retrieval. Existing but stale documents are refresh candidates; existence is not proof.
+commands and retrieval. This inventory is the standalone route when project-foundation is absent;
+complete only the categories relevant to the request and disclose any unavailable checks. Existing but stale documents are refresh candidates; existence is not proof.
 Read the root summaries, then only the areas needed for the user's question. Do not read every file.
 
 ## 2. Fill the gaps once
 
-For missing/stale categories, load the `project-foundation` skill by reading its
+A missing filename alone does not require setup: use equivalent records. A read-only question
+uses scoped source tracing and reports gaps. For requested context preparation with missing/stale
+categories, load the `project-foundation` skill by reading its
 [SKILL.md](../project-foundation/SKILL.md) and follow it, reusing its inventory, workers and completed
 checks. Read its foundation/economy references and Drive's [routing](../drive/references/model-routing.md)
 only when doing that work. It owns architecture, commands and memory as well as verification; do not

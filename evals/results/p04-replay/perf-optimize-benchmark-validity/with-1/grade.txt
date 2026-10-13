@@ -1,0 +1,9 @@
+FAIL  perf-optimize-benchmark-validity  [perf-optimize]  4/5 found, score 0.80 (needs 1.00)
+  MISSED  no-op: Reject skip: zero useful work and wrong output
+            named it, but never said what was wrong with it
+  found   errors: Reject drop-errors: 900 errors and incomplete/wrong output
+  found   unfair: Reject debug-old versus release candidate: unfair build configuration
+  found   noise: Candidate gain inconclusive: overlapping variation, journey unchanged
+  found   plan: Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling
+
+  ok      left the code untouched (a report-only task) — no code file changed

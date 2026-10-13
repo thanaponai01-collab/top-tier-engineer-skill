@@ -1,0 +1,168 @@
+[
+  {
+    "case": "p07-running-artifact-identity",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   head-is-not-running-source \u2014 \"the SHA-256 of `app.py`, so uncommitted edits count\"\n  found   health-is-not-identity \u2014 \"It now fails a healthy but stale process, and it passes when the running process matches the working tree.\"\n  held    do-not-change-contract",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 4368,
+        "cacheReadInputTokens": 271392,
+        "cacheCreationInputTokens": 25058,
+        "webSearchRequests": 0,
+        "costUSD": 0.17108720000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 860,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md documents a read-only Run doctor that checks actual running identity.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source, build config, flags, role and mocks.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/doctor.py"
+      ],
+      "added": [
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.17108720000000002,
+    "turns": 15,
+    "grade_text": "PASS  p07-running-artifact-identity  [verify-loop]  2/2 found, score 1.00 (needs 1.00)\n  found   head-is-not-running-source: The report explicitly explains that HEAD or a revision token alone misses uncommitted source changes.\n  found   health-is-not-identity: The report identifies that a process can be healthy and still be stale, so identity must be checked.\n  held    do-not-change-contract: Do not change application behavior or its identity response to make the doctor pass.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 45.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-9gjwdc9d\\top-tier-engineer"
+  },
+  {
+    "case": "p07-running-artifact-identity",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   head-is-not-running-source \u2014 \"Because it hashes file contents rather than a revision id, uncommitted edits with an unchanged revision are caught.\"\n  found   health-is-not-identity \u2014 \"identity mismatch: pid N is healthy but stale (<field>: running=\u2026 current=\u2026); restart the service from the current sourc\"\n  held    do-not-change-contract",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2695,
+        "cacheReadInputTokens": 110874,
+        "cacheCreationInputTokens": 13499,
+        "webSearchRequests": 0,
+        "costUSD": 0.0920534,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 355,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md documents a read-only Run doctor that checks actual running identity.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source, build config, flags, role and mocks.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/doctor.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.0920534,
+    "turns": 10,
+    "grade_text": "FAIL  p07-running-artifact-identity  [verify-loop]  0/2 found, score 0.00 (needs 1.00)\n  MISSED  head-is-not-running-source: The report explicitly explains that HEAD or a revision token alone misses uncommitted source changes.\n            named it, but never said what was wrong with it\n  MISSED  health-is-not-identity: The report identifies that a process can be healthy and still be stale, so identity must be checked.\n            named it, but never said what was wrong with it\n  held    do-not-change-contract: Do not change application behavior or its identity response to make the doctor pass.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 28.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  }
+]

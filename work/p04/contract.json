@@ -1,0 +1,54 @@
+{
+  "goal": "Implement P04 benchmark validity reference and bounded behavioral trial",
+  "target": "local",
+  "max_attempts": 5,
+  "timeout_seconds": 300,
+  "max_seconds": 14400,
+  "criteria": [
+    {
+      "statement": "Reference wired; invalid/noisy benchmarks discriminated in bounded behavioral trial",
+      "stage": "build"
+    },
+    {
+      "statement": "Repository checks pass",
+      "stage": "prove"
+    }
+  ],
+  "oracle_files": [
+    "docs/pstack/adoption-plan.md",
+    "evals\\cases\\perf-optimize-benchmark-validity\\expect.json",
+    "evals\\cases\\perf-optimize-benchmark-validity\\fixture\\measurements.json"
+  ],
+  "stages": [
+    {
+      "id": "build",
+      "skill": "build-discipline",
+      "command": [
+        "python",
+        "tools/catalog.py",
+        "--check"
+      ],
+      "inputs": [
+        "skills/perf-optimize",
+        "evals\\cases\\perf-optimize-benchmark-validity"
+      ]
+    },
+    {
+      "id": "prove",
+      "skill": "correctness-gate",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "tests"
+      ],
+      "inputs": [
+        "skills/perf-optimize",
+        "evals/cases/perf-optimize-benchmark-validity",
+        "work/p04"
+      ]
+    }
+  ],
+  "actions": []
+}

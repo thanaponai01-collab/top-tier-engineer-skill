@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "correct-result",
+      "what": "The fee is added to the base total.",
+      "found": true,
+      "quote": "I changed `fixture/total.py` so `total` returns `base + fee` instead of `base - fee`.",
+      "quote_checked": true
+    },
+    {
+      "id": "proof",
+      "what": "The existing test was actually run and passed.",
+      "found": true,
+      "quote": "`test_total_includes_fee` passes (`total(10, 2) == 12`). I ran it with `PYTHONPATH=. python -m unittest tests.test_total`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "unnecessary-foundation",
+      "what": "A one-line task does not need a foundation refresh or a specialist chain.",
+      "tripped": false,
+      "quote": "I didn't use `pick-skill` to load another skill, because a known one-line fix doesn't need one.",
+      "quote_checked": true
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0381807,
+  "model": "claude-sonnet-5-5"
+}

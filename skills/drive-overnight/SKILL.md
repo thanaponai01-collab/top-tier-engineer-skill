@@ -83,4 +83,7 @@ NEXT:      <the one step to take first>
 The branch and `OVERNIGHT.md` are the handoff. `recall` reads them the next day.
 
 Use [Drive model routing](../drive/references/model-routing.md) for workers; the current session
-retains authority, budgets and evidence gates. Worker dispatch does not widen unattended scope.
+retains authority, budgets and evidence gates. If that reference is unavailable, use only workers
+and models the host supports and keep the current session as coordinator. Worker dispatch does
+not widen unattended scope. If `recall` is unavailable next day, read this handoff and the branch
+directly.

@@ -96,5 +96,29 @@
       }
     ],
     "what": "Preserve intent and unfinished expiry; record the completed fix without inventing verification."
+  },
+  "actions": {
+    "skills_in_order": [
+      "project-update"
+    ],
+    "skills_why": "opened the project-upkeep skill",
+    "end_state": {
+      "cmd": "python tools/upkeep_probe.py compare",
+      "must_print_any": [
+        "upkeep documents unchanged"
+      ],
+      "why": "second upkeep pass left context documents byte-for-byte unchanged"
+    },
+    "must_run_any": [
+      "tools/context\\.py.*index.*--files"
+    ],
+    "must_run_why": "indexed the changed context records with the local helper",
+    "must_not_run_any": [
+      "find\\s+/",
+      "Get-ChildItem.*-Recurse.*[A-Z]:\\\\",
+      "rg\\s+--files\\s+[A-Z]:\\\\",
+      "[A-Z]:[\\\\/]+Users[\\\\/]+[^\\\\/]+[\\\\/]+\\.claude[\\\\/]+projects"
+    ],
+    "must_not_run_why": "kept all reads and searches inside the supplied fixture"
   }
 }

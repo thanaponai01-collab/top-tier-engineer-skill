@@ -1,0 +1,369 @@
+[
+  {
+    "case": "p07-running-artifact-identity",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  1/2 found\n  found   head-is-not-running-source \u2014 \"Because it hashes the working-tree files, an uncommitted edit is caught even when `HEAD` hasn't moved.\"\n  MISSED  health-is-not-identity\n  held    do-not-change-contract",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2521,
+        "cacheReadInputTokens": 128290,
+        "cacheCreationInputTokens": 17989,
+        "webSearchRequests": 0,
+        "costUSD": 0.110015,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 231,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 2,
+    "missed": [
+      "The report finds that a healthy responsive old process is not proof of the intended build."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md documents a read-only Run doctor that checks actual running identity.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source and changed flags, role and mocks.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/doctor.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.110015,
+    "turns": 11,
+    "grade_text": "FAIL  p07-running-artifact-identity  [verify-loop]  1/2 found, score 0.50 (needs 1.00)\n  found   head-is-not-running-source: The report explains that HEAD alone does not identify uncommitted source currently on disk.\n  MISSED  health-is-not-identity: The report finds that a healthy responsive old process is not proof of the intended build.\n            named it, but never said what was wrong with it\n  held    do-not-change-contract: Do not change application behavior or its identity response to make the doctor pass.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 27.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-89ooad3n\\top-tier-engineer"
+  },
+  {
+    "case": "p07-running-artifact-identity",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   head-is-not-running-source \u2014 \"The source hash is read from the working tree, so it catches uncommitted edits with `HEAD` unchanged.\"\n  found   health-is-not-identity \u2014 \"The old Run doctor only asserted `pid > 0`, so any healthy process passed.\"\n  held    do-not-change-contract",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 7362,
+        "cacheReadInputTokens": 241804,
+        "cacheCreationInputTokens": 27311,
+        "webSearchRequests": 0,
+        "costUSD": 0.2070764,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1643,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left .verify-run/config.json alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "left .verify-run/port alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "left check_doctor.py alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "left run_service.py alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "left wait_ready.py alone",
+        "ok": false,
+        "workdir": true,
+        "detail": "added: outside the files this run may change"
+      },
+      {
+        "check": "VERIFY.md documents a read-only Run doctor that checks actual running identity.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source and changed flags, role and mocks.",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/doctor.py"
+      ],
+      "added": [
+        "fixture/.verify-run/config.json",
+        "fixture/.verify-run/port",
+        "fixture/.verify-state.json",
+        "fixture/check_doctor.py",
+        "fixture/run_service.py",
+        "fixture/wait_ready.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.2070764,
+    "turns": 17,
+    "grade_text": "FAIL  p07-running-artifact-identity  [verify-loop]  1/2 found, score 0.50 (needs 1.00)\n  found   head-is-not-running-source: The report explains that HEAD alone does not identify uncommitted source currently on disk.\n  MISSED  health-is-not-identity: The report finds that a healthy responsive old process is not proof of the intended build.\n            named it, but never said what was wrong with it\n  held    do-not-change-contract: Do not change application behavior or its identity response to make the doctor pass.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 74.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-28q_ear4\\top-tier-engineer"
+  },
+  {
+    "case": "p07-running-artifact-identity",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   head-is-not-running-source \u2014 \"It compares that with what the live process captured at startup: source sha256 of `app.py` (uncommitted bytes included),\"\n  found   health-is-not-identity \u2014 \"A healthy old process was rejected for:\"\n  held    do-not-change-contract",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 46,
+        "outputTokens": 12752,
+        "cacheReadInputTokens": 942062,
+        "cacheCreationInputTokens": 41547,
+        "webSearchRequests": 0,
+        "costUSD": 0.3880062,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2877,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md documents a read-only Run doctor that checks actual running identity.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source and changed flags, role and mocks.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/doctor.py"
+      ],
+      "added": [
+        "V.bak",
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.3880062,
+    "turns": 32,
+    "grade_text": "PASS  p07-running-artifact-identity  [verify-loop]  2/2 found, score 1.00 (needs 1.00)\n  found   head-is-not-running-source: The report explains that HEAD alone does not identify uncommitted source currently on disk.\n  found   health-is-not-identity: The report finds that a healthy responsive old process is not proof of the intended build.\n  held    do-not-change-contract: Do not change application behavior or its identity response to make the doctor pass.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 149.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-9727cx5i\\top-tier-engineer"
+  },
+  {
+    "case": "p07-running-artifact-identity",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   head-is-not-running-source \u2014 \"It hashes `app.py` and `config.json` as they are on disk, so uncommitted edits count and Git HEAD plays no part.\"\n  found   health-is-not-identity \u2014 \"the same process still answered healthy, but the doctor failed with exit 1.\"\n  held    do-not-change-contract",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2889,
+        "cacheReadInputTokens": 113548,
+        "cacheCreationInputTokens": 14757,
+        "webSearchRequests": 0,
+        "costUSD": 0.09929279999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 309,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md documents a read-only Run doctor that checks actual running identity.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source and changed flags, role and mocks.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/doctor.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.09929279999999999,
+    "turns": 10,
+    "grade_text": "FAIL  p07-running-artifact-identity  [verify-loop]  1/2 found, score 0.50 (needs 1.00)\n  found   head-is-not-running-source: The report explains that HEAD alone does not identify uncommitted source currently on disk.\n  MISSED  health-is-not-identity: The report finds that a healthy responsive old process is not proof of the intended build.\n            named it, but never said what was wrong with it\n  held    do-not-change-contract: Do not change application behavior or its identity response to make the doctor pass.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 27.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  }
+]

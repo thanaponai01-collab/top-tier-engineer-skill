@@ -1,0 +1,450 @@
+[
+  {
+    "case": "project-context-task-trail",
+    "skill": "project-context",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  5/5 found\n  found   current-limit \u2014 \"The code still allows 1000 rows: `app.py:export_allowed` returns `0 <= rows <= 1000`.\"\n  found   history \u2014 \"`df19a71` (2026-10-10), \"Bound exports after memory pressure\", set the 1000-row bound in `app.py`.\"\n  found   unfinished \u2014 \"The wording is still unresolved, so keep that question open while you change the boundary.\"\n  found   current-failure \u2014 \"It ran 2 tests and 1 failed: `test_above_limit` fails because `export_allowed(501)` returns True.\"\n  found   shared-caller \u2014 \"Billing's 1000-item batches would start failing if you lower the shared limit to 500.\"\n  held    false-proof\n  held    scope-drift\n  held    unrelated-sweep",
+    "actions_passed": true,
+    "followed_skill": true,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "project-context"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:project-context"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1403,
+        "cacheReadInputTokens": 122468,
+        "cacheCreationInputTokens": 16863,
+        "webSearchRequests": 0,
+        "costUSD": 0.09374880000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "rerun the relevant safe boundary check",
+        "ok": true,
+        "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-mwaep1ba/fixture\" && PYTHONDONTWRITEBYTECODE=1 python -B -m uni"
+      },
+      {
+        "check": "never ran: git\\s+(push|fetch|pull), context\\.py[^\\n]*\\bindex\\b",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "opened the task-context retrieval skill",
+        "ok": true,
+        "detail": "opened: project-context",
+        "with_only": true
+      },
+      {
+        "check": "after the run, `git status --porcelain` shows the fix",
+        "ok": true,
+        "detail": "exit 0; requires exit 0 and matching output; printed: "
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.09374880000000001,
+    "turns": 6,
+    "grade_text": "FAIL  project-context-task-trail  [project-context]  4/5 found, score 0.80 (needs 1.00)\n  found   current-limit: The current owner requirement limits exports to 500 rows, but app.py still accepts 1000.\n  found   history: The relevant Git commit introduced the older limit to constrain allocations after memory pressure.\n  found   unfinished: The oversized-request message wording remains unresolved.\n  found   current-failure: The current boundary test fails; the old passing receipt is historical.\n  MISSED  shared-caller: The billing reconciliation module is an unmapped caller of export_allowed, so the shared boundary change affects export and billing reconciliation.\n            named it, but never said what was wrong with it\n  held    false-proof: Repeats the historical pass as current proof.\n  held    scope-drift: Begins changing the product during context preparation.\n  TRIPPED unrelated-sweep: Loading unrelated area records adds no relevant context and should be avoided.\n            claimed: work/unrelated\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 20.3,
+    "timed_out": false,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-ffmph4da\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": {
+      "exit": 0,
+      "output": ""
+    }
+  },
+  {
+    "case": "project-context-task-trail",
+    "skill": "project-context",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  4/5 found\n  found   current-limit \u2014 \"The code hasn't caught up: `app.py:export_allowed` still returns `0 <= rows <= 1000`.\"\n  found   history \u2014 \"`df19a71` (10-10), \"Bound exports after memory pressure\", set the 1000-row cap.\"\n  found   unfinished \u2014 \"The wording is still unresolved, so keep it open when you change the boundary and don't invent one.\"\n  found   current-failure \u2014 \"`test_above_limit` fails because `export_allowed(501)` returns True.\"\n  MISSED  shared-caller\n  held    false-proof\n  held    scope-drift\n  held    unrelated-sweep",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 977,
+        "cacheReadInputTokens": 84448,
+        "cacheCreationInputTokens": 12891,
+        "webSearchRequests": 0,
+        "costUSD": 0.0697948,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "The billing reconciliation module is an unmapped caller of export_allowed, so the shared boundary change affects export and billing reconciliation."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "rerun the relevant safe boundary check",
+        "ok": true,
+        "detail": "ran it: cd fixture; python -B -m unittest test_limits 2>&1 | tail -15"
+      },
+      {
+        "check": "never ran: git\\s+(push|fetch|pull), context\\.py[^\\n]*\\bindex\\b",
+        "ok": true,
+        "detail": "did not run it"
+      },
+      {
+        "check": "after the run, `git status --porcelain` shows the fix",
+        "ok": true,
+        "detail": "exit 0; requires exit 0 and matching output; printed: "
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.0697948,
+    "turns": 5,
+    "grade_text": "FAIL  project-context-task-trail  [project-context]  4/5 found, score 0.80 (needs 1.00)\n  found   current-limit: The current owner requirement limits exports to 500 rows, but app.py still accepts 1000.\n  found   history: The relevant Git commit introduced the older limit to constrain allocations after memory pressure.\n  found   unfinished: The oversized-request message wording remains unresolved.\n  found   current-failure: The current boundary test fails; the old passing receipt is historical.\n  MISSED  shared-caller: The billing reconciliation module is an unmapped caller of export_allowed, so the shared boundary change affects export and billing reconciliation.\n            never named: src/billing/reconcile.py\n            named it, but never said what was wrong with it\n  held    false-proof: Repeats the historical pass as current proof.\n  held    scope-drift: Begins changing the product during context preparation.\n  TRIPPED unrelated-sweep: Loading unrelated area records adds no relevant context and should be avoided.\n            claimed: work/unrelated\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 14.2,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": {
+      "exit": 0,
+      "output": ""
+    }
+  },
+  {
+    "case": "project-update-preserves-intent",
+    "skill": "project-update",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   gap \u2014 \"No tests ran, so the change is unverified.\"\n  found   dependency \u2014 \"Checkout calls the same helper and passes `/billing`, so its result changes from `/` to `/billing`.\"",
+    "actions_passed": true,
+    "followed_skill": true,
+    "leaked": false,
+    "errored": true,
+    "used_skill": true,
+    "skills_loaded": [
+      "project-update"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:project-update"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 2566,
+        "cacheReadInputTokens": 207272,
+        "cacheCreationInputTokens": 17578,
+        "webSearchRequests": 0,
+        "costUSD": 0.11673120000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 293,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "captured the first-pass document bytes before repeating upkeep",
+        "ok": true,
+        "detail": "ran it: cd fixture cat > work/redirect.md <<'EOF' # Redirect Purpose: navigation shared by login and checkout. Owned p"
+      },
+      {
+        "check": "opened the project-upkeep skill",
+        "ok": true,
+        "detail": "opened: project-update",
+        "with_only": true
+      },
+      {
+        "check": "second upkeep pass left context documents byte-for-byte unchanged",
+        "ok": true,
+        "detail": "exit 0; requires exit 0 and matching output; printed: upkeep documents unchanged"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Expired sessions still cannot bypass authentication.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Session expiry is still unfinished.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The next step is verification.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The shared record retains both real callers.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The stale shared behavior is replaced with return-target behavior.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The affected auth record describes the completed result.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Root work still points to both areas.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Superseded shared behavior leaves the current area summary.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/BUILD.md",
+        "fixture/work/auth.md",
+        "fixture/work/redirect.md"
+      ],
+      "added": [
+        "fixture/.project-context/index.sqlite"
+      ],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.11673120000000001,
+    "turns": 11,
+    "grade_text": "FAIL  project-update-preserves-intent  [project-update]  1/2 found, score 0.50 (needs 1.00)\n  found   gap: The fix is recorded but verification did not run.\n  MISSED  dependency: The report identifies shared impact beyond the initial module.\n            never named: src/shared/redirect.py, src/billing/checkout.py\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 300.0,
+    "timed_out": true,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-ffmph4da\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": {
+      "exit": 0,
+      "output": "upkeep documents unchanged\n"
+    }
+  },
+  {
+    "case": "project-update-preserves-intent",
+    "skill": "project-update",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   gap \u2014 \"the return URL fix is marked done but unverified, because no checks ran.\"\n  found   dependency \u2014 \"I also noted a side effect from the current callers: checkout passes `/billing`, so it now returns `/billing` instead of\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 1378,
+        "cacheReadInputTokens": 131342,
+        "cacheCreationInputTokens": 11344,
+        "webSearchRequests": 0,
+        "costUSD": 0.0723142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 183,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "captured the first-pass document bytes before repeating upkeep",
+        "ok": true,
+        "detail": "ran it: cd fixture cat > work/auth.md <<'E' # Auth Purpose: login navigation and session policy. Owner requirement: .."
+      },
+      {
+        "check": "second upkeep pass left context documents byte-for-byte unchanged",
+        "ok": true,
+        "detail": "exit 0; requires exit 0 and matching output; printed: upkeep documents unchanged"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Expired sessions still cannot bypass authentication.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Session expiry is still unfinished.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The next step is verification.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The shared record retains both real callers.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The stale shared behavior is replaced with return-target behavior.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The affected auth record describes the completed result.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Root work still points to both areas.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Superseded shared behavior leaves the current area summary.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/BUILD.md",
+        "fixture/work/auth.md",
+        "fixture/work/redirect.md"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.0723142,
+    "turns": 6,
+    "grade_text": "FAIL  project-update-preserves-intent  [project-update]  1/2 found, score 0.50 (needs 1.00)\n  found   gap: The fix is recorded but verification did not run.\n  MISSED  dependency: The report identifies shared impact beyond the initial module.\n            never named: src/shared/redirect.py, src/billing/checkout.py\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 25.4,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": {
+      "exit": 0,
+      "output": "upkeep documents unchanged\n"
+    }
+  }
+]

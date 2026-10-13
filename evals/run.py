@@ -163,13 +163,19 @@ def check_actions(spec, parsed, changes, end_output=None, arm="with"):
 
     end = spec.get("end_state")
     if end:
-        output = grade.normalize(end_output or "")
-        ok = (any(grade.normalize(s) in output for s in end.get("must_print_any", [""]))
+        execution = end_output if isinstance(end_output, dict) else {}
+        raw_output = execution.get("output", "")
+        output = grade.normalize(raw_output)
+        exit_code = execution.get("exit")
+        ok = (type(exit_code) is int and exit_code == 0
+              and any(grade.normalize(s) in output for s in end.get("must_print_any", [""]))
               and not any(grade.normalize(s) in output for s in end.get("must_not_print_any", [])))
         checks.append({
             "check": end.get("why") or f"after the run, `{end['cmd']}` shows the fix",
             "ok": ok,
-            "detail": "printed: " + " ".join((end_output or "").split())[-200:],
+            "detail": ("exit unknown; rerun the end-state command to retain its exit code"
+                       if exit_code is None else f"exit {exit_code}; requires exit 0 and matching output")
+                      + "; printed: " + " ".join(raw_output.split())[-200:],
         })
     return checks
 
@@ -244,9 +250,9 @@ def run_end_state(spec, workdir):
     try:
         proc = subprocess.run(end["cmd"], shell=True, cwd=cwd, capture_output=True, text=True,
                               timeout=end.get("timeout", 120), env=agent.clean_env())
-        return proc.stdout + proc.stderr
+        return {"exit": proc.returncode, "output": proc.stdout + proc.stderr}
     except (subprocess.TimeoutExpired, OSError) as exc:
-        return f"(end-state command failed: {exc})"
+        return {"exit": None, "output": f"(end-state command failed: {exc})"}
 
 
 def report_text(parsed, workdir, changes):
@@ -303,7 +309,7 @@ def score_run(case, arm, parsed, report, checks, changes, verdict=None):
     by_meaning = bool(verdict and verdict.get("ok"))
     main = verdict if by_meaning else graded
     leaked = agent.touched_answer_key(parsed)
-    used_skill = any(agent.skill_matches(s, case["skill"]) for s in parsed["skills"])
+    used_skill = any(agent.skill_matches(s, case["skill"]) for s in parsed["skills_loaded"])
     shared = [c for c in checks if not c.get("with_only")]
     own = [c for c in checks if c.get("with_only")]
     ok_actions = all(c["ok"] for c in shared)
@@ -319,7 +325,12 @@ def score_run(case, arm, parsed, report, checks, changes, verdict=None):
         "leaked": leaked,
         "errored": parsed["is_error"],
         "used_skill": used_skill,
-        "skills_loaded": parsed["skills"],
+        "skills_loaded": parsed["skills_loaded"],
+        "skill_calls": parsed["skills"],
+        "skill_reads": parsed["skill_reads"],
+        "skill_read_candidates": parsed["skill_read_candidates"],
+        "model_usage": parsed["model_usage"],
+        "dispatch_count": sum(t["name"] in {"Agent", "Task"} for t in parsed["tools"]),
         "found": main["found"], "total": main["total"],
         "missed": [p["what"] for p in main["planted"] if not p["found"]],
         "tripped": [t["what"] for t in main["traps"] if t["tripped"]],
@@ -347,7 +358,7 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
         say(f"start  {tag}")
         raw = agent.run_agent(prompt, workdir, plugin_dir if arm == "with" else None,
                               model=args.model, timeout=args.timeout, budget_usd=args.budget_usd)
-        parsed = agent.parse_stream(raw["lines"])
+        parsed = agent.parse_stream(raw["lines"], plugin_dir=plugin_dir if arm == "with" else None)
         if raw["timed_out"]:
             parsed["is_error"] = True
         changes = agent.diff_snapshots(before, agent.snapshot(workdir))
@@ -371,6 +382,7 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
 
         result = score_run(case, arm, parsed, report, checks, changes, verdict)
         result.update({"seconds": raw["seconds"], "timed_out": raw["timed_out"],
+                       "staged_plugin": plugin_dir if arm == "with" else None,
                        "stderr_tail": raw["stderr"][-600:], "end_output": end_output})
         write_run_grade(run_dir, result)
         say(f"{'PASS ' if result['passed'] else 'fail '}  {tag}  "
@@ -496,7 +508,9 @@ def write_scorecard(results, meta, path=SCORECARD):
     if with_runs:
         used = sum(1 for r in with_runs if r["used_skill"])
         L.append(f"\n**Did the agent open the skill it was asked to use?** {used} of {len(with_runs)} tries.")
-        L.append("A try that never opened the skill measured the model, not the skill.")
+        L.append("Counts Skill calls and direct Reads matched to actual staged files; these are tool requests,")
+        L.append("not proof of successful reading or procedure compliance. Unmatched SKILL.md requests remain")
+        L.append("in result.json as candidates; missing staging evidence makes historical loading unmeasured.")
 
     followed = {}
     for r in with_runs:
@@ -569,7 +583,14 @@ def rescore(out_dir, use_judge=True, rejudge=False, jobs=6):
         case, run_dir, tpath, rpath = job
         with open(rpath, encoding="utf-8") as fh:
             old = json.load(fh)
-        parsed = agent.parse_stream(grade.read(tpath).splitlines())
+        # Staging may have been deleted. Preserve previously validated reads only if
+        # the exact Read call remains present in the retained transcript.
+        parsed = agent.parse_stream(grade.read(tpath).splitlines(), plugin_dir=old.get("staged_plugin"))
+        for read in old.get("skill_reads", []):
+            if any(t["name"] == "Read" and t["input"].get("file_path") == read["path"] for t in parsed["tools"]):
+                if read not in parsed["skill_reads"]:
+                    parsed["skill_reads"].append(read)
+                parsed["skills_loaded"] = sorted(set(parsed["skills_loaded"]) | {read["skill"]})
         if old.get("timed_out"):
             parsed["is_error"] = True
         report = grade.read(os.path.join(run_dir, "report.md"))
@@ -586,7 +607,7 @@ def rescore(out_dir, use_judge=True, rejudge=False, jobs=6):
                 with open(jpath, "w", encoding="utf-8") as fh:
                     json.dump(verdict, fh, indent=2)
         r = score_run(case, old["arm"], parsed, report, checks, old["changes"], verdict)
-        r.update({k: old.get(k) for k in ("seconds", "timed_out", "stderr_tail", "end_output")})
+        r.update({k: old.get(k) for k in ("seconds", "timed_out", "stderr_tail", "end_output", "staged_plugin")})
         write_run_grade(run_dir, r)
         return r
 

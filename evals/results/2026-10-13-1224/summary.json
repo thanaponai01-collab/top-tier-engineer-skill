@@ -1,0 +1,529 @@
+[
+  {
+    "case": "pick-skill-slow-is-a-bug",
+    "skill": "pick-skill",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [
+      "debug-protocol"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:debug-protocol"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 1696,
+        "cacheReadInputTokens": 169119,
+        "cacheCreationInputTokens": 19468,
+        "webSearchRequests": 0,
+        "costUSD": 0.2235358,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 219,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced or measured the slowness before changing code",
+        "ok": true,
+        "detail": "ran it before changing any code: cd fixture && echo \"--- as-is\"; python dashboard.py; python -c \"import dashboard;print(dashboard.render()[:30]"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "render() finishes in under a second and serves the real flags (new navigation)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/settings.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2235358,
+    "turns": 7,
+    "grade_text": "PASS  pick-skill-slow-is-a-bug  [pick-skill]  1/1 found, score 1.00 (needs 1.00)\n  found   cause-is-the-flags-host: The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds.\n  held    optimize-the-decoy: Blaming or 'fixing' the widget sort (50 items, microseconds), or adding caching or shorter timeouts as the fix, while the misspelled host stays.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 35.6,
+    "timed_out": false,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "drive-bug-through-skills",
+    "skill": "drive",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": false,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 3378,
+        "cacheReadInputTokens": 188185,
+        "cacheCreationInputTokens": 18972,
+        "webSearchRequests": 0,
+        "costUSD": 0.257029,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 405,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced the failure before fixing it",
+        "ok": true,
+        "detail": "ran it before changing any code: cd C:/Users/thana/AppData/Local/Temp/tte-eval-ulcx1nsg/fixture; for f in *; do echo \"== $f\"; cat \"$f\"; done; p"
+      },
+      {
+        "check": "went through the playbook: opened drive \u2192 debug-protocol \u2192 evolve-maintain \u2192 correctness-gate, in order, rather than doing the steps from memory",
+        "ok": false,
+        "detail": "opened: no skill",
+        "with_only": true
+      },
+      {
+        "check": "after the run, `python report.py` prints the right total, 42.35",
+        "ok": true,
+        "detail": "printed: Total: 42.35"
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/parse.py"
+      ],
+      "added": [
+        "contract.json",
+        "fixture/RUN.json",
+        "fixture/acceptance.py",
+        "fixture/diagnose.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.257029,
+    "turns": 7,
+    "grade_text": "PASS  drive-bug-through-skills  [drive]  2/2 found, score 1.00 (needs 1.00)\n  found   the-cause-is-in-parse: the diagnosis step localised the cause to parse.py, not to where the total is printed\n  found   fix-proven: the fix is shown to hold: the right total, and a test that now guards it\n  held    patch-the-symptom-without-diagnosing: rounding or fixing where the number is printed skips the diagnosis step the playbook demands",
+    "seconds": 42.2,
+    "timed_out": false,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": "Total: 42.35\n"
+  },
+  {
+    "case": "project-foundation-after-setup",
+    "skill": "project-foundation",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 4721,
+        "cacheReadInputTokens": 196572,
+        "cacheCreationInputTokens": 20319,
+        "webSearchRequests": 0,
+        "costUSD": 0.2963424,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 266,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "checked FEATURES.md against the code with feature-map's features.py, instead of writing the map by hand",
+        "ok": false,
+        "detail": "never ran it \u2014 read or asserted only"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Architecture records actual module boundaries with sources.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Command index records a usable Python check.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Startup links architecture, commands and current work.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Startup explains retrieval or upkeep.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Current work has a concrete Next.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "A feature map traces the total calculation to its check.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The routing block setup wrote is preserved.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Verification was recorded through verify-loop's verify.py, which keeps its state file.",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/AGENTS.md",
+        "fixture/VERIFY.md"
+      ],
+      "added": [
+        "fixture/.project-context/foundation.json",
+        "fixture/BRIEF.md",
+        "fixture/BUILD.md",
+        "fixture/FEATURES.md",
+        "fixture/docs/architecture.md",
+        "fixture/docs/commands.md",
+        "fixture/verification/mutation.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2963424,
+    "turns": 7,
+    "grade_text": "PASS  project-foundation-after-setup  [project-foundation]  2/2 found, score 1.00 (needs 1.00)\n  found   coverage: Live gateway remains outside verified coverage.\n  found   category-list: The report lists every category with its state.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 49.7,
+    "timed_out": false,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "onboard-system-stale-architecture",
+    "skill": "onboard-system",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 3633,
+        "cacheReadInputTokens": 123371,
+        "cacheCreationInputTokens": 17336,
+        "webSearchRequests": 0,
+        "costUSD": 0.2360622,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 351,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "checked the understanding against the code by running its check, not only reading notes",
+        "ok": true,
+        "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-_8514tbc/fixture\" && python -m unittest 2>&1 | tail -3; python "
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "docs/architecture.md names billing/notify.py, the module that sends customer email today",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "docs/architecture.md includes credit_notes.py",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "no line of docs/architecture.md still presents mailer.py as a current module (it may appear only as what was renamed)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/CLAUDE.md",
+        "fixture/docs/architecture.md"
+      ],
+      "added": [
+        "fixture/docs/features.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2360622,
+    "turns": 5,
+    "grade_text": "PASS  onboard-system-stale-architecture  [onboard-system]  2/2 found, score 1.00 (needs 1.00)\n  found   architecture-stale: docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.\n  found   invariant-carried: The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
+    "seconds": 39.0,
+    "timed_out": false,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-healthy-check",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1594,
+        "cacheReadInputTokens": 123789,
+        "cacheCreationInputTokens": 15812,
+        "webSearchRequests": 0,
+        "costUSD": 0.1831738,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 180,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "The supplied product-backed check was actually executed.",
+        "ok": true,
+        "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-_0bv0af7/fixture\" && python -m unittest -v test_shipping 2>&1 |"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1831738,
+    "turns": 6,
+    "grade_text": "PASS  verify-loop-healthy-check  [verify-loop]  2/2 found, score 1.00 (needs 1.00)\n  found   real-check: The test calls shipping_fee and checks the specified boundary correctly.\n  found   limited-proof: A passing boundary check alone does not certify the whole application or establish observed mutation rejection.\n  held    healthy-check-rejected: The correct boundary test must not be labeled vacuous or spec-wrong.",
+    "seconds": 21.8,
+    "timed_out": false,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "correctness-gate-green-but-wrong",
+    "skill": "correctness-gate",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "phrases",
+    "phrase_passed": true,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "correctness-gate"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:correctness-gate"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1701,
+        "cacheReadInputTokens": 92829,
+        "cacheCreationInputTokens": 14533,
+        "webSearchRequests": 0,
+        "costUSD": 0.1688818,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 141,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "ran the test suite itself before changing anything, instead of trusting that green means correct",
+        "ok": true,
+        "detail": "ran it before changing any code: cd fixture && python -m unittest -v 2>&1 | tail -4; python -I -c \" import sys; sys.path.insert(0,'.') from shi"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1688818,
+    "turns": 5,
+    "grade_text": "PASS  correctness-gate-green-but-wrong  [correctness-gate]  3/3 found, score 1.00 (needs 1.00)\n  found   boundary-off-by-one: shipping.py uses `total > 100`; SPEC.md clause 1 says 100 or more ships free, so fee(100) is wrong\n  found   test-encodes-the-bug: test_hundred asserts fee(100) == 5, which is what the code does rather than what the spec says\n  found   spec-is-the-oracle: correctness is judged against SPEC.md, not against the existing suite\n  held    green-suite-read-as-correct: the gate must fail; a green suite is not evidence of correctness here",
+    "seconds": 22.7,
+    "timed_out": false,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

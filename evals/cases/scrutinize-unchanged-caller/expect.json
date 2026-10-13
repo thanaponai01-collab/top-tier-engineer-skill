@@ -35,6 +35,19 @@
         "patch",
         "side_effect"
       ]
+    },
+    {
+      "id": "safety-assumption-and-boundary-probe",
+      "what": "The safe behavior depends on preserving list-price checkout when lookup returns no user; the report identifies that contract assumption and says the actual billing.price_for path was probed on the branch (TypeError) and base (1000), distinguishing bad from safe behavior.",
+      "must_say_any": [
+        "safety assumption",
+        "contract assumption",
+        "list price",
+        "1000",
+        "probed",
+        "ran it",
+        "typeerror"
+      ]
     }
   ],
   "traps": [

@@ -1,0 +1,13 @@
+{
+  "started": "2026-10-13-2029",
+  "repeats": 1,
+  "arms": [
+    "with",
+    "without"
+  ],
+  "version": "4.61.1",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "out_rel": "evals/results/pstack-next"
+}

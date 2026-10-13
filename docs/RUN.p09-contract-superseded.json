@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "contract": {
+    "goal": "Adopt optional bounded guidance for large agent programs and dependent PR stack delivery",
+    "target": "local",
+    "max_attempts": 3,
+    "timeout_seconds": 900,
+    "max_seconds": 14400,
+    "criteria": [
+      {
+        "statement": "The pre-change result is retained and its no-advantage limits are stated",
+        "stage": "baseline"
+      },
+      {
+        "statement": "Drive links to a scoped reference covering bounded program slicing and verified contiguous stack delivery",
+        "stage": "content"
+      },
+      {
+        "statement": "The post-change read-only task trial reports current stack and work-graph facts without external actions",
+        "stage": "behavior"
+      },
+      {
+        "statement": "Handoff and BUILD record the slice and evidence",
+        "stage": "content"
+      },
+      {
+        "statement": "The repository suite and generated catalog pass",
+        "stage": "prove"
+      }
+    ],
+    "oracle_files": [
+      "PLAN.md",
+      "docs/pstack/adoption-plan.md",
+      "docs/pstack/comparison.md",
+      "evals/cases/drive-program-delivery",
+      "work/p09/check_baseline.py",
+      "work/p09/check_content.py",
+      "work/p09/prove.py"
+    ],
+    "stages": [
+      {
+        "id": "baseline",
+        "skill": "agent-evals",
+        "command": [
+          "python",
+          "work/p09/check_baseline.py"
+        ],
+        "inputs": [
+          "work/p09/check_baseline.py",
+          "evals/results/p09-baseline"
+        ]
+      },
+      {
+        "id": "behavior",
+        "skill": "agent-evals",
+        "command": [
+          "python",
+          "evals/run.py",
+          "--cases",
+          "drive-program-delivery",
+          "--repeats",
+          "1",
+          "--arms",
+          "without,with",
+          "--jobs",
+          "1",
+          "--budget-usd",
+          "2",
+          "--out",
+          "evals/results/p09-final",
+          "--keep-workdirs"
+        ],
+        "inputs": [
+          "skills/drive",
+          "evals/cases/drive-program-delivery",
+          "evals/run.py",
+          "evals/agent.py",
+          "evals/grade.py",
+          "evals/judge.py"
+        ]
+      },
+      {
+        "id": "content",
+        "skill": "build-discipline",
+        "command": [
+          "python",
+          "work/p09/check_content.py"
+        ],
+        "inputs": [
+          "skills/drive",
+          "work/p09/check_content.py",
+          "work/p09/evidence.md",
+          "work/pstack-handoff.md",
+          "BUILD.md"
+        ]
+      },
+      {
+        "id": "prove",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "work/p09/prove.py"
+        ],
+        "inputs": [
+          "skills",
+          "tests",
+          "tools/catalog.py",
+          "evals/cases/drive-program-delivery",
+          "evals/RESULTS.md",
+          "PLAN.md",
+          "BUILD.md",
+          "work/p09"
+        ]
+      }
+    ],
+    "actions": []
+  },
+  "contract_hash": "50ca26b5f2f857635f3fa2a28c05948a58ad276a560c777f153558cf56febe29",
+  "oracle_hash": "704b1945ef8e98daa231bcc6dc7c33f5318d1ea8964c814957a65c775deeae3f",
+  "started_at": 1791895011.4808095,
+  "status": "failed",
+  "proofs": {
+    "baseline": {
+      "command": [
+        "python",
+        "work/p09/check_baseline.py"
+      ],
+      "exit": 0,
+      "output": "P09 baseline: both arms passed 8/8; Drive added no measured outcome advantage; no worker dispatch was exercised.\n",
+      "at": 1791895015.243156,
+      "seconds": 0.06,
+      "inputs_hash": "a569bf76af91fb68cc744d56838d3fe5a71b0eb6c9f27d3f6dc6acf3f2ed8965"
+    }
+  },
+  "attempts": {
+    "baseline": 1
+  },
+  "journal": {},
+  "history": [
+    {
+      "stage": "baseline",
+      "command": [
+        "python",
+        "work/p09/check_baseline.py"
+      ],
+      "exit": 0,
+      "output": "P09 baseline: both arms passed 8/8; Drive added no measured outcome advantage; no worker dispatch was exercised.\n",
+      "at": 1791895015.243156,
+      "seconds": 0.06,
+      "inputs_hash": "a569bf76af91fb68cc744d56838d3fe5a71b0eb6c9f27d3f6dc6acf3f2ed8965"
+    }
+  ],
+  "reason": "Initial P09 contract incorrectly froze comparison and adoption-plan documents as immutable oracles even though this authorized slice updates them; oracle drift correctly rejected the behavior stage. Baseline proof is preserved.",
+  "next_action": "Archive this run and initialize the revised P09 contract with only fixed plan, acceptance fixture and checker files as oracles; include status documents as checked outputs."
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "case": "perf-optimize-benchmark-validity",
+    "skill": "perf-optimize",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "phrases",
+    "phrase_passed": false,
+    "judge_text": "",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "perf-optimize"
+    ],
+    "skill_calls": [
+      "top-tier-engineer:perf-optimize"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2913,
+        "cacheReadInputTokens": 93736,
+        "cacheCreationInputTokens": 15326,
+        "webSearchRequests": 0,
+        "costUSD": 0.1996472,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 979,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "Reject skip: zero useful work and wrong output"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1996472,
+    "turns": 6,
+    "grade_text": "FAIL  perf-optimize-benchmark-validity  [perf-optimize]  4/5 found, score 0.80 (needs 1.00)\n  MISSED  no-op: Reject skip: zero useful work and wrong output\n            named it, but never said what was wrong with it\n  found   errors: Reject drop-errors: 900 errors and incomplete/wrong output\n  found   unfair: Reject debug-old versus release candidate: unfair build configuration\n  found   noise: Candidate gain inconclusive: overlapping variation, journey unchanged\n  found   plan: Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling",
+    "seconds": 34.0,
+    "timed_out": false,
+    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-_9gt5ytm\\top-tier-engineer",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

@@ -1,0 +1,72 @@
+{
+  "goal": "Adopt optional bounded guidance for large agent programs and dependent PR stack delivery",
+  "target": "local",
+  "max_attempts": 3,
+  "timeout_seconds": 900,
+  "max_seconds": 14400,
+  "criteria": [
+    {"statement": "The pre-change result is retained and its no-advantage limits are stated", "stage": "baseline"},
+    {"statement": "Drive links to a scoped reference covering bounded program slicing and verified contiguous stack delivery", "stage": "content"},
+    {"statement": "The post-change read-only task trial reports current stack and work-graph facts without external actions", "stage": "behavior"},
+    {"statement": "Handoff and BUILD record the slice and evidence", "stage": "content"},
+    {"statement": "The repository suite and generated catalog pass", "stage": "prove"}
+  ],
+  "oracle_files": [
+    "PLAN.md",
+    "evals/cases/drive-program-delivery",
+    "work/p09/check_baseline.py",
+    "work/p09/check_content.py",
+    "work/p09/run_behavior.py",
+    "work/p09/check_behavior_evidence.py",
+    "work/p09/prove.py"
+  ],
+  "stages": [
+    {
+      "id": "baseline",
+      "skill": "agent-evals",
+      "command": ["python", "work/p09/check_baseline.py"],
+      "inputs": ["work/p09/check_baseline.py", "evals/results/p09-baseline"]
+    },
+    {
+      "id": "behavior",
+      "skill": "agent-evals",
+      "command": ["python", "work/p09/check_behavior_evidence.py"],
+      "inputs": [
+        "skills/drive",
+        "evals/cases/drive-program-delivery",
+        "evals/results/p09-verified",
+        "work/p09/check_behavior_evidence.py"
+      ]
+    },
+    {
+      "id": "content",
+      "skill": "build-discipline",
+      "command": ["python", "work/p09/check_content.py"],
+      "inputs": [
+        "skills/drive",
+        "work/p09/check_content.py",
+        "work/p09/evidence.md",
+        "work/pstack-handoff.md",
+        "BUILD.md",
+        "docs/pstack/comparison.md",
+        "docs/pstack/adoption-plan.md"
+      ]
+    },
+    {
+      "id": "prove",
+      "skill": "correctness-gate",
+      "command": ["python", "work/p09/prove.py"],
+      "inputs": [
+        "skills",
+        "tests",
+        "tools/catalog.py",
+        "evals/cases/drive-program-delivery",
+        "evals/RESULTS.md",
+        "PLAN.md",
+        "BUILD.md",
+        "work/p09"
+      ]
+    }
+  ],
+  "actions": []
+}

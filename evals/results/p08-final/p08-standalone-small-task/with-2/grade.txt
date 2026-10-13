@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   correct-result — "I changed `fixture/total.py` so `total` returns `base + fee` instead of `base - fee`."
+  found   proof — "`test_total_includes_fee` passes (`total(10, 2) == 12`). I ran it with `PYTHONPATH=. python -m unittest tests.test_total"
+  held    unnecessary-foundation
+
+Phrase grader (grade.py), for comparison:
+PASS  p08-standalone-small-task  [pick-skill]  2/2 found, score 1.00 (needs 1.00)
+  found   correct-result: The fee is added to the base total.
+  found   proof: The existing test was actually run and passed.
+  held    unnecessary-foundation: A one-line task does not need a foundation refresh or a specialist chain.
+
+  ok      did not start unnecessary project setup or reusable verification — did not run it
+  ok      after the run, the existing unit test passes — exit 0; requires exit 0 and matching output; printed: . ---------------------------------------------------------------------- Ran 1 test in 0.000s OK

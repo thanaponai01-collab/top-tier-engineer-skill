@@ -133,7 +133,7 @@ def compact_summary(repo):
         return run
     parts = [f"Project context: intent: {paths['intent']}; work: {paths['work']}. Read relevant linked areas."]
     if run:
-        parts.append(run)
+        parts[0] += " " + run
     if nxt:
         parts.append('Next: ' + ' '.join(nxt.split())[:300] + f" [{paths['work']}]")
     if decisions:

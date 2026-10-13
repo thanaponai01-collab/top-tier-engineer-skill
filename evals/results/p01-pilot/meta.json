@@ -1,0 +1,13 @@
+{
+  "started": "2026-10-13-1218",
+  "repeats": 1,
+  "arms": [
+    "without",
+    "with"
+  ],
+  "version": "4.61.1",
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "out_rel": "evals/results/p01-pilot"
+}

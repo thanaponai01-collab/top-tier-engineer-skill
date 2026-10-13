@@ -1,0 +1,136 @@
+{
+  "case": "project-update-preserves-intent",
+  "skill": "project-update",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   gap \u2014 \"No tests have run.\"\n  found   dependency \u2014 \"I also noted that checkout calls it with `/billing` and now gets `/billing` back, so someone should confirm that was int\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2173,
+      "cacheReadInputTokens": 131726,
+      "cacheCreationInputTokens": 12450,
+      "webSearchRequests": 0,
+      "costUSD": 0.08472660000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 136,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "indexed the changed context records with the local helper",
+      "ok": true,
+      "detail": "ran it: cd C:/Users/thana/AppData/Local/Temp/tte-eval-2p5oprom/fixture && python - <<'E' def sub(p,a,b): s=open(p,newl"
+    },
+    {
+      "check": "kept all reads and searches inside the supplied fixture",
+      "ok": true,
+      "detail": "did not run it"
+    },
+    {
+      "check": "second upkeep pass left context documents byte-for-byte unchanged",
+      "ok": true,
+      "detail": "exit 0; requires exit 0 and matching output; printed: upkeep documents unchanged"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Expired sessions still cannot bypass authentication.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Session expiry is still unfinished.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The next step is verification.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The shared record retains both real callers.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The stale shared behavior is replaced with return-target behavior.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The affected auth record describes the completed result.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Root work still points to both areas.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Superseded shared behavior leaves the current area summary.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/BUILD.md",
+      "fixture/work/auth.md",
+      "fixture/work/redirect.md"
+    ],
+    "added": [
+      "fixture/.project-context/index.sqlite"
+    ],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.08472660000000001,
+  "turns": 6,
+  "seconds": 28.0,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": {
+    "exit": 0,
+    "output": "upkeep documents unchanged\n"
+  }
+}

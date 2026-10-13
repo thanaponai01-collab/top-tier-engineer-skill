@@ -1,7 +1,10 @@
 # PStack adoption plan
 
 Status owner: [handoff](../../work/pstack-handoff.md). Evidence: [validation](validation.md).
-All slices are proposals. Owners are unassigned; implementation/dispatch has not been authorized.
+P01 was authorized by the user's `/drive implement the p01` request; its bounded results are
+in [evidence](../../work/p01/evidence.md). P05 implementation and bounded trial evidence are in
+[the P05 record](../../work/p05/evidence.md); adoption status remains handoff-owned. Other slices
+retain their status in the handoff.
 
 ## P01 Establish trustworthy behavioral evidence
 
@@ -75,5 +78,7 @@ P01 comes first. Design P02/P07 fixtures together to avoid repeated startup/proo
 follow once reporting is trustworthy; P05/P06 need independent discrimination cases. Shared edits
 have one writer. Before skill changes, write a case, retain baseline and replay after. Consult
 current context and diffs; do not overwrite unrelated work or replace an active RUN.json.
-Version bumps, releases, installed-plugin updates, tracker filing and P09 are outside this
-document-authoring task. Later adoption follows repository checks and the user's actual scope.
+Version bumps, releases, installed-plugin updates and tracker filing remain outside this plan.
+P09 has a separate authorized implementation pass; its local scope and evidence are tracked in the
+[handoff](../../work/pstack-handoff.md). Later adoption follows repository checks and the user's
+actual scope.

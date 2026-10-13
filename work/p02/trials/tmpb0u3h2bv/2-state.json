@@ -1,0 +1,28 @@
+{
+ "checks": {
+  "Persistence|python probe.py api": {
+   "count": 0,
+   "exit": 0,
+   "fp": null,
+   "ok": true,
+   "output": "persisted note verified through second public read\n"
+  }
+ },
+ "cleanup": {
+  "exit": 1,
+  "ok": false,
+  "output": "cleanup deliberately failed\n",
+  "seconds": 0.12621259689331055
+ },
+ "doctor": {
+  "exit": 0,
+  "ok": true,
+  "output": "{\"build\": \"p02-v1\", \"owner\": \"580cbae570c84e30b0622bdacf7e8795\", \"pid\": 45288}\n",
+  "seconds": 0.1453721523284912
+ },
+ "failures": {},
+ "result": "red",
+ "rounds": 0,
+ "strict": false,
+ "tree": "708c7a35f70efe11"
+}

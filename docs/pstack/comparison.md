@@ -72,7 +72,8 @@ while missing-skill fallbacks are defined in some paths. Describe actual standal
 without removing useful composition. Skill loading, procedure completion and outcome are separate;
 eval records include mixed benefits and reporting limitations described in [validation](validation.md).
 
-Defer cloud fleets, large program stores, automated PR-stack queues and build-noise exceptions
-until repeated demand justifies them. Separate principle skills for every habit, mandatory multi-model
+P09 adopts optional portable steps for bounded program planning and verified stack delivery. Defer
+cloud fleets, large program stores, automated PR-stack queues and build-noise exceptions until
+repeated demand justifies them. Separate principle skills for every habit, mandatory multi-model
 review for routine edits and a competing receipt format are not recommended. Preserve optional
 workflows; every addition must demonstrate value against its attention, cost and maintenance overhead.

@@ -45,6 +45,24 @@ surprise; that's where the bugs are.
 - **Silent changes:** performance, error meaning, logs, stored formats, contracts other callers use.
 - **The tests:** do they run the path you traced, or mock around it?
 
+## 4. Test the decisive assumption
+
+Name the one or two assumptions that make the change safe: for example, a persisted format stays
+compatible, a schema field remains available through the migration window, shutdown happens only
+after consumers stop, a pinned library preserves an error contract, or a flag has the same meaning
+at every entry point. Trace that assumption through relevant configuration, schemas, lifecycle
+ordering, pinned dependencies and indirect consumers beyond direct callers. Do not turn this into a
+full impact map: stop when the decisive boundary is identified, and mark any uninspected path
+**unknown**.
+
+Use an unchanged consumer or boundary fixture where one is available. Run the smallest probe that
+would fail on the bad behavior and pass on the safe behavior; retain the command and result. A
+source read is **traced**, not **proven**. If the fixture cannot exercise both behaviors, report
+that limit instead of calling the assumption verified.
+
+*Test:* name the safety assumption, the unchanged boundary that depends on it, and the bad/safe
+probe result (or the specific unknown that prevents one).
+
 Run things wherever it's cheap, from a scratch checkout, and not code from an author you have no
 reason to trust. Make the scratch checkout with `git worktree add <temp dir> <branch>` and remove
 it afterwards (`git worktree remove <temp dir>`); never switch the person's own checkout to another branch. Post nothing on the PR or ticket unless asked.

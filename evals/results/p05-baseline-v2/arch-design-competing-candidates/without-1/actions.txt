@@ -1,0 +1,1 @@
+  1. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-rpqpf803" && find . -type f | grep -v node_modules | head -50 && cat fixture/requirements.md

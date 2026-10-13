@@ -1,0 +1,57 @@
+{
+  "goal": "Implement P01 trustworthy loading reports and bounded recall pilot",
+  "target": "local",
+  "max_attempts": 5,
+  "timeout_seconds": 600,
+  "max_seconds": 14400,
+  "criteria": [
+    {
+      "statement": "Staged Read and Skill calls distinguished from absent or unrelated reads",
+      "stage": "build"
+    },
+    {
+      "statement": "Full helper suite passes",
+      "stage": "prove"
+    }
+  ],
+  "oracle_files": [
+    "docs/pstack/validation.md"
+  ],
+  "stages": [
+    {
+      "id": "build",
+      "skill": "build-discipline",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "tests",
+        "-p",
+        "test_runner.py"
+      ],
+      "inputs": [
+        "evals/agent.py",
+        "evals/run.py",
+        "tests/test_runner.py"
+      ]
+    },
+    {
+      "id": "prove",
+      "skill": "correctness-gate",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "tests"
+      ],
+      "inputs": [
+        "evals/agent.py",
+        "evals/run.py",
+        "tests"
+      ]
+    }
+  ],
+  "actions": []
+}

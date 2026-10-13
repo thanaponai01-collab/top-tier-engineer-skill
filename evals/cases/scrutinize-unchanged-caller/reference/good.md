@@ -17,3 +17,6 @@ keeps testing the old contract, so the suite is green. Replace the mock with the
 Smallest fix: `user = get_user(user_id); if user is None: return amount_cents`, plus a billing test
 that uses the real lookup for an unknown id. Cheaper alternative weighed: keep raising and add
 `find_user()` returning None for new callers. That avoids touching existing callers at all.
+
+
+The decisive safety assumption is that a missing user still reaches checkout at list price. I probed the unchanged `billing.price_for` boundary against both implementations: the branch raises TypeError, while main returns 1000. That distinguishes the unsafe contract change from the safe behavior we need to preserve.

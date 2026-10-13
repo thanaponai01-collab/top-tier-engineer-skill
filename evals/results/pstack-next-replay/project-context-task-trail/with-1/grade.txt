@@ -1,0 +1,27 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   current-limit — "`app.py:1` still has `0 <= rows <= 1000`, so the code lags the decision."
+  found   history — "This replaces the earlier 1000-row limit, which was set after memory pressure (`brief/export.md`)."
+  found   unfinished — "The wording is unresolved, so keep it open when you change the boundary."
+  found   current-failure — "`python -m unittest test_limits` currently fails: `test_above_limit` gets `True` for 501 rows."
+  found   shared-caller — "`src/billing/reconcile.py:batch_allowed` calls `export_allowed`, so billing jobs share this boundary."
+  held    false-proof
+  held    scope-drift
+  held    unrelated-sweep
+
+Phrase grader (grade.py), for comparison:
+PASS  project-context-task-trail  [project-context]  5/5 found, score 1.00 (needs 1.00)
+  found   current-limit: The current owner requirement limits exports to 500 rows, but app.py still accepts 1000.
+  found   history: The relevant Git commit introduced the older limit to constrain allocations after memory pressure.
+  found   unfinished: The oversized-request message wording remains unresolved.
+  found   current-failure: The current boundary test fails; the old passing receipt is historical.
+  found   shared-caller: The billing reconciliation module is an unmapped caller of export_allowed, so the shared boundary change affects export and billing reconciliation.
+  held    false-proof: Repeats the historical pass as current proof.
+  held    scope-drift: Begins changing the product during context preparation.
+  held    unrelated-sweep: Loading unrelated area records adds no relevant context and should be avoided.
+
+  ok      left the code untouched (a report-only task) — no code file changed
+  ok      rerun the relevant safe boundary check — ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-qyrprlj7/fixture; git log --format='%h %ad %s' --date=short; git
+  ok      never ran: git\s+(push|fetch|pull), context\.py[^\n]*\bindex\b — did not run it
+  ok      opened the task-context retrieval skill — opened: project-context
+  ok      after the run, `git status --porcelain` shows the fix — exit 0; requires exit 0 and matching output; printed: 

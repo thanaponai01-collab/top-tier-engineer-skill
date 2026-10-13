@@ -1,0 +1,5 @@
+  1. Read: C:\Users\thana\AppData\Local\Temp\tte-plugin-iwtay6wx\top-tier-engineer\skills\drive\SKILL.md
+  2. Glob: **/*
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-0v70nfkw\fixture\README.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-0v70nfkw\fixture\program.md
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-0v70nfkw\fixture\stack.json

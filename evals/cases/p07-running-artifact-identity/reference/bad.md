@@ -1,0 +1,1 @@
+The service responds and the doctor reports its PID, so the current build is correct. Git HEAD is unchanged; there is no need to inspect source details. A successful health request is enough to trust the process.

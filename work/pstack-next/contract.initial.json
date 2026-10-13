@@ -1,0 +1,32 @@
+{
+  "goal": "Complete the PStack handoff's next bounded fresh-reader and repeated-upkeep trial",
+  "target": "local",
+  "max_attempts": 3,
+  "timeout_seconds": 1800,
+  "max_seconds": 7200,
+  "criteria": [
+    {"statement": "The trial fixtures cover larger-area task retrieval, an unmapped shared caller, unrelated areas, and a repeated unchanged upkeep pass", "stage": "fixture"},
+    {"statement": "A bounded behavior trial retains independent action evidence and distinguishes useful scoped retrieval/upkeep from unrelated loading or document churn", "stage": "behavior"},
+    {"statement": "The handoff and BUILD report the outcome, limits, and next check without overstating reliability", "stage": "content"},
+    {"statement": "Repository tests and catalog check pass on final inputs", "stage": "prove"}
+  ],
+  "oracle_files": [
+    "work/pstack-next/contract.json",
+    "work/pstack-next/check_fixture.py",
+    "work/pstack-next/run_behavior.py",
+    "work/pstack-next/check_content.py",
+    "work/pstack-next/prove.py",
+    "work/pstack-next/upkeep_probe.py",
+    "evals/cases/project-context-task-trail/expect.json",
+    "evals/cases/project-context-task-trail/prompt.md",
+    "evals/cases/project-update-preserves-intent/expect.json",
+    "evals/cases/project-update-preserves-intent/prompt.md"
+  ],
+  "stages": [
+    {"id": "fixture", "skill": "agent-evals", "command": ["python", "work/pstack-next/check_fixture.py"], "inputs": ["work/pstack-next/check_fixture.py", "evals/cases/project-context-task-trail", "evals/cases/project-update-preserves-intent"]},
+    {"id": "behavior", "skill": "agent-evals", "command": ["python", "work/pstack-next/run_behavior.py"], "inputs": ["evals/run.py", "evals/agent.py", "evals/cases/project-context-task-trail", "evals/cases/project-update-preserves-intent", "skills/project-context", "skills/project-update"]},
+    {"id": "content", "skill": "project-update", "command": ["python", "work/pstack-next/check_content.py"], "inputs": ["work/pstack-next", "work/pstack-handoff.md", "BUILD.md"]},
+    {"id": "prove", "skill": "correctness-gate", "command": ["python", "work/pstack-next/prove.py"], "inputs": ["tests", "skills/project-context", "skills/project-update", "evals/cases/project-context-task-trail", "evals/cases/project-update-preserves-intent", "work/pstack-next", "work/pstack-handoff.md", "BUILD.md", "tools/catalog.py"]}
+  ],
+  "actions": []
+}

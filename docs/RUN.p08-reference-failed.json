@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "contract": {
+    "goal": "Clarify standalone and composed skill use while preserving direct handling of small tasks",
+    "target": "local",
+    "max_attempts": 3,
+    "timeout_seconds": 1800,
+    "max_seconds": 7200,
+    "criteria": [
+      {
+        "statement": "The before-edit baseline is retained and its limitations are stated",
+        "stage": "baseline"
+      },
+      {
+        "statement": "A same-case live replay after edits checks direct small-task behavior",
+        "stage": "behavior"
+      },
+      {
+        "statement": "Affected cross-skill handoffs state a fallback or an explicit limit",
+        "stage": "content"
+      },
+      {
+        "statement": "The repository suite and generated skill catalog pass",
+        "stage": "prove"
+      }
+    ],
+    "oracle_files": [
+      "docs/pstack/adoption-plan.md",
+      "docs/pstack/comparison.md",
+      "evals/cases/p08-standalone-small-task",
+      "evals/results/2026-10-13-1804",
+      "work/p08/check_baseline.py",
+      "work/p08/check_content.py",
+      "work/p08/prove.py"
+    ],
+    "stages": [
+      {
+        "id": "baseline",
+        "skill": "agent-evals",
+        "command": [
+          "python",
+          "work/p08/check_baseline.py"
+        ],
+        "inputs": [
+          "evals/results/2026-10-13-1804"
+        ]
+      },
+      {
+        "id": "behavior",
+        "skill": "agent-evals",
+        "command": [
+          "python",
+          "evals/run.py",
+          "--cases",
+          "p08-standalone-small-task",
+          "--repeats",
+          "1",
+          "--jobs",
+          "1",
+          "--budget-usd",
+          "2",
+          "--out",
+          "evals/results/p08-final"
+        ],
+        "inputs": [
+          "skills",
+          "evals/cases/p08-standalone-small-task",
+          "evals/run.py",
+          "evals/agent.py",
+          "evals/grade.py",
+          "evals/judge.py"
+        ]
+      },
+      {
+        "id": "content",
+        "skill": "project-context",
+        "command": [
+          "python",
+          "work/p08/check_content.py"
+        ],
+        "inputs": [
+          "skills",
+          "work/p08/check_content.py"
+        ]
+      },
+      {
+        "id": "prove",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "work/p08/prove.py"
+        ],
+        "inputs": [
+          "skills",
+          "evals/cases/p08-standalone-small-task",
+          "tests",
+          "evals/RESULTS.md",
+          "BUILD.md",
+          "work/p08/evidence.md",
+          "work/pstack-handoff.md",
+          "work/p08/prove.py"
+        ]
+      }
+    ],
+    "actions": []
+  },
+  "contract_hash": "4795ad93ac0580a86783b6e517df23f6a5828636e935d2f7778abe30b8a87dd7",
+  "oracle_hash": "b8b5c2bf92826e0251d250179e9d1e36b0ab7f459ff97eded5a4825070656d7a",
+  "started_at": 1791890078.288117,
+  "status": "failed",
+  "proofs": {
+    "baseline": {
+      "command": [
+        "python",
+        "work/p08/check_baseline.py"
+      ],
+      "exit": 0,
+      "output": "P08 baseline: without 1/1 and with 1/1 passed; direct handling already works, so no improvement is claimed.\n",
+      "at": 1791890116.444869,
+      "seconds": 0.082,
+      "inputs_hash": "37288cc0a3a3bb2f272482e6636a20314e3cc03ebaeeee44c4699fa76fc7c82f"
+    },
+    "behavior": {
+      "command": [
+        "python",
+        "evals/run.py",
+        "--cases",
+        "p08-standalone-small-task",
+        "--repeats",
+        "1",
+        "--jobs",
+        "1",
+        "--budget-usd",
+        "2",
+        "--out",
+        "evals/results/p08-final"
+      ],
+      "exit": 0,
+      "output": "start  p08-standalone-small-task [without #2]\nPASS   p08-standalone-small-task [without #2]  2/2 found, $0.06, 12s\nstart  p08-standalone-small-task [with #2]\nPASS   p08-standalone-small-task [with #2]  2/2 found, $0.09, 13s\n\nscorecard: evals\\RESULTS.md\n4 of 4 runs passed; evidence in evals/results/p08-final/\n",
+      "at": 1791890116.725172,
+      "seconds": 36.887,
+      "inputs_hash": "a26c898aea5db5961c71669789df997ee1ab3cf3cea4c1add1cfb50303de95ef"
+    },
+    "content": {
+      "command": [
+        "python",
+        "work/p08/check_content.py"
+      ],
+      "exit": 0,
+      "output": "P08 content: 9 verify-loop handoffs and 9 cross-skill/reference paths state their fallback or limit.\n",
+      "at": 1791890153.8237777,
+      "seconds": 0.07,
+      "inputs_hash": "f055b02543c663cfbcdf9639c54d3202fe8338e72f51ae582d3e5a91df081d2e"
+    }
+  },
+  "attempts": {
+    "baseline": 1,
+    "behavior": 1,
+    "content": 1,
+    "prove": 1
+  },
+  "journal": {},
+  "history": [
+    {
+      "stage": "baseline",
+      "command": [
+        "python",
+        "work/p08/check_baseline.py"
+      ],
+      "exit": 0,
+      "output": "P08 baseline: without 1/1 and with 1/1 passed; direct handling already works, so no improvement is claimed.\n",
+      "at": 1791890116.444869,
+      "seconds": 0.082,
+      "inputs_hash": "37288cc0a3a3bb2f272482e6636a20314e3cc03ebaeeee44c4699fa76fc7c82f"
+    },
+    {
+      "stage": "behavior",
+      "command": [
+        "python",
+        "evals/run.py",
+        "--cases",
+        "p08-standalone-small-task",
+        "--repeats",
+        "1",
+        "--jobs",
+        "1",
+        "--budget-usd",
+        "2",
+        "--out",
+        "evals/results/p08-final"
+      ],
+      "exit": 0,
+      "output": "start  p08-standalone-small-task [without #2]\nPASS   p08-standalone-small-task [without #2]  2/2 found, $0.06, 12s\nstart  p08-standalone-small-task [with #2]\nPASS   p08-standalone-small-task [with #2]  2/2 found, $0.09, 13s\n\nscorecard: evals\\RESULTS.md\n4 of 4 runs passed; evidence in evals/results/p08-final/\n",
+      "at": 1791890116.725172,
+      "seconds": 36.887,
+      "inputs_hash": "a26c898aea5db5961c71669789df997ee1ab3cf3cea4c1add1cfb50303de95ef"
+    },
+    {
+      "stage": "content",
+      "command": [
+        "python",
+        "work/p08/check_content.py"
+      ],
+      "exit": 0,
+      "output": "P08 content: 9 verify-loop handoffs and 9 cross-skill/reference paths state their fallback or limit.\n",
+      "at": 1791890153.8237777,
+      "seconds": 0.07,
+      "inputs_hash": "f055b02543c663cfbcdf9639c54d3202fe8338e72f51ae582d3e5a91df081d2e"
+    },
+    {
+      "stage": "prove",
+      "command": [
+        "python",
+        "work/p08/prove.py"
+      ],
+      "exit": 1,
+      "output": "IOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpyi_6h0mv\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpyi_6h0mv\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpyi_6h0mv\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:64: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpyi_6h0mv\\\\edges.json' mode='r' encoding='utf-8'>\n  g = json.load(open(out_file, encoding=\"utf-8\"))\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n..E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp54tjo96_\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp54tjo96_\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp54tjo96_\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp54tjo96_\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp54tjo96_\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp54tjo96_\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpuvtafpui\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpuvtafpui\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpuvtafpui\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpuvtafpui\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpuvtafpui\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpuvtafpui\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpuvtafpui\\\\tasks.yml' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:92: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp9ekkrmpb\\\\a.py' mode='w' encoding='cp1252'>\n  open(os.path.join(tmp, \"a.py\"), \"w\").write(\"import b\\n\")\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:93: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp9ekkrmpb\\\\b.py' mode='w' encoding='cp1252'>\n  open(os.path.join(tmp, \"b.py\"), \"w\").write(\"def f():\\n    return 1\\n\")\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp80ykbm5a\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp80ykbm5a\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp80ykbm5a\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp80ykbm5a\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp80ykbm5a\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp80ykbm5a\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n..............................................................................warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.................................................................................................................................................................warning: in the working copy of 'VERIFY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/auth.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/cart.py', LF will be replaced by CRLF the next time Git touches it\n..............warning: in the working copy of 'VERIFY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\n.....................\n======================================================================\nFAIL: test_good_reference_passes (test_evals.GraderDiscriminates.test_good_reference_passes)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_evals.py\", line 209, in test_good_reference_passes\n    self.assertTrue(\n    ~~~~~~~~~~~~~~~^\n        result[\"passed\"],\n        ^^^^^^^^^^^^^^^^^\n        f\"{name}: the reference GOOD report failed\\n{grade.render(result)}\",\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\nAssertionError: False is not true : p08-standalone-small-task: the reference GOOD report failed\nFAIL  p08-standalone-small-task  [pick-skill]  1/2 found, score 0.50 (needs 1.00)\n  found   correct-result: The fee is added to the base total.\n  MISSED  proof: The existing test was actually run and passed.\n            named it, but never said what was wrong with it\n  held    unnecessary-foundation: A one-line task does not need a foundation refresh or a specialist chain.\n\n----------------------------------------------------------------------\nRan 500 tests in 141.749s\n\nFAILED (failures=1)\n",
+      "at": 1791890195.424954,
+      "seconds": 142.195,
+      "inputs_hash": "80227b7c6261b3a0c4eac0742c5fd503f5271dc7b41a86cf0bf538766e15f87d"
+    }
+  ],
+  "reason": "The corrected full suite found one remaining P08 eval fixture error: reference/good.md described the right output but omitted its planted passing-test evidence. Preserve this run; add that evidence to the positive reference and rerun the calibrated gate.",
+  "next_action": "Fix and calibrate the positive reference, preserve the failed RUN, then rerun behavior and repository gates."
+}

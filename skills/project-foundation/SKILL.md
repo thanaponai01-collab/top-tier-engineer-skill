@@ -1,7 +1,7 @@
 ---
 name: project-foundation
 description: >-
-  Create, trace and check every context file a project needs (brief, current work, features, verification, architecture, commands, memory index), then list each one's state. The step after /project-setup; Drive and onboard-system reuse it. Manual: run /project-foundation.
+  Prepare or refresh sourced project context, validate selected behavior and report each category's state. Reused by Drive and onboarding; setup is optional. Manual: run /project-foundation.
 disable-model-invocation: true
 metadata:
   stage: orient
@@ -15,7 +15,14 @@ refreshes every context file the other skills read, traces each against the real
 checks it can, and ends with a list of every category and its state. Bounded discovery, explicit
 gaps. Use [the foundation contract](references/foundation.md) for owned documents and equivalents,
 and [the economy policy](references/economy.md) when independent discovery can use cheaper workers.
-Let verify-loop judge behavioral verification. No other skill requires this one.
+Let verify-loop judge behavioral verification. This skill is conditional: Drive loads it for
+foundation work, and onboard-system uses it when requested context preparation has missing or
+stale categories. Ordinary task skills do not require a foundation refresh. If this skill is absent,
+onboard-system prepares bounded sourced notes directly; Drive performs the bounded step plainly
+and reports the missing capability.
+Reuse current maps and checks. For missing/stale categories, perform the specialist handoff
+below; efficiency means avoiding repeated work, not skipping its validation. A small task
+needs only its affected records, not a foundation refresh.
 
 *Evidence labels: **proven** = you ran it · **traced** = you read the whole chain, start to
 end · **suspected** = neither.*
@@ -58,11 +65,12 @@ Read existing VERIFY.md and FEATURES.md first. Reuse equivalent documents and li
 possible. Update missing or demonstrably stale setup; preserve manual notes, coverage limits and
 expectations. Conflicting expectations are a finding, not permission to match the implementation.
 
-- FEATURES.md (or equivalent): load the `feature-map` skill and follow it: draft with its bundled
-  `features.py init`, trace each feature to its effect, then `features.py check --strict` must exit 0.
-  Record selected behavior, requirement source, entry point, implementation and check paths, and
-  evidence status. Mark the map partial. Write it by hand only when feature-map is not installed,
-  and say so in the list.
+- FEATURES.md (or equivalent): for missing/stale entries, load `feature-map`: draft with its
+  bundled `features.py init` and trace the selected batch to its effects. Run `features.py check`
+  for a partial batch and report unmapped/unlinked counts and Next. Use `check --strict` only
+  to claim the complete map; it must exit 0. Record requirement source, entry point,
+  implementation/check paths and evidence status. Feature-map owns map validation;
+  verify-loop owns behavioral proof. Write by hand only when feature-map is unavailable.
 - VERIFY.md: finished checks for the selected behavior, working directory expressed in commands,
   stable behavioral failure signal, declared expectation inputs and blind spots. Add launch,
   readiness, instance identity and cleanup only when checks require a running application.
@@ -71,8 +79,8 @@ expectations. Conflicting expectations are a finding, not permission to match th
   Reference secrets by location; never record values in these files.
 
 
-Also complete the foundation's architecture and command categories. Trace a small as-is map using
-`arch-map` when available; without it, write sourced boundaries/edges and explicit unknowns in
+Also complete architecture and commands. For missing/stale architecture, use `arch-map`
+when available; without it, write sourced boundaries/edges and explicit unknowns in
 Markdown. Keep docs/architecture.md within 80 lines and split complex areas. Record key commands,
 working directories, prerequisites and observed/not-run status in docs/commands.md; do not copy
 all flags or run external actions. Link supported rationale, not guessed history.
@@ -81,6 +89,8 @@ record coverage gaps and Next. Empty projects get meaningful observed state and 
 fictional entry points or empty headings. Intent/work are always prepared; no WHY/PLAN placeholders.
 
 Use the memory convention's Scaling by area rules when preparing area links and placement notes.
+If the project-context convention is unavailable, preserve existing source links and area boundaries;
+do not create a separate index, and report that the placement guidance was unavailable.
 Complete the selected area's purpose, boundaries, constraints and requirement/check pointers in
 existing documents; record unmapped dependencies as gaps. Keep startup size independent of module
 count by linking area indexes. Record placement conventions where contributors already look.

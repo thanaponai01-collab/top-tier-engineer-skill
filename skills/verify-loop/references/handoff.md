@@ -5,12 +5,16 @@ Use this contract when a skill hands work here, so each caller states only its o
 
 ## When a handoff applies
 
-The project has a VERIFY.md, or the user asked for reusable verification. Otherwise the caller
-runs its checks directly. A diagnosis, review or readiness request ends with the caller's findings
-and a proposed runnable check; strict green is not its completion gate.
+For an authorized repair or reusable proof, hand off when VERIFY.md covers the claim or the
+user requests a reusable recipe. Otherwise run the scoped checks directly. An assessment
+reports actual results, gaps and a runnable check; failure remains a valid verdict and does not
+authorize product repairs. Explicit verification/readiness claims still need the proof their
+caller requires. Reuse current receipts for unchanged claims and inputs; load this skill only
+when proof is missing/stale or checks need work, not because VERIFY.md exists somewhere.
 
 ## The caller supplies
 
+- **Scope and authority:** assessment, recipe preparation, or authorized repair; affected paths.
 - **The claim**, in observable terms.
 - **Where the expected result comes from**: spec, policy, contract or budget. Never the code.
 - **The real-run command** that watches the behavior.
@@ -30,6 +34,8 @@ and a proposed runnable check; strict green is not its completion gate.
   | structure-gate | a structural breach or complexity exceeding baseline threshold |
   | agent-drift | the diverged input reproducing a below-band score |
   | senior-review | the observed breakage or boundary gap reproduced |
+  | project-foundation | selected requirement-backed behavior broken in scratch |
+  | agent-release | a disabled kill switch, cap or redaction control in scratch |
 
 - **Adjacent regressions**: callers of what changed, which must stay green.
 

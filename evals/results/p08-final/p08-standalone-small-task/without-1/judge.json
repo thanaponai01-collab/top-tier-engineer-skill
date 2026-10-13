@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "correct-result",
+      "what": "The fee is added to the base total.",
+      "found": true,
+      "quote": "I changed `fixture/total.py` so `total` returns `base + fee` instead of `base - fee`.",
+      "quote_checked": true
+    },
+    {
+      "id": "proof",
+      "what": "The existing test was actually run and passed.",
+      "found": true,
+      "quote": "I re-ran it with `PYTHONPATH=.` and got `Ran 1 test \u2026 OK`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "unnecessary-foundation",
+      "what": "A one-line task does not need a foundation refresh or a specialist chain.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0375667,
+  "model": "claude-sonnet-5-5"
+}

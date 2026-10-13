@@ -1,0 +1,29 @@
+{
+  "goal": "Clarify standalone and composed skill use while preserving direct handling of small tasks",
+  "target": "local",
+  "max_attempts": 3,
+  "timeout_seconds": 1800,
+  "max_seconds": 7200,
+  "criteria": [
+    {"statement": "The before-edit baseline is retained and its limitations are stated", "stage": "baseline"},
+    {"statement": "A same-case live replay after edits checks direct small-task behavior", "stage": "behavior"},
+    {"statement": "Affected cross-skill handoffs state a fallback or an explicit limit", "stage": "content"},
+    {"statement": "The repository suite and generated skill catalog pass", "stage": "prove"}
+  ],
+  "oracle_files": [
+    "docs/pstack/adoption-plan.md",
+    "docs/pstack/comparison.md",
+    "evals/cases/p08-standalone-small-task",
+    "evals/results/2026-10-13-1804",
+    "work/p08/check_baseline.py",
+    "work/p08/check_content.py",
+    "work/p08/prove.py"
+  ],
+  "stages": [
+    {"id": "baseline", "skill": "agent-evals", "command": ["python", "work/p08/check_baseline.py"], "inputs": ["evals/results/2026-10-13-1804"]},
+    {"id": "behavior", "skill": "agent-evals", "command": ["python", "evals/run.py", "--cases", "p08-standalone-small-task", "--repeats", "1", "--jobs", "1", "--budget-usd", "2", "--out", "evals/results/p08-final"], "inputs": ["skills", "evals/cases/p08-standalone-small-task", "evals/run.py", "evals/agent.py", "evals/grade.py", "evals/judge.py"]},
+    {"id": "content", "skill": "project-context", "command": ["python", "work/p08/check_content.py"], "inputs": ["skills", "work/p08/check_content.py"]},
+    {"id": "prove", "skill": "correctness-gate", "command": ["python", "work/p08/prove.py"], "inputs": ["skills", "evals/cases/p08-standalone-small-task", "tests", "evals/RESULTS.md", "BUILD.md", "work/p08/evidence.md", "work/pstack-handoff.md", "work/p08/prove.py"]}
+  ],
+  "actions": []
+}

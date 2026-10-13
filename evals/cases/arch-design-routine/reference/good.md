@@ -1,0 +1,1 @@
+This is a routine, settled copy change with no open structural choice. Update the label in the existing `web/account_form.py`; keep the field, validation, API and persistence as they are. No competing designs, no new module or boundary, and no extra review round is needed.

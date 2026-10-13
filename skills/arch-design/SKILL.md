@@ -18,15 +18,15 @@ words; engineers get the same story plus `file:line`.
 *Evidence: **proven** = you ran it · **traced** = you read the whole chain (a source opened this
 session counts) · **suspected** = neither.* Only proven and traced can carry a one-way door.
 
-Five steps: **map, scope, candidates, deep dive, record**. A review stops after step 3 and asks; it
-changes no code or docs, not even the map. Designing new, or replacing a part: `references/design-new.md`.
+Five steps: **map, scope, candidates, deep dive, record**. Reviews stop after step 3, with no edits.
+New/replaced parts use `references/design-new.md`; consequential forks only use `references/competing-designs.md`; settled small changes stay direct.
 
 ## 1. Map
 
 Start from the project's map: `docs/architecture.md` (or the `architecture:` pointer in CLAUDE.md)
 and recorded decisions (`docs/adr/`, `WHY.md`); a move that reopens a decision says why its reason
 no longer holds. No map: sketch one from the entry points as you read, suggest `/project-foundation`
-for next time, and go on. A map is a claim: check every edge you rely on against the code. A map
+when available for next time, and go on. This design task does not depend on that skill. A map is a claim: check every edge you rely on against the code. A map
 that says what the code does not do goes **first** in the report, with the line in each, because
 every reader, human or AI, will believe a problem is solved that isn't.
 
@@ -39,7 +39,9 @@ scope from their entry points. Repo too big to read, or a history question: `ref
 
 ## 3. Candidates
 
-Each of these is a lead until it passes the two tests below.
+- **Consequential fork.** Set decision criteria before options; compare the simplest viable base with
+  one structurally distinct alternative. Name costly stored/public contracts and say whether sketches
+  were isolated/model-diverse or same-model fallback. See `references/competing-designs.md` for limits.
 - **Chains and bottlenecks.** Follow one user action end to end. Something slow, fallible or not
   yours (network, email, an outside API) inside the user's wait is a lead; after a step you can't
   undo (a charge), its failure shows as an error after the damage. Count ripples: one change, N edits.
@@ -56,10 +58,8 @@ Each of these is a lead until it passes the two tests below.
 - **Hidden coupling.** Files in different modules that always change together with no import
   between them share an unnamed assumption; give it one owner.
 
-**Deletion test**: undo it in your head (merge, inline, drop the interface). If the complexity
-collapses, it's a finding; if it just moves, it isn't. **Same-reason test**, before any merge: ask
-what would make each change. Different answers mean they only look alike; a display date and a tax
-date can be byte-identical today.
+**Deletion test**: undo it mentally; if complexity collapses, it's a finding. **Same-reason test**:
+before merging, ask what would make each change; different answers mean separate jobs.
 
 Don't flag what only looks bad: a module imported by many that imports nothing is a stable
 foundation; a queue one flow skips may be one another flow needs. Before proposing to delete, merge
@@ -89,8 +89,8 @@ Work the chosen candidate through with the user, one question at a time: constra
 interface, what sits behind it, which tests survive. Ask the owner only what they can answer ("is
 it fine if the receipt arrives a minute later?"); decide technical questions yourself and say so.
 
-Give **two real options**, one the simplest thing that meets every requirement (often the existing
-owner), with the forces each way. Then the **door**: a library or folder layout is two-way, decide
+For an open design decision, give **two real options**, including the simplest viable one; compare
+their forces. Then the **door**: a library or folder layout is two-way, decide
 it in a line. A stored data shape, public API, datastore or auth model is one-way: check its facts
 this session and give the user the options and the cost of being wrong first. Write dependencies
 you'd use under ~10% of, or could write in ~100 lines, yourself; inline a seam with one caller and

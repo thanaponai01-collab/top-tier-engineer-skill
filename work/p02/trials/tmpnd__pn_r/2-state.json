@@ -1,0 +1,34 @@
+{
+ "baseline": {
+  "VERIFY.md checks": "fd204be418e0a3eb",
+  "VERIFY.md run": "8672f69afcbbc0de",
+  "VERIFY.md signals": "6aecc32ecfe5f0c2",
+  "probe.py": "a7b60db3de07267c"
+ },
+ "checks": {
+  "Persistence|python probe.py cli": {
+   "count": 0,
+   "exit": 0,
+   "fp": null,
+   "ok": true,
+   "output": "persisted note verified through second public read\n"
+  }
+ },
+ "cleanup": {
+  "exit": 0,
+  "ok": true,
+  "output": "",
+  "seconds": 0.12311983108520508
+ },
+ "failures": {
+  "Persistence|python probe.py cli": {
+   "exit": 1,
+   "output": "Traceback (most recent call last):\n  File \"C:\\Users\\thana\\AppData\\Local\\Temp\\tmpnd__pn_r\\probe.py\", line 39, in <module>\n    assert actual == expected, 'expected persisted note, got ' + repr(actual)\n           ^^^^^^^^^^^^^^^^^^\nAssertionError: expected persisted note, got None\n",
+   "signature": "982d178819a9601d"
+  }
+ },
+ "result": "green",
+ "rounds": 0,
+ "strict": true,
+ "tree": "7a27030268c2fc05"
+}

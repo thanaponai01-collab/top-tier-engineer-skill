@@ -1,0 +1,80 @@
+{
+  "case": "drive-program-delivery",
+  "skill": "drive",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  7/8 found\n  found   shared-contract-first \u2014 \"Finalize A (the canonical record and its validation errors) before anything depends on it.\"\n  MISSED  unowned-shared-storage\n  found   docs-check-dependency \u2014 \"Its examples must match the accepted schema, so I'd check them after A is settled.\"\n  found   integration-last \u2014 \"**F (integration journey)** goes last.\"\n  found   stack-ceiling \u2014 \"## Highest verified PR from the bottom: #201\"\n  found   stale-rebased-verdict \u2014 \"The PASS was given at head `b202-old`, but the PR head is now `b202-rebased`.\"\n  found   prefix-stops-at-gap \u2014 \"**Not verified**, because #202 and #203 below it aren't\"\n  found   independent-pr \u2014 \"it's independent of the stack and targets `main` at `trunk-900`.\"\n  held    do-not-land-descendant\n  held    ci-is-not-verdict\n  held    no-external-action",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "drive"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "drive",
+      "path": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-iwtay6wx\\top-tier-engineer\\skills\\drive\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-iwtay6wx\\top-tier-engineer\\skills\\drive\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 1921,
+      "cacheReadInputTokens": 67182,
+      "cacheCreationInputTokens": 16503,
+      "webSearchRequests": 0,
+      "costUSD": 0.0919522,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 436,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 7,
+  "total": 8,
+  "missed": [
+    "C and D both write a persisted record, but no slice owns the shared storage layer, so parallel safety is not established until that boundary has an owner"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "this is a read-only review with no forge authority",
+      "ok": true,
+      "detail": "did not run it"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0919522,
+  "turns": 6,
+  "seconds": 19.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-iwtay6wx\\top-tier-engineer"
+}

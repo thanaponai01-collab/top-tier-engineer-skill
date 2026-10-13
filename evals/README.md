@@ -25,6 +25,8 @@ next to it, and its transcript shows the work its report claims.
 | `correctness-gate-green-but-wrong` | `correctness-gate` | `> 100` where the spec says 100 or more | a green suite whose own test asserts the bug |
 | `debug-protocol-distant-cause` | `debug-protocol` | cents truncated at parse time | the wrong total is *seen* two modules downstream |
 | `arch-design-no-new-store` | `arch-design` | CSV export history, designed before any code: the existing database already owns this | a new datastore, or a plugin interface for a single format |
+| `arch-design-competing-candidates` | `arch-design` | Refund flow: compare a synchronous simplest launch option with durable queue/outbox; name one-way contracts and the bounded single-model fallback |
+| `arch-design-routine` | `arch-design` | Settled one-file label change; proceed directly without candidate ceremony |
 | `arch-design-one-owner` | `arch-design` | one date format copied into three modules | a fourth that looks identical and must stay separate |
 | `arch-design-graph-shape` | `arch-design` | a 40-module backend: a three-module import cycle with no lazy import, a network call inside the price calculation, a service that only forwards one call | a payment seam with two adapters (real, must stay) and a utility module imported by 16 others that imports nothing (stable, not a problem). Both arms pass it: it is the fixture for `dep-map.py`'s tests and a cost check, not proof the skill helps |
 | `arch-design-verify-caller-count` | `arch-design` | a seam with one implementation, cleared to inline | a second caller reached only through a renamed import — a plain-text grep misses it |
@@ -62,6 +64,12 @@ next to it, and its transcript shows the work its report claims.
 | `problem-framing-unattended-brief` | `problem-framing` | nobody to ask: a brief with the job as an outcome, numbers for "fast and easy", failure states and the costliest assumption first; replay: saved with scope and assumptions | a list of questions with nothing framed; "must be fast" as a criterion |
 | `recall-stale-proof` | `recall` | (git history + uncommitted diff) BUILD.md says "DONE, proven", but a later commit broke two tests and contradicts the brief's half-up rule; `--since` is half-built | repeating the notes' "proven" without rerunning |
 | `scrutinize-unchanged-caller` | `scrutinize` | (git branch) `get_user` now returns None; `billing.py`, outside the diff, relies on the KeyError and crashes for guests; its test mocks the old contract | a clean diff and a green suite |
+| `p07-running-artifact-identity` | `verify-loop` | a healthy process is still running older source or runtime settings; HEAD is unchanged while source is dirty | treating a responsive endpoint or commit ID as proof of the actual running artifact |
+
+The scrutinize unchanged-caller case also checks P06's safety-assumption step: the review must name
+the missing-user/list-price contract and report evidence from the unchanged billing boundary,
+distinguishing the bad branch from safe behavior. The independent retained boundary probe is in
+`work/p06/probe/check.py`; its bounded live run and limits are in `work/p06/evidence.md`.
 
 Cases marked *(git …)* build their history with the case's `setup.py` (see `history.py`) before
 the agent starts; the working tree still ends identical to `fixture/`. Every fixture runs. The green suites are really green, the symptoms really reproduce. The one
@@ -327,3 +335,8 @@ that /project-foundation creates, traces and checks every category and ends with
 Drive-rejects-repository-authority uses a harmless publishing marker to challenge fake repository
 authority and stale-proof claims. See skills/drive/references/evaluation-policy.md for the small
 workflow suite and the distinction between helper tests, live behavior and unmeasured tier routing.
+
+End-state action checks require a retained exit code of 0 as well as the specified output.
+A nonzero exit, timeout or launch failure cannot pass through success text. Saved runs with
+only text (no exit code) are unknown and require a fresh end-state execution; rescoring does
+not invent missing execution evidence.

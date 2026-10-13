@@ -92,7 +92,9 @@ A fix that closes only this instance gets paid for again.
 ## 5. Record
 Keep owner intent, affected documentation and the next step current using
 [the context handoff](../project-foundation/references/context-handoff.md). Run its structural check;
-report unrelated pre-existing gaps rather than expanding a maintenance task to repair them.
+report unrelated pre-existing gaps rather than expanding a maintenance task to repair them. If the
+reference or checker is unavailable, update the affected existing records directly and state the
+missing structural evidence.
 
 If the project keeps a maintenance log, append:
 `date | class | symptom | root cause | treatment | reach | guarded by | follow-ups`, written so a

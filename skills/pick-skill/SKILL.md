@@ -24,6 +24,22 @@ present the menu and stop — a routing answer with no work started is this skil
 does — do it directly and say so. The skills are for work that is worth the ritual.
 *Test:* you can say what this skill would add that doing the work plainly would not.
 
+## Keep the route small
+
+A skill is invocable on its own; a workflow may add a conditional handoff when the task has
+an unmet requirement, named risk or missing output. Start with direct work or one skill, and load
+only the next skill whose condition applies. A Next list is a pointer, not an instruction to load
+the chain. Read only references needed for the selected task.
+Reuse current artifacts and applicable evidence; changed inputs need fresh proof.
+For a handoff, pass the claim, source, affected paths and evidence/gaps; the receiver returns
+its result and evidence, while the caller keeps its own verdict. No full-history handoff. If a named
+skill is missing, use the caller's stated fallback; if none is stated, do the bounded work directly
+and report the missing capability or evidence. Small tasks need no foundation, index, plan or run
+record unless the task itself needs one.
+
+*Test:* before another load, name the unresolved question it will settle; otherwise continue
+with the current skill or finish. A routine value change uses its relevant existing check.
+
 ## "Look at my code and tell me what's wrong"
 
 Five skills land here. They differ by the question underneath, and picking the wrong one gives a
@@ -76,16 +92,16 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 
 ## The Relay: nine checkpoints
 
-Any piece of work passes the same nine checkpoints, each owned by one skill, and each leaves evidence
-the next one reads. In a driven run, RUN.json is authoritative for progress and blockers; the files
-below support its checks. Skip a checkpoint on purpose (a typo skips all nine),
+These checkpoints are questions to consider, not nine skills to load. Use only those relevant
+to the task; each applicable checkpoint leaves evidence the next one reads. In a driven run,
+RUN.json is authoritative for progress and blockers; the files below support its checks. Skip a checkpoint on purpose (a typo skips all nine),
 never by accident.
 
 | # | Checkpoint | Question | Skill | Baton |
 |---|---|---|---|---|
 | 1 | Orient | Where are we? What is here? | `recall` to resume, `onboard-system` on first contact | the capsule; `VERIFY.md`, `FEATURES.md`, `docs/architecture.md` |
 | 2 | Frame | What does done mean? | `problem-framing`, then `verify-loop` | `BRIEF.md`; the exit check |
-| 3 | Design | What shape, and what can go wrong? | `arch-design` (`agent-design` for an agent), `threat-model` | `docs/arch-design.md` |
+| 3 | Design | What shape, and what can go wrong? | `arch-design` (`agent-design` for an agent), `threat-model` | sourced map/decision; `docs/agent-design.md` for an agent |
 | 4 | Plan | Which pieces, in what order, which can run together? | `plan-work` | `PLAN.md` |
 | 5 | Build | Is each slice proven and wired? | `build-discipline` (`agent-evals` before any agent code) | `BUILD.md`, commits |
 | 6 | Prove | Does the whole thing hold? | `correctness-gate`, `wire-check`; `agent-prove` for an agent | the verdict |
@@ -121,7 +137,8 @@ Name the area and the question in one line, route on that, and say what you scop
 
 **Routing to the ritual instead of the work.** `build-discipline` already wires and proves each
 slice; following it with `wire-check` and `correctness-gate` on the same slice is the same check
-paid for three times. Those two are for code that arrived without them.
+paid for three times. Use them for missing wiring evidence or a broader correctness question
+the slice proof did not answer.
 *Test:* the skill you are about to run would find something the last one could not have.
 
 **Symptom words pointing at the wrong skill.** "It's slow" with an unknown cause is

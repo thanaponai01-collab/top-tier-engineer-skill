@@ -1,18 +1,27 @@
 <!-- context-id: task:pstack-adoption -->
 <!-- context-type: task -->
 <!-- context-area: plugin-improvement -->
-<!-- context-status: proposed -->
+<!-- context-status: active -->
 <!-- context-paths: skills/drive, skills/verify-loop, skills/arch-design, skills/perf-optimize, skills/scrutinize, evals -->
 # PStack comparison and improvement handoff
 
-Updated: 2026-10-13, Asia/Bangkok. Overall status: **research complete; adoption proposed**.
+Updated: 2026-10-13, Asia/Bangkok. Overall status: **P01-P03 implemented with bounded trials; P04 implemented with partial behavior evidence; P05 implemented with one bounded behavior trial and repository gates passed; P06 implemented with one bounded behavior trial and decisive-boundary probe (procedure validation partial); P07 implemented and verified on one bounded baseline/skill replay with repository gates passed (reliability unmeasured); P08 implemented with a passing bounded standalone trial and documented fallback audit (missing-skill behavior unmeasured live); P09 implemented with one bounded behavior trial (reliability and real forge operations unmeasured)**.
 
 Borrow PStack mechanisms that improve observed outcomes while retaining top-tier-engineer's
-evidence controller, bounded project memory and scoped user authority. This handoff preserves
-the comparison and proposed work for a future session. It does not approve the proposals or
-authorize implementation, agent dispatch, commits, publishing, external messages or a release.
-The earlier request was discussion only; the subsequent request authorized this document.
+evidence controller, bounded project memory and scoped user authority. This handoff records
+comparison, scope and adoption status; it does not grant authority by itself. The user's earlier
+`/drive implement p07` request authorized local implementation, bounded evaluation and evidence maintenance, not a release. Earlier requests authorized the preceding slices and this handoff.
+The later `/drive implement the p01` request authorizes P01 implementation and its bounded trials.
+The subsequent `/drive implement the p02` request authorizes P02 implementation and local application trials.
 
+The subsequent `/drive implement the p03` request authorizes P03 local implementation and bounded trials.
+P04 local implementation/trials authorized by the subsequent `/drive implement the p04` request.
+P05 local implementation/trial authorized by the earlier `/drive implement p05` request.
+P06 local implementation/trial authorized by the subsequent `/drive implement the p06` request.
+P07 local implementation/trial authorized by the earlier `/drive implement p07` request.
+P08 local implementation, bounded evaluation and evidence maintenance are authorized by the current `/drive implement p08` request; no release or version bump is authorized.
+P09 local implementation, bounded evaluation and evidence maintenance are authorized by the current `/drive implement p09` request; no forge mutation, release or version bump is authorized.
+The current `/drive` request authorizes the bounded P01 expanded trial described in Next, including the local skill adjustment, replay, and evidence maintenance; no release or version bump is authorized.
 ## Current state
 
 - Compared official Cursor PStack at `1dcc2bacde73ddd284803b7af28164d0436198fc` with local
@@ -42,22 +51,24 @@ This table owns adoption status. Linked sections own rationale, scope and accept
 
 | ID | Workstream | Priority | Status | Detail |
 |---|---|---|---|---|
-| P01 | Isolated behavior trials and trustworthy reporting | First | Proposed | [Validation](../docs/pstack/validation.md) |
-| P02 | App launch, doctor, real drive and evidence cleanup | First | Existing; validation needed | [Plan](../docs/pstack/adoption-plan.md) |
-| P03 | Enforce recurring mistakes structurally | Second | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
-| P04 | Benchmark validity and measured work counts | Second | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
-| P05 | Optional competing designs | Third | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
-| P06 | Test decisive safety assumptions | Third | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
-| P07 | Identify the actual running artifact | Second | Existing; validation needed | [Plan](../docs/pstack/adoption-plan.md) |
-| P08 | Clarify standalone use and skill handoffs | Second | Proposed | [Comparison](../docs/pstack/comparison.md) |
-| P09 | Stack delivery and large agent programs | Later | Deferred | [Comparison](../docs/pstack/comparison.md) |
+| P01 | Isolated behavior trials and trustworthy reporting | First | Verified (bounded recall pilot and one expanded fresh-reader/upkeep trial; reliability unmeasured) | [Evidence](pstack-next/evidence.md); [pilot](p01/evidence.md) |
+| P02 | App launch, doctor, real drive and evidence cleanup | First | Verified (bounded API, CLI and browser trials) | [Evidence](p02/evidence.md) |
+| P03 | Enforce recurring mistakes structurally | Second | Verified (bounded subprocess enforcement) | [Evidence](p03/evidence.md) |
+| P04 | Benchmark validity and measured work counts | Second | Implemented; procedure validation partial | [Evidence](p04/evidence.md) |
+| P05 | Optional competing designs | Third | Verified (one bounded live replay per fixture; reliability unmeasured) | [Evidence](p05/evidence.md) |
+| P06 | Test decisive safety assumptions | Third | Implemented; bounded trial passed; procedure validation partial | [Evidence](p06/evidence.md) |
+| P07 | Identify the actual running artifact | Second | Verified (one bounded live replay; reliability unmeasured) | [Evidence](p07/evidence.md) |
+| P08 | Clarify standalone use and skill handoffs | Second | Implemented; bounded direct-task trial passed; missing-skill behavior not live-tested | [Evidence](p08/evidence.md) |
+| P09 | Stack delivery and large agent programs | Later | Implemented; one bounded behavior trial passed (reliability and real forge operations unmeasured) | [Evidence](p09/evidence.md) |
 
 ## Next for this proposal
 
-If adoption is requested, begin P01 with a bounded pilot: inspect the evaluation runner, choose
-one repeated fresh-reader/recovery case, and report outcome, skill loading, procedure compliance
-and cost separately. Resolve the observed skill-read counter discrepancy before relying on it.
-Do not launch a full matrix, add skills or alter release machinery before locating a demonstrated gap.
+The expanded P01 trial is retained in [evidence](pstack-next/evidence.md). It demonstrated a targeted
+caller read after a broad baseline sweep and unchanged Markdown files after a second local index/check
+pass in both upkeep arms. This is one bounded run per arm; broader fresh-reader/recovery reliability,
+repeatability and savings remain unmeasured. Next, run an independent larger-area fixture and selected
+repetitions with independently observed action evidence. Do not launch a full matrix, add skills or alter
+release machinery before locating a demonstrated gap.
 
 ## Detailed handoff
 

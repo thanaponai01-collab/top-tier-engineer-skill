@@ -1,0 +1,90 @@
+{
+  "ok": true,
+  "found": 8,
+  "total": 8,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "shared-contract-first",
+      "what": "the shared import record is finalized before dependent implementations",
+      "found": true,
+      "quote": "**Finalize A first.** `program.md` says the shared record isn't finalized, and B, C, D and F all depend on it.",
+      "quote_checked": true
+    },
+    {
+      "id": "safe-parallel-lanes",
+      "what": "CLI and API can proceed in parallel after the record and parser because their owned paths and tests are separate",
+      "found": true,
+      "quote": "**C and D in parallel**, both based on B and neither on the other.",
+      "quote_checked": true
+    },
+    {
+      "id": "docs-independent",
+      "what": "documentation can proceed independently",
+      "found": true,
+      "quote": "**E (docs) anytime.** It has no code dependency.",
+      "quote_checked": true
+    },
+    {
+      "id": "integration-last",
+      "what": "the real integration journey waits until the parser and both entry points are integrated and is rerun after integration",
+      "found": true,
+      "quote": "**F last**, run against the integrated result.",
+      "quote_checked": true
+    },
+    {
+      "id": "stack-ceiling",
+      "what": "only PR 201 is currently in the verified contiguous bottom-up prefix",
+      "found": true,
+      "quote": "**Highest verified PR from the bottom of the stack: #201.** The stack is not verified above that.",
+      "quote_checked": true
+    },
+    {
+      "id": "stale-rebased-verdict",
+      "what": "PR 202's verdict is stale because its recorded head differs from its current head, even though patch id matches",
+      "found": true,
+      "quote": "The verdict is for head `b202-old`, but the current head is `b202-rebased`.",
+      "quote_checked": true
+    },
+    {
+      "id": "prefix-stops-at-gap",
+      "what": "PR 203 lacks an independent verdict and blocks PR 204 despite PR 204's own passing verdict",
+      "found": true,
+      "quote": "Its verdict is sound for what it covers, but it can't count while #202 and #203 below it are unverified.",
+      "quote_checked": true
+    },
+    {
+      "id": "independent-pr",
+      "what": "PR 205 is outside the dependent stack and must be assessed separately",
+      "found": true,
+      "quote": "It is outside the stack and based directly on `main`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "do-not-land-descendant",
+      "what": "a green descendant is not landable across the unverified gap",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "ci-is-not-verdict",
+      "what": "green CI on 203 is not an independent review verdict",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "no-external-action",
+      "what": "the review-only request cannot arm or mutate a PR",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0455427,
+  "model": "claude-sonnet-5-5"
+}
