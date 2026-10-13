@@ -1,9 +1,10 @@
 """Replay-safe gate for the clean paired P07 evaluation."""
 import json
+import sys
 from pathlib import Path
 
 case = "p07-running-artifact-identity"
-root = Path("evals/results/p07-final")
+root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("evals/results/p07-run2")
 summary = json.loads((root / "summary.json").read_text(encoding="utf-8"))
 rows = [row for row in summary if row.get("case") == case]
 without_runs = [row for row in rows if row.get("arm") == "without"]
@@ -36,4 +37,4 @@ history = json.loads(Path("evals/results/p07-replay/summary.json").read_text(enc
 failed_history = sum(row.get("case") == case and row.get("arm") == "with" and not row.get("passed") for row in history)
 if failed_history < 2:
     raise SystemExit("P07 failed/inconclusive earlier skill attempts were not preserved")
-print(f"P07 clean comparison: baseline passed; skill run(s) {', '.join(passed_with)} passed; {failed_history} earlier failed skill attempts remain retained.")
+print(f"P07 isolated comparison: clean baseline passed; skill run(s) {', '.join(passed_with)} passed meaning and action gates; {failed_history} earlier failed skill attempts remain retained.")

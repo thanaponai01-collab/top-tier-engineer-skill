@@ -88,6 +88,9 @@ class RunningArtifactIdentity(unittest.TestCase):
                 if changed == "source_sha256":
                     with (current / "app.py").open("a", encoding="utf-8") as stream:
                         stream.write("\n# uncommitted source change\n")
+                elif changed == "config_sha256":
+                    config["build"] = "new-build"
+                    (current / "config.json").write_text(json.dumps(config, sort_keys=True), encoding="utf-8")
                 else:
                     config[changed] = ["--mode=staging"] if changed == "flags" else ("worker" if changed == "role" else ["mail-live"])
                     (current / "config.json").write_text(json.dumps(config, sort_keys=True), encoding="utf-8")
@@ -108,6 +111,9 @@ class RunningArtifactIdentity(unittest.TestCase):
 
     def test_healthy_old_process_is_rejected_for_uncommitted_source_on_same_head(self):
         self.exercise_stale("source_sha256")
+
+    def test_healthy_old_process_is_rejected_for_changed_build_configuration(self):
+        self.exercise_stale("config_sha256")
 
     def test_healthy_old_process_is_rejected_for_flags_roles_and_mock_boundaries(self):
         for field in ("flags", "role", "mocks"):

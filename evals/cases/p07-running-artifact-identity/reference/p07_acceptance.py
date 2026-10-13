@@ -46,7 +46,7 @@ def doctor(root, expected):
 
 
 def main():
-    for changed in (None, "source", "flags", "role", "mocks"):
+    for changed in (None, "source", "config", "flags", "role", "mocks"):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "current"
             old = Path(temp) / "old"
@@ -73,6 +73,9 @@ def main():
                 if changed == "source":
                     with (root / "app.py").open("a", encoding="utf-8") as stream:
                         stream.write("\n# uncommitted source revision\n")
+                elif changed == "config":
+                    settings["build"] = "new-build"
+                    (root / "config.json").write_text(json.dumps(settings, sort_keys=True), encoding="utf-8")
                 else:
                     settings[changed] = ["--mode=staging"] if changed == "flags" else ("worker" if changed == "role" else ["mail-live"])
                     (root / "config.json").write_text(json.dumps(settings, sort_keys=True), encoding="utf-8")
@@ -80,7 +83,7 @@ def main():
                 current_head = subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip()
                 if current_head != head:
                     raise AssertionError("HEAD changed during the uncommitted identity replay")
-                expected = {"source": "source_sha256", "flags": "flags", "role": "role", "mocks": "mocks"}[changed]
+                expected = {"source": "source_sha256", "config": "config_sha256", "flags": "flags", "role": "role", "mocks": "mocks"}[changed]
                 if expected not in output:
                     raise AssertionError(f"doctor did not name changed identity field {expected}: {output}")
                 with urlopen(f"http://127.0.0.1:{settings['port']}/identity", timeout=1) as response:
@@ -91,7 +94,7 @@ def main():
                 if server.poll() is None:
                     server.terminate()
                     server.wait(timeout=3)
-    print("current identity passes; stale source and all runtime contract fields reject")
+    print("current identity passes; stale source, build configuration, and all runtime contract fields reject")
 
 
 if __name__ == "__main__":

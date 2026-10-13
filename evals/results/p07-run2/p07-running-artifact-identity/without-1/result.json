@@ -1,0 +1,79 @@
+{
+  "case": "p07-running-artifact-identity",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   head-is-not-running-source \u2014 \"Because it hashes file contents rather than a revision id, uncommitted edits with an unchanged revision are caught.\"\n  found   health-is-not-identity \u2014 \"identity mismatch: pid N is healthy but stale (<field>: running=\u2026 current=\u2026); restart the service from the current sourc\"\n  held    do-not-change-contract",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 2695,
+      "cacheReadInputTokens": 110874,
+      "cacheCreationInputTokens": 13499,
+      "webSearchRequests": 0,
+      "costUSD": 0.0920534,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 355,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "VERIFY.md documents a read-only Run doctor that checks actual running identity.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source, build config, flags, role and mocks.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/doctor.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0920534,
+  "turns": 10,
+  "seconds": 28.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

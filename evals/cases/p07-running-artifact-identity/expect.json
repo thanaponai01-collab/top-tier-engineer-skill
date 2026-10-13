@@ -6,24 +6,20 @@
   "planted": [
     {
       "id": "head-is-not-running-source",
-      "what": "The report says the repository revision token alone cannot identify source changes made without a commit.",
+      "what": "The report explicitly explains that HEAD or a revision token alone misses uncommitted source changes.",
       "must_say_any": [
-        "dirty source",
-        "uncommitted source",
-        "working-tree edits"
-      ],
-      "must_name": [
-        "repository revision token"
+        "HEAD is only provenance",
+        "HEAD alone",
+        "uncommitted edits count"
       ]
     },
     {
       "id": "health-is-not-identity",
-      "what": "The report finds that a healthy responsive old process is not proof of the intended build.",
+      "what": "The report identifies that a process can be healthy and still be stale, so identity must be checked.",
       "must_say_any": [
-        "stale instance",
-        "wrong build",
-        "wrong artifact",
-        "different source"
+        "stale instance can remain healthy",
+        "process can answer successfully while stale",
+        "healthy but stale process"
       ]
     }
   ],
@@ -39,7 +35,7 @@
     }
   ],
   "workdir": {
-    "what": "The doctor must pass on the current identity and reject independent healthy stale source/config cases.",
+    "what": "The doctor must pass on the current identity and reject independent healthy stale source, build config, and runtime contract cases.",
     "edits_allowed": [
       "doctor.py",
       "VERIFY.md",
@@ -68,7 +64,7 @@
       {
         "id": "live-identity-and-stale-rejection",
         "kind": "outcome",
-        "what": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source and changed flags, role and mocks.",
+        "what": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source, build config, flags, role and mocks.",
         "replace": {
           "p07_acceptance.py": "reference/p07_acceptance.py"
         },
