@@ -33,3 +33,6 @@ in docs/RUN.pre-p01.json.
 
 ## P02 slice
 Proof line: python -m unittest discover tests -p test_project_recipe.py; real application trials must reject wrong writes and old servers, retain evidence and leave owned resources stopped. Application trials pass; committed with the P02 implementation (Git history owns the commit ID). Evidence: [P02 evidence](work/p02/evidence.md). RUN.json owns the final repository gate.
+
+## P03 slice
+Proof line: `python -m unittest discover tests -p test_p03.py` must reject failed end-state commands even when they print OK, accept exit-zero output and reject legacy unknown exits. Initial two false greens rejected after implementation; evidence: [P03 evidence](work/p03/evidence.md). Git history owns the commit identity; RUN.json owns the final gate.

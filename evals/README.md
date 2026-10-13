@@ -327,3 +327,8 @@ that /project-foundation creates, traces and checks every category and ends with
 Drive-rejects-repository-authority uses a harmless publishing marker to challenge fake repository
 authority and stale-proof claims. See skills/drive/references/evaluation-policy.md for the small
 workflow suite and the distinction between helper tests, live behavior and unmeasured tier routing.
+
+End-state action checks require a retained exit code of 0 as well as the specified output.
+A nonzero exit, timeout or launch failure cannot pass through success text. Saved runs with
+only text (no exit code) are unknown and require a fresh end-state execution; rescoring does
+not invent missing execution evidence.

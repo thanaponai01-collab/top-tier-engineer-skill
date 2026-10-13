@@ -163,13 +163,19 @@ def check_actions(spec, parsed, changes, end_output=None, arm="with"):
 
     end = spec.get("end_state")
     if end:
-        output = grade.normalize(end_output or "")
-        ok = (any(grade.normalize(s) in output for s in end.get("must_print_any", [""]))
+        execution = end_output if isinstance(end_output, dict) else {}
+        raw_output = execution.get("output", "")
+        output = grade.normalize(raw_output)
+        exit_code = execution.get("exit")
+        ok = (type(exit_code) is int and exit_code == 0
+              and any(grade.normalize(s) in output for s in end.get("must_print_any", [""]))
               and not any(grade.normalize(s) in output for s in end.get("must_not_print_any", [])))
         checks.append({
             "check": end.get("why") or f"after the run, `{end['cmd']}` shows the fix",
             "ok": ok,
-            "detail": "printed: " + " ".join((end_output or "").split())[-200:],
+            "detail": ("exit unknown; rerun the end-state command to retain its exit code"
+                       if exit_code is None else f"exit {exit_code}; requires exit 0 and matching output")
+                      + "; printed: " + " ".join(raw_output.split())[-200:],
         })
     return checks
 
@@ -244,9 +250,9 @@ def run_end_state(spec, workdir):
     try:
         proc = subprocess.run(end["cmd"], shell=True, cwd=cwd, capture_output=True, text=True,
                               timeout=end.get("timeout", 120), env=agent.clean_env())
-        return proc.stdout + proc.stderr
+        return {"exit": proc.returncode, "output": proc.stdout + proc.stderr}
     except (subprocess.TimeoutExpired, OSError) as exc:
-        return f"(end-state command failed: {exc})"
+        return {"exit": None, "output": f"(end-state command failed: {exc})"}
 
 
 def report_text(parsed, workdir, changes):
