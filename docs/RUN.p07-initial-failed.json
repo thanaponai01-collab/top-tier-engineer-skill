@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "contract": {
+    "goal": "Implement and validate P07 actual running artifact identity evidence",
+    "target": "local",
+    "max_attempts": 6,
+    "timeout_seconds": 360,
+    "max_seconds": 14400,
+    "criteria": [
+      {
+        "statement": "A live doctor rejects a healthy old process when the source or material runtime configuration differs, including uncommitted changes with unchanged HEAD",
+        "stage": "proof"
+      },
+      {
+        "statement": "The verify-loop instructions guide recording material build/source/dirty identity, flags, roles and mocked boundaries, and warn that HEAD alone cannot identify an uncommitted build",
+        "stage": "build"
+      },
+      {
+        "statement": "The retained P07 behavior replay meets its independent artifact and outcome checks",
+        "stage": "behavior"
+      },
+      {
+        "statement": "The complete repository unit suite passes",
+        "stage": "prove"
+      },
+      {
+        "statement": "The skill catalog validates",
+        "stage": "catalog"
+      }
+    ],
+    "oracle_files": [
+      "docs/pstack/adoption-plan.md",
+      "docs/pstack/validation.md",
+      "tests/test_p07.py",
+      "work/p07/check_results.py",
+      "evals/cases/p07-running-artifact-identity"
+    ],
+    "stages": [
+      {
+        "id": "proof",
+        "skill": "build-discipline",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "tests.test_p07"
+        ],
+        "inputs": [
+          "tests/test_p07.py",
+          "evals/fixtures/p07",
+          "skills/verify-loop/scripts/verify.py"
+        ]
+      },
+      {
+        "id": "build",
+        "skill": "build-discipline",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "tests.test_p07"
+        ],
+        "inputs": [
+          "skills/verify-loop/SKILL.md",
+          "skills/verify-loop/VERIFY_FORMAT.md",
+          "tests/test_p07.py",
+          "evals/fixtures/p07"
+        ]
+      },
+      {
+        "id": "behavior",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "work/p07/check_results.py"
+        ],
+        "inputs": [
+          "work/p07/check_results.py",
+          "work/p07/evidence.md",
+          "evals/results/p07-replay/summary.json",
+          "evals/results/p07-replay/p07-running-artifact-identity/with-1/actions.txt"
+        ]
+      },
+      {
+        "id": "prove",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "inputs": [
+          "skills/verify-loop",
+          "evals/cases/p07-running-artifact-identity",
+          "tests",
+          "work/p07/check_results.py"
+        ]
+      },
+      {
+        "id": "catalog",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "tools/catalog.py",
+          "--check"
+        ],
+        "inputs": [
+          "skills/verify-loop",
+          "CATALOG.md",
+          "README.md",
+          "tools/catalog.py"
+        ]
+      }
+    ],
+    "actions": []
+  },
+  "contract_hash": "8fddc044567a98cc35ba43a5e223b02534f57493fbf721c5c5e7891b2c340c61",
+  "oracle_hash": "694f3a1317176ac3cb19042fd35197f2fa45224b109111328126a58c47d7618f",
+  "started_at": 1791885015.792045,
+  "status": "failed",
+  "proofs": {},
+  "attempts": {},
+  "journal": {},
+  "history": [],
+  "reason": "Initial P07 contract froze placeholder test inputs; replacing them with the real acceptance harness changed oracle hashes.",
+  "next_action": "Archive this failed journal; finalize P07 acceptance artifacts, then initialize a revised contract against those immutable files."
+}

@@ -64,6 +64,7 @@ next to it, and its transcript shows the work its report claims.
 | `problem-framing-unattended-brief` | `problem-framing` | nobody to ask: a brief with the job as an outcome, numbers for "fast and easy", failure states and the costliest assumption first; replay: saved with scope and assumptions | a list of questions with nothing framed; "must be fast" as a criterion |
 | `recall-stale-proof` | `recall` | (git history + uncommitted diff) BUILD.md says "DONE, proven", but a later commit broke two tests and contradicts the brief's half-up rule; `--since` is half-built | repeating the notes' "proven" without rerunning |
 | `scrutinize-unchanged-caller` | `scrutinize` | (git branch) `get_user` now returns None; `billing.py`, outside the diff, relies on the KeyError and crashes for guests; its test mocks the old contract | a clean diff and a green suite |
+| `p07-running-artifact-identity` | `verify-loop` | a healthy process is still running older source or runtime settings; HEAD is unchanged while source is dirty | treating a responsive endpoint or commit ID as proof of the actual running artifact |
 
 The scrutinize unchanged-caller case also checks P06's safety-assumption step: the review must name
 the missing-user/list-price contract and report evidence from the unchanged billing boundary,

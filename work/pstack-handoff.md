@@ -5,20 +5,20 @@
 <!-- context-paths: skills/drive, skills/verify-loop, skills/arch-design, skills/perf-optimize, skills/scrutinize, evals -->
 # PStack comparison and improvement handoff
 
-Updated: 2026-10-13, Asia/Bangkok. Overall status: **P01-P03 implemented with bounded trials; P04 implemented with partial behavior evidence; P05 implemented with one bounded behavior trial and repository gates passed; P06 implemented with one bounded behavior trial and decisive-boundary probe (procedure validation partial); P07-P08 proposed or awaiting validation; P09 deferred**.
+Updated: 2026-10-13, Asia/Bangkok. Overall status: **P01-P03 implemented with bounded trials; P04 implemented with partial behavior evidence; P05 implemented with one bounded behavior trial and repository gates passed; P06 implemented with one bounded behavior trial and decisive-boundary probe (procedure validation partial); P07 implemented; behavior and repository validation incomplete; P08 proposed; P09 deferred**.
 
 Borrow PStack mechanisms that improve observed outcomes while retaining top-tier-engineer's
 evidence controller, bounded project memory and scoped user authority. This handoff records
 comparison, scope and adoption status; it does not grant authority by itself. The user's current
-`/drive implement p05` request authorizes local implementation and bounded evaluation, not a release.
-The earlier request was discussion only; the subsequent request authorized this document.
+`/drive implement p07` request authorizes local implementation, bounded evaluation and evidence maintenance, not a release. Earlier requests authorized the preceding slices and this handoff.
 The later `/drive implement the p01` request authorizes P01 implementation and its bounded trials.
 The subsequent `/drive implement the p02` request authorizes P02 implementation and local application trials.
 
 The subsequent `/drive implement the p03` request authorizes P03 local implementation and bounded trials.
 P04 local implementation/trials authorized by the subsequent `/drive implement the p04` request.
-P05 local implementation/trial authorized by the current `/drive implement p05` request.
-P06 local implementation/trial authorized by the current `/drive implement the p06` request.
+P05 local implementation/trial authorized by the earlier `/drive implement p05` request.
+P06 local implementation/trial authorized by the subsequent `/drive implement the p06` request.
+P07 local implementation/trial authorized by the current `/drive implement p07` request.
 ## Current state
 
 - Compared official Cursor PStack at `1dcc2bacde73ddd284803b7af28164d0436198fc` with local
@@ -54,7 +54,7 @@ This table owns adoption status. Linked sections own rationale, scope and accept
 | P04 | Benchmark validity and measured work counts | Second | Implemented; procedure validation partial | [Evidence](p04/evidence.md) |
 | P05 | Optional competing designs | Third | Verified (one bounded live replay per fixture; reliability unmeasured) | [Evidence](p05/evidence.md) |
 | P06 | Test decisive safety assumptions | Third | Implemented; bounded trial passed; procedure validation partial | [Evidence](p06/evidence.md) |
-| P07 | Identify the actual running artifact | Second | Existing; validation needed | [Plan](../docs/pstack/adoption-plan.md) |
+| P07 | Identify the actual running artifact | Second | Implemented; behavior and repository validation incomplete | [Evidence](p07/evidence.md) |
 | P08 | Clarify standalone use and skill handoffs | Second | Proposed | [Comparison](../docs/pstack/comparison.md) |
 | P09 | Stack delivery and large agent programs | Later | Deferred | [Comparison](../docs/pstack/comparison.md) |
 

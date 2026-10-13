@@ -65,6 +65,16 @@ include: packages/auth/VERIFY.md
 - `ready`: Polled until it exits 0 before checks execute.
 - `doctor`: Optional read-only identity/build/auth check after readiness and before checks; also
   supports an externally managed instance without `start`.
+- For a build-sensitive service, make the doctor identify the artifact actually loaded by the
+  process. Compare a running source/build content digest and material configuration with the
+  expected checkout, including uncommitted source, resolved flags, roles and mocked boundaries.
+  HEAD is provenance, not an identity for dirty source. Keep owner/PID checks where needed to
+  distinguish the intended instance. Report the expected and observed values for each mismatch;
+  health or PID alone does not prove artifact identity. Record the check in the affected VERIFY.md
+  section with its oracle, literal fail-signal and observed fail-proof, then run it through verify.py
+  so the output remains in the run receipt. Prove both sides: unchanged current identity passes, and
+  a healthy old process on the expected port is rejected after a source or runtime-contract change.
+  Exercise a dirty-source change without committing it so the test holds HEAD constant.
 - `stop`: Optional shutdown command (otherwise the process group is terminated).
 - `login`: Login/role instructions; refer to secrets by location rather than recording their values.
 

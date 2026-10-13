@@ -1,0 +1,18 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   head-is-not-running-source — "It never uses the revision id, so uncommitted edits are caught."
+  found   health-is-not-identity — "I rewrote `doctor.py` and `VERIFY.md` so a healthy old process fails the check when `app.py` or `config.json` has change"
+  held    do-not-change-contract
+
+Phrase grader (grade.py), for comparison:
+FAIL  p07-running-artifact-identity  [verify-loop]  0/2 found, score 0.00 (needs 1.00)
+  MISSED  head-is-not-running-source: The report explains that HEAD alone does not identify uncommitted source currently on disk.
+            never named: HEAD
+  MISSED  health-is-not-identity: The report finds that a healthy responsive old process is not proof of the intended build.
+            named it, but never said what was wrong with it
+  held    do-not-change-contract: Do not change application behavior or its identity response to make the doctor pass.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      VERIFY.md documents a read-only Run doctor that checks actual running identity. — 
+  ok      Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source and changed flags, role and mocks. — 

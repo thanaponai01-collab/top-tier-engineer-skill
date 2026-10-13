@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "contract": {
+    "goal": "Implement and validate P07 actual running artifact identity evidence",
+    "target": "local",
+    "max_attempts": 6,
+    "timeout_seconds": 360,
+    "max_seconds": 14400,
+    "criteria": [
+      {
+        "statement": "The live doctor accepts unchanged identity and rejects a healthy old process after uncommitted source changes on the same HEAD and after material runtime identity changes",
+        "stage": "build"
+      },
+      {
+        "statement": "Verify-loop guidance records source/dirty identity, build/configuration, flags, roles and mocked boundaries, and says HEAD alone cannot identify an uncommitted build",
+        "stage": "build"
+      },
+      {
+        "statement": "A clean paired P07 baseline and skill run pass independent report and behavior checks; earlier failed attempts remain preserved",
+        "stage": "behavior"
+      },
+      {
+        "statement": "The full repository unit suite passes",
+        "stage": "prove"
+      },
+      {
+        "statement": "The skill catalog validates",
+        "stage": "catalog"
+      }
+    ],
+    "oracle_files": [
+      "docs/pstack/adoption-plan.md",
+      "docs/pstack/validation.md",
+      "tests/test_p07.py",
+      "work/p07/check_results.py",
+      "evals/cases/p07-running-artifact-identity"
+    ],
+    "stages": [
+      {
+        "id": "build",
+        "skill": "build-discipline",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_p07.py"
+        ],
+        "inputs": [
+          "skills/verify-loop/SKILL.md",
+          "skills/verify-loop/VERIFY_FORMAT.md",
+          "tests/test_p07.py",
+          "evals/fixtures/p07"
+        ]
+      },
+      {
+        "id": "behavior",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "work/p07/check_results.py"
+        ],
+        "inputs": [
+          "work/p07/check_results.py",
+          "work/p07/evidence.md",
+          "evals/results/p07-final/summary.json",
+          "evals/results/p07-replay/summary.json"
+        ]
+      },
+      {
+        "id": "prove",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "inputs": [
+          "skills/verify-loop",
+          "evals/cases/p07-running-artifact-identity",
+          "tests",
+          "evals/RESULTS.md",
+          "work/p07/check_results.py"
+        ]
+      },
+      {
+        "id": "catalog",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "tools/catalog.py",
+          "--check"
+        ],
+        "inputs": [
+          "skills/verify-loop",
+          "CATALOG.md",
+          "README.md",
+          "tools/catalog.py"
+        ]
+      }
+    ],
+    "actions": []
+  },
+  "contract_hash": "a753bc3b58a7ed730baf8b2a399479fe87bfe8fe0e4e4910cb6756850846deba",
+  "oracle_hash": "ae2a5bec1dfb73d161d1914b9b8b80fc40239ddd69591827ce4bb4c1ad9d41db",
+  "started_at": 1791886346.8208075,
+  "status": "failed",
+  "proofs": {
+    "build": {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_p07.py"
+      ],
+      "exit": 0,
+      "output": ".warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n..\n----------------------------------------------------------------------\nRan 5 tests in 4.083s\n\nOK\n",
+      "at": 1791886359.6463566,
+      "seconds": 4.229,
+      "inputs_hash": "6bfbdbc7010bbd5b558465b3269950807eef76d37f734185bca129f4d3a3d44a"
+    }
+  },
+  "attempts": {
+    "build": 1
+  },
+  "journal": {},
+  "history": [
+    {
+      "stage": "build",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_p07.py"
+      ],
+      "exit": 0,
+      "output": ".warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n..\n----------------------------------------------------------------------\nRan 5 tests in 4.083s\n\nOK\n",
+      "at": 1791886359.6463566,
+      "seconds": 4.229,
+      "inputs_hash": "6bfbdbc7010bbd5b558465b3269950807eef76d37f734185bca129f4d3a3d44a"
+    }
+  ],
+  "reason": "The clean skill run passed report and independent live behavior checks, but the eval workdir gate rejected its added test_doctor.py and serve_verify.py helpers. Preserve this run and revise only the allowed-file list and gate to require a later passing retry.",
+  "next_action": "Archive this run; permit the two scoped verification helpers, keep prior trial output, rerun the skill arm, then complete repository gates."
+}

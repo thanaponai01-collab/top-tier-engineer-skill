@@ -1,0 +1,84 @@
+{
+  "case": "p07-running-artifact-identity",
+  "skill": "verify-loop",
+  "question": "Does the agent make the Run doctor identify the live source and runtime contract, and reject a healthy stale process?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "head-is-not-running-source",
+      "what": "The report says the repository revision token alone cannot identify source changes made without a commit.",
+      "must_say_any": [
+        "dirty source",
+        "uncommitted source",
+        "working-tree edits"
+      ],
+      "must_name": [
+        "repository revision token"
+      ]
+    },
+    {
+      "id": "health-is-not-identity",
+      "what": "The report finds that a healthy responsive old process is not proof of the intended build.",
+      "must_say_any": [
+        "stale instance",
+        "wrong build",
+        "wrong artifact",
+        "different source"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "do-not-change-contract",
+      "what": "Do not change application behavior or its identity response to make the doctor pass.",
+      "must_not_say_any": [
+        "changed the app identity",
+        "changed the service contract",
+        "changed the application response"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "The doctor must pass on the current identity and reject independent healthy stale source/config cases.",
+    "edits_allowed": [
+      "doctor.py",
+      "VERIFY.md",
+      "check_doctor.py",
+      "run_service.py",
+      "wait_ready.py",
+      "test_doctor.py",
+      "serve_verify.py",
+      ".verify-port",
+      ".verify-state.json",
+      ".verify-run/*",
+      ".verify-evidence/*",
+      ".gitignore",
+      "identity_check.py"
+    ],
+    "must_contain": [
+      {
+        "id": "doctor-checks-running-identity",
+        "kind": "process",
+        "what": "VERIFY.md documents a read-only Run doctor that checks actual running identity.",
+        "path": "VERIFY.md",
+        "regex": "(?is)## Run.*doctor:.*doctor\\.py"
+      }
+    ],
+    "replays": [
+      {
+        "id": "live-identity-and-stale-rejection",
+        "kind": "outcome",
+        "what": "Independent replay accepts unchanged identity and rejects the healthy old process for uncommitted source and changed flags, role and mocks.",
+        "replace": {
+          "p07_acceptance.py": "reference/p07_acceptance.py"
+        },
+        "command": [
+          "python",
+          "p07_acceptance.py"
+        ],
+        "expect": "pass",
+        "timeout": 45
+      }
+    ]
+  }
+}

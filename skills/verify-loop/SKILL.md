@@ -39,6 +39,13 @@ against the current app; if not, create only the sections the requested behavior
 regressions need. A one-off request can end with direct checks and retained rejecting and passing
 output. Strict green covers mapped claims only, never that every feature was found: report gaps.
 
+When a Run doctor must identify a particular build, use the [running artifact identity guidance](VERIFY_FORMAT.md#run)
+to bind the live process to material source and runtime settings. A responsive endpoint, PID or HEAD alone
+cannot identify uncommitted source or distinguish a stale build with changed flags, roles or mocked
+boundaries. Update the affected VERIFY.md procedure with the identity check and run it through
+verify.py; a manual scratch probe alone does not leave reusable project evidence. In the report, say
+that a healthy old process was rejected and name the expected-versus-observed identity mismatch.
+
 ## What makes a check good
 
 1. **It can fail.** Observe rejection of a wrong result, restore, then observe a pass.
