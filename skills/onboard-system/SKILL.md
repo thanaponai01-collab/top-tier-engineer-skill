@@ -20,7 +20,8 @@ end · **suspected** = neither.*
 
 Follow existing startup pointers and run project-foundation's `foundation.py inventory` when installed.
 Otherwise inspect the same categories directly: intent, work, feature/check indexes, architecture,
-commands and retrieval. Existing but stale documents are refresh candidates; existence is not proof.
+commands and retrieval. This inventory is the standalone route when project-foundation is absent;
+complete only the categories relevant to the request and disclose any unavailable checks. Existing but stale documents are refresh candidates; existence is not proof.
 Read the root summaries, then only the areas needed for the user's question. Do not read every file.
 
 ## 2. Fill the gaps once

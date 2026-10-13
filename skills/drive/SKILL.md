@@ -32,6 +32,9 @@ Use the smallest route: direct work for a small task, otherwise load the current
 Add a skill when it supplies missing evidence or handles a named risk; reuse current outputs
 and checks instead of loading every Next suggestion. Read references only for the active branch.
 A handoff carries the claim, source, affected paths and evidence/gaps, not the whole history.
+For multiple dependent workstreams or a dependent PR stack, read
+[program delivery](references/program-delivery.md). It supplies bounded planning and stack checks;
+it does not dispatch workers or authorize forge actions.
 
 ## 1. Match, once
 
@@ -90,7 +93,9 @@ On resume, inspect the branch, diff, RUN.json and remote state; preserve other p
 Release work uses `safe-release`: verified artifact, tested rollback, version and journey checks,
 then a bounded watch window with explicit thresholds. Roll back only within recorded authority.
 
-Where a named skill is not installed, do that step plainly and say the skill was missing.
+When a named skill is missing, use the calling step's stated fallback. If it has none, do the
+relevant bounded work directly, keep the native output, and state which specialist evidence or
+capability was unavailable.
 
 ## 4. Keep going, switch, finish
 

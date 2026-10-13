@@ -1,0 +1,3 @@
+I fixed `fixture/total.py`: `total` now returns `base + fee` instead of `base - fee`. I didn't load a skill. pick-skill's own rule says a one-line fix needs none, so I did it directly.
+
+The check passed. `test_total_includes_fee` ran with `PYTHONPATH=.` and gave `OK`, and `python total.py` prints `12`. My first `unittest discover` attempt failed with an import error, because `tests/` isn't a package. That was only how I invoked it, not a problem with the fix.

@@ -34,8 +34,10 @@ new goal guesses or database are needed. Routing belongs in this instruction blo
 agent definitions supply the host-readable model settings. Do not duplicate plugin agents into
 project .claude/agents unless the user asks for portable project-local workers.
 
-Read [Drive routing](../drive/references/model-routing.md) for the policy. A Markdown instruction
-cannot switch the current session model or provide a delegation API. If the host lacks the
+Read [Drive routing](../drive/references/model-routing.md) for the policy. If that reference is
+unavailable, use only worker types and model IDs the host actually supports, keep the current
+session as coordinator, and report single-agent fallback. A Markdown instruction cannot switch the
+current session model or provide a delegation API. If the host lacks the
 configured workers, record that limitation; do not substitute unsupported model names.
 
 Report the instruction file changed, configured worker roles and any host limitations. Setup

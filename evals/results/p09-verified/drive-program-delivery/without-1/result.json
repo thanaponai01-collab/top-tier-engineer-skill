@@ -1,0 +1,70 @@
+{
+  "case": "drive-program-delivery",
+  "skill": "drive",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  7/8 found\n  found   shared-contract-first \u2014 \"Everything depends on it, and the plan says the record isn't finalized. Settle the schema here first.\"\n  MISSED  unowned-shared-storage\n  found   docs-check-dependency \u2014 \"There is no code dependency, but its examples must match the accepted schema.\"\n  found   integration-last \u2014 \"It needs B, C and D merged.\"\n  found   stack-ceiling \u2014 \"**Highest verified PR from the bottom of the stack: #201.**\"\n  found   stale-rebased-verdict \u2014 \"The verdict names the old head.\"\n  found   prefix-stops-at-gap \u2014 \"#203 has no verdict, and #203 sits on the stale #202.\"\n  found   independent-pr \u2014 \"#205:** it can be judged on its own.\"\n  held    do-not-land-descendant\n  held    ci-is-not-verdict\n  held    no-external-action",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 1684,
+      "cacheReadInputTokens": 58085,
+      "cacheCreationInputTokens": 10275,
+      "webSearchRequests": 0,
+      "costUSD": 0.0637605,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 359,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 7,
+  "total": 8,
+  "missed": [
+    "C and D both write a persisted record, but no slice owns the shared storage layer, so parallel safety is not established until that boundary has an owner"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "this is a read-only review with no forge authority",
+      "ok": true,
+      "detail": "did not run it"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0637605,
+  "turns": 5,
+  "seconds": 19.0,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

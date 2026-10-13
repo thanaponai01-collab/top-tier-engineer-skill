@@ -15,7 +15,11 @@ refreshes every context file the other skills read, traces each against the real
 checks it can, and ends with a list of every category and its state. Bounded discovery, explicit
 gaps. Use [the foundation contract](references/foundation.md) for owned documents and equivalents,
 and [the economy policy](references/economy.md) when independent discovery can use cheaper workers.
-Let verify-loop judge behavioral verification. No other skill requires this one.
+Let verify-loop judge behavioral verification. This skill is conditional: Drive loads it for
+foundation work, and onboard-system uses it when requested context preparation has missing or
+stale categories. Ordinary task skills do not require a foundation refresh. If this skill is absent,
+onboard-system prepares bounded sourced notes directly; Drive performs the bounded step plainly
+and reports the missing capability.
 Reuse current maps and checks. For missing/stale categories, perform the specialist handoff
 below; efficiency means avoiding repeated work, not skipping its validation. A small task
 needs only its affected records, not a foundation refresh.
@@ -85,6 +89,8 @@ record coverage gaps and Next. Empty projects get meaningful observed state and 
 fictional entry points or empty headings. Intent/work are always prepared; no WHY/PLAN placeholders.
 
 Use the memory convention's Scaling by area rules when preparing area links and placement notes.
+If the project-context convention is unavailable, preserve existing source links and area boundaries;
+do not create a separate index, and report that the placement guidance was unavailable.
 Complete the selected area's purpose, boundaries, constraints and requirement/check pointers in
 existing documents; record unmapped dependencies as gaps. Keep startup size independent of module
 count by linking area indexes. Record placement conventions where contributors already look.

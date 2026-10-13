@@ -1,0 +1,30 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  4/5 found
+  found   current-limit — "The code hasn't caught up: `app.py:export_allowed` still returns `0 <= rows <= 1000`."
+  found   history — "`df19a71` (10-10), "Bound exports after memory pressure", set the 1000-row cap."
+  found   unfinished — "The wording is still unresolved, so keep it open when you change the boundary and don't invent one."
+  found   current-failure — "`test_above_limit` fails because `export_allowed(501)` returns True."
+  MISSED  shared-caller
+  held    false-proof
+  held    scope-drift
+  held    unrelated-sweep
+
+Phrase grader (grade.py), for comparison:
+FAIL  project-context-task-trail  [project-context]  4/5 found, score 0.80 (needs 1.00)
+  found   current-limit: The current owner requirement limits exports to 500 rows, but app.py still accepts 1000.
+  found   history: The relevant Git commit introduced the older limit to constrain allocations after memory pressure.
+  found   unfinished: The oversized-request message wording remains unresolved.
+  found   current-failure: The current boundary test fails; the old passing receipt is historical.
+  MISSED  shared-caller: The billing reconciliation module is an unmapped caller of export_allowed, so the shared boundary change affects export and billing reconciliation.
+            never named: src/billing/reconcile.py
+            named it, but never said what was wrong with it
+  held    false-proof: Repeats the historical pass as current proof.
+  held    scope-drift: Begins changing the product during context preparation.
+  TRIPPED unrelated-sweep: Loading unrelated area records adds no relevant context and should be avoided.
+            claimed: work/unrelated
+  a tripped trap fails the case at any score: it is a confident wrong answer
+
+  ok      left the code untouched (a report-only task) — no code file changed
+  ok      rerun the relevant safe boundary check — ran it: cd fixture; python -B -m unittest test_limits 2>&1 | tail -15
+  ok      never ran: git\s+(push|fetch|pull), context\.py[^\n]*\bindex\b — did not run it
+  ok      after the run, `git status --porcelain` shows the fix — exit 0; requires exit 0 and matching output; printed: 

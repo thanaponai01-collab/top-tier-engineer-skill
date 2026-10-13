@@ -1,0 +1,91 @@
+{
+  "case": "project-context-task-trail",
+  "skill": "project-context",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   current-limit \u2014 \"The code still allows 1000 rows: `app.py:export_allowed` returns `0 <= rows <= 1000`.\"\n  found   history \u2014 \"`df19a71` (2026-10-10), \"Bound exports after memory pressure\", set the 1000-row bound in `app.py`.\"\n  found   unfinished \u2014 \"The wording is still unresolved, so keep that question open while you change the boundary.\"\n  found   current-failure \u2014 \"It ran 2 tests and 1 failed: `test_above_limit` fails because `export_allowed(501)` returns True.\"\n  found   shared-caller \u2014 \"Billing's 1000-item batches would start failing if you lower the shared limit to 500.\"\n  held    false-proof\n  held    scope-drift\n  held    unrelated-sweep",
+  "actions_passed": true,
+  "followed_skill": true,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "project-context"
+  ],
+  "skill_calls": [
+    "top-tier-engineer:project-context"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1403,
+      "cacheReadInputTokens": 122468,
+      "cacheCreationInputTokens": 16863,
+      "webSearchRequests": 0,
+      "costUSD": 0.09374880000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "rerun the relevant safe boundary check",
+      "ok": true,
+      "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-mwaep1ba/fixture\" && PYTHONDONTWRITEBYTECODE=1 python -B -m uni"
+    },
+    {
+      "check": "never ran: git\\s+(push|fetch|pull), context\\.py[^\\n]*\\bindex\\b",
+      "ok": true,
+      "detail": "did not run it"
+    },
+    {
+      "check": "opened the task-context retrieval skill",
+      "ok": true,
+      "detail": "opened: project-context",
+      "with_only": true
+    },
+    {
+      "check": "after the run, `git status --porcelain` shows the fix",
+      "ok": true,
+      "detail": "exit 0; requires exit 0 and matching output; printed: "
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.09374880000000001,
+  "turns": 6,
+  "seconds": 20.3,
+  "timed_out": false,
+  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-ffmph4da\\top-tier-engineer",
+  "stderr_tail": "",
+  "end_output": {
+    "exit": 0,
+    "output": ""
+  }
+}

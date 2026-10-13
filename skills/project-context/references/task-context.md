@@ -10,7 +10,7 @@ and its authority; retrieve context for the next decision rather than starting a
    mappings. Search using the target's name and terms from those records; open the returned sources.
    If no mapping exists, use a scoped file/symbol search and disclose the gap. An empty index result
    means nothing found in indexed context, not that the project has no relevant code or history.
-3. Inspect the mapped implementation and actual callers where the task touches shared behavior.
+3. Inspect the mapped implementation and actual callers where the task touches shared behavior. Search the target symbol in repository source (for example, `rg -n --glob '*.py' '<symbol>' src tests`) and open production call sites across area boundaries; mappings are starting points, not a complete caller list. Keep searches inside the repository, not the host filesystem.
    Check the working-tree diff so uncommitted changes are not mistaken for committed behavior.
 4. When the reason or prior task matters, use scoped Git history: `git log -n 10 -- <paths>`,
    `git log -S '<symbol or value>' -- <path>`, and `git show <sha> -- <paths>` as appropriate.

@@ -78,5 +78,7 @@ P01 comes first. Design P02/P07 fixtures together to avoid repeated startup/proo
 follow once reporting is trustworthy; P05/P06 need independent discrimination cases. Shared edits
 have one writer. Before skill changes, write a case, retain baseline and replay after. Consult
 current context and diffs; do not overwrite unrelated work or replace an active RUN.json.
-Version bumps, releases, installed-plugin updates, tracker filing and P09 are outside this
-document-authoring task. Later adoption follows repository checks and the user's actual scope.
+Version bumps, releases, installed-plugin updates and tracker filing remain outside this plan.
+P09 has a separate authorized implementation pass; its local scope and evidence are tracked in the
+[handoff](../../work/pstack-handoff.md). Later adoption follows repository checks and the user's
+actual scope.

@@ -26,7 +26,7 @@ New/replaced parts use `references/design-new.md`; consequential forks only use 
 Start from the project's map: `docs/architecture.md` (or the `architecture:` pointer in CLAUDE.md)
 and recorded decisions (`docs/adr/`, `WHY.md`); a move that reopens a decision says why its reason
 no longer holds. No map: sketch one from the entry points as you read, suggest `/project-foundation`
-for next time, and go on. A map is a claim: check every edge you rely on against the code. A map
+when available for next time, and go on. This design task does not depend on that skill. A map is a claim: check every edge you rely on against the code. A map
 that says what the code does not do goes **first** in the report, with the line in each, because
 every reader, human or AI, will believe a problem is solved that isn't.
 

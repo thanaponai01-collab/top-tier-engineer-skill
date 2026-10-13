@@ -18,6 +18,8 @@ nothing.
 
 For context discovery, current-work scaling and completion upkeep, follow
 [the context handoff](../project-foundation/references/context-handoff.md), preserving existing equivalents.
+If that reference is unavailable, read the project's startup pointers and update only the affected
+intent, work and evidence records; report that the structural handoff check was unavailable.
 
 A build outlives one sitting, so keep one file, `BUILD.md` at the repo root (or the brief's own file
 if it has one). One line per slice: `proof line | status | commit`. Under it, a **Deferred** list:

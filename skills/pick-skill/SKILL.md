@@ -26,13 +26,16 @@ does — do it directly and say so. The skills are for work that is worth the ri
 
 ## Keep the route small
 
-Start with direct work or one skill. Load another only for an unmet requirement, a named
-risk, or a missing output the current task needs. A Next list is a pointer, not an instruction
-to load the chain. Read the selected skill and only references whose conditions apply.
+A skill is invocable on its own; a workflow may add a conditional handoff when the task has
+an unmet requirement, named risk or missing output. Start with direct work or one skill, and load
+only the next skill whose condition applies. A Next list is a pointer, not an instruction to load
+the chain. Read only references needed for the selected task.
 Reuse current artifacts and applicable evidence; changed inputs need fresh proof.
 For a handoff, pass the claim, source, affected paths and evidence/gaps; the receiver returns
-its result and evidence, while the caller keeps its own verdict. No full-history handoff.
-Small tasks need no foundation, index, plan or run record unless the task itself needs one.
+its result and evidence, while the caller keeps its own verdict. No full-history handoff. If a named
+skill is missing, use the caller's stated fallback; if none is stated, do the bounded work directly
+and report the missing capability or evidence. Small tasks need no foundation, index, plan or run
+record unless the task itself needs one.
 
 *Test:* before another load, name the unresolved question it will settle; otherwise continue
 with the current skill or finish. A routine value change uses its relevant existing check.

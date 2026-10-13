@@ -1,0 +1,78 @@
+{
+  "case": "drive-program-delivery",
+  "skill": "drive",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  8/8 found\n  found   shared-contract-first \u2014 \"The record isn't finalized and everything depends on it, so finalize it first.\"\n  found   unowned-shared-storage \u2014 \"A shared persistence or store layer isn't listed, and I'd check for one.\"\n  found   docs-check-dependency \u2014 \"Its \"examples match the accepted schema\" check can't pass until A and B settle, so validate it last.\"\n  found   integration-last \u2014 \"It runs only on the integrated result.\"\n  found   stack-ceiling \u2014 \"## Highest verified PR from the bottom: #201\"\n  found   stale-rebased-verdict \u2014 \"The verdict is stale and needs a fresh independent review at `b202-rebased`.\"\n  found   prefix-stops-at-gap \u2014 \"A passing descendant doesn't extend the ceiling.\"\n  found   independent-pr \u2014 \"It is outside the chain and doesn't repair the gap.\"\n  held    do-not-land-descendant\n  held    ci-is-not-verdict\n  held    no-external-action",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "drive"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "drive",
+      "path": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-c6d_p428\\top-tier-engineer\\skills\\drive\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-c6d_p428\\top-tier-engineer\\skills\\drive\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 2206,
+      "cacheReadInputTokens": 67307,
+      "cacheCreationInputTokens": 18641,
+      "webSearchRequests": 0,
+      "costUSD": 0.1033667,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 426,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 8,
+  "total": 8,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "this is a read-only review with no forge authority",
+      "ok": true,
+      "detail": "did not run it"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.1033667,
+  "turns": 7,
+  "seconds": 22.8,
+  "timed_out": false,
+  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-c6d_p428\\top-tier-engineer",
+  "stderr_tail": "",
+  "end_output": null
+}
