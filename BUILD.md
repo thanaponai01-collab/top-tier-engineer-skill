@@ -17,4 +17,6 @@ Strengthen fresh-reader/repeated-upkeep trials with independent action evidence 
 fixtures; done when bounded loading and unchanged second-pass files are demonstrated across runs.
 
 ## Existing work
+- include: work/task-context.md (shared task retrieval and cross-skill discovery; live evidence and gaps)
+- include: work/recall-improvement.md (catch-up scope and evidence clarification; live trial limitations)
 - include: work/plugin-baseline.md (existing evidence claims, including uncommitted work; not proof of this change)

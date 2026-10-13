@@ -1,0 +1,59 @@
+{
+  "case": "project-context-task-trail",
+  "skill": "project-context",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   current-limit \u2014 \"The code still allows up to 1,000 rows, but the owner's current limit is 500, and the boundary test fails today.\"\n  found   history \u2014 \"`df19a71` (2026-10-10), \"Bound exports after memory pressure\", added the 1,000-row cap.\"\n  found   unfinished \u2014 \"The wording is still undecided, and the work record says to keep that question open while changing the limit.\"\n  found   current-failure \u2014 \"`test_above_limit` failed because `export_allowed(501)` returned `True`.\"\n  held    false-proof\n  held    scope-drift",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "top-tier-engineer:project-context"
+  ],
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "rerun the relevant safe boundary check",
+      "ok": true,
+      "detail": "ran it: cd fixture && git status --short; git log --stat --format='%h %ad %s' --date=short -n 3; cd .. && python -I -m"
+    },
+    {
+      "check": "never ran: git\\s+(push|fetch|pull), context\\.py[^\\n]*\\bindex\\b",
+      "ok": true,
+      "detail": "did not run it"
+    },
+    {
+      "check": "after the run, `git status --porcelain` shows the fix",
+      "ok": true,
+      "detail": "printed: "
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1920514,
+  "turns": 7,
+  "seconds": 27.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": ""
+}

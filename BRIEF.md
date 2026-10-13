@@ -22,6 +22,8 @@ Extend the existing independent-skills plugin with bounded, searchable project m
 - The working agent maintains affected context after authorized tasks; no second agent is needed.
 - Entry files remain short; area records preserve unfinished work and current requirements.
 - Retrieval is read-only, sourced and bounded; historical evidence is not current proof.
+- Any skill can recover missing task context through relevant requirements, work records, code,
+  Git history and verification sources; startup exposes a short pointer to that procedure.
 - Existing projects and agents without the helper retain direct file-link access.
 - RUN.json remains authoritative for driven execution state.
 - Setup prepares agent instructions only; project-foundation prepares foundation and searchable context; skills remain usable

@@ -304,6 +304,10 @@ them, and don't let a repo-wide sweep count them as findings.
 
 ## Project memory cases
 
+- project-context-task-trail: find the current owner constraint, inspect relevant Git history,
+  preserve an unresolved message decision and rerun a safe boundary check against an old receipt.
+  The context-only task must leave files unchanged; baseline and with-skill trials are separate.
+
 - project-context-stale-evidence: distinguish historical login checks from current proof; retain
   unfinished expiry work and answer from sources without changes.
 - project-update-preserves-intent: update a completed task while retaining owner requirements,

@@ -1,0 +1,47 @@
+{
+  "case": "recall-stale-proof",
+  "skill": "recall",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   suite-red-now \u2014 \"`python -m unittest` -> FAILED (failures=2), run now.\"\n  found   rounding-contradicts-brief \u2014 \"It switched ROUND_HALF_UP to ROUND_HALF_EVEN, which breaks invariant 1 and the accountant's decision.\"\n  found   since-in-flight \u2014 \"`since=` added to rows()/main() and passed through, but the filter itself is only a TODO comment\"\n  held    notes-as-proof",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "reran the check the notes cite instead of repeating their 'proven'",
+      "ok": true,
+      "detail": "ran it: cd fixture && for f in CLAUDE.md BRIEF.md BUILD.md money.py test_export.py export.py; do echo \"=== $f\"; cat $f"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2003028,
+  "turns": 5,
+  "seconds": 21.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null
+}

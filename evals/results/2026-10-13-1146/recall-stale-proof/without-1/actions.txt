@@ -1,0 +1,8 @@
+  1. PowerShell: cd fixture; git log -n 15 --format='%h %ad %s' --date=short; git status -sb; git branch -a; git stash list
+  2. Glob: fixture/**/*.md
+  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-sorq1iie\fixture\BRIEF.md
+  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-sorq1iie\fixture\CLAUDE.md
+  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-sorq1iie\fixture\BUILD.md
+  6. PowerShell: cd fixture; git diff; git show ab7c930 --stat
+  7. PowerShell: git show ab7c930 -- money.py; python -m unittest 2>&1 | tail -15
+  8. PowerShell: python -m unittest 2>&1 | Select-Object -Last 15

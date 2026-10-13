@@ -108,7 +108,10 @@ in force, `BUILD.md` for the next step, `FEATURES.md`, `VERIFY.md` with its cove
 command, architecture and command documentation), and one line saying a changed decision
 replaces its line in the brief or its linked area.
 State when to read linked areas and identify equivalent documents with `intent:` and `work:`
-pointers. Include one upkeep line: authorized updates refresh affected intent, evidence and Next;
+pointers. Add one conditional task-context line naming the installed memory reference's
+Task context section: consult it when the task needs missing project decisions, state, code history
+or verification context. This makes the shared retrieval procedure reachable from any working skill
+without loading its detail at every startup. Include one upkeep line: authorized updates refresh affected intent, evidence and Next;
 read-only reviews report gaps. Links and one-line summaries only; detail stays in the linked files.
 Preserve other instructions and never write a
 second block. If no instruction file exists, create one appropriate to the requested agent, not

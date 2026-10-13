@@ -71,7 +71,7 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Starting or resuming work: "where were we?", what is the state and the next step | `recall` |
 | "Does it actually work?" before a merge or release | `correctness-gate` |
 | Deploying, or changing the shape of stored data | `safe-release` |
-| Questions about saved goals, work, commands or evidence | `project-context` |
+| Missing task context, saved decisions, history or verification sources | `project-context` |
 | Maintain context after work or reconcile missed updates | `project-update` |
 
 ## The Relay: nine checkpoints

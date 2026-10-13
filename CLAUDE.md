@@ -28,6 +28,7 @@ verify: evals/PROJECT_MEMORY.md
 architecture: docs/architecture.md
 commands: docs/commands.md
 Read BRIEF.md and BUILD.md first; open linked areas only for the task.
+Task context missing: read skills/project-context/references/memory.md#task-context for scoped source/history/check retrieval.
 Retrieve: python skills/project-context/scripts/context.py --repo . search WORDS --limit 5
 Upkeep: update affected records after authorized work; index --files CHANGED_CONTEXT_FILES.
 Index is disposable; facts stay in files. Read-only reviews report gaps.

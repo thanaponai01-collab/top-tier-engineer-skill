@@ -1,3 +1,83 @@
+# Task-context retrieval revision — 2026-10-13
+
+These local, uncommitted instruction changes were checked with real agents. This is one trial
+per case/arm, not a reliability estimate or proof of improvement over the baseline.
+
+| Case | Without plugin | With revised plugin | Evidence |
+|---|---|---|---|
+| project-context-task-trail | 1/1 pass | 1/1 pass on final instructions | results/context-task-trail-baseline/; results/context-task-retrieval-final/ |
+| project-context-stale-evidence | not rerun | 1/1 pass on final instructions | results/context-task-retrieval-final/ |
+| project-foundation-after-setup | not rerun | 1/1 pass | results/context-task-retrieval-with/ |
+| build-discipline-keeps-decisions | not rerun | 1/1 pass | results/context-task-retrieval-with/ |
+| pick-skill-slow-is-a-bug | not rerun | 1/1 pass | results/context-task-retrieval-with/ |
+
+The initial with-plugin batch also passed both context cases, before the task procedure was split
+into references/task-context.md to meet the context budget. Its retained evidence is in
+results/context-task-retrieval-with/. The final context replay loaded project-context via the
+Skill tool and read task-context.md, then inspected relevant Git history and reran the safe check.
+The foundation transcript records an actual startup-pointer write to the installed Task context
+reference. The building regression passed, but does not prove every working skill follows the
+shared context procedure or that larger projects load only relevant areas.
+
+Repository checks: all 484 tests passed in 95.661 seconds; catalog listing 4993/5000 characters;
+handoff check: no budget overruns or structural gaps. A first full run caught a missing frontmatter
+trigger phrase; corrected and rerun. Structural/cache checks are not product or behavior proof.
+
+Record-format/indexing detail was subsequently moved unchanged into references/storage.md so
+memory.md also fits the context helper's stricter 80-line detail budget. Scoped structural checks
+pass and the 20 context-instruction tests pass. Replay evidence: results/context-task-storage-split/.
+The latest broad handoff check observes concurrently added work/pstack-handoff.md and reports
+an unrelated missing packages/auth/VERIFY.md link from skills/verify-loop/VERIFY_FORMAT.md;
+that work was not changed here. The earlier clean handoff result predates those workspace changes.
+
+Historical scorecards below retain their original claims and limitations.
+
+# Scorecard - do the skills make an agent better?
+
+Each row is one rigged codebase from `evals/cases/`: a real defect planted in it, and a
+trap beside it that a careless agent falls for. A real agent was given the task several
+times **without** this plugin (plain Claude Code, the task in plain words) and **with** it.
+A try counts as passed only if the agent found everything planted, fell for no trap,
+and actually did the work its report claims (checked from its own transcript).
+
+Reports are graded on **meaning** by a separate model that is never told which side wrote
+them, and must quote the report for every finding it credits; a quote that is not really in
+the report does not count. That judge grades every reference report correctly
+(`python evals/judge.py --calibrate`).
+
+- **When:** 2026-10-13-1147
+- **Model:** claude-opus-5-5
+- **Tries per case, per side:** 1
+- **Plugin version:** 4.61.1
+- **Cost of this run:** $0.20
+- **Raw evidence:** `evals/results/2026-10-13-1147/` — every report, action log and grade
+
+| Case | Skill | What it tests | Without skills | With skills | Verdict |
+|---|---|---|---|---|---|
+| `recall-stale-proof` | `recall` | what is the true state of the work: what the notes claim, checked against what can be rerun now? | — | 1 of 1 | only one side was run |
+
+**Meaning vs phrase grading:** the older phrase grader (`grade.py`) agreed with the judge on
+1 of 1 reports. Where they differ, open the run's `grade.txt`: both verdicts are there.
+
+**Did the agent open the skill it was asked to use?** 0 of 1 tries.
+A try that never opened the skill measured the model, not the skill.
+
+## Why tries failed
+
+None failed.
+
+## How to read this
+
+- **Skill helps**: with the skill the agent passes clearly more often. The skill earns its place.
+- **No difference — the agent already does this**: the model gets it right on its own. The
+  skill costs attention and adds nothing on this task; make the case harder or cut the skill.
+- **Skill hurts**: the agent does worse with the skill. Fix it before anything else.
+- A few tries is a small sample. One try either way is noise; a gap of two or more in three is a signal.
+
+Re-run with `python evals/run.py` whenever a skill or the model changes.
+
+## Previous scorecard (historical evidence)
+
 # arch-design for an owner who can't read code (4.61.0)
 
 2026-10-11: SKILL.md becomes map, scope, candidates, deep dive, record, with before/after pictures

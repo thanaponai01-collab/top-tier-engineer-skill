@@ -1,5 +1,9 @@
 # Project context handoff
 
+For missing task context before work, follow
+[Task context](../../project-context/references/memory.md#task-context); reuse the sources already
+opened and return to the current task. No helper or additional skill invocation is required.
+
 Use during project setup and authorized updates to project code or documentation. For a read-only
 review, report context gaps without editing the project. A small direct edit needs only updates
 to facts it changes, not a new workflow or document set.

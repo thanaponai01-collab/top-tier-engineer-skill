@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "historical",
+      "what": "Login evidence is historical and does not establish current verification.",
+      "found": true,
+      "quote": "The records call that \"historical evidence, not current verification\"",
+      "quote_checked": true
+    },
+    {
+      "id": "expiry",
+      "what": "Session expiry is unverified and the next step is to verify expiry and return URLs.",
+      "found": true,
+      "quote": "Check session expiry and return URLs against the current code before extending authentication",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "false-green",
+      "what": "Claims authentication is currently verified.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0378447,
+  "model": "claude-sonnet-5-5"
+}

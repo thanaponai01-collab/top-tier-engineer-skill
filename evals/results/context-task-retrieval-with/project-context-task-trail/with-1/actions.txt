@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:project-context
+  2. Bash: cd fixture && find . -type f | grep -v '/.git/' | head -100; cat RUN.json 2>/dev/null; cat AGENTS.md CLAUDE.md 2>/dev/null
+  3. Bash: cd fixture && for f in BRIEF.md BUILD.md FEATURES.md VERIFY.md brief/export.md work/export.md evidence/export.md app.py test_limits.py; do echo "=== $f"; cat "…
+  4. Bash: cd fixture && git status --short; git show --stat df19a71 fd8278d | grep -v '^$'; python -B -m unittest test_limits 2>&1; echo "exit=$?"; git status --short; ls

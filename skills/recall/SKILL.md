@@ -44,13 +44,19 @@ equivalent documents. The check establishes structure, not fidelity to the owner
 
 ## 2. Check what can be checked
 
+Use **proven** only for a relevant check that passed now at the inspected baseline. Label an
+earlier receipt **from the notes**, with its date/baseline when recorded. A failing check proves
+a failure was observed, not that the feature is done. If a check cannot run, name the command
+and blocker and mark the claim unverified.
+
 A note that says "proven" is a claim from an earlier session. Reconcile unknown external actions
 against the actual provider before any retry; an applied action must not be repeated. Then rerun the last check it names (the
 test, the `VERIFY.md` section, the build) before you repeat the claim. Rerun only what is safe to
 repeat; a check that writes data or calls a live service stays "from the notes". Code and checks establish
 implemented behavior; owner requirements in the current brief and linked areas establish intended
-behavior. Report a mismatch as a gap. Correct stale descriptions of implementation, while preserving
-owner intent until the owner changes it; green tests alone cannot supersede a requirement.
+behavior. Report a mismatch as a gap and correct the description in the capsule; leave the source
+notes unchanged during a catch-up. Preserve owner intent until the owner changes it; green tests
+alone cannot supersede a requirement.
 
 *Test:* every "done" in the capsule was either rerun now or is labelled as from the notes.
 
@@ -61,7 +67,7 @@ Answer first. About ten lines, each with its source:
 ```
 GOAL:      <what this work is for, one line>
 DECISIONS: <the decisions in force from BRIEF.md and relevant linked areas that bear on NEXT, or "none recorded">
-DONE:      <finished and proven; what you reran> [proven]
+DONE:      <finished work; name current passing checks, or label historical claims "from the notes">
 IN FLIGHT: <uncommitted or half-built, by file> [traced]
 OPEN:      <decisions and questions nobody answered>
 BROKEN:    <failing or unverified, with the command that shows it>
@@ -74,8 +80,10 @@ A decision the user states while you are catching them up goes into `BRIEF.md` t
 `problem-framing` says ("Keeping the brief current"); that one write is allowed here.
 
 If nothing is recorded, a clean tree and no notes, say "nothing recorded" and ask what the work
-is. Do not reconstruct a plausible history. A repo you have never seen, with no `VERIFY.md`,
-`FEATURES.md` or `WHY.md`, is first contact, not a resume: hand off to `onboard-system`.
+is. Do not reconstruct a plausible history. Missing `VERIFY.md`, `FEATURES.md` or `WHY.md` alone
+does not make this onboarding: use available Git history, work notes and equivalent documents,
+and state the gaps. If there is no recoverable working context, suggest `onboard-system` for a
+broader first-contact walkthrough; do not start that workflow as part of a catch-up.
 
 ## 4. Then
 

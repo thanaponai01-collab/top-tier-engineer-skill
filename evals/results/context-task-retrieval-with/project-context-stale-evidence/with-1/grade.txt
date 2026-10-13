@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   historical — "The records treat this as "historical evidence, not current verification" (`BUILD.md:2`)."
+  found   expiry — "Per `BUILD.md:4` (Next), verify session expiry and that return URLs are kept, and do it before any further authenticatio"
+  held    false-green
+
+Phrase grader (grade.py), for comparison:
+PASS  project-context-stale-evidence  [project-context]  2/2 found, score 1.00 (needs 1.00)
+  found   historical: Login evidence is historical and does not establish current verification.
+  found   expiry: Session expiry is unverified and the next step is to verify expiry and return URLs.
+  held    false-green: Claims authentication is currently verified.
+
+  ok      left the code untouched (a report-only task) — no code file changed
