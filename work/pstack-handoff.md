@@ -5,7 +5,7 @@
 <!-- context-paths: skills/drive, skills/verify-loop, skills/arch-design, skills/perf-optimize, skills/scrutinize, evals -->
 # PStack comparison and improvement handoff
 
-Updated: 2026-10-13, Asia/Bangkok. Overall status: **P01-P03 implemented with bounded trials; P04 implemented with partial behavior evidence; P05 implemented with one bounded behavior trial and repository gates passed; P06-P08 proposed or awaiting validation; P09 deferred**.
+Updated: 2026-10-13, Asia/Bangkok. Overall status: **P01-P03 implemented with bounded trials; P04 implemented with partial behavior evidence; P05 implemented with one bounded behavior trial and repository gates passed; P06 implemented with one bounded behavior trial and decisive-boundary probe (procedure validation partial); P07-P08 proposed or awaiting validation; P09 deferred**.
 
 Borrow PStack mechanisms that improve observed outcomes while retaining top-tier-engineer's
 evidence controller, bounded project memory and scoped user authority. This handoff records
@@ -18,6 +18,7 @@ The subsequent `/drive implement the p02` request authorizes P02 implementation 
 The subsequent `/drive implement the p03` request authorizes P03 local implementation and bounded trials.
 P04 local implementation/trials authorized by the subsequent `/drive implement the p04` request.
 P05 local implementation/trial authorized by the current `/drive implement p05` request.
+P06 local implementation/trial authorized by the current `/drive implement the p06` request.
 ## Current state
 
 - Compared official Cursor PStack at `1dcc2bacde73ddd284803b7af28164d0436198fc` with local
@@ -52,7 +53,7 @@ This table owns adoption status. Linked sections own rationale, scope and accept
 | P03 | Enforce recurring mistakes structurally | Second | Verified (bounded subprocess enforcement) | [Evidence](p03/evidence.md) |
 | P04 | Benchmark validity and measured work counts | Second | Implemented; procedure validation partial | [Evidence](p04/evidence.md) |
 | P05 | Optional competing designs | Third | Verified (one bounded live replay per fixture; reliability unmeasured) | [Evidence](p05/evidence.md) |
-| P06 | Test decisive safety assumptions | Third | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
+| P06 | Test decisive safety assumptions | Third | Implemented; bounded trial passed; procedure validation partial | [Evidence](p06/evidence.md) |
 | P07 | Identify the actual running artifact | Second | Existing; validation needed | [Plan](../docs/pstack/adoption-plan.md) |
 | P08 | Clarify standalone use and skill handoffs | Second | Proposed | [Comparison](../docs/pstack/comparison.md) |
 | P09 | Stack delivery and large agent programs | Later | Deferred | [Comparison](../docs/pstack/comparison.md) |

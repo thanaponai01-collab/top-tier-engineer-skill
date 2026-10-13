@@ -7,3 +7,5 @@ passes (`python -m unittest discover -s tests`: 4 tests OK).
 Minor: the docstring could mention the None return in the module docs.
 
 LGTM, safe to merge.
+
+I didn't test the missing-user path.

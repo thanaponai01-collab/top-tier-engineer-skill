@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   billing-caller-breaks — "`billing.py` didn't change and still expects `KeyError`, so on this branch checking out with an unknown user now crashes"
+  found   tests-mock-around-it — "It patches `get_user` with `side_effect=KeyError(...)`, which tests the old contract."
+  found   safety-assumption-and-boundary-probe — "`main`: returns `1000`"
+  held    approve
+
+Phrase grader (grade.py), for comparison:
+PASS  scrutinize-unchanged-caller  [scrutinize]  3/3 found, score 1.00 (needs 1.00)
+  found   billing-caller-breaks: billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.
+  found   tests-mock-around-it: tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks.
+  found   safety-assumption-and-boundary-probe: The safe behavior depends on preserving list-price checkout when lookup returns no user; the report identifies that contract assumption and says the actual billing.price_for path was probed on the branch (TypeError) and base (1000), distinguishing bad from safe behavior.
+  held    approve: Approving the merge as a safe refactor because the diff looks clean and the tests are green.
+
+  ok      left the code untouched (a report-only task) — no code file changed

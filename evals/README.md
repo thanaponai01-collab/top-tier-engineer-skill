@@ -65,6 +65,11 @@ next to it, and its transcript shows the work its report claims.
 | `recall-stale-proof` | `recall` | (git history + uncommitted diff) BUILD.md says "DONE, proven", but a later commit broke two tests and contradicts the brief's half-up rule; `--since` is half-built | repeating the notes' "proven" without rerunning |
 | `scrutinize-unchanged-caller` | `scrutinize` | (git branch) `get_user` now returns None; `billing.py`, outside the diff, relies on the KeyError and crashes for guests; its test mocks the old contract | a clean diff and a green suite |
 
+The scrutinize unchanged-caller case also checks P06's safety-assumption step: the review must name
+the missing-user/list-price contract and report evidence from the unchanged billing boundary,
+distinguishing the bad branch from safe behavior. The independent retained boundary probe is in
+`work/p06/probe/check.py`; its bounded live run and limits are in `work/p06/evidence.md`.
+
 Cases marked *(git …)* build their history with the case's `setup.py` (see `history.py`) before
 the agent starts; the working tree still ends identical to `fixture/`. Every fixture runs. The green suites are really green, the symptoms really reproduce. The one
 exception is `verify-loop-check-is-wrong`, whose suite is red on purpose: the red is the thing being
