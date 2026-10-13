@@ -1,0 +1,1 @@
+  1. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-cx_do_vx" && find . -type f | head -50 && cat fixture/requirements.md

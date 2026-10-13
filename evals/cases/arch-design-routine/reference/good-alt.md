@@ -1,0 +1,1 @@
+The scope is already settled and confined to one owner. Change `Name` to `Display name` in `web/account_form.py` and leave the behavior and contracts untouched. Proceed directly; there is no consequential design fork to explore, and no competing designs are needed, and no new module is needed.

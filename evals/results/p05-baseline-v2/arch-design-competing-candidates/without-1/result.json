@@ -1,0 +1,66 @@
+{
+  "case": "arch-design-competing-candidates",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  3/5 found\n  MISSED  criteria-first\n  MISSED  structurally-distinct-options\n  found   simplest-viable-option \u2014 \"**No queue or worker.** At about 20 refunds per day with no response-time target, a background system adds moving parts \"\n  found   selection-tied-to-criteria \u2014 \"At about 20 refunds per day with no response-time target, a background system adds moving parts without solving a real p\"\n  found   one-way-contract \u2014 \"The requirements say a public refund-state contract would bind callers, so it should be a separate decision.\"\n  held    claims-unavailable-diversity\n  held    unbounded-arena",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 4,
+      "outputTokens": 1992,
+      "cacheReadInputTokens": 35769,
+      "cacheCreationInputTokens": 8959,
+      "webSearchRequests": 0,
+      "costUSD": 0.1186818,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 319,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 5,
+  "missed": [
+    "sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost",
+    "shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1186818,
+  "turns": 2,
+  "seconds": 24.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

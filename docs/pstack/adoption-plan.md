@@ -2,7 +2,9 @@
 
 Status owner: [handoff](../../work/pstack-handoff.md). Evidence: [validation](validation.md).
 P01 was authorized by the user's `/drive implement the p01` request; its bounded results are
-in [evidence](../../work/p01/evidence.md). Other slices remain proposals.
+in [evidence](../../work/p01/evidence.md). P05 implementation and bounded trial evidence are in
+[the P05 record](../../work/p05/evidence.md); adoption status remains handoff-owned. Other slices
+retain their status in the handoff.
 
 ## P01 Establish trustworthy behavioral evidence
 

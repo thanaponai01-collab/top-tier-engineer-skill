@@ -25,16 +25,15 @@ Implementation committed on codex/p01-behavior-evidence; RUN.json owns execution
 in docs/RUN.pre-p01.json.
 
 ## Existing work
-- include: work/skill-composition.md (conditional handoffs, scope fixes and validation)
-- include: work/pstack-handoff.md (PStack comparison and adoption status; P01 implementation and pilot)
-- include: work/task-context.md (shared task retrieval and cross-skill discovery; live evidence and gaps)
-- include: work/recall-improvement.md (catch-up scope and evidence clarification; live trial limitations)
-- include: work/plugin-baseline.md (existing evidence claims, including uncommitted work; not proof of this change)
+- include: work/skill-composition.md; work/pstack-handoff.md (PStack status); work/task-context.md (retrieval and discovery)
+- include: work/recall-improvement.md (fresh-context gaps); work/plugin-baseline.md (prior claims, not proof of this change)
 
 ## P02 slice
 Proof line: python -m unittest discover tests -p test_project_recipe.py; real application trials must reject wrong writes and old servers, retain evidence and leave owned resources stopped. Application trials pass; committed with the P02 implementation (Git history owns the commit ID). Evidence: [P02 evidence](work/p02/evidence.md). RUN.json owns the final repository gate.
 
 ## P03 slice
 Proof line: `python -m unittest discover tests -p test_p03.py` must reject failed end-state commands even when they print OK, accept exit-zero output and reject legacy unknown exits. Initial two false greens rejected after implementation; evidence: [P03 evidence](work/p03/evidence.md). Git history owns the commit identity; RUN.json owns the final gate.
+## P05 slice
+Proof line: `python evals/run.py --cases arch-design-competing-candidates arch-design-routine --repeats 1 --arms without,with --jobs 1 --budget-usd 2`; the consequential case must compare bounded options and the routine case must stay direct. Then run the full suite and catalog check. Behavior passed; repo gate is in RUN.json; baseline/final: `work/p05/`; uncommitted.
 ## P04 slice
 Proof line: `python tools/catalog.py --check` and `python evals/run.py --cases perf-optimize-benchmark-validity` must retain rejection of no-op/errors/unfair builds and inconclusive noise. Implemented; sampling procedure partial. Git history owns the commit identity. [Evidence](work/p04/evidence.md); RUN.json owns the gate.

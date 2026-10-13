@@ -1,0 +1,69 @@
+{
+  "case": "arch-design-competing-candidates",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  4/5 found\n  MISSED  criteria-first\n  found   structurally-distinct-options \u2014 \"B \u00b7 Not recommended: queue + worker + status endpoint\"\n  found   simplest-viable-option \u2014 \"A \u00b7 Recommended: synchronous, with a refunds table\"\n  found   selection-tied-to-criteria \u2014 \"B only becomes worth it if the provider regularly takes longer than a page request can wait (roughly over 10s), or if vo\"\n  found   one-way-contract \u2014 \"This is a stored data shape, so changing it later means a migration.\"\n  held    claims-unavailable-diversity\n  held    unbounded-arena",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [
+    "top-tier-engineer:arch-design"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 3290,
+      "cacheReadInputTokens": 66374,
+      "cacheCreationInputTokens": 15000,
+      "webSearchRequests": 0,
+      "costUSD": 0.19909880000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 623,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 5,
+  "missed": [
+    "sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.19909880000000002,
+  "turns": 4,
+  "seconds": 38.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-79h6ieh1\\top-tier-engineer"
+}
