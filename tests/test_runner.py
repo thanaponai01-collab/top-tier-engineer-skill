@@ -47,6 +47,29 @@ REPRO = {"must_run_any": [r"python[0-9.]*\s+(\S*/)?report\.py"], "must_run_befor
 
 
 class ParseStream(unittest.TestCase):
+    def test_staged_reads_are_distinct_from_calls_and_other_reads(self):
+        with tempfile.TemporaryDirectory() as plugin:
+            path = os.path.join(plugin, "skills", "recall", "SKILL.md")
+            os.makedirs(os.path.dirname(path))
+            with open(path, "w") as fh:
+                fh.write("skill")
+            p = agent.parse_stream(stream(
+                tool("Read", file_path=path.replace("\\", "/")),
+                tool("Read", file_path="/other/skills/recall/SKILL.md"),
+                tool("Skill", skill="top-tier-engineer:recall")), plugin_dir=plugin)
+            self.assertEqual(p["skills"], ["top-tier-engineer:recall"])
+            self.assertEqual(p["skill_reads"], [{"skill": "recall", "path": path.replace("\\", "/"), "sub": False}])
+            self.assertEqual(p["skills_loaded"], ["recall"])
+            absent = agent.parse_stream(stream(tool("Read", file_path="/other/skills/recall/SKILL.md")), plugin_dir=plugin)
+            self.assertEqual(absent["skills_loaded"], [])
+            unknown = agent.parse_stream(stream(tool("Read", file_path=path)))
+            self.assertEqual(unknown["skills_loaded"], [])
+            self.assertEqual(unknown["skill_read_candidates"], [path])
+            event = tool("Read", file_path=path)
+            event["parent_tool_use_id"] = "worker"
+            delegated = agent.parse_stream(stream(event), plugin_dir=plugin)
+            self.assertTrue(delegated["skill_reads"][0]["sub"])
+
     def test_powershell_execution_is_not_lost(self):
         parsed = agent.parse_stream(stream(tool("PowerShell", command="cd fixture; python incident.py")))
         self.assertEqual(parsed["commands"], ["cd fixture; python incident.py"])

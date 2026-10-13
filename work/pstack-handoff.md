@@ -1,17 +1,18 @@
 <!-- context-id: task:pstack-adoption -->
 <!-- context-type: task -->
 <!-- context-area: plugin-improvement -->
-<!-- context-status: proposed -->
+<!-- context-status: active -->
 <!-- context-paths: skills/drive, skills/verify-loop, skills/arch-design, skills/perf-optimize, skills/scrutinize, evals -->
 # PStack comparison and improvement handoff
 
-Updated: 2026-10-13, Asia/Bangkok. Overall status: **research complete; adoption proposed**.
+Updated: 2026-10-13, Asia/Bangkok. Overall status: **P01 implemented and bounded pilot verified; remaining adoption proposed**.
 
 Borrow PStack mechanisms that improve observed outcomes while retaining top-tier-engineer's
 evidence controller, bounded project memory and scoped user authority. This handoff preserves
 the comparison and proposed work for a future session. It does not approve the proposals or
 authorize implementation, agent dispatch, commits, publishing, external messages or a release.
 The earlier request was discussion only; the subsequent request authorized this document.
+The later `/drive implement the p01` request authorizes P01 implementation and its bounded trials.
 
 ## Current state
 
@@ -42,7 +43,7 @@ This table owns adoption status. Linked sections own rationale, scope and accept
 
 | ID | Workstream | Priority | Status | Detail |
 |---|---|---|---|---|
-| P01 | Isolated behavior trials and trustworthy reporting | First | Proposed | [Validation](../docs/pstack/validation.md) |
+| P01 | Isolated behavior trials and trustworthy reporting | First | Verified (bounded recall pilot) | [Evidence](p01/evidence.md) |
 | P02 | App launch, doctor, real drive and evidence cleanup | First | Existing; validation needed | [Plan](../docs/pstack/adoption-plan.md) |
 | P03 | Enforce recurring mistakes structurally | Second | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
 | P04 | Benchmark validity and measured work counts | Second | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
@@ -54,9 +55,9 @@ This table owns adoption status. Linked sections own rationale, scope and accept
 
 ## Next for this proposal
 
-If adoption is requested, begin P01 with a bounded pilot: inspect the evaluation runner, choose
-one repeated fresh-reader/recovery case, and report outcome, skill loading, procedure compliance
-and cost separately. Resolve the observed skill-read counter discrepancy before relying on it.
+P01's loading fix and repeated recall pilot are retained in [evidence](p01/evidence.md).
+Next expansion requires a fixture with independently observed full procedure compliance;
+the current recall case cannot establish that. Broader fresh-reader/recovery reliability remains open.
 Do not launch a full matrix, add skills or alter release machinery before locating a demonstrated gap.
 
 ## Detailed handoff

@@ -1,7 +1,8 @@
 # PStack adoption plan
 
 Status owner: [handoff](../../work/pstack-handoff.md). Evidence: [validation](validation.md).
-All slices are proposals. Owners are unassigned; implementation/dispatch has not been authorized.
+P01 was authorized by the user's `/drive implement the p01` request; its bounded results are
+in [evidence](../../work/p01/evidence.md). Other slices remain proposals.
 
 ## P01 Establish trustworthy behavioral evidence
 

@@ -16,8 +16,16 @@ Older per-slice build notes and their evidence paths: `BUILD.archive.md` (read o
 Strengthen fresh-reader/repeated-upkeep trials with independent action evidence and larger area
 fixtures; done when bounded loading and unchanged second-pass files are demonstrated across runs.
 
+## P01 slice
+
+Proof line: `python -m unittest discover tests -p test_runner.py` distinguishes actual staged
+reads, Skill calls, unrelated and unvalidated reads; initial missing behavior rejected, then green.
+Bounded repeated recall pilot and limitations: [P01 evidence](work/p01/evidence.md).
+Implementation committed on codex/p01-behavior-evidence; RUN.json owns execution state. Earlier completed run preserved
+in docs/RUN.pre-p01.json.
+
 ## Existing work
-- include: work/pstack-handoff.md (PStack comparison and detailed adoption proposal; implementation not started)
+- include: work/pstack-handoff.md (PStack comparison and adoption status; P01 implementation and pilot)
 - include: work/task-context.md (shared task retrieval and cross-skill discovery; live evidence and gaps)
 - include: work/recall-improvement.md (catch-up scope and evidence clarification; live trial limitations)
 - include: work/plugin-baseline.md (existing evidence claims, including uncommitted work; not proof of this change)

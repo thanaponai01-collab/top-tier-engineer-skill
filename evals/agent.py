@@ -132,7 +132,7 @@ def run_agent(prompt, workdir, plugin_dir=None, model=None, timeout=1200,
             "seconds": round(time.time() - t0, 1)}
 
 
-def parse_stream(lines):
+def parse_stream(lines, plugin_dir=None):
     """Turn stream-json lines into what the agent did and what it said.
 
     Tool calls made inside subagents count too: work delegated is still work
@@ -164,6 +164,22 @@ def parse_stream(lines):
 
     commands = [t["input"].get("command", "") for t in tools if t["name"] in SHELL_TOOLS]
     skills = [t["input"].get("skill", "") for t in tools if t["name"] == "Skill"]
+    # Match actual staged files, never a filename suffix in an unrelated checkout.
+    staged = {}
+    if plugin_dir:
+        folder = os.path.join(plugin_dir, "skills")
+        if os.path.isdir(folder):
+            for name in os.listdir(folder):
+                path = os.path.join(folder, name, "SKILL.md")
+                if os.path.isfile(path):
+                    staged[os.path.normcase(os.path.abspath(path))] = name
+    reads = []
+    for t in tools:
+        path = t["input"].get("file_path", "")
+        if t["name"] == "Read" and path:
+            name = staged.get(os.path.normcase(os.path.abspath(path)))
+            if name:
+                reads.append({"skill": name, "path": path, "sub": t["sub"]})
     usage = result.get("modelUsage") or {}
     final = result.get("result")
     if not isinstance(final, str) or not final.strip():
@@ -172,6 +188,11 @@ def parse_stream(lines):
         "tools": tools,
         "commands": commands,
         "skills": skills,
+        "skill_reads": reads,
+        "skills_loaded": sorted({s.split(":")[-1] for s in skills} | {r["skill"] for r in reads}),
+        "skill_read_candidates": [t["input"]["file_path"] for t in tools
+                                  if t["name"] == "Read" and t["input"].get("file_path", "").replace("\\", "/").endswith("/SKILL.md")],
+        "model_usage": usage,
         "hooks": hooks,
         "final_text": final,
         "model": init.get("model") or (next(iter(usage), None)),
