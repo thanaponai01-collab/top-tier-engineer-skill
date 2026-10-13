@@ -1,0 +1,276 @@
+{
+  "version": 1,
+  "contract": {
+    "goal": "Complete the PStack handoff's bounded fresh-reader and repeated-upkeep trial with retained independent action evidence",
+    "target": "local",
+    "max_attempts": 6,
+    "timeout_seconds": 1500,
+    "max_seconds": 7200,
+    "criteria": [
+      {
+        "statement": "The fixture checker proves a larger task-conditioned fixture, a real unmapped caller/helper, identical task prompts, and rejection of host/global-memory searches",
+        "stage": "fixture"
+      },
+      {
+        "statement": "Transcript evidence shows the baseline broad-area load and the post-change skill run loading only the relevant shared caller; control misses only the planted caller",
+        "stage": "behavior"
+      },
+      {
+        "statement": "The bounded with/without upkeep pair finishes locally; each repeats index/check after a byte snapshot and leaves context Markdown unchanged",
+        "stage": "behavior"
+      },
+      {
+        "statement": "Handoff and BUILD report observed results, their limits, and a current next step",
+        "stage": "content"
+      },
+      {
+        "statement": "Repository tests and catalog check pass on final inputs",
+        "stage": "prove"
+      }
+    ],
+    "oracle_files": [
+      "PLAN.md",
+      "work/pstack-next/contract.json",
+      "work/pstack-next/check_fixture_v2.py",
+      "work/pstack-next/run_behavior_v4.py",
+      "work/pstack-next/check_content.py",
+      "work/pstack-next/prove.py",
+      "work/pstack-next/upkeep_probe.py",
+      "evals/cases/project-context-task-trail/expect.json",
+      "evals/cases/project-context-task-trail/prompt.md",
+      "evals/cases/project-update-preserves-intent/expect.json",
+      "evals/cases/project-update-preserves-intent/prompt.md",
+      "evals/cases/project-update-preserves-intent/prompt-plain.md",
+      "evals/cases/project-update-preserves-intent/fixture/tools/context.py",
+      "evals/cases/project-update-preserves-intent/fixture/tools/upkeep_probe.py",
+      "evals/results/pstack-next/project-context-task-trail",
+      "evals/results/pstack-next-replay/project-context-task-trail"
+    ],
+    "stages": [
+      {
+        "id": "fixture",
+        "skill": "agent-evals",
+        "command": [
+          "python",
+          "work/pstack-next/check_fixture_v2.py"
+        ],
+        "inputs": [
+          "PLAN.md",
+          "work/pstack-next/check_fixture_v2.py",
+          "evals/cases/project-context-task-trail",
+          "evals/cases/project-update-preserves-intent",
+          "skills/project-context/scripts/context.py"
+        ]
+      },
+      {
+        "id": "behavior",
+        "skill": "agent-evals",
+        "command": [
+          "python",
+          "work/pstack-next/run_behavior_v4.py"
+        ],
+        "inputs": [
+          "work/pstack-next/run_behavior_v4.py",
+          "evals/run.py",
+          "evals/agent.py",
+          "evals/cases/project-context-task-trail",
+          "evals/cases/project-update-preserves-intent",
+          "evals/results/pstack-next/project-context-task-trail",
+          "evals/results/pstack-next-replay/project-context-task-trail",
+          "skills/project-context",
+          "skills/project-update"
+        ]
+      },
+      {
+        "id": "content",
+        "skill": "project-update",
+        "command": [
+          "python",
+          "work/pstack-next/check_content.py"
+        ],
+        "inputs": [
+          "work/pstack-next",
+          "work/pstack-handoff.md",
+          "BUILD.md",
+          "evals/RESULTS.md"
+        ]
+      },
+      {
+        "id": "prove",
+        "skill": "correctness-gate",
+        "command": [
+          "python",
+          "work/pstack-next/prove.py"
+        ],
+        "inputs": [
+          "tests",
+          "skills/project-context",
+          "skills/project-update",
+          "evals/cases/project-context-task-trail",
+          "evals/cases/project-update-preserves-intent",
+          "work/pstack-next",
+          "work/pstack-handoff.md",
+          "BUILD.md",
+          "evals/RESULTS.md",
+          "tools/catalog.py"
+        ]
+      }
+    ],
+    "actions": []
+  },
+  "contract_hash": "02da4ab7d8412f8799db7107ccf74a0b48110343099f78d180b662387808a752",
+  "oracle_hash": "cd005fc23b0b6f42ec5706d5fdad9925da27473dfae19fec9b9a4f2460daee5f",
+  "started_at": 1791900433.4071553,
+  "status": "complete",
+  "proofs": {
+    "fixture": {
+      "command": [
+        "python",
+        "work/pstack-next/check_fixture_v2.py"
+      ],
+      "exit": 0,
+      "output": "PStack Next replay fixture: 24 context files, real unmapped caller/helper, 12 unrelated areas, bounded repeated upkeep.\n",
+      "at": 1791900563.8699896,
+      "seconds": 0.068,
+      "inputs_hash": "6ebbc070c79564ec3f774adac1f61a36304f73293f546240d21413bab0152aa8"
+    },
+    "behavior": {
+      "command": [
+        "python",
+        "work/pstack-next/run_behavior_v4.py"
+      ],
+      "exit": 0,
+      "output": "Context: initial skill broad sweep included unrelated content; replay skill opened the caller selectively (5/5); control retained only the planted miss.\nUpkeep without: 2/2, $0.0847, 28.0s; repeated index/check left Markdown unchanged.\nUpkeep with: 2/2, $0.0910, 25.0s; repeated index/check left Markdown unchanged.\nPStack Next behavior: bounded fresh-reader and repeated-upkeep trials passed once per arm; reliability and savings remain unmeasured.\n",
+      "at": 1791900563.9709456,
+      "seconds": 0.07,
+      "inputs_hash": "9b3ced46dce24c440ad02a7459a86a9978e574e2810cd1f7897bab2104129ab6"
+    },
+    "content": {
+      "command": [
+        "python",
+        "work/pstack-next/check_content.py"
+      ],
+      "exit": 0,
+      "output": "PStack Next content: status, evidence, next-step limits, and BUILD links are present.\n",
+      "at": 1791900564.0660925,
+      "seconds": 0.067,
+      "inputs_hash": "5ff7d545a844243448e1a020da629533cadbf5af8ab0e38070f1576018e63ecd"
+    },
+    "prove": {
+      "command": [
+        "python",
+        "work/pstack-next/prove.py"
+      ],
+      "exit": 0,
+      "output": "file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:64: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\edges.json' mode='r' encoding='utf-8'>\n  g = json.load(open(out_file, encoding=\"utf-8\"))\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n..E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\tasks.yml' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:92: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpnpl7e7nv\\\\a.py' mode='w' encoding='cp1252'>\n  open(os.path.join(tmp, \"a.py\"), \"w\").write(\"import b\\n\")\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:93: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpnpl7e7nv\\\\b.py' mode='w' encoding='cp1252'>\n  open(os.path.join(tmp, \"b.py\"), \"w\").write(\"def f():\\n    return 1\\n\")\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n..............................................................................warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.................................................................................................................................................................warning: in the working copy of 'VERIFY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/auth.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/cart.py', LF will be replaced by CRLF the next time Git touches it\n..............warning: in the working copy of 'VERIFY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\n.....................\n----------------------------------------------------------------------\nRan 500 tests in 120.925s\n\nOK\ncatalog: 36 skills, every copy current, listing 4993/5000 chars\n",
+      "at": 1791900564.1615114,
+      "seconds": 121.339,
+      "inputs_hash": "b699f0c7c959c8f2b41e18cc6d40f876139c4ab6b4be768d59442d8b52977efa"
+    }
+  },
+  "attempts": {
+    "fixture": 2,
+    "behavior": 2,
+    "content": 2,
+    "prove": 2
+  },
+  "journal": {},
+  "history": [
+    {
+      "stage": "fixture",
+      "command": [
+        "python",
+        "work/pstack-next/check_fixture_v2.py"
+      ],
+      "exit": 0,
+      "output": "PStack Next replay fixture: 24 context files, real unmapped caller/helper, 12 unrelated areas, bounded repeated upkeep.\n",
+      "at": 1791900438.154475,
+      "seconds": 0.069,
+      "inputs_hash": "6ebbc070c79564ec3f774adac1f61a36304f73293f546240d21413bab0152aa8"
+    },
+    {
+      "stage": "behavior",
+      "command": [
+        "python",
+        "work/pstack-next/run_behavior_v4.py"
+      ],
+      "exit": 0,
+      "output": "Context: initial skill broad sweep included unrelated content; replay skill opened the caller selectively (5/5); control retained only the planted miss.\nUpkeep without: 2/2, $0.0847, 28.0s; repeated index/check left Markdown unchanged.\nUpkeep with: 2/2, $0.0910, 25.0s; repeated index/check left Markdown unchanged.\nPStack Next behavior: bounded fresh-reader and repeated-upkeep trials passed once per arm; reliability and savings remain unmeasured.\n",
+      "at": 1791900438.3708727,
+      "seconds": 0.071,
+      "inputs_hash": "9b3ced46dce24c440ad02a7459a86a9978e574e2810cd1f7897bab2104129ab6"
+    },
+    {
+      "stage": "content",
+      "command": [
+        "python",
+        "work/pstack-next/check_content.py"
+      ],
+      "exit": 0,
+      "output": "PStack Next content: status, evidence, next-step limits, and BUILD links are present.\n",
+      "at": 1791900438.5841093,
+      "seconds": 0.062,
+      "inputs_hash": "5ff7d545a844243448e1a020da629533cadbf5af8ab0e38070f1576018e63ecd"
+    },
+    {
+      "stage": "prove",
+      "command": [
+        "python",
+        "work/pstack-next/prove.py"
+      ],
+      "exit": 0,
+      "output": "file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpv6phc21t\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpv6phc21t\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpv6phc21t\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpv6phc21t\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpv6phc21t\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpv6phc21t\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:64: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpv6phc21t\\\\edges.json' mode='r' encoding='utf-8'>\n  g = json.load(open(out_file, encoding=\"utf-8\"))\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n..E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpdimr9i4b\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpdimr9i4b\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpdimr9i4b\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpdimr9i4b\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpdimr9i4b\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpdimr9i4b\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpq6p9d1mh\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpq6p9d1mh\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpq6p9d1mh\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpq6p9d1mh\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpq6p9d1mh\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpq6p9d1mh\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpq6p9d1mh\\\\tasks.yml' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:92: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmprmp_d4pp\\\\a.py' mode='w' encoding='cp1252'>\n  open(os.path.join(tmp, \"a.py\"), \"w\").write(\"import b\\n\")\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:93: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmprmp_d4pp\\\\b.py' mode='w' encoding='cp1252'>\n  open(os.path.join(tmp, \"b.py\"), \"w\").write(\"def f():\\n    return 1\\n\")\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpn516z7sw\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpn516z7sw\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpn516z7sw\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpn516z7sw\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpn516z7sw\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpn516z7sw\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n..............................................................................warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.................................................................................................................................................................warning: in the working copy of 'VERIFY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/auth.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/cart.py', LF will be replaced by CRLF the next time Git touches it\n..............warning: in the working copy of 'VERIFY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\n.....................\n----------------------------------------------------------------------\nRan 500 tests in 119.904s\n\nOK\ncatalog: 36 skills, every copy current, listing 4993/5000 chars\n",
+      "at": 1791900438.792655,
+      "seconds": 120.302,
+      "inputs_hash": "b699f0c7c959c8f2b41e18cc6d40f876139c4ab6b4be768d59442d8b52977efa"
+    },
+    {
+      "stage": "fixture",
+      "command": [
+        "python",
+        "work/pstack-next/check_fixture_v2.py"
+      ],
+      "exit": 0,
+      "output": "PStack Next replay fixture: 24 context files, real unmapped caller/helper, 12 unrelated areas, bounded repeated upkeep.\n",
+      "at": 1791900563.8699896,
+      "seconds": 0.068,
+      "inputs_hash": "6ebbc070c79564ec3f774adac1f61a36304f73293f546240d21413bab0152aa8"
+    },
+    {
+      "stage": "behavior",
+      "command": [
+        "python",
+        "work/pstack-next/run_behavior_v4.py"
+      ],
+      "exit": 0,
+      "output": "Context: initial skill broad sweep included unrelated content; replay skill opened the caller selectively (5/5); control retained only the planted miss.\nUpkeep without: 2/2, $0.0847, 28.0s; repeated index/check left Markdown unchanged.\nUpkeep with: 2/2, $0.0910, 25.0s; repeated index/check left Markdown unchanged.\nPStack Next behavior: bounded fresh-reader and repeated-upkeep trials passed once per arm; reliability and savings remain unmeasured.\n",
+      "at": 1791900563.9709456,
+      "seconds": 0.07,
+      "inputs_hash": "9b3ced46dce24c440ad02a7459a86a9978e574e2810cd1f7897bab2104129ab6"
+    },
+    {
+      "stage": "content",
+      "command": [
+        "python",
+        "work/pstack-next/check_content.py"
+      ],
+      "exit": 0,
+      "output": "PStack Next content: status, evidence, next-step limits, and BUILD links are present.\n",
+      "at": 1791900564.0660925,
+      "seconds": 0.067,
+      "inputs_hash": "5ff7d545a844243448e1a020da629533cadbf5af8ab0e38070f1576018e63ecd"
+    },
+    {
+      "stage": "prove",
+      "command": [
+        "python",
+        "work/pstack-next/prove.py"
+      ],
+      "exit": 0,
+      "output": "file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:64: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpls2ze6xo\\\\edges.json' mode='r' encoding='utf-8'>\n  g = json.load(open(out_file, encoding=\"utf-8\"))\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n..E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpvzjik_dr\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp_6us_w00\\\\tasks.yml' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:92: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpnpl7e7nv\\\\a.py' mode='w' encoding='cp1252'>\n  open(os.path.join(tmp, \"a.py\"), \"w\").write(\"import b\\n\")\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:93: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmpnpl7e7nv\\\\b.py' mode='w' encoding='cp1252'>\n  open(os.path.join(tmp, \"b.py\"), \"w\").write(\"def f():\\n    return 1\\n\")\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\main.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\app/routes/orders.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\app/services/billing.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\app/models/invoice.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\app/services/old_report.py' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nE:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\tests\\test_graph_audit.py:21: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\\\Users\\\\thana\\\\AppData\\\\Local\\\\Temp\\\\tmp4fd052pj\\\\layers.txt' mode='w' encoding='utf-8'>\n  open(p, \"w\", encoding=\"utf-8\").write(text)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n..............................................................................warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'doctor.py', LF will be replaced by CRLF the next time Git touches it\n.................................................................................................................................................................warning: in the working copy of 'VERIFY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/auth.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/cart.py', LF will be replaced by CRLF the next time Git touches it\n..............warning: in the working copy of 'VERIFY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\n.....................\n----------------------------------------------------------------------\nRan 500 tests in 120.925s\n\nOK\ncatalog: 36 skills, every copy current, listing 4993/5000 chars\n",
+      "at": 1791900564.1615114,
+      "seconds": 121.339,
+      "inputs_hash": "b699f0c7c959c8f2b41e18cc6d40f876139c4ab6b4be768d59442d8b52977efa"
+    }
+  ]
+}
