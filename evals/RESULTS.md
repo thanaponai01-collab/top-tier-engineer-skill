@@ -575,3 +575,7 @@ Model claude-opus-5-5; $0.26, 35 seconds. No baseline arm or reliability claim.
 [Retained scorecard](../work/p02/replay-scorecard.md),
 [raw evidence](results/p02-replay/verify-loop-make-it-verified/with-1/result.json),
 [P02 application trials and limits](../work/p02/evidence.md).
+
+## P04 bounded benchmark-validity trials (2026-10-13)
+
+Baseline with/without: 5/5 each. After: with 4/5, without 5/5; final with replay 4/5. Phrase scorer missed correctly rejected zero-work output in both with reports. Manual reading confirms all five findings; procedure remains partial: final replay opens the reference and sizes full sampling from variation but chooses an arbitrary 20-pair pilot. No reliability or improvement claim. Evidence and limits: [P04](../work/p04/evidence.md).

@@ -5,7 +5,7 @@
 <!-- context-paths: skills/drive, skills/verify-loop, skills/arch-design, skills/perf-optimize, skills/scrutinize, evals -->
 # PStack comparison and improvement handoff
 
-Updated: 2026-10-13, Asia/Bangkok. Overall status: **P01, P02 and P03 implemented with bounded trials; remaining adoption proposed**.
+Updated: 2026-10-13, Asia/Bangkok. Overall status: **P01, P02 and P03 implemented with bounded trials; P04 implemented with partial behavior evidence; remaining adoption proposed**.
 
 Borrow PStack mechanisms that improve observed outcomes while retaining top-tier-engineer's
 evidence controller, bounded project memory and scoped user authority. This handoff preserves
@@ -16,7 +16,7 @@ The later `/drive implement the p01` request authorizes P01 implementation and i
 The subsequent `/drive implement the p02` request authorizes P02 implementation and local application trials.
 
 The subsequent `/drive implement the p03` request authorizes P03 local implementation and bounded trials.
-
+P04 local implementation/trials authorized by the subsequent `/drive implement the p04` request.
 ## Current state
 
 - Compared official Cursor PStack at `1dcc2bacde73ddd284803b7af28164d0436198fc` with local
@@ -49,7 +49,7 @@ This table owns adoption status. Linked sections own rationale, scope and accept
 | P01 | Isolated behavior trials and trustworthy reporting | First | Verified (bounded recall pilot) | [Evidence](p01/evidence.md) |
 | P02 | App launch, doctor, real drive and evidence cleanup | First | Verified (bounded API, CLI and browser trials) | [Evidence](p02/evidence.md) |
 | P03 | Enforce recurring mistakes structurally | Second | Verified (bounded subprocess enforcement) | [Evidence](p03/evidence.md) |
-| P04 | Benchmark validity and measured work counts | Second | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
+| P04 | Benchmark validity and measured work counts | Second | Implemented; procedure validation partial | [Evidence](p04/evidence.md) |
 | P05 | Optional competing designs | Third | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
 | P06 | Test decisive safety assumptions | Third | Proposed | [Plan](../docs/pstack/adoption-plan.md) |
 | P07 | Identify the actual running artifact | Second | Existing; validation needed | [Plan](../docs/pstack/adoption-plan.md) |

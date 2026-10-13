@@ -1,0 +1,4 @@
+  1. Skill: top-tier-engineer:perf-optimize
+  2. Bash: ls -la && cat measurements.json
+  3. Bash: find . -type f | head -50
+  4. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-0ksfg3cs/fixture && cat README.md && echo ---- && cat measurements.json

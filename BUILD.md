@@ -36,3 +36,5 @@ Proof line: python -m unittest discover tests -p test_project_recipe.py; real ap
 
 ## P03 slice
 Proof line: `python -m unittest discover tests -p test_p03.py` must reject failed end-state commands even when they print OK, accept exit-zero output and reject legacy unknown exits. Initial two false greens rejected after implementation; evidence: [P03 evidence](work/p03/evidence.md). Git history owns the commit identity; RUN.json owns the final gate.
+## P04 slice
+Proof line: `python tools/catalog.py --check` and `python evals/run.py --cases perf-optimize-benchmark-validity` must retain rejection of no-op/errors/unfair builds and inconclusive noise. Implemented; sampling procedure partial. Git history owns the commit identity. [Evidence](work/p04/evidence.md); RUN.json owns the gate.

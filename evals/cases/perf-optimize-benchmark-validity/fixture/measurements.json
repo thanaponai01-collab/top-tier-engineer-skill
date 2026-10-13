@@ -1,0 +1,79 @@
+{
+  "workload": "export 1000 invoices; expected checksum 42000; user journey open-to-downloaded-file",
+  "runs": [
+    {
+      "variant": "baseline",
+      "build": "release",
+      "attempted": 1000,
+      "completed": 1000,
+      "errors": 0,
+      "checksum": 42000,
+      "ms": [
+        100,
+        110,
+        90
+      ],
+      "journey_ms": [
+        300,
+        310,
+        290
+      ]
+    },
+    {
+      "variant": "skip",
+      "build": "release",
+      "attempted": 1000,
+      "completed": 0,
+      "errors": 0,
+      "checksum": 0,
+      "ms": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "variant": "drop-errors",
+      "build": "release",
+      "attempted": 1000,
+      "completed": 100,
+      "errors": 900,
+      "checksum": 4200,
+      "ms": [
+        10,
+        11,
+        9
+      ]
+    },
+    {
+      "variant": "debug-old",
+      "build": "debug",
+      "completed": 1000,
+      "errors": 0,
+      "checksum": 42000,
+      "ms": [
+        500,
+        510,
+        490
+      ]
+    },
+    {
+      "variant": "candidate",
+      "build": "release",
+      "completed": 1000,
+      "errors": 0,
+      "checksum": 42000,
+      "ms": [
+        85,
+        115,
+        100
+      ],
+      "journey_ms": [
+        295,
+        320,
+        285
+      ]
+    }
+  ],
+  "conditions": "same input, cold cache, concurrency 1; baseline batch then candidate batch; compiler flags beyond build label missing; no profile; candidate limiter unknown"
+}

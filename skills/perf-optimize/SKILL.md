@@ -22,6 +22,10 @@ Pick the mode:
 
 ## Measure mode
 
+Before using measurements to choose or keep a change, open and read
+[benchmark validity](references/benchmark-validity.md), including for saved benchmark reviews.
+Apply its validity gate and sampling budget before proposing run counts or adoption thresholds.
+
 1. **Budget.** `metric | current | target`. User-felt time as p50/p95 (never averages), throughput,
    memory, bundle size, money or tokens per operation. No target given → propose one, mark it assumed.
 2. **Baseline.** Several runs under recorded conditions (input size, warm/cold, concurrency); median
