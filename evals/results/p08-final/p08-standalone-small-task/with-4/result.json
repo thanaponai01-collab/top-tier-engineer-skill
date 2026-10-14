@@ -19,12 +19,12 @@
   "skill_reads": [
     {
       "skill": "pick-skill",
-      "path": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-qkj0qs7a\\top-tier-engineer\\skills\\pick-skill\\SKILL.md",
+      "path": "<tmp>\\tte-plugin-qkj0qs7a\\top-tier-engineer\\skills\\pick-skill\\SKILL.md",
       "sub": false
     }
   ],
   "skill_read_candidates": [
-    "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-qkj0qs7a\\top-tier-engineer\\skills\\pick-skill\\SKILL.md"
+    "<tmp>\\tte-plugin-qkj0qs7a\\top-tier-engineer\\skills\\pick-skill\\SKILL.md"
   ],
   "model_usage": {
     "claude-sonnet-5-5": {
@@ -79,5 +79,5 @@
     "exit": 0,
     "output": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n"
   },
-  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-qkj0qs7a\\top-tier-engineer"
+  "staged_plugin": "<tmp>\\tte-plugin-qkj0qs7a\\top-tier-engineer"
 }

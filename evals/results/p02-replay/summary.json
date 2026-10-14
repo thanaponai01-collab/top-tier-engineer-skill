@@ -99,7 +99,7 @@
     "grade_text": "PASS  verify-loop-make-it-verified  [verify-loop]  1/1 found, score 1.00 (needs 1.00)\n  found   reports-what-was-wrong-with-the-old-check: the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
     "seconds": 35.0,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-94ozr6s_\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-94ozr6s_\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   }

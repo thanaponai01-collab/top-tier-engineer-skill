@@ -5,7 +5,7 @@ I filed nothing, so the team won't find any issues tomorrow. Two things stopped 
 
 I didn't touch `AUDIT.md`, since nothing was filed to stamp back into it.
 
-I wrote the issue bodies so filing is quick once there's a remote and a login. They're in `C:\Users\thana\AppData\Local\Temp\tte-eval-6_ajt522\issue-bodies.md`.
+I wrote the issue bodies so filing is quick once there's a remote and a login. They're in `<tmp>\tte-eval-6_ajt522\issue-bodies.md`.
 
 - **Content:** each body copies the audit's What, Why, Where, Proof and Order lines verbatim. Each also starts with the shared context: the `TAX_V2` flag stays off by default, and the auth model doesn't change.
 - **Label and order:** the batch label is `tax-audit`. Create them in the order M1, M2, M4, then add `Blocked by #N` to M2 and M4 once the numbers exist.

@@ -3,7 +3,7 @@
 FAIL: test_cleanup_failure_cannot_leave_a_successful_verdict (test_project_recipe.ApplicationRecipe.test_cleanup_failure_cannot_leave_a_successful_verdict)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\thana\AppData\Local\Temp\p02-mutation-8i81l5ka\tests\test_project_recipe.py", line 104, in test_cleanup_failure_cannot_leave_a_successful_verdict
+  File "<tmp>\p02-mutation-8i81l5ka\tests\test_project_recipe.py", line 104, in test_cleanup_failure_cannot_leave_a_successful_verdict
     self.assertEqual(code, 1, 'cleanup failure silently accepted: ' + out)
     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: 0 != 1 : cleanup failure silently accepted: Run: app ready in 0.2s (python app.py serve)

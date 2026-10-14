@@ -204,7 +204,7 @@
       {
         "check": "ran the grader (against the stub or a deliberately wrong agent), not only read it",
         "ok": true,
-        "detail": "ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-3qsqw62y/fixture && python evals/triage/grade.py; cat > /tmp/wro"
+        "detail": "ran it: cd <tmp>/tte-eval-3qsqw62y/fixture && python evals/triage/grade.py; cat > /tmp/wro"
       }
     ],
     "changes": {
@@ -250,7 +250,7 @@
       {
         "check": "ran the grader (against the stub or a deliberately wrong agent), not only read it",
         "ok": true,
-        "detail": "ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-jvw50vbw/fixture && python evals/triage/grade.py"
+        "detail": "ran it: cd <tmp>/tte-eval-jvw50vbw/fixture && python evals/triage/grade.py"
       }
     ],
     "changes": {
@@ -1353,7 +1353,7 @@
       {
         "check": "checked the understanding against the code by running its check, not only reading notes",
         "ok": true,
-        "detail": "ran it: cd fixture && python -m unittest 2>&1 | tail -5; ls ../ 2>/dev/null | head -0; ls C:/Users/thana/AppData/Local"
+        "detail": "ran it: cd fixture && python -m unittest 2>&1 | tail -5; ls ../ 2>/dev/null | head -0; ls <home>/AppData/Local"
       },
       {
         "check": "changed nothing outside the allowed files",
@@ -1429,7 +1429,7 @@
       {
         "check": "checked the understanding against the code by running its check, not only reading notes",
         "ok": true,
-        "detail": "ran it: cd C:\\Users\\thana\\AppData\\Local\\Temp\\tte-eval-1cya5phj\\fixture; python -m unittest 2>&1 | Select-Object -Last "
+        "detail": "ran it: cd <tmp>\\tte-eval-1cya5phj\\fixture; python -m unittest 2>&1 | Select-Object -Last "
       },
       {
         "check": "changed nothing outside the allowed files",

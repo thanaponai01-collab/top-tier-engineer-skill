@@ -12,7 +12,7 @@
 
 **The written file doesn't pass its own check.** I wrote `docs/arch-design.md` with 4 findings and 1 move. `arch-design.py check` exits 1: it resolves paths and `at:` against a git repo root, so all 14 file references report as broken and `at:` reports as stale. The content is hand-verified against the files, but the check hasn't passed. Running `git init` and committing would probably clear it. I held off because that changes your directory and you didn't ask for it.
 
-Files are in `C:\Users\thana\AppData\Local\Temp\tte-eval-z7813kbl`:
+Files are in `<tmp>\tte-eval-z7813kbl`:
 - `docs/arch-design.md`
 
 <!-- file written by the agent: docs/arch-design.md -->

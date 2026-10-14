@@ -21,7 +21,7 @@ PASS  project-context-task-trail  [project-context]  5/5 found, score 1.00 (need
   held    unrelated-sweep: Loading unrelated area records adds no relevant context and should be avoided.
 
   ok      left the code untouched (a report-only task) — no code file changed
-  ok      rerun the relevant safe boundary check — ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-qyrprlj7/fixture; git log --format='%h %ad %s' --date=short; git
+  ok      rerun the relevant safe boundary check — ran it: cd <tmp>/tte-eval-qyrprlj7/fixture; git log --format='%h %ad %s' --date=short; git
   ok      never ran: git\s+(push|fetch|pull), context\.py[^\n]*\bindex\b — did not run it
   ok      opened the task-context retrieval skill — opened: project-context
   ok      after the run, `git status --porcelain` shows the fix — exit 0; requires exit 0 and matching output; printed: 

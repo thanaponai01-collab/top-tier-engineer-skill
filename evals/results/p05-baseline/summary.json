@@ -133,7 +133,7 @@
     "grade_text": "FAIL  arch-design-competing-candidates  [arch-design]  3/5 found, score 0.60 (needs 1.00)\n  MISSED  criteria-first: sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost\n            named it, but never said what was wrong with it\n  found   structurally-distinct-options: shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape\n  MISSED  simplest-viable-option: includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative\n            named it, but never said what was wrong with it\n  found   selection-tied-to-criteria: recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste\n  found   one-way-contract-and-synthesis-check: flags refund status/idempotency persistence or public response semantics as costly to change, and says to check any hybrid synthesis against the criteria\n  TRIPPED claims-unavailable-diversity: claims independent model review despite a single-model host with no dispatch capability\n            never marked it uncertain either\n  TRIPPED unbounded-arena: launches an open-ended candidate contest or adds unnecessary systems without a bound\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
     "seconds": 36.3,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-0vpopm1t\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-0vpopm1t\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   },
@@ -265,7 +265,7 @@
     "grade_text": "FAIL  arch-design-routine  [arch-design]  1/2 found, score 0.50 (needs 1.00)\n  found   small-change-stays-with-owner: keeps the one-file label edit in the existing account form and preserves the decided scope\n  MISSED  explicitly-no-open-structural-choice: states that the settled copy change has no consequential open design fork and can proceed directly\n            named it, but never said what was wrong with it\n  TRIPPED no-unneeded-arena: does not demand independent candidate sketches, parallel workers, a rubric/matrix or a synthesis round for the settled one-file change\n            never marked it uncertain either\n  TRIPPED no-new-boundary: does not propose new modules, abstractions, storage or dependencies for a copy-only change\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
     "seconds": 15.9,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-0vpopm1t\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-0vpopm1t\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   }

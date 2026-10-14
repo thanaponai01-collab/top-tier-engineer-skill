@@ -1,8 +1,8 @@
   1. Skill: top-tier-engineer:project-context
   2. Glob: **/{RUN.json,AGENTS.md,CLAUDE.md,VERIFY.md,intent*,work*,.project*,memory*}
-  3. Bash: ls -la /c/Users/thana/AppData/Local/Temp/tte-eval-4efpf2k7 2>&1 | head -50
-  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-4efpf2k7\fixture\AGENTS.md
+  3. Bash: ls -la <tmp>/tte-eval-4efpf2k7 2>&1 | head -50
+  4. Read: <tmp>\tte-eval-4efpf2k7\fixture\AGENTS.md
   5. Glob: **/*
-  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-4efpf2k7\fixture\BRIEF.md
-  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-4efpf2k7\fixture\BUILD.md
-  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-4efpf2k7\fixture\work\auth.md
+  6. Read: <tmp>\tte-eval-4efpf2k7\fixture\BRIEF.md
+  7. Read: <tmp>\tte-eval-4efpf2k7\fixture\BUILD.md
+  8. Read: <tmp>\tte-eval-4efpf2k7\fixture\work\auth.md

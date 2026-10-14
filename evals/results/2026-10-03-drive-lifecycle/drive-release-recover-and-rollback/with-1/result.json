@@ -23,7 +23,7 @@
     {
       "check": "acceptance reproduces wrong export before editing",
       "ok": true,
-      "detail": "ran it before changing any code: S=\"C:/Users/thana/AppData/Local/Temp/tte-plugin-h4grp8no/top-tier-engineer/skills/drive/scripts/run.py\"; pytho"
+      "detail": "ran it before changing any code: S=\"<tmp>/tte-plugin-h4grp8no/top-tier-engineer/skills/drive/scripts/run.py\"; pytho"
     },
     {
       "check": "never ran: git\\s+push, curl\\s+.*https?://",

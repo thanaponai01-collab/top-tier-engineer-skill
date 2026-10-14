@@ -1,6 +1,6 @@
 Your feeling is right. The shop is mostly fine, but one important part is badly arranged: **checkout waits for the email server before it shows the customer the thank-you page.** That one problem explains both things in your note. When the mail server is slow, checkout can take up to about 100 seconds. When it's down, the card has already been charged but the customer sees an error page.
 
-I didn't change anything in your shop. I also opened a visual version of this report in your browser: `C:\Users\thana\AppData\Local\Temp\architecture-review-20261011.html`
+I didn't change anything in your shop. I also opened a visual version of this report in your browser: `<tmp>\architecture-review-20261011.html`
 
 ## First: your design document is wrong
 

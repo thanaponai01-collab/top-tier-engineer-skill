@@ -49,6 +49,6 @@ flowchart LR
 - **Problem 2:** `checkout.py:6-7` reserves stock item by item, and `inventory.py` has no release step. The out-of-stock case is proven by the test. The declined-card case is only suspected, because `payments.charge` is currently a placeholder that never fails.
 - **Other option for #1:** keep sending inline but catch the error. That's a one-line change, but customers would still wait up to 100 seconds. I'm not suggesting a new message system: the current SQLite to-do list is enough at this size.
 
-There's a visual version with the same diagrams side by side at `C:\Users\thana\AppData\Local\Temp\architecture-review-shop.html`, and I've opened it for you. I haven't changed anything in your shop or its documents.
+There's a visual version with the same diagrams side by side at `<tmp>\architecture-review-shop.html`, and I've opened it for you. I haven't changed anything in your shop or its documents.
 
 **I'd start with #1**, because it's exactly the problem you described. **Which one would you like to explore further?** If it's #1, the one thing I need from you is whether a receipt arriving up to a minute after purchase is OK.

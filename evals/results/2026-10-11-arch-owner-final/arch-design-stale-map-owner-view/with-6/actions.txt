@@ -4,5 +4,5 @@
   4. Bash: mkdir -p "$TEMP/archproof" && cat > "$TEMP/archproof/proof.py" <<'EOF' import sys; sys.path.insert(0, sys.argv[1]) import smtplib, time from shop import invent…
   5. Bash: cat > "$TEMP/architecture-review-shop.html" <<'EOF' <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-widt…
   6. Bash: cygpath -w "$TEMP"
-  7. Write: C:\Users\thana\AppData\Local\Temp\architecture-review-shop.html
+  7. Write: <tmp>\architecture-review-shop.html
   8. Bash: cd "$TEMP" && start "" architecture-review-shop.html; echo ok

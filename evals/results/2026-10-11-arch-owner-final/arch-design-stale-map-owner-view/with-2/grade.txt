@@ -3,7 +3,7 @@ judge: PASS  5/5 found
   found   map-is-stale — "### First: your architecture document is wrong"
   found   charge-then-email-chain — "And if the email server is down, the customer sees an error page **after their card has already been charged**."
   found   reuse-existing-queue — "Refund emails already go through this to-do list, so you'd be reusing something you already run."
-  found   before-after-picture — "There's a visual version with the same diagrams side by side at `C:\Users\thana\AppData\Local\Temp\architecture-review-s"
+  found   before-after-picture — "There's a visual version with the same diagrams side by side at `<tmp>\architecture-review-s"
   found   owner-decides-next — "**Which one would you like to explore further?**"
   held    queue-is-not-dead
 

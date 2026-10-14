@@ -51,7 +51,7 @@
       {
         "check": "rerun the relevant safe boundary check",
         "ok": true,
-        "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-mwaep1ba/fixture\" && PYTHONDONTWRITEBYTECODE=1 python -B -m uni"
+        "detail": "ran it: cd \"<tmp>/tte-eval-mwaep1ba/fixture\" && PYTHONDONTWRITEBYTECODE=1 python -B -m uni"
       },
       {
         "check": "never ran: git\\s+(push|fetch|pull), context\\.py[^\\n]*\\bindex\\b",
@@ -84,7 +84,7 @@
     "grade_text": "FAIL  project-context-task-trail  [project-context]  4/5 found, score 0.80 (needs 1.00)\n  found   current-limit: The current owner requirement limits exports to 500 rows, but app.py still accepts 1000.\n  found   history: The relevant Git commit introduced the older limit to constrain allocations after memory pressure.\n  found   unfinished: The oversized-request message wording remains unresolved.\n  found   current-failure: The current boundary test fails; the old passing receipt is historical.\n  MISSED  shared-caller: The billing reconciliation module is an unmapped caller of export_allowed, so the shared boundary change affects export and billing reconciliation.\n            named it, but never said what was wrong with it\n  held    false-proof: Repeats the historical pass as current proof.\n  held    scope-drift: Begins changing the product during context preparation.\n  TRIPPED unrelated-sweep: Loading unrelated area records adds no relevant context and should be avoided.\n            claimed: work/unrelated\n  a tripped trap fails the case at any score: it is a confident wrong answer",
     "seconds": 20.3,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-ffmph4da\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-ffmph4da\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": {
       "exit": 0,
@@ -310,7 +310,7 @@
     "grade_text": "FAIL  project-update-preserves-intent  [project-update]  1/2 found, score 0.50 (needs 1.00)\n  found   gap: The fix is recorded but verification did not run.\n  MISSED  dependency: The report identifies shared impact beyond the initial module.\n            never named: src/shared/redirect.py, src/billing/checkout.py\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
     "seconds": 300.0,
     "timed_out": true,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-ffmph4da\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-ffmph4da\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": {
       "exit": 0,

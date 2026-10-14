@@ -3,7 +3,7 @@ FFF.
 FAIL: test_legacy_output_without_exit_is_unknown (test_p03.EndStateEnforcement.test_legacy_output_without_exit_is_unknown)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "E:\Me\5.Claude\01 ASSET\Skills\top-tier-engineer\tests\test_p03.py", line 34, in test_legacy_output_without_exit_is_unknown
+  File "<repo>\tests\test_p03.py", line 34, in test_legacy_output_without_exit_is_unknown
     self.assertFalse(result['ok'])
     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: True is not false
@@ -12,7 +12,7 @@ AssertionError: True is not false
 FAIL: test_success_text_on_stderr_does_not_hide_failed_exit (test_p03.EndStateEnforcement.test_success_text_on_stderr_does_not_hide_failed_exit)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "E:\Me\5.Claude\01 ASSET\Skills\top-tier-engineer\tests\test_p03.py", line 25, in test_success_text_on_stderr_does_not_hide_failed_exit
+  File "<repo>\tests\test_p03.py", line 25, in test_success_text_on_stderr_does_not_hide_failed_exit
     self.assertFalse(result['ok'], 'failed stderr command silently accepted: ' + result['detail'])
     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: True is not false : failed stderr command silently accepted: printed: OK
@@ -21,7 +21,7 @@ AssertionError: True is not false : failed stderr command silently accepted: pri
 FAIL: test_success_text_on_stdout_does_not_hide_failed_exit (test_p03.EndStateEnforcement.test_success_text_on_stdout_does_not_hide_failed_exit)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "E:\Me\5.Claude\01 ASSET\Skills\top-tier-engineer\tests\test_p03.py", line 20, in test_success_text_on_stdout_does_not_hide_failed_exit
+  File "<repo>\tests\test_p03.py", line 20, in test_success_text_on_stdout_does_not_hide_failed_exit
     self.assertFalse(result['ok'], 'failed stdout command silently accepted: ' + result['detail'])
     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: True is not false : failed stdout command silently accepted: printed: OK

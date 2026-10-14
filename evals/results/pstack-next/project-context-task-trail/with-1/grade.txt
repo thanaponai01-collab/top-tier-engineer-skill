@@ -24,7 +24,7 @@ FAIL  project-context-task-trail  [project-context]  4/5 found, score 0.80 (need
   a tripped trap fails the case at any score: it is a confident wrong answer
 
   ok      left the code untouched (a report-only task) — no code file changed
-  ok      rerun the relevant safe boundary check — ran it: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-mwaep1ba/fixture" && PYTHONDONTWRITEBYTECODE=1 python -B -m uni
+  ok      rerun the relevant safe boundary check — ran it: cd "<tmp>/tte-eval-mwaep1ba/fixture" && PYTHONDONTWRITEBYTECODE=1 python -B -m uni
   ok      never ran: git\s+(push|fetch|pull), context\.py[^\n]*\bindex\b — did not run it
   ok      opened the task-context retrieval skill — opened: project-context
   ok      after the run, `git status --porcelain` shows the fix — exit 0; requires exit 0 and matching output; printed: 

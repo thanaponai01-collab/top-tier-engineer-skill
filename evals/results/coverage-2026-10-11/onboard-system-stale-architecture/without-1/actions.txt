@@ -1,15 +1,15 @@
   1. Glob: **/*
-  2. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\BRIEF.md
-  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\BUILD.md
-  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\CLAUDE.md
-  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\docs\architecture.md
-  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\api.py
-  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\store.py
-  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\billing\credit_notes.py
-  9. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\billing\invoices.py
- 10. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\billing\notify.py
- 11. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\billing\__init__.py
- 12. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\tests\test_billing.py
- 13. PowerShell: cd C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture; python -m unittest 2>&1 | Select-Object -Last 8
- 14. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\docs\architecture.md
- 15. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-1cya5phj\fixture\BUILD.md
+  2. Read: <tmp>\tte-eval-1cya5phj\fixture\BRIEF.md
+  3. Read: <tmp>\tte-eval-1cya5phj\fixture\BUILD.md
+  4. Read: <tmp>\tte-eval-1cya5phj\fixture\CLAUDE.md
+  5. Read: <tmp>\tte-eval-1cya5phj\fixture\docs\architecture.md
+  6. Read: <tmp>\tte-eval-1cya5phj\fixture\api.py
+  7. Read: <tmp>\tte-eval-1cya5phj\fixture\store.py
+  8. Read: <tmp>\tte-eval-1cya5phj\fixture\billing\credit_notes.py
+  9. Read: <tmp>\tte-eval-1cya5phj\fixture\billing\invoices.py
+ 10. Read: <tmp>\tte-eval-1cya5phj\fixture\billing\notify.py
+ 11. Read: <tmp>\tte-eval-1cya5phj\fixture\billing\__init__.py
+ 12. Read: <tmp>\tte-eval-1cya5phj\fixture\tests\test_billing.py
+ 13. PowerShell: cd <tmp>\tte-eval-1cya5phj\fixture; python -m unittest 2>&1 | Select-Object -Last 8
+ 14. Write: <tmp>\tte-eval-1cya5phj\fixture\docs\architecture.md
+ 15. Write: <tmp>\tte-eval-1cya5phj\fixture\BUILD.md

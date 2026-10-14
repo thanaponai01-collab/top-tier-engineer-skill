@@ -1,29 +1,29 @@
   1. Skill: top-tier-engineer:verify-loop
   2. Glob: fixture/**
-  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\doctor.py
-  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\VERIFY.md
-  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\app.py
-  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\config.json
+  3. Read: <tmp>\tte-eval-3gy9motx\fixture\doctor.py
+  4. Read: <tmp>\tte-eval-3gy9motx\fixture\VERIFY.md
+  5. Read: <tmp>\tte-eval-3gy9motx\fixture\app.py
+  6. Read: <tmp>\tte-eval-3gy9motx\fixture\config.json
   7. Grep: ## Run|running artifact|identity
-  8. Read: C:\Users\thana\AppData\Local\Temp\tte-plugin-rvno3o8e\top-tier-engineer\skills\verify-loop\VERIFY_FORMAT.md
-  9. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts && ls && grep -n -i "doctor\|VERIFY_PORT\|environ\[" veri…
- 10. Read: C:\Users\thana\AppData\Local\Temp\tte-plugin-rvno3o8e\top-tier-engineer\skills\verify-loop\scripts\verify.py
- 11. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\doctor.py
- 12. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\test_doctor.py
- 13. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\VERIFY.md
+  8. Read: <tmp>\tte-plugin-rvno3o8e\top-tier-engineer\skills\verify-loop\VERIFY_FORMAT.md
+  9. Bash: cd <tmp>/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts && ls && grep -n -i "doctor\|VERIFY_PORT\|environ\[" veri…
+ 10. Read: <tmp>\tte-plugin-rvno3o8e\top-tier-engineer\skills\verify-loop\scripts\verify.py
+ 11. Write: <tmp>\tte-eval-3gy9motx\fixture\doctor.py
+ 12. Write: <tmp>\tte-eval-3gy9motx\fixture\test_doctor.py
+ 13. Write: <tmp>\tte-eval-3gy9motx\fixture\VERIFY.md
  14. Bash: cd fixture && python test_doctor.py; echo exit=$?
- 15. Bash: cd fixture && V=/c/Users/thana/AppData/Local/Temp/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py; python $V run 2>&1 | tail -15; py…
- 16. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\serve_verify.py
- 17. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\doctor.py
- 18. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9momx\fixture\doctor.py
- 19. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\doctor.py
- 20. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\VERIFY.md
- 21. Bash: cd fixture && V=/c/Users/thana/AppData/Local/Temp/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py sed -i 's/^- path: .*/- path: app.…
- 22. Bash: cd fixture && V=/c/Users/thana/AppData/Local/Temp/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py python - <<'EOF' p="test_doctor.py…
- 23. Bash: cd fixture && V=/c/Users/thana/AppData/Local/Temp/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py cat > doctor.py <<'EOF' import jso…
- 24. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts && grep -n "def check_hash\|def recipe_hash\|def .*finger…
- 25. Read: C:\Users\thana\AppData\Local\Temp\tte-plugin-rvno3o8e\top-tier-engineer\skills\verify-loop\scripts\verify.py
+ 15. Bash: cd fixture && V=<tmp>/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py; python $V run 2>&1 | tail -15; py…
+ 16. Write: <tmp>\tte-eval-3gy9motx\fixture\serve_verify.py
+ 17. Edit: <tmp>\tte-eval-3gy9motx\fixture\doctor.py
+ 18. Edit: <tmp>\tte-eval-3gy9momx\fixture\doctor.py
+ 19. Edit: <tmp>\tte-eval-3gy9motx\fixture\doctor.py
+ 20. Edit: <tmp>\tte-eval-3gy9motx\fixture\VERIFY.md
+ 21. Bash: cd fixture && V=<tmp>/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py sed -i 's/^- path: .*/- path: app.…
+ 22. Bash: cd fixture && V=<tmp>/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py python - <<'EOF' p="test_doctor.py…
+ 23. Bash: cd fixture && V=<tmp>/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py cat > doctor.py <<'EOF' import jso…
+ 24. Bash: cd <tmp>/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts && grep -n "def check_hash\|def recipe_hash\|def .*finger…
+ 25. Read: <tmp>\tte-plugin-rvno3o8e\top-tier-engineer\skills\verify-loop\scripts\verify.py
  26. Grep: PASS|FAIL
- 27. Edit: C:\Users\thana\AppData\Local\Temp\tte-eval-3gy9motx\fixture\test_doctor.py
- 28. Bash: cd fixture && V=/c/Users/thana/AppData/Local/Temp/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py python $V baseline | tail -1 cat >…
+ 27. Edit: <tmp>\tte-eval-3gy9motx\fixture\test_doctor.py
+ 28. Bash: cd fixture && V=<tmp>/tte-plugin-rvno3o8e/top-tier-engineer/skills/verify-loop/scripts/verify.py python $V baseline | tail -1 cat >…
  29. Bash: cd fixture && rm -f .verify-port; ls -a; diff /tmp/doctor.good doctor.py && echo doctor-restored

@@ -1,9 +1,9 @@
   1. Skill: top-tier-engineer:agent-prove
   2. Glob: fixture/**/*
-  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_neuqukb\fixture\README.md
-  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_neuqukb\fixture\evals\refund-agent\bar.md
-  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_neuqukb\fixture\evals\refund-agent\tasks.json
-  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_neuqukb\fixture\evals\refund-agent\summarize.py
-  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_neuqukb\fixture\evals\refund-agent\runs\2026-10-10-v2.json
-  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_neuqukb\fixture\evals\refund-agent\runs\2026-09-21-v1.json
-  9. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_neuqukb\fixture\evals\refund-agent\transcripts\v2-S02-run3.txt
+  3. Read: <tmp>\tte-eval-_neuqukb\fixture\README.md
+  4. Read: <tmp>\tte-eval-_neuqukb\fixture\evals\refund-agent\bar.md
+  5. Read: <tmp>\tte-eval-_neuqukb\fixture\evals\refund-agent\tasks.json
+  6. Read: <tmp>\tte-eval-_neuqukb\fixture\evals\refund-agent\summarize.py
+  7. Read: <tmp>\tte-eval-_neuqukb\fixture\evals\refund-agent\runs\2026-10-10-v2.json
+  8. Read: <tmp>\tte-eval-_neuqukb\fixture\evals\refund-agent\runs\2026-09-21-v1.json
+  9. Read: <tmp>\tte-eval-_neuqukb\fixture\evals\refund-agent\transcripts\v2-S02-run3.txt

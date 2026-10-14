@@ -1,11 +1,11 @@
   1. Skill: top-tier-engineer:agent-release
-  2. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-486px3e8\LAUNCH.md
+  2. Read: <tmp>\tte-eval-486px3e8\LAUNCH.md
   3. Glob: fixture/**/*
-  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-486px3e8\fixture\LAUNCH.md
-  5. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-486px3e8\fixture\config.yaml
-  6. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-486px3e8\fixture\assistant\settings.py
-  7. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-486px3e8\fixture\assistant\loop.py
-  8. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-486px3e8\fixture\assistant\tools.py
-  9. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-486px3e8\fixture\assistant\llm.py
- 10. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-486px3e8\fixture\assistant\runlog.py
- 11. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-486px3e8/fixture/prompts && ls -l --time-style=full-iso && diff order-assistant-2026-10-02.md order-assistant-202…
+  4. Read: <tmp>\tte-eval-486px3e8\fixture\LAUNCH.md
+  5. Read: <tmp>\tte-eval-486px3e8\fixture\config.yaml
+  6. Read: <tmp>\tte-eval-486px3e8\fixture\assistant\settings.py
+  7. Read: <tmp>\tte-eval-486px3e8\fixture\assistant\loop.py
+  8. Read: <tmp>\tte-eval-486px3e8\fixture\assistant\tools.py
+  9. Read: <tmp>\tte-eval-486px3e8\fixture\assistant\llm.py
+ 10. Read: <tmp>\tte-eval-486px3e8\fixture\assistant\runlog.py
+ 11. Bash: cd <tmp>/tte-eval-486px3e8/fixture/prompts && ls -l --time-style=full-iso && diff order-assistant-2026-10-02.md order-assistant-202…

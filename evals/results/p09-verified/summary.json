@@ -91,12 +91,12 @@
     "skill_reads": [
       {
         "skill": "drive",
-        "path": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-c6d_p428\\top-tier-engineer\\skills\\drive\\SKILL.md",
+        "path": "<tmp>\\tte-plugin-c6d_p428\\top-tier-engineer\\skills\\drive\\SKILL.md",
         "sub": false
       }
     ],
     "skill_read_candidates": [
-      "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-c6d_p428\\top-tier-engineer\\skills\\drive\\SKILL.md"
+      "<tmp>\\tte-plugin-c6d_p428\\top-tier-engineer\\skills\\drive\\SKILL.md"
     ],
     "model_usage": {
       "claude-sonnet-5-5": {
@@ -145,7 +145,7 @@
     "grade_text": "FAIL  drive-program-delivery  [drive]  0/8 found, score 0.00 (needs 1.00)\n  MISSED  shared-contract-first: the shared import record is finalized before dependent implementations\n            never named: src/contracts/import_record.py\n            named it, but never said what was wrong with it\n  MISSED  unowned-shared-storage: C and D both write a persisted record, but no slice owns the shared storage layer, so parallel safety is not established until that boundary has an owner\n            never named: storage layer\n            named it, but never said what was wrong with it\n  MISSED  docs-check-dependency: E can be drafted independently, but its examples must be checked against A's schema after A settles\n            named it, but never said what was wrong with it\n  MISSED  integration-last: the real integration journey waits until the parser and both entry points are integrated and is rerun after integration\n            named it, but never said what was wrong with it\n  MISSED  stack-ceiling: only PR 201 is currently in the verified contiguous bottom-up prefix\n            never named: PR 201\n  MISSED  stale-rebased-verdict: PR 202's verdict is stale because its recorded head differs from its current head, even though patch id matches\n            never named: PR 202\n  MISSED  prefix-stops-at-gap: PR 203 lacks an independent verdict and blocks PR 204 despite PR 204's own passing verdict\n            never named: PR 203, PR 204\n  MISSED  independent-pr: PR 205 is outside the dependent stack and must be assessed separately\n            never named: PR 205\n  held    do-not-land-descendant: a green descendant is not landable across the unverified gap\n  held    ci-is-not-verdict: green CI on 203 is not an independent review verdict\n  held    no-external-action: the review-only request cannot arm or mutate a PR",
     "seconds": 22.8,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-c6d_p428\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-c6d_p428\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   }

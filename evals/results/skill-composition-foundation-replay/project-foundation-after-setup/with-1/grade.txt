@@ -3,7 +3,7 @@ PASS  project-foundation-after-setup  [project-foundation]  2/2 found, score 1.0
   found   category-list: The report lists every category with its state.
   NOT CHECKED  the working copy: this case grades actions too, pass --workdir
 
-  ok      checked FEATURES.md against the code with feature-map's features.py, instead of writing the map by hand — ran it: cd C:/Users/thana/AppData/Local/Temp/tte-eval-c28052dn/fixture; S=C:/Users/thana/AppData/Local/Temp/tte-plugin
+  ok      checked FEATURES.md against the code with feature-map's features.py, instead of writing the map by hand — ran it: cd <tmp>/tte-eval-c28052dn/fixture; S=<tmp>/tte-plugin
   ok      changed nothing outside the allowed files —
   ok      Architecture records actual module boundaries with sources. —
   ok      Command index records a usable Python check. —

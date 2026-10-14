@@ -1,4 +1,4 @@
   1. Skill: top-tier-engineer:perf-optimize
-  2. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-wxo9mfxa" && ls -la && cat measurements.json
-  3. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-wxo9mfxa" && find fixture -type f | head -50 && cat "C:/Users/thana/AppData/Local/Temp/tte-plugin-s32__zm7/top-t…
-  4. Bash: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-wxo9mfxa/fixture" && cat README.md && echo ---- && cat measurements.json
+  2. Bash: cd "<tmp>/tte-eval-wxo9mfxa" && ls -la && cat measurements.json
+  3. Bash: cd "<tmp>/tte-eval-wxo9mfxa" && find fixture -type f | head -50 && cat "<tmp>/tte-plugin-s32__zm7/top-t…
+  4. Bash: cd "<tmp>/tte-eval-wxo9mfxa/fixture" && cat README.md && echo ---- && cat measurements.json

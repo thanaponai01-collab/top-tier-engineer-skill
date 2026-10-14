@@ -6,7 +6,7 @@
   "report_passed": true,
   "graded_by": "meaning",
   "phrase_passed": false,
-  "judge_text": "judge: PASS  5/5 found\n  found   map-is-stale \u2014 \"### First: your architecture document is wrong\"\n  found   charge-then-email-chain \u2014 \"And if the email server is down, the customer sees an error page **after their card has already been charged**.\"\n  found   reuse-existing-queue \u2014 \"Refund emails already go through this to-do list, so you'd be reusing something you already run.\"\n  found   before-after-picture \u2014 \"There's a visual version with the same diagrams side by side at `C:\\Users\\thana\\AppData\\Local\\Temp\\architecture-review-s\"\n  found   owner-decides-next \u2014 \"**Which one would you like to explore further?**\"\n  held    queue-is-not-dead",
+  "judge_text": "judge: PASS  5/5 found\n  found   map-is-stale \u2014 \"### First: your architecture document is wrong\"\n  found   charge-then-email-chain \u2014 \"And if the email server is down, the customer sees an error page **after their card has already been charged**.\"\n  found   reuse-existing-queue \u2014 \"Refund emails already go through this to-do list, so you'd be reusing something you already run.\"\n  found   before-after-picture \u2014 \"There's a visual version with the same diagrams side by side at `<tmp>\\architecture-review-s\"\n  found   owner-decides-next \u2014 \"**Which one would you like to explore further?**\"\n  held    queue-is-not-dead",
   "actions_passed": false,
   "followed_skill": null,
   "leaked": false,

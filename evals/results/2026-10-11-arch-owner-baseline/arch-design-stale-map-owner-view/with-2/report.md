@@ -64,7 +64,7 @@ Orders and stock levels are currently kept only in the program's memory (`shop/d
 
 ## How to check the fixes worked
 
-The failure test I ran is saved at `C:\Users\thana\AppData\Local\Temp\probe\probe.py`. After the fixes, running it again should show:
+The failure test I ran is saved at `<tmp>\probe\probe.py`. After the fixes, running it again should show:
 - the customer gets a success page, not an error;
 - the failed email is still waiting to be retried;
 - mug stock is back to 5.
