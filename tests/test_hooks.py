@@ -20,10 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TOOLS = ROOT / "tools"
 SCRIPTS = ROOT / "plugin" / "scripts"
 GATE = SCRIPTS / "unproven-gate.py"
-ROUTE_HINT = TOOLS / "route-hint.py"
 STOP_GATE = SCRIPTS / "verify-stop-gate.py"
-START_HERE_HOOK = TOOLS / "start-here-hook.py"
-FRONT_DOOR = TOOLS / "front-door.py"
 VERIFY = ROOT / "plugin" / "skills" / "verify-loop" / "scripts" / "verify.py"
 
 # The hooks are hyphenated CLI scripts, so they are loaded by path rather than
@@ -31,10 +28,6 @@ VERIFY = ROOT / "plugin" / "skills" / "verify-loop" / "scripts" / "verify.py"
 _spec = importlib.util.spec_from_file_location("unproven_gate", GATE)
 unproven_gate = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(unproven_gate)
-
-_rspec = importlib.util.spec_from_file_location("route_hint", ROUTE_HINT)
-route_hint = importlib.util.module_from_spec(_rspec)
-_rspec.loader.exec_module(route_hint)
 
 
 def tool_use(name, payload):
@@ -63,133 +56,6 @@ def run_hook(script, payload, cwd=None):
         encoding="utf-8", cwd=cwd,
     )
     return proc.returncode, proc.stdout, proc.stderr
-
-
-_fspec = importlib.util.spec_from_file_location("front_door", FRONT_DOOR)
-front_door = importlib.util.module_from_spec(_fspec)
-_fspec.loader.exec_module(front_door)
-
-
-class TestFrontDoor(unittest.TestCase):
-    """The default hook: the card always, then project state or one setup line, then freshness."""
-
-    def test_card_names_every_manual_skill_and_links_the_full_card(self):
-        _, out, _ = run_hook(FRONT_DOOR, {"cwd": str(ROOT)})
-        catalog = (ROOT / "CATALOG.md").read_text(encoding="utf-8")
-        self.assertIn(str(ROOT / "CATALOG.md"), out)
-        for d in (ROOT / "plugin" / "skills").iterdir():
-            f = d / "SKILL.md"
-            if f.is_file():
-                self.assertIn(d.name + "`", catalog, d.name)
-                if "disable-model-invocation: true" in f.read_text(encoding="utf-8"):
-                    self.assertIn("/top-tier-engineer:drive", out)
-
-    def test_a_cold_git_project_is_told_to_set_up(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            (Path(tmp) / ".git").mkdir()
-            code, out, _ = run_hook(FRONT_DOOR, {"cwd": tmp})
-            self.assertEqual(code, 0)
-            self.assertIn("/top-tier-engineer:project-setup for instructions", out)
-        self.assertIn("/top-tier-engineer:project-foundation for the context files", out)
-
-    def test_a_set_up_project_gets_its_state_not_the_setup_line(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            (Path(tmp) / ".git").mkdir()
-            (Path(tmp) / "CLAUDE.md").write_text("<!-- start-here -->\nx\n<!-- /start-here -->\n",
-                                                  encoding="utf-8")
-            (Path(tmp) / "BUILD.md").write_text("# Build\n\n## Next\n- route the export handler\n",
-                                                 encoding="utf-8")
-            _, out, _ = run_hook(FRONT_DOOR, {"cwd": tmp})
-            self.assertIn("route the export handler", out)
-            self.assertNotIn("project-setup once", out)
-
-    def test_a_folder_that_is_not_a_project_gets_only_the_card(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            _, out, _ = run_hook(FRONT_DOOR, {"cwd": tmp})
-            self.assertIn("/top-tier-engineer:drive", out)
-            self.assertNotIn("project-setup once", out)
-
-    def test_the_card_names_manual_skills_and_does_not_repeat_the_listing(self):
-        # 4.62: the full card repeated the host's skill listing (~2 KB) every session and said
-        # "check here first". Manual-only skills are the part the listing never shows.
-        card = front_door.card()
-        self.assertIn("/top-tier-engineer:drive", card)
-        self.assertIn("/top-tier-engineer:drive", card)
-        self.assertNotIn("`debug-protocol`", card)
-        self.assertNotIn("check here first", card)
-        self.assertIn("CATALOG.md", card)
-        self.assertLess(len(card), 1000)
-
-    def test_a_start_here_block_is_not_repeated_by_the_summary(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            (Path(tmp) / "BUILD.md").write_text("# Build\n\n## Next\n- route it\n", encoding="utf-8")
-            self.assertIn("Project context: intent", front_door.front_door(tmp))
-            (Path(tmp) / "CLAUDE.md").write_text("<!-- start-here -->\nintent: BRIEF.md\n"
-                                                  "<!-- /start-here -->\n", encoding="utf-8")
-            out = front_door.front_door(tmp)
-            self.assertNotIn("Project context: intent", out)
-            self.assertIn("Next: - route it", out)
-
-    def test_long_decisions_are_cut_at_a_boundary_not_mid_word(self):
-        _sspec = importlib.util.spec_from_file_location("start_here_hook", TOOLS / "start-here-hook.py")
-        sh = importlib.util.module_from_spec(_sspec)
-        _sspec.loader.exec_module(sh)
-        text = "- " + "alpha beta gamma. " * 10 + "- Retrieval is ready later"
-        out = sh.clip(text, 200)
-        self.assertTrue(out.endswith(" …"))
-        self.assertNotIn("Retrieval is rea", out)
-        self.assertTrue(out[:-2].endswith("."))
-        self.assertEqual(sh.clip("short", 200), "short")
-
-    def test_a_source_checkout_ahead_of_the_install_is_flagged(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            (Path(tmp) / ".claude-plugin").mkdir()
-            (Path(tmp) / ".claude-plugin" / "plugin.json").write_text(
-                json.dumps({"name": "top-tier-engineer", "version": "999.0.0"}), encoding="utf-8")
-            self.assertIn("/plugin update top-tier-engineer", front_door.freshness_line(tmp))
-            (Path(tmp) / ".claude-plugin" / "plugin.json").write_text(
-                json.dumps({"name": "top-tier-engineer", "version": "0.0.1"}), encoding="utf-8")
-            self.assertEqual(front_door.freshness_line(tmp), "")
-            (Path(tmp) / ".claude-plugin" / "plugin.json").write_text(
-                json.dumps({"name": "other-plugin", "version": "999.0.0"}), encoding="utf-8")
-            self.assertEqual(front_door.freshness_line(tmp), "")
-
-    def test_the_installed_copy_itself_is_never_stale(self):
-        self.assertEqual(front_door.freshness_line(str(ROOT)), "")
-
-    def test_exits_zero_on_garbage(self):
-        proc = subprocess.run([sys.executable, str(FRONT_DOOR)], input="garbage",
-                              capture_output=True, text=True, encoding="utf-8")
-        self.assertEqual(proc.returncode, 0)
-
-    def test_output_stays_short(self):
-        _, out, _ = run_hook(FRONT_DOOR, {"cwd": str(ROOT)})
-        self.assertLessEqual(len(out.splitlines()), 20)
-
-
-class TestBriefAreaPointers(unittest.TestCase):
-    def test_hook_uses_existing_intent_and_work_documents(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / "AGENTS.md").write_text("<!-- start-here -->\nintent: PRODUCT.md\nwork: CURRENT.md\n<!-- /start-here -->", encoding="utf-8")
-            (root / "PRODUCT.md").write_text("## Decisions\n- Tenant data stays separate.\n", encoding="utf-8")
-            (root / "CURRENT.md").write_text("## Next\nCheck tenant isolation.\n", encoding="utf-8")
-            code, out, err = run_hook(START_HERE_HOOK, {"cwd": tmp})
-            self.assertEqual(code, 0, err)
-            self.assertIn("Tenant data stays separate", out)
-            self.assertIn("Check tenant isolation", out)
-            self.assertIn("CURRENT.md", out)
-
-    def test_hook_links_current_areas_without_loading_their_contents(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / "brief").mkdir()
-            (root / "BRIEF.md").write_text("include: brief/billing.md — billing work\n", encoding="utf-8")
-            (root / "brief/billing.md").write_text("AREA_DETAIL_NOT_FOR_STARTUP", encoding="utf-8")
-            code, out, err = run_hook(START_HERE_HOOK, {"cwd": tmp})
-            self.assertEqual(code, 0, err)
-            self.assertIn("brief/billing.md", out)
-            self.assertNotIn("AREA_DETAIL_NOT_FOR_STARTUP", out)
 
 
 class TestRunDetection(unittest.TestCase):
@@ -317,193 +183,6 @@ class TestFailsOpen(unittest.TestCase):
             self.assertEqual(second.strip(), "")
 
 
-class TestRouteHintRouting(unittest.TestCase):
-    """The prompt each skill is actually asked for, in the words people use."""
-
-    def route(self, prompt):
-        return route_hint.suggest(prompt)[0]
-
-    def test_broken_with_no_cause_goes_to_diagnosis(self):
-        for prompt in ("the login page is broken",
-                       "checkout keeps failing",
-                       "it worked yesterday and now it crashes",
-                       "this doesn't work any more",
-                       "getting an error when I save",
-                       "the upload just hangs"):
-            self.assertEqual(self.route(prompt), "debug-protocol", prompt)
-
-    def test_broken_with_a_named_cause_is_maintenance_not_diagnosis(self):
-        # Route on what is known, not on the adjective: a proven cause means
-        # the diagnosis is already done.
-        for prompt in ("login is broken because the token expires early",
-                       "it fails due to the missing index",
-                       "the crash turns out to be a null config"):
-            self.assertEqual(self.route(prompt), "evolve-maintain", prompt)
-
-    def test_each_remaining_rule_routes(self):
-        cases = {
-            "time to deploy this to prod": "safe-release",
-            "I need a migration for the orders table": "safe-release",
-            "can this endpoint be abused?": "threat-model",
-            "is the session handling secure": "threat-model",
-            "file these as issues please": "issue-handoff",
-            "find the dead code in here": "latent-audit",
-            "is the new handler hooked up?": "wire-check",
-            "honestly is this codebase spaghetti": "structure-gate",
-            "second opinion on this PR before I merge": "scrutinize",
-            "does this actually work?": "correctness-gate",
-            "show me the architecture": "arch-map",
-            "upgrade the dependencies": "evolve-maintain",
-            "the report takes forever to load": "perf-optimize",
-            "which skill should I use here": "pick-skill",
-            "look at my codebase and tell me what to do": "senior-review",
-            "what should I fix first?": "senior-review",
-            "why does the cache work this way?": "code-history",
-            "why did we pick Postgres here": "code-history",
-            "is there a postmortem for the March outage": "code-history",
-            "walk me through how checkout works": "explain",
-            "help me understand this codebase": "explain",
-            "teach me how the queue is wired": "explain",
-            "how does the billing subsystem work?": "explain",
-            "I'm onboarding onto the payments service, how does it work": "onboard-system",
-            "never seen this codebase before, get me up to speed on it": "onboard-system",
-            "where were we?": "recall",
-            "catch me up on this project": "recall",
-            "what was I working on yesterday": "recall",
-            "set up this new project with these skills": "project-setup",
-            "I'm starting fresh, set up the checks for this repo": "project-setup",
-            "bootstrap the repo with the skills": "project-setup",
-            "keep going on this while I sleep": "drive-overnight",
-            "run this unattended and log what you decide": "drive-overnight",
-            "work on it overnight until the tests pass": "drive-overnight",
-        }
-        for prompt, skill in cases.items():
-            self.assertEqual(self.route(prompt), skill, prompt)
-
-    def test_a_failure_report_still_goes_to_diagnosis_not_explain(self):
-        self.assertEqual(self.route("help me understand why checkout keeps failing"),
-                         "debug-protocol")
-
-
-class TestRouteHintSilence(unittest.TestCase):
-    """Precision over recall: a hook that fires on ordinary work is uninstalled."""
-
-    def route(self, prompt):
-        return route_hint.suggest(prompt)[0]
-
-    def test_ordinary_work_gets_no_hint(self):
-        for prompt in ("add a button to the settings page",
-                       "add error handling to the parser",
-                       "what does this function do?",
-                       "rename the variable to userCount",
-                       "write a test for the date helper",
-                       "update the README",
-                       "commit this with a decent message",
-                       "explain this regex to me",
-                       "how does this function work?",
-                       "add two numbers together",
-                       "bump the copyright year",
-                       "set up the project with Docker",
-                       "set up the database for this repo",
-                       "the overnight batch job failed",
-                       "add a dark mode toggle to the settings page"):
-            self.assertIsNone(self.route(prompt), prompt)
-
-    def test_building_is_left_alone(self):
-        # build-discipline is deliberately not a rule: "implement this" is the
-        # most common thing anyone types, and a hint on every one is noise.
-        for prompt in ("build it", "implement this endpoint", "make it work"):
-            self.assertIsNone(self.route(prompt), prompt)
-
-    def test_a_prompt_that_names_a_skill_is_left_alone(self):
-        for prompt in ("run debug-protocol on this",
-                       "use senior-review here",
-                       "I already tried wire-check"):
-            self.assertIsNone(self.route(prompt), prompt)
-
-    def test_slash_commands_and_junk_are_left_alone(self):
-        for prompt in ("/pick-skill", "", "   ", None, 42,
-                       "x" * (route_hint.MAX_PROMPT + 1)):
-            self.assertIsNone(self.route(prompt), repr(prompt)[:40])
-
-    def test_every_rule_points_at_a_real_skill(self):
-        for skill, _, _, _ in route_hint.COMPILED:
-            self.assertIn(skill, route_hint.SKILLS, skill)
-            self.assertTrue((ROOT / "plugin" / "skills" / skill / "SKILL.md").is_file(), skill)
-
-    def test_the_hint_names_an_optional_skill(self):
-        text = route_hint.message(*route_hint.suggest("the app is broken"))
-        self.assertIn("debug-protocol", text)
-        self.assertIn("Optional guidance", text)
-        self.assertNotIn("Run it, or", text)
-        self.assertEqual(route_hint.message(None, None), "")
-
-
-class TestRouteHintFailsOpen(unittest.TestCase):
-    """Exit 2 on UserPromptSubmit erases the user's prompt. Never happens."""
-
-    def test_every_malformed_payload_exits_zero_and_silent(self):
-        for payload in ({}, {"prompt": None}, {"prompt": []},
-                        {"session_id": "x"}, {"prompt": "add a button"}):
-            code, out, _ = run_hook(ROUTE_HINT, payload)
-            self.assertEqual(code, 0, payload)
-            self.assertEqual(out.strip(), "", payload)
-
-    def test_non_json_stdin_exits_zero(self):
-        proc = subprocess.run([sys.executable, str(ROUTE_HINT)], input="not json",
-                              capture_output=True, text=True)
-        self.assertEqual(proc.returncode, 0)
-
-    def test_end_to_end_hints_once_then_stays_quiet(self):
-        payload = {"prompt": "the checkout page is broken",
-                   "session_id": "route-%s" % os.getpid()}
-        code, first, _ = run_hook(ROUTE_HINT, payload)
-        self.assertEqual(code, 0)
-        self.assertIn("debug-protocol", first)
-        self.assertEqual(run_hook(ROUTE_HINT, payload)[1].strip(), "")
-
-    def test_selftest_passes(self):
-        proc = subprocess.run([sys.executable, str(ROUTE_HINT), "--selftest"],
-                              capture_output=True, text=True)
-        self.assertEqual(proc.returncode, 0, proc.stderr)
-
-
-class TestStartHereHook(unittest.TestCase):
-    def project(self, files):
-        tmp = tempfile.TemporaryDirectory()
-        self.addCleanup(tmp.cleanup)
-        for rel, text in files.items():
-            (Path(tmp.name) / rel).write_text(text, encoding="utf-8")
-        return tmp.name
-
-    def test_hands_over_decisions_and_the_next_step(self):
-        repo = self.project({
-            "BRIEF.md": "# Brief\n## Decisions\n- 2026-10-09 · Export is JSON only\n## Not building\n- UI\n",
-            "BUILD.md": "# Build\n## Next\nSlice 5: --month filter\n## Deferred\n",
-        })
-        code, out, _ = run_hook(START_HERE_HOOK, {"hook_event_name": "SessionStart", "cwd": repo})
-        self.assertEqual(code, 0)
-        self.assertIn("Export is JSON only", out)
-        self.assertIn("Slice 5: --month filter", out)
-        self.assertNotIn("Not building", out)
-
-    def test_names_a_note_over_budget(self):
-        repo = self.project({"BUILD.md": "".join(f"- slice {i}\n" for i in range(90))})
-        code, out, _ = run_hook(START_HERE_HOOK, {"hook_event_name": "SessionStart", "cwd": repo})
-        self.assertEqual(code, 0)
-        self.assertIn("BUILD.md: 90/80", out)
-
-    def test_silent_in_a_project_with_no_notes(self):
-        repo = self.project({"README.md": "hello\n"})
-        code, out, _ = run_hook(START_HERE_HOOK, {"hook_event_name": "SessionStart", "cwd": repo})
-        self.assertEqual((code, out), (0, ""))
-
-    def test_exits_zero_on_garbage(self):
-        proc = subprocess.run([sys.executable, str(START_HERE_HOOK)],
-                              input="garbage", capture_output=True, text=True)
-        self.assertEqual(proc.returncode, 0)
-
-
 class TestHooksManifest(unittest.TestCase):
     def test_explicit_entry_profiles(self):
         for name in ('hooks.json', 'optional.json', 'autonomous.json'):
@@ -511,6 +190,12 @@ class TestHooksManifest(unittest.TestCase):
             self.assertEqual(set(manifest['hooks']), set() if name == 'hooks.json' else {'Stop'})
         for path in (ROOT / 'plugin' / 'skills').glob('*/SKILL.md'):
             self.assertIn('disable-model-invocation: true', path.read_text(encoding='utf-8').split('---', 2)[1])
+
+    def test_opt_in_profiles_point_at_shipped_scripts(self):
+        for name in ('optional.json', 'autonomous.json'):
+            text = (ROOT / 'plugin' / 'hooks' / name).read_text(encoding='utf-8-sig')
+            self.assertIn('${CLAUDE_PLUGIN_ROOT}/scripts/verify-stop-gate.py', text)
+        self.assertTrue((SCRIPTS / 'verify-stop-gate.py').is_file())
 
 
 class TestVerifyStopGate(unittest.TestCase):
@@ -622,40 +307,3 @@ class TestDriveStopGate(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
-
-class TestDriveEntry(unittest.TestCase):
-    """The autonomous profile's entry hook: loud on tasks, silent on everything else, never exit 2."""
-
-    ENTRY = TOOLS / "drive-entry.py"
-
-    def _run(self, stdin):
-        return subprocess.run([sys.executable, str(self.ENTRY)], input=stdin,
-                              capture_output=True, text=True)
-
-    def test_task_prompt_gets_the_drive_directive(self):
-        proc = self._run(json.dumps({"prompt": "the nightly digest stopped going out after yesterday's deploy"}))
-        self.assertEqual(proc.returncode, 0)
-        self.assertIn("`drive`", proc.stdout)
-
-    def test_silent_on_questions_chat_slash_and_named_skills(self):
-        for prompt in ("ok", "/drive fix the export that is broken", "why is the export so slow today?",
-                       "run debug-protocol on the export, it is broken somehow"):
-            proc = self._run(json.dumps({"prompt": prompt}))
-            self.assertEqual((proc.returncode, proc.stdout), (0, ""), prompt)
-
-    def test_fails_open_on_garbage(self):
-        for stdin in ("", "garbage", "[]", json.dumps({"prompt": 5})):
-            proc = self._run(stdin)
-            self.assertEqual((proc.returncode, proc.stdout), (0, ""), stdin)
-
-    def test_autonomous_profile_points_at_real_scripts(self):
-        manifest = json.loads((ROOT / "plugin" / "hooks" / "autonomous.json").read_text(encoding="utf-8-sig"))
-        referenced = json.dumps(manifest)
-        for script in ("verify-stop-gate.py",):
-            self.assertIn(script, referenced)
-            self.assertTrue((SCRIPTS / script).is_file(), script)
-
-    def test_selftest(self):
-        proc = subprocess.run([sys.executable, str(self.ENTRY), "--selftest"], capture_output=True, text=True)
-        self.assertEqual((proc.returncode, proc.stdout.strip()), (0, "selftest ok"), proc.stderr)

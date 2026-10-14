@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.64.1 - 2026-10-14 - unused hook scripts removed
+
+- Deleted the unwired legacy hooks `tools/front-door.py`, `start-here-hook.py`, `route-hint.py`
+  and `drive-entry.py`, with their tests. `tools/` now holds only `catalog.py`.
+- Deleted the routing evals (`evals/route.py`, `route_live.py`, `routing.json`, `ROUTING.md`):
+  they measured whether an agent picks skills on its own, which manual-only skills never do.
+- Added a test that the opt-in hook profiles point at `plugin/scripts/verify-stop-gate.py`.
+- Unit suite: 455 tests pass; catalog check passes.
+
 ## 4.64.0 - 2026-10-14 - plugin folder split, philosophy removed
 
 - **Install is only the plugin:** skills, agents, hooks and both manifests moved into `plugin/`;

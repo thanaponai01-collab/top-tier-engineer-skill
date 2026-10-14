@@ -1,6 +1,6 @@
 <!-- context-id: architecture:plugin -->
 <!-- context-type: architecture -->
-<!-- context-paths: plugin/hooks/hooks.json, tools/front-door.py, tools/start-here-hook.py, plugin/skills/project-context/scripts/context.py, plugin/skills/project-setup/SKILL.md, plugin/skills/project-foundation/SKILL.md -->
+<!-- context-paths: plugin/hooks/hooks.json, plugin/scripts/verify-stop-gate.py, plugin/skills/project-context/scripts/context.py, plugin/skills/project-setup/SKILL.md, plugin/skills/project-foundation/SKILL.md -->
 # Plugin architecture
 
 Independent skills do engineering work; shared project memory makes their results discoverable.
@@ -8,14 +8,13 @@ This is the observed implementation, not a proposed product architecture.
 
 ```mermaid
 flowchart LR
-  hooks["plugin/hooks/hooks.json"] --> entry["tools/front-door.py"]
-  entry --> catalog["CATALOG.md"]
-  entry --> summary["tools/start-here-hook.py"]
-  summary --> records["Project Markdown records"]
-  drive["plugin/skills/drive"] --> foundation["plugin/skills/project-foundation"]
-  foundation --> records
+  user["user: /top-tier-engineer:drive"] --> drive["plugin/skills/drive"]
+  optional["plugin/hooks/optional.json (opt-in)"] --> gate["plugin/scripts/verify-stop-gate.py"]
+  gate --> run["RUN.json: driven run state"]
+  drive --> foundation["plugin/skills/project-foundation"]
+  foundation --> records["Project Markdown records"]
   setup["plugin/skills/project-setup"] --> instructions["agent routing instructions"]
-  summary --> run["RUN.json: driven run state"]
+  drive --> run
   drive --> executor["plugin/agents/drive-executor.md: bounded implementation"]
   drive --> worker["plugin/agents/setup-reader.md: bounded read-only discovery"]
   context["plugin/skills/project-context/scripts/context.py"] --> records
@@ -26,13 +25,10 @@ flowchart LR
 ## Boundaries and sources
 | Relationship | Source |
 |---|---|
-| SessionStart invokes front-door | plugin/hooks/hooks.json:4 |
-| Front-door reads generated catalog | tools/front-door.py:46 |
-| Front-door loads compact project summary | tools/front-door.py:57 |
-| Summary reads current intent/work pointers | tools/start-here-hook.py:104 |
+| Default install runs no hooks | plugin/hooks/hooks.json:3 |
+| Opt-in Stop gate checks verify and RUN.json evidence | plugin/hooks/optional.json:9 |
 | Drive owns worker routing | plugin/skills/drive/references/model-routing.md:1 |
 | project-foundation owns foundation preparation and the category list | plugin/skills/project-foundation/SKILL.md:1 |
-| Summary reports an unfinished driven run | tools/start-here-hook.py:104 |
 | Economy worker is declarative read-only configuration | plugin/agents/setup-reader.md:1 |
 | Context indexes authoritative files transactionally | plugin/skills/project-context/scripts/context.py:161 |
 | Context retrieves indexed or fallback records | plugin/skills/project-context/scripts/context.py:201 |

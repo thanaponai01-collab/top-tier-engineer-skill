@@ -31,50 +31,9 @@ def frontmatter(text):
     return text.split("---", 2)[1]
 
 
-start_here = load("start_here_hook", ROOT / "tools" / "start-here-hook.py")
-front_door = load("front_door", ROOT / "tools" / "front-door.py")
-
-
 def run_state(status="active", journal=None, proofs=None):
     return {"status": status, "proofs": proofs or {}, "journal": journal or {},
             "contract": {"goal": "g", "stages": [{"id": "diagnose"}, {"id": "prove"}]}}
-
-
-class G1DrivenRunAtStartup(unittest.TestCase):
-    def repo(self, state):
-        tmp = tempfile.TemporaryDirectory()
-        self.addCleanup(tmp.cleanup)
-        path = Path(tmp.name)
-        if state is not None:
-            (path / "RUN.json").write_text(state if isinstance(state, str) else json.dumps(state),
-                                           encoding="utf-8")
-        return path
-
-    def test_active_run_with_unknown_action_is_announced(self):
-        repo = self.repo(run_state(journal={"deploy": {"result": "unknown"}},
-                                   proofs={"diagnose": {}}))
-        text = start_here.compact_summary(str(repo))
-        self.assertIn("Driven run: active", text)
-        self.assertIn("next: prove", text)
-        self.assertIn("unresolved actions: 1", text)
-        self.assertIn("reconcile", text)
-
-    def test_blocked_run_is_announced(self):
-        repo = self.repo(run_state(status="blocked"))
-        self.assertIn("Driven run: blocked", start_here.compact_summary(str(repo)))
-
-    def test_complete_run_and_no_run_stay_silent(self):
-        self.assertNotIn("Driven run", start_here.compact_summary(str(self.repo(run_state("complete")))))
-        self.assertNotIn("Driven run", start_here.compact_summary(str(self.repo(None))))
-
-    def test_malformed_run_fails_open_with_a_pointer(self):
-        text = start_here.compact_summary(str(self.repo("{not json")))
-        self.assertIn("Driven run: unreadable", text)
-
-    def test_front_door_shows_the_run_in_a_project_never_set_up(self):
-        repo = self.repo(run_state())
-        (repo / ".git").mkdir()
-        self.assertIn("Driven run: active", front_door.front_door(str(repo)))
 
 
 class G2PlansReachTheWorkDocument(unittest.TestCase):
@@ -163,10 +122,6 @@ class FoundationFrontDoor(unittest.TestCase):
 
     def test_setup_and_cold_projects_point_to_it(self):
         self.assertIn("/project-foundation", skill("project-setup"))
-        tmp = tempfile.TemporaryDirectory()
-        self.addCleanup(tmp.cleanup)
-        (Path(tmp.name) / ".git").mkdir()
-        self.assertIn("project-foundation", front_door.setup_line(tmp.name))
 
     def test_drive_and_onboard_load_it(self):
         for name in ("drive", "onboard-system"):

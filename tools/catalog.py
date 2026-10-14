@@ -4,7 +4,7 @@ catalog — one source for every list of this plugin's skills, and a check that 
 
 WHY THIS EXISTS
 ---------------
-The skill set was kept by hand in five places (README table, pick-skill, route-hint's name list,
+The skill set was kept by hand in five places (README table, pick-skill,
 plugin.json's count, marketplace.json's description), and they drifted: marketplace.json said
 "Twenty-five" when there were thirty-three. The source of truth is now each SKILL.md's frontmatter:
 `name`, `description`, `disable-model-invocation`, and `metadata.stage` / `metadata.card`.

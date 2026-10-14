@@ -13,8 +13,7 @@ written statement of what a correct report must say — and of what the agent mu
 skill "works" here when the agent names the planted thing, does **not** fall for the decoy sitting
 next to it, and its transcript shows the work its report claims.
 
-**The latest score is in [`RESULTS.md`](RESULTS.md)** (with vs without the skills, per case) and
-**[`ROUTING.md`](ROUTING.md)** (does the agent pick the right skill on its own).
+**The latest score is in [`RESULTS.md`](RESULTS.md)** (with vs without the skills, per case).
 
 ## The cases
 
@@ -130,19 +129,6 @@ python evals/judge.py --calibrate      # every good/good-alt must pass, every ba
 
 The phrase verdict is kept beside it in every run's `grade.txt`, and `--no-judge` grades on phrases
 alone (free, less accurate).
-
-## Does it pick the right skill? — `route_live.py` and `route.py`
-
-A skill that never loads does nothing, however good it is. `routing.json` holds requests people
-really type about one small service, none naming a skill, each with the skill(s) that fit — and a few
-where the right answer is *no* skill. `route_live.py` gives each to a real agent with the plugin
-loaded, records the first skill it opens, and also what the plugin's `route-hint` hook suggested.
-The table goes to `ROUTING.md`.
-
-The static, free counterpart is `route.py`: it checks `route-hint.py`'s `suggest()` function
-directly, against a fixed set of prompts written to expose overlap between skill descriptions. Run
-it on every change to `tools/route-hint.py`; run `route_live.py` when the change is bigger, or
-before a release, since it costs real API budget.
 
 ## Grading one report by hand
 

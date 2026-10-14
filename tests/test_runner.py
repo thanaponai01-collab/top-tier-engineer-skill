@@ -2,7 +2,7 @@
 """
 The eval runner, held by a test — without running an agent.
 
-run.py and route_live.py spend real usage, so they can't run in this suite. What
+run.py spends real usage, so they can't run in this suite. What
 can: everything they do with a transcript once they have one. These tests feed
 them hand-written transcripts and check the part that decides a score — what
 the agent did, in what order, and whether that counts.
@@ -20,7 +20,6 @@ sys.path.insert(0, EVALS)
 
 import agent  # noqa: E402
 import grade  # noqa: E402
-import route_live as route  # noqa: E402
 import run    # noqa: E402
 
 
@@ -344,32 +343,6 @@ class LessonsFromRealRuns(unittest.TestCase):
             self.assertFalse(grade.says_as_claim(text, phrase), phrase)
 
 
-class Routing(unittest.TestCase):
-    def test_judge(self):
-        self.assertTrue(route.judge(["debug-protocol"], "top-tier-engineer:debug-protocol"))
-        self.assertFalse(route.judge(["debug-protocol"], "debug"), "a built-in skill instead is a miss")
-        self.assertFalse(route.judge(["debug-protocol"], None))
-        self.assertTrue(route.judge([], None))
-        self.assertTrue(route.judge([], "update-config"))
-        self.assertFalse(route.judge([], "top-tier-engineer:drive"))
-
-    def test_the_hook_hint_is_read_by_running_the_hook(self):
-        skills = set(os.listdir(os.path.join(ROOT, "plugin", "skills")))
-        with tempfile.TemporaryDirectory() as tmp:
-            plugin = agent.stage_plugin(os.path.join(tmp, "p"))
-            self.assertEqual(route.hook_hint("What code in here is dead and safe to delete?",
-                                             plugin, skills), "latent-audit")
-            self.assertIsNone(route.hook_hint("What does HTTP status 418 mean?", plugin, skills))
-
-    def test_every_expected_skill_exists(self):
-        skills = set(os.listdir(os.path.join(ROOT, "plugin", "skills")))
-        for c in route.load()["cases"]:
-            for e in c["expect"]:
-                self.assertIn(e, skills, f"routing.json expects unknown skill {e!r}")
-            for s in skills:
-                self.assertNotIn(s, c["prompt"], f"a routing prompt names skill {s}: {c['prompt']}")
-
-
 class StagedPlugin(unittest.TestCase):
     def test_the_agent_gets_the_skills_but_not_the_answer_keys(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -381,16 +354,6 @@ class StagedPlugin(unittest.TestCase):
             self.assertTrue(os.path.isfile(os.path.join(dest, "agents", "setup-reader.md")))
             self.assertFalse(os.path.exists(os.path.join(dest, "evals")))
             self.assertFalse(os.path.exists(os.path.join(dest, "tests")))
-
-    def test_the_staged_front_door_prints_the_card(self):
-        # 2026-10-10: CATALOG.md was not staged, so every eval agent got an empty front door
-        # while a real install (the whole repo) got the card. Run the hook from the staged copy.
-        with tempfile.TemporaryDirectory() as tmp:
-            dest = agent.stage_plugin(os.path.join(tmp, "p"))
-            proc = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "front-door.py")],
-                                  input='{"cwd": "%s"}' % tmp.replace("\\", "/"),
-                                  capture_output=True, text=True, encoding="utf-8")
-            self.assertIn("/top-tier-engineer:drive", proc.stdout)
 
     def test_saved_evidence_carries_no_email_address(self):
         self.assertEqual(agent.redact("git -c user.email=someone.01@example.co.uk commit -m x"),

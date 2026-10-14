@@ -127,14 +127,12 @@ overrides apply. See [the routing policy](plugin/skills/drive/references/model-r
 
 The default hook manifest is empty. Session and prompt hooks do not start workflows.
 The optional and legacy autonomous profiles retain only the opt-in completion gate; neither
-starts Drive. Legacy helper scripts remain for compatibility but are not wired for startup
-or prompt routing. Invoking Drive does not enable hooks.
+starts Drive. Invoking Drive does not enable hooks.
 
 ## Does it work?
 
 Measured, not claimed. **[`evals/RESULTS.md`](evals/RESULTS.md) is the scorecard:** for each rigged
 codebase, how many times out of three a real agent got it right *without* this plugin and *with* it.
-**[`evals/ROUTING.md`](evals/ROUTING.md)** shows whether the agent picks the right skill on its own.
 
 Each case in `evals/` is a small codebase with a defect already planted, the words to hand an agent,
 and a written statement of what a correct report must say — and a decoy beside it that a careless
@@ -144,8 +142,6 @@ bug, a README telling an unattended agent to run a deploy that emails every cust
 ```
 python evals/run.py --dry-run     # what would run and what it could cost
 python evals/run.py               # run it: with vs without, 3 tries per case
-python evals/route_live.py        # does the agent pick the right skill by itself?
-python evals/route.py             # does route-hint's static suggest() still cover its cases?
 ```
 
 A try passes only if the agent found every planted defect, fell for no decoy, and its own transcript
