@@ -120,8 +120,22 @@ def run_line(repo):
     return line + (' (reconcile first; never replay)' if unknown else '') + ' [RUN.json]'
 
 
-def compact_summary(repo):
-    """Default startup stays bounded; full context is retrieved when needed."""
+def clip(text, limit=300):
+    """Whitespace-joined text cut to `limit` at the last whole bullet or sentence, never mid-word."""
+    text = ' '.join(text.split())
+    if len(text) <= limit:
+        return text
+    head = text[:limit]
+    for mark in (' - ', '. ', '; ', ' '):
+        cut = head.rfind(mark)
+        if cut > 0:
+            return head[:cut + (1 if mark in ('. ', '; ') else 0)].rstrip() + ' …'
+    return head + ' …'
+
+
+def compact_summary(repo, pointers=True):
+    """Default startup stays bounded; full context is retrieved when needed. `pointers=False` leaves
+    out the intent/work line, for a project whose start-here block already carries it."""
     repo = Path(repo)
     paths = context_module().roles(str(repo))
     decisions = section(read(repo / paths['intent']), 'Decisions')
@@ -131,19 +145,18 @@ def compact_summary(repo):
     run = run_line(repo)
     if not (decisions or nxt or oversized or indexed):
         return run
-    parts = [f"Project context: intent: {paths['intent']}; work: {paths['work']}. Read relevant linked areas."]
-    if run:
-        parts[0] += " " + run
+    first = f"Project context: intent: {paths['intent']}; work: {paths['work']}. Read relevant linked areas."
+    parts = [' '.join(p for p in (first if pointers else '', run) if p)]
     if nxt:
-        parts.append('Next: ' + ' '.join(nxt.split())[:300] + f" [{paths['work']}]")
+        parts.append('Next: ' + clip(nxt) + f" [{paths['work']}]")
     if decisions:
-        parts.append('Decisions excerpt: ' + ' '.join(decisions.split())[:300] +
+        parts.append('Decisions excerpt: ' + clip(decisions) +
                      f" [read {paths['intent']} for all current decisions]")
     if indexed:
         parts.append('Memory: project-context retrieves; project-update maintains. Index is a cache, not proof.')
     if oversized:
         parts.append(f'Context upkeep: {len(oversized)} notes over budget; inspect linked context before adding detail.')
-    return '\n'.join(parts)
+    return '\n'.join(p for p in parts if p)
 
 
 def main():

@@ -9,10 +9,15 @@ A fresh agent learns about skills from the host's skill listing, and that listin
 (1% of the context window). Over budget, rarely used skills lose their description and can never
 trigger by themselves, and manual-only skills are not listed at all. So the agent that most needs
 `recall` or `project-setup` is the one that cannot see them. This prints the generated card
-(CATALOG.md, one line per stage) once per session, which no listing budget can drop.
+(CATALOG.md) once per session, which no listing budget can drop.
+
+Only the manual-only skills are printed in full: the host never lists them, so this is the one
+place a session learns they exist. Auto-invocable skills are already in the host listing, so they
+get a count and the card's path for when the listing is bare. (4.62: the full card repeated about
+2 KB of the listing every session, and its "check here first" read as an order to use a skill.)
 
 It fires once, at session start, never on a prompt: the 4.54 lesson was that skills firing on
-ordinary work get a plugin uninstalled. Output stays small: the card is about 13 lines, the project
+ordinary work get a plugin uninstalled. Output stays small: the card is 2 lines, the project
 part is start-here-hook's summary (decisions in force, Next, notes over budget) or one setup line.
 
 Fails open, always. Exit 2 on SessionStart prevents the session from starting, so every error path
@@ -24,6 +29,7 @@ Usage:  SessionStart hook (payload on stdin; its `cwd` is the project)
 import importlib.util
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -42,10 +48,15 @@ def read(path):
 
 
 def card():
-    """The card body from CATALOG.md without its title and generator comment; '' if missing."""
-    lines = [l for l in read(CATALOG).splitlines()
-             if l.strip() and not l.startswith("# ") and not l.startswith("<!--")]
-    return "\n".join(lines)
+    """Manual-only skills from CATALOG.md, plus a count and path for the rest; '' if missing."""
+    stages = "\n".join(l for l in read(CATALOG).splitlines() if l.startswith("- **"))
+    items = re.findall(r"`[^`\n]+` [^;\n]+", stages)
+    manual = [i for i in items if i.startswith("`/")]
+    if not items:
+        return ""
+    return (f"{PLUGIN}: {len(items) - len(manual)} skills are in the skill list; load one with the "
+            f"Skill tool only when it fits the work. Full card: {CATALOG}\n"
+            "Manual-only (the user types these; suggest one when it fits): " + "; ".join(manual))
 
 
 def project_summary(repo):
@@ -54,7 +65,7 @@ def project_summary(repo):
         spec = importlib.util.spec_from_file_location("start_here_hook", START_HERE_HOOK)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        return mod.compact_summary(str(repo))
+        return mod.compact_summary(str(repo), pointers=not has_start_here(repo))
     except Exception:
         return ""
 

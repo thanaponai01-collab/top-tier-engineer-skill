@@ -10,7 +10,7 @@ Extend the existing independent-skills plugin with bounded, searchable project m
     `CATALOG.md` (what a fresh session sees) and the README table.
   - which skill for which job, flows, the nine-checkpoint Relay: `skills/pick-skill/SKILL.md`.
   - driven-run state and evidence: `RUN.json` via `skills/drive`; unattended variant: `drive-overnight`.
-  - shared engineering philosophy: `PHILOSOPHY.md` (imported by the user's global CLAUDE.md, not by skills).
+  - shared engineering philosophy: `PHILOSOPHY.md` (optional: loaded only by the opt-in philosophy hook in `hooks/optional.json` and `hooks/autonomous.json`; no longer imported globally since 4.62.0).
   - project-memory convention: `skills/project-context/references/memory.md`; setup categories:
     `skills/project-foundation/references/foundation.md`.
   - proof that a skill changes agent behaviour: `evals/` (`cases/`, `RESULTS.md`); helper tests: `tests/`.

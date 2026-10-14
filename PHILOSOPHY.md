@@ -2,7 +2,7 @@
 
 These are engineering guidelines, not a required workflow. Work directly for small changes: a
 typo, a rename, a one-line fix, a question. For multi-step work, check the skill card first
-(CATALOG.md, shown at session start) and load the skill that fits; skip it when you can say what it
+(CATALOG.md) and load the skill that fits; skip it when you can say what it
 would not add.
 Choose `drive` explicitly to orchestrate the skills. Create workflow files only when useful
 for the task or required by the workflow the user chose. Existing user authorization applies.

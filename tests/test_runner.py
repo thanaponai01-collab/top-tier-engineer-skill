@@ -390,7 +390,7 @@ class StagedPlugin(unittest.TestCase):
             proc = subprocess.run([sys.executable, os.path.join(dest, "tools", "front-door.py")],
                                   input='{"cwd": "%s"}' % tmp.replace("\\", "/"),
                                   capture_output=True, text=True, encoding="utf-8")
-            self.assertIn("by where the work is", proc.stdout)
+            self.assertIn("/top-tier-engineer:recall", proc.stdout)
 
     def test_saved_evidence_carries_no_email_address(self):
         self.assertEqual(agent.redact("git -c user.email=someone.01@example.co.uk commit -m x"),

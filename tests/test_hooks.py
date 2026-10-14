@@ -73,11 +73,16 @@ _fspec.loader.exec_module(front_door)
 class TestFrontDoor(unittest.TestCase):
     """The default hook: the card always, then project state or one setup line, then freshness."""
 
-    def test_card_names_every_skill(self):
+    def test_card_names_every_manual_skill_and_links_the_full_card(self):
         _, out, _ = run_hook(FRONT_DOOR, {"cwd": str(ROOT)})
+        catalog = (ROOT / "CATALOG.md").read_text(encoding="utf-8")
+        self.assertIn(str(ROOT / "CATALOG.md"), out)
         for d in (ROOT / "skills").iterdir():
-            if (d / "SKILL.md").is_file():
-                self.assertIn(d.name + "`", out, d.name)
+            f = d / "SKILL.md"
+            if f.is_file():
+                self.assertIn(d.name + "`", catalog, d.name)
+                if "disable-model-invocation: true" in f.read_text(encoding="utf-8"):
+                    self.assertIn(f"/top-tier-engineer:{d.name}`", out, d.name)
 
     def test_a_cold_git_project_is_told_to_set_up(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -101,8 +106,40 @@ class TestFrontDoor(unittest.TestCase):
     def test_a_folder_that_is_not_a_project_gets_only_the_card(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, out, _ = run_hook(FRONT_DOOR, {"cwd": tmp})
-            self.assertIn("by where the work is", out)
+            self.assertIn("/top-tier-engineer:recall", out)
             self.assertNotIn("project-setup once", out)
+
+    def test_the_card_names_manual_skills_and_does_not_repeat_the_listing(self):
+        # 4.62: the full card repeated the host's skill listing (~2 KB) every session and said
+        # "check here first". Manual-only skills are the part the listing never shows.
+        card = front_door.card()
+        self.assertIn("/top-tier-engineer:drive", card)
+        self.assertIn("/top-tier-engineer:recall", card)
+        self.assertNotIn("`debug-protocol`", card)
+        self.assertNotIn("check here first", card)
+        self.assertIn("CATALOG.md", card)
+        self.assertLess(len(card), 1000)
+
+    def test_a_start_here_block_is_not_repeated_by_the_summary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "BUILD.md").write_text("# Build\n\n## Next\n- route it\n", encoding="utf-8")
+            self.assertIn("Project context: intent", front_door.front_door(tmp))
+            (Path(tmp) / "CLAUDE.md").write_text("<!-- start-here -->\nintent: BRIEF.md\n"
+                                                  "<!-- /start-here -->\n", encoding="utf-8")
+            out = front_door.front_door(tmp)
+            self.assertNotIn("Project context: intent", out)
+            self.assertIn("Next: - route it", out)
+
+    def test_long_decisions_are_cut_at_a_boundary_not_mid_word(self):
+        _sspec = importlib.util.spec_from_file_location("start_here_hook", TOOLS / "start-here-hook.py")
+        sh = importlib.util.module_from_spec(_sspec)
+        _sspec.loader.exec_module(sh)
+        text = "- " + "alpha beta gamma. " * 10 + "- Retrieval is ready later"
+        out = sh.clip(text, 200)
+        self.assertTrue(out.endswith(" …"))
+        self.assertNotIn("Retrieval is rea", out)
+        self.assertTrue(out[:-2].endswith("."))
+        self.assertEqual(sh.clip("short", 200), "short")
 
     def test_a_source_checkout_ahead_of_the_install_is_flagged(self):
         with tempfile.TemporaryDirectory() as tmp:
