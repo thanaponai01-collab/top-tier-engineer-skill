@@ -1,6 +1,0 @@
-Run: doctor failed; no check was run.
-        Traceback (most recent call last):
-          File "C:\Users\thana\AppData\Local\Temp\tmplmt5fd7z\probe.py", line 21, in <module>
-            assert identity['owner'] == config['owner'] and identity['build'] == 'p02-v1', 'wrong owned build'
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        AssertionError: wrong owned build

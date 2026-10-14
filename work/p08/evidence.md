@@ -39,9 +39,9 @@ baseline: `evals/results/2026-10-13-1804/`; post-edit replay: `evals/results/p08
 - Initial repository proof passed: `python -m unittest discover tests` (500 tests) and `python tools/catalog.py --check` (36 skills). `git diff --check` is clean. The required RUN.json finish replay remains.
 - Missing-skill behavior is documented and structurally checked, but no live trial removed a skill
   from the staged plugin. Broader behavior and reliability remain unmeasured.
-- The first draft run was preserved as `docs/RUN.p08-contract-revised.json` after expanding its
+- The first draft run was preserved as `work/runs/RUN.p08-contract-revised.json` after expanding its
   content checker. Its before-edit baseline remains retained for the revised run.
-- A later repository gate failure is preserved as `docs/RUN.p08-proof-failed.json`. It exposed a
+- A later repository gate failure is preserved as `work/runs/RUN.p08-proof-failed.json`. It exposed a
   prompt/grader leak and a 40-line BUILD.md limit. The prompt and fixture stayed unchanged; the
   rubric was narrowed to passing evidence, the baseline was rescored, and BUILD.md is back within
   its limit. The corrected repository gate completed with all checks passing. A final handoff status/format correction is being revalidated by the current RUN.json finish replay.

@@ -21,7 +21,7 @@ loading behavior on this fixture; it does not measure repeatability or general r
 Raw artifacts: `evals/results/pstack-next/project-context-task-trail/` (initial baseline) and
 `evals/results/pstack-next-replay/project-context-task-trail/` (post-change replay). The earlier
 failed Drive attempts and contracts remain separately retained at
-`docs/RUN.pstack-next-initial-failed.json`, `docs/RUN.pstack-next-checker-failed.json`,
+`work/runs/RUN.pstack-next-initial-failed.json`, `work/runs/RUN.pstack-next-checker-failed.json`,
 `work/pstack-next/contract.initial.json`, and `work/pstack-next/contract.v2.json`.
 
 ## Repeated upkeep

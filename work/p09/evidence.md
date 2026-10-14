@@ -22,7 +22,7 @@ PR mutation, independent per-PR verification or large-team execution.
 The first post-change replay in [the retained output](../../evals/results/p09-final/) passed 8/8
 without Drive and 7/8 with Drive, but the case incorrectly rewarded parallelizing C and D without a
 named shared-storage owner. The evaluator process also exited zero when the with arm failed. That
-run is preserved as failed in [the run archive](../../docs/RUN.p09-behavior-gate-failed.json); its
+run is preserved as failed in [the run archive](../runs/RUN.p09-behavior-gate-failed.json); its
 verdict is not acceptance evidence. The corrected case now requires the missing boundary, and the
 behavior command checks the retained per-arm pass state before it can exit zero.
 
@@ -38,14 +38,14 @@ behavior difference on the planted shared-boundary finding; it does not establis
 cost savings, large-team execution or real forge-state accuracy.
 
 The initial post-change replay and its defective check are preserved under
-[the failed run](../../evals/results/p09-final/) and [run journal](../../docs/RUN.p09-behavior-gate-failed.json).
+[the failed run](../../evals/results/p09-final/) and [run journal](../runs/RUN.p09-behavior-gate-failed.json).
 The corrected acceptance case and replay-safe result check are retained in the repo. Repository
 suite and catalog proof are recorded in RUN.json. No external PR actions, installed-plugin update,
 release or version change is authorized by this task.
 
 The first retained-result checker run failed on a Windows path separator mismatch; it did not rerun
 the agent or invalidate the live evaluation. The failure is preserved in
-[the checker run journal](../../docs/RUN.p09-evidence-path-failed.json); the checker now normalizes
+[the checker run journal](../runs/RUN.p09-evidence-path-failed.json); the checker now normalizes
 the action-log path before confirming the new reference was read.
 
 An initial content-check preflight also used literal phrases that were split by line wrapping or
