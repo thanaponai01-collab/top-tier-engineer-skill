@@ -22,5 +22,5 @@ The same check accepts exit-zero output. This is harness discrimination, not a n
 model-behavior trial or a reliability estimate; no skill instructions changed.
 
 Repository suite and final replay receipts are in RUN.json. Catalog check remains required.
-The completed P02 run is preserved in docs/RUN.pre-p03.json. Unrelated
-`docs/RUN.project-foundation.json` is preserved. Git history owns the commit identity.
+The completed P02 run is preserved in work/runs/RUN.pre-p03.json. Unrelated
+`work/runs/RUN.project-foundation.json` is preserved. Git history owns the commit identity.

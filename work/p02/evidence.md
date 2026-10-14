@@ -2,7 +2,7 @@
 
 2026-10-13, Asia/Bangkok. Authorized by `/drive implement the p02`.
 Local implementation, committed in the P02 slice (see Git history); no version bump, release or installed-plugin update.
-RUN.json owns the execution gate; docs/RUN.pre-p02.json preserves the completed P01 run.
+RUN.json owns the execution gate; work/runs/RUN.pre-p02.json preserves the completed P01 run.
 
 ## Result and implementation
 

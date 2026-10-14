@@ -15,9 +15,9 @@ fixtures; done when bounded loading and unchanged second-pass files are demonstr
 One bounded baseline/post fresh-reader replay and one upkeep replay per arm passed; second-pass Markdown bytes stayed unchanged. Broader reliability/repeatability remain open. [Evidence](work/pstack-next/evidence.md).
 ## P01 slice
 Proof: `python -m unittest discover tests -p test_runner.py` distinguishes staged reads, Skill calls and unrelated reads; initial failure rejected, then green. [P01 evidence](work/p01/evidence.md).
-Implementation is on codex/p01-behavior-evidence; RUN.json owns execution state; earlier run: `docs/RUN.pre-p01.json`.
+Implementation is on codex/p01-behavior-evidence; RUN.json owns execution state; earlier run: `work/runs/RUN.pre-p01.json`.
 ## Existing work
-Includes: `work/skill-composition.md`, `work/pstack-handoff.md` (PStack), `work/task-context.md` (retrieval), `work/recall-improvement.md` (fresh-context gaps), `work/plugin-baseline.md` (prior claims), and `PLAN.md` (P09).
+Includes: `work/skill-composition.md`, `work/pstack-handoff.md` (PStack), `work/task-context.md` (retrieval), `work/recall-improvement.md` (fresh-context gaps), `work/plugin-baseline.md` (prior claims), and `work/runs/PLAN.p09.md` (P09).
 ## P02 slice
 Proof line: python -m unittest discover tests -p test_project_recipe.py; real application trials must reject wrong writes and old servers, retain evidence and leave owned resources stopped. Application trials pass; committed with the P02 implementation (Git history owns the commit ID). Evidence: [P02 evidence](work/p02/evidence.md). RUN.json owns the final repository gate.
 ## P03 slice
@@ -29,7 +29,7 @@ Decisive safety-assumption guidance and unchanged-boundary bad/safe probe implem
 ## P04 slice
 Proof line: `python tools/catalog.py --check` and `python evals/run.py --cases perf-optimize-benchmark-validity` must retain rejection of no-op/errors/unfair builds and inconclusive noise. Implemented; sampling procedure partial. Git history owns the commit identity. [Evidence](work/p04/evidence.md); RUN.json owns the gate.
 ## P07 slice
-Proof line: `python -m unittest discover -s tests -p test_p07.py` rejects healthy same-HEAD processes after dirty source, config digest, flags, role, or mock changes; grader calibration 44/44, baseline/skill replay 1/1 each, full suite 500/500, and catalog 36 skills pass. Implemented and verified; uncommitted. Current gate: RUN.json; prior rejected runs preserved under docs/RUN.p07-*.json. [P07 evidence](work/p07/evidence.md).
+Proof line: `python -m unittest discover -s tests -p test_p07.py` rejects healthy same-HEAD processes after dirty source, config digest, flags, role, or mock changes; grader calibration 44/44, baseline/skill replay 1/1 each, full suite 500/500, and catalog 36 skills pass. Implemented and verified; uncommitted. Current gate: RUN.json; prior rejected runs preserved under work/runs/RUN.p07-*.json. [P07 evidence](work/p07/evidence.md).
 ## P08 slice
 Proof: full suite and catalog gate in RUN.json; direct-task behavior passed 1/1 per arm before and after. [P08 evidence](work/p08/evidence.md); missing-skill behavior is not live-tested.
 ## P09 slice

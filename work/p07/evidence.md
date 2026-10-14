@@ -27,7 +27,7 @@ for the bounded cases below; reliability beyond this single replay remains unmea
   `evals/results/p07-run2/`; two earlier failed skill attempts remain in `evals/results/p07-replay/`.
 - The full repository suite passed (500 tests), and `python tools/catalog.py --check` passed (36
   skills; listing 4993/5000 characters). The completed current-input gate is `RUN.json`; rejected
-  drafts and the earlier oracle-changed run remain preserved under `docs/RUN.p07-*.json`.
+  drafts and the earlier oracle-changed run remain preserved under `work/runs/RUN.p07-*.json`.
 
 ## Scope and limits
 

@@ -1,1 +1,0 @@
-VERIFY-STATE: red (red run 0 in a row)
