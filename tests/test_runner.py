@@ -354,7 +354,7 @@ class Routing(unittest.TestCase):
         self.assertFalse(route.judge([], "top-tier-engineer:drive"))
 
     def test_the_hook_hint_is_read_by_running_the_hook(self):
-        skills = set(os.listdir(os.path.join(ROOT, "skills")))
+        skills = set(os.listdir(os.path.join(ROOT, "plugin", "skills")))
         with tempfile.TemporaryDirectory() as tmp:
             plugin = agent.stage_plugin(os.path.join(tmp, "p"))
             self.assertEqual(route.hook_hint("What code in here is dead and safe to delete?",
@@ -362,7 +362,7 @@ class Routing(unittest.TestCase):
             self.assertIsNone(route.hook_hint("What does HTTP status 418 mean?", plugin, skills))
 
     def test_every_expected_skill_exists(self):
-        skills = set(os.listdir(os.path.join(ROOT, "skills")))
+        skills = set(os.listdir(os.path.join(ROOT, "plugin", "skills")))
         for c in route.load()["cases"]:
             for e in c["expect"]:
                 self.assertIn(e, skills, f"routing.json expects unknown skill {e!r}")
@@ -387,7 +387,7 @@ class StagedPlugin(unittest.TestCase):
         # while a real install (the whole repo) got the card. Run the hook from the staged copy.
         with tempfile.TemporaryDirectory() as tmp:
             dest = agent.stage_plugin(os.path.join(tmp, "p"))
-            proc = subprocess.run([sys.executable, os.path.join(dest, "tools", "front-door.py")],
+            proc = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "front-door.py")],
                                   input='{"cwd": "%s"}' % tmp.replace("\\", "/"),
                                   capture_output=True, text=True, encoding="utf-8")
             self.assertIn("/top-tier-engineer:drive", proc.stdout)
@@ -417,7 +417,7 @@ class StagedPlugin(unittest.TestCase):
 
 
 def complete_verify_loop(case, work):
-    helper = os.path.join(ROOT, "skills", "verify-loop", "scripts", "verify.py")
+    helper = os.path.join(ROOT, "plugin", "skills", "verify-loop", "scripts", "verify.py")
     product = os.path.join(work, "refund.py")
     correct = grade.read(product)
     with open(product, "w", encoding="utf-8") as fh:

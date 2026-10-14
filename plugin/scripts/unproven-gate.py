@@ -3,8 +3,7 @@
 unproven-gate — flags source files that were edited and never run.
 
 The habit this catches is the one nobody asks a skill for: code changed, the
-turn ended, and "it should work" stood in for a result. PHILOSOPHY.md #3 and
-#7 both land here — decide what done looks like, then say how you know.
+turn ended, and "it should work" stood in for a result.
 
 WHY UserPromptSubmit AND NOT Stop
 ---------------------------------

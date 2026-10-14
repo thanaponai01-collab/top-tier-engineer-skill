@@ -18,13 +18,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TOOLS = ROOT / "tools"
-GATE = TOOLS / "unproven-gate.py"
-PHILOSOPHY_HOOK = TOOLS / "philosophy-hook.py"
+SCRIPTS = ROOT / "plugin" / "scripts"
+GATE = SCRIPTS / "unproven-gate.py"
 ROUTE_HINT = TOOLS / "route-hint.py"
-STOP_GATE = TOOLS / "verify-stop-gate.py"
+STOP_GATE = SCRIPTS / "verify-stop-gate.py"
 START_HERE_HOOK = TOOLS / "start-here-hook.py"
 FRONT_DOOR = TOOLS / "front-door.py"
-VERIFY = ROOT / "skills" / "verify-loop" / "scripts" / "verify.py"
+VERIFY = ROOT / "plugin" / "skills" / "verify-loop" / "scripts" / "verify.py"
 
 # The hooks are hyphenated CLI scripts, so they are loaded by path rather than
 # imported by name.
@@ -77,7 +77,7 @@ class TestFrontDoor(unittest.TestCase):
         _, out, _ = run_hook(FRONT_DOOR, {"cwd": str(ROOT)})
         catalog = (ROOT / "CATALOG.md").read_text(encoding="utf-8")
         self.assertIn(str(ROOT / "CATALOG.md"), out)
-        for d in (ROOT / "skills").iterdir():
+        for d in (ROOT / "plugin" / "skills").iterdir():
             f = d / "SKILL.md"
             if f.is_file():
                 self.assertIn(d.name + "`", catalog, d.name)
@@ -429,7 +429,7 @@ class TestRouteHintSilence(unittest.TestCase):
     def test_every_rule_points_at_a_real_skill(self):
         for skill, _, _, _ in route_hint.COMPILED:
             self.assertIn(skill, route_hint.SKILLS, skill)
-            self.assertTrue((ROOT / "skills" / skill / "SKILL.md").is_file(), skill)
+            self.assertTrue((ROOT / "plugin" / "skills" / skill / "SKILL.md").is_file(), skill)
 
     def test_the_hint_names_an_optional_skill(self):
         text = route_hint.message(*route_hint.suggest("the app is broken"))
@@ -466,20 +466,6 @@ class TestRouteHintFailsOpen(unittest.TestCase):
         proc = subprocess.run([sys.executable, str(ROUTE_HINT), "--selftest"],
                               capture_output=True, text=True)
         self.assertEqual(proc.returncode, 0, proc.stderr)
-
-
-class TestPhilosophyHook(unittest.TestCase):
-    def test_emits_the_philosophy(self):
-        code, out, _ = run_hook(PHILOSOPHY_HOOK, {"hook_event_name": "SessionStart"})
-        self.assertEqual(code, 0)
-        self.assertIn("Understand before you change", out)
-        self.assertIn("Ground truth over memory", out)
-
-    def test_exits_zero_on_garbage(self):
-        # Exit 2 on SessionStart prevents the session from starting at all.
-        proc = subprocess.run([sys.executable, str(PHILOSOPHY_HOOK)],
-                              input="garbage", capture_output=True, text=True)
-        self.assertEqual(proc.returncode, 0)
 
 
 class TestStartHereHook(unittest.TestCase):
@@ -521,9 +507,9 @@ class TestStartHereHook(unittest.TestCase):
 class TestHooksManifest(unittest.TestCase):
     def test_explicit_entry_profiles(self):
         for name in ('hooks.json', 'optional.json', 'autonomous.json'):
-            manifest = json.loads((ROOT / 'hooks' / name).read_text())
+            manifest = json.loads((ROOT / 'plugin' / 'hooks' / name).read_text())
             self.assertEqual(set(manifest['hooks']), set() if name == 'hooks.json' else {'Stop'})
-        for path in (ROOT / 'skills').glob('*/SKILL.md'):
+        for path in (ROOT / 'plugin' / 'skills').glob('*/SKILL.md'):
             self.assertIn('disable-model-invocation: true', path.read_text(encoding='utf-8').split('---', 2)[1])
 
 
@@ -664,11 +650,11 @@ class TestDriveEntry(unittest.TestCase):
             self.assertEqual((proc.returncode, proc.stdout), (0, ""), stdin)
 
     def test_autonomous_profile_points_at_real_scripts(self):
-        manifest = json.loads((ROOT / "hooks" / "autonomous.json").read_text(encoding="utf-8-sig"))
+        manifest = json.loads((ROOT / "plugin" / "hooks" / "autonomous.json").read_text(encoding="utf-8-sig"))
         referenced = json.dumps(manifest)
         for script in ("verify-stop-gate.py",):
             self.assertIn(script, referenced)
-            self.assertTrue((TOOLS / script).is_file(), script)
+            self.assertTrue((SCRIPTS / script).is_file(), script)
 
     def test_selftest(self):
         proc = subprocess.run([sys.executable, str(self.ENTRY), "--selftest"], capture_output=True, text=True)

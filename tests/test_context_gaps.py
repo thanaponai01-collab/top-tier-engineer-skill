@@ -13,7 +13,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SKILLS = ROOT / "skills"
+SKILLS = ROOT / "plugin" / "skills"
 
 
 def load(name, path):

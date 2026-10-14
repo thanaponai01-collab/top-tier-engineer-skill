@@ -11,7 +11,7 @@ import unittest
 
 from _helpers import ROOT
 
-SCRIPT = Path(ROOT) / "skills/drive/scripts/run.py"
+SCRIPT = Path(ROOT) / "plugin/skills/drive/scripts/run.py"
 spec = importlib.util.spec_from_file_location("drive_run", SCRIPT)
 drive = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(drive)

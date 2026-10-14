@@ -26,7 +26,7 @@ end · **suspected** = neither.*
    action, never "whichever agent gets there first."
 
 2. **List every tool, before any is built.** For each tool, in one row: what it does, its reversibility
-   tier from `PHILOSOPHY.md` habit 5 (reversible: act; one-way: needs a human confirm, and a yes for one
+   tier (reversible: act; one-way: needs a human confirm, and a yes for one
    call never covers the next), and what it hands back into the agent's context. That last column is the
    one people skip: a tool that returns a fetched page, a file, another user's message, or any text you
    did not write yourself is handing the agent content an attacker could have shaped. Mark those rows —

@@ -23,9 +23,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SKILLS_DIR = ROOT / "skills"
+SKILLS_DIR = ROOT / "plugin" / "skills"
 CATALOG = ROOT / "CATALOG.md"
-PLUGIN_JSON = ROOT / ".claude-plugin" / "plugin.json"
+PLUGIN_JSON = ROOT / "plugin" / ".claude-plugin" / "plugin.json"
 MARKETPLACE_JSON = ROOT / ".claude-plugin" / "marketplace.json"
 README = ROOT / "README.md"
 PICK_SKILL = SKILLS_DIR / "pick-skill" / "SKILL.md"
@@ -109,7 +109,7 @@ def load_skills():
             try:
                 fm = frontmatter(read(f))
             except ValueError as e:
-                raise ValueError(f"skills/{d.name}/SKILL.md: {e}") from None
+                raise ValueError(f"plugin/skills/{d.name}/SKILL.md: {e}") from None
             fm["dir"] = d.name
             skills.append(fm)
     return skills
@@ -189,9 +189,9 @@ def problems(skills):
     found = []
     for s in skills:
         if s["name"] != s["dir"]:
-            found.append(f"skills/{s['dir']}: frontmatter name is {s['name']!r}")
+            found.append(f"plugin/skills/{s['dir']}: frontmatter name is {s['name']!r}")
         if not s["manual"] and len(s["description"]) > DESC_MAX:
-            found.append(f"skills/{s['dir']}: description is {len(s['description'])} chars, cap {DESC_MAX}")
+            found.append(f"plugin/skills/{s['dir']}: description is {len(s['description'])} chars, cap {DESC_MAX}")
     total = listing_chars(skills)
     if total > LISTING_MAX:
         found.append(f"skill listing is {total} chars, cap {LISTING_MAX}: shorten descriptions")
@@ -204,7 +204,7 @@ def problems(skills):
     pick = read(PICK_SKILL)
     for name in sorted(names - {"pick-skill"}):
         if f"`{name}`" not in pick:
-            found.append(f"skills/pick-skill/SKILL.md: never names `{name}`")
+            found.append(f"plugin/skills/pick-skill/SKILL.md: never names `{name}`")
     return found
 
 

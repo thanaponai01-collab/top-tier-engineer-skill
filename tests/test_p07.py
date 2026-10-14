@@ -26,8 +26,8 @@ class RunningArtifactIdentity(unittest.TestCase):
                 self.assertNotIn("head", prompt)
 
     def test_verify_loop_guides_material_running_artifact_identity(self):
-        skill = (Path(ROOT) / "skills/verify-loop/SKILL.md").read_text(encoding="utf-8").lower()
-        format_doc = (Path(ROOT) / "skills/verify-loop/VERIFY_FORMAT.md").read_text(encoding="utf-8").lower()
+        skill = (Path(ROOT) / "plugin/skills/verify-loop/SKILL.md").read_text(encoding="utf-8").lower()
+        format_doc = (Path(ROOT) / "plugin/skills/verify-loop/VERIFY_FORMAT.md").read_text(encoding="utf-8").lower()
         combined = skill + "\n" + format_doc
         for term in ("source", "dirty", "flags", "role", "mock", "head"):
             with self.subTest(term=term):

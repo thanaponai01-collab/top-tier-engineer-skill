@@ -556,7 +556,7 @@ def write_scorecard(results, meta, path=SCORECARD):
 
 
 def plugin_version():
-    with open(os.path.join(agent.ROOT, ".claude-plugin", "plugin.json"), encoding="utf-8") as fh:
+    with open(os.path.join(agent.PLUGIN, ".claude-plugin", "plugin.json"), encoding="utf-8") as fh:
         return json.load(fh).get("version", "?")
 
 

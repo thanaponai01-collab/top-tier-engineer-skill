@@ -4,7 +4,7 @@ Contract lives in RUN.json (frozen). Summary, so a stranger can tell when this i
 
 - Goal: a fresh agent finds what the repo is, where facts live, what is next; each skill list/flow
   has one home; merge candidates recorded with a verdict.
-- Exit check: `python skills/drive/scripts/run.py --repo . finish` (stages: tests.test_agent_context, then full suite).
+- Exit check: `python plugin/skills/drive/scripts/run.py --repo . finish` (stages: tests.test_agent_context, then full suite).
 - Budget: 6 attempts total, 4 hours. Two failed attempts on one idea: re-observe, then park.
 - Off limits: skill behaviour (SKILL.md procedures), evals/cases, hooks, tests other than the new one
   (except test files that assert the README table/flows I move).

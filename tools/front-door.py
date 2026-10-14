@@ -93,7 +93,7 @@ def freshness_line(repo):
     except OSError:
         return ""
     name, source = version_of(repo / ".claude-plugin" / "plugin.json")
-    _, installed = version_of(PLUGIN_ROOT / ".claude-plugin" / "plugin.json")
+    _, installed = version_of(PLUGIN_ROOT / "plugin" / ".claude-plugin" / "plugin.json")
     if name != PLUGIN or not source or not installed or source <= installed:
         return ""
     fmt = lambda v: ".".join(map(str, v))

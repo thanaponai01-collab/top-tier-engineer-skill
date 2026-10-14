@@ -21,7 +21,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # What a plugin install actually ships. The evals, their answer keys and the
 # test suite stay behind, so an agent that wanders around the plugin folder
 # cannot read the expected answer.
-PLUGIN_PARTS = (".claude-plugin", "skills", "agents", "hooks", "tools", "PHILOSOPHY.md", "CATALOG.md")
+PLUGIN = os.path.join(ROOT, "plugin")
 
 # Environment the child agent is allowed to see. Everything else — in
 # particular the parent session's own CLAUDE_CODE_* wiring — is dropped, so the
@@ -69,16 +69,10 @@ def stage_plugin(dest, hooks_profile=None):
     `hooks_profile` ("optional", "autonomous") installs hooks/<profile>.json as the staged
     plugin's hooks.json, the same copy a person makes by hand. The checkout is not touched.
     """
-    os.makedirs(dest, exist_ok=True)
-    for part in PLUGIN_PARTS:
-        src = os.path.join(ROOT, part)
-        if os.path.isdir(src):
-            shutil.copytree(src, os.path.join(dest, part),
-                            ignore=shutil.ignore_patterns(*IGNORED_DIRS))
-        elif os.path.isfile(src):
-            shutil.copy2(src, os.path.join(dest, part))
+    shutil.copytree(PLUGIN, dest, dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns(*IGNORED_DIRS))
     if hooks_profile:
-        shutil.copy2(os.path.join(ROOT, "hooks", hooks_profile + ".json"),
+        shutil.copy2(os.path.join(PLUGIN, "hooks", hooks_profile + ".json"),
                      os.path.join(dest, "hooks", "hooks.json"))
     return dest
 

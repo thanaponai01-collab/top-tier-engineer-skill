@@ -14,7 +14,7 @@ import os, sys, unittest
 
 from _helpers import ROOT
 
-SCRIPTS = os.path.join(ROOT, "skills", "structure-gate", "scripts")
+SCRIPTS = os.path.join(ROOT, "plugin", "skills", "structure-gate", "scripts")
 sys.path.insert(0, SCRIPTS)
 
 import structure_opacity as opacity  # noqa: E402  - imported after the path is set

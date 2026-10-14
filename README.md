@@ -1,7 +1,6 @@
 # Top-Tier Engineer
 
-Thirty-six engineering skills for AI coding agents, plus one philosophy file. Skills say *what* to
-do for a task; `PHILOSOPHY.md` offers optional engineering guidelines.
+Thirty-six engineering skills for AI coding agents. Skills say *what* to do for a task.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
 work to another skill it also says what to do when that skill isn't there. `evals/` holds the
@@ -9,7 +8,7 @@ rigged codebases that check whether the skills actually find what they claim to 
 
 ## Use with Codex
 
-The Codex manifest at `.codex-plugin/plugin.json` exposes the canonical `skills/` directory.
+The Codex manifest at `plugin/.codex-plugin/plugin.json` exposes the canonical `plugin/skills/` directory.
 Install a packaged repository archive from **Plugins**, or copy selected skill folders intact to a
 project's `.agents/skills/` directory. Keep project-specific guidance in the project's `AGENTS.md`.
 
@@ -32,7 +31,7 @@ the agent discovers existing commands, entry points and tests, then verifies the
 FEATURES.md map is optional; `project-foundation` prepares those records; `project-setup` prepares agent instructions.
 The map records what was found, while executed checks establish what worked.
 
-**Other agents:** every `skills/<name>/SKILL.md` is plain markdown. Copy the one you need and
+**Other agents:** every `plugin/skills/<name>/SKILL.md` is plain markdown. Copy the one you need and
 paste it — it carries its own vocabulary and its own fallbacks, so nothing silently depends on
 the rest of this repo being loaded.
 
@@ -90,7 +89,7 @@ from each skill's frontmatter, as is [CATALOG.md](CATALOG.md), the card a fresh 
 
 `drive` includes an evidence controller: RUN.json owns the contract, stage evidence, attempts and
 the external-action journal (`init`, `next`, `check`, `begin`, `reconcile`, `finish`, `status`,
-`stop blocked|failed`; see its [run contract](skills/drive/references/run-contract.md)). The promise
+`stop blocked|failed`; see its [run contract](plugin/skills/drive/references/run-contract.md)). The promise
 is a verified result in the requested environment **or an explicit blocked/failed handoff with
 preserved work**. It is not a scheduler or security sandbox: keep independent acceptance checks in
 CI and restrict host tools and credentials. Other agents can put `status` in their completion gate.
@@ -114,15 +113,15 @@ them and `project-update` repairs missed updates. `recall`'s `context_budget.py 
 names every note over budget and the move that fixes it. Code describes implemented behavior;
 owner requirements describe intended behavior, and mismatches are reported, not overwritten.
 
-The helper is `skills/project-context/scripts/context.py` (run with `--repo <project>`): `next`,
+The helper is `plugin/skills/project-context/scripts/context.py` (run with `--repo <project>`): `next`,
 `search WORDS --limit 5`, `show ID`, `affected PATHS`, `index [--files ...]`, `check`. Queries
 never write the cache; a missing or corrupt index falls back to bounded file retrieval. Ownership,
-metadata, budgets and freshness live in [the memory convention](skills/project-context/references/memory.md);
-foundation categories in [foundation](skills/project-foundation/references/foundation.md).
+metadata, budgets and freshness live in [the memory convention](plugin/skills/project-context/references/memory.md);
+foundation categories in [foundation](plugin/skills/project-foundation/references/foundation.md).
 
 Worker routing: the plugin ships `drive-executor` (Sonnet) and read-only `setup-reader` (Haiku);
 `drive` dispatches bounded assignments, the coordinator checks the product evidence, and host
-overrides apply. See [the routing policy](skills/drive/references/model-routing.md).
+overrides apply. See [the routing policy](plugin/skills/drive/references/model-routing.md).
 
 ## Hooks
 
@@ -154,6 +153,10 @@ shows it did the work its report claims — the repro ran before the fix, the de
 fired, production was left alone. The answer key never reaches the agent. See `evals/README.md`.
 
 ## Developing
+
+The repo is a workshop around the plugin. Only `plugin/` is installed: the skills, the two
+agents, the hook profiles and the one completion-gate script. Everything else (`evals/`,
+`tests/`, `tools/`, `docs/`) stays in the checkout; the marketplace points at `./plugin`.
 
 ```
 python -m unittest discover tests

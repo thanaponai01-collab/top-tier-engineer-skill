@@ -45,7 +45,7 @@ MAX_PROMPT = 20_000  # a pasted stack trace is not a routing question
 # Every skill in this plugin, read from skills/ so a new or renamed skill needs
 # no edit here. A prompt that already says one of these needs no help choosing,
 # so the hook stays out of the way.
-SKILLS_DIR = Path(__file__).resolve().parent.parent / "skills"
+SKILLS_DIR = Path(__file__).resolve().parent.parent / "plugin" / "skills"
 try:
     SKILLS = tuple(sorted(p.name for p in SKILLS_DIR.iterdir() if (p / "SKILL.md").is_file()))
 except OSError:

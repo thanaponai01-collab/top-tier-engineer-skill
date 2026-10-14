@@ -1,7 +1,7 @@
 # Current build
 
 Goal: independent skills share bounded, searchable context; files own facts and SQLite indexes them.
-Released: see `.claude-plugin/plugin.json` (version) and `CHANGELOG.md` (what each release changed).
+Released: see `plugin/.claude-plugin/plugin.json` (version) and `CHANGELOG.md` (what each release changed).
 Older per-slice build notes and their evidence paths: `BUILD.archive.md` (read only when asked).
 
 ## State
@@ -33,7 +33,7 @@ Proof line: `python -m unittest discover -s tests -p test_p07.py` rejects health
 ## P08 slice
 Proof: full suite and catalog gate in RUN.json; direct-task behavior passed 1/1 per arm before and after. [P08 evidence](work/p08/evidence.md); missing-skill behavior is not live-tested.
 ## P09 slice
-Guide: [program delivery](skills/drive/references/program-delivery.md). Proof: `python work/p09/check_behavior_evidence.py`, full suite and catalog check in RUN.json; optional bounded program/stack guidance only, no forge actions. [P09 evidence](work/p09/evidence.md); uncommitted.
+Guide: [program delivery](plugin/skills/drive/references/program-delivery.md). Proof: `python work/p09/check_behavior_evidence.py`, full suite and catalog check in RUN.json; optional bounded program/stack guidance only, no forge actions. [P09 evidence](work/p09/evidence.md); uncommitted.
 ## Explicit Drive entry
 All skills are manual-only; default hooks are empty, opt-in profiles retain only completion checks,
 and Drive reads specialist procedures as needed. Hook/catalog checks pass; live replay is blocked

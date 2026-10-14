@@ -61,7 +61,7 @@ def hook_hint(prompt, plugin_dir, skills):
                           "hook_event_name": "UserPromptSubmit", "cwd": plugin_dir})
     env = dict(agent.clean_env(), CLAUDE_PLUGIN_ROOT=plugin_dir)
     try:
-        out = subprocess.run([sys.executable, os.path.join(plugin_dir, "tools", "route-hint.py")],
+        out = subprocess.run([sys.executable, os.path.join(agent.ROOT, "tools", "route-hint.py")],
                              input=payload, capture_output=True, text=True, timeout=30, env=env).stdout
     except (OSError, subprocess.TimeoutExpired):
         return None
@@ -89,7 +89,7 @@ def one(case, i, fixture, plugin_dir, args):
         parsed = agent.parse_stream(raw["lines"])
         pick = first_pick(parsed)
         ok = judge(case["expect"], pick)
-        hint = hook_hint(case["prompt"], plugin_dir, set(os.listdir(os.path.join(agent.ROOT, "skills"))))
+        hint = hook_hint(case["prompt"], plugin_dir, set(os.listdir(os.path.join(agent.PLUGIN, "skills"))))
         hint_ok = judge(case["expect"], PLUGIN_PREFIX + hint if hint else None)
         print(f"{'right' if ok else 'WRONG'}  {pick or '(none)':40} hint={hint or '-':18} ← "
               f"{case['prompt'][:60]}", flush=True)

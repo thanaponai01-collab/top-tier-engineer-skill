@@ -6,16 +6,16 @@ import subprocess, sys, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPTS = {
-    "structure-report.py": os.path.join(ROOT, "skills", "structure-gate", "scripts"),
-    "graph-audit.py": os.path.join(ROOT, "skills", "latent-audit", "scripts"),
-    "change-map.py": os.path.join(ROOT, "skills", "arch-design", "scripts"),
-    "dep-map.py": os.path.join(ROOT, "skills", "arch-design", "scripts"),
-    "verify.py": os.path.join(ROOT, "skills", "verify-loop", "scripts"),
-    "compliance.py": os.path.join(ROOT, "skills", "verify-loop", "scripts"),
-    "arch-design.py": os.path.join(ROOT, "skills", "arch-design", "scripts"),
-    "features.py": os.path.join(ROOT, "skills", "feature-map", "scripts"),
-    "history.py": os.path.join(ROOT, "skills", "code-history", "scripts"),
-    "context_budget.py": os.path.join(ROOT, "skills", "recall", "scripts"),
+    "structure-report.py": os.path.join(ROOT, "plugin", "skills", "structure-gate", "scripts"),
+    "graph-audit.py": os.path.join(ROOT, "plugin", "skills", "latent-audit", "scripts"),
+    "change-map.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
+    "dep-map.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
+    "verify.py": os.path.join(ROOT, "plugin", "skills", "verify-loop", "scripts"),
+    "compliance.py": os.path.join(ROOT, "plugin", "skills", "verify-loop", "scripts"),
+    "arch-design.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
+    "features.py": os.path.join(ROOT, "plugin", "skills", "feature-map", "scripts"),
+    "history.py": os.path.join(ROOT, "plugin", "skills", "code-history", "scripts"),
+    "context_budget.py": os.path.join(ROOT, "plugin", "skills", "recall", "scripts"),
 }
 
 

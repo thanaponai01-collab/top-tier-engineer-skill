@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.64.0 - 2026-10-14 - plugin folder split, philosophy removed
+
+- **Install is only the plugin:** skills, agents, hooks and both manifests moved into `plugin/`;
+  the marketplace now points at `./plugin`. Installs no longer copy evals, tests, docs or work
+  notes (about 4,500 tracked files before; the plugin folder holds about 100).
+- The completion gate and its helper moved from `tools/` to `plugin/scripts/`; hook profiles
+  call `${CLAUDE_PLUGIN_ROOT}/scripts/verify-stop-gate.py`. Dev-only legacy hooks stay in `tools/`.
+- **PHILOSOPHY.md removed** with its loader hook: nothing loaded it once skills became manual-only.
+  `agent-design` now states its reversibility rule inline.
+- Plugin descriptions no longer advertise a session-start skill card or tell agents to pick skills.
+- The finished run record `RUN.json` moved to `docs/RUN.pstack-next-complete-before-plugin-split.json`;
+  its inputs named the old `skills/` paths, so the completion gate rejected it after the move.
+- Unit suite: 499 tests pass; catalog check passes.
+
 ## 4.63.0 - 2026-10-14 - explicit Drive entry and Codex packaging
 
 - All skills are manual-only. The default hook manifest is empty; optional profiles retain only

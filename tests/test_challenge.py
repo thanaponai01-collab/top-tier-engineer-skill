@@ -212,7 +212,7 @@ class AutoChallenge(unittest.TestCase):
 
     def test_polyglot_mutation_operators(self):
         import sys
-        sys.path.insert(0, str(Path(__file__).parent.parent / "skills" / "verify-loop" / "scripts"))
+        sys.path.insert(0, str(Path(__file__).parent.parent / "plugin" / "skills" / "verify-loop" / "scripts"))
         from mutate import generate
         js_code = "function check(a, b) {\n    if (a === b && a !== null) {\n        return true;\n    }\n    return false;\n}"
         mutations = generate(js_code, limit=10, lang="js")

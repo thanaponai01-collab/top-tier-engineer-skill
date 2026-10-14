@@ -65,8 +65,8 @@ class Cases(unittest.TestCase):
 
     def test_expectations_name_their_skill_and_say_what_is_planted(self):
         skills = {
-            d for d in os.listdir(os.path.join(ROOT, "skills"))
-            if os.path.isfile(os.path.join(ROOT, "skills", d, "SKILL.md"))
+            d for d in os.listdir(os.path.join(ROOT, "plugin", "skills"))
+            if os.path.isfile(os.path.join(ROOT, "plugin", "skills", d, "SKILL.md"))
         }
         for name in grade.case_names():
             case = grade.load_case(name)
@@ -163,7 +163,7 @@ class PlainPrompts(unittest.TestCase):
     """
 
     def test_each_case_has_a_plain_prompt_naming_no_skill(self):
-        skills = os.listdir(os.path.join(ROOT, "skills"))
+        skills = os.listdir(os.path.join(ROOT, "plugin", "skills"))
         for name in grade.case_names():
             path = os.path.join(grade.CASES_DIR, name, "prompt-plain.md")
             self.assertTrue(os.path.isfile(path), f"{name}: missing prompt-plain.md")
@@ -185,8 +185,8 @@ class EveryNewSkillHasACase(unittest.TestCase):
             return {l.strip() for l in fh if l.strip() and not l.startswith("#")}
 
     def test_every_skill_has_a_case_or_is_listed_as_untested(self):
-        skills = {d for d in os.listdir(os.path.join(ROOT, "skills"))
-                  if os.path.isfile(os.path.join(ROOT, "skills", d, "SKILL.md"))}
+        skills = {d for d in os.listdir(os.path.join(ROOT, "plugin", "skills"))
+                  if os.path.isfile(os.path.join(ROOT, "plugin", "skills", d, "SKILL.md"))}
         covered = {grade.load_case(n)["skill"] for n in grade.case_names()}
         listed = self.uncovered()
         missing = sorted(skills - covered - listed)
@@ -384,7 +384,7 @@ class ActionChecks(unittest.TestCase):
     def solve(self):
         shutil.copytree(os.path.join(self.case["dir"], "reference", "solution"),
                         self.work, dirs_exist_ok=True)
-        helper = os.path.join(os.path.dirname(grade.CASES_DIR), "..", "skills", "verify-loop", "scripts", "verify.py")
+        helper = os.path.join(os.path.dirname(grade.CASES_DIR), "..", "plugin", "skills", "verify-loop", "scripts", "verify.py")
         correct = read(os.path.join(self.work, "refund.py"))
         self.write("refund.py", read(os.path.join(self.case["dir"], "fixture", "refund.py")))
         for command in ("run", "baseline"):

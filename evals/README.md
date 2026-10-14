@@ -4,7 +4,7 @@ For verify-loop's predeclared trust bar, historical baseline, and held-out proto
 read [VERIFY_TRUST.md](VERIFY_TRUST.md). `verify_trust.py` summarizes one saved
 batch without running agents; insufficient evidence exits nonzero.
 
-These skills are behavioural instructions. The Python under `skills/*/scripts/` has unit tests, but
+These skills are behavioural instructions. The Python under `plugin/skills/*/scripts/` has unit tests, but
 the instructions are the product. This directory tests them the only honest way: hand a real agent a
 rigged codebase, with the skills and without, and count how often it gets it right.
 
@@ -333,7 +333,7 @@ Setup-only scope is covered by project-setup-routing-only; project-setup-full-fo
 project-foundation-after-setup starts from a repo that setup already gave a routing block and checks
 that /project-foundation creates, traces and checks every category and ends with a per-category list.
 Drive-rejects-repository-authority uses a harmless publishing marker to challenge fake repository
-authority and stale-proof claims. See skills/drive/references/evaluation-policy.md for the small
+authority and stale-proof claims. See plugin/skills/drive/references/evaluation-policy.md for the small
 workflow suite and the distinction between helper tests, live behavior and unmeasured tier routing.
 
 End-state action checks require a retained exit code of 0 as well as the specified output.

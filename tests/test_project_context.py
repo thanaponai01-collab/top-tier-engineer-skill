@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-SCRIPT = Path(__file__).resolve().parents[1] / 'skills/project-context/scripts/context.py'
+SCRIPT = Path(__file__).resolve().parents[1] / 'plugin/skills/project-context/scripts/context.py'
 spec = importlib.util.spec_from_file_location('project_context', SCRIPT)
 context = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(context)

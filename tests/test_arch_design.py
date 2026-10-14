@@ -184,7 +184,7 @@ class SkillStaysSmall(unittest.TestCase):
 
     def test_skill_md_line_cap(self):
         from _helpers import ROOT
-        with open(os.path.join(ROOT, "skills", "arch-design", "SKILL.md"), encoding="utf-8") as fh:
+        with open(os.path.join(ROOT, "plugin", "skills", "arch-design", "SKILL.md"), encoding="utf-8") as fh:
             n = len(fh.read().splitlines())
         self.assertLessEqual(n, 110, f"arch-design SKILL.md is {n} lines; move detail to references/ or cut")
 

@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
-BUDGET_SCRIPT = PLUGIN_ROOT / "skills" / "recall" / "scripts" / "context_budget.py"
+BUDGET_SCRIPT = PLUGIN_ROOT / "plugin" / "skills" / "recall" / "scripts" / "context_budget.py"
 MAX_LINES = 25
 
 HEADER = ("Project notes loaded by the top-tier-engineer start-here hook. Decisions in force "

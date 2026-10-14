@@ -3,18 +3,17 @@
 Extend the existing independent-skills plugin with bounded, searchable project memory.
 
 ## What this repo is
-- A Claude Code plugin of independent engineering skills: `skills/<name>/SKILL.md`, each one question
+- A Claude Code plugin of independent engineering skills: `plugin/skills/<name>/SKILL.md`, each one question
   to one procedure, with optional stdlib-only helpers in its own `scripts/`. No skill requires another.
 - Where each fact lives (one home per fact; link, do not copy):
   - skill list and one-line cards: each SKILL.md frontmatter; `tools/catalog.py --write` generates
     `CATALOG.md` (what a fresh session sees) and the README table.
-  - which skill for which job, flows, the nine-checkpoint Relay: `skills/pick-skill/SKILL.md`.
-  - driven-run state and evidence: `RUN.json` via `skills/drive`; unattended variant: `drive-overnight`.
-  - shared engineering philosophy: `PHILOSOPHY.md` (optional: loaded only by the opt-in philosophy hook in `hooks/optional.json` and `hooks/autonomous.json`; no longer imported globally since 4.62.0).
-  - project-memory convention: `skills/project-context/references/memory.md`; setup categories:
-    `skills/project-foundation/references/foundation.md`.
+  - which skill for which job, flows, the nine-checkpoint Relay: `plugin/skills/pick-skill/SKILL.md`.
+  - driven-run state and evidence: `RUN.json` via `plugin/skills/drive`; unattended variant: `drive-overnight`.
+  - project-memory convention: `plugin/skills/project-context/references/memory.md`; setup categories:
+    `plugin/skills/project-foundation/references/foundation.md`.
   - proof that a skill changes agent behaviour: `evals/` (`cases/`, `RESULTS.md`); helper tests: `tests/`.
-  - session-start hook and install: `tools/front-door.py`, `hooks/hooks.json`; version: `.claude-plugin/plugin.json`.
+  - hooks: `plugin/hooks/hooks.json` (empty by default), opt-in Stop gate in `plugin/hooks/optional.json`; version: `plugin/.claude-plugin/plugin.json`.
 - Rules for changing it are in `CLAUDE.md`; `AGENTS.md` points other agents there.
 
 ## Decisions
@@ -46,6 +45,6 @@ Extend the existing independent-skills plugin with bounded, searchable project m
 - Behavioral skill evaluation must be reported separately from helper tests.
 
 ## Design
-- include: skills/project-context/references/memory.md (storage, ownership and retrieval)
-- include: skills/project-foundation/references/foundation.md (complete setup categories and freshness)
-- include: skills/project-foundation/references/economy.md (bounded economical discovery workers)
+- include: plugin/skills/project-context/references/memory.md (storage, ownership and retrieval)
+- include: plugin/skills/project-foundation/references/foundation.md (complete setup categories and freshness)
+- include: plugin/skills/project-foundation/references/economy.md (bounded economical discovery workers)

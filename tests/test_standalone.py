@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-CLAUDE.md's other rules, held by a test: each skill names itself, leaves
-"How to work" to PHILOSOPHY.md, and survives being read on its own.
+CLAUDE.md's other rules, held by a test: each skill names itself, holds
+only its own work, and survives being read on its own.
 
 The last part is what most of this file is about. The README invites people to
 copy a single SKILL.md into another agent, so anything a skill relies on from
@@ -16,7 +16,7 @@ from _helpers import ROOT
 
 SKILLS = {
     os.path.basename(os.path.dirname(f)): f
-    for f in glob.glob(os.path.join(ROOT, "skills", "*", "SKILL.md"))
+    for f in glob.glob(os.path.join(ROOT, "plugin", "skills", "*", "SKILL.md"))
 }
 
 # The gloss every skill must carry if it labels evidence at all. Checked by a
@@ -62,7 +62,7 @@ class Standalone(unittest.TestCase):
 
     def test_philosophy_lives_outside_skills(self):
         for name, f in SKILLS.items():
-            self.assertNotIn("\n## How to work\n", read(f), f"{name}: How to work belongs in PHILOSOPHY.md")
+            self.assertNotIn("\n## How to work\n", read(f), f"{name}: a skill holds only its own work")
 
     def test_every_skill_carries_a_test_line(self):
         """An instruction nobody can check is one an agent claims for free."""

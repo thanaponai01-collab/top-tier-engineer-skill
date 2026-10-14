@@ -282,7 +282,7 @@ def check_workdir(case, workdir):
         checks.append({"id": item["id"], "what": item["what"], "kind": item.get("kind", ""),
                        "gate": item.get("gate", True), "ok": ok, "detail": detail})
     if spec.get("verify_status"):
-        helper = os.path.join(os.path.dirname(CASES_DIR), "..", "skills", "verify-loop", "scripts", "verify.py")
+        helper = os.path.join(os.path.dirname(CASES_DIR), "..", "plugin", "skills", "verify-loop", "scripts", "verify.py")
         proc = subprocess.run([sys.executable, helper, "status", workdir],
                               capture_output=True, text=True, timeout=30)
         checks.append({"id": "strict-current-green", "what": "final helper status is strict, current and green",

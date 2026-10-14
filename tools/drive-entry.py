@@ -20,7 +20,7 @@ import re
 import sys
 from pathlib import Path
 
-SKILLS_DIR = Path(__file__).resolve().parent.parent / "skills"
+SKILLS_DIR = Path(__file__).resolve().parent.parent / "plugin" / "skills"
 MIN_CHARS = 30
 MAX_PROMPT = 20_000
 

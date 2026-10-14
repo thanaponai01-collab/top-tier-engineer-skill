@@ -29,7 +29,7 @@ class FreshAgentEntry(unittest.TestCase):
     def test_brief_says_what_the_whole_repo_is(self):
         t = text("BRIEF.md")
         self.assertIn("## What this repo is", t)
-        for anchor in ("skills/", "tools/catalog.py", "evals/", "PHILOSOPHY.md"):
+        for anchor in ("plugin/", "tools/catalog.py", "evals/"):
             self.assertIn(anchor, t, f"BRIEF.md never says where {anchor} fits")
         self.assertLessEqual(len(t.splitlines()), 120)
 
@@ -43,8 +43,8 @@ class FreshAgentEntry(unittest.TestCase):
 class OneHomePerList(unittest.TestCase):
     def test_flows_table_has_one_home(self):
         header = "| Goal | Find | Change | Prove | Ship |"
-        homes = [p for p in ("README.md", "skills/pick-skill/SKILL.md", "CATALOG.md") if header in text(p)]
-        self.assertEqual(homes, ["skills/pick-skill/SKILL.md"])
+        homes = [p for p in ("README.md", "plugin/skills/pick-skill/SKILL.md", "CATALOG.md") if header in text(p)]
+        self.assertEqual(homes, ["plugin/skills/pick-skill/SKILL.md"])
 
     def test_readme_skill_table_is_generated(self):
         t = text("README.md")
