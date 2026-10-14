@@ -2,6 +2,7 @@
 name: agent-drift
 description: >-
   Check a live AI agent against its shipped baseline on a schedule. Use when it "used to work", complaints rise with no code change, or after a model update.
+disable-model-invocation: true
 metadata:
   stage: watch
   card: "is the live agent still what we shipped?"

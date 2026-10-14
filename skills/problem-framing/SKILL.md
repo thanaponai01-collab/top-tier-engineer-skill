@@ -2,6 +2,7 @@
 name: problem-framing
 description: >-
   Turn a vague idea into testable requirements before design or code. Use for "I want an app that...", fuzzy goals, or when nobody can say what done means.
+disable-model-invocation: true
 metadata:
   stage: frame
   card: "vague idea to testable requirements"

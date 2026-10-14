@@ -2,6 +2,7 @@
 name: debug-protocol
 description: >-
   Find the proven root cause before fixing. Use when something is broken and the cause is unknown: wrong output, crash, hang, flaky, "it worked yesterday".
+disable-model-invocation: true
 metadata:
   stage: fix
   card: "broken and the cause is unknown"

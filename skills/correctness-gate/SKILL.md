@@ -2,6 +2,7 @@
 name: correctness-gate
 description: >-
   Prove built software works with evidence, not plausibility. Use for "does this actually work?", "test this properly", or before a merge or release.
+disable-model-invocation: true
 metadata:
   stage: prove
   card: "does it actually work, before merge or release?"

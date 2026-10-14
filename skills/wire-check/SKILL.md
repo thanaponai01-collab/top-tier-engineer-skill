@@ -2,6 +2,7 @@
 name: wire-check
 description: >-
   Check that code is connected to the running system, not just written. Use for "built but isn't working", "is this hooked up?", "what does nothing call?"
+disable-model-invocation: true
 metadata:
   stage: prove
   card: "built, but nothing happens"

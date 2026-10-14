@@ -1,7 +1,7 @@
 {
   "name": "top-tier-engineer",
-  "description": "Thirty-six engineering skills. Work directly for small changes, load the skill that fits for multi-step work, or choose drive to orchestrate the full workflow. One session-start hook shows the skill card and the project's next step; other hooks are opt-in.",
-  "version": "4.62.0",
+  "description": "Thirty-six engineering skills for Claude Code and other agents that support Agent Skills. Work directly for small changes, load the skill that fits for multi-step work, or choose drive to orchestrate the full workflow. One session-start hook shows the skill card and the project's next step; other hooks are opt-in.",
+  "version": "4.63.0",
   "author": {
     "name": "Thanaponai01"
   },
@@ -14,6 +14,7 @@
     "architecture",
     "software-lifecycle",
     "agent-skills",
+    "codex",
     "claude-code"
   ]
 }

@@ -2,6 +2,7 @@
 name: perf-optimize
 description: >-
   Make a system measurably faster or cheaper by finding the real cause. Use for slow, laggy, "speed up", "reduce cost", "will this query scale?"
+disable-model-invocation: true
 metadata:
   stage: fix
   card: "slow, clunky or expensive"

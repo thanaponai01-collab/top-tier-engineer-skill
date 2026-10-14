@@ -2,6 +2,7 @@
 name: feature-map
 description: >-
   Map features to entry points and checks. Use for "what can this app do, how do I reach X?"
+disable-model-invocation: true
 metadata:
   stage: orient
   card: "what can this app do, how do I reach X?"

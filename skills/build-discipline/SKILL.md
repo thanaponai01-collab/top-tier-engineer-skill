@@ -2,6 +2,7 @@
 name: build-discipline
 description: >-
   Use for building a multi-file feature in small slices, each wired and proven.
+disable-model-invocation: true
 metadata:
   stage: build
   card: "build a multi-file feature in proven slices"

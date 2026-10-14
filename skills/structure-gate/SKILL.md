@@ -2,6 +2,7 @@
 name: structure-gate
 description: >-
   Measure complexity, nesting, length, import cycles and duplication, and say plainly whether it is spaghetti. Use for "is this code a mess?" or a CI check.
+disable-model-invocation: true
 metadata:
   stage: review
   card: "is it spaghetti, measured"

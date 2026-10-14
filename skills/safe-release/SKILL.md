@@ -2,6 +2,7 @@
 name: safe-release
 description: >-
   Deploy, or change stored data, with a proven way back. Use for "deploy", "ship it", "push to prod", "migration", "alter table", "backfill".
+disable-model-invocation: true
 metadata:
   stage: ship
   card: "deploy, or change the shape of stored data"

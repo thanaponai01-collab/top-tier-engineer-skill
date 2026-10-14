@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.63.0 - 2026-10-14 - explicit Drive entry and Codex packaging
+
+- All skills are manual-only. The default hook manifest is empty; optional profiles retain only
+  the completion gate, so sessions and ordinary prompts never start a workflow automatically.
+- Drive is the single explicit workflow entry point and loads specialist procedures conditionally.
+- Added the Codex plugin manifest and install guidance while keeping the canonical skill sources in
+  `skills/`.
+- Catalog and hook gates pass. The full Windows suite remains unproven because child-process tests
+  cannot resolve Python or stop owned processes in this environment; the raw log stays local.
+
 ## 4.62.0 - 2026-10-14 - a quieter session start
 
 - **Skill card:** the SessionStart hook prints only the manual-only `/commands` (the host never lists

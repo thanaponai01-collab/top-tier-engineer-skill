@@ -2,6 +2,7 @@
 name: senior-review
 description: >-
   Review a whole codebase like a senior engineer and rank what matters. Use for "is this codebase any good?", "is it production-ready?", "biggest gap?"
+disable-model-invocation: true
 metadata:
   stage: review
   card: "is this codebase good, what is the biggest gap?"

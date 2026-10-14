@@ -2,6 +2,7 @@
 name: code-history
 description: >-
   Use for "why is it built this way, who decided?": the recorded reason, before changing it.
+disable-model-invocation: true
 metadata:
   stage: orient
   card: "why is it built this way, who decided?"

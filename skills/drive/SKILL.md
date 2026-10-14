@@ -10,6 +10,10 @@ metadata:
 
 # Drive
 
+Start when the user explicitly invokes Drive. Drive is the single workflow entry point.
+Specialist skills are manual-only internal procedures: read their SKILL.md by relative file
+path when needed, rather than invoking them through the Skill tool.
+
 You state a goal. Pick the playbook and carry it to the requested environment. Done means the
 acceptance checks pass there; an honest blocked result preserves the work and names the intervention.
 For work spanning several steps, **before the first implementation edit**, resolve this skill's
@@ -39,29 +43,36 @@ it does not dispatch workers or authorize forge actions.
 ## 1. Match, once
 
 Read the goal, say in one line which playbook it is and what you read it as (and not as), then
-write the steps. If two playbooks lead to different work, ask the one question that separates
+write the necessary work steps. The table lists available procedures, not mandatory chains.
+Start directly or with one procedure addressing the current uncertainty. Add another only
+when an unresolved requirement or named risk needs it; reuse existing evidence. Specialist
+Next suggestions are advisory. If two playbooks lead to different work, ask the one question that separates
 them and start on what it does not block.
 
-| The goal | Steps |
+| Current need | Procedure to read only when needed |
 |---|---|
-| A question about the code | `explain` or `code-history`. Read-only; nothing else runs. |
-| Broken, cause unknown | `debug-protocol` → fix with `evolve-maintain` → `correctness-gate` |
-| Broken, cause known; refactor; upgrade | `evolve-maintain` → `correctness-gate` |
-| New behavior | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `plan-work` (only if it has more than one piece) → `build-discipline` → `correctness-gate` |
-| An AI agent or model-driven feature | `problem-framing` (only if "done" is unclear) → `arch-design` (only if it needs a new boundary) → `agent-design` (create or refresh a missing/stale tool contract) → `threat-model` (derive missing abuse cases for that surface) → `agent-evals` (before any agent code) → `plan-work` (only if it has more than one piece) → `build-discipline` → `agent-prove` (includes the `threat-model` abuse cases) → `safe-release` + `agent-release` when it goes out → `agent-drift` on the schedule once it's live |
-| An agent is flaky, or a model or prompt changed | `agent-prove` → fix with `build-discipline` → `agent-prove` |
-| A live agent might have drifted, or a check-in is due | `agent-drift` → `agent-prove` + fix if it's real |
-| Slow or expensive | `perf-optimize` → `correctness-gate` |
-| Insecure, or takes untrusted input | `threat-model` → `evolve-maintain` → `correctness-gate` |
-| "Is this good / should this land" | `senior-review` for a project, `scrutinize` for one diff |
-| Dead code, or "is this hooked up?" | `latent-audit` for a sweep, `wire-check` for one change. Read-only until you say to delete. |
-| "Is it a mess?", restructure, module boundaries | `structure-gate` to measure, `arch-design` to decide, `evolve-maintain` → `correctness-gate` per move |
-| Resume, or "where were we?" | `recall`, then match the goal it surfaces |
-| Plans to file as tickets | `issue-handoff` (it writes to the tracker: ask first unless the goal itself said to file) |
-| A new repo, or "set this up for the skills" | `project-setup` for instructions, then `project-foundation` |
-| An unfamiliar codebase, or "get me up to speed" | `onboard-system` (it reuses `project-foundation`) |
-| Deploy, or change stored data | `safe-release` |
-| Big, vague, or matches nothing | `problem-framing` to make the goal checkable, then match again |
+| Understand code or a recorded decision | `explain` or `code-history` |
+| Find an unknown failure cause | `debug-protocol` |
+| Change existing behavior or upgrade | `evolve-maintain` |
+| Clarify an ambiguous outcome | `problem-framing` |
+| Decide a new module boundary | `arch-design` |
+| Order several dependent pieces | `plan-work` |
+| Build several connected files | `build-discipline` |
+| Establish missing correctness evidence | `correctness-gate` |
+| Design an AI tool contract or its acceptance tasks | `agent-design` or `agent-evals` |
+| Prove an AI feature over repeated runs | `agent-prove` |
+| Investigate live agent drift | `agent-drift` |
+| Measure and resolve slowness or cost | `perf-optimize` |
+| Investigate an exposed security surface | `threat-model` |
+| Assess a project or a proposed diff | `senior-review` or `scrutinize` |
+| Prove dead code or trace a disconnected change | `latent-audit` or `wire-check` |
+| Measure code structure | `structure-gate` |
+| Recover missing session context | `recall` |
+| File explicitly requested tracker issues | `issue-handoff` |
+| Prepare missing agent instructions | `project-setup` |
+| Prepare missing project context | `project-foundation` |
+| Understand an unfamiliar project | `onboard-system` |
+| Release to an authorized environment or change stored data | `safe-release`; `agent-release` for an AI feature |
 
 The last step of any playbook that changes code is `safe-release`, and only when the change is
 going out. No matching row is an answer: a typo or a rename is done directly, and you say so.
@@ -80,7 +91,7 @@ For a short direct task, the written check suffices; do not create a run record 
 
 ## 3. Run it
 
-Read `run.py next`, load the named skill (with a Skill tool or by reading its file), and follow it.
+Read `run.py next`, read the needed specialist procedure by file path, and follow it.
 Run `run.py check <stage>` to advance; a narrated pass never closes a step. Skip a step whose job
 an earlier skill already did; a skill that wires and proves each slice is not followed by a second
 wiring pass. A step that fails twice on one idea sends you back to observe, not to a third try.

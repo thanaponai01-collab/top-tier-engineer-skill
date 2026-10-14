@@ -2,11 +2,11 @@
 name: arch-design
 description: >-
   Improve or design a codebase's architecture, shown as before/after pictures. Use for "could the architecture be better?", "how should this be structured?"
+disable-model-invocation: true
 metadata:
   stage: design
   card: "could the architecture be better? how should it be structured?"
 ---
-
 # Architecture & Design
 
 Take a codebase to a simpler, better-shaped place: the smallest structure that does the job,

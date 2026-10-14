@@ -2,6 +2,7 @@
 name: evolve-maintain
 description: >-
   Change a running system without breaking it: upgrades, deprecations, removing an old API, large refactors. Use for "upgrade X", "refactor this module".
+disable-model-invocation: true
 metadata:
   stage: build
   card: "upgrade, refactor or deprecate on a live system"

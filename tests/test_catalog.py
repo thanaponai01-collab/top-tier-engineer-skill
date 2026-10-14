@@ -50,14 +50,15 @@ class Catalog(unittest.TestCase):
 
     def test_a_long_description_is_caught(self):
         skills = catalog.load_skills()
-        i = next(i for i, s in enumerate(skills) if not s["manual"])
+        i = 0
+        skills[i] = dict(skills[i], manual=False)
         skills[i] = dict(skills[i], description="x" * (catalog.DESC_MAX + 1))
         self.assertTrue(any("cap 160" in p for p in catalog.problems(skills)))
 
     def test_a_listing_over_budget_is_caught(self):
         skills = catalog.load_skills()
         extra = [dict(skills[0], manual=False, description="x" * 150, name=f"pad-{i}", dir=f"pad-{i}")
-                 for i in range(5)]
+                 for i in range(40)]
         self.assertTrue(any("skill listing is" in p for p in catalog.problems(skills + extra)))
 
     def test_manual_skills_cost_nothing_in_the_listing(self):

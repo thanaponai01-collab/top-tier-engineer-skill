@@ -2,6 +2,7 @@
 name: latent-audit
 description: >-
   Find dead code and layer violations, proving code dead before deleting it. Use for "find dead code", "clean up the codebase", "are the layers respected?"
+disable-model-invocation: true
 metadata:
   stage: review
   card: "dead code and layer violations"

@@ -2,6 +2,7 @@
 name: agent-evals
 description: >-
   Build an AI agent's task set and a grader it cannot touch, before the agent exists. Use at the start of any agent or LLM feature, or "how do I know it's good?"
+disable-model-invocation: true
 metadata:
   stage: build
   card: "evals and a grader before building an agent"

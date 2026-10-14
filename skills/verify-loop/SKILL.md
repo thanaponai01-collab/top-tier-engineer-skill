@@ -2,6 +2,7 @@
 name: verify-loop
 description: >-
   Write a check that can fail, then loop until it passes, with retained proof. Use for "verify this change", "is it actually done?", VERIFY.md recipes.
+disable-model-invocation: true
 metadata:
   stage: prove
   card: "check your own work until it really passes"

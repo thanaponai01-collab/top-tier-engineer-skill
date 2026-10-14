@@ -2,6 +2,7 @@
 name: project-context
 description: >-
   Use for missing task context: retrieve project decisions, history and evidence.
+disable-model-invocation: true
 metadata:
   stage: orient
   card: "ask the project's memory"

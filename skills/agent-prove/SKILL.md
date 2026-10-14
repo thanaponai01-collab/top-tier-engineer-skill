@@ -2,6 +2,7 @@
 name: agent-prove
 description: >-
   Prove an AI agent meets a set bar over repeated runs, not one. Use when an agent is flaky, before shipping it, or after a model, prompt or tool change.
+disable-model-invocation: true
 metadata:
   stage: prove
   card: "does the agent work, over repeated runs?"

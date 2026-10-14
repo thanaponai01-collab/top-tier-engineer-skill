@@ -1,5 +1,9 @@
 # Scorecard — do the skills make an agent better?
 
+2026-10-14: explicit Drive entry change: live `drive-bug-through-skills` replay attempted,
+blocked because the Claude Code CLI is absent. Prior scores below are historical; they do
+not validate the revised manual-only entry or conditional routing.
+
 Each row is one rigged codebase from `evals/cases/`: a real defect planted in it, and a
 trap beside it that a careless agent falls for. A real agent was given the task several
 times **without** this plugin (plain Claude Code, the task in plain words) and **with** it.

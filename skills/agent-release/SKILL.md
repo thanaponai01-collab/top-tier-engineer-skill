@@ -2,6 +2,7 @@
 name: agent-release
 description: >-
   Put an AI agent in front of real users with a kill switch, spend caps, pinned model, logged runs and staged rollout. Use before an agent goes live.
+disable-model-invocation: true
 metadata:
   stage: ship
   card: "ship an agent with kill switch and caps"

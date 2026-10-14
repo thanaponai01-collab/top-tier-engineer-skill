@@ -2,6 +2,7 @@
 name: agent-trace
 description: >-
   Walk one AI agent run step by step to the exact step it went wrong. Use for "why did the agent do that?" or a transcript that looks wrong.
+disable-model-invocation: true
 metadata:
   stage: fix
   card: "why did the agent do that?"

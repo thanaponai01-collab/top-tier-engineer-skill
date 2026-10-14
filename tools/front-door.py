@@ -49,14 +49,7 @@ def read(path):
 
 def card():
     """Manual-only skills from CATALOG.md, plus a count and path for the rest; '' if missing."""
-    stages = "\n".join(l for l in read(CATALOG).splitlines() if l.startswith("- **"))
-    items = re.findall(r"`[^`\n]+` [^;\n]+", stages)
-    manual = [i for i in items if i.startswith("`/")]
-    if not items:
-        return ""
-    return (f"{PLUGIN}: {len(items) - len(manual)} skills are in the skill list; load one with the "
-            f"Skill tool only when it fits the work. Full card: {CATALOG}\n"
-            "Manual-only (the user types these; suggest one when it fits): " + "; ".join(manual))
+    return f"Start explicitly with /{PLUGIN}:drive and a goal. Internal procedure index: {CATALOG}"
 
 
 def project_summary(repo):

@@ -2,6 +2,7 @@
 name: agent-design
 description: >-
   Design an AI agent's tools, how reversible each is and what flows into its context, before any agent code. Use for "I'm about to build an agent".
+disable-model-invocation: true
 metadata:
   stage: design
   card: "design an agent's tools before any code"

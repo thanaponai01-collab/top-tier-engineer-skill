@@ -2,6 +2,7 @@
 name: project-update
 description: >-
   Use after work changes a decision, Next or feature: update affected project memory.
+disable-model-invocation: true
 metadata:
   stage: build
   card: "keep project memory current after work"

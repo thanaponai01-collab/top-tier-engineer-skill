@@ -18,6 +18,9 @@ Extend the existing independent-skills plugin with bounded, searchable project m
 - Rules for changing it are in `CLAUDE.md`; `AGENTS.md` points other agents there.
 
 ## Decisions
+- Drive is the single explicit workflow entry point. All skills are manual-only; default hooks
+  are empty and opt-in profiles retain only completion checks. Specialist procedures are
+  read on demand, with evidence-based transitions rather than mandatory chains.
 - Existing Markdown and structured receipts own facts; SQLite is a rebuildable local index.
 - The working agent maintains affected context after authorized tasks; no second agent is needed.
 - Entry files remain short; area records preserve unfinished work and current requirements.

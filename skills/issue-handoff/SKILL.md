@@ -2,6 +2,7 @@
 name: issue-handoff
 description: >-
   Turn a plan, a doc or the chat into tracked issues without losing what made them buildable. Use for "file these as issues", "put this in GitHub".
+disable-model-invocation: true
 metadata:
   stage: plan
   card: "turn a plan into tracked issues"

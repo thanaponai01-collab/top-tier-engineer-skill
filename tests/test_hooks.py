@@ -82,7 +82,7 @@ class TestFrontDoor(unittest.TestCase):
             if f.is_file():
                 self.assertIn(d.name + "`", catalog, d.name)
                 if "disable-model-invocation: true" in f.read_text(encoding="utf-8"):
-                    self.assertIn(f"/top-tier-engineer:{d.name}`", out, d.name)
+                    self.assertIn("/top-tier-engineer:drive", out)
 
     def test_a_cold_git_project_is_told_to_set_up(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -106,7 +106,7 @@ class TestFrontDoor(unittest.TestCase):
     def test_a_folder_that_is_not_a_project_gets_only_the_card(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, out, _ = run_hook(FRONT_DOOR, {"cwd": tmp})
-            self.assertIn("/top-tier-engineer:recall", out)
+            self.assertIn("/top-tier-engineer:drive", out)
             self.assertNotIn("project-setup once", out)
 
     def test_the_card_names_manual_skills_and_does_not_repeat_the_listing(self):
@@ -114,7 +114,7 @@ class TestFrontDoor(unittest.TestCase):
         # "check here first". Manual-only skills are the part the listing never shows.
         card = front_door.card()
         self.assertIn("/top-tier-engineer:drive", card)
-        self.assertIn("/top-tier-engineer:recall", card)
+        self.assertIn("/top-tier-engineer:drive", card)
         self.assertNotIn("`debug-protocol`", card)
         self.assertNotIn("check here first", card)
         self.assertIn("CATALOG.md", card)
@@ -519,35 +519,12 @@ class TestStartHereHook(unittest.TestCase):
 
 
 class TestHooksManifest(unittest.TestCase):
-    def test_default_install_runs_only_the_front_door(self):
-        # One SessionStart hook, never a prompt hook: 4.54 removed skills firing on ordinary work.
-        manifest = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8-sig"))
-        self.assertEqual(list(manifest["hooks"]), ["SessionStart"])
-        commands = [h["command"] for e in manifest["hooks"]["SessionStart"] for h in e["hooks"]]
-        self.assertEqual(len(commands), 1)
-        self.assertIn("front-door.py", commands[0])
-        self.assertTrue(FRONT_DOOR.is_file())
-
-    def test_manifest_is_valid_and_points_at_real_scripts(self):
-        manifest = json.loads((ROOT / "hooks" / "optional.json")
-                              .read_text(encoding="utf-8-sig"))
-        events = manifest["hooks"]
-        self.assertIn("SessionStart", events)
-        self.assertIn("UserPromptSubmit", events)
-        referenced = json.dumps(manifest)
-        for script in ("philosophy-hook.py", "front-door.py", "unproven-gate.py", "route-hint.py"):
-            self.assertIn(script, referenced)
-            self.assertTrue((TOOLS / script).is_file(), script)
-
-    def test_the_only_stop_hook_is_the_verify_gate(self):
-        # A Stop hook was deleted in c479319 for wedging sessions. This one is a deliberate
-        # return (verify-stop-gate.py explains why); anything else on Stop needs the same case.
-        manifest = json.loads((ROOT / "hooks" / "optional.json")
-                              .read_text(encoding="utf-8-sig"))
-        commands = [h["command"] for e in manifest["hooks"]["Stop"] for h in e["hooks"]]
-        self.assertEqual(len(commands), 1)
-        self.assertIn("verify-stop-gate.py", commands[0])
-        self.assertTrue(STOP_GATE.is_file())
+    def test_explicit_entry_profiles(self):
+        for name in ('hooks.json', 'optional.json', 'autonomous.json'):
+            manifest = json.loads((ROOT / 'hooks' / name).read_text())
+            self.assertEqual(set(manifest['hooks']), set() if name == 'hooks.json' else {'Stop'})
+        for path in (ROOT / 'skills').glob('*/SKILL.md'):
+            self.assertIn('disable-model-invocation: true', path.read_text(encoding='utf-8').split('---', 2)[1])
 
 
 class TestVerifyStopGate(unittest.TestCase):
@@ -689,7 +666,7 @@ class TestDriveEntry(unittest.TestCase):
     def test_autonomous_profile_points_at_real_scripts(self):
         manifest = json.loads((ROOT / "hooks" / "autonomous.json").read_text(encoding="utf-8-sig"))
         referenced = json.dumps(manifest)
-        for script in ("philosophy-hook.py", "drive-entry.py", "verify-stop-gate.py"):
+        for script in ("verify-stop-gate.py",):
             self.assertIn(script, referenced)
             self.assertTrue((TOOLS / script).is_file(), script)
 

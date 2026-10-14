@@ -2,6 +2,7 @@
 name: arch-map
 description: >-
   Draw a codebase or a change as a diagram traced from the real code. Use for "show me the architecture", "visualize this codebase", "draw what this change does".
+disable-model-invocation: true
 metadata:
   stage: orient
   card: "draw the architecture or what a change does"

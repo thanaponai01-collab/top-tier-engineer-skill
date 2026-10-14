@@ -2,6 +2,7 @@
 name: scrutinize
 description: >-
   An outsider's second opinion on a PR, diff, plan or design doc before it lands. Use for "second opinion", "sanity-check this PR".
+disable-model-invocation: true
 metadata:
   stage: review
   card: "second opinion on a PR, diff or plan"

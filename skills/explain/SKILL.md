@@ -2,6 +2,7 @@
 name: explain
 description: >-
   Teach how part of a codebase works and why, changing nothing. Use for "walk me through", "help me understand this system". Not for one-line questions.
+disable-model-invocation: true
 metadata:
   stage: orient
   card: "walk me through how this works"
