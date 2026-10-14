@@ -1,3 +1,3 @@
   1. Skill: top-tier-engineer:project-context
   2. Bash: find . -type f -not -path './.git/*' | head -50; cat RUN.json 2>/dev/null
-  3. Bash: cd /c/Users/thana/AppData/Local/Temp/tte-eval-ctw8kpbj/fixture && for f in AGENTS.md BRIEF.md BUILD.md work/auth.md; do echo "=== $f"; cat -n "$f"; done
+  3. Bash: cd <tmp>/tte-eval-ctw8kpbj/fixture && for f in AGENTS.md BRIEF.md BUILD.md work/auth.md; do echo "=== $f"; cat -n "$f"; done

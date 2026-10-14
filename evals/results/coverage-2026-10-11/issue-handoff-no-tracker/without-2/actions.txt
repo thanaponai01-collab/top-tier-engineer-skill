@@ -1,2 +1,2 @@
-  1. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-hj51xi5o\fixture\AUDIT.md
+  1. Read: <tmp>\tte-eval-hj51xi5o\fixture\AUDIT.md
   2. Bash: cd fixture && git remote -v; gh auth status 2>&1 | head -5

@@ -29,7 +29,7 @@
       "id": "before-after-picture",
       "what": "the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose",
       "found": true,
-      "quote": "There's a visual version with the same diagrams side by side at `C:\\Users\\thana\\AppData\\Local\\Temp\\architecture-review-shop.html`, and I've opened it for you.",
+      "quote": "There's a visual version with the same diagrams side by side at `<tmp>\\architecture-review-shop.html`, and I've opened it for you.",
       "quote_checked": true
     },
     {

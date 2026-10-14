@@ -21,7 +21,7 @@
     {
       "check": "ran the grader (against the stub or a deliberately wrong agent), not only read it",
       "ok": true,
-      "detail": "ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-jvw50vbw/fixture && python evals/triage/grade.py"
+      "detail": "ran it: cd <tmp>/tte-eval-jvw50vbw/fixture && python evals/triage/grade.py"
     }
   ],
   "changes": {

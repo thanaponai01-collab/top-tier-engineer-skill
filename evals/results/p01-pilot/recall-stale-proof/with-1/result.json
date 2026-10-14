@@ -19,12 +19,12 @@
   "skill_reads": [
     {
       "skill": "recall",
-      "path": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-7hmxljk4\\top-tier-engineer\\skills\\recall\\SKILL.md",
+      "path": "<tmp>\\tte-plugin-7hmxljk4\\top-tier-engineer\\skills\\recall\\SKILL.md",
       "sub": false
     }
   ],
   "skill_read_candidates": [
-    "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-7hmxljk4\\top-tier-engineer\\skills\\recall\\SKILL.md"
+    "<tmp>\\tte-plugin-7hmxljk4\\top-tier-engineer\\skills\\recall\\SKILL.md"
   ],
   "model_usage": {
     "claude-opus-5-5": {
@@ -74,5 +74,5 @@
   "timed_out": false,
   "stderr_tail": "",
   "end_output": null,
-  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-7hmxljk4\\top-tier-engineer"
+  "staged_plugin": "<tmp>\\tte-plugin-7hmxljk4\\top-tier-engineer"
 }

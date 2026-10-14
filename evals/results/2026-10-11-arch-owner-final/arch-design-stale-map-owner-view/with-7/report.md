@@ -2,7 +2,7 @@
 
 **Verdict: messy in places.** During checkout, the customer waits while the receipt email is sent. When the mail server is slow, checkout is slow. When the mail server is down, the card has already been charged and the customer then sees an error page. That explains both things you noticed, and I reproduced the second one by running your shop's code with the mail server switched off.
 
-I've opened an illustrated version in your browser: `C:\Users\thana\AppData\Local\Temp\architecture-review-20261011-1347.html`. I haven't changed anything in your shop's files.
+I've opened an illustrated version in your browser: `<tmp>\architecture-review-20261011-1347.html`. I haven't changed anything in your shop's files.
 
 ## ⚠ First: your design document is wrong
 

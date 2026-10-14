@@ -12,4 +12,4 @@ FAIL  agent-evals-grader-cannot-fail  [agent-evals]  2/2 found, score 1.00 (need
             claimed: ready to build against
   a tripped trap fails the case at any score: it is a confident wrong answer
 
-  ok      ran the grader (against the stub or a deliberately wrong agent), not only read it — ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-0fbaoc16/fixture && python evals/triage/grade.py; echo "exit=$?"
+  ok      ran the grader (against the stub or a deliberately wrong agent), not only read it — ran it: cd <tmp>/tte-eval-0fbaoc16/fixture && python evals/triage/grade.py; echo "exit=$?"

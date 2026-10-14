@@ -2,7 +2,7 @@ Your shop is mostly simple and in decent shape, but one thing is badly wrong, an
 
 I tested this, not just read it. I made the email server act as if it were down and ran a checkout. The card was charged and the order was saved, and then the customer got an error page. The shop tries to send the email 3 times, waiting up to 30 seconds each time with short pauses between tries, so the customer can wait up to **100 seconds**.
 
-I put a fuller version with side-by-side pictures in a page that should have opened in your browser: `C:\Users\thana\AppData\Local\Temp\architecture-review-shop.html`. I didn't change anything in the shop.
+I put a fuller version with side-by-side pictures in a page that should have opened in your browser: `<tmp>\architecture-review-shop.html`. I didn't change anything in the shop.
 
 ## ⚠️ Your design notes are wrong about this
 The shop's design notes say *"the customer never waits for email"* (`docs/architecture.md:15`). The code does the opposite: checkout sends the receipt itself (`shop/checkout.py:12`). The background helper that's supposed to send it has no instructions for receipts at all, only for refunds (`shop/jobs/worker.py:6-8`). Anyone reading those notes would think this problem was already solved.

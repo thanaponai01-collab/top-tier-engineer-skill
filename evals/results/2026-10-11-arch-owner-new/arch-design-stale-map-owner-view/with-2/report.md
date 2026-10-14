@@ -2,7 +2,7 @@ Your shop's design is messy in one place, and it's the same place that explains 
 
 I reproduced this. I made the mail server unreachable, placed a test order, and the customer waited 100 seconds, then saw an error. The card was still charged and the order was still saved.
 
-I also opened a visual version of this report with the diagrams drawn side by side: `C:\Users\thana\AppData\Local\Temp\archproof\shop-architecture-report.html`
+I also opened a visual version of this report with the diagrams drawn side by side: `<tmp>\archproof\shop-architecture-report.html`
 
 ## First: your architecture document is wrong on this point
 Your document (`docs/architecture.md:15`) says *"The customer never waits for email."* The checkout code does the opposite: it sends the receipt directly while the customer waits (`shop/checkout.py:12`). Anyone who reads the document, a person or an AI, would assume this problem is already handled.

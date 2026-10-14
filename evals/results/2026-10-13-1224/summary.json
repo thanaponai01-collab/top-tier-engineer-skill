@@ -77,7 +77,7 @@
     "grade_text": "PASS  pick-skill-slow-is-a-bug  [pick-skill]  1/1 found, score 1.00 (needs 1.00)\n  found   cause-is-the-flags-host: The cause is a typo in yesterday's settings move: FLAGS_URL points at flags.internal.exmaple, which never answers, so fetch_flags waits 3 x 2 s before falling back to defaults. That is the 6 seconds.\n  held    optimize-the-decoy: Blaming or 'fixing' the widget sort (50 items, microseconds), or adding caching or shorter timeouts as the fix, while the misspelled host stays.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
     "seconds": 35.6,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   },
@@ -124,7 +124,7 @@
       {
         "check": "reproduced the failure before fixing it",
         "ok": true,
-        "detail": "ran it before changing any code: cd C:/Users/thana/AppData/Local/Temp/tte-eval-ulcx1nsg/fixture; for f in *; do echo \"== $f\"; cat \"$f\"; done; p"
+        "detail": "ran it before changing any code: cd <tmp>/tte-eval-ulcx1nsg/fixture; for f in *; do echo \"== $f\"; cat \"$f\"; done; p"
       },
       {
         "check": "went through the playbook: opened drive \u2192 debug-protocol \u2192 evolve-maintain \u2192 correctness-gate, in order, rather than doing the steps from memory",
@@ -159,7 +159,7 @@
     "grade_text": "PASS  drive-bug-through-skills  [drive]  2/2 found, score 1.00 (needs 1.00)\n  found   the-cause-is-in-parse: the diagnosis step localised the cause to parse.py, not to where the total is printed\n  found   fix-proven: the fix is shown to hold: the right total, and a test that now guards it\n  held    patch-the-symptom-without-diagnosing: rounding or fixing where the number is printed skips the diagnosis step the playbook demands",
     "seconds": 42.2,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": "Total: 42.35\n"
   },
@@ -288,7 +288,7 @@
     "grade_text": "PASS  project-foundation-after-setup  [project-foundation]  2/2 found, score 1.00 (needs 1.00)\n  found   coverage: Live gateway remains outside verified coverage.\n  found   category-list: The report lists every category with its state.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
     "seconds": 49.7,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   },
@@ -335,7 +335,7 @@
       {
         "check": "checked the understanding against the code by running its check, not only reading notes",
         "ok": true,
-        "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-_8514tbc/fixture\" && python -m unittest 2>&1 | tail -3; python "
+        "detail": "ran it: cd \"<tmp>/tte-eval-_8514tbc/fixture\" && python -m unittest 2>&1 | tail -3; python "
       },
       {
         "check": "changed nothing outside the allowed files",
@@ -381,7 +381,7 @@
     "grade_text": "PASS  onboard-system-stale-architecture  [onboard-system]  2/2 found, score 1.00 (needs 1.00)\n  found   architecture-stale: docs/architecture.md, which the start-here block sends every session to, is stale. It names billing/mailer.py (renamed to billing/notify.py on 2026-09-02) and omits billing/credit_notes.py and the api.py correct() path.\n  found   invariant-carried: The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
     "seconds": 39.0,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   },
@@ -437,7 +437,7 @@
       {
         "check": "The supplied product-backed check was actually executed.",
         "ok": true,
-        "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-_0bv0af7/fixture\" && python -m unittest -v test_shipping 2>&1 |"
+        "detail": "ran it: cd \"<tmp>/tte-eval-_0bv0af7/fixture\" && python -m unittest -v test_shipping 2>&1 |"
       }
     ],
     "changes": {
@@ -454,7 +454,7 @@
     "grade_text": "PASS  verify-loop-healthy-check  [verify-loop]  2/2 found, score 1.00 (needs 1.00)\n  found   real-check: The test calls shipping_fee and checks the specified boundary correctly.\n  found   limited-proof: A passing boundary check alone does not certify the whole application or establish observed mutation rejection.\n  held    healthy-check-rejected: The correct boundary test must not be labeled vacuous or spec-wrong.",
     "seconds": 21.8,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   },
@@ -522,7 +522,7 @@
     "grade_text": "PASS  correctness-gate-green-but-wrong  [correctness-gate]  3/3 found, score 1.00 (needs 1.00)\n  found   boundary-off-by-one: shipping.py uses `total > 100`; SPEC.md clause 1 says 100 or more ships free, so fee(100) is wrong\n  found   test-encodes-the-bug: test_hundred asserts fee(100) == 5, which is what the code does rather than what the spec says\n  found   spec-is-the-oracle: correctness is judged against SPEC.md, not against the existing suite\n  held    green-suite-read-as-correct: the gate must fail; a green suite is not evidence of correctness here",
     "seconds": 22.7,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": null
   }

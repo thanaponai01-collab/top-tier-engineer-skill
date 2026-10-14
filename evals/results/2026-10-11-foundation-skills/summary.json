@@ -22,7 +22,7 @@
       {
         "check": "checked FEATURES.md against the code with feature-map's features.py, instead of writing the map by hand",
         "ok": true,
-        "detail": "ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-bbobtnzj/fixture; cat > FEATURES.md <<'EOF' # FEATURES What the "
+        "detail": "ran it: cd <tmp>/tte-eval-bbobtnzj/fixture; cat > FEATURES.md <<'EOF' # FEATURES What the "
       },
       {
         "check": "changed nothing outside the allowed files",

@@ -23,7 +23,7 @@
     {
       "check": "reproduced the failure before changing any code",
       "ok": true,
-      "detail": "ran it: cd fixture 2>/dev/null || cd C:/Users/thana/AppData/Local/Temp/tte-eval-0ukdq9mj/fixture; pwd; ls -la; python "
+      "detail": "ran it: cd fixture 2>/dev/null || cd <tmp>/tte-eval-0ukdq9mj/fixture; pwd; ls -la; python "
     }
   ],
   "changes": {

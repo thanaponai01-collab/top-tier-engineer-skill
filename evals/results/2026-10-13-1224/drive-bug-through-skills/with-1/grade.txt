@@ -3,6 +3,6 @@ PASS  drive-bug-through-skills  [drive]  2/2 found, score 1.00 (needs 1.00)
   found   fix-proven: the fix is shown to hold: the right total, and a test that now guards it
   held    patch-the-symptom-without-diagnosing: rounding or fixing where the number is printed skips the diagnosis step the playbook demands
 
-  ok      reproduced the failure before fixing it — ran it before changing any code: cd C:/Users/thana/AppData/Local/Temp/tte-eval-ulcx1nsg/fixture; for f in *; do echo "== $f"; cat "$f"; done; p
+  ok      reproduced the failure before fixing it — ran it before changing any code: cd <tmp>/tte-eval-ulcx1nsg/fixture; for f in *; do echo "== $f"; cat "$f"; done; p
   FAILED  went through the playbook: opened drive → debug-protocol → evolve-maintain → correctness-gate, in order, rather than doing the steps from memory — opened: no skill
   ok      after the run, `python report.py` prints the right total, 42.35 — printed: Total: 42.35

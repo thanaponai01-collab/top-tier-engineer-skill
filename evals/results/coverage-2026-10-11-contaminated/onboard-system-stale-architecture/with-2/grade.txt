@@ -10,7 +10,7 @@ FAIL  onboard-system-stale-architecture  [onboard-system]  1/2 found, score 0.50
             named it, but never said what was wrong with it
   NOT CHECKED  the working copy: this case grades actions too, pass --workdir
 
-  ok      checked the understanding against the code by running its check, not only reading notes — ran it: cd "C:/Users/thana/AppData/Local/Temp/tte-eval-vb0wajnk/fixture" && python -m unittest 2>&1 | tail -5; python 
+  ok      checked the understanding against the code by running its check, not only reading notes — ran it: cd "<tmp>/tte-eval-vb0wajnk/fixture" && python -m unittest 2>&1 | tail -5; python 
   ok      changed nothing outside the allowed files — 
   ok      docs/architecture.md names billing/notify.py, the module that sends customer email today — 
   ok      docs/architecture.md includes credit_notes.py — 

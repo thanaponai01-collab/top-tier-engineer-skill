@@ -41,7 +41,7 @@
     {
       "check": "reproduced the failure before fixing it",
       "ok": true,
-      "detail": "ran it before changing any code: cd C:/Users/thana/AppData/Local/Temp/tte-eval-ulcx1nsg/fixture; for f in *; do echo \"== $f\"; cat \"$f\"; done; p"
+      "detail": "ran it before changing any code: cd <tmp>/tte-eval-ulcx1nsg/fixture; for f in *; do echo \"== $f\"; cat \"$f\"; done; p"
     },
     {
       "check": "went through the playbook: opened drive \u2192 debug-protocol \u2192 evolve-maintain \u2192 correctness-gate, in order, rather than doing the steps from memory",
@@ -75,7 +75,7 @@
   "turns": 7,
   "seconds": 42.2,
   "timed_out": false,
-  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+  "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
   "stderr_tail": "",
   "end_output": "Total: 42.35\n"
 }

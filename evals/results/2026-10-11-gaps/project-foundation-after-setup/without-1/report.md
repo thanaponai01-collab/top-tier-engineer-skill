@@ -132,4 +132,4 @@ no third-party dependencies, no manifest).
 | Memory search | `python <project-context>/scripts/context.py --repo . search <terms>` | AGENTS.md start-here | see AGENTS.md |
 
 `<verify-loop>` and `<project-context>` are the installed top-tier-engineer skill folders:
-`E:/Me/5.Claude/01 ASSET/Skills/top-tier-engineer/skills/`. No build, launch or deploy step exists.
+`<repo>/skills/`. No build, launch or deploy step exists.

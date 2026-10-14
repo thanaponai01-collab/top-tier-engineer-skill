@@ -1,4 +1,4 @@
   1. Glob: **/*
-  2. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-i2xu8nia\fixture\README.md
-  3. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-i2xu8nia\fixture\program.md
-  4. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-i2xu8nia\fixture\stack.json
+  2. Read: <tmp>\tte-eval-i2xu8nia\fixture\README.md
+  3. Read: <tmp>\tte-eval-i2xu8nia\fixture\program.md
+  4. Read: <tmp>\tte-eval-i2xu8nia\fixture\stack.json

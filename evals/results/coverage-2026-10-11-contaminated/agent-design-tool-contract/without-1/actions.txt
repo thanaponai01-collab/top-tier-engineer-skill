@@ -1,3 +1,3 @@
-  1. Read: C:\Users\thana\AppData\Local\Temp\tte-eval-_qpig0_n\fixture\PLAN.md
+  1. Read: <tmp>\tte-eval-_qpig0_n\fixture\PLAN.md
   2. Skill: top-tier-engineer:agent-design
-  3. Write: C:\Users\thana\AppData\Local\Temp\tte-eval-_qpig0_n\fixture\docs\agent-design.md
+  3. Write: <tmp>\tte-eval-_qpig0_n\fixture\docs\agent-design.md

@@ -23,7 +23,7 @@
     {
       "check": "checked the understanding against the code by running its check, not only reading notes",
       "ok": true,
-      "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-vb0wajnk/fixture\" && python -m unittest 2>&1 | tail -5; python "
+      "detail": "ran it: cd \"<tmp>/tte-eval-vb0wajnk/fixture\" && python -m unittest 2>&1 | tail -5; python "
     },
     {
       "check": "changed nothing outside the allowed files",

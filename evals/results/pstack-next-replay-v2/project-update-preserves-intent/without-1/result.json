@@ -41,7 +41,7 @@
     {
       "check": "indexed the changed context records with the local helper",
       "ok": true,
-      "detail": "ran it: cd C:/Users/thana/AppData/Local/Temp/tte-eval-2p5oprom/fixture && python - <<'E' def sub(p,a,b): s=open(p,newl"
+      "detail": "ran it: cd <tmp>/tte-eval-2p5oprom/fixture && python - <<'E' def sub(p,a,b): s=open(p,newl"
     },
     {
       "check": "kept all reads and searches inside the supplied fixture",

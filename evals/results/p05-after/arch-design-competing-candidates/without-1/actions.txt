@@ -1,1 +1,1 @@
-  1. Bash: find . -type f | head -50 && cat fixture/requirements.md; cat "/e/Me/5.Claude/01 ASSET/Skills/top-tier-engineer/PHILOSOPHY.md" 2>&1 | head -80
+  1. Bash: find . -type f | head -50 && cat fixture/requirements.md; cat "<repo>/PHILOSOPHY.md" 2>&1 | head -80

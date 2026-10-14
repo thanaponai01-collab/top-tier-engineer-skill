@@ -139,7 +139,7 @@
     "grade_text": "FAIL  project-update-preserves-intent  [project-update]  1/2 found, score 0.50 (needs 1.00)\n  found   gap: The fix is recorded but verification did not run.\n  MISSED  dependency: The report identifies shared impact beyond the initial module.\n            never named: src/shared/redirect.py, src/billing/checkout.py\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
     "seconds": 25.0,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-dsbrphmt\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-dsbrphmt\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": {
       "exit": 0,
@@ -189,7 +189,7 @@
       {
         "check": "indexed the changed context records with the local helper",
         "ok": true,
-        "detail": "ran it: cd C:/Users/thana/AppData/Local/Temp/tte-eval-2p5oprom/fixture && python - <<'E' def sub(p,a,b): s=open(p,newl"
+        "detail": "ran it: cd <tmp>/tte-eval-2p5oprom/fixture && python - <<'E' def sub(p,a,b): s=open(p,newl"
       },
       {
         "check": "kept all reads and searches inside the supplied fixture",

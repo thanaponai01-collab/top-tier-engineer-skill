@@ -1,4 +1,4 @@
-I found the cause of both problems you described: the slow checkout, and customers being charged but seeing an error page. It's one problem with one fix. I've opened a visual report in your browser, and it's saved at `C:\Users\thana\AppData\Local\Temp\archproof\architecture-review-20261011.html`. I didn't change anything in the shop.
+I found the cause of both problems you described: the slow checkout, and customers being charged but seeing an error page. It's one problem with one fix. I've opened a visual report in your browser, and it's saved at `<tmp>\archproof\architecture-review-20261011.html`. I didn't change anything in the shop.
 
 ## The short answer
 **Most of the shop is in good shape, but one part is badly built.** At checkout, the customer has to wait while the shop sends their receipt email. If the email server is slow, checkout can take up to **100 seconds**. If the email server is down, the customer **has already been charged** and then sees an error page.

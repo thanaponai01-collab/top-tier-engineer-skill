@@ -50,7 +50,7 @@
     {
       "check": "The supplied product-backed check was actually executed.",
       "ok": true,
-      "detail": "ran it: cd \"C:/Users/thana/AppData/Local/Temp/tte-eval-_0bv0af7/fixture\" && python -m unittest -v test_shipping 2>&1 |"
+      "detail": "ran it: cd \"<tmp>/tte-eval-_0bv0af7/fixture\" && python -m unittest -v test_shipping 2>&1 |"
     }
   ],
   "changes": {
@@ -66,7 +66,7 @@
   "turns": 6,
   "seconds": 21.8,
   "timed_out": false,
-  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+  "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
   "stderr_tail": "",
   "end_output": null
 }

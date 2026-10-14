@@ -123,5 +123,5 @@ All run from `fixture/` (this folder). Prerequisite: Python 3 (observed 3.13.4);
 | Feature map check | `python <feature-map>/scripts/features.py check --strict` | FEATURES.md | ran: exit 0 |
 
 `<verify-loop>` / `<feature-map>` = the installed top-tier-engineer skills under
-`E:/Me/5.Claude/01 ASSET/Skills/top-tier-engineer/skills/`.
+`<repo>/skills/`.
 No build, launch, CLI, CI or deploy commands exist (AGENTS.md: none requested).

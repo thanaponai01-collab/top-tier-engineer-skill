@@ -9,7 +9,7 @@ PASS  onboard-system-stale-architecture  [onboard-system]  2/2 found, score 1.00
   found   invariant-carried: The owner's invariant is carried into the account: sent invoices are immutable and corrections are credit notes.
   NOT CHECKED  the working copy: this case grades actions too, pass --workdir
 
-  ok      checked the understanding against the code by running its check, not only reading notes — ran it: cd fixture && python -m unittest 2>&1 | tail -5; ls ../ 2>/dev/null | head -0; ls C:/Users/thana/AppData/Local
+  ok      checked the understanding against the code by running its check, not only reading notes — ran it: cd fixture && python -m unittest 2>&1 | tail -5; ls ../ 2>/dev/null | head -0; ls <home>/AppData/Local
   ok      changed nothing outside the allowed files — 
   ok      docs/architecture.md names billing/notify.py, the module that sends customer email today — 
   ok      docs/architecture.md includes credit_notes.py — 

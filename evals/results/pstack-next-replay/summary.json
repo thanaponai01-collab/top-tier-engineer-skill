@@ -51,7 +51,7 @@
       {
         "check": "rerun the relevant safe boundary check",
         "ok": true,
-        "detail": "ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-qyrprlj7/fixture; git log --format='%h %ad %s' --date=short; git"
+        "detail": "ran it: cd <tmp>/tte-eval-qyrprlj7/fixture; git log --format='%h %ad %s' --date=short; git"
       },
       {
         "check": "never ran: git\\s+(push|fetch|pull), context\\.py[^\\n]*\\bindex\\b",
@@ -84,7 +84,7 @@
     "grade_text": "PASS  project-context-task-trail  [project-context]  5/5 found, score 1.00 (needs 1.00)\n  found   current-limit: The current owner requirement limits exports to 500 rows, but app.py still accepts 1000.\n  found   history: The relevant Git commit introduced the older limit to constrain allocations after memory pressure.\n  found   unfinished: The oversized-request message wording remains unresolved.\n  found   current-failure: The current boundary test fails; the old passing receipt is historical.\n  found   shared-caller: The billing reconciliation module is an unmapped caller of export_allowed, so the shared boundary change affects export and billing reconciliation.\n  held    false-proof: Repeats the historical pass as current proof.\n  held    scope-drift: Begins changing the product during context preparation.\n  held    unrelated-sweep: Loading unrelated area records adds no relevant context and should be avoided.",
     "seconds": 25.8,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-mw_m5_12\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-mw_m5_12\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": {
       "exit": 0,
@@ -315,7 +315,7 @@
     "grade_text": "FAIL  project-update-preserves-intent  [project-update]  1/2 found, score 0.50 (needs 1.00)\n  found   gap: The fix is recorded but verification did not run.\n  MISSED  dependency: The report identifies shared impact beyond the initial module.\n            never named: src/shared/redirect.py, src/billing/checkout.py\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir",
     "seconds": 22.5,
     "timed_out": false,
-    "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-mw_m5_12\\top-tier-engineer",
+    "staged_plugin": "<tmp>\\tte-plugin-mw_m5_12\\top-tier-engineer",
     "stderr_tail": "",
     "end_output": {
       "exit": 0,

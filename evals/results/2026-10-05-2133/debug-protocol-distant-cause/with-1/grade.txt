@@ -4,4 +4,4 @@ PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (nee
   found   proven-both-directions: the cause was proven in both directions, not just observed once
   held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made
 
-  ok      reproduced the failure before changing any code — ran it: cd fixture 2>/dev/null || cd C:/Users/thana/AppData/Local/Temp/tte-eval-0ukdq9mj/fixture; pwd; ls -la; python 
+  ok      reproduced the failure before changing any code — ran it: cd fixture 2>/dev/null || cd <tmp>/tte-eval-0ukdq9mj/fixture; pwd; ls -la; python 

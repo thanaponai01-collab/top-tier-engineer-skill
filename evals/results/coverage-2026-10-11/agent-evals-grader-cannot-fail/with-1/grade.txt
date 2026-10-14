@@ -10,4 +10,4 @@ PASS  agent-evals-grader-cannot-fail  [agent-evals]  2/2 found, score 1.00 (need
   found   set-too-small-and-happy: 8 tasks, all plain routing. Nothing hostile, nothing to escalate, no instruction-injection ticket, no ambiguous ones, and no held-out slice. Below the dozen-plus a non-deterministic agent needs, and missing the refusal cases the README itself names.
   held    harness-works: Accepting that 8/8 on the stub proves the harness works and building can start. A stub scoring perfect is the evidence the grader is broken.
 
-  ok      ran the grader (against the stub or a deliberately wrong agent), not only read it — ran it: cd /c/Users/thana/AppData/Local/Temp/tte-eval-3qsqw62y/fixture && python evals/triage/grade.py; cat > /tmp/wro
+  ok      ran the grader (against the stub or a deliberately wrong agent), not only read it — ran it: cd <tmp>/tte-eval-3qsqw62y/fixture && python evals/triage/grade.py; cat > /tmp/wro

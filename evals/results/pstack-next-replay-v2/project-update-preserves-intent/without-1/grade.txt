@@ -11,7 +11,7 @@ FAIL  project-update-preserves-intent  [project-update]  1/2 found, score 0.50 (
             named it, but never said what was wrong with it
   NOT CHECKED  the working copy: this case grades actions too, pass --workdir
 
-  ok      indexed the changed context records with the local helper — ran it: cd C:/Users/thana/AppData/Local/Temp/tte-eval-2p5oprom/fixture && python - <<'E' def sub(p,a,b): s=open(p,newl
+  ok      indexed the changed context records with the local helper — ran it: cd <tmp>/tte-eval-2p5oprom/fixture && python - <<'E' def sub(p,a,b): s=open(p,newl
   ok      kept all reads and searches inside the supplied fixture — did not run it
   ok      second upkeep pass left context documents byte-for-byte unchanged — exit 0; requires exit 0 and matching output; printed: upkeep documents unchanged
   ok      changed nothing outside the allowed files — 

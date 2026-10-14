@@ -144,7 +144,7 @@
         "work/p09/check_behavior_evidence.py"
       ],
       "exit": 1,
-      "output": "Traceback (most recent call last):\n  File \"E:\\Me\\5.Claude\\01 ASSET\\Skills\\top-tier-engineer\\work\\p09\\check_behavior_evidence.py\", line 22, in <module>\n    assert \"references/program-delivery.md\" in with_actions, \"the new reference was not read\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: the new reference was not read\n",
+      "output": "Traceback (most recent call last):\n  File \"<repo>\\work\\p09\\check_behavior_evidence.py\", line 22, in <module>\n    assert \"references/program-delivery.md\" in with_actions, \"the new reference was not read\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: the new reference was not read\n",
       "at": 1791896084.647449,
       "seconds": 0.065,
       "inputs_hash": "0e18d24e3f7ccc21d700a6e97a719eaf04045beb59767c64e49174ffa447d521"

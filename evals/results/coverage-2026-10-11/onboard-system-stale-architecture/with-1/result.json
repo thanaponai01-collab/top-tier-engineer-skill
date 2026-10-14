@@ -23,7 +23,7 @@
     {
       "check": "checked the understanding against the code by running its check, not only reading notes",
       "ok": true,
-      "detail": "ran it: cd fixture && python -m unittest 2>&1 | tail -5; ls ../ 2>/dev/null | head -0; ls C:/Users/thana/AppData/Local"
+      "detail": "ran it: cd fixture && python -m unittest 2>&1 | tail -5; ls ../ 2>/dev/null | head -0; ls <home>/AppData/Local"
     },
     {
       "check": "changed nothing outside the allowed files",

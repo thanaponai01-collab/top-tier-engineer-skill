@@ -1,4 +1,4 @@
-  1. Read: C:\Users\thana\AppData\Local\Temp\tte-plugin-4t1qba1t\top-tier-engineer\skills\recall\SKILL.md
+  1. Read: <tmp>\tte-plugin-4t1qba1t\top-tier-engineer\skills\recall\SKILL.md
   2. Bash: cd fixture && git status && git branch -a && git log -n 15 --stat --date=iso && git diff && git diff --cached --stat && ls -la && git stash list
   3. Bash: cd fixture && for f in CLAUDE.md BRIEF.md BUILD.md money.py test_export.py export.py; do echo "=== $f"; cat $f; done; git show ab7c930 -- money.py
-  4. Bash: cd fixture && python -m unittest 2>&1; echo "exit=$?"; python "C:/Users/thana/AppData/Local/Temp/tte-plugin-4t1qba1t/top-tier-engineer/skills/recall/scripts/co…
+  4. Bash: cd fixture && python -m unittest 2>&1; echo "exit=$?"; python "<tmp>/tte-plugin-4t1qba1t/top-tier-engineer/skills/recall/scripts/co…

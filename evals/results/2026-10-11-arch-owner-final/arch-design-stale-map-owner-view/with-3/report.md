@@ -2,7 +2,7 @@ Your shop is **in decent shape overall, but a few parts are messy**, and one of 
 
 I tested all of this by running your shop code with a fake mail server that was switched off. I didn't change any files in your shop.
 
-I opened an illustrated version of this report in your browser. It's saved at `C:\Users\thana\AppData\Local\Temp\architecture-review-20261011.html`.
+I opened an illustrated version of this report in your browser. It's saved at `<tmp>\architecture-review-20261011.html`.
 
 ## Your design document is wrong
 Your design document (`docs/architecture.md`) says checkout puts the receipt on a to-do list and *"the customer never waits for email."* The code doesn't do that. It sends the email right away while the customer waits (`shop/checkout.py:12`). Anyone reading the document, whether a person or an AI, would think this problem was already solved.

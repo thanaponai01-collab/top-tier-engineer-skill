@@ -3,10 +3,10 @@ F..
 FAIL: test_api_and_cli_reject_ack_without_persistence_then_strict_green (test_project_recipe.ApplicationRecipe.test_api_and_cli_reject_ack_without_persistence_then_strict_green) (mode='cli')
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\thana\AppData\Local\Temp\p02-mutation-v9_0n373\tests\test_project_recipe.py", line 63, in test_api_and_cli_reject_ack_without_persistence_then_strict_green
+  File "<tmp>\p02-mutation-v9_0n373\tests\test_project_recipe.py", line 63, in test_api_and_cli_reject_ack_without_persistence_then_strict_green
     self.assert_clean(root)
     ~~~~~~~~~~~~~~~~~^^^^^^
-  File "C:\Users\thana\AppData\Local\Temp\p02-mutation-v9_0n373\tests\test_project_recipe.py", line 54, in assert_clean
+  File "<tmp>\p02-mutation-v9_0n373\tests\test_project_recipe.py", line 54, in assert_clean
     self.assertFalse((root / 'build/data').exists(), 'disposable data survived teardown')
     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: True is not false : disposable data survived teardown

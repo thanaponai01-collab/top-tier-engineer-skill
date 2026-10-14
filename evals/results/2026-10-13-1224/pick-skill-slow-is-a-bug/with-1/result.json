@@ -75,7 +75,7 @@
   "turns": 7,
   "seconds": 35.6,
   "timed_out": false,
-  "staged_plugin": "C:\\Users\\thana\\AppData\\Local\\Temp\\tte-plugin-2zyat4ro\\top-tier-engineer",
+  "staged_plugin": "<tmp>\\tte-plugin-2zyat4ro\\top-tier-engineer",
   "stderr_tail": "",
   "end_output": null
 }

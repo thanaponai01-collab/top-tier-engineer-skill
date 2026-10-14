@@ -4,5 +4,5 @@
   4. Bash: mkdir -p "$TEMP/archprobe" && cat > "$TEMP/archprobe/probe.py" <<'EOF' import sys, smtplib, time sys.path.insert(0, sys.argv[1]) calls = {"smtp": 0, "slept": 0…
   5. Bash: cat > "$TEMP/architecture-review-shop.html" <<'EOF' <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-widt…
   6. Bash: cygpath -w "$TEMP"; ls "$TEMP/archprobe" 2>/dev/null
-  7. Write: C:\Users\thana\AppData\Local\Temp\architecture-review-shop.html
+  7. Write: <tmp>\architecture-review-shop.html
   8. Bash: rm -rf "$TEMP/archprobe"; start "" "$TEMP/architecture-review-shop.html"; echo ok
