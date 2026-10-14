@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.62.0 - 2026-10-14 - a quieter session start
+
+- **Skill card:** the SessionStart hook prints only the manual-only `/commands` (the host never lists
+  them) plus the path to `CATALOG.md`; the auto-invocable skills are already in the host's skill
+  list. "Check here first" is gone from the card. Hook output: 2,485 -> 784 bytes outside a project,
+  3,233 -> 1,437 bytes in this repo.
+- **Project summary:** the decisions excerpt is cut at a sentence or bullet, not mid-word; the
+  intent/work line is omitted when the project's start-here block already carries it.
+- **Philosophy:** `PHILOSOPHY.md` is no longer imported from the owner's global `CLAUDE.md` (about
+  1,400 tokens per session in every project). It loads only through the opt-in hooks.
+- **Tradeoff accepted by the owner:** live routing (`route_live.py`, Sonnet, isolated) fell from 21 of
+  34 to 12 of 34 right; the 9 net new misses all open no skill. The run changed the card and the
+  philosophy together, so which one caused it is *suspected* (the card), not proven. The owner chose
+  fewer automatic skill loads for a quieter, cheaper session.
+- Tests: 503 pass; new tests cover the compact card, the omitted pointer line and the excerpt cut.
+
 ## 4.61.1 - 2026-10-12 - one home per list; current entry files for a fresh agent
 
 - The README skill table is now generated from each SKILL.md's frontmatter by `tools/catalog.py`
