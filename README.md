@@ -1,6 +1,6 @@
 # Top-Tier Engineer
 
-Thirty-six engineering skills for AI coding agents. Skills say *what* to do for a task.
+Thirty-seven engineering skills for AI coding agents. Skills say *what* to do for a task.
 
 Each skill is written to survive on its own: it defines any notation it uses, and where it hands
 work to another skill it also says what to do when that skill isn't there. `evals/` holds the
@@ -79,6 +79,7 @@ from each skill's frontmatter, as is [CATALOG.md](CATALOG.md), the card a fresh 
 | `scrutinize` | second opinion on a PR, diff or plan (manual: /scrutinize) |
 | `senior-review` | is this codebase good, what is the biggest gap? (manual: /senior-review) |
 | `structure-gate` | is it spaghetti, measured (manual: /structure-gate) |
+| `surplus` | spare budget, no goal: find real work and do it (manual: /surplus) |
 | `threat-model` | can this be abused? (manual: /threat-model) |
 | `verify-loop` | check your own work until it really passes (manual: /verify-loop) |
 | `wire-check` | built, but nothing happens (manual: /wire-check) |

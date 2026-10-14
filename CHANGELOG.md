@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.65.0 - 2026-10-14 - surplus: spare budget, no goal
+
+- New skill **`surplus`**: given leftover budget and no goal, it probes a repo for what only running
+  things reveals, fixes what the evidence supports, parks release-type actions and stops when the
+  work list runs dry. Three probes, in order: repeat the suite (flaky checks), break the README's
+  claims, then mutate the source (behaviour no test pins).
+- Helper `plugin/skills/surplus/scripts/surplus.py` (stdlib): `repeat` counts failures over N runs;
+  `mutate` flips one operator at a time, restores each file byte for byte, refuses a suite that is
+  not green three times, and reports a kill that does not repeat as a flaky kill.
+- Eval case `surplus-finds-real-work`: without the skill 0 of 3 (agents fixed the two visible bugs
+  in about 45 s and stopped; four unpinned boundaries left, every mutant survived), with it 3 of 3.
+- Unit suite: 465 tests pass; catalog check passes.
+
 ## 4.64.1 - 2026-10-14 - unused hook scripts removed
 
 - Deleted the unwired legacy hooks `tools/front-door.py`, `start-here-hook.py`, `route-hint.py`

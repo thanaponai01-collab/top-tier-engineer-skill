@@ -1,6 +1,6 @@
 {
   "name": "top-tier-engineer",
-  "version": "4.64.1",
+  "version": "4.65.0",
   "description": "Thirty-six engineering workflow skills for Codex, including architecture, debugging, verification, reviews, releases, and goal-driven runs.",
   "skills": "./skills/"
 }

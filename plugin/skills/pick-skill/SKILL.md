@@ -84,6 +84,7 @@ Still ambiguous after that? `senior-review` — it is the one that ends by namin
 | Create, trace, check and list the project's context files (foundation, architecture, commands, memory) | `project-foundation` |
 | Understand an unfamiliar system, reuse its foundation, fill only gaps and check one prediction | `onboard-system` |
 | You know the goal but not the skills, and want it carried through to done | `drive` (unattended, with a decision log: `drive-overnight`) |
+| Spare budget and no goal: find real work by running things (flaky checks, broken claims, unpinned behaviour) | `surplus` |
 | Starting or resuming work: "where were we?", what is the state and the next step | `recall` |
 | "Does it actually work?" before a merge or release | `correctness-gate` |
 | Deploying, or changing the shape of stored data | `safe-release` |
