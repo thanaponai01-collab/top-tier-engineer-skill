@@ -1,5 +1,22 @@
 # Changelog
 
+## 4.66.0 - 2026-10-14 - Drive: the coordinator decides routing and says who did the work
+
+- **Drive no longer implies "Opus orchestrates, Sonnet works".** Delegating to `drive-executor` is
+  the coordinator's call. Drive now reads its routing policy before the first implementation edit,
+  states the choice, and the final report says who did the work: this session, or the worker and
+  the model its own messages ran on. `model-routing.md`, `project-setup` and the README say the same.
+- Why: an Opus coordinator was given a three-section spec, then an eleven-section one with five new
+  modules. It never delegated (0 of 5 runs, with or without the plugin), calling the build small
+  enough to do directly for about $0.55. Nothing showed a Sonnet worker would have been cheaper.
+- Eval case `drive-says-who-did-the-work` (coordinator pinned to Opus via `agent_model`): without
+  the plugin 0 of 2; old Drive text 1 of 3 (opened the routing policy once); new text 2 of 2.
+  Whether a Sonnet subagent edited code is recorded as a note, not graded.
+- Eval harness: `delegated` reads the model each subagent message actually ran on (an agent file's
+  `model: sonnet` is not evidence); `must_read_any` checks a skill reference was really opened;
+  action checks accept `"gate": false`; a case's `agent_model` pins the coordinator model.
+- Unit suite: 468 tests pass; catalog check passes.
+
 ## 4.65.0 - 2026-10-14 - surplus: spare budget, no goal
 
 - New skill **`surplus`**: given leftover budget and no goal, it probes a repo for what only running

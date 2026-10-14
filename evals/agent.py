@@ -147,10 +147,15 @@ def parse_stream(lines, plugin_dir=None):
         elif kind == "system" and ev.get("subtype") == "hook_response":
             hooks.append({"event": ev.get("hook_event", ""), "output": ev.get("output") or ""})
         elif kind == "assistant":
-            for block in (ev.get("message") or {}).get("content") or []:
+            message = ev.get("message") or {}
+            for block in message.get("content") or []:
                 if block.get("type") == "tool_use":
+                    # `model` is the model that actually produced this call, read from the
+                    # message itself; `parent` ties a subagent's call to the dispatch behind it.
                     tools.append({"name": block.get("name", ""), "input": block.get("input") or {},
-                                  "sub": bool(ev.get("parent_tool_use_id"))})
+                                  "sub": bool(ev.get("parent_tool_use_id")),
+                                  "id": block.get("id", ""), "parent": ev.get("parent_tool_use_id") or "",
+                                  "model": message.get("model", "")})
                 elif block.get("type") == "text" and not ev.get("parent_tool_use_id"):
                     texts.append(block.get("text", ""))
         elif kind == "result":
@@ -220,7 +225,8 @@ def action_log(parsed, width=160):
         detail = " ".join(str(detail).split())
         if len(detail) > width:
             detail = detail[:width - 1] + "…"
-        lines.append(f"{i:3}. {'  (subagent) ' if t['sub'] else ''}{t['name']}: {detail}")
+        sub = f"  (subagent{' ' + t['model'] if t.get('model') else ''}) " if t["sub"] else ""
+        lines.append(f"{i:3}. {sub}{t['name']}: {detail}")
     return "\n".join(lines)
 
 

@@ -1,0 +1,90 @@
+{
+  "case": "drive-says-who-did-the-work",
+  "skill": "drive",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  1/2 found\n  found   acceptance-proven \u2014 \"`python acceptance/check.py` passes 21/21\"\n  MISSED  who-did-the-work\n  held    oracle-edited",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 9671,
+      "cacheReadInputTokens": 159407,
+      "cacheCreationInputTokens": 23310,
+      "webSearchRequests": 0,
+      "costUSD": 0.41182939999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1591,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 2,
+  "missed": [
+    "the report says who implemented it: this session without workers, or a named worker and the model it ran on"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "recorded, not graded: a subagent that really ran on Sonnet made code edits",
+      "ok": false,
+      "detail": "no subagent dispatched",
+      "gate": false
+    },
+    {
+      "check": "after the run, the acceptance check passes 21/21 and the existing tests stay green",
+      "ok": true,
+      "detail": "exit 0; requires exit 0 and matching output; printed: ACCEPTANCE: 21/21 passed ---------------------------------------------------------------------- Ran 3 tests in 0.000s OK"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/shop/cart.py",
+      "fixture/shop/invoice.py"
+    ],
+    "added": [
+      "fixture/shop/giftcards.py",
+      "fixture/shop/inventory.py",
+      "fixture/shop/loyalty.py",
+      "fixture/shop/money.py",
+      "fixture/shop/orders.py",
+      "fixture/shop/shipping.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.41182939999999996,
+  "turns": 13,
+  "seconds": 80.4,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": {
+    "exit": 0,
+    "output": "ACCEPTANCE: 21/21 passed\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+  }
+}

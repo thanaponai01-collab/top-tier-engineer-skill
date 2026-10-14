@@ -22,7 +22,7 @@ Preserve manual text and existing model overrides. Do not create competing instr
 Add or refresh one managed block, at most 30 lines, between `<!-- agent-routing -->` and
 `<!-- /agent-routing -->`. Record:
 - Coordinator: the current session model. The user selects Opus in Claude Code if desired.
-- Execution: plugin agent `agents/drive-executor.md` (Sonnet), for bounded implementation and local checks.
+- Execution: plugin agent `agents/drive-executor.md` (Sonnet), when the coordinator chooses to delegate bounded implementation and local checks; otherwise the coordinator implements.
 - Discovery: plugin agent `agents/setup-reader.md` (Haiku), for bounded read-only evidence collection.
 - project-foundation owns foundation preparation; Drive owns execution gates and task context upkeep.
 - Workers receive assigned paths, acceptance checks, allowed edits and limits; no full chat dump.

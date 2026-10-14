@@ -26,8 +26,10 @@ end · **suspected** = neither.*
 
 ## Coordinator and workers
 
-The current session coordinates. Read [model routing](references/model-routing.md) before
-worker dispatch; respect host support and project overrides. For foundation work, load the
+The current session coordinates and decides whether to delegate. Before the first implementation
+edit, read [model routing](references/model-routing.md) and state that choice in one line; respect
+host support and project overrides. The final report says who did the work: this session, or
+which worker and the model its own messages ran on. For foundation work, load the
 `project-foundation` skill by reading its [SKILL.md](../project-foundation/SKILL.md) and follow it;
 it owns context, architecture, commands and verification preparation. Setup only prepares agent instructions. For workflow changes,
 read [evaluation policy](references/evaluation-policy.md) before claiming routing reliable.

@@ -7,6 +7,11 @@ agent types; naming a worker in prose is not dispatch. Other hosts must use thei
 model IDs and delegation tools, or run in the current session and disclose the fallback.
 Host/project overrides take precedence; configured tier is not proof of the model actually used.
 
+Delegating is the coordinator's call, not a promise that a cheaper model does the implementation.
+Doing the work in this session is a valid outcome when briefing and re-checking a worker would
+cost more than it saves. Either way, say which happened and why; never imply a worker ran when
+none was dispatched.
+
 ## Delegate only when it saves work
 
 Use at most two bounded discovery workers and one executor at a time. Tiny edits and already

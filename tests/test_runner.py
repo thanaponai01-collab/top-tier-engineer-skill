@@ -218,6 +218,60 @@ class OtherActionChecks(unittest.TestCase):
                 result = run.score_run(case, "with", parsed, good, checks, NO_CHANGES)
                 self.assertFalse(result["passed"])
 
+    def test_delegation_is_read_from_the_subagents_own_model(self):
+        """The agent file says `model: sonnet`; only the subagent's messages prove it ran there."""
+        spec = {"model_any": ["sonnet"], "must_edit": True, "agent_any": ["drive-executor"]}
+
+        def call(name, used, parent="", id_="", **inp):
+            return {"type": "assistant", "parent_tool_use_id": parent or None,
+                    "message": {"model": used, "content": [
+                        {"type": "tool_use", "id": id_, "name": name, "input": inp}]}}
+
+        def checks(*events, arm="with"):
+            parsed = agent.parse_stream(stream(*events))
+            return [c["ok"] for c in run.check_actions({"delegated": spec}, parsed, NO_CHANGES, arm=arm)]
+
+        dispatch = call("Agent", "claude-opus-5-5", id_="t1",
+                        subagent_type="top-tier-engineer:drive-executor", prompt="build it")
+        self.assertEqual(checks(dispatch, call("Edit", "claude-sonnet-5-5", "t1", file_path="shop/cart.py")),
+                         [True, True])
+        self.assertEqual(checks(dispatch, call("Read", "claude-sonnet-5-5", "t1", file_path="SPEC.md"),
+                                call("Edit", "claude-opus-5-5", file_path="shop/cart.py")),
+                         [False, False], "a worker that only read, with Opus editing, is not routed work")
+        self.assertEqual(checks(dispatch, call("Edit", "claude-opus-5-5", "t1", file_path="shop/cart.py")),
+                         [False, False], "a worker that ran on Opus is not a Sonnet worker")
+        self.assertEqual(checks(call("Edit", "claude-opus-5-5", file_path="shop/cart.py")), [False, False])
+        generic = call("Agent", "claude-opus-5-5", id_="t2", subagent_type="general-purpose", model="sonnet")
+        self.assertEqual(checks(generic, call("Write", "claude-sonnet-5-5", "t2", file_path="shop/tax.py")),
+                         [True, False], "any Sonnet worker counts head-to-head; only drive-executor follows the skill")
+        self.assertEqual(checks(generic, call("Write", "claude-sonnet-5-5", "t2", file_path="shop/tax.py"),
+                                arm="without"), [True])
+
+    def test_an_advisory_check_is_shown_but_never_decides(self):
+        case = grade.load_case("drive-says-who-did-the-work")
+        good = grade.read(os.path.join(case["dir"], "reference", "good.md"))
+        routing = "/plugin/skills/drive/references/model-routing.md"
+        parsed = agent.parse_stream(stream(tool("Read", file_path=routing), tool("Edit", file_path="shop/cart.py")))
+        checks = run.check_actions(case["actions"], parsed, NO_CHANGES,
+                                   {"exit": 0, "output": "ACCEPTANCE: 21/21 passed"}, arm="with")
+        self.assertFalse(next(c for c in checks if "Sonnet" in c["check"])["ok"])
+        r = run.score_run(case, "with", parsed, good, checks, NO_CHANGES)
+        self.assertTrue(r["passed"], "doing the work in-session is allowed; delegation is only recorded")
+        self.assertTrue(r["followed_skill"])
+
+    def test_skipping_the_routing_policy_is_not_following_the_skill(self):
+        spec = {"must_read_any": [r"model-routing\.md"]}
+        def ok(*events, arm="with"):
+            got = run.check_actions(spec, agent.parse_stream(stream(*events)), NO_CHANGES, arm=arm)
+            return got[0]["ok"] if got else None
+        self.assertTrue(ok(tool("Read", file_path=r"C:\tmp\drive\references\model-routing.md")))
+        self.assertTrue(ok(bash("cat $B/references/model-routing.md")))
+        self.assertFalse(ok(tool("Read", file_path="drive/SKILL.md")),
+                         "seeing the link in SKILL.md is not reading the policy")
+        self.assertFalse(ok(bash("cat > notes.md <<'EOF'\nsee model-routing.md\nEOF")),
+                         "writing the name into notes is not reading it")
+        self.assertIsNone(ok(arm="without"))
+
     def test_read_only_allows_notes_but_not_code(self):
         parsed = agent.parse_stream(stream())
         ok = run.check_actions({"read_only": True}, parsed,

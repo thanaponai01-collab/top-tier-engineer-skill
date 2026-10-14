@@ -120,9 +120,10 @@ never write the cache; a missing or corrupt index falls back to bounded file ret
 metadata, budgets and freshness live in [the memory convention](plugin/skills/project-context/references/memory.md);
 foundation categories in [foundation](plugin/skills/project-foundation/references/foundation.md).
 
-Worker routing: the plugin ships `drive-executor` (Sonnet) and read-only `setup-reader` (Haiku);
-`drive` dispatches bounded assignments, the coordinator checks the product evidence, and host
-overrides apply. See [the routing policy](plugin/skills/drive/references/model-routing.md).
+Worker routing: the plugin ships `drive-executor` (Sonnet) and read-only `setup-reader` (Haiku).
+The coordinating session decides whether a bounded assignment is worth dispatching; often it is
+not, and the session implements directly. Either way the report says who did the work. The
+coordinator checks the product evidence, and host overrides apply. See [the routing policy](plugin/skills/drive/references/model-routing.md).
 
 ## Hooks
 

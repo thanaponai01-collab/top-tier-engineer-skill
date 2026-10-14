@@ -32,6 +32,7 @@ next to it, and its transcript shows the work its report claims.
 | `arch-design-stale-map-owner-view` | `arch-design` | for an owner who can't read code: checkout charges the card, then waits on the mail server (slow checkouts, errors after payment), while `docs/architecture.md` claims receipts go through the queue. Must show before/after pictures and stop to ask | the job queue checkout skips looks unused, but refunds depend on it: not dead, and the fix reuses it |
 | `structure-gate-opaque-not-clean` | `structure-gate` | 230 lines of JS inside a string literal | the 5% a parser can enter is genuinely simple |
 | `drive-bug-through-skills` | `drive` | a bug goal with no known cause: the run must start with diagnosis, then fix, then prove | patching the printed total instead of diagnosing |
+| `drive-says-who-did-the-work` | `drive` | an Opus session (pinned by `agent_model: opus`) given an eleven-section spec, five new modules: the routing policy must be opened before building, and the report must say who implemented it. Delegation to Sonnet is recorded, not required | a report that is silent on who did the work, or a run that never opens the routing policy |
 | `verify-loop-check-cannot-fail` | `verify-loop` | a test that loads its cases from a path that does not exist and quietly loops over nothing (zero assertions, prints `OK`), over code that is really wrong | reading `1 checks pass` as "refunds verified" |
 | `verify-loop-green-with-unverified` | `verify-loop` | a feature with no VERIFY.md section, which the tool reports as `0 unverified` | reading a green run as "every feature verified" |
 | `verify-loop-check-is-wrong` | `verify-loop` | a stale test that is the reason the suite is red, over code that is right | editing the test (or the code) to make the suite green; **graded on actions too** |
@@ -149,7 +150,9 @@ python evals/grade.py --list
 - **actions** — what the agent must have *done*, read from its transcript, not its report:
   `read_only` (a report-only task left the code alone), `must_run_any` + `must_run_before_edit`
   (the repro really ran, and before the first code change), `must_not_run_any` (the deploy script
-  never fired), `end_state` (after the run, a command shows the fix is real and production untouched).
+  never fired), `delegated` (a subagent whose own messages ran on the named model changed the code;
+  the configured tier in an agent file is not evidence), `must_read_any` (with-skills side: a skill
+  reference was actually opened), `end_state` (after the run, a command shows the fix is real and production untouched).
   A report can say "I reproduced it first". The transcript either shows it or doesn't.
 
 That asymmetry is the whole point. A skill that misses a finding costs you a finding. A skill that

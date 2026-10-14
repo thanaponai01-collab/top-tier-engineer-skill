@@ -94,6 +94,14 @@ def check_actions(spec, parsed, changes, end_output=None, arm="with"):
                        script an unattended run must park, not fire
       skills_in_order  (with-skills side only) the agent opened these skills, in
                        this order — a playbook followed, not done from memory
+      delegated        {model_any, must_edit, agent_any}: a top-level dispatch whose
+                       subagent's own messages ran on a model matching `model_any`
+                       (and, with must_edit, changed code) — the routing really
+                       happened, not just a tier written in an agent file.
+                       `agent_any` (with-skills side only) also names the agent type.
+                       `"gate": false` records it without deciding pass or fail
+      must_read_any    (with-skills side only) regexes; a Read path or shell command
+                       matches one — a skill reference actually opened, not skipped
       end_state        after the run, `cmd` is run in the work folder; its output
                        must contain one of `must_print_any` and none of
                        `must_not_print_any` — the fix is real on disk, not in prose
@@ -161,6 +169,43 @@ def check_actions(spec, parsed, changes, end_output=None, arm="with"):
             "with_only": True,
         })
 
+    routed = spec.get("delegated")
+    if routed:
+        work = dispatches(parsed["tools"])
+        on_model = [w for w in work
+                    if any(re.search(m, x) for m in routed.get("model_any", [".*"]) for x in w["models"])
+                    and (w["edits"] or not routed.get("must_edit"))]
+        seen = "; ".join(f"{w['agent'] or 'agent'} → {', '.join(w['models']) or 'no messages'}"
+                         f"{' (edited)' if w['edits'] else ''}" for w in work)
+        gate = routed.get("gate", True)
+        checks.append({
+            "check": routed.get("why") or f"a subagent on {', '.join(routed['model_any'])} did the work",
+            "ok": bool(on_model),
+            "detail": "dispatched: " + seen if work else "no subagent dispatched",
+            "gate": gate,
+        })
+        if routed.get("agent_any") and arm == "with":
+            typed = [w for w in on_model if any(re.search(a, w["agent"]) for a in routed["agent_any"])]
+            checks.append({
+                "check": routed.get("agent_why") or f"the worker was {', '.join(routed['agent_any'])}",
+                "ok": bool(typed),
+                "detail": "dispatched: " + (seen or "nothing"),
+                "with_only": True,
+                "gate": gate,
+            })
+
+    to_read = spec.get("must_read_any")
+    if to_read and arm == "with":
+        sources = [t["input"].get("file_path", "") for t in parsed["tools"] if t["name"] == "Read"]
+        sources += [executed_part(c) for c in commands]
+        hit = next((s for s in sources if any(re.search(r, s.replace("\\", "/")) for r in to_read)), None)
+        checks.append({
+            "check": spec.get("must_read_why") or f"opened one of: {', '.join(to_read)}",
+            "ok": bool(hit),
+            "detail": "read: " + " ".join(hit.split())[:110] if hit else "never opened it",
+            "with_only": True,
+        })
+
     end = spec.get("end_state")
     if end:
         execution = end_output if isinstance(end_output, dict) else {}
@@ -191,6 +236,24 @@ EDIT_TOOLS = {"Edit", "Write", "MultiEdit", "NotebookEdit"}
 
 HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1[^\n]*\n.*?\n\s*\2\s*(?=\n|$)", re.S)
 QUOTED = re.compile(r"'[^']*'|\"(?:[^\"\\]|\\.)*\"")
+
+
+def dispatches(tools):
+    """Each top-level Agent/Task call, with the models its subagent's messages ran on
+    and whether that subagent changed code."""
+    out = []
+    for t in tools:
+        if t["name"] not in {"Agent", "Task"} or t.get("sub"):
+            continue
+        inner = [s for s in tools if t.get("id") and s.get("parent") == t["id"]]
+        out.append({
+            "agent": t["input"].get("subagent_type", ""),
+            "models": sorted({s["model"] for s in inner if s.get("model")}),
+            "edits": any(s["name"] in EDIT_TOOLS or (s["name"] in agent.SHELL_TOOLS and
+                         SHELL_EDIT.search(executed_part(s["input"].get("command", ""))))
+                         for s in inner),
+        })
+    return out
 
 
 def executed_part(cmd):
@@ -310,8 +373,9 @@ def score_run(case, arm, parsed, report, checks, changes, verdict=None):
     main = verdict if by_meaning else graded
     leaked = agent.touched_answer_key(parsed)
     used_skill = any(agent.skill_matches(s, case["skill"]) for s in parsed["skills_loaded"])
-    shared = [c for c in checks if not c.get("with_only")]
-    own = [c for c in checks if c.get("with_only")]
+    # A `gate: false` check is recorded and shown, never decisive.
+    shared = [c for c in checks if not c.get("with_only") and c.get("gate", True)]
+    own = [c for c in checks if c.get("with_only") and c.get("gate", True)]
     ok_actions = all(c["ok"] for c in shared)
     return {
         "case": case["case"], "skill": case["skill"], "arm": arm,
@@ -357,7 +421,9 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
             prompt = explicit_manual_skill(prompt, case, plugin_dir)
         say(f"start  {tag}")
         raw = agent.run_agent(prompt, workdir, plugin_dir if arm == "with" else None,
-                              model=args.model, timeout=args.timeout, budget_usd=args.budget_usd)
+                              # A case about routing pins its coordinator; it outranks --model.
+                              model=case.get("agent_model") or args.model,
+                              timeout=args.timeout, budget_usd=args.budget_usd)
         parsed = agent.parse_stream(raw["lines"], plugin_dir=plugin_dir if arm == "with" else None)
         if raw["timed_out"]:
             parsed["is_error"] = True
@@ -418,7 +484,8 @@ def write_run_grade(run_dir, result):
                   "Phrase grader (grade.py), for comparison:"]
     lines += [result["grade_text"], ""]
     for c in result["action_checks"]:
-        lines.append(f"  {'ok     ' if c['ok'] else 'FAILED '} {c['check']} — {c['detail']}")
+        mark = 'ok     ' if c['ok'] else 'FAILED ' if c.get('gate', True) else 'note   '
+        lines.append(f"  {mark} {c['check']} — {c['detail']}")
     if result["leaked"]:
         lines.append("  FAILED  the agent reached for the answer key — this run does not count")
     if result["errored"]:
@@ -521,11 +588,12 @@ def write_scorecard(results, meta, path=SCORECARD):
         L.append("only the side with skills can be asked it:")
         for name, runs in sorted(followed.items()):
             n = sum(1 for r in runs if r["followed_skill"])
-            detail = next((c for c in runs[0]["action_checks"] if c.get("with_only")), {})
+            detail = next((c for c in runs[0]["action_checks"]
+                           if c.get("with_only") and c.get("gate", True)), {})
             L.append(f"- `{name}`: {n} of {len(runs)} tries — {detail.get('check', '')}.")
             for r in runs:
                 for c in r["action_checks"]:
-                    if c.get("with_only") and not c["ok"]:
+                    if c.get("with_only") and c.get("gate", True) and not c["ok"]:
                         L.append(f"  - one try {c['detail']}")
 
     L.append("\n## Why tries failed\n")
@@ -537,7 +605,7 @@ def write_scorecard(results, meta, path=SCORECARD):
         reasons += [f"missed: {m}" for m in r["missed"]]
         reasons += [f"fell for the trap: {t}" for t in r["tripped"]]
         reasons += [f"did not do it: {c['check']} ({c['detail']})" for c in r["action_checks"]
-                    if not c["ok"] and not c.get("with_only")]
+                    if not c["ok"] and not c.get("with_only") and c.get("gate", True)]
         if r["leaked"]:
             reasons.append("looked at the answer key — run discarded")
         if r["errored"]:

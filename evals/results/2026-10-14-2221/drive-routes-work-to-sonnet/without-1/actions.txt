@@ -1,0 +1,3 @@
+  1. Bash: cd fixture && find . -type f -not -path '*/.git/*' | head -50 && cat SPEC.md && cat acceptance/check.py
+  2. Bash: cd fixture && cat shop/*.py tests/test_cart.py
+  3. Bash: cd fixture && cat > shop/cart.py <<'EOF' """A shopping cart: quantities per sku.""" from decimal import Decimal, ROUND_HALF_UP from shop import catalog BULK_QT…
