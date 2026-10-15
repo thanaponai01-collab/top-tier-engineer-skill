@@ -1,0 +1,19 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   no-op — "`completed: 0`, `checksum: 0` against the expected 42000. It does no work, so it's 1 ms."
+  found   errors — "900 of 1000 failed, `completed: 100`, `checksum: 4200`."
+  found   unfair — "It compares a debug build with a release build."
+  found   noise — "The data can't separate "no effect" from an effect of up to about ±30% in export time, so it doesn't support adopting th"
+  found   plan — "Interleave the runs."
+
+Phrase grader (grade.py), for comparison:
+FAIL  perf-optimize-benchmark-validity  [perf-optimize]  3/5 found, score 0.60 (needs 1.00)
+  MISSED  no-op: Reject skip: zero useful work and wrong output
+            named it, but never said what was wrong with it
+  found   errors: Reject drop-errors: 900 errors and incomplete/wrong output
+  found   unfair: Reject debug-old versus release candidate: unfair build configuration
+  MISSED  noise: Candidate gain inconclusive: overlapping variation, journey unchanged
+            named it, but never said what was wrong with it
+  found   plan: Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling
+
+  ok      left the code untouched (a report-only task) — no code file changed

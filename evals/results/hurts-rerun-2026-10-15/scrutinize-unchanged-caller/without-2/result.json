@@ -1,0 +1,63 @@
+{
+  "case": "scrutinize-unchanged-caller",
+  "skill": "scrutinize",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   billing-caller-breaks \u2014 \"Now `get_user` returns `None`, and `None[\"tier\"]` raises `TypeError`, which this `except KeyError` doesn't catch.\"\n  found   tests-mock-around-it \u2014 \"`tests/test_billing.py:12` mocks `get_user` with `side_effect=KeyError(\"nobody\")`, so the billing test still sees the ol\"\n  found   safety-assumption-and-boundary-probe \u2014 \"On `main` the same call returns `1000` (an unknown user pays list price, as the docstring says).\"\n  held    approve",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1554,
+      "cacheReadInputTokens": 107677,
+      "cacheCreationInputTokens": 10830,
+      "webSearchRequests": 0,
+      "costUSD": 0.13929539999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 41,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.13929539999999999,
+  "turns": 5,
+  "seconds": 20.9,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

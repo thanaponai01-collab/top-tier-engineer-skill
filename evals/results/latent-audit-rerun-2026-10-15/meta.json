@@ -1,0 +1,13 @@
+{
+  "started": "2026-10-15-1343",
+  "repeats": 3,
+  "arms": [
+    "without",
+    "with"
+  ],
+  "version": "4.66.0",
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "out_rel": "evals/results/latent-audit-rerun-2026-10-15"
+}

@@ -1,0 +1,47 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "no-op",
+      "what": "Reject skip: zero useful work and wrong output",
+      "found": true,
+      "quote": "**0 of 1000 completed**, checksum 0 (expected 42000)",
+      "quote_checked": true
+    },
+    {
+      "id": "errors",
+      "what": "Reject drop-errors: 900 errors and incomplete/wrong output",
+      "found": true,
+      "quote": "**100 of 1000 completed, 900 errors**, checksum 4200",
+      "quote_checked": true
+    },
+    {
+      "id": "unfair",
+      "what": "Reject debug-old versus release candidate: unfair build configuration",
+      "found": true,
+      "quote": "Debug vs release measures the build mode, not the code.",
+      "quote_checked": true
+    },
+    {
+      "id": "noise",
+      "what": "Candidate gain inconclusive: overlapping variation, journey unchanged",
+      "found": true,
+      "quote": "The 5 ms journey difference (about 1.7%) is well inside the overlapping ranges, and the export medians are the same.",
+      "quote_checked": true
+    },
+    {
+      "id": "plan",
+      "what": "Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling",
+      "found": true,
+      "quote": "**Alternate runs:** A B B A \u2026 for 15 pairs (30 runs), clearing the cache before every run, with one discarded warm-up per variant.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.044720600000000006,
+  "model": "claude-sonnet-5-5"
+}

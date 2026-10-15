@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "billing-caller-breaks",
+      "what": "billing.py is not in the diff, but price_for still relies on get_user raising KeyError for an unknown user. With the change, get_user returns None, so None['tier'] raises TypeError at checkout for any unknown or guest user instead of charging list price.",
+      "found": true,
+      "quote": "`billing.py` still expects `get_user` to raise `KeyError`. Now it gets `None` back, indexes into it, and crashes with `TypeError`.",
+      "quote_checked": true
+    },
+    {
+      "id": "tests-mock-around-it",
+      "what": "tests/test_billing.py patches get_user with side_effect=KeyError, so the suite still exercises the old contract and stays green while the real path breaks.",
+      "found": true,
+      "quote": "It uses `mock.patch(\"billing.get_user\", side_effect=KeyError(\"nobody\"))`, so it keeps simulating the old contract.",
+      "quote_checked": true
+    },
+    {
+      "id": "safety-assumption-and-boundary-probe",
+      "what": "The safe behavior depends on preserving list-price checkout when lookup returns no user; the report identifies that contract assumption and says the actual billing.price_for path was probed on the branch (TypeError) and base (1000), distinguishing bad from safe behavior.",
+      "found": true,
+      "quote": "main: `price_for('nobody',1000)` \u2192 `1000`, `price_for('u1',1000)` \u2192 `900`",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "approve",
+      "what": "Approving the merge as a safe refactor because the diff looks clean and the tests are green.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0340066,
+  "model": "claude-sonnet-5-5"
+}

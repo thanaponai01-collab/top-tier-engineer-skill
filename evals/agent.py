@@ -40,6 +40,8 @@ ENV_KEEP = (
 
 IGNORED_DIRS = {"__pycache__", ".pytest_cache", ".git", ".mypy_cache", ".ruff_cache"}
 SHELL_TOOLS = {"Bash", "PowerShell"}
+# A shell command that prints a file's text. Naming the path (ls, rm, grep -l) is not reading it.
+SHELL_READERS = re.compile(r"(?<![\w.-])(cat|sed|head|tail|less|more|nl|bat|type|get-content|gc)(?![\w.-])", re.I)
 
 # Strings that mean the agent reached the answer key instead of doing the task.
 LEAK_MARKERS = ("evals/cases", "reference/good", "reference/bad", "expect.json",
@@ -179,6 +181,16 @@ def parse_stream(lines, plugin_dir=None):
             name = staged.get(os.path.normcase(os.path.abspath(path)))
             if name:
                 reads.append({"skill": name, "path": path, "sub": t["sub"]})
+    # An agent that prints a staged SKILL.md with `cat`/`sed`/`Get-Content` has loaded it as surely
+    # as one that calls Read; ignoring that made runs that followed the skill score "not opened".
+    for t in tools:
+        cmd = t["input"].get("command", "") if t["name"] in SHELL_TOOLS else ""
+        if not cmd or not staged or not SHELL_READERS.search(cmd):
+            continue
+        text = os.path.normcase(cmd.replace("\\", "/"))
+        for path, name in staged.items():
+            if os.path.normcase(path.replace("\\", "/")) in text:
+                reads.append({"skill": name, "path": path, "sub": t["sub"], "via": "shell"})
     usage = result.get("modelUsage") or {}
     final = result.get("result")
     if not isinstance(final, str) or not final.strip():

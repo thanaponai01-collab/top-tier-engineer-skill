@@ -13,7 +13,8 @@ This repo is the `top-tier-engineer` Claude Code plugin: independent skills unde
 - A skill earns its place by making an agent better, so a new skill lands with an eval case under
   `evals/cases/` (see `evals/README.md`). Write the case first and watch an agent without the skill
   fail it; then show the skill fixing that. `evals/uncovered.txt` lists older skills with no case yet
-  and may only shrink.
+  and may only shrink. `python tools/ledger.py --write` refreshes `evals/LEDGER.md` (all runs, per case);
+  the tests fail if it is stale.
 - After changing a skill, re-run it for real: `python evals/run.py --cases <its case>`. The unit
   tests prove the grader works; only `run.py` shows whether the skill does. Commit the refreshed
   `evals/RESULTS.md`.
