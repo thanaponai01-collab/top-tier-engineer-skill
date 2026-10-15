@@ -70,6 +70,25 @@ class ParseStream(unittest.TestCase):
             delegated = agent.parse_stream(stream(event), plugin_dir=plugin)
             self.assertTrue(delegated["skill_reads"][0]["sub"])
 
+    def test_shell_reads_of_staged_skill_count_as_loading(self):
+        with tempfile.TemporaryDirectory() as plugin:
+            path = os.path.join(plugin, "skills", "drive", "SKILL.md")
+            os.makedirs(os.path.dirname(path))
+            with open(path, "w") as fh:
+                fh.write("skill")
+            fwd = path.replace("\\", "/")
+            for cmd in (f'cat "{fwd}"', f"sed -n 1,40p {fwd}", f"head -50 '{path}'",
+                        f'Get-Content "{path}"', f'cd x; type "{path}" | more'):
+                p = agent.parse_stream(stream(tool("Bash", command=cmd)), plugin_dir=plugin)
+                self.assertEqual(p["skills_loaded"], ["drive"], cmd)
+                self.assertEqual(p["skill_reads"][0]["via"], "shell")
+            # Naming the file without reading it, or reading another checkout's copy, is not loading.
+            for cmd in (f'ls "{fwd}"', f'rm "{fwd}"', "cat /other/skills/drive/SKILL.md"):
+                p = agent.parse_stream(stream(tool("Bash", command=cmd)), plugin_dir=plugin)
+                self.assertEqual(p["skills_loaded"], [], cmd)
+            unstaged = agent.parse_stream(stream(tool("Bash", command=f'cat "{fwd}"')))
+            self.assertEqual(unstaged["skills_loaded"], [])
+
     def test_powershell_execution_is_not_lost(self):
         parsed = agent.parse_stream(stream(tool("PowerShell", command="cd fixture; python incident.py")))
         self.assertEqual(parsed["commands"], ["cd fixture; python incident.py"])

@@ -1,0 +1,73 @@
+{
+  "case": "latent-audit-layers-and-decoy",
+  "skill": "latent-audit",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   layer-breach-notify \u2014 \"`app/models/notify.py:2` has `from app.routes.web import BANNER`.\"\n  found   legacy-export-dead \u2014 \"`app/services/legacy_export.py` (`to_xml`) | **Watch: strongest delete candidate**\"\n  found   layers-were-declared-not-guessed \u2014 \"I took the layer order from `ARCHITECTURE.md:3-7`: routes (interface), then services (domain), then models (data).\"\n  held    csv-out-resolved-by-name",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "latent-audit"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "latent-audit",
+      "path": "<tmp>\\tte-plugin-i4jgk4nk\\top-tier-engineer\\skills\\latent-audit\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-i4jgk4nk\\top-tier-engineer\\skills\\latent-audit\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 3172,
+      "cacheReadInputTokens": 113182,
+      "cacheCreationInputTokens": 13850,
+      "webSearchRequests": 0,
+      "costUSD": 0.1969164,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 473,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1969164,
+  "turns": 5,
+  "seconds": 36.4,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-i4jgk4nk\\top-tier-engineer",
+  "stderr_tail": "",
+  "end_output": null
+}

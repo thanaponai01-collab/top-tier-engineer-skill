@@ -1,0 +1,72 @@
+{
+  "case": "perf-optimize-benchmark-validity",
+  "skill": "perf-optimize",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  5/5 found\n  found   no-op \u2014 \"**0 of 1000 completed**, checksum 0 (expected 42000)\"\n  found   errors \u2014 \"**100 of 1000 completed, 900 errors**, checksum 4200\"\n  found   unfair \u2014 \"Debug vs release measures the build mode, not the code.\"\n  found   noise \u2014 \"The 5 ms journey difference (about 1.7%) is well inside the overlapping ranges, and the export medians are the same.\"\n  found   plan \u2014 \"**Alternate runs:** A B B A \u2026 for 15 pairs (30 runs), clearing the cache before every run, with one discarded warm-up pe\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "perf-optimize"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "perf-optimize",
+      "path": "<tmp>\\tte-plugin-kdvet8z6\\top-tier-engineer\\skills\\perf-optimize\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 2747,
+      "cacheReadInputTokens": 87380,
+      "cacheCreationInputTokens": 12658,
+      "webSearchRequests": 0,
+      "costUSD": 0.173712,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 557,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.173712,
+  "turns": 4,
+  "seconds": 32.1,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-kdvet8z6\\top-tier-engineer",
+  "stderr_tail": "",
+  "end_output": null
+}

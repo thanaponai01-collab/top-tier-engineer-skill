@@ -14,6 +14,8 @@ skill "works" here when the agent names the planted thing, does **not** fall for
 next to it, and its transcript shows the work its report claims.
 
 **The latest score is in [`RESULTS.md`](RESULTS.md)** (with vs without the skills, per case).
+**What every case has shown across all retained runs is in [`LEDGER.md`](LEDGER.md)**
+(generated: `python tools/ledger.py --write`; it flags thin samples, untrusted runs and cases never compared).
 
 ## The cases
 
