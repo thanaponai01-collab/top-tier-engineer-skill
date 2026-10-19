@@ -13,8 +13,11 @@ metadata:
 
 Build the check before the work, make it hard to fool, loop until it passes.
 
-**Done** = one mapped check seen rejecting a controlled wrong result, checks frozen with
-`baseline`, then `run --strict` and `status` print `VERIFY-STATE: green` on unchanged inputs.
+The point is not that you are sure; it is that someone who did not watch can trust the claim.
+
+**Done** = one mapped check seen rejecting a controlled wrong result, the highest-risk check seen
+catching a `challenge` mutation, checks frozen with `baseline`, then `run --strict` and `status`
+print `VERIFY-STATE: green` on unchanged inputs. `verify.py` decides these, not your confidence.
 Anything less is reported as what it is: red, partial, stale or unverified.
 
 ## A good check
@@ -38,13 +41,15 @@ evidence.
 
 1. **Name the claim** observably. Not "refunds work" but "POST /refund on a paid order returns 200
    and the balance drops by the amount".
-2. **Pick the strongest rung you can run**: lint < unit < integration < real run < real data.
-   Take the top one, plus one below for a fast signal.
+2. **Pick the strongest check you can run**: lint < unit < integration < real run < real data,
+   and above that property-based, differential, metamorphic or formal checks. There is no top
+   rung: take the strongest this environment affords, plus one below for a fast signal.
 3. **Record it** in VERIFY.md ([format](VERIFY_FORMAT.md)): command, `oracle:` files, literal
    `fail-signal:`. Reuse the project's harness; `init` drafts from existing tests.
 4. **Prove it fails.** From a clean tree, put in the original bug or a deliberate wrong state,
    `run`, see the fail-signal, restore, confirm `git diff` is empty, `run` again. Add a
-   `fail-proof:` line. Prose is not a receipt.
+   `fail-proof:` line. Prose is not a receipt. Then `challenge` the highest-risk feature; keep
+   `require: challenge` in VERIFY.md so strict stays red (`UNCHALLENGED`) until one is caught.
 5. **Freeze**: `baseline`. From here change code, never the check.
 6. **Slice and run.** Fix what the failure text says. `NEWLY RED`: undo your last change first.
    `SAME FAILURE x2`: your model is wrong; re-read before a third try. `BUDGET`: stop and report.
@@ -65,6 +70,20 @@ Green only covers what is mapped. Look for what it cannot show and report it:
   ([artifact identity](VERIFY_FORMAT.md#run))
 
 An assessment reports; it edits product code only when a fix was asked for.
+
+## Assume the checker can be fooled, by you too
+
+A capable agent can pass a weak check without doing the work: hardcode the output, mock the thing
+under test, loosen an assertion, narrow the claim. The stronger the agent, the more this matters.
+Guard structurally, not with good intentions:
+
+- **Separate judge from worker.** Where you can, have a fresh context (a subagent, a reviewer, CI)
+  write or challenge the check without seeing the implementation.
+- **Freeze before you build.** `baseline` comes before the work it judges, and re-freezing a
+  weakened check needs a named reviewer (step 7).
+- **Prefer evidence a third party can re-run.** `.verify-state.json` is sealed, so a hand edit
+  shows as `tampered`, but the seal has no secret. Independently owned [CI](references/ci.md) is
+  what nobody in the loop can reach.
 
 ## The answer
 

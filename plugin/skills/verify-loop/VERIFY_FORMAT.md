@@ -5,6 +5,7 @@
 ## Format Overview
 
 ```markdown
+require: challenge
 include: packages/auth/VERIFY.md
 
 ## Feature Name
@@ -89,6 +90,11 @@ include: packages/auth/VERIFY.md
   `include:` per area, and each area's sections move to `verify/<area>.md` verbatim.
   Every verify.py command that reads the recipe follows the includes, so the split changes no verdict.
 
+### 6. `require: <words>`
+- A top-level line (outside any section). `require: challenge` makes `run --strict` stay red
+  (`UNCHALLENGED`) until `verify.py challenge` has caught a mutation for the current checks.
+  `verify.py init` writes it. It is frozen by `baseline`: removing it later is `CHECK CHANGED`.
+
 ## Completion
 
 `run --strict` requires a baseline and rejects failed checks, unverified features, missing rejection evidence and orphan
@@ -104,4 +110,8 @@ A changed or removed frozen check, or a changed `fail-signal:`, re-freezes only 
 This makes a self-approved change visible, not impossible: the state file is local and editable,
 so committed checks under review rules and the `ci` mode remain the independent guard.
 
+.verify-state.json is sealed with a content hash on every write. A file edited by hand reads as
+`STATE FORGED` on run and `tampered` on status until it is deleted and verification starts over.
+The seal has no secret, so it catches careless or naive edits, not a writer who recomputes it;
+independently owned CI is the boundary for that.
 Commands run through the shell like a Makefile: run recipes only from a repo you trust.

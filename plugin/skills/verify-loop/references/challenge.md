@@ -42,7 +42,8 @@ challenge it again. Never change the expected outcome to fit the implementation.
 
 Evidence is stored under `challenge` in .verify-state.json: claim, exact mutation, original
 tree fingerprint, check signature, commands, exit codes and bounded output for both runs.
-Caught evidence can satisfy strict rejection proof for unchanged checks; still run `baseline`,
+With `require: challenge` in VERIFY.md, strict stays red (`UNCHALLENGED`) until one
+challenge is caught for the current checks. Caught evidence can satisfy strict rejection proof for unchanged checks; still run `baseline`,
 `run --strict` and `status` before claiming completion. Challenge alone does not mark the regular
 verification state green. Evidence becomes historical when files or check definitions change.
 Caught checks also retain individual receipts under `failures`, including their mutation and

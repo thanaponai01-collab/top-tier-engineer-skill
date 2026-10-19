@@ -25,7 +25,9 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
 broke something that passed, SAME FAILURE when a check fails identically twice, and BUDGET after
 --budget red runs in a row. A `--only` run compares nothing and saves nothing.
 Strict runs require retained failure output for the current checks plus a fail-proof note;
-a non-strict pass is partial, never a successful completion status.
+a non-strict pass is partial, never a successful completion status. A top-level
+`require: challenge` line also makes strict demand a caught `challenge` mutation. The state file is
+sealed with a content hash: a hand-edited one reads as tampered until it is deleted.
 
 A check passes when its command exits 0. Commands run through the shell, like a Makefile:
 only run a VERIFY.md from a repo you trust. Stdlib only.
@@ -101,6 +103,18 @@ def find_includes(text):
             if inc:
                 includes.append(inc)
     return includes
+
+
+def requirements(text):
+    """Top-level `require:` lines (outside any section), e.g. `require: challenge`. Lower-cased words."""
+    words, in_section = set(), False
+    for line in text.splitlines():
+        if re.match(r"^##\s", line):
+            in_section = True
+        m = re.match(r"^require:\s*(.+)$", line.strip()) if not in_section else None
+        if m:
+            words.update(w.strip().lower() for w in m.group(1).split(",") if w.strip())
+    return sorted(words)
 
 
 def parse(text, repo=None, seen=None):
@@ -493,6 +507,8 @@ def cmd_init(repo):
         "Run them all with `verify.py run`. This is a draft: fix the grouping, add a real-run check",
         "for each feature, and replace every TODO. Start with the current task; a complete map",
         "is optional. Unchecked sections remain unverified, and a draft is never proof.",
+        "",
+        "require: challenge",
         "",
     ]
     for name in sorted(groups):
@@ -901,7 +917,12 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         else:
             print("Blind spots: none listed. A recipe that admits none has not looked.")
 
-    incomplete = strict and (unverified or unproven or orphans or missing_baseline)
+    unchallenged = (strict and "challenge" in requirements(read(repo, RECIPE)) and not any(
+        r.get("mutation") and r.get("signature") == signature for r in receipts.values()))
+    if unchallenged and not as_json:
+        print("UNCHALLENGED  VERIFY.md requires a caught mutation for the current checks: run "
+              "`verify.py challenge` on the highest-risk feature")
+    incomplete = strict and (unverified or unproven or orphans or missing_baseline or unchallenged)
     try:
         changed_during_run = signature != sha(json.dumps(check_hashes(repo), sort_keys=True))
     except (OSError, ValueError):
@@ -942,6 +963,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 "journeys": journeys,
                 "broken": broken,
                 "flaky": len(flaky_checks),
+                "unchallenged": bool(unchallenged),
                 "quarantined": len(quarantined_hits),
             },
             "results": [
@@ -975,16 +997,32 @@ def sha(text):
     return hashlib.sha256(text.encode("utf-8", "replace")).hexdigest()[:16]
 
 
+def seal_of(state):
+    body = {k: v for k, v in state.items() if k != "seal"}
+    return hashlib.sha256(json.dumps(body, sort_keys=True).encode("utf-8")).hexdigest()
+
+
 def load_state(repo):
+    """The saved state. A file whose seal does not match was written by something other than this
+    script; it comes back marked `forged`, and the mark survives every later save until the file is
+    deleted. The seal has no secret: it catches hand edits, not a writer who recomputes it.
+    Independently owned CI is what a determined writer cannot reach."""
     try:
         with open(os.path.join(repo, STATE), encoding="utf-8") as fh:
             data = json.load(fh)
-        return data if isinstance(data, dict) else {}
     except (OSError, ValueError):
         return {}
+    if not isinstance(data, dict):
+        return {"forged": True}
+    if data and data.get("seal") != seal_of(data):
+        data["forged"] = True
+    data.pop("seal", None)
+    return data
 
 
 def save_state(repo, state):
+    state = {k: v for k, v in state.items() if k != "seal"}
+    state["seal"] = seal_of(state)
     with open(os.path.join(repo, STATE), "w", encoding="utf-8", newline="\n") as fh:
         json.dump(state, fh, indent=1, sort_keys=True)
 
@@ -1037,6 +1075,7 @@ def check_hashes(repo):
     hashes[RECIPE + " checks"] = sha("\n".join(f"{f['name']}|{k}|{c}" for f in features for k, c in f["checks"]))
     hashes[RECIPE + " signals"] = sha(json.dumps([(f["name"], f["signals"]) for f in features]))
     hashes[RECIPE + " run"] = sha(json.dumps(parse_run(read(repo, RECIPE)), sort_keys=True))
+    hashes[RECIPE + " require"] = sha(json.dumps(requirements(recipe_text)))
     return hashes
 
 
@@ -1058,7 +1097,8 @@ def current_receipts(state, signature):
     if challenge.get("verdict") == "caught" and challenge.get("check_signature") == signature:
         for key, row in challenge.get("mutated", {}).get("checks", {}).items():
             if key.startswith(challenge.get("feature", "") + "|") and not row.get("ok") and row.get("exit") is not None:
-                receipts[key] = {"signature": signature, "exit": row["exit"], "output": row["output"]}
+                receipts[key] = {"signature": signature, "exit": row["exit"], "output": row["output"],
+                                 "mutation": challenge.get("mutation")}
     return receipts
 
 
@@ -1127,7 +1167,10 @@ def track(repo, results, only, budget, failures, strict=False, signature=None):
     for c in changed:
         lines.append(f"CHECK CHANGED  {c} differs from the baseline. Loosening a check is not a fix: "
                      "restore it, or have a person review it and run `verify.py baseline --reviewed-by <name> --reason <why>`")
-    red = bool(failures or changed or strays)
+    if state.get("forged"):
+        lines.append(f"STATE FORGED  {STATE} was edited outside verify.py. Its history cannot be trusted: "
+                     "delete it and verify again from scratch")
+    red = bool(failures or changed or strays or state.get("forged"))
     rounds = state.get("rounds", 0) + 1 if red else 0
     if red and rounds >= budget:
         lines.append(f"BUDGET  {rounds} red runs in a row (budget {budget}): stop, report what passes, "
@@ -1135,7 +1178,7 @@ def track(repo, results, only, budget, failures, strict=False, signature=None):
     state.update({"checks": checks, "rounds": rounds, "result": "red" if red else "green",
                   "strict": strict, "tree": tree_sig(repo)})
     save_state(repo, state)
-    return lines, bool(changed or strays)
+    return lines, bool(changed or strays or state.get("forged"))
 
 
 def file_sigs(repo):
@@ -1214,10 +1257,12 @@ def cmd_scope(repo, patterns, add, clear, check):
 
 
 def frozen_lines(repo):
-    """What a re-baseline compares line by line: each check command and each feature's signals."""
-    features, _ = parse(read(repo, RECIPE), repo=repo)
+    """What a re-baseline compares line by line: each check command, each feature's signals and the
+    recipe's `require:` words."""
+    text = read(repo, RECIPE)
+    features, _ = parse(text, repo=repo)
     return {"checks": sorted(f"{f['name']}|{k}|{c}" for f in features for k, c in f["checks"]),
-            "signals": {f["name"]: f["signals"] for f in features}}
+            "signals": {f["name"]: f["signals"] for f in features}, "require": requirements(text)}
 
 
 def weakened(repo, state, hashes, lines):
@@ -1227,12 +1272,14 @@ def weakened(repo, state, hashes, lines):
     base = state.get("baseline") or {}
     old = state.get("baseline_lines")
     includes = {os.path.normpath(i).replace("\\", "/") for i in find_includes(read(repo, RECIPE))}
-    skip = {RECIPE + " run"} | includes | ({RECIPE + " checks", RECIPE + " signals"} if old else set())
+    skip = {RECIPE + " run"} | includes | ({RECIPE + " checks", RECIPE + " signals"} if old else set()) \
+        | ({RECIPE + " require"} if old and "require" in old else set())
     out = [k for k in sorted(base) if k not in skip and hashes.get(k) != base[k]]
     if old:
         out += [f"check removed or edited: {c}" for c in old.get("checks", []) if c not in lines["checks"]]
         out += [f"fail-signal changed: {name}" for name, sig in sorted(old.get("signals", {}).items())
                 if name in lines["signals"] and lines["signals"][name] != sig]
+        out += [f"requirement removed: require: {w}" for w in old.get("require", []) if w not in lines["require"]]
     return out
 
 
@@ -1292,6 +1339,8 @@ def status_verdict(repo):
     if not os.path.isfile(os.path.join(repo, RECIPE)):
         return "none", "no VERIFY.md; this repo does not use verify-loop", 0
     state = load_state(repo)
+    if state.get("forged"):
+        return "tampered", f"{STATE} was edited outside verify.py; delete it and verify again", 1
     if not state.get("result"):
         return "never-run", "VERIFY.md exists, no run recorded", 3
     try:
@@ -1365,12 +1414,15 @@ def answer(repo):
               for k, r in sorted(checks.items()) if isinstance(r, dict) and r.get("ok") and "|" in k]
     orphans = [t for t in find_tests(repo) if not is_covered(t, [c for f in features for _, c in f["checks"]], repo)] \
         if features else []
+    unchallenged = ["no caught challenge mutation for the current checks"] if features and \
+        "challenge" in requirements(read(repo, RECIPE)) and not any(
+            r.get("mutation") and r.get("signature") == signature for r in receipts.values()) else []
     return {
         "verdict": VERDICTS[name], "state": name, "detail": detail, "exit": code,
         "verify_line": state.get("verify_line"),
         "rejections": rejections, "passed": passed,
         "gaps": {"failing": failing, "unverified": unverified, "unproven": unproven,
-                 "orphan_tests": orphans, "blind_spots": blind,
+                 "orphan_tests": orphans, "unchallenged": unchallenged, "blind_spots": blind,
                  "rebaselined": [rebaseline_text(r) for r in open_rebaselines(repo, state)]},
         "rebaselines": state.get("rebaselines", []),
         "strict": bool(state.get("strict")), "rounds": state.get("rounds", 0),
@@ -1397,7 +1449,7 @@ def cmd_report(repo, as_json=False):
         print(f"PASSED  {p['feature']}: `{p['command']}`")
     g = a["gaps"]
     labels = (("failing", "failing check"), ("unverified", "no check"), ("unproven", "never seen red"),
-              ("orphan_tests", "orphan test"), ("blind_spots", "blind spot"),
+              ("orphan_tests", "orphan test"), ("unchallenged", "unchallenged"), ("blind_spots", "blind spot"),
               ("rebaselined", "check changed under review"))
     rows = [(label, item) for key, label in labels for item in g[key]]
     for label, item in rows:

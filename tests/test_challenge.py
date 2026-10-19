@@ -31,8 +31,8 @@ class Challenge(unittest.TestCase):
             self.assertIn("CHALLENGE: caught", out)
             self.assertEqual(Path(root, "app.py").read_text(), "def answer(): return 42\n")
             after = json.loads(Path(root, ".verify-state.json").read_text())
-            self.assertEqual({k: v for k, v in after.items() if k not in ("challenge", "failures")},
-                             {k: v for k, v in before.items() if k != "failures"})
+            self.assertEqual({k: v for k, v in after.items() if k not in ("challenge", "failures", "seal")},
+                             {k: v for k, v in before.items() if k not in ("failures", "seal")})
             self.assertIn("Answer|python test_answer.py", after["failures"])
             self.assertIn("expected 42", after["challenge"]["mutated"]["checks"]["Answer|python test_answer.py"]["output"])
 

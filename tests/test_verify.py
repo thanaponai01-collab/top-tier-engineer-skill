@@ -5,9 +5,9 @@ verify.py — the feature-to-check map behind verify-loop.
 Run them all with `python -m unittest discover tests`.
 """
 from pathlib import Path
-import json, os, subprocess, tempfile, unittest
+import json, os, subprocess, sys, tempfile, unittest
 
-from _helpers import run
+from _helpers import run, SCRIPTS
 
 PASS = 'python -c "pass"'
 FAIL = 'python -c "import sys; print(\'expected 42, got 41\'); sys.exit(1)"'
@@ -876,10 +876,10 @@ class ScaleAndEfficiency(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             fail_cmd = 'python -c "import sys; sys.exit(1)"'
             write(tmp, "VERIFY.md", f"## Unstable\n- test: `{fail_cmd}`\n- fail-proof: x\n")
-            # Populate state with quarantined entry
-            state_file = os.path.join(tmp, ".verify-state.json")
-            with open(state_file, "w", encoding="utf-8") as fh:
-                json.dump({"quarantined": [f"Unstable|{fail_cmd}"]}, fh)
+            # Populate state with quarantined entry, sealed the way verify.py writes it
+            sys.path.insert(0, SCRIPTS["verify.py"])
+            import verify
+            verify.save_state(tmp, {"quarantined": [f"Unstable|{fail_cmd}"]})
             # With --quarantine, it is isolated and does not exit 1
             code, out, _ = run("verify.py", "run", tmp, "--quarantine")
             self.assertEqual(code, 0, out)
@@ -993,3 +993,86 @@ class ScaleAndEfficiency(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TrustAndIndependence(unittest.TestCase):
+    RECIPE = ("require: challenge\n\n## Answer\n- test: `python test_answer.py`\n"
+              "- fail-signal: expected 42\n- fail-proof: returned 41, test went red\n")
+
+    def fixture(self, root):
+        write(root, "app.py", "def answer(): return 42\n")
+        write(root, "test_answer.py", "from app import answer\nassert answer() == 42, 'expected 42'\n")
+        write(root, "VERIFY.md", self.RECIPE)
+        write(root, "mutation.json", json.dumps({"file": "app.py", "before": "return 42", "after": "return 41",
+                                                 "claim": "the answer must equal 42"}))
+
+    def red_then_green(self, root):
+        write(root, "app.py", "def answer(): return 41  # wrong on purpose\n")  # new size: no stale .pyc
+        run("verify.py", "run", root)
+        write(root, "app.py", "def answer(): return 42\n")
+        run("verify.py", "baseline", root)
+
+    def test_hand_edited_state_is_tampered_until_deleted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", "## Ping\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
+            run("verify.py", "run", tmp)
+            path = os.path.join(tmp, ".verify-state.json")
+            with open(path, encoding="utf-8") as fh:
+                state = json.load(fh)
+            state.update(strict=True, result="green")
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(state, fh)
+            code, out, _ = run("verify.py", "status", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("tampered", out)
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("STATE FORGED", out)
+            self.assertIn("tampered", run("verify.py", "status", tmp)[1], "a later save must not launder it")
+            os.remove(path)
+            self.assertIn("never-run", run("verify.py", "status", tmp)[1])
+
+    def test_require_challenge_blocks_strict_green_until_a_mutation_is_caught(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.fixture(tmp)
+            self.red_then_green(tmp)
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("UNCHALLENGED", out)
+            self.assertIn("GAP  unchallenged", run("verify.py", "report", tmp)[1])
+            code, out, _ = run("verify.py", "challenge", tmp, "--feature", "Answer",
+                               "--mutation", os.path.join(tmp, "mutation.json"))
+            self.assertEqual(code, 0, out)
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 0, out)
+            self.assertNotIn("UNCHALLENGED", out)
+            self.assertIn("VERIFY-STATE: green", run("verify.py", "status", tmp)[1])
+
+    def test_removing_require_challenge_after_baseline_is_a_check_change(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.fixture(tmp)
+            self.red_then_green(tmp)
+            write(tmp, "VERIFY.md", self.RECIPE.replace("require: challenge\n\n", ""))
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("CHECK CHANGED  VERIFY.md require", out)
+
+    def test_rebaseline_needs_review_to_drop_require_challenge_but_not_to_add_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.fixture(tmp)
+            write(tmp, "VERIFY.md", self.RECIPE.replace("require: challenge\n\n", ""))
+            self.assertEqual(run("verify.py", "baseline", tmp)[0], 0)
+            write(tmp, "VERIFY.md", self.RECIPE)
+            code, out, _ = run("verify.py", "baseline", tmp)
+            self.assertEqual(code, 0, out)
+            write(tmp, "VERIFY.md", self.RECIPE.replace("require: challenge\n\n", ""))
+            code, out, _ = run("verify.py", "baseline", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("BASELINE REFUSED  requirement removed: require: challenge", out)
+
+    def test_init_drafts_require_challenge(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "tests/test_thing.py", "assert True\n")
+            run("verify.py", "init", tmp)
+            with open(os.path.join(tmp, "VERIFY.md"), encoding="utf-8") as fh:
+                self.assertIn("\nrequire: challenge\n", fh.read())

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.6.0 - 2026-10-19 - Built for stronger agents
+
+- `require: challenge` (a top-level VERIFY.md line, written by `init`, frozen by `baseline`) keeps
+  `run --strict` red with `UNCHALLENGED` until a `challenge` mutation is caught for the current
+  checks. `report` lists it under the new `unchallenged` gap.
+- `.verify-state.json` is sealed with a content hash. A hand-edited file reads as `STATE FORGED`
+  on run and `tampered` on status until it is deleted. Existing unsealed state files read as
+  tampered once: delete them and verify again.
+- SKILL.md: done includes a caught challenge, the check-strength ladder has no top rung, and a new
+  section treats the checker as foolable (separate judge from worker, freeze before building,
+  prefer third-party evidence). The build-identity steps are summarized in the project recipe.
+
 ## 1.5.0 - 2026-10-19 - A frozen check cannot be quietly re-frozen
 
 - `verify.py baseline` refuses (exit 1, `BASELINE REFUSED`) when a frozen test or oracle file

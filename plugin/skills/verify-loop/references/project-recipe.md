@@ -20,6 +20,12 @@ readiness signal, build identity, login/role and material flags. Verify the inst
 is the intended build; a responsive port alone may be an old server. A short-lived CLI needs a
 known binary and isolated invocation, not a background server.
 
+When the doctor must identify a particular build, bind the live process to its material source and
+runtime settings as described in the `## Run` section of [the format](../VERIFY_FORMAT.md): a PID, HEAD or healthy endpoint
+cannot tell uncommitted source or changed flags, roles or mocked boundaries apart from a stale build.
+Put the identity check in VERIFY.md and run it through verify.py so the evidence is reusable, and in
+the report name the healthy old process that was rejected and the expected-versus-observed mismatch.
+
 VERIFY.md's `## Run` supports executable `setup`, `start`, `ready`, `doctor`, and `stop` commands,
 plus free-text `login`. Keep secrets out of the document and captured output.
 
