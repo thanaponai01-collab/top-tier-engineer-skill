@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0 - 2026-10-19 - One answer reference
+
+- `references/handoff.md` is now `references/answer.md`: one contract for every caller, what they
+  pass and what comes back. The table of caller skills that no longer ship is gone, and SKILL.md
+  drops its separate handoff row.
+
 ## 1.3.0 - 2026-10-19 - Sharper SKILL.md
 
 - Rewrote `SKILL.md` around check quality: what a good check is, the loop, and what to look for

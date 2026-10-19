@@ -1273,7 +1273,7 @@ VERDICTS = {"green": "green", "red": "red", "tampered": "red", "out-of-scope": "
 
 
 def answer(repo):
-    """The one answer every caller gets (see references/handoff.md): verdict, the VERIFY: line,
+    """The one answer every caller gets (see references/answer.md): verdict, the VERIFY: line,
     observed rejections, what passed and the gaps, plus the status fields it is built from."""
     name, detail, code = status_verdict(repo)
     state = load_state(repo) if name != "none" else {}

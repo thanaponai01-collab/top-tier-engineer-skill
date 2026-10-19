@@ -81,7 +81,7 @@ product gap (report it).
 
 Lead with the outcome. Then give:
 
-- the `verify.py report` answer ([format](handoff.md#what-comes-back));
+- the `verify.py report` answer ([format](answer.md#what-comes-back));
 - each feature with its action and live result;
 - what drifted and what you changed;
 - product gaps;

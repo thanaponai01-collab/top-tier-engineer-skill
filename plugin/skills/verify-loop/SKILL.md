@@ -66,10 +66,9 @@ An assessment reports; it edits product code only when a fix was asked for.
 
 ## The answer
 
-Callers (users, skills, agents) pass the **claim** with where its expected result comes from, the
-**scope** (diff, ref or paths) and the **mode** (assess, prepare or repair). Everyone gets the same
-[answer](references/handoff.md#what-comes-back) from `verify.py report` (`--json` for machines):
-verdict, `VERIFY:` line, observed rejection, what passed, gaps.
+Callers pass the **claim** (and where its expected result comes from), the **scope** and the
+**mode** (assess, prepare or repair). Finish with `verify.py report` (`--json` for machines); the
+contract is in [answer](references/answer.md).
 
 ## Modes
 
@@ -80,7 +79,6 @@ verdict, `VERIFY:` line, observed rejection, what passed, gaps.
 | CI, or fresh proof of committed code | [CI](references/ci.md) |
 | The check must launch and drive an app | [project recipe](references/project-recipe.md) |
 | Schema, privacy, guardrail, repeatability | [compliance](references/compliance.md) |
-| Another skill hands you its claim | [handoff](references/handoff.md) |
 | Create a project `verify` skill | [create](references/create.md) |
 | Keep that skill honest as the app changes | [maintain](references/maintain.md) |
 | A red you have not classified yet | [triage](references/triage.md) |

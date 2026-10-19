@@ -76,6 +76,6 @@ unverified.
 
 ## Report
 
-Return the `verify.py report` answer ([format](handoff.md#what-comes-back)). Also list the files
+Return the `verify.py report` answer ([format](answer.md#what-comes-back)). Also list the files
 generated, the feature you drove end to end, where its evidence is, and the features or surfaces
 left unmapped. The plugin repo's `examples/verify-create/` is a finished run.
