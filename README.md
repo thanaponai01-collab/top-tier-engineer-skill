@@ -42,7 +42,4 @@ intact into a project's `.agents/skills/`.
 - `examples/verify-create/` — a notes service with a generated, proven `.claude/skills/verify/`.
 - `tests/` — unit tests for the helpers: `python -m unittest discover tests`.
 
-The skill mentions `correctness-gate` and `wire-check` for deeper work; those live in the full
-top-tier-engineer plugin and are not included here.
-
 Create mode borrows ideas from pstack's `create-verification-skill` (MIT); see `NOTICE`.

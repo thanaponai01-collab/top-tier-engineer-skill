@@ -86,8 +86,8 @@ include: packages/auth/VERIFY.md
 - A top-level line (outside any section) that reads another recipe in place; the path is from the
   repo root, written bare (`include: verify/billing.md`), nothing else on the line.
 - Past about 150 lines, split by area: `VERIFY.md` keeps `## Run`, `## Blind spots` and one
-  `include:` per area, and each area's sections move to `verify/<area>.md` verbatim. Run, strict and
-  `features.py check` read through the includes, so the split changes no verdict.
+  `include:` per area, and each area's sections move to `verify/<area>.md` verbatim.
+  Every verify.py command that reads the recipe follows the includes, so the split changes no verdict.
 
 ## Completion
 

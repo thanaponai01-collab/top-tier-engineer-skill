@@ -82,13 +82,16 @@ contract is in [answer](references/answer.md).
 | Create a project `verify` skill | [create](references/create.md) |
 | Keep that skill honest as the app changes | [maintain](references/maintain.md) |
 | A red you have not classified yet | [triage](references/triage.md) |
+| `loop`, `watch`, `contract`, scaffolds, quarantine | [helper commands](references/helpers.md) |
 
 ## Other helper commands
 
 `run --affected | --stress N | --quarantine | --json` · `triage` · `scope <files>` (fence a fix;
 `OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto <file>` (mutation score) ·
-`loop --scope <f> --max N` · `watch` · `contract old new` · `scaffold-oracle | scaffold-ui |
-scaffold-driver` · `scaffold-skill` · `skill-check` · `maintain` · `ci`. Evidence lives in
+`loop --scope <f> --max N` (reruns, never edits) ·
+`watch --max-runs N` (never exits without it) · `contract old new` · `scaffold-oracle | scaffold-ui |
+scaffold-driver` · `scaffold-skill` · `skill-check` · `maintain` · `ci`. What each does and
+when it is safe: [helper commands](references/helpers.md). Evidence lives in
 `.verify-evidence/` and `.verify-state.json`.
 
 *Test:* the check existed before the change it judges, you can name the moment it was red, and

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.1 - 2026-10-19 - Docs match what ships
+
+- New `references/helpers.md` documents `loop`, `watch`, `triage`, `contract`, the scaffolds and
+  `--stress`/`--quarantine`, including when an agent may quarantine a check.
+- `loop` is described as rerun-and-triage (it makes no edits); `watch` is shown with `--max-runs`
+  so an agent's shell does not block.
+- `ci.md` drops its table of skills that no longer ship and says the CI example lives in the
+  source repo, not the installed skill. `VERIFY_FORMAT.md` no longer names the missing
+  `features.py`. README drops its `correctness-gate`/`wire-check` note.
+
 ## 1.4.0 - 2026-10-19 - One answer reference
 
 - `references/handoff.md` is now `references/answer.md`: one contract for every caller, what they

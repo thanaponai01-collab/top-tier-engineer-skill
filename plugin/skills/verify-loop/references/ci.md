@@ -46,7 +46,8 @@ tests GitHub's merge commit; it does not claim to test only the head branch. See
 [event semantics](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)
 and [workflow permissions](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax).
 
-The working example is `examples/verify-ci/` and `.github/workflows/verify.yml` in this plugin.
+A working example lives in the plugin's source repository, not in the installed skill:
+`examples/verify-ci/` and `.github/workflows/verify.yml` at the repo root. Only the template ships.
 Prove the correct example passes and that a weak check and wrong product fail before adapting it.
 The template contains no deploy step. Requesting CI setup authorizes verification, not release.
 
@@ -63,17 +64,8 @@ pins through repository review rules; changes to those are changes to the proof.
 are not an OS sandbox, and hostile checks can access external resources available to the job.
 Review and redact logs before publishing artifacts; choose retention appropriate to the project.
 
-## Fit with the existing skills
+## Reporting
 
-| Skill | How it uses this evidence |
-|---|---|
-| build-discipline | Proves a slice with the project's existing checks; CI adds committed-code evidence |
-| correctness-gate | Judges oracle quality and coverage; CI executes the recipe without replacing that judgment |
-| threat-model, perf-optimize, wire-check | Supplies abuse, performance or reachability checks as ordinary recipe commands |
-| senior-review, scrutinize | Reads commit-bound evidence when available; review remains usable without CI |
-| safe-release | Consumes verification evidence, then separately proves rollback, rollout and deployed behavior |
-| drive | Coordinates the work; RUN.json owns progress while VERIFY.md owns check definitions |
-
-Keep BUILD.md, VERIFY.md and RUN.json in their existing roles. Do not introduce a common protocol
-or require a chain of skills. Report CI verdict, tested commit, evidence location and coverage
-limits; only mark hosted CI proven after observing its actual run.
+Keep VERIFY.md as the check definitions and the CI report as the evidence; do not copy one into
+the other. Report CI verdict, tested commit, evidence location and coverage limits; only mark
+hosted CI proven after observing its actual run.
