@@ -1,8 +1,9 @@
 ---
 name: verify-loop
 description: >-
-  Write a check that can fail, then loop until it passes, with retained proof. Use for "verify this change", "is it actually done?", VERIFY.md recipes.
-disable-model-invocation: true
+  Prove a change or claim with a check seen failing, then passing, and keep the evidence. Use when
+  a user, skill or agent asks to verify a change, prove a task is done, check a claim against the
+  real app, or create a project verify skill; VERIFY.md recipes. Not for just running tests.
 metadata:
   stage: prove
   card: "check your own work until it really passes"
@@ -28,6 +29,7 @@ repair request. A specialist handoff keeps the caller's verdict and scope.
 | The check has to launch and drive an app | [project recipe](references/project-recipe.md) |
 | Schema, privacy, guardrail or repeatability checks | [compliance](references/compliance.md) |
 | Another skill is handing you its claim | [handoff](references/handoff.md) |
+| Create a project `verify` skill that launches and drives the app | [create mode](references/create.md) |
 | A reusable recipe, or none of the above | the loop below |
 
 Verifying a change always means: fix the comparison point, trace the changed behavior into its
@@ -46,6 +48,14 @@ cannot identify uncommitted source or distinguish a stale build with changed fla
 boundaries. Update the affected VERIFY.md procedure with the identity check and run it through
 verify.py; a manual scratch probe alone does not leave reusable project evidence. In the report, say
 that a healthy old process was rejected and name the expected-versus-observed identity mismatch.
+
+## How to call me
+
+Skills, agents and other AIs call this skill instead of verifying on their own. Pass the **claim**
+(observable, with where its expected result comes from), the **scope** (diff, ref or paths) and the
+**mode** (assess, prepare or repair). Every caller gets one [answer](references/handoff.md#what-comes-back):
+the verdict (green, red, partial, stale or unverified), the `VERIFY:` line, the observed rejection, what
+passed and the gaps. `verify.py report` prints it, and `report --json` or `status --json` gives the same answer as JSON.
 
 ## What makes a check good
 
@@ -106,7 +116,8 @@ earlier pass is back. `scope --clear` when done.
 - Keep redacted artifacts in `.verify-evidence/` or the project's own location; output tails
   survive teardown in `.verify-state.json`. Local state records runs; it does not stop a hostile
   writer. Independently owned CI does.
-- Report the verdict first, then the `VERIFY:` line, the rejection you observed and the gaps.
+- Report the answer: `verify.py report` gives the verdict, the `VERIFY:` line, the observed
+  rejection, what passed and the gaps.
 
 ```bash
 python <skill-base>/scripts/verify.py init        # optional draft from existing tests
@@ -123,7 +134,9 @@ python <skill-base>/scripts/verify.py contract old_api.json new_api.json # verif
 python <skill-base>/scripts/verify.py watch       # poll file changes and run affected checks live
 python <skill-base>/scripts/verify.py baseline    # freeze checks and oracles
 python <skill-base>/scripts/verify.py run --strict && python <skill-base>/scripts/verify.py status
-python <skill-base>/scripts/verify.py status --json                       # same verdict, for callers
+python <skill-base>/scripts/verify.py report      # the caller answer; --json = status --json
+python <skill-base>/scripts/verify.py scaffold-skill  # create mode: draft .claude/skills/verify/
+python <skill-base>/scripts/verify.py skill-check     # create mode: lint it against VERIFY.md
 python <skill-base>/scripts/verify.py challenge . --feature F --auto app.py  # polyglot mutation score (py/js/go/rs)
 ```
 

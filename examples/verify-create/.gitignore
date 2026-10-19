@@ -1,0 +1,5 @@
+.verify-state.json
+.verify-data/
+.verify-evidence/
+__pycache__/
+.verify-pid

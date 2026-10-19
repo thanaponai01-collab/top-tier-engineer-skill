@@ -13,6 +13,8 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
   baseline  Freeze tests, declared oracle files, check commands and the Run recipe. `run` fails
          with CHECK CHANGED if any of them differ: the loop fixes code, never the check.
   status Was the last whole run strict, green and current? One line, exit 0/1/3.
+  report The caller answer: verdict, VERIFY: line, observed rejections, passes and gaps.
+  scaffold-skill / skill-check  Create mode: draft and lint a project-local `verify` skill.
   scope  Before a fix, name the files it may touch. Any later edit outside them fails the run
          (OUT OF SCOPE), and every check that passed when the fix began stays on watch.
 
@@ -59,7 +61,8 @@ Usage:
   python scripts/verify.py init [repo]
   python scripts/verify.py run  [repo] [--only TEXT] [--timeout 120] [--strict] [--budget 5]
   python scripts/verify.py baseline [repo]
-  python scripts/verify.py status   [repo]
+  python scripts/verify.py status   [repo] [--json]
+  python scripts/verify.py report   [repo] [--json]
   python scripts/verify.py tests    [repo] [--strict]
   python scripts/verify.py scope PATH... [--add | --clear | --check] [--repo .]
 
@@ -810,11 +813,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if missing_baseline and not as_json:
         print("  note  no baseline: freeze the finished checks before strict completion")
     signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
-    challenge = state.get("challenge", {})
-    if challenge.get("verdict") == "caught" and challenge.get("check_signature") == signature:
-        for key, row in challenge.get("mutated", {}).get("checks", {}).items():
-            if key.startswith(challenge.get("feature", "") + "|") and not row.get("ok") and row.get("exit") is not None:
-                receipts[key] = {"signature": signature, "exit": row["exit"], "output": row["output"]}
+    receipts = current_receipts(state, signature)
     for f in shown:
         if not as_json:
             print(("Journey: " if f["journey"] else "") + f["name"])
@@ -874,13 +873,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
             unproven += 1
             if not as_json:
                 print("  note  no fail-proof recorded: nobody has shown these checks can go red")
-        elif strict and not any(
-                receipts.get(f"{f['name']}|{cmd}", {}).get("signature") == signature
-                and f["signals"]
-                and any(signal in receipts.get(f"{f['name']}|{cmd}", {}).get("output", "")
-                        for signal in f["signals"])
-                and not HARNESS_FAILURE.search(receipts.get(f"{f['name']}|{cmd}", {}).get("output", ""))
-                for kind, cmd in f["checks"] if kind not in ("lint", "type", "types")):
+        elif strict and not proven_by(f, receipts, signature):
             unproven += 1
             if not as_json:
                 print("  note  no recorded failing run matching fail-signal for the current checks; fail-proof prose alone is not evidence")
@@ -918,12 +911,17 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     norm_results = [(feat, kind, cmd, (ok or q), out, code) for feat, kind, cmd, ok, out, code, q in results]
     notes, bad = track(repo, norm_results, only, budget,
                        failed + broken + bool(incomplete) + changed_during_run + bool(flaky_checks), strict, signature)
+    verify_line = (f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
+                   f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
+                   f"{journeys} journeys, {broken} broken")
+    if not only:
+        state = load_state(repo)
+        state["verify_line"] = verify_line
+        save_state(repo, state)
     if not as_json:
         for n in notes:
             print(n)
-        print(f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
-              f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
-              f"{journeys} journeys, {broken} broken")
+        print(verify_line)
         if quarantined_hits:
             print(f"  QUARANTINED: {len(quarantined_hits)} check(s) isolated from failure.")
     red = bool(failed or broken or bad or incomplete or changed_during_run or flaky_checks)
@@ -952,6 +950,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 for feat, kind, cmd, ok, out, code, q in results
             ],
             "blind_spots": blind,
+            "verify_line": verify_line,
             "exit": 1 if red else 0,
         }
         if reports is None:
@@ -1047,6 +1046,33 @@ def tampered(repo, state):
 
 
 HARNESS_FAILURE = re.compile(r"ModuleNotFoundError|ImportError|FileNotFoundError|SyntaxError|missing dependency|command not found|not recognized as|can\'t open file", re.I)
+
+
+def current_receipts(state, signature):
+    """Failure receipts for the current checks, with a caught challenge's mutated run folded in."""
+    receipts = dict(state.get("failures", {}))
+    challenge = state.get("challenge", {})
+    if challenge.get("verdict") == "caught" and challenge.get("check_signature") == signature:
+        for key, row in challenge.get("mutated", {}).get("checks", {}).items():
+            if key.startswith(challenge.get("feature", "") + "|") and not row.get("ok") and row.get("exit") is not None:
+                receipts[key] = {"signature": signature, "exit": row["exit"], "output": row["output"]}
+    return receipts
+
+
+def proven_by(feature, receipts, signature):
+    """The receipt that proves this feature's checks can go red: (command, signal, receipt) or None.
+    It must belong to the current checks, contain a declared fail-signal and not be a harness error."""
+    for kind, cmd in feature["checks"]:
+        if kind in ("lint", "type", "types"):
+            continue
+        r = receipts.get(f"{feature['name']}|{cmd}", {})
+        out = r.get("output", "")
+        if r.get("signature") != signature or HARNESS_FAILURE.search(out):
+            continue
+        for signal in feature["signals"]:
+            if signal in out:
+                return cmd, signal, r
+    return None
 
 
 NOISE = re.compile(r"\S*[\\/](?:tmp|temp)[\\/]\S*|/tmp/\S+|0x[0-9a-f]+|\d+(?:\.\d+)?s\b|\d{2}:\d{2}:\d{2}", re.I)
@@ -1230,24 +1256,89 @@ def cmd_status(repo, as_json=False):
     """One line for a hook or a human: is the last run green and still true of the files? Exit 0 yes,
     1 red, 3 stale or never run. No VERIFY.md means this repo does not use it: 0, silent.
     --json prints one object with the same verdict plus failing checks and the last challenge."""
-    name, detail, code = status_verdict(repo)
     if as_json:
-        state = load_state(repo) if name != "none" else {}
-        checks = state.get("checks", {}) or {}
-        challenge = state.get("challenge") or {}
-        print(json.dumps({
-            "state": name, "detail": detail, "exit": code,
-            "strict": bool(state.get("strict")), "rounds": state.get("rounds", 0),
-            "failing": sorted(k for k, r in checks.items() if isinstance(r, dict) and not r.get("ok")),
-            "checks": len(checks), "receipts": sorted((state.get("failures") or {}).keys()),
-            "challenge": {"feature": challenge.get("feature"), "verdict": challenge.get("verdict")}
-            if challenge else None,
-        }, indent=2))
-        return code
+        a = answer(repo)
+        print(json.dumps(a, indent=2))
+        return a["exit"]
+    name, detail, code = status_verdict(repo)
     if name == "none":
         return 0
     print(f"VERIFY-STATE: {name}" + (f" ({detail})" if detail else ""))
     return code
+
+
+VERDICTS = {"green": "green", "red": "red", "tampered": "red", "out-of-scope": "red",
+            "partial": "partial", "stale": "stale", "never-run": "unverified", "none": "unverified"}
+
+
+def answer(repo):
+    """The one answer every caller gets (see references/handoff.md): verdict, the VERIFY: line,
+    observed rejections, what passed and the gaps, plus the status fields it is built from."""
+    name, detail, code = status_verdict(repo)
+    state = load_state(repo) if name != "none" else {}
+    checks = state.get("checks", {}) or {}
+    challenge = state.get("challenge") or {}
+    features, blind = parse(read(repo, RECIPE), repo=repo) if name != "none" else ([], [])
+    try:
+        signature = sha(json.dumps(check_hashes(repo), sort_keys=True)) if features else None
+    except (OSError, ValueError):
+        signature = None
+    receipts = current_receipts(state, signature) if signature else {}
+    rejections, unproven, unverified = [], [], []
+    for f in features:
+        if not f["checks"]:
+            unverified.append(f["name"])
+            continue
+        hit = proven_by(f, receipts, signature)
+        if not hit or not f["proofs"]:
+            unproven.append(f["name"])
+            continue
+        cmd, signal, r = hit
+        line = next((ln.strip() for ln in reversed(r.get("output", "").splitlines()) if signal in ln), signal)
+        rejections.append({"feature": f["name"], "command": cmd, "wrong_state": f["proofs"][0],
+                           "fail_signal": signal, "exit": r.get("exit"), "observed": line[:300]})
+    failing = sorted(k for k, r in checks.items() if isinstance(r, dict) and not r.get("ok"))
+    passed = [{"feature": k.split("|", 1)[0], "command": k.split("|", 1)[1]}
+              for k, r in sorted(checks.items()) if isinstance(r, dict) and r.get("ok") and "|" in k]
+    orphans = [t for t in find_tests(repo) if not is_covered(t, [c for f in features for _, c in f["checks"]], repo)] \
+        if features else []
+    return {
+        "verdict": VERDICTS[name], "state": name, "detail": detail, "exit": code,
+        "verify_line": state.get("verify_line"),
+        "rejections": rejections, "passed": passed,
+        "gaps": {"failing": failing, "unverified": unverified, "unproven": unproven,
+                 "orphan_tests": orphans, "blind_spots": blind},
+        "strict": bool(state.get("strict")), "rounds": state.get("rounds", 0),
+        "failing": failing, "checks": len(checks), "receipts": sorted((state.get("failures") or {}).keys()),
+        "challenge": {"feature": challenge.get("feature"), "verdict": challenge.get("verdict")}
+        if challenge else None,
+    }
+
+
+def cmd_report(repo, as_json=False):
+    """Print the caller answer: verdict first, then VERIFY:, rejections, passes and gaps. Exit as status."""
+    a = answer(repo)
+    if as_json:
+        print(json.dumps(a, indent=2))
+        return a["exit"]
+    print(f"VERDICT: {a['verdict']}" + (f" ({a['detail']})" if a["detail"] else ""))
+    print(a["verify_line"] or "VERIFY: no whole run recorded")
+    for r in a["rejections"]:
+        print(f"REJECTED  {r['feature']}: `{r['command']}` went red (exit {r['exit']}) on {r['wrong_state']}"
+              f" | signal: {r['fail_signal']} | observed: {r['observed']}")
+    if not a["rejections"]:
+        print("REJECTED  none observed for the current checks: nothing here is proven able to fail")
+    for p in a["passed"]:
+        print(f"PASSED  {p['feature']}: `{p['command']}`")
+    g = a["gaps"]
+    labels = (("failing", "failing check"), ("unverified", "no check"), ("unproven", "never seen red"),
+              ("orphan_tests", "orphan test"), ("blind_spots", "blind spot"))
+    rows = [(label, item) for key, label in labels for item in g[key]]
+    for label, item in rows:
+        print(f"GAP  {label}: {item}")
+    if not rows:
+        print("GAP  none recorded; green covers mapped claims only, not features nobody mapped")
+    return a["exit"]
 
 
 def diagnose_failure(out, exit_code, check_name, state=None):
@@ -1786,6 +1877,14 @@ def main():
     t = sub.add_parser("status", help="is the last run green and still true of the files? (exit 0/1/3)")
     t.add_argument("repo", nargs="?", default=".")
     t.add_argument("--json", action="store_true", help="print one JSON object (same exit codes)")
+    ss = sub.add_parser("scaffold-skill", help="create mode: draft .claude/skills/verify/ + feature map from the stack")
+    ss.add_argument("repo", nargs="?", default=".", help="repo root, or the touched package in a monorepo")
+    sk = sub.add_parser("skill-check", help="create mode: lint the project verify skill and its VERIFY.md links")
+    sk.add_argument("repo", nargs="?", default=".")
+    sk.add_argument("--json", action="store_true", help="print problems as JSON")
+    rp = sub.add_parser("report", help="the caller answer: verdict, VERIFY: line, rejections, passes, gaps")
+    rp.add_argument("repo", nargs="?", default=".")
+    rp.add_argument("--json", action="store_true", help="print the answer as JSON (same as status --json)")
     tr = sub.add_parser("triage", help="diagnose latest failure into harness-gap, spec-drift, or product-gap")
     tr.add_argument("repo", nargs="?", default=".")
     tr.add_argument("--json", action="store_true", help="output triage report as JSON")
@@ -1873,6 +1972,13 @@ def main():
         sys.exit(cmd_baseline(repo))
     if a.cmd == "status":
         sys.exit(cmd_status(repo, a.json))
+    if a.cmd in ("scaffold-skill", "skill-check"):
+        from create import cmd_scaffold_skill, cmd_skill_check
+        if a.cmd == "scaffold-skill":
+            sys.exit(cmd_scaffold_skill(sys.modules[__name__], repo))
+        sys.exit(cmd_skill_check(sys.modules[__name__], repo, a.json))
+    if a.cmd == "report":
+        sys.exit(cmd_report(repo, a.json))
     if a.cmd == "triage":
         sys.exit(cmd_triage(repo, a.json))
     if a.cmd == "tests":
