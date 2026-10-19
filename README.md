@@ -7,7 +7,7 @@ the `verify-loop` skill: write a check that can fail, then loop until it passes,
 ## Install (Claude Code)
 
 ```
-git clone -b claude/blissful-galileo-grfe9g https://github.com/thanaponai01-collab/top-tier-engineer-skill verify-loop
+git clone -b verify-loop-only https://github.com/thanaponai01-collab/top-tier-engineer-skill verify-loop
 /plugin marketplace add <path-to-clone>
 /plugin install verify-loop@thanaponai01-skills
 ```
