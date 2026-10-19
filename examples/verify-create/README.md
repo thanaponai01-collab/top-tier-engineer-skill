@@ -17,3 +17,6 @@ edit `app.py` without committing it and see the doctor reject the old process, p
 in its `fail-proof:` state and see its `fail-signal:` from `verify.py run`, restore, then run
 `baseline`, `run --strict` and `report`. The resulting state is local and git-ignored, so a fresh
 checkout starts at `unverified` until you repeat those steps.
+
+`python $V maintain examples/verify-create` audits the skill for maintain mode. On a fresh checkout
+every feature reads `RE-PROVE`, because the rejection receipts are local state.

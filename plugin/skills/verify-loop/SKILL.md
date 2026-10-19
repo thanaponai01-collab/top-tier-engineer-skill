@@ -3,7 +3,7 @@ name: verify-loop
 description: >-
   Prove a change or claim with a check seen failing, then passing, and keep the evidence. Use when
   a user, skill or agent asks to verify a change, prove a task is done, check a claim against the
-  real app, or create a project verify skill; VERIFY.md recipes. Not for just running tests.
+  real app, or create or maintain a project verify skill; VERIFY.md recipes. Not for just running tests.
 metadata:
   stage: prove
   card: "check your own work until it really passes"
@@ -30,6 +30,7 @@ repair request. A specialist handoff keeps the caller's verdict and scope.
 | Schema, privacy, guardrail or repeatability checks | [compliance](references/compliance.md) |
 | Another skill is handing you its claim | [handoff](references/handoff.md) |
 | Create a project `verify` skill that launches and drives the app | [create mode](references/create.md) |
+| Keep that skill and its feature map honest as the app changes | [maintain mode](references/maintain.md) |
 | A reusable recipe, or none of the above | the loop below |
 
 Verifying a change always means: fix the comparison point, trace the changed behavior into its
@@ -137,6 +138,7 @@ python <skill-base>/scripts/verify.py run --strict && python <skill-base>/script
 python <skill-base>/scripts/verify.py report      # the caller answer; --json = status --json
 python <skill-base>/scripts/verify.py scaffold-skill  # create mode: draft .claude/skills/verify/
 python <skill-base>/scripts/verify.py skill-check     # create mode: lint it against VERIFY.md
+python <skill-base>/scripts/verify.py maintain        # maintain mode: map/re-prove/fix/re-drive audit
 python <skill-base>/scripts/verify.py challenge . --feature F --auto app.py  # polyglot mutation score (py/js/go/rs)
 ```
 

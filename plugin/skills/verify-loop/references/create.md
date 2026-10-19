@@ -67,7 +67,8 @@ its `Gotchas` entry says why. Never weaken a journey to make it pass.
    restore it from a saved copy afterwards. `verify.py run` must show the `fail-signal:`. Restore,
    and confirm the restore.
 4. `verify.py skill-check <repo>` must report no problems. Then run `baseline`, `run --strict` and
-   `report`.
+   `report`. Once the skill is committed, add `last-maintained: <sha>` to `features/README.md` so
+   that [maintain mode](maintain.md) counts churn from that commit.
 
 If you proved it in a stand-in (a container instead of the real VM, a local stack instead of a
 remote one), list each setup step the stand-in did and the target will not. Those steps stay

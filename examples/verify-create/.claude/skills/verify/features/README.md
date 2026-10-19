@@ -23,6 +23,8 @@ H1 title, one paragraph of user-visible behavior, a `verify-section:` line, then
 the seed data cannot complete fails and says why in `Gotchas`; never weaken it to pass. A proof
 through one entry point does not verify the others this map lists.
 
+last-maintained: 6f49b33
+
 ## Features
 
 - [Create note](./create-note.md)

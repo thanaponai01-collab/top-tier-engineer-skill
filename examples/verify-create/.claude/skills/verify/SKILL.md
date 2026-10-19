@@ -78,4 +78,5 @@ options `--port 8765 --data .verify-data --evidence .verify-evidence`. Its docst
    output unchanged: verdict, `VERIFY:` line, observed rejection, passes and gaps.
 
 Never weaken a journey or expectation to make it pass. If verify-loop is absent, run the checks
-directly before and after, keep both outputs, and report the verdict as `unverified`.
+directly before and after, keep both outputs, and report the verdict as `unverified`. When the app
+changes, use verify-loop's maintain mode (`verify.py maintain .`) to keep this skill honest.

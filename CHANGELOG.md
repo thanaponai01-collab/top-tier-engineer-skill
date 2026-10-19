@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.0 - 2026-10-19 - Maintain mode
+
+- Maintain mode (`references/maintain.md`) is a periodic pass over a project verify skill. It
+  has three outcomes: clean, changed or blocked. Its edit scope keeps frozen checks behind a
+  person's review. The pass reads every feature from source, runs a live pass over every
+  feature, triages drift into map drift, harness gaps and product gaps, and ends on
+  `run --strict` + `report`.
+- The new `verify.py maintain` is a read-only audit. Per feature it reports `map`, `re-prove`,
+  `fix`, `re-drive` or `drive`. It also reports skill-check shape problems, checks changed since
+  the baseline, and changed files that no feature claims. Churn counts from a committed
+  `last-maintained: <sha>` line in `features/README.md` (or `--since REF`). A check input that
+  matches the baseline does not count as churn.
+- Create mode now records `last-maintained:`, and generated skills point to maintain mode.
+
 ## 1.1.0 - 2026-10-19 - One way in, one answer, create mode
 
 - verify-loop is no longer manual-only. The new description lets users, skills and agents call it

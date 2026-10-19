@@ -15,6 +15,7 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
   status Was the last whole run strict, green and current? One line, exit 0/1/3.
   report The caller answer: verdict, VERIFY: line, observed rejections, passes and gaps.
   scaffold-skill / skill-check  Create mode: draft and lint a project-local `verify` skill.
+  maintain  Maintain mode: what the next pass over that skill must map, re-prove, fix or re-drive.
   scope  Before a fix, name the files it may touch. Any later edit outside them fails the run
          (OUT OF SCOPE), and every check that passed when the fix began stays on watch.
 
@@ -1882,6 +1883,10 @@ def main():
     sk = sub.add_parser("skill-check", help="create mode: lint the project verify skill and its VERIFY.md links")
     sk.add_argument("repo", nargs="?", default=".")
     sk.add_argument("--json", action="store_true", help="print problems as JSON")
+    mt = sub.add_parser("maintain", help="maintain mode: read-only audit of the verify skill vs VERIFY.md, proof and churn")
+    mt.add_argument("repo", nargs="?", default=".")
+    mt.add_argument("--since", help="git ref of the last pass (default: last-maintained: in features/README.md)")
+    mt.add_argument("--json", action="store_true", help="print the audit as JSON")
     rp = sub.add_parser("report", help="the caller answer: verdict, VERIFY: line, rejections, passes, gaps")
     rp.add_argument("repo", nargs="?", default=".")
     rp.add_argument("--json", action="store_true", help="print the answer as JSON (same as status --json)")
@@ -1977,6 +1982,9 @@ def main():
         if a.cmd == "scaffold-skill":
             sys.exit(cmd_scaffold_skill(sys.modules[__name__], repo))
         sys.exit(cmd_skill_check(sys.modules[__name__], repo, a.json))
+    if a.cmd == "maintain":
+        from maintain import cmd_maintain
+        sys.exit(cmd_maintain(sys.modules[__name__], repo, a.since, a.json))
     if a.cmd == "report":
         sys.exit(cmd_report(repo, a.json))
     if a.cmd == "triage":
