@@ -2,8 +2,9 @@ verify-loop
 Copyright (c) 2026 Thanaponai01
 
 Create mode (plugin/skills/verify-loop/references/create.md, scripts/create.py and the
-feature-map shape it generates) adapts ideas and some wording from pstack's
-create-verification-skill (https://github.com/michael-denyer/pstack-claude), used under the
+feature-map shape it generates) and maintain mode (references/maintain.md, scripts/maintain.py)
+adapt ideas and some wording from pstack's create-verification-skill and
+maintain-verification-skill (https://github.com/michael-denyer/pstack-claude), used under the
 MIT License:
 
   MIT License
