@@ -5,7 +5,7 @@ verify.py — the feature-to-check map behind verify-loop.
 Run them all with `python -m unittest discover tests`.
 """
 from pathlib import Path
-import json, os, tempfile, unittest
+import json, os, subprocess, tempfile, unittest
 
 from _helpers import run
 
@@ -499,6 +499,82 @@ class EvidenceGate(unittest.TestCase):
             write(tmp, "value.txt", "41")
             os.utime(path, ns=(stat.st_atime_ns, stat.st_mtime_ns))
             self.assertEqual(run("verify.py", "status", tmp)[0], 3)
+
+
+class Rebaseline(unittest.TestCase):
+    """An agent cannot loosen a frozen check and then quietly re-freeze it."""
+    RECIPE = ("## Answer\n- test: `python check.py`\n- oracle: check.py\n"
+              "- fail-signal: expected 42\n- fail-proof: input 41 rejected\n")
+
+    def _repo(self, tmp):
+        write(tmp, "check.py", "assert open('value.txt').read() == '42', 'expected 42'\n")
+        write(tmp, "value.txt", "42")
+        write(tmp, "VERIFY.md", self.RECIPE)
+        self.assertEqual(run("verify.py", "baseline", tmp)[0], 0)
+
+    def _state(self, tmp):
+        with open(os.path.join(tmp, ".verify-state.json"), encoding="utf-8") as fh:
+            return json.load(fh)
+
+    def test_edited_check_cannot_be_rebaselined_without_a_reviewer(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            before = self._state(tmp)["baseline"]
+            write(tmp, "check.py", "pass\n")
+            for extra in ((), ("--reviewed-by", "  ", "--reason", "x"), ("--reviewed-by", "me")):
+                code, out, _ = run("verify.py", "baseline", tmp, *extra)
+                self.assertEqual(code, 1, out)
+                self.assertIn("BASELINE REFUSED  check.py", out)
+            self.assertEqual(self._state(tmp)["baseline"], before)
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("CHECK CHANGED  check.py", out)
+
+    def test_removed_check_and_changed_signal_need_review(self):
+        cases = (self.RECIPE.replace("- test: `python check.py`\n", ""),
+                 self.RECIPE.replace("expected 42", "expected"))
+        for recipe in cases:
+            with self.subTest(recipe=recipe), tempfile.TemporaryDirectory() as tmp:
+                self._repo(tmp)
+                write(tmp, "VERIFY.md", recipe)
+                code, out, _ = run("verify.py", "baseline", tmp)
+                self.assertEqual(code, 1, out)
+                self.assertIn("BASELINE REFUSED", out)
+
+    def test_added_checks_and_run_repairs_freeze_without_review(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._repo(tmp)
+            write(tmp, "tests/test_more.py", "assert True\n")
+            write(tmp, "VERIFY.md", self.RECIPE + "- run: `python -c \"pass\"`\n"
+                  "## More\n- test: `python tests/test_more.py`\n- fail-signal: boom\n"
+                  "## Run\n- setup: `python -c \"pass\"`\n")
+            code, out, _ = run("verify.py", "baseline", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertNotIn("RE-BASELINED", out)
+            self.assertNotIn("rebaselines", self._state(tmp))
+
+    def test_reviewed_rebaseline_is_recorded_and_shown_until_committed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            subprocess.run(["git", "init", "-q", tmp], check=True)
+            self._repo(tmp)
+            write(tmp, "check.py", "assert open('value.txt').read().strip() == '42', 'expected 42'\n")
+            code, out, _ = run("verify.py", "baseline", tmp, "--reviewed-by", "Dana", "--reason", "spec allows newline")
+            self.assertEqual(code, 0, out)
+            self.assertIn("RE-BASELINED  1 frozen check change(s), reviewed by Dana", out)
+            entry = self._state(tmp)["rebaselines"][0]
+            self.assertEqual((entry["by"], entry["reason"], entry["changed"]), ("Dana", "spec allows newline", ["check.py"]))
+            run("verify.py", "run", tmp)
+            _, out, _ = run("verify.py", "status", tmp)
+            self.assertIn("RE-BASELINED  check.py (reviewed by Dana: spec allows newline)", out)
+            code, out, _ = run("verify.py", "report", tmp, "--json")
+            self.assertEqual(json.loads(out)["gaps"]["rebaselined"], ["check.py (reviewed by Dana: spec allows newline)"])
+            _, out, _ = run("verify.py", "report", tmp)
+            self.assertIn("GAP  check changed under review: check.py", out)
+            subprocess.run(["git", "-C", tmp, "add", "-A"], check=True)
+            subprocess.run(["git", "-C", tmp, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "x"], check=True)
+            code, out, _ = run("verify.py", "report", tmp, "--json")
+            self.assertEqual(json.loads(out)["gaps"]["rebaselined"], [])
+            self.assertEqual(len(json.loads(out)["rebaselines"]), 1)
 
 
 class Scope(unittest.TestCase):

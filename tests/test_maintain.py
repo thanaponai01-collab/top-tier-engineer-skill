@@ -152,7 +152,7 @@ class Maintain(unittest.TestCase):
             with open(os.path.join(tmp, "check.py"), "a", encoding="utf-8") as fh:
                 fh.write("# reviewed wording\n")
             git(tmp, "commit", "-qam", "harness repair")
-            run("verify.py", "baseline", tmp)
+            run("verify.py", "baseline", tmp, "--reviewed-by", "reviewer", "--reason", "harness repair")
             os.remove(os.path.join(tmp, "ok.flag"))
             run("verify.py", "run", tmp)
             write(tmp, "ok.flag")

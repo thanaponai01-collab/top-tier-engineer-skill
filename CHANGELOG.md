@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.5.0 - 2026-10-19 - A frozen check cannot be quietly re-frozen
+
+- `verify.py baseline` refuses (exit 1, `BASELINE REFUSED`) when a frozen test or oracle file
+  changed, a check command was removed or edited, or a feature's `fail-signal:` changed, unless
+  `--reviewed-by <name>` and `--reason <why>` are given. Added checks, test files, oracles and
+  features, and `## Run` repairs, still freeze without review.
+- Each reviewed re-baseline is recorded in `.verify-state.json` (`rebaselines`: who, why, what,
+  HEAD). `status` prints `RE-BASELINED` lines and `report` lists `gaps.rebaselined` until the change
+  is committed.
+- SKILL.md, triage, answer and VERIFY_FORMAT document the rule and its limit: local state is
+  editable, so CI and review rules stay the independent guard.
+
 ## 1.4.1 - 2026-10-19 - Docs match what ships
 
 - New `references/helpers.md` documents `loop`, `watch`, `triage`, `contract`, the scaffolds and

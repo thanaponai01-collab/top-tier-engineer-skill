@@ -62,11 +62,14 @@ run):
                  "fail_signal": "expected stored note 'Release checklist'", "exit": 1,
                  "observed": "expected stored note 'Release checklist', got ['Grocery list']"}],
  "passed": [{"feature": "Create note", "command": "..."}],
- "gaps": {"failing": [], "unverified": [], "unproven": [], "orphan_tests": [], "blind_spots": []},
+ "gaps": {"failing": [], "unverified": [], "unproven": [], "orphan_tests": [], "blind_spots": [],
+          "rebaselined": []}, "rebaselines": [],
  "strict": true, "rounds": 0, "failing": [], "checks": 2, "receipts": ["..."], "challenge": null}
 ```
 
 `state` is the finer status (`tampered`, `out-of-scope`, `never-run`, `none`) behind the verdict.
+`gaps.rebaselined` lists frozen checks a person approved changing since the last commit, with who
+and why; `rebaselines` keeps every recorded one. A caller should read these as changes to the proof.
 `run --json` reports one run as it happens and carries `verify_line` too. A project
 `.claude/skills/verify/` (see [create](create.md)) returns the same answer. Pass it on unchanged.
 

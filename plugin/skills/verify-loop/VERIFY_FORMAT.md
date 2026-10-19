@@ -98,4 +98,10 @@ green covers mapped claims only; it does not prove the feature inventory is comp
 `status` requires the last whole run to be strict, green and unchanged by content. A non-strict
 pass is `partial`; a failed strict run stays red. Output tails and rejection receipts remain in
 .verify-state.json after app teardown. Capture larger artifacts separately and redact secrets.
+
+A changed or removed frozen check, or a changed `fail-signal:`, re-freezes only with
+`baseline --reviewed-by <name> --reason <why>`; added checks and `## Run` repairs need no review.
+This makes a self-approved change visible, not impossible: the state file is local and editable,
+so committed checks under review rules and the `ci` mode remain the independent guard.
+
 Commands run through the shell like a Makefile: run recipes only from a repo you trust.

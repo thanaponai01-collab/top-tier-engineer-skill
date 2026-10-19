@@ -28,8 +28,10 @@ When `verify.py run` fails, never blindly modify product code. Triage the failur
 - **Action**: 
   1. Do not silently change the check!
   2. Report the drift to the user.
-  3. With user confirmation, update the check and run `verify.py baseline` to register the new expectation.
-- **Rule**: Changing test expectations without baselining triggers `CHECK CHANGED` failure.
+  3. With user confirmation, update the check and run
+     `verify.py baseline --reviewed-by <name> --reason <why>` to register the new expectation.
+- **Rule**: Changing test expectations without baselining triggers `CHECK CHANGED` failure, and a plain
+  `baseline` refuses the change. Never name a reviewer who did not review it.
 
 ## 3. Product Gap
 - **Symptoms**: Test assertion failed, runtime output deviated from expected contract, regression occurred (`NEWLY RED`).

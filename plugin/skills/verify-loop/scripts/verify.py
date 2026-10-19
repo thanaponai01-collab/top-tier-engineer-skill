@@ -12,6 +12,8 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
 
   baseline  Freeze tests, declared oracle files, check commands and the Run recipe. `run` fails
          with CHECK CHANGED if any of them differ: the loop fixes code, never the check.
+         Re-freezing a changed or removed check needs --reviewed-by and --reason; the
+         re-baseline is recorded and shown by status and report until it is committed.
   status Was the last whole run strict, green and current? One line, exit 0/1/3.
   report The caller answer: verdict, VERIFY: line, observed rejections, passes and gaps.
   scaffold-skill / skill-check  Create mode: draft and lint a project-local `verify` skill.
@@ -61,7 +63,7 @@ up; polled for --timeout seconds), `stop` (optional, else the process tree is ki
 Usage:
   python scripts/verify.py init [repo]
   python scripts/verify.py run  [repo] [--only TEXT] [--timeout 120] [--strict] [--budget 5]
-  python scripts/verify.py baseline [repo]
+  python scripts/verify.py baseline [repo] [--reviewed-by NAME --reason WHY]
   python scripts/verify.py status   [repo] [--json]
   python scripts/verify.py report   [repo] [--json]
   python scripts/verify.py tests    [repo] [--strict]
@@ -1124,7 +1126,7 @@ def track(repo, results, only, budget, failures, strict=False, signature=None):
         changed = [str(exc)]
     for c in changed:
         lines.append(f"CHECK CHANGED  {c} differs from the baseline. Loosening a check is not a fix: "
-                     "restore it, or have a person review it and run `verify.py baseline`")
+                     "restore it, or have a person review it and run `verify.py baseline --reviewed-by <name> --reason <why>`")
     red = bool(failures or changed or strays)
     rounds = state.get("rounds", 0) + 1 if red else 0
     if red and rounds >= budget:
@@ -1211,20 +1213,78 @@ def cmd_scope(repo, patterns, add, clear, check):
     return 0
 
 
-def cmd_baseline(repo):
+def frozen_lines(repo):
+    """What a re-baseline compares line by line: each check command and each feature's signals."""
+    features, _ = parse(read(repo, RECIPE), repo=repo)
+    return {"checks": sorted(f"{f['name']}|{k}|{c}" for f in features for k, c in f["checks"]),
+            "signals": {f["name"]: f["signals"] for f in features}}
+
+
+def weakened(repo, state, hashes, lines):
+    """Frozen checks a re-baseline would change or drop. Additions are not listed: a new check, test
+    file, oracle or feature only adds to the proof, and neither does a ## Run repair. Include files
+    are judged by the checks parsed from them, so adding a feature there is an addition too."""
+    base = state.get("baseline") or {}
+    old = state.get("baseline_lines")
+    includes = {os.path.normpath(i).replace("\\", "/") for i in find_includes(read(repo, RECIPE))}
+    skip = {RECIPE + " run"} | includes | ({RECIPE + " checks", RECIPE + " signals"} if old else set())
+    out = [k for k in sorted(base) if k not in skip and hashes.get(k) != base[k]]
+    if old:
+        out += [f"check removed or edited: {c}" for c in old.get("checks", []) if c not in lines["checks"]]
+        out += [f"fail-signal changed: {name}" for name, sig in sorted(old.get("signals", {}).items())
+                if name in lines["signals"] and lines["signals"][name] != sig]
+    return out
+
+
+def git_head(repo):
+    try:
+        p = subprocess.run(["git", "-C", repo, "rev-parse", "--short", "HEAD"],
+                           capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return p.stdout.strip() if p.returncode == 0 else None
+
+
+def cmd_baseline(repo, reviewed_by=None, reason=None):
     if not os.path.isfile(os.path.join(repo, RECIPE)):
         print(f"no {RECIPE} in {repo}. Run `verify.py init` first.")
         return 2
     state = load_state(repo)
     try:
-        state["baseline"] = check_hashes(repo)
+        hashes = check_hashes(repo)
     except (OSError, ValueError) as exc:
         print(f"invalid oracle: {exc}")
         return 2
+    lines = frozen_lines(repo)
+    changed = weakened(repo, state, hashes, lines)
+    if changed and not (reviewed_by and reviewed_by.strip() and reason and reason.strip()):
+        for c in changed:
+            print(f"BASELINE REFUSED  {c}")
+        print("A frozen check changed. The loop changes code, never the check: restore it, or have a "
+              "person review the change and run `verify.py baseline --reviewed-by <name> --reason <why>`. "
+              "Never pass --reviewed-by for a review that did not happen.")
+        return 1
+    if changed:
+        state.setdefault("rebaselines", []).append({
+            "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "by": reviewed_by.strip(),
+            "reason": reason.strip(), "changed": changed, "head": git_head(repo)})
+        print(f"RE-BASELINED  {len(changed)} frozen check change(s), reviewed by {reviewed_by.strip()}: "
+              f"{reason.strip()}. `status` and `report` show this until it is committed.")
+    state["baseline"], state["baseline_lines"] = hashes, lines
     save_state(repo, state)
     print(f"baseline recorded: {len(state['baseline'])} check file(s). From here an edit to any of "
-          "them fails the run until a person re-baselines.")
+          "them fails the run until a person reviews it and re-baselines.")
     return 0
+
+
+def open_rebaselines(repo, state):
+    """Re-baselines not yet committed: recorded at the current HEAD (or outside Git)."""
+    head = git_head(repo)
+    return [r for r in state.get("rebaselines", []) if r.get("head") == head]
+
+
+def rebaseline_text(r):
+    return f"{'; '.join(r['changed'])} (reviewed by {r['by']}: {r['reason']})"
 
 
 def status_verdict(repo):
@@ -1265,6 +1325,8 @@ def cmd_status(repo, as_json=False):
     if name == "none":
         return 0
     print(f"VERIFY-STATE: {name}" + (f" ({detail})" if detail else ""))
+    for r in open_rebaselines(repo, load_state(repo)):
+        print(f"RE-BASELINED  {rebaseline_text(r)}")
     return code
 
 
@@ -1308,7 +1370,9 @@ def answer(repo):
         "verify_line": state.get("verify_line"),
         "rejections": rejections, "passed": passed,
         "gaps": {"failing": failing, "unverified": unverified, "unproven": unproven,
-                 "orphan_tests": orphans, "blind_spots": blind},
+                 "orphan_tests": orphans, "blind_spots": blind,
+                 "rebaselined": [rebaseline_text(r) for r in open_rebaselines(repo, state)]},
+        "rebaselines": state.get("rebaselines", []),
         "strict": bool(state.get("strict")), "rounds": state.get("rounds", 0),
         "failing": failing, "checks": len(checks), "receipts": sorted((state.get("failures") or {}).keys()),
         "challenge": {"feature": challenge.get("feature"), "verdict": challenge.get("verdict")}
@@ -1333,7 +1397,8 @@ def cmd_report(repo, as_json=False):
         print(f"PASSED  {p['feature']}: `{p['command']}`")
     g = a["gaps"]
     labels = (("failing", "failing check"), ("unverified", "no check"), ("unproven", "never seen red"),
-              ("orphan_tests", "orphan test"), ("blind_spots", "blind spot"))
+              ("orphan_tests", "orphan test"), ("blind_spots", "blind spot"),
+              ("rebaselined", "check changed under review"))
     rows = [(label, item) for key, label in labels for item in g[key]]
     for label, item in rows:
         print(f"GAP  {label}: {item}")
@@ -1346,10 +1411,10 @@ def diagnose_failure(out, exit_code, check_name, state=None):
     """Diagnose a failure into ('harness-gap' | 'spec-drift' | 'product-gap', summary, recommended_action)."""
     if state and state.get("result") == "tampered":
         return ("spec-drift", "Baseline tampering detected (check commands or oracle files modified).",
-                "Consult team or spec. If intentional, run `verify.py baseline`.")
+                "Consult team or spec. If a person approves, run `verify.py baseline --reviewed-by <name> --reason <why>`.")
     if state and "CHECK CHANGED" in str(state.get("detail", "")):
         return ("spec-drift", "Test checks or oracle files differ from the baseline.",
-                "Do NOT weaken check silently. Confirm changes and re-run `verify.py baseline`.")
+                "Do NOT weaken check silently. After a person reviews it, run `verify.py baseline --reviewed-by <name> --reason <why>`.")
 
     out_lower = (out or "").lower()
     if re.search(r"eaddrinuse|address already in use|port \d+ is already in use|bind: address already in use", out_lower):
@@ -1412,7 +1477,7 @@ def cmd_triage(repo, as_json=False):
 
     if changed:
         category, summary, action = ("spec-drift", f"Baseline mismatch: {', '.join(changed)} changed.",
-                                     "Confirm changes with team/spec. If intentional, run `verify.py baseline`.")
+                                     "Confirm changes with team/spec. If a person approves, run `verify.py baseline --reviewed-by <name> --reason <why>`.")
         target_check = "baseline"
     elif failing_entries:
         target_check, check_data = failing_entries[0]
@@ -1875,6 +1940,8 @@ def main():
                    help="output run results and summary as JSON")
     b = sub.add_parser("baseline", help="freeze the check files; later edits to them fail the run")
     b.add_argument("repo", nargs="?", default=".")
+    b.add_argument("--reviewed-by", help="the person who reviewed a change to a frozen check")
+    b.add_argument("--reason", help="why the reviewed check change is right (spec change, harness repair)")
     t = sub.add_parser("status", help="is the last run green and still true of the files? (exit 0/1/3)")
     t.add_argument("repo", nargs="?", default=".")
     t.add_argument("--json", action="store_true", help="print one JSON object (same exit codes)")
@@ -1974,7 +2041,7 @@ def main():
     if a.cmd == "init":
         sys.exit(cmd_init(repo))
     if a.cmd == "baseline":
-        sys.exit(cmd_baseline(repo))
+        sys.exit(cmd_baseline(repo, a.reviewed_by, a.reason))
     if a.cmd == "status":
         sys.exit(cmd_status(repo, a.json))
     if a.cmd in ("scaffold-skill", "skill-check"):

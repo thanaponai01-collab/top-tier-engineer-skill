@@ -49,7 +49,9 @@ evidence.
 6. **Slice and run.** Fix what the failure text says. `NEWLY RED`: undo your last change first.
    `SAME FAILURE x2`: your model is wrong; re-read before a third try. `BUDGET`: stop and report.
 7. **A check you think is wrong is a finding, not an edit.** Stop for a person. Editing it
-   yourself gets `CHECK CHANGED`.
+   yourself gets `CHECK CHANGED`, and `baseline` refuses to re-freeze a changed or removed check
+   without `--reviewed-by <name> --reason <why>`. Pass those only for a review a person actually
+   gave; the re-baseline is recorded and shown in `status` and `report`. New checks need no review.
 8. **Finish**: `run --strict && status` → green. If you touched tests, `tests --strict`.
 
 ## Before you say done
