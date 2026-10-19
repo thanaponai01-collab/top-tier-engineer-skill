@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 - 2026-10-19 - Sharper SKILL.md
+
+- Rewrote `SKILL.md` around check quality: what a good check is, the loop, and what to look for
+  before saying done. Helper commands are listed in one line instead of explained; detail stays in
+  `references/`. Dropped pointers to skills that are no longer shipped.
+
 ## 1.2.0 - 2026-10-19 - Maintain mode
 
 - Maintain mode (`references/maintain.md`) is a periodic pass over a project verify skill. It
