@@ -1,4 +1,0 @@
-  1. Glob: fixture/**
-  2. Grep: (?i)export.{0,20}size|max.?size|size.?limit
-  3. Bash: cd fixture; for f in AGENTS.md BRIEF.md BUILD.md FEATURES.md VERIFY.md brief/export.md evidence/export.md work/export.md app.py test_limits.py; do echo "=== $f…
-  4. Bash: cd fixture; python -B -m unittest test_limits 2>&1 | tail -15

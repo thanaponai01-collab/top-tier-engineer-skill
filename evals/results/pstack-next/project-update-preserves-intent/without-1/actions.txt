@@ -1,5 +1,0 @@
-  1. Glob: **/*
-  2. Bash: cd fixture; for f in CHANGE.md BRIEF.md AGENTS.md BUILD.md docs/architecture.md work/*.md tools/upkeep_probe.py; do echo "=== $f"; cat $f; done
-  3. Bash: cd fixture; for f in src/*/*.py tests/*.py; do echo "=== $f"; cat $f; done
-  4. Bash: cd fixture cat > work/auth.md <<'E' # Auth Purpose: login navigation and session policy. Owner requirement: ../BRIEF.md. Owned path: src/auth/login.py. Depende…
-  5. Bash: cd fixture; python tools/upkeep_probe.py compare

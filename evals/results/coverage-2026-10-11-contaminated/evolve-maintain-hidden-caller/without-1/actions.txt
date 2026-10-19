@@ -1,5 +1,0 @@
-  1. Grep: v1|V1
-  2. Glob: **/*
-  3. Read: <tmp>\tte-eval-5luzqbec\fixture\jobs\nightly.yaml
-  4. Read: <tmp>\tte-eval-5luzqbec\fixture\scheduler.py
-  5. Read: <tmp>\tte-eval-5luzqbec\fixture\DEPRECATIONS.md

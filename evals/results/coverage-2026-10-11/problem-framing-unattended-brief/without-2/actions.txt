@@ -1,5 +1,0 @@
-  1. Read: <tmp>\tte-eval-nvyjd8d5\fixture\notes\client-call.md
-  2. Glob: fixture/**/*
-  3. Read: <tmp>\tte-eval-nvyjd8d5\fixture\README.md
-  4. Write: <tmp>\tte-eval-nvyjd8d5\fixture\docs\brief.md
-  5. Write: <tmp>\tte-eval-nvyjd8d5\fixture\README.md

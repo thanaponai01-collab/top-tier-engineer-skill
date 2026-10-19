@@ -1,20 +1,19 @@
 {
-  "name": "top-tier-engineer",
-  "description": "Thirty-seven engineering skills for Claude Code and other agents that support Agent Skills. Drive is the single entry point: run /top-tier-engineer:drive with a goal. Every skill is manual-only, so nothing loads unless you invoke it, and the default install runs no hooks.",
-  "version": "4.66.0",
+  "name": "verify-loop",
+  "description": "Verify Loop only: write a check that can fail, then loop until it passes, with retained proof. Run /verify-loop:verify-loop. The skill is manual-only and the install runs no hooks.",
+  "version": "1.0.0",
   "author": {
     "name": "Thanaponai01"
   },
   "homepage": "https://github.com/thanaponai01-collab/top-tier-engineer-skill",
   "repository": "https://github.com/thanaponai01-collab/top-tier-engineer-skill",
   "keywords": [
-    "engineering",
-    "code-review",
+    "verification",
+    "testing",
     "correctness",
-    "architecture",
-    "software-lifecycle",
+    "mutation-testing",
     "agent-skills",
-    "codex",
-    "claude-code"
+    "claude-code",
+    "codex"
   ]
 }

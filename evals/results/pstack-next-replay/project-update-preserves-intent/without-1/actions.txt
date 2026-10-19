@@ -1,6 +1,0 @@
-  1. Glob: **/*.md
-  2. Bash: ls -la; ls "<home>/.claude/projects/<tmp-project>-tte-eval-x35u4h9-/memory/" 2>&1
-  3. Bash: cd fixture; for f in CHANGE.md BRIEF.md AGENTS.md BUILD.md docs/architecture.md work/*.md; do echo "=== $f"; cat "$f"; done
-  4. Bash: cd fixture; find . -path ./docs -prune -o -type f -not -name '*.md' -print; cat src/shared/redirect.py src/auth/login.py src/billing/checkout.py 2>&1
-  5. Bash: cd fixture; cat > work/auth.md <<'E' # Auth Purpose: login navigation and session policy. Owner requirement: ../BRIEF.md. Owned path: src/auth/login.py. Depend…
-  6. Bash: cd fixture; md5sum BUILD.md work/*.md | diff - /tmp/a && echo unchanged; grep -rn "always\|pending\|loses" BUILD.md work docs AGENTS.md BRIEF.md

@@ -1,6 +1,0 @@
-  1. Read: <tmp>\tte-plugin-c_9cw4iu\top-tier-engineer\skills\pick-skill\SKILL.md
-  2. Glob: **/*
-  3. Read: <tmp>\tte-eval-i241du84\fixture\total.py
-  4. Read: <tmp>\tte-eval-i241du84\fixture\tests\test_total.py
-  5. Edit: <tmp>\tte-eval-i241du84\fixture\total.py
-  6. Bash: cd "<tmp>/tte-eval-i241du84/fixture" && PYTHONPATH=. python -m unittest tests.test_total 2>&1 | tail -5

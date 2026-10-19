@@ -1,6 +1,0 @@
-  1. Skill: top-tier-engineer:verify-loop
-  2. Bash: ls -la . fixture fixture/verification ../ci-evidence 2>&1 | head -50; cat fixture/verification/ci.json
-  3. Read: <tmp>\tte-plugin-6536d87_\top-tier-engineer\skills\verify-loop\references\ci.md
-  4. Bash: cd <tmp>/tte-eval-8kbed2zq/fixture && for f in .gitignore .verify-state.json SPEC.md VERIFY.md app.py test_answer.py verification/m…
-  5. Bash: V="<tmp>/tte-plugin-6536d87_/top-tier-engineer/skills/verify-loop/scripts/verify.py"; python --version; git init -q 2>&1; git add -…
-  6. Bash: cd <tmp>/tte-eval-8kbed2zq && head -c 1500 ci-evidence/report.json; echo; wc -l ci-evidence/run.log; git -C fixture status --short

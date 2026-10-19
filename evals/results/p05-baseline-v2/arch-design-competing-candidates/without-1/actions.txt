@@ -1,1 +1,0 @@
-  1. Bash: cd "<tmp>/tte-eval-rpqpf803" && find . -type f | grep -v node_modules | head -50 && cat fixture/requirements.md

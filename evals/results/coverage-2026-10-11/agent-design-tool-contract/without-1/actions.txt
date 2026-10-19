@@ -1,5 +1,0 @@
-  1. Read: <tmp>\tte-eval-hjsyemx_\fixture\PLAN.md
-  2. Glob: **/*
-  3. Read: <tmp>\tte-eval-hjsyemx_\fixture\platform\models.py
-  4. Read: <repo>/PHILOSOPHY.md
-  5. Write: <tmp>\tte-eval-hjsyemx_\fixture\DESIGN.md

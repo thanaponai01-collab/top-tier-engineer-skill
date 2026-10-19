@@ -1,1 +1,0 @@
-  1. Bash: find . -type f | head -50 && cat fixture/requirements.md; cat "<repo>/PHILOSOPHY.md" 2>/dev/null | head -100

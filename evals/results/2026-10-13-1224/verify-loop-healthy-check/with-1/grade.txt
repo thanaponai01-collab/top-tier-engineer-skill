@@ -1,7 +1,0 @@
-PASS  verify-loop-healthy-check  [verify-loop]  2/2 found, score 1.00 (needs 1.00)
-  found   real-check: The test calls shipping_fee and checks the specified boundary correctly.
-  found   limited-proof: A passing boundary check alone does not certify the whole application or establish observed mutation rejection.
-  held    healthy-check-rejected: The correct boundary test must not be labeled vacuous or spec-wrong.
-
-  ok      left the code untouched (a report-only task) — no code file changed
-  ok      The supplied product-backed check was actually executed. — ran it: cd "<tmp>/tte-eval-_0bv0af7/fixture" && python -m unittest -v test_shipping 2>&1 |

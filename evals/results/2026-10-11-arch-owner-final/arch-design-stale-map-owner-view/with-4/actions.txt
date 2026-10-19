@@ -1,9 +1,0 @@
-  1. Skill: top-tier-engineer:arch-design
-  2. Bash: cd fixture && find . -type f | head -100 && wc -l $(find . -type f -name "*.*" | grep -v node_modules) | tail -50
-  3. Read: <tmp>\tte-plugin-qqof2902\top-tier-engineer\skills\arch-design\references\visual-report.md
-  4. Bash: cd fixture && for f in docs/architecture.md README.md shop/*.py shop/jobs/*.py; do echo "=== $f"; cat -n "$f"; done; ls -la; ls docs
-  5. Bash: cd fixture && grep -rn "run_forever\|send_receipt\|enqueue" . ; mkdir -p "$TEMP/archproof" && cat > "$TEMP/archproof/proof.py" <<'EOF' import sys, time, smtpli…
-  6. Bash: F="$TEMP/architecture-review-20261011.html"; cat > "$F" <<'EOF' <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-wi…
-  7. Bash: cygpath -w "$TEMP"
-  8. Write: <tmp>\architecture-review-20261011.html
-  9. Bash: cmd //c start "" "<tmp>\architecture-review-20261011.html"; rm -rf "$TEMP/archproof"; echo ok

@@ -1,1 +1,0 @@
-The selected behavior passed after rejecting a controlled wrong fee. Payment integration is still untested. Setup refreshed the partial recipe and retained project instructions.

@@ -1,6 +1,0 @@
-  1. Bash: cd <tmp>/tte-eval-z63jx4i5/fixture && ls -la && cat *.md 2>/dev/null | head -100
-  2. Bash: cd <tmp>/tte-eval-z63jx4i5/fixture && cat cli.py invoices.py; ls tests; cat tests/*.py
-  3. Bash: cd <tmp>/tte-eval-z63jx4i5/fixture && python - <<'EOF' import re p='invoices.py'; s=open(p).read() s=s.replace('''def export(''',''…
-  4. Bash: cd <tmp>/tte-eval-z63jx4i5/fixture && python - <<'EOF' s=open('BUILD.md').read() i=s.index('## Next') j=s.index('## Deferred') s=s[…
-  5. Bash: cd <tmp>/tte-eval-z63jx4i5/fixture && wc -c BUILD.md
-  6. Write: <tmp>/tte-eval-z63jx4i5/fixture/BUILD.md

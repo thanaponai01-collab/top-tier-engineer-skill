@@ -1,3 +1,0 @@
-  1. Skill: top-tier-engineer:agent-trace
-  2. Bash: ls -R fixture; cat fixture/INCIDENT.md
-  3. Bash: cd fixture; cat -n runs/run-4471.jsonl; cat TOOLS.md

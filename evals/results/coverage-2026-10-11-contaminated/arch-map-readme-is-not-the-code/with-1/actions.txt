@@ -1,4 +1,0 @@
-  1. Skill: top-tier-engineer:arch-map
-  2. Glob: fixture/**/*
-  3. Bash: cd fixture; for f in main.py db.py settings.py api/*.py services/*.py repo/*.py plugins/*.py README.md; do echo "=== $f"; cat -n $f; done
-  4. Write: <tmp>\tte-eval-rxhw4bg6\fixture\docs\architecture.md

@@ -1,36 +1,8 @@
 # CLAUDE.md
 
-This repo is the `top-tier-engineer` Claude Code plugin: independent skills under `plugin/skills/<name>/SKILL.md`.
+This repo is the `verify-loop` Claude Code plugin: one skill at `plugin/skills/verify-loop/SKILL.md`.
 
-- No required setup. The optional memory convention lives in plugin/skills/project-context/references/memory.md; it governs storage/retrieval only. A skill may name another skill to hand off to.
-- Skills hold only their own work; there is no shared philosophy file.
-- A skill's helper scripts live in its own `scripts/` folder and are stdlib-only Python.
-- Every list of skills comes from each SKILL.md's frontmatter (`metadata.stage`, `metadata.card`).
-  After adding, renaming or re-describing a skill: `python tools/catalog.py --write`, then add its
-  pick-skill line by hand (the README table and CATALOG.md are generated); `--check` (run by the
-  tests) names what is missing.
+- Helper scripts live in `plugin/skills/verify-loop/scripts/` and are stdlib-only Python.
 - Before committing: `python -m unittest discover tests`.
-- A skill earns its place by making an agent better, so a new skill lands with an eval case under
-  `evals/cases/` (see `evals/README.md`). Write the case first and watch an agent without the skill
-  fail it; then show the skill fixing that. `evals/uncovered.txt` lists older skills with no case yet
-  and may only shrink. `python tools/ledger.py --write` refreshes `evals/LEDGER.md` (all runs, per case);
-  the tests fail if it is stale.
-- After changing a skill, re-run it for real: `python evals/run.py --cases <its case>`. The unit
-  tests prove the grader works; only `run.py` shows whether the skill does. Commit the refreshed
-  `evals/RESULTS.md`.
-- Version lives in `plugin/.claude-plugin/plugin.json`; bump it and add a `CHANGELOG.md` entry per release.
-
-<!-- start-here -->
-Goal: independent engineering skills with reliable, bounded project context.
-intent: BRIEF.md
-work: BUILD.md
-features: CATALOG.md
-verify: evals/PROJECT_MEMORY.md
-architecture: docs/architecture.md
-commands: docs/commands.md
-Read BRIEF.md and BUILD.md first; open linked areas only for the task.
-Task context missing: read plugin/skills/project-context/references/memory.md#task-context for scoped source/history/check retrieval.
-Retrieve: python plugin/skills/project-context/scripts/context.py --repo . search WORDS --limit 5
-Upkeep: update affected records after authorized work; index --files CHANGED_CONTEXT_FILES.
-Index is disposable; facts stay in files. Read-only reviews report gaps.
-<!-- /start-here -->
+- Version lives in `plugin/.claude-plugin/plugin.json` (keep `plugin/.codex-plugin/plugin.json` in
+  step); bump it and add a `CHANGELOG.md` entry per release.

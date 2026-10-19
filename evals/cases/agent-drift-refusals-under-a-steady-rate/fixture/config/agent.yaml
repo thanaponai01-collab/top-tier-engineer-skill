@@ -1,6 +1,0 @@
-# support-agent runtime config
-model: claude-sonnet-5-5          # simplified 2026-09-16 (was claude-sonnet-5-5-20260801)
-prompt: support-v7
-max_steps: 15
-max_cost_per_run_usd: 0.20
-max_cost_per_day_usd: 400

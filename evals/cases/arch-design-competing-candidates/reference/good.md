@@ -1,7 +1,0 @@
-First set criteria: prevent duplicate refunds under retries, expose a completed/failed state to operators, keep the 20/day launch operable, and meet a response-time target once one exists. Unknown provider latency and retry behavior stay explicit assumptions.
-
-Option A is the **simplest viable** launch design, needing one table: `web/order_views.py` calls `orders/service.py`, which records an idempotency key and refund state in the existing database before invoking `payments/gateway.py` synchronously. It has fewer moving parts and immediate results, but the request waits on an undocumented provider and transient outages complicate retries.
-
-Option B writes a refund request plus an outbox entry transactionally, then a worker invokes the gateway and updates refund status. It handles slow providers and retry recovery better, but adds queue/worker operations and eventual status handling that may be unnecessary at 20 refunds a day.
-
-I recommend A for launch because no latency SLA or volume growth is specified; measure provider latency before locking in that assumption. Keep idempotency and refund status in the design either way. The persisted key and public status/response contract are costly doors. Limit to two options: do one bounded round (two isolated sketches, within $8/25 minutes); this host has one model and no worker dispatch, so these are structurally distinct single-model sketches, not model-diverse review. If combining anything from B into A, replay every stated criterion against the combined shape before accepting it.

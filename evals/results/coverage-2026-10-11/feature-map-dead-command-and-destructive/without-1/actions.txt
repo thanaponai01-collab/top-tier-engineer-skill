@@ -1,3 +1,0 @@
-  1. Glob: **/*
-  2. Bash: cd fixture; for f in README.md notes.py store.py commands/*.py notes.json; do echo "=== $f"; cat $f; done
-  3. Write: <tmp>\tte-eval-6061vua5\fixture\CLAUDE.md

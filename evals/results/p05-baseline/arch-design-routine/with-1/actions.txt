@@ -1,3 +1,0 @@
-  1. Skill: top-tier-engineer:arch-design
-  2. Bash: cd <tmp>/tte-eval-nebh_4hw && find fixture -type f | head -50 && cat <tmp>/tte-plugin-0vpopm1t/top-tier…
-  3. Bash: cat <tmp>/tte-eval-nebh_4hw/fixture/requirements.md

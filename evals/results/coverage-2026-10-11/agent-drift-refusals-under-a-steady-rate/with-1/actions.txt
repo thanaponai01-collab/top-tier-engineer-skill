@@ -1,7 +1,0 @@
-  1. Skill: top-tier-engineer:agent-drift
-  2. Glob: **/*
-  3. Read: <tmp>\tte-eval-ojkthwgq\fixture\RELEASE.md
-  4. Read: <tmp>\tte-eval-ojkthwgq\fixture\config\agent.yaml
-  5. Read: <tmp>\tte-eval-ojkthwgq\fixture\evals\support-agent\runs\2026-08-15-baseline.json
-  6. Read: <tmp>\tte-eval-ojkthwgq\fixture\evals\support-agent\graders.py
-  7. Bash: cd <tmp>/tte-eval-ojkthwgq/fixture/live; for f in sample-*.json; do echo "== $f"; head -c 1800 $f; echo; done; echo; wc -l refused-…

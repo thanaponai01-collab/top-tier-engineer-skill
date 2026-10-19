@@ -1,4 +1,0 @@
-  1. Skill: top-tier-engineer:perf-optimize
-  2. Bash: ls -la && cat measurements.json
-  3. Bash: find fixture -type f | head -50; cat "<tmp>/tte-plugin-_9gt5ytm/top-tier-engineer/skills/perf-optimize/references/benchmark-validit…
-  4. Bash: cd <tmp>/tte-eval-qsmu5sie/fixture && cat README.md; echo ----; cat measurements.json

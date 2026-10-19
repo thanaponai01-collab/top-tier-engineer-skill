@@ -1,3 +1,0 @@
-  1. Bash: cd "<tmp>/tte-eval-vjfo8jch" && ls -la && cat measurements.json
-  2. Bash: cd "<tmp>/tte-eval-vjfo8jch" && find . -type f | head -50 && cat fixture/measurements.json
-  3. Bash: cd "<tmp>/tte-eval-vjfo8jch" && cat fixture/README.md

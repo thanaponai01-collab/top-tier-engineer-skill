@@ -1,6 +1,0 @@
-  1. Glob: fixture/**
-  2. Read: <tmp>\tte-eval-0j6mthxj\fixture\total.py
-  3. Read: <tmp>\tte-eval-0j6mthxj\fixture\tests\test_total.py
-  4. Read: <tmp>\tte-eval-0j6mthxj\fixture\README.md
-  5. Edit: <tmp>\tte-eval-0j6mthxj\fixture\total.py
-  6. PowerShell: Set-Location fixture; python -I -m unittest discover -s tests -t . 2>&1; if ($LASTEXITCODE) { $env:PYTHONPATH='.'; python -m unittest discover -s tests -v 2>&1…

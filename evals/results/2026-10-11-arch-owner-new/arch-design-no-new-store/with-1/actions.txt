@@ -1,3 +1,0 @@
-  1. Skill: top-tier-engineer:arch-design
-  2. Bash: cd fixture && find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100 && cat CLAUDE.md docs/architecture.md 2>/dev/null; ls docs 2>/dev/…
-  3. Bash: cd fixture && for f in $(find . -type f); do echo "=== $f"; cat -n "$f"; done; ls -la . app

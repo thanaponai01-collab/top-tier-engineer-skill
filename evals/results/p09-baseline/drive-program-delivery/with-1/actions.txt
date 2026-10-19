@@ -1,5 +1,0 @@
-  1. Read: <tmp>\tte-plugin-iwtay6wx\top-tier-engineer\skills\drive\SKILL.md
-  2. Glob: **/*
-  3. Read: <tmp>\tte-eval-0v70nfkw\fixture\README.md
-  4. Read: <tmp>\tte-eval-0v70nfkw\fixture\program.md
-  5. Read: <tmp>\tte-eval-0v70nfkw\fixture\stack.json

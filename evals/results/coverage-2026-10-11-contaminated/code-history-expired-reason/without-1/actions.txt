@@ -1,3 +1,0 @@
-  1. Bash: cd fixture && cat profile.py | head -80; git log --oneline -- profile.py | head -20; grep -rn "PROFILE_TTL" . --include=* 2>/dev/null | head -20
-  2. Bash: cd fixture && git show 7590712 c8e1a6f; git log --all --format='%h %s%n%b' | head -40; ls -R . | grep -v .git | head -40
-  3. Bash: cd fixture && cat settings_page.py db.py README.md; grep -rn "profile\." *.py

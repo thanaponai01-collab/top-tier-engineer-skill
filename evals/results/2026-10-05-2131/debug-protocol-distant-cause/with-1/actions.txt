@@ -1,9 +1,0 @@
-  1. Glob: **/*
-  2. Read: <tmp>\tte-eval-fxygm_hp\fixture\report.py
-  3. Read: <tmp>\tte-eval-fxygm_hp\fixture\parse.py
-  4. Read: <tmp>\tte-eval-fxygm_hp\fixture\totals.py
-  5. Read: <tmp>\tte-eval-fxygm_hp\fixture\data.csv
-  6. Read: <tmp>\tte-eval-fxygm_hp\fixture\test_totals.py
-  7. Bash: cd fixture && python report.py
-  8. Bash: cd fixture && cat >> test_totals.py.new <<'EOF' EOF rm test_totals.py.new python - <<'EOF' import re p='test_totals.py' s=open(p).read() s=s.replace("from tota…
-  9. Bash: cd fixture && python - <<'EOF' p='parse.py' s=open(p).read() s=s.replace("import csv\n","import csv\nfrom decimal import Decimal\n") s=s.replace("return int(fl…

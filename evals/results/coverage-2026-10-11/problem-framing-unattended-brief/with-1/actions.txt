@@ -1,7 +1,0 @@
-  1. Skill: top-tier-engineer:problem-framing
-  2. Read: <tmp>\tte-eval-1wg60g7r\notes\client-call.md
-  3. Glob: **/*
-  4. Read: <tmp>\tte-eval-1wg60g7r\fixture\notes\client-call.md
-  5. Read: <tmp>\tte-eval-1wg60g7r\fixture\README.md
-  6. Write: <tmp>\tte-eval-1wg60g7r\fixture\BRIEF.md
-  7. Write: <tmp>\tte-eval-1wg60g7r\fixture\README.md

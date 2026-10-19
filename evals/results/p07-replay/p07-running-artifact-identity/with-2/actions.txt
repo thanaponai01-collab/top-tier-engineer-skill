@@ -1,9 +1,0 @@
-  1. Skill: top-tier-engineer:verify-loop
-  2. Glob: fixture/**
-  3. Read: <tmp>\tte-eval-u_mmt2jh\fixture\doctor.py
-  4. Read: <tmp>\tte-eval-u_mmt2jh\fixture\VERIFY.md
-  5. Read: <tmp>\tte-eval-u_mmt2jh\fixture\app.py
-  6. Read: <tmp>\tte-eval-u_mmt2jh\fixture\config.json
-  7. Grep: ^## Run|running artifact|identity
-  8. Write: <tmp>\tte-eval-u_mmt2jh\fixture\doctor.py
-  9. Bash: T=$(mktemp -d); cp fixture/{app.py,doctor.py,config.json} $T; cd $T; sed -i 's/"port": 0/"port": 18765/' config.json python app.py serve & sleep 1 python docto…

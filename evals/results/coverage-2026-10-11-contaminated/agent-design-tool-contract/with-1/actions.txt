@@ -1,3 +1,0 @@
-  1. Skill: top-tier-engineer:agent-design
-  2. Read: <tmp>\tte-eval-ddqj1hy9\fixture\PLAN.md
-  3. Write: <tmp>\tte-eval-ddqj1hy9\docs\agent-design.md

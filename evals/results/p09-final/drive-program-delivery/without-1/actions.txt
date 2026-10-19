@@ -1,4 +1,0 @@
-  1. Glob: **/*
-  2. Read: <tmp>\tte-eval-zyq9t1p5\fixture\README.md
-  3. Read: <tmp>\tte-eval-zyq9t1p5\fixture\program.md
-  4. Read: <tmp>\tte-eval-zyq9t1p5\fixture\stack.json

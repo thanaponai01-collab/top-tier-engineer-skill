@@ -1,7 +1,0 @@
-  1. Skill: top-tier-engineer:perf-optimize
-  2. Glob: fixture/**/*
-  3. Read: <tmp>\tte-eval-peqz3n8d\fixture\report.py
-  4. Read: <tmp>\tte-eval-peqz3n8d\fixture\db.py
-  5. Read: <tmp>\tte-eval-peqz3n8d\fixture\README.md
-  6. Read: <tmp>\tte-eval-peqz3n8d\fixture\test_report.py
-  7. Bash: cd "<tmp>/tte-eval-peqz3n8d/fixture" && cat > /tmp/scale.py <<'EOF' import sys, time, statistics sys.path.insert(0, ".") import db …

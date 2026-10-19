@@ -1,6 +1,0 @@
-  1. Read: <tmp>\tte-plugin-c6d_p428\top-tier-engineer\skills\drive\SKILL.md
-  2. Glob: **/*
-  3. Read: <tmp>\tte-plugin-c6d_p428\top-tier-engineer\skills\drive\references\program-delivery.md
-  4. Read: <tmp>\tte-eval-rzrbegov\fixture\README.md
-  5. Read: <tmp>\tte-eval-rzrbegov\fixture\program.md
-  6. Read: <tmp>\tte-eval-rzrbegov\fixture\stack.json

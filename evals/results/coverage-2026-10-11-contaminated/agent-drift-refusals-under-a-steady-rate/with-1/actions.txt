@@ -1,7 +1,0 @@
-  1. Skill: top-tier-engineer:agent-drift
-  2. Glob: fixture/**/*
-  3. Read: <tmp>\tte-eval-y3anfw59\fixture\RELEASE.md
-  4. Read: <tmp>\tte-eval-y3anfw59\fixture\config\agent.yaml
-  5. Read: <tmp>\tte-eval-y3anfw59\fixture\evals\support-agent\graders.py
-  6. Read: <tmp>\tte-eval-y3anfw59\fixture\evals\support-agent\runs\2026-08-15-baseline.json
-  7. Bash: cd fixture/live; for f in *; do echo "== $f ($(wc -c <$f) bytes)"; head -c 1500 $f; echo; done

@@ -1,3 +1,0 @@
-  1. Skill: top-tier-engineer:verify-loop
-  2. Bash: find . -type f -not -path './.git/*' | head -50 && cat fixture/VERIFY.md 2>/dev/null; ls -la fixture
-  3. Bash: cd <tmp>/tte-eval-dcrwfpof/fixture && for f in SPEC.md discount.py test_discount.py; do echo "== $f"; cat "$f"; done; echo; python …

@@ -1,4 +1,0 @@
-  1. Bash: find . -type f -not -path '*/node_modules/*' | head -50 && cat fixture/* 2>/dev/null | head -300
-  2. Bash: cd <tmp>/tte-eval-b0hz6ybq/fixture && python -m unittest -v 2>&1 | tail -20
-  3. Edit: <tmp>\tte-eval-b0hz6ybq\fixture\test_discount.py
-  4. Bash: python -m unittest -v 2>&1 | tail -6

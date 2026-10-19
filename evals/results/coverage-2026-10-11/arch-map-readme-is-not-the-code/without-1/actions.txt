@@ -1,4 +1,0 @@
-  1. Glob: **/*
-  2. Bash: cd <tmp>/tte-eval-qm7jzvey/fixture && for f in README.md main.py settings.py db.py api/*.py services/*.py repo/*.py plugins/*.py; d…
-  3. Write: <tmp>\tte-eval-qm7jzvey\fixture\ARCHITECTURE.md
-  4. Edit: <tmp>\tte-eval-qm7jzvey\fixture\README.md

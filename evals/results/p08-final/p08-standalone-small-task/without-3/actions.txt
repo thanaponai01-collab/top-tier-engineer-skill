@@ -1,5 +1,0 @@
-  1. Glob: fixture/**
-  2. Read: <tmp>\tte-eval-mfal7dn0\fixture\total.py
-  3. Read: <tmp>\tte-eval-mfal7dn0\fixture\tests\test_total.py
-  4. Edit: <tmp>\tte-eval-mfal7dn0\fixture\total.py
-  5. PowerShell: cd fixture; python -m unittest discover -s tests -t . -v 2>&1; if ($LASTEXITCODE -ne 0) { $env:PYTHONPATH="."; python -m unittest tests.test_total -v 2>&1 }

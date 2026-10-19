@@ -1,3 +1,0 @@
-  1. Bash: cd fixture && git status && git log --oneline -15 --date=short --format="%h %ad %s" && git branch -a && git stash list && ls -la
-  2. Bash: cd fixture && for f in BRIEF.md BUILD.md CLAUDE.md export.py money.py test_export.py; do echo "=== $f"; cat $f; done; echo "=== DIFF"; git diff; echo "=== ab7c…
-  3. Bash: cd fixture && python -m unittest 2>&1 | tail -15

@@ -1,6 +1,0 @@
-  1. Skill: top-tier-engineer:verify-loop
-  2. Glob: fixture/**
-  3. Read: <tmp>\tte-eval-t5pkcp7q\fixture\discount.py
-  4. Read: <tmp>\tte-eval-t5pkcp7q\fixture\SPEC.md
-  5. Read: <tmp>\tte-eval-t5pkcp7q\fixture\test_discount.py
-  6. Bash: cd fixture && python -m pytest -q 2>&1 | tail -30; python "<tmp>/tte-plugin-s0as_gw_/top-tier-engineer/skills/verify-loop/scripts/v…

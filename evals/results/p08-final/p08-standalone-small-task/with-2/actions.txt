@@ -1,7 +1,0 @@
-  1. Read: <tmp>\tte-plugin-j8k09f9y\top-tier-engineer\skills\pick-skill\SKILL.md
-  2. Glob: fixture/**
-  3. Read: <tmp>\tte-eval-s1jj7bzm\fixture\total.py
-  4. Read: <tmp>\tte-eval-s1jj7bzm\fixture\tests\test_total.py
-  5. Read: <tmp>\tte-eval-s1jj7bzm\fixture\README.md
-  6. Edit: <tmp>\tte-eval-s1jj7bzm\fixture\total.py
-  7. Bash: cd "<tmp>/tte-eval-s1jj7bzm/fixture" && python -m unittest discover -s tests -t . 2>&1 | tail -5; PYTHONPATH=. python -m unittest t…

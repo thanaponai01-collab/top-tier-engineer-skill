@@ -1,5 +1,0 @@
-  1. Read: <tmp>\tte-eval-19duo1c2\fixture\notes\client-call.md
-  2. Glob: **/*
-  3. Read: <tmp>\tte-eval-19duo1c2\fixture\README.md
-  4. Write: <tmp>\tte-eval-19duo1c2\fixture\docs\kickoff.md
-  5. Write: <tmp>\tte-eval-19duo1c2\fixture\README.md

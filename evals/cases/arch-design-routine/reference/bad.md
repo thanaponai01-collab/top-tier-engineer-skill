@@ -1,1 +1,0 @@
-Ask two independent designers to sketch separate account form systems, score them against a design matrix, cross-judge the results and synthesize the best parts. Add a new form service abstraction for future flexibility.

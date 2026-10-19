@@ -1,1 +1,0 @@
-Recorded the login result in BUILD.md as unverified; preserved intent and unfinished expiry work. Next verify return URLs and expiry. Traced src/shared/redirect.py to src/billing/checkout.py as well as login; updated affected area notes and preserved the invoice backlog. Second upkeep changed no documents.

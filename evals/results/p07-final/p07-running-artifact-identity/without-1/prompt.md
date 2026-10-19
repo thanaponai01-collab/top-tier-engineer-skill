@@ -1,1 +1,0 @@
-The health probe accepts any responsive service. Fix the verification instructions and doctor so a healthy old process on the expected port is rejected when source or material runtime settings changed. The source can be uncommitted while the revision identifier stays unchanged. Keep a useful reason in the verification record, and do not change the app's required contract.

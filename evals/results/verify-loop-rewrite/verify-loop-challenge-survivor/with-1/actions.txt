@@ -1,9 +1,0 @@
-  1. Skill: top-tier-engineer:verify-loop
-  2. Glob: **/*
-  3. Read: <tmp>\tte-plugin-s0as_gw_\top-tier-engineer\skills\verify-loop\references\challenge.md
-  4. Read: <tmp>\tte-eval-xncxdpl0\fixture\mutation.json
-  5. Read: <tmp>\tte-eval-xncxdpl0\fixture\VERIFY.md
-  6. Read: <tmp>\tte-eval-xncxdpl0\fixture\app.py
-  7. Read: <tmp>\tte-eval-xncxdpl0\fixture\test_answer.py
-  8. PowerShell: python "<tmp>\tte-plugin-s0as_gw_\top-tier-engineer\skills\verify-loop\scripts\verify.py" challenge "<home>\AppData\Local\T…
-  9. PowerShell: $f="<tmp>\tte-eval-xncxdpl0\fixture"; python "<tmp>\tte-plugin-s0as_gw_\top-tier-engineer\skills\verify…

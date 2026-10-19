@@ -1,8 +1,0 @@
-  1. Glob: **/*
-  2. Read: <tmp>\tte-eval-0fbaoc16\fixture\README.md
-  3. Read: <tmp>\tte-eval-0fbaoc16\fixture\triage_agent.py
-  4. Read: <tmp>\tte-eval-0fbaoc16\fixture\evals\triage\grade.py
-  5. Read: <tmp>\tte-eval-0fbaoc16\fixture\evals\triage\tasks.jsonl
-  6. Bash: cd <tmp>/tte-eval-0fbaoc16/fixture && python evals/triage/grade.py; echo "exit=$?"
-  7. Edit: <tmp>\tte-eval-0fbaoc16\fixture\evals\triage\grade.py
-  8. Bash: python evals/triage/grade.py; echo "exit=$?"

@@ -1,6 +1,6 @@
 {
-  "name": "top-tier-engineer",
-  "version": "4.66.0",
-  "description": "Thirty-six engineering workflow skills for Codex, including architecture, debugging, verification, reviews, releases, and goal-driven runs.",
+  "name": "verify-loop",
+  "version": "1.0.0",
+  "description": "Verify Loop only: write a check that can fail, then loop until it passes, with retained proof. Run /verify-loop:verify-loop. The skill is manual-only and the install runs no hooks.",
   "skills": "./skills/"
 }

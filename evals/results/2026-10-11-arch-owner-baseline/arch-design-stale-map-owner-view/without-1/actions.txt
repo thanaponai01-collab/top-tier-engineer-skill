@@ -1,3 +1,0 @@
-  1. Bash: cd fixture && find . -type f | head -100 && wc -l $(find . -type f -name "*.*" | grep -v node_modules) | tail -50
-  2. Bash: cd fixture && for f in README.md docs/architecture.md shop/*.py shop/jobs/*.py; do echo "=== $f"; cat -n "$f"; done
-  3. Bash: mkdir -p /tmp/shopcheck && cat > /tmp/shopcheck/t.py <<'EOF' import sys; sys.path.insert(0, sys.argv[1]) import smtplib, time from shop import inventory, db, w…

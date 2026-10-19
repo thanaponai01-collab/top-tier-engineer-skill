@@ -1,6 +1,0 @@
-  1. Read: <tmp>\tte-plugin-clyb_006\top-tier-engineer\skills\project-setup\SKILL.md
-  2. Glob: **/*
-  3. Bash: ls -la "<tmp>/tte-eval-8g0j3czx"
-  4. Read: <tmp>\tte-plugin-clyb_006\top-tier-engineer\skills\drive\references\model-routing.md
-  5. Read: <tmp>\tte-eval-8g0j3czx\fixture\CLAUDE.md
-  6. Edit: <tmp>\tte-eval-8g0j3czx\fixture\CLAUDE.md

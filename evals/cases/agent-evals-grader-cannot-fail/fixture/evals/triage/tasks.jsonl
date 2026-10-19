@@ -1,8 +1,0 @@
-{"id": 1, "ticket": "I was charged twice for my subscription this month.", "expected": "billing"}
-{"id": 2, "ticket": "My package says delivered but it isn't here.", "expected": "shipping"}
-{"id": 3, "ticket": "How do I change my password?", "expected": "account"}
-{"id": 4, "ticket": "Can I get a refund for the blue sweater? It doesn't fit.", "expected": "returns"}
-{"id": 5, "ticket": "The tracking number doesn't work on the carrier site.", "expected": "shipping"}
-{"id": 6, "ticket": "Please update the card on my account.", "expected": "billing"}
-{"id": 7, "ticket": "I want to return two items from order 5521.", "expected": "returns"}
-{"id": 8, "ticket": "I can't log in, it says my email isn't registered.", "expected": "account"}

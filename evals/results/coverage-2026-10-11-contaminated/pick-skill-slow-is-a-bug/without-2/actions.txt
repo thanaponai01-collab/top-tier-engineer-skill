@@ -1,8 +1,0 @@
-  1. Glob: fixture/**
-  2. Read: <tmp>\tte-eval-utdtjdq4\fixture\CHANGES.md
-  3. Read: <tmp>\tte-eval-utdtjdq4\fixture\dashboard.py
-  4. Read: <tmp>\tte-eval-utdtjdq4\fixture\flags_client.py
-  5. Read: <tmp>\tte-eval-utdtjdq4\fixture\net.py
-  6. Read: <tmp>\tte-eval-utdtjdq4\fixture\settings.py
-  7. Edit: <tmp>\tte-eval-utdtjdq4\fixture\settings.py
-  8. Bash: cd <tmp>/tte-eval-utdtjdq4/fixture && python dashboard.py

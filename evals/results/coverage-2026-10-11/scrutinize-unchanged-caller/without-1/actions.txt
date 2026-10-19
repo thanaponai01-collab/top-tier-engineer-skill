@@ -1,3 +1,0 @@
-  1. Bash: cd fixture && git status | head -5; git branch -a; cat PR.md; git log --oneline --all | head; git diff main...feature/optional-user --stat
-  2. Bash: cd fixture && git diff main...feature/optional-user -- . ':!PR.md'; ls; grep -rn "get_user" --include=*.py .
-  3. Bash: cd fixture && cat billing.py tests/test_billing.py; python -m unittest discover -s tests 2>&1 | tail -4

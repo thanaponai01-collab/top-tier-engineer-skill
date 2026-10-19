@@ -1,6 +1,0 @@
-  1. Skill: arch-design
-  2. Glob: fixture/**/*
-  3. Read: <tmp>\tte-eval-henq2tx5\fixture\app\db.py
-  4. Read: <tmp>\tte-eval-henq2tx5\fixture\app\users\models.py
-  5. Read: <tmp>\tte-eval-henq2tx5\fixture\app\reports\models.py
-  6. Read: <tmp>\tte-eval-henq2tx5\fixture\app\reports\views.py

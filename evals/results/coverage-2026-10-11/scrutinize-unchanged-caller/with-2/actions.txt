@@ -1,4 +1,0 @@
-  1. Skill: top-tier-engineer:scrutinize
-  2. Bash: cd fixture && git status | head -5; git branch -a; cat PR.md; git log --oneline --all | head; git merge-base main feature/optional-user; git diff main...featur…
-  3. Bash: cd fixture && ls; grep -rn "get_user\|KeyError" --include=*.py . ; cat billing.py; python -m unittest discover -s tests 2>&1 | tail -4
-  4. Bash: cd fixture && python -c " from billing import price_for print(price_for('nobody',1000))" 2>&1 | tail -3

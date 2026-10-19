@@ -1,1 +1,0 @@
-  1. Bash: cd "<tmp>/tte-eval-cx_do_vx" && find . -type f | head -50 && cat fixture/requirements.md

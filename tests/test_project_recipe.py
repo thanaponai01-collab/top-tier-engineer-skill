@@ -15,7 +15,7 @@ from urllib.request import urlopen
 from _helpers import ROOT, run
 from test_verify import alive
 
-FIXTURE = Path(ROOT) / 'evals/fixtures/p02'
+FIXTURE = Path(ROOT) / 'tests/fixtures/p02'
 
 class ApplicationRecipe(unittest.TestCase):
     def fixture(self, root, mode='api', managed=True):

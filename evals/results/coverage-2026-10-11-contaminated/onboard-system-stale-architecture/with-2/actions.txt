@@ -1,6 +1,0 @@
-  1. Read: <tmp>\tte-plugin-rk5iv5lr\top-tier-engineer\skills\onboard-system\SKILL.md
-  2. Glob: **/*
-  3. Bash: cd "<tmp>/tte-eval-vb0wajnk/fixture" && for f in BRIEF.md BUILD.md CLAUDE.md docs/architecture.md api.py store.py billing/*.py test…
-  4. Bash: cd "<tmp>/tte-eval-vb0wajnk/fixture" && python -m unittest 2>&1 | tail -5; python -c " import api,store i=api.create('a',[('w',2,10…
-  5. Write: <tmp>\tte-eval-vb0wajnk\fixture\docs\architecture.md
-  6. Edit: <tmp>\tte-eval-vb0wajnk\fixture\CLAUDE.md

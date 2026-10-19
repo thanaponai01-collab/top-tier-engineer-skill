@@ -1,8 +1,0 @@
-  1. Skill: top-tier-engineer:verify-loop
-  2. Glob: **/*
-  3. Read: <tmp>\tte-plugin-59sovf4k\top-tier-engineer\skills\verify-loop\references\challenge.md
-  4. Read: <tmp>\tte-eval-c3h3qkao\fixture\VERIFY.md
-  5. Read: <tmp>\tte-eval-c3h3qkao\fixture\mutation.json
-  6. Read: <tmp>\tte-eval-c3h3qkao\fixture\test_answer.py
-  7. Read: <tmp>\tte-eval-c3h3qkao\fixture\app.py
-  8. Bash: cd <tmp>/tte-eval-c3h3qkao/fixture && python <tmp>/tte-plugin-59sovf4k/top-tier-engineer/skills/verify-…

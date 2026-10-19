@@ -1,3 +1,0 @@
-  1. Skill: top-tier-engineer:arch-design
-  2. Bash: cd fixture && find . -type f | head -50 && cat requirements.md
-  3. Bash: cd "<tmp>/tte-plugin-84camfc4/top-tier-engineer/skills/arch-design/references" && ls && cat competing-designs.md design-new.md

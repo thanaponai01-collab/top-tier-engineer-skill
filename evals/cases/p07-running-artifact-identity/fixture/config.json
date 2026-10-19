@@ -1,1 +1,0 @@
-{"port": 0, "flags": ["--mode=production", "--workers=2"], "role": "api", "mocks": ["mail-sink"]}

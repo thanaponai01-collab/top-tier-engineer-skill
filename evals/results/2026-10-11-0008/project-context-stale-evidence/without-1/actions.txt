@@ -1,5 +1,0 @@
-  1. Glob: **/*
-  2. Read: <tmp>\tte-eval-jjmk9oz1\fixture\AGENTS.md
-  3. Read: <tmp>\tte-eval-jjmk9oz1\fixture\BRIEF.md
-  4. Read: <tmp>\tte-eval-jjmk9oz1\fixture\BUILD.md
-  5. Read: <tmp>\tte-eval-jjmk9oz1\fixture\work\auth.md
