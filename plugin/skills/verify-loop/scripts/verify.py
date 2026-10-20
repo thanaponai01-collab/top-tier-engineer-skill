@@ -225,8 +225,10 @@ def find_tests(repo):
 
 
 def is_covered(rel, commands, repo):
-    """True when some command names this test file, or a directory that holds it."""
+    """True when some command names this test file, a directory that holds it, or (Python) its
+    module: `python -m unittest tests.test_x` or `pytest test_x` name tests/test_x.py."""
     base = rel.rsplit("/", 1)[-1]
+    dotted = rel[:-3].replace("/", ".") if rel.endswith(".py") else None
     for cmd in commands:
         for tok in re.findall(r"[\w./-]+", cmd.replace("\\", "/")):
             t = tok[2:] if tok.startswith("./") else tok
@@ -237,7 +239,17 @@ def is_covered(rel, commands, repo):
                 return True
             if rel.startswith(t + "/") and os.path.isdir(os.path.join(repo, t)):
                 return True
+            if dotted and "/" not in t and (
+                    t == dotted or t.startswith(dotted + ".") or dotted.endswith("." + t)
+                    or any(t.startswith(tail + ".") for tail in _module_tails(dotted))):
+                return True
     return False
+
+
+def _module_tails(dotted):
+    """'a.b.test_x' -> ['b.test_x', 'test_x']: the module as named from a subfolder."""
+    parts = dotted.split(".")
+    return [".".join(parts[i:]) for i in range(1, len(parts))]
 
 
 def get_affected_files(repo, ref=None):
@@ -319,29 +331,44 @@ def filter_affected(features, changed_files, repo, covmap=None):
 SITECUSTOMIZE = """import os, sys
 _here = os.path.dirname(os.path.abspath(__file__))
 _root = os.environ.get("VERIFY_COV_ROOT", "")
-_seen = set()
+_seen, _called = set(), set()
 _out = os.path.join(_here, f"covdata.{os.getpid()}")
+_calls = os.path.join(_here, f"covcall.{os.getpid()}")
 if _root:
     try:
         open(_out, "a", encoding="utf-8").close()
     except OSError:
         pass
-    def _prof(frame, event, arg):
-        if event != "call":
+    def _note(code):
+        fn = code.co_filename
+        func = bool(code.co_flags & 0x2)  # CO_NEWLOCALS: a function body, not module or class code
+        if not fn or fn.startswith("<") or (fn in _called if func else fn in _seen):
             return
-        fn = frame.f_code.co_filename
-        if fn in _seen or not fn or fn.startswith("<"):
-            return
-        _seen.add(fn)
         try:
             real = os.path.realpath(fn)
             rel = os.path.relpath(real, _root)
-            if not rel.startswith("..") and os.path.dirname(real) != _here:
-                with open(_out, "a", encoding="utf-8") as fh:
-                    fh.write(rel.replace(os.sep, "/") + "\\n")
+            inside = not rel.startswith("..") and os.path.dirname(real) != _here
+            for done, path in ((_seen, _out), (_called, _calls) if func else (None, None)):
+                if done is not None and fn not in done:
+                    done.add(fn)
+                    if inside:
+                        with open(path, "a", encoding="utf-8") as fh:
+                            fh.write(rel.replace(os.sep, "/") + "\\n")
         except Exception:
             pass
-    sys.setprofile(_prof)
+    _mon = getattr(sys, "monitoring", None)
+    try:  # 3.12+: each code object reports its first start, then costs nothing
+        _mon.use_tool_id(4, "verify-coverage")
+        def _start(code, offset):
+            _note(code)
+            return _mon.DISABLE
+        _mon.register_callback(4, _mon.events.PY_START, _start)
+        _mon.set_events(4, _mon.events.PY_START)
+    except Exception:
+        def _prof(frame, event, arg):
+            if event == "call":
+                _note(frame.f_code)
+        sys.setprofile(_prof)
 sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != _here]
 del sys.modules["sitecustomize"]
 try:
@@ -369,15 +396,80 @@ def coverage_env(folder, repo):
 
 
 def coverage_files(folder, repo):
-    """{measured, files}: the repo-relative files the check's Python processes executed."""
-    files, measured = set(), False
+    """{measured, files, called}: the repo-relative files the check's Python processes executed,
+    and the ones where a function (not just module or class code, as an import runs) was called."""
+    files, called, measured = set(), set(), False
     for name in os.listdir(folder):
-        if not name.startswith("covdata"):
+        into = files if name.startswith("covdata") else called if name.startswith("covcall") else None
+        if into is None:
             continue
-        measured = True
+        measured = measured or into is files
         with open(os.path.join(folder, name), encoding="utf-8", errors="replace") as fh:
-            files.update(ln.strip() for ln in fh if ln.strip())
-    return {"measured": measured, "files": sorted(files)}
+            into.update(ln.strip() for ln in fh if ln.strip())
+    return {"measured": measured, "files": sorted(files), "called": sorted(called)}
+
+
+# ---- hollow passes ------------------------------------------------------------------------
+# A check can exit 0 without running the product: it loads no cases, loops over [], skips, or
+# tests a copy of the logic. When a feature names Python files with functions in `path:`, `run`
+# measures its checks and calls the feature HOLLOW if they all pass without calling one of those
+# functions. Importing the module does not count: an import runs module code, not the behavior.
+
+INFER = "infer"  # no `path:`: the product is whatever repo code the checks imported
+
+
+def is_test_file(rel):
+    base = rel.rsplit("/", 1)[-1]
+    return bool(TEST_PY.match(base)) or base == "conftest.py" or any(
+        part in SKIP_DIRS for part in rel.split("/")[:-1])
+
+
+def defines_function(repo, rel):
+    try:
+        tree = ast.parse(read(repo, rel))
+    except (SyntaxError, ValueError, OSError):
+        return False
+    return any(isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) for n in ast.walk(tree))
+
+
+def reach_targets(repo, feature):
+    """Repo-relative .py files under the feature's `path:` that define a function (empty = not
+    judged), or INFER when the feature has no `path:`."""
+    if not feature.get("paths"):
+        return INFER
+    out = set()
+    for p in feature["paths"]:
+        p = p.strip().rstrip("/").replace("\\", "/")
+        full = os.path.join(repo, p)
+        found = [p] if os.path.isfile(full) else []
+        if os.path.isdir(full):
+            for here, dirs, files in os.walk(full):
+                dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+                found += [os.path.relpath(os.path.join(here, f), repo).replace("\\", "/") for f in files]
+        out |= {rel for rel in found if rel.endswith(".py") and not is_test_file(rel) and defines_function(repo, rel)}
+    return out
+
+
+def hollow(repo, targets, rows, reach):
+    """The product files the feature's checks should have called, when every check passed, ran
+    fresh under measurement, and called no function in them; else []. Cached or unmeasured
+    (non-Python) checks leave it unjudged. With INFER (no `path:`) the product is the non-test repo
+    code the checks imported, and calling any function in any of it clears the feature."""
+    if not targets or not rows:
+        return []
+    entries = []
+    for cmd, ok, cached in rows:
+        entry = reach.get(cmd)
+        if not ok or cached or not entry or not entry.get("measured"):
+            return []
+        entries.append(entry)
+    called = {f for e in entries for f in e.get("called", [])}
+    if targets == INFER:
+        if any(not is_test_file(f) for f in called):
+            return []
+        return sorted({f for e in entries for f in e.get("files", []) if f.endswith(".py")
+                       and not is_test_file(f) and defines_function(repo, f)})
+    return [] if targets & called else sorted(targets)
 
 
 def save_coverage(repo, entries):
@@ -819,11 +911,12 @@ def free_port():
         return s.getsockname()[1]
 
 
-def slotted(jobs, repo, timeout, stress, record=None):
+def slotted(jobs, repo, timeout, stress, record=None, measure=()):
     """attempt() for run --jobs: each check runs with VERIFY_SLOT (0..jobs-1, never two running
     checks in one slot) and a fresh VERIFY_PORT, so checks that start their own app, database or
     scratch folder can key it on those and run in parallel without colliding. With `record` (a
-    dict), each check also runs under coverage and record[cmd] gets the files it executed."""
+    dict), each check also runs under coverage and record[cmd] gets the files it executed; with
+    `measure` (commands) only those do."""
     slots = queue.Queue()
     for i in range(max(1, jobs)):
         slots.put(i)
@@ -832,7 +925,7 @@ def slotted(jobs, repo, timeout, stress, record=None):
         slot = slots.get()
         try:
             env = dict(os.environ, VERIFY_SLOT=str(slot), VERIFY_PORT=str(free_port()))
-            if record is None:
+            if record is None or (measure and cmd not in measure):
                 return attempt(cmd, repo, timeout, stress, env)
             with tempfile.TemporaryDirectory(prefix="verify-cov-") as folder:
                 env.update(coverage_env(folder, repo))
@@ -911,7 +1004,9 @@ def tail_of(path):
 
 
 def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1, as_json=False, quarantine=False, jobs=1,
-            use_cache=True, record_coverage=False):
+            use_cache=True, record_coverage=False, judge_reach=True):
+    """judge_reach=False: no HOLLOW verdict, for the scratch reruns inside challenge, whose own
+    verdict (survived) is the more useful answer about a check that never runs the product."""
     path = os.path.join(repo, RECIPE)
     if not os.path.isfile(path):
         if as_json:
@@ -1026,10 +1121,10 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
                 track(repo, [], only, budget, 1, strict)
             else:
                 verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature, use_cache,
-                                     affected is not None, record)
+                                     affected is not None, record, judge_reach)
         else:
             verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature, use_cache,
-                                     affected is not None, record)
+                                     affected is not None, record, judge_reach)
     finally:
         if proc or (recipe and recipe.get("stop")):
             ok, code, out, secs = stop_app(proc, recipe.get("stop"), repo, timeout)
@@ -1056,7 +1151,7 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
 
 
 def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None, jobs=1, signature=None, use_cache=True,
-               selected=False, record=None):
+               selected=False, record=None, judge_reach=True):
     results = []
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
@@ -1083,7 +1178,15 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     # --jobs: start every check now, then read results in recipe order, so output and loop memory
     # are the same as a serial run. Default 1: checks that share an app or files may collide.
     order = [cmd for f in shown for _, cmd in f["checks"]]
-    run_one = slotted(jobs, repo, timeout, stress, record)
+    # Judged: features whose checks are all `test:` with no ## Run recipe. A `run:` check or one
+    # against a started app drives a process the measurement does not see.
+    targets = {f["name"]: reach_targets(repo, f) for f in shown if judge_reach and not f["journey"] and not recipe
+               and f["checks"] and all(k == "test" for k, _ in f["checks"])}
+    measure = {c for f in shown if targets.get(f["name"]) for _, c in f["checks"]}
+    reach = record if record is not None else {}
+    run_one = slotted(jobs, repo, timeout, stress, reach if (record is not None or measure) else None,
+                      () if record is not None else measure)
+    hollow_feats = []
     pending = {}
     if jobs > 1:
         pool = ThreadPoolExecutor(max_workers=jobs)
@@ -1150,6 +1253,17 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                             print(f"        CAUSE  {cause}")
                         for line in out.rstrip().splitlines()[-TAIL_LINES:]:
                             print(f"        {line}")
+        mine = [(c, ok_r, hit_r) for fn, _, c, ok_r, _, _, q_r, hit_r in results if fn == f["name"] and not q_r]
+        missed = hollow(repo, targets.get(f["name"]), mine, reach)
+        if missed:
+            hollow_feats.append(f["name"])
+            for c, _, _ in mine:
+                fresh.pop(c, None)
+            if not as_json:
+                print(f"  HOLLOW  every check passed without calling a function in {', '.join(missed)}"
+                      + (" (imported, never called)" if targets[f["name"]] == INFER else "")
+                      + ": it loads no cases, skips, or tests a copy. A pass that never runs the product "
+                      "proves nothing about it")
         if not f["proofs"]:
             unproven += 1
             if not as_json:
@@ -1234,11 +1348,12 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         save_state(repo, state)
     norm_results = [(feat, kind, cmd, (ok or q), out, code) for feat, kind, cmd, ok, out, code, q, _ in results]
     notes, bad = track(repo, norm_results, only, budget,
-                       failed + broken + bool(incomplete) + changed_during_run + bool(flaky_checks), strict, signature,
+                       failed + broken + bool(incomplete) + changed_during_run + bool(flaky_checks) + len(hollow_feats),
+                       strict, signature,
                        tree_after)
     verify_line = (f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
                    f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
-                   f"{journeys} journeys, {broken} broken")
+                   f"{journeys} journeys, {broken} broken" + (f" | {len(hollow_feats)} hollow" if hollow_feats else ""))
     if not only:
         state = load_state(repo)
         state["verify_line"] = verify_line
@@ -1252,7 +1367,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         if cached:
             print(f"CACHED  {cached} check(s) reused: already proved passing on this exact content"
                   + (" (full signature)" if strict else "") + "; --no-cache runs them again")
-    red = bool(failed or broken or bad or incomplete or changed_during_run or flaky_checks)
+    red = bool(failed or broken or bad or incomplete or changed_during_run or flaky_checks or hollow_feats)
     if as_json:
         report = {
             "verdict": "red" if red else "green",
@@ -1267,6 +1382,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 "journeys": journeys,
                 "broken": broken,
                 "flaky": len(flaky_checks),
+                "hollow": hollow_feats,
                 "unchallenged": bool(unchallenged),
                 "not_independent": len(dependent),
                 "quarantined": len(quarantined_hits),
@@ -2718,8 +2834,8 @@ def main():
     ch.add_argument("--after", help="inline mutation replacement string")
     ch.add_argument("--claim", help="inline mutation claim description (defaults to '<feature>: <before> -> <after>')")
     ch.add_argument("--auto", metavar="FILE", nargs="?", const="",
-                    help="generate standard mutations for this product file; report a mutation score "
-                         "(with --diff the file may be left out: every changed product file)")
+                    help="generate standard mutations for this product file; report a mutation score. "
+                         "Without FILE: the feature's `path:` files, or with --diff every changed product file")
     ch.add_argument("--diff", metavar="REF", nargs="?", const="HEAD",
                     help="with --auto, mutate only lines changed since REF (default HEAD)")
     ch.add_argument("--max", type=int, default=20, help="most mutations to try with --auto (default 20)")
@@ -2783,8 +2899,6 @@ def main():
             ap.error("challenge needs exactly one of --mutation, (--file --before --after), or --auto")
         if a.diff and not auto:
             ap.error("--diff works with --auto")
-        if auto and not a.auto and not a.diff:
-            ap.error("--auto needs a FILE, or --diff to mutate every changed product file")
         if auto:
             from mutate import cmd_auto
             sys.exit(cmd_auto(sys.modules[__name__], repo, a.feature, a.auto or None, a.timeout, a.max, a.json,

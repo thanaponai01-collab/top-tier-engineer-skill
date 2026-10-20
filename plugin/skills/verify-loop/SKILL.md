@@ -33,7 +33,9 @@ Anything less is reported as what it is: red, partial, stale or unverified.
 5. **Is one cheap command.**
 
 A check that loads no cases, asserts nothing or passes either way is broken machinery, not
-evidence.
+evidence. `run` flags it `HOLLOW` when a Python `test:` check passes without calling the product
+it imports. Give each feature a `path:` to its product files: that sharpens `HOLLOW` to those
+files, and `challenge --auto` then needs no file argument.
 
 ## The loop
 
@@ -123,7 +125,7 @@ contract is in [answer](references/answer.md).
 `run --affected [--record-coverage] | --jobs N | --stress N | --quarantine | --json | --no-cache` (checks get
 `VERIFY_SLOT`/`VERIFY_PORT`; a pass already proved on identical content is reused, never a
 non-strict one for `--strict`) · `triage` · `scope <files>` (fence a fix;
-`OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto [<file>] [--diff [REF]] [--jobs N]` (mutation score, `--diff` = only changed lines; `UNCOVERED` = no check reaches the line) ·
+`OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto [<file>] [--diff [REF]] [--jobs N]` (mutation score; no file = the `path:` files, no fail-signal needed; `--diff` = only changed lines; `UNCOVERED` = no check reaches the line) ·
 `review [--base REF] [--no-mutate]` (weakened tests/checks + unproven changed lines; reads only) ·
 `loop --scope <f> --max N` (reruns, never edits) ·
 `VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline & peer `verified_by`) · `swarm [--claim | --auto]` ·

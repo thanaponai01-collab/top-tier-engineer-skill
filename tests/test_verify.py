@@ -828,8 +828,8 @@ class ScaleAndEfficiency(unittest.TestCase):
             write(tmp, "src/cart.py", "def cart(): pass\n")
             write(tmp, "src/auth.py", "def auth(): pass\n")
             write(tmp, "VERIFY.md",
-                  "## Cart\n- path: src/cart.py\n- test: `python -c \"pass\"`\n- fail-proof: x\n\n"
-                  "## Auth\n- path: src/auth.py\n- test: `python -c \"pass\"`\n- fail-proof: x\n\n"
+                  "## Cart\n- path: src/cart.py\n- test: `python -c \"from src.cart import cart; cart()\"`\n- fail-proof: x\n\n"
+                  "## Auth\n- path: src/auth.py\n- test: `python -c \"from src.auth import auth; auth()\"`\n- fail-proof: x\n\n"
                   "## Journey: Checkout\n- features: Cart, Auth\n- test: `python -c \"pass\"`\n- fail-proof: x\n")
             subprocess.run(["git", "add", "."], cwd=tmp, check=True)
             subprocess.run(["git", "-c", "user.name=T", "-c", "user.email=t@example.com", "commit", "-qm", "init"],

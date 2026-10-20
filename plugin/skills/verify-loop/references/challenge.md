@@ -62,8 +62,12 @@ sensitive output. One caught mutation proves detection of that mistake, not comp
 ## Auto survey (mutation score)
 
 ```bash
-python <skill-base>/scripts/verify.py challenge . --feature Grade --auto app.py [--max 20] [--jobs N] [--json]
+python <skill-base>/scripts/verify.py challenge . --feature Grade --auto [app.py] [--max 20] [--jobs N] [--json]
 ```
+
+With no FILE it mutates the feature's `path:` files. It needs no `fail-signal:`: without one, any
+failing check that is not a harness error counts as caught, and the output says so. Declare a signal
+to tell a real rejection from a crash; a recorded `--mutation` challenge still requires one.
 
 Generates standard syntax-validated mutations for one product file (flip `==`/`!=`, move a `<`/`>=`
 boundary, swap `and`/`or`, flip booleans, swap `+`/`-`, swap `*`/`/`, invert `is`/`is not`, mutate

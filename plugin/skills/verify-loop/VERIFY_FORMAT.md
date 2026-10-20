@@ -42,6 +42,15 @@ include: packages/auth/VERIFY.md
 
 ### 1. `## <Feature>`
 - Each bullet is `kind: <command>`, `fail-proof: <text>` or `oracle: <files>`.
+- `path:` lists the product files or folders the feature covers. It does three jobs: `--affected`
+  selects the feature when they change, `challenge --auto` mutates them when no FILE is given, and
+  `run` measures the feature's `test:` checks against them. If every check passes without calling a
+  function in those `.py` files (an import alone does not count), the feature is `HOLLOW` and the run
+  is red: the check loads no cases, skips, or tests a copy of the logic. Without `path:` the product
+  is the non-test repo code the checks imported: `HOLLOW` when they import it but call none of it,
+  and one call anywhere clears it, so `path:` is the sharper fence. Not judged: features with a
+  `run:` or other non-`test:` check, any recipe with a `## Run` section (the app runs outside the
+  measurement), cached passes, non-Python checks and modules that define no function.
 - A check passes when its command exits 0.
 - `fail-proof:` explains the controlled wrong state and intended failure signal. Strict runs also
   require a retained failing command/output for the current check hashes; a sentence alone fails.

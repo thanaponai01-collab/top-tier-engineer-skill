@@ -18,14 +18,18 @@ def copy_repo(repo, dest):
     shutil.copytree(repo, dest, ignore=COPY_IGNORE)
 
 
-def prepare(v, repo, feature):
+def prepare(v, repo, feature, need_signal=True):
     """What every mutation of one feature shares, checked once: (frozen hashes, feature, Run recipe).
-    Raises ValueError when the feature or the tree cannot be challenged."""
+    Raises ValueError when the feature or the tree cannot be challenged. need_signal=False is for a
+    survey that records no receipt (`challenge --auto`): any behavioral failure then counts as caught."""
     frozen = v.check_hashes(repo)
     features, _ = v.parse(v.read(repo, v.RECIPE), repo=repo)
     selected = [f for f in features if f["name"] == feature]
-    if len(selected) != 1 or not selected[0]["checks"] or not selected[0]["signals"]:
-        raise ValueError("name one exact feature with checks and a declared fail-signal")
+    if len(selected) != 1 or not selected[0]["checks"]:
+        raise ValueError("name one exact feature with checks")
+    if need_signal and not selected[0]["signals"]:
+        raise ValueError("a challenge that records a receipt needs a declared fail-signal; "
+                         "`--auto` surveys without one")
     recipe = v.parse_run(v.read(repo, v.RECIPE))
     if any(k == "run" for f in features for k, _ in f["checks"]) and not (recipe or {}).get("start"):
         raise ValueError("live run checks need a scratch-local Run start recipe")
@@ -56,15 +60,17 @@ def judge(v, feat, rows, intact, passing=None):
     caught = {f"{feat['name']}|{cmd}": row for kind, cmd, row in rows
               if row and not row["ok"] and row["exit"] is not None
               and kind not in ("lint", "type", "types")
-              and any(signal in row["output"] and signal not in ((passing or {}).get(f"{feat['name']}|{cmd}") or "")
-                      for signal in feat["signals"])
+              and (not feat["signals"] or any(
+                  signal in row["output"] and signal not in ((passing or {}).get(f"{feat['name']}|{cmd}") or "")
+                  for signal in feat["signals"]))
               and not v.HARNESS_FAILURE.search(row["output"])}
     if not intact:
         return "inconclusive", "check, oracle or mutated product changed during the run", {}
     if rows and all(row and row["ok"] for _, _, row in rows):
         return "survived", "selected feature checks still pass on the wrong implementation", {}
     if caught:
-        return "caught", "selected behavioral check rejected the mutation with its declared signal", caught
+        return "caught", ("selected behavioral check rejected the mutation with its declared signal"
+                          if feat["signals"] else "a behavioral check failed (no fail-signal declared)"), caught
     if any(row and not row["ok"] and row["exit"] is not None
            and any(s in row["output"] and s in ((passing or {}).get(f"{feat['name']}|{cmd}") or "")
                    for s in feat["signals"])
@@ -126,7 +132,7 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
                     "checks": checks, "checks_unchanged": v.check_hashes(str(scratch)) == frozen}
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
-            code = v.cmd_run(str(scratch), None, timeout, False, use_cache=False)
+            code = v.cmd_run(str(scratch), None, timeout, False, use_cache=False, judge_reach=False)
         checks = v.load_state(str(scratch)).get("checks", {})
         return {"exit": code, "output": output.getvalue()[-8000:], "checks": checks,
                 "checks_unchanged": v.check_hashes(str(scratch)) == frozen}

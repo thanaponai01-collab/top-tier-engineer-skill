@@ -15,6 +15,7 @@ import ast
 import contextlib
 import io
 import json
+import os
 import queue
 import re
 import shutil
@@ -194,7 +195,7 @@ class Lane:
         v, lane = self.v, str(self.path)
         if self.recipe:  # the Run recipe starts the app: run the whole recipe, one lane only
             with contextlib.redirect_stdout(io.StringIO()):
-                v.cmd_run(lane, None, self.timeout, False, use_cache=False)
+                v.cmd_run(lane, None, self.timeout, False, use_cache=False, judge_reach=False)
             checks = v.load_state(lane).get("checks", {})
             return [(k, c, checks.get(f"{self.feat['name']}|{c}")) for k, c in self.feat["checks"]]
         rows = []
@@ -290,16 +291,51 @@ def changed_files(v, repo, ref, frozen):
     return out
 
 
+def path_files(v, repo, frozen, feat):
+    """The mutable product files under a feature's `path:` entries, in recipe order."""
+    from challenge import mutable_target
+    out = []
+    for p in feat.get("paths", []):
+        p = p.strip().rstrip("/").replace("\\", "/")
+        full = os.path.join(repo, p)
+        if os.path.isfile(full):
+            found = [p]
+        elif os.path.isdir(full):
+            found = []
+            for here, dirs, files in os.walk(full):
+                dirs[:] = sorted(d for d in dirs if d not in v.SKIP_DIRS and not v.is_state_file(d))
+                found += [os.path.relpath(os.path.join(here, f), repo).replace("\\", "/") for f in sorted(files)]
+        else:
+            continue
+        for rel in found:
+            if rel in out or detect_lang(rel) == "other":
+                continue
+            try:
+                mutable_target(v, repo, frozen, rel)
+            except (OSError, ValueError):
+                continue
+            out.append(rel)
+    return out
+
+
 def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1, diff=None):
     from challenge import prepare, mutable_target, judge
     root = Path(repo).resolve()
     try:
         if timeout <= 0 or jobs < 1:
             raise ValueError("timeout and jobs must be positive")
-        frozen, feat, recipe = prepare(v, repo, feature)
-        names = [rel_file] if rel_file else changed_files(v, repo, diff, frozen)
-        if not names:
-            raise ValueError(f"no changed product file since {diff}")
+        frozen, feat, recipe = prepare(v, repo, feature, need_signal=False)
+        if rel_file:
+            names = [rel_file]
+        elif diff:
+            names = changed_files(v, repo, diff, frozen)
+            if not names:
+                raise ValueError(f"no changed product file since {diff}")
+        else:
+            names = path_files(v, repo, frozen, feat)
+            if not names:
+                raise ValueError(f"feature {feature!r} has no `path:` naming a product file; "
+                                 "pass the FILE to mutate or --diff")
         sources, candidates = {}, []
         for name in names:
             target = mutable_target(v, repo, frozen, name)
@@ -377,6 +413,9 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1, diff=N
     else:
         shown = "n/a" if score is None else f"{score:.0%}"
         scope = f" (lines changed since {diff})" if diff else ""
+        if not feat["signals"]:
+            print("note  no fail-signal declared: any failing check counts as caught. Declare one to "
+                  "tell a real rejection from a crash.")
         print(f"CHALLENGE-AUTO: {caught}/{decided} caught (score {shown}), {len(uncovered)} uncovered, "
               f"{summary['inconclusive']} inconclusive, feature {feature!r}, "
               f"file {', '.join(sorted(sources))}{scope}")
