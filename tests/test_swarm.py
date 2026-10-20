@@ -192,6 +192,23 @@ class SwarmCoordination(unittest.TestCase):
             self.assertFalse([r for r in report["results"] if r["feature"] == "Prices"], out)
             self.assertEqual(report["unmapped"], [], out)
 
+    def test_swarm_auto_maps_files_through_the_recorded_coverage_map(self):
+        """1.13.2: a check that executed app.py under `run --record-coverage` maps it to its feature,
+        with no `paths:` line, so the survey scores it per feature instead of as UNMAPPED."""
+        from test_review import BONUS, BONUS_TESTS, committed
+        with tempfile.TemporaryDirectory() as root:
+            committed(root)
+            code, out, _ = run_as("alpha", "run", root, "--record-coverage")
+            self.assertEqual(code, 0, out)
+            Path(root, "app.py").write_text(Path(root, "app.py").read_text() + BONUS)
+            Path(root, "test_app.py").write_text(Path(root, "test_app.py").read_text() + BONUS_TESTS)
+            code, out, _ = run_as("alpha", "swarm", root, "--auto", "--diff", "HEAD", "--json")
+            report = json.loads(out)
+            self.assertEqual(code, 0, out)
+            self.assertEqual(report["unmapped"], [], out)
+            self.assertEqual([f["feature"] for f in report["features"]], ["Grade"], out)
+            self.assertFalse([r for r in report["results"] if r["feature"] == "Prices"], out)
+
     def test_swarm_auto_unmapped_file_is_caught_if_any_feature_catches_it(self):
         """A changed file no feature maps still goes to every feature; the repo-wide verdict per mutant
         is the best one, so one feature's UNCOVERED does not hide another feature's catch."""

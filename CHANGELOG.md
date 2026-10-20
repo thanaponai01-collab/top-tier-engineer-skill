@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.13.2 - 2026-10-20 - Survey maps files through the coverage map
+
+- **`swarm --auto` and `review` read the recorded coverage map.** A file that a feature's check executed under `run --record-coverage` now belongs to that feature, so the survey scores it per feature instead of as `UNMAPPED`. A check like `python -m unittest test_app` names no product file, so before this a feature needed a `paths:` line to own the code it tests. Features with declared `paths:` also own files their checks executed. As with `run --affected`, the map is as fresh as its last recording.
+
 ## 1.13.1 - 2026-10-20 - Swarm survey judges each mutant once
 
 - **`swarm --auto` no longer inflates `UNCOVERED`.** A feature that mapped none of the changed files used to get every changed file, so an unrelated feature reported `UNCOVERED` lines that another feature's checks catch. Now a feature surveys only the files it maps. A file no feature maps still goes to every feature, so it is still judged.

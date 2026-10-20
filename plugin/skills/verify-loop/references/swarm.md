@@ -75,6 +75,7 @@ pool across features and reporting both per-feature and repo-wide mutation score
 `survived`, `uncovered`). Like `challenge --auto`, this is a read-only diagnostic survey and never
 writes receipts to `.verify-state.json`.
 
-Each feature surveys only the files it maps; a file no feature maps (`UNMAPPED`) goes to every
+Each feature surveys only the files it maps (its `paths:`, files its checks name, and files its
+checks executed under `run --record-coverage`); a file no feature maps (`UNMAPPED`) goes to every
 feature and counts repo-wide only. The repo-wide score judges each mutant once, caught if any
 feature's checks catch it, so one feature cannot report `UNCOVERED` for a line another feature catches.

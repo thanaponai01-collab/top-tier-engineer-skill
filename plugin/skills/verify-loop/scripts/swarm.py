@@ -204,10 +204,17 @@ def survey(v, repo, diff=None, jobs=1, limit=20, timeout=120):
                 except (OSError, ValueError):
                     continue
 
+        covmap = v.read_json(v.coverage_path(repo))  # files each check executed (run --record-coverage)
+
+        def executed(f, rel):
+            entries = (covmap.get(f"{f['name']}|{cmd}") for _, cmd in f["checks"])
+            return any(isinstance(e, dict) and e.get("measured") and rel in e.get("files", []) for e in entries)
+
         def owns(f, rel):
             if diff_files is None and f.get("paths"):
-                return any(rel == fp.rstrip("/") or rel.startswith(fp.rstrip("/") + "/") for fp in f["paths"])
-            return v.is_feature_affected(f, {rel}, repo)
+                return executed(f, rel) or any(rel == fp.rstrip("/") or rel.startswith(fp.rstrip("/") + "/")
+                                               for fp in f["paths"])
+            return v.is_feature_affected(f, {rel}, repo, covmap)
 
         # A feature surveys the files it maps; a file no feature maps goes to every feature, so it is
         # still judged. A mapped file never goes to a feature that does not map it: that feature's
