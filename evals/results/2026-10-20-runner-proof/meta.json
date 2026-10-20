@@ -1,0 +1,15 @@
+{
+  "started": "2026-10-20-1754",
+  "repeats": 1,
+  "arms": [
+    "without",
+    "with"
+  ],
+  "version": "1.16.0",
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "out_rel": "evals/results/2026-10-20-runner-proof",
+  "user_memory_bytes": 0,
+  "claude_version": "2.1.304 (Claude Code)"
+}

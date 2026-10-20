@@ -1,0 +1,6 @@
+{
+  "file": "commerce.py",
+  "before": "DISCOUNT_MIN = 100",
+  "after": "DISCOUNT_MIN = 50",
+  "claim": "Discount must preserve its spec threshold"
+}

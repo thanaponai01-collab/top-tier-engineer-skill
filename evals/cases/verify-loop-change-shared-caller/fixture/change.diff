@@ -1,0 +1,9 @@
+diff --git a/commerce.py b/commerce.py
+--- a/commerce.py
++++ b/commerce.py
+@@ -1,4 +1,4 @@
+-QUALIFY = 100
++QUALIFY = 50
+ 
+ def shipping_fee(total):
+     return 0 if total >= QUALIFY else 5

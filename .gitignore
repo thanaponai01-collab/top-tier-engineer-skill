@@ -5,3 +5,7 @@ trace.out
 # Local agent settings and raw run artifacts may contain machine paths or prompt metadata.
 .claude/settings.local.json
 
+# Raw agent transcripts stay local: large, and they carry the session's account details.
+# Each run's report.md, actions.txt, grade.txt, result.json and the batch RESULTS.md are the
+# committed evidence.
+evals/results/**/transcript.jsonl

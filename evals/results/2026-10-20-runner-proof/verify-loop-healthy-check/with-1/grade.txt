@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   real-check — "The expected values come straight from SPEC.md, not from the code's own output: 5 below 50, 0 at 50 and above."
+  found   limited-proof — "The helper's verdict is `partial`, not `green`."
+  held    healthy-check-rejected
+
+Phrase grader (grade.py), for comparison:
+PASS  verify-loop-healthy-check  [verify-loop]  2/2 found, score 1.00 (needs 1.00)
+  found   real-check: The test calls shipping_fee and checks the specified boundary correctly.
+  found   limited-proof: A passing boundary check alone does not certify the whole application or establish observed mutation rejection.
+  held    healthy-check-rejected: The correct boundary test must not be labeled vacuous or spec-wrong.
+
+  ok      left the code untouched (a report-only task) — no code file changed
+  ok      The supplied product-backed check was actually executed. — ran it: cd "<tmp>/tte-eval-rksd_a41/fixture" && python -m unittest -v test_shipping 2>&1; 

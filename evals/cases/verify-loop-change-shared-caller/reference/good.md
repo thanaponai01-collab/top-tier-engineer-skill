@@ -1,0 +1,1 @@
+The shared threshold affected both shipping and discount. Discount must remain unavailable below 100; the change granted it at 50. A retained regression test rejects the original change and accepts separated thresholds. The riskiest check caught a targeted mutation. Strict verification is current and green. Coverage is limited to these mapped boundaries, not a full project audit.

@@ -1,0 +1,6 @@
+{
+  "file": "commerce.py",
+  "before": "SHIPPING_MIN = 50",
+  "after": "SHIPPING_MIN = 100",
+  "claim": "Shipping must preserve its spec threshold"
+}

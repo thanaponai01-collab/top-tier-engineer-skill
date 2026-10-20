@@ -1,0 +1,157 @@
+[
+  {
+    "case": "verify-loop-healthy-check",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   real-check \u2014 \"The expected values come straight from SPEC.md, not from the code's own output: 5 below 50, 0 at 50 and above.\"\n  found   limited-proof \u2014 \"The helper's verdict is `partial`, not `green`.\"\n  held    healthy-check-rejected",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 2963,
+        "cacheReadInputTokens": 179718,
+        "cacheCreationInputTokens": 12584,
+        "webSearchRequests": 0,
+        "costUSD": 0.1959396,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 520,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "The supplied product-backed check was actually executed.",
+        "ok": true,
+        "detail": "ran it: cd \"<tmp>/tte-eval-rksd_a41/fixture\" && python -m unittest -v test_shipping 2>&1; "
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1959396,
+    "turns": 9,
+    "api_seconds": 45.34,
+    "helper_calls": [
+      "--help",
+      "run",
+      "challenge",
+      "report"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  verify-loop-healthy-check  [verify-loop]  2/2 found, score 1.00 (needs 1.00)\n  found   real-check: The test calls shipping_fee and checks the specified boundary correctly.\n  found   limited-proof: A passing boundary check alone does not certify the whole application or establish observed mutation rejection.\n  held    healthy-check-rejected: The correct boundary test must not be labeled vacuous or spec-wrong.",
+    "seconds": 51.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-x66x5xmj\\verify-loop"
+  },
+  {
+    "case": "verify-loop-healthy-check",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   real-check \u2014 \"It's a sound check of the rule in SPEC.md.\"\n  found   limited-proof \u2014 \"It only looks at four totals.\"\n  held    healthy-check-rejected",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2049,
+        "cacheReadInputTokens": 135674,
+        "cacheCreationInputTokens": 7436,
+        "webSearchRequests": 0,
+        "costUSD": 0.1276588,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 274,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "The supplied product-backed check was actually executed.",
+        "ok": true,
+        "detail": "ran it: cd \"<tmp>/tte-eval-356ysvsx/fixture\" && python -I -m unittest -v test_shipping 2>&"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1276588,
+    "turns": 7,
+    "api_seconds": 44.634,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-healthy-check  [verify-loop]  1/2 found, score 0.50 (needs 1.00)\n  MISSED  real-check: The test calls shipping_fee and checks the specified boundary correctly.\n            named it, but never said what was wrong with it\n  found   limited-proof: A passing boundary check alone does not certify the whole application or establish observed mutation rejection.\n  held    healthy-check-rejected: The correct boundary test must not be labeled vacuous or spec-wrong.",
+    "seconds": 47.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  }
+]

@@ -1,0 +1,1 @@
+The mutation survived. The check still passed despite the wrong implementation. It compares constants and does not observe answer(). Source files stayed unchanged; machine-readable original and mutated runs are retained. This identifies one coverage gap, not every possible flaw.

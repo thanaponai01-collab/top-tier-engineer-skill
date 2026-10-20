@@ -1,0 +1,1 @@
+Fresh CI rejected the recipe: the mutation survived because the check never calls answer(). The copied local green state was ignored. The report records the tested commit and actual original and mutated commands; this proves a coverage gap, not complete coverage. No source was changed.
