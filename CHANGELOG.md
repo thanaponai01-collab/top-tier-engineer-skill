@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0 - 2026-10-20 - Parallel checks
+
+- `verify.py run --jobs N` runs up to N checks at once and reports them in recipe order, so
+  output, loop memory and verdict match a serial run. On a 20-check repo, `--jobs 8` cut a run
+  from 7.6s to 1.6s; check execution was 93% of run time. Default stays 1: checks that share an
+  app, port or files can collide. Documented in SKILL.md and `references/helpers.md`.
+
 ## 1.6.0 - 2026-10-19 - Built for stronger agents
 
 - `require: challenge` (a top-level VERIFY.md line, written by `init`, frozen by `baseline`) keeps

@@ -53,6 +53,13 @@ changes, enum narrowing and response-shape changes. Keep the old spec as a commi
 Each prints a suggested VERIFY.md section; it does not edit VERIFY.md. Paste it, replace the
 suggested `fail-signal:` with the real behavioral one, then prove rejection as in step 4.
 
+## Parallel checks: --jobs
+
+`run --jobs N` runs up to N checks at once and prints results in recipe order, so output, loop
+memory and verdict match a serial run. Use it only when no two checks share an app, port, database
+or written file; the default of 1 is the safe choice for `## Run` recipes that drive one live app.
+A check that fails only under `--jobs` is sharing something: run it serially and fix the coupling.
+
 ## Flaky checks: --stress and --quarantine
 
 `run --stress N` runs each check N times. A check that both passes and fails is reported flaky and

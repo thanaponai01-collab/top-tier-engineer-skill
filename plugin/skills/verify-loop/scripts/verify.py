@@ -76,6 +76,7 @@ unproven, or has orphan tests); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
 import argparse, ast, fnmatch, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
+from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _encoding import utf8_streams
@@ -624,6 +625,15 @@ def run_check(cmd, repo, timeout):
         return False, None, f"timed out after {timeout}s", time.time() - t0
 
 
+def attempt(cmd, repo, timeout, stress):
+    """(ok, exit, output, seconds, passes) for one check; with stress > 1 it repeats and counts passes."""
+    ok, code, out, secs = run_check(cmd, repo, timeout)
+    passes = int(ok)
+    for _ in range(stress - 1):
+        passes += run_check(cmd, repo, timeout)[0]
+    return ok, code, out, secs, passes
+
+
 def start_app(cmd, repo):
     """(process, log path). The app keeps running in the background; its output goes to a log.
 
@@ -685,7 +695,7 @@ def tail_of(path):
         return []
 
 
-def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1, as_json=False, quarantine=False):
+def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1, as_json=False, quarantine=False, jobs=1):
     path = os.path.join(repo, RECIPE)
     if not os.path.isfile(path):
         if as_json:
@@ -788,9 +798,9 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
                         print(f"        {line}")
                 track(repo, [], only, budget, 1, strict)
             else:
-                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports)
+                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs)
         else:
-            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports)
+            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs)
     finally:
         if proc or (recipe and recipe.get("stop")):
             ok, code, out, secs = stop_app(proc, recipe.get("stop"), repo, timeout)
@@ -816,7 +826,7 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
     return verdict
 
 
-def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None):
+def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None, jobs=1):
     results = []
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
@@ -833,6 +843,13 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         print("  note  no baseline: freeze the finished checks before strict completion")
     signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
     receipts = current_receipts(state, signature)
+    # --jobs: start every check now, then read results in recipe order, so output and loop memory
+    # are the same as a serial run. Default 1: checks that share an app or files may collide.
+    pending = []
+    if jobs > 1:
+        pool = ThreadPoolExecutor(max_workers=jobs)
+        pending = [pool.submit(attempt, cmd, repo, timeout, stress) for f in shown for _, cmd in f["checks"]]
+        pool.shutdown(wait=False)  # submitted checks still run; results are read below
     for f in shown:
         if not as_json:
             print(("Journey: " if f["journey"] else "") + f["name"])
@@ -853,17 +870,12 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 print("  UNVERIFIED  no checks")
             continue
         for kind, cmd in f["checks"]:
-            ok, code, out, secs = run_check(cmd, repo, timeout)
-            check_passes = 1 if ok else 0
-            if stress > 1:
-                for _ in range(stress - 1):
-                    s_ok, _, _, _ = run_check(cmd, repo, timeout)
-                    if s_ok:
-                        check_passes += 1
-                if 0 < check_passes < stress:
-                    flaky_checks.append((f["name"], kind, cmd, check_passes, stress))
-                    quarantined.add(f"{f['name']}|{cmd}")
-                    ok = False
+            ok, code, out, secs, check_passes = (pending.pop(0).result() if pending
+                                                 else attempt(cmd, repo, timeout, stress))
+            if stress > 1 and 0 < check_passes < stress:
+                flaky_checks.append((f["name"], kind, cmd, check_passes, stress))
+                quarantined.add(f"{f['name']}|{cmd}")
+                ok = False
 
             key = f"{f['name']}|{cmd}"
             is_quarantined = False
@@ -1990,6 +2002,8 @@ def main():
                    help="quarantine non-deterministic flaky checks from failing the run")
     r.add_argument("--json", action="store_true",
                    help="output run results and summary as JSON")
+    r.add_argument("--jobs", type=int, default=1,
+                   help="run up to N checks at once; only for checks that share no app or files (default 1)")
     b = sub.add_parser("baseline", help="freeze the check files; later edits to them fail the run")
     b.add_argument("repo", nargs="?", default=".")
     b.add_argument("--reviewed-by", help="the person who reviewed a change to a frozen check")
@@ -2110,7 +2124,7 @@ def main():
         sys.exit(cmd_triage(repo, a.json))
     if a.cmd == "tests":
         sys.exit(cmd_tests(repo, a.strict))
-    sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget, a.affected, a.stress, a.json, a.quarantine))
+    sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget, a.affected, a.stress, a.json, a.quarantine, a.jobs))
 
 
 if __name__ == "__main__":

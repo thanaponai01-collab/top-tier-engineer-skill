@@ -795,6 +795,24 @@ class ScaleAndEfficiency(unittest.TestCase):
             self.assertIn("FLAKY", out)
             self.assertIn("Non-deterministic check detected", out)
 
+    def test_jobs_runs_checks_in_parallel_and_reports_in_recipe_order(self):
+        import time
+        slow = 'python -c "import time; time.sleep(1)"'
+        recipe = "".join(f"## F{i}\n- test: `{slow}`\n- fail-proof: x\n\n" for i in range(4))
+        recipe += f"## Last\n- test: `{FAIL}`\n- fail-proof: x\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "VERIFY.md", recipe)
+            t0 = time.time()
+            code, out, _ = run("verify.py", "run", tmp, "--jobs", "5")
+            elapsed = time.time() - t0
+            self.assertEqual(code, 1, out)
+            self.assertLess(elapsed, 3.5, out)
+            lines = out.splitlines()
+            order = [lines.index(f"F{i}") for i in range(4)] + [lines.index("Last")]
+            self.assertEqual(order, sorted(order), out)
+            self.assertIn("expected 42, got 41", out)
+            self.assertIn("4 checks pass, 1 fail", out)
+
     def test_cause_summary_extracted_on_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
             fail_cmd = 'python -c "import sys; print(\'log 1\'); print(\'AssertionError: expected total == 100, got 99\'); sys.exit(1)"'
