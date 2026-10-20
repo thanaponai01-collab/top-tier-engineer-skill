@@ -14,8 +14,9 @@
 - **Coverage-based `--affected`.** With coverage.py importable, `run --record-coverage` records the
   repo files each check executes, and `--affected` selects by that map as well as by file names
   (which miss imported helpers). This stays optional: without coverage.py the run says so and
-  proceeds. The coverage path is NOT exercised by the test suite on this machine: coverage.py is
-  not installed, and its two tests skip.
+  proceeds. Only files with executed lines count: with `source =`, coverage.py also lists files it
+  never ran. Tested against coverage.py 7.16.2. Its two tests skip when coverage.py is not
+  importable.
 - **Fix: `--affected` can no longer make `--strict` green.** 1.10 exited 0 for
   `run --affected --strict` on a selection. Now it exits 1 with `SELECTED`, including when nothing
   changed. Changed-file lists no longer include verify-loop's own state and cache files.

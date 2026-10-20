@@ -363,6 +363,8 @@ def coverage_files(folder, repo):
         data.read()
         measured = True
         for f in data.measured_files():
+            if not data.lines(f):
+                continue  # `source =` also lists files under it that never ran, with no lines
             rel = os.path.relpath(os.path.realpath(f), root)
             if not rel.startswith(".."):
                 files.add(rel.replace(os.sep, "/"))
