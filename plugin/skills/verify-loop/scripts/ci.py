@@ -56,7 +56,7 @@ def cmd_ci(v, repo, plan_file, output, timeout):
             work = Path(tmp, "project")
             work.mkdir()
             with tarfile.open(archive) as tar:
-                members = [m for m in tar.getmembers() if Path(m.name).name != v.STATE]
+                members = [m for m in tar.getmembers() if not v.is_state_file(Path(m.name).name)]
                 if any(not (m.isfile() or m.isdir()) for m in members):
                     raise ValueError("CI inputs must not contain symlinks or special files")
                 tar.extractall(work, members=members, filter="data")

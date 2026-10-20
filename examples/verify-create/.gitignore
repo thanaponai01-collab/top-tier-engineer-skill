@@ -1,4 +1,4 @@
-.verify-state.json
+.verify-state*
 .verify-data/
 .verify-evidence/
 __pycache__/

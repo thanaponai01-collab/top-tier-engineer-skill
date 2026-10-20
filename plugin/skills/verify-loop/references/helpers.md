@@ -60,6 +60,17 @@ memory and verdict match a serial run. Use it only when no two checks share an a
 or written file; the default of 1 is the safe choice for `## Run` recipes that drive one live app.
 A check that fails only under `--jobs` is sharing something: run it serially and fix the coupling.
 
+## Many agents in one checkout: VERIFY_AGENT
+
+Saves are atomic and locked, and concurrent saves merge, so agents sharing a checkout do not
+corrupt or revert each other's state. Without a name they still share one loop memory: one
+agent's run becomes the other's NEWLY RED and `status`. Give each agent its own with
+`VERIFY_AGENT=<name>` (letters, digits, `-`, `_`): its last run, rounds, scope and `status` live in
+`.verify-state.<name>.json`. The baseline, re-baselines and rejection receipts stay shared in
+`.verify-state.json`, so a new name neither escapes a freeze nor has to re-prove a check. Agents
+still share the files on disk: a green `status` is true of the tree as it is now, edits by others
+included. Give agents that edit the same files separate worktrees. Gitignore `.verify-state*`.
+
 ## Flaky checks: --stress and --quarantine
 
 `run --stress N` runs each check N times. A check that both passes and fails is reported flaky and

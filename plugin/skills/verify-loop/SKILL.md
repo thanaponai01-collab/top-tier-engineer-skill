@@ -110,6 +110,7 @@ contract is in [answer](references/answer.md).
 `run --affected | --jobs N | --stress N | --quarantine | --json` · `triage` · `scope <files>` (fence a fix;
 `OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto <file>` (mutation score) ·
 `loop --scope <f> --max N` (reruns, never edits) ·
+`VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline) ·
 `watch --max-runs N` (never exits without it) · `contract old new` · `scaffold-oracle | scaffold-ui |
 scaffold-driver` · `scaffold-skill` · `skill-check` · `maintain` · `ci`. What each does and
 when it is safe: [helper commands](references/helpers.md). Evidence lives in

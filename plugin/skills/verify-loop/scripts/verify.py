@@ -21,7 +21,8 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
   scope  Before a fix, name the files it may touch. Any later edit outside them fails the run
          (OUT OF SCOPE), and every check that passed when the fix began stays on watch.
 
-`run` also remembers itself in .verify-state.json (gitignore it): it says NEWLY RED when a fix
+`run` also remembers itself in .verify-state.json (gitignore .verify-state*; VERIFY_AGENT=<name>
+gives each agent its own loop memory while the baseline and receipts stay shared): it says NEWLY RED when a fix
 broke something that passed, SAME FAILURE when a check fails identically twice, and BUDGET after
 --budget red runs in a row. A `--only` run compares nothing and saves nothing.
 Strict runs require retained failure output for the current checks plus a fail-proof note;
@@ -75,7 +76,7 @@ Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is 
 unproven, or has orphan tests); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
-import argparse, ast, fnmatch, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
+import argparse, ast, contextlib, fnmatch, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -1014,14 +1015,53 @@ def seal_of(state):
     return hashlib.sha256(json.dumps(body, sort_keys=True).encode("utf-8")).hexdigest()
 
 
-def load_state(repo):
-    """The saved state. A file whose seal does not match was written by something other than this
-    script; it comes back marked `forged`, and the mark survives every later save until the file is
-    deleted. The seal has no secret: it catches hand edits, not a writer who recomputes it.
-    Independently owned CI is what a determined writer cannot reach."""
+# Many agents can share one checkout. Every save takes a short lock, re-reads the file and merges:
+# a key this process did not change keeps what is on disk, so a stale save cannot revert another
+# agent's baseline or drop its receipts. The file is replaced whole, so a reader never sees half of
+# it. With VERIFY_AGENT=<name>, loop memory (last run, rounds, scope, doctor) lives in
+# .verify-state.<name>.json; the baseline, re-baselines and rejection receipts stay in STATE for
+# every agent, so a new name neither escapes a freeze nor has to re-prove a check.
+SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures")
+AGENT_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
+LOCK = ".verify-state.lock"
+_loaded = {}  # state file -> what this process last read from it: the base of the merge
+
+
+def is_state_file(name):
+    """STATE, an agent's state file, the lock or a temp file mid-write."""
+    return name.startswith(".verify-state")
+
+
+def agent_name():
+    name = os.environ.get("VERIFY_AGENT", "").strip()
+    if name and not AGENT_NAME.match(name):
+        raise ValueError(f"VERIFY_AGENT={name!r}: use 1-64 letters, digits, '-' or '_'")
+    return name or None
+
+
+def state_paths(repo):
+    """(shared file, this agent's file); the same path when VERIFY_AGENT is unset."""
+    shared, name = os.path.join(repo, STATE), agent_name()
+    return shared, (os.path.join(repo, f".verify-state.{name}.json") if name else shared)
+
+
+def retry(fn, tries=100):
+    """Windows refuses to replace or open a file another process holds for a moment: wait it out."""
+    for i in range(tries):
+        try:
+            return fn()
+        except PermissionError:
+            if i == tries - 1:
+                raise
+            time.sleep(0.01)
+
+
+def read_state_file(path):
+    def load():
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
     try:
-        with open(os.path.join(repo, STATE), encoding="utf-8") as fh:
-            data = json.load(fh)
+        data = retry(load)
     except (OSError, ValueError):
         return {}
     if not isinstance(data, dict):
@@ -1032,11 +1072,106 @@ def load_state(repo):
     return data
 
 
+def load_state(repo):
+    """The saved state. A file whose seal does not match was written by something other than this
+    script; it comes back marked `forged`, and the mark survives every later save until the file is
+    deleted. The seal has no secret: it catches hand edits, not a writer who recomputes it.
+    Independently owned CI is what a determined writer cannot reach."""
+    shared_path, own_path = state_paths(repo)
+    shared = read_state_file(shared_path)
+    _loaded[shared_path] = json.loads(json.dumps(shared))
+    if own_path == shared_path:
+        return shared
+    own = read_state_file(own_path)
+    _loaded[own_path] = json.loads(json.dumps(own))
+    data = {k: v for k, v in own.items() if k not in SHARED_KEYS}
+    data.update({k: shared[k] for k in SHARED_KEYS if k in shared})
+    if shared.get("forged"):
+        data["forged"] = True
+    return data
+
+
+@contextlib.contextmanager
+def state_lock(repo, wait=30.0, stale=60.0):
+    """Held only while one save merges and writes, so a lock older than `stale` is abandoned."""
+    path, end = os.path.join(repo, LOCK), time.time() + wait
+    while True:
+        try:
+            os.close(os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY))
+            break
+        except (FileExistsError, PermissionError):
+            try:
+                if time.time() - os.path.getmtime(path) > stale:
+                    os.remove(path)
+                    continue
+            except OSError:
+                pass
+            if time.time() > end:
+                raise TimeoutError(f"{path} held for {wait:.0f}s; delete it if no verify.py is running")
+            time.sleep(0.005)
+    try:
+        yield
+    finally:
+        try:
+            retry(lambda: os.remove(path))
+        except OSError:
+            pass
+
+
+def merge_state(disk, base, mine, owned):
+    """Three-way merge of one save: keys this process left as loaded keep the disk value."""
+    out = dict(disk)
+    for k in set(base) | set(mine):
+        if k in ("forged", "seal") or not owned(k):
+            continue
+        if k not in mine:
+            out.pop(k, None)  # this process removed it
+        elif k in base and mine[k] == base[k]:
+            continue
+        elif k == "failures" and isinstance(mine[k], dict):
+            out[k] = merge_state(disk.get(k) or {}, base.get(k) or {}, mine[k], lambda _: True)
+        elif k == "rebaselines" and isinstance(mine[k], list):
+            have = list(disk.get(k) or [])
+            out[k] = have + [r for r in mine[k] if r not in have]
+        else:
+            out[k] = mine[k]
+    return out
+
+
+def write_state_file(path, base, mine, owned):
+    disk = read_state_file(path)
+    out = merge_state(disk, base, mine, owned)
+    if disk.get("forged"):
+        out["forged"] = True
+    if not out and not os.path.exists(path):
+        return
+    out["seal"] = seal_of(out)
+    fd, tmp = tempfile.mkstemp(prefix=".verify-state.", suffix=".tmp", dir=os.path.dirname(path))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(out, fh, indent=1, sort_keys=True)
+        retry(lambda: os.replace(tmp, path))
+    except BaseException:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
+    out.pop("seal")
+    _loaded[path] = json.loads(json.dumps(out))
+
+
 def save_state(repo, state):
-    state = {k: v for k, v in state.items() if k != "seal"}
-    state["seal"] = seal_of(state)
-    with open(os.path.join(repo, STATE), "w", encoding="utf-8", newline="\n") as fh:
-        json.dump(state, fh, indent=1, sort_keys=True)
+    shared_path, own_path = state_paths(repo)
+    with state_lock(repo):
+        if own_path == shared_path:
+            write_state_file(shared_path, _loaded.get(shared_path, {}), state, lambda _: True)
+            return
+        write_state_file(shared_path, _loaded.get(shared_path, {}),
+                         {k: state[k] for k in SHARED_KEYS if k in state}, lambda k: k in SHARED_KEYS)
+        write_state_file(own_path, _loaded.get(own_path, {}),
+                         {k: v for k, v in state.items() if k not in SHARED_KEYS},
+                         lambda k: k not in SHARED_KEYS)
 
 
 def tree_sig(repo):
@@ -1045,7 +1180,7 @@ def tree_sig(repo):
     for root, dirs, files in os.walk(repo):
         dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS)
         for f in sorted(files):
-            if f == STATE or f.endswith(".pyc"):
+            if is_state_file(f) or f.endswith(".pyc"):
                 continue
             p = os.path.join(root, f)
             try:
@@ -1199,7 +1334,7 @@ def file_sigs(repo):
     for root, dirs, files in os.walk(repo):
         dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS)
         for f in sorted(files):
-            if f == STATE or f.endswith(".pyc"):
+            if is_state_file(f) or f.endswith(".pyc"):
                 continue
             p = os.path.join(root, f)
             rel = os.path.relpath(p, repo).replace(os.sep, "/")
@@ -2079,6 +2214,11 @@ def main():
     ci.add_argument("--timeout", type=int, default=120, help="seconds per check")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
+    try:
+        agent_name()
+    except ValueError as exc:
+        print(f"verify.py: {exc}")
+        sys.exit(2)
     if a.cmd == "ci":
         from ci import cmd_ci
         sys.exit(cmd_ci(sys.modules[__name__], repo, a.plan, a.output, a.timeout))

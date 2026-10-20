@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.8.0 - 2026-10-20 - Many agents, one checkout
+
+- State writes are atomic: each save goes to a temp file and replaces `.verify-state.json` whole.
+  Before, a reader racing six writers saw a half-written file 38 times in 6 seconds.
+- Each save takes a short lock (`.verify-state.lock`), re-reads the file and merges. A key the
+  saving process did not change keeps what is on disk, receipts are merged per check and
+  re-baselines are appended, so a stale save no longer reverts another agent's baseline or drops
+  its receipts. Six processes saving 25 receipts each now keep all 150.
+- `VERIFY_AGENT=<name>` gives an agent its own loop memory in `.verify-state.<name>.json`: last
+  run, NEWLY RED/SAME FAILURE, rounds, scope, doctor and `status`/`report`. The baseline,
+  re-baselines and rejection receipts stay in `.verify-state.json` for every agent, so a new name
+  cannot escape a freeze and one agent's proof that a check fails counts for all. A bad name exits 2.
+- Every `.verify-state*` file is left out of the tree signature, scope, challenge copies and CI
+  inputs, so one agent's save does not make another's green stale. Gitignore `.verify-state*`.
+- `challenge` no longer calls itself inconclusive because another agent added a receipt meanwhile.
+
 ## 1.7.0 - 2026-10-20 - Parallel checks
 
 - `verify.py run --jobs N` runs up to N checks at once and reports them in recipe order, so

@@ -114,4 +114,8 @@ so committed checks under review rules and the `ci` mode remain the independent 
 `STATE FORGED` on run and `tampered` on status until it is deleted and verification starts over.
 The seal has no secret, so it catches careless or naive edits, not a writer who recomputes it;
 independently owned CI is the boundary for that.
+
+Saves are atomic and locked, and concurrent saves merge. `VERIFY_AGENT=<name>` keeps an agent's
+loop memory in `.verify-state.<name>.json` while the baseline, re-baselines and receipts stay in
+.verify-state.json; see [helper commands](references/helpers.md). Gitignore `.verify-state*`.
 Commands run through the shell like a Makefile: run recipes only from a repo you trust.

@@ -23,7 +23,7 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
         if not target.is_file() or mutation["before"] == mutation["after"]:
             raise ValueError("target must exist and replacement must change it")
         frozen = v.check_hashes(repo)
-        if target in {Path(repo, name).resolve() for name in frozen} or target.name in (v.RECIPE, v.STATE):
+        if target in {Path(repo, name).resolve() for name in frozen} or target.name == v.RECIPE or v.is_state_file(target.name):
             raise ValueError("mutate product code, never the recipe, state, tests or frozen oracles")
         source = target.read_text(encoding="utf-8")
         if source.count(mutation["before"]) != 1:
@@ -65,7 +65,7 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
             copies = [Path(tmp, "original"), Path(tmp, "mutated")]
             for scratch in copies:
                 shutil.copytree(repo, scratch,
-                                ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc", v.STATE))
+                                ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".verify-state*"))
             report["original"] = trial(copies[0])
             original = report["original"]
             relative = target.relative_to(Path(repo).resolve())
@@ -97,7 +97,11 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
     except (OSError, ValueError) as exc:
         report.update(verdict="inconclusive", reason=str(exc))
 
-    if v.tree_sig(repo) != original_tree or v.load_state(repo) != original_state:
+    # Receipts other agents add meanwhile are additive evidence; anything else changing is not.
+    def settled(state):
+        return {k: val for k, val in state.items() if k != "failures"}
+
+    if v.tree_sig(repo) != original_tree or settled(v.load_state(repo)) != settled(original_state):
         print("CHALLENGE: inconclusive (source files or verification state changed during challenge; evidence not saved)")
         return 2
     if not record:
