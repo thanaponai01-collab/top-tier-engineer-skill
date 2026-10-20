@@ -107,7 +107,9 @@ contract is in [answer](references/answer.md).
 
 ## Other helper commands
 
-`run --affected | --jobs N | --stress N | --quarantine | --json` · `triage` · `scope <files>` (fence a fix;
+`run --affected | --jobs N | --stress N | --quarantine | --json | --no-cache` (checks get
+`VERIFY_SLOT`/`VERIFY_PORT`; a pass already proved on identical content is reused, never a
+non-strict one for `--strict`) · `triage` · `scope <files>` (fence a fix;
 `OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto <file> [--jobs N]` (mutation score; `UNCOVERED` = no check reaches the line) ·
 `loop --scope <f> --max N` (reruns, never edits) ·
 `VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline) ·

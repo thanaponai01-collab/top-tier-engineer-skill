@@ -96,7 +96,7 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
     def trial(scratch):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
-            code = v.cmd_run(str(scratch), None, timeout, False)
+            code = v.cmd_run(str(scratch), None, timeout, False, use_cache=False)
         checks = v.load_state(str(scratch)).get("checks", {})
         return {"exit": code, "output": output.getvalue()[-8000:], "checks": checks,
                 "checks_unchanged": v.check_hashes(str(scratch)) == frozen}

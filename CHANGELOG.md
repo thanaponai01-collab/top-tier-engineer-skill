@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.10.0 - 2026-10-20 - A fast, shared inner loop
+
+Timings are warm medians on this Windows machine (Python 3.13). The test repo is 60 MB of git:
+1,500 small source files and twelve 5 MB binaries.
+
+- **Fast tree signature.** A non-strict `run` and `watch` fingerprint the tree from a stat cache.
+  A file whose size, mtime and (on POSIX) ctime are unchanged since it was last hashed is not read
+  again, as git's index works. `--strict`, `status`, `ci` and `challenge` still read every byte.
+  Both ways give the same signature for honest stat data, so `status` can judge a fast-recorded
+  run. Limit: an edit that restores size and timestamps goes unseen by the fast path until a full
+  pass. Files changed in the last 2 s are always re-read. The signature itself went from 0.30 s to
+  0.011 s on the warm path. Warm `run` went from 0.340 s to 0.208 s; the rest is Python startup
+  and the check. `run --strict` went from 0.342 s to 0.319 s and `status` from 0.157 s to 0.150 s.
+  The cache stays out of the git signature: no blob hashes, because `core.autocrlf` and ignored
+  files would make git's view and a full read disagree.
+- **Shared result cache.** `run` reuses a pass any agent or worktree already proved for the same
+  command on the same content. Text shows `[CACHED: proved <time> by <agent>]` and a
+  `CACHED  n check(s) reused` line; `--json` adds `cached` per result and in the summary. Only
+  passes from runs whose tree did not move are kept. A pass recorded under the fast signature
+  never satisfies `--strict`, which reuses only full-signature passes. There is no caching with a
+  `## Run` recipe or `--stress`, and `run --no-cache` opts out. The cache sits in Git's common
+  directory (`.git/verify-loop/`), shared by every worktree, with an atomic, locked write, or in
+  `.verify-state-cache/` outside Git. Three 1 s checks: rerun on unchanged content 3.36 s to
+  0.17 s; strict rerun 3.61 s to 0.38 s; a second worktree on the same content 3.36 s to 0.16 s.
+  Challenge, `--auto` lanes and `ci` never use it.
+- **Slots and ports for `--jobs`.** Every check runs with `VERIFY_SLOT` (0..N-1, never shared by
+  two running checks) and a fresh free `VERIFY_PORT`, so checks that start their own app can run
+  in parallel. Four checks that each start an HTTP server: 6.09 s serially (1.9.0 with `--jobs 4`
+  had 3 of 4 fail on the shared port), 1.67 s with `--jobs 4`, all passing. The pattern is
+  documented in `references/helpers.md`.
+- The tree signature now covers `fixtures/` folders: a fixture is an input, so editing one makes
+  `status` stale and misses the cache. A worktree's `.git` file is left out. The signature format
+  changed, so a green `status` recorded by 1.9.0 reads `stale` once; run again.
+
 ## 1.9.0 - 2026-10-20 - Faster, more honest mutation surveys
 
 - `challenge --auto` copies the tree once per lane instead of twice per mutant. Each lane runs the

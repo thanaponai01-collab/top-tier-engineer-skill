@@ -189,7 +189,7 @@ class Lane:
         v, lane = self.v, str(self.path)
         if self.recipe:  # the Run recipe starts the app: run the whole recipe, one lane only
             with contextlib.redirect_stdout(io.StringIO()):
-                v.cmd_run(lane, None, self.timeout, False)
+                v.cmd_run(lane, None, self.timeout, False, use_cache=False)
             checks = v.load_state(lane).get("checks", {})
             return [(k, c, checks.get(f"{self.feat['name']}|{c}")) for k, c in self.feat["checks"]]
         rows = []

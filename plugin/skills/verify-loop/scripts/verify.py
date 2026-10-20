@@ -30,6 +30,11 @@ a non-strict pass is partial, never a successful completion status. A top-level
 `require: challenge` line also makes strict demand a caught `challenge` mutation. The state file is
 sealed with a content hash: a hand-edited one reads as tampered until it is deleted.
 
+A pass already proved for the same command on the same content (by any agent, in any worktree of
+the repo) is reused and shown as CACHED; --strict reuses only passes recorded under a full,
+every-byte signature, and --no-cache runs everything. Non-strict runs fingerprint the tree from a
+stat cache (see tree_sig). Each check gets VERIFY_SLOT and a free VERIFY_PORT for --jobs.
+
 A check passes when its command exits 0. Commands run through the shell, like a Makefile:
 only run a VERIFY.md from a repo you trust. Stdlib only.
 
@@ -65,7 +70,7 @@ up; polled for --timeout seconds), `stop` (optional, else the process tree is ki
 
 Usage:
   python scripts/verify.py init [repo]
-  python scripts/verify.py run  [repo] [--only TEXT] [--timeout 120] [--strict] [--budget 5]
+  python scripts/verify.py run  [repo] [--only TEXT] [--timeout 120] [--strict] [--budget 5] [--jobs N] [--no-cache]
   python scripts/verify.py baseline [repo] [--reviewed-by NAME --reason WHY]
   python scripts/verify.py status   [repo] [--json]
   python scripts/verify.py report   [repo] [--json]
@@ -76,7 +81,7 @@ Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is 
 unproven, or has orphan tests); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
-import argparse, ast, contextlib, fnmatch, hashlib, json, os, re, signal, subprocess, sys, tempfile, time
+import argparse, ast, contextlib, fnmatch, hashlib, json, os, queue, re, signal, socket, subprocess, sys, tempfile, time
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -90,6 +95,9 @@ TEST_PY = re.compile(r"^(test_.+|.+_test)\.py$")
 TEST_JS = re.compile(r"^.+\.(test|spec)\.(js|jsx|ts|tsx|mjs|cjs)$")
 TAIL_LINES = 12
 STATE = ".verify-state.json"
+# The tree signature skips installed dependencies and build output, not test fixtures: a fixture is
+# an input, and the result cache must not reuse a pass after one changes.
+TREE_SKIP = SKIP_DIRS - {"fixture", "fixtures"}
 BUDGET = 5
 
 
@@ -615,24 +623,49 @@ def extract_failure_summary(output):
     return None
 
 
-def run_check(cmd, repo, timeout):
+def run_check(cmd, repo, timeout, env=None):
     """(ok, exit code or None, combined output, seconds)."""
     t0 = time.time()
     try:
         p = subprocess.run(cmd, shell=True, cwd=repo, capture_output=True, text=True,
-                           encoding="utf-8", errors="replace", timeout=timeout)
+                           encoding="utf-8", errors="replace", timeout=timeout, env=env)
         return p.returncode == 0, p.returncode, (p.stdout or "") + (p.stderr or ""), time.time() - t0
     except subprocess.TimeoutExpired:
         return False, None, f"timed out after {timeout}s", time.time() - t0
 
 
-def attempt(cmd, repo, timeout, stress):
+def attempt(cmd, repo, timeout, stress, env=None):
     """(ok, exit, output, seconds, passes) for one check; with stress > 1 it repeats and counts passes."""
-    ok, code, out, secs = run_check(cmd, repo, timeout)
+    ok, code, out, secs = run_check(cmd, repo, timeout, env)
     passes = int(ok)
     for _ in range(stress - 1):
-        passes += run_check(cmd, repo, timeout)[0]
+        passes += run_check(cmd, repo, timeout, env)[0]
     return ok, code, out, secs, passes
+
+
+def free_port():
+    """A TCP port nothing listens on right now (the OS picks it)."""
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def slotted(jobs, repo, timeout, stress):
+    """attempt() for run --jobs: each check runs with VERIFY_SLOT (0..jobs-1, never two running
+    checks in one slot) and a fresh VERIFY_PORT, so checks that start their own app, database or
+    scratch folder can key it on those and run in parallel without colliding."""
+    slots = queue.Queue()
+    for i in range(max(1, jobs)):
+        slots.put(i)
+
+    def run_one(cmd):
+        slot = slots.get()
+        try:
+            env = dict(os.environ, VERIFY_SLOT=str(slot), VERIFY_PORT=str(free_port()))
+            return attempt(cmd, repo, timeout, stress, env)
+        finally:
+            slots.put(slot)
+    return run_one
 
 
 def start_app(cmd, repo):
@@ -696,7 +729,8 @@ def tail_of(path):
         return []
 
 
-def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1, as_json=False, quarantine=False, jobs=1):
+def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1, as_json=False, quarantine=False, jobs=1,
+            use_cache=True):
     path = os.path.join(repo, RECIPE)
     if not os.path.isfile(path):
         if as_json:
@@ -802,9 +836,9 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
                         print(f"        {line}")
                 track(repo, [], only, budget, 1, strict)
             else:
-                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature)
+                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature, use_cache)
         else:
-            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature)
+            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature, use_cache)
     finally:
         if proc or (recipe and recipe.get("stop")):
             ok, code, out, secs = stop_app(proc, recipe.get("stop"), repo, timeout)
@@ -830,7 +864,7 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
     return verdict
 
 
-def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None, jobs=1, signature=None):
+def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None, jobs=1, signature=None, use_cache=True):
     results = []
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
@@ -847,13 +881,24 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         print("  note  no baseline: freeze the finished checks before strict completion")
     signature = signature or sha(json.dumps(check_hashes(repo), sort_keys=True))
     receipts = current_receipts(state, signature)
+    # The result cache: a pass some agent proved for this command on this exact content is reused.
+    # Not with a ## Run recipe (checks then depend on a live app) or --stress (which must re-run).
+    caching = use_cache and not recipe and stress == 1
+    tree_before = tree_sig(repo, fast=not strict) if caching else None
+    sig_info = dict(TREE_INFO) if caching else None
+    hits = cached_passes(repo, {c for f in shown for _, c in f["checks"]}, tree_before, strict) if caching else {}
+    fresh = {}  # command: (output, seconds) for passes this run proved
     # --jobs: start every check now, then read results in recipe order, so output and loop memory
     # are the same as a serial run. Default 1: checks that share an app or files may collide.
-    pending = []
+    order = [cmd for f in shown for _, cmd in f["checks"]]
+    run_one = slotted(jobs, repo, timeout, stress)
+    pending = {}
     if jobs > 1:
         pool = ThreadPoolExecutor(max_workers=jobs)
-        pending = [pool.submit(attempt, cmd, repo, timeout, stress) for f in shown for _, cmd in f["checks"]]
+        pending = {i: pool.submit(run_one, cmd)
+                   for i, cmd in enumerate(order) if cmd not in hits}
         pool.shutdown(wait=False)  # submitted checks still run; results are read below
+    index = -1
     for f in shown:
         if not as_json:
             print(("Journey: " if f["journey"] else "") + f["name"])
@@ -874,8 +919,15 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 print("  UNVERIFIED  no checks")
             continue
         for kind, cmd in f["checks"]:
-            ok, code, out, secs, check_passes = (pending.pop(0).result() if pending
-                                                 else attempt(cmd, repo, timeout, stress))
+            index += 1
+            hit = hits.get(cmd)
+            if hit:
+                ok, code, out, secs, check_passes = True, 0, hit.get("output", ""), 0.0, 1
+            else:
+                job = pending.pop(index, None)
+                ok, code, out, secs, check_passes = job.result() if job else run_one(cmd)
+                if ok and caching:
+                    fresh[cmd] = (out, secs)
             if stress > 1 and 0 < check_passes < stress:
                 flaky_checks.append((f["name"], kind, cmd, check_passes, stress))
                 quarantined.add(f"{f['name']}|{cmd}")
@@ -887,7 +939,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 is_quarantined = True
                 quarantined_hits.append((f["name"], kind, cmd))
 
-            results.append((f["name"], kind, cmd, ok, out, code, is_quarantined))
+            results.append((f["name"], kind, cmd, ok, out, code, is_quarantined, bool(hit)))
             if is_quarantined:
                 if not as_json:
                     print(f"  QUARANTINED  {kind}  {cmd}  [{secs:.1f}s] (flake isolated)")
@@ -897,7 +949,9 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 if not as_json:
                     tag = "PASS" if ok else "FAIL"
                     extra = "" if ok else (" (timeout)" if code is None else f" (exit {code})")
-                    print(f"  {tag}  {kind}  {cmd}  [{secs:.1f}s]{extra}")
+                    when = (f"CACHED: proved {hit.get('at')} by {hit.get('agent') or 'an unnamed agent'}"
+                            if hit else f"{secs:.1f}s")
+                    print(f"  {tag}  {kind}  {cmd}  [{when}]{extra}")
                     if not ok:
                         cause = extract_failure_summary(out)
                         if cause:
@@ -945,12 +999,17 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         changed_during_run = True
     if changed_during_run and not as_json:
         print("CHECK CHANGED DURING RUN  repeat verification with stable checks and oracles")
+    tree_after = tree_sig(repo, fast=not strict) if caching else None
+    if caching and tree_after == tree_before and not changed_during_run:
+        remember_passes(repo, fresh, tree_before, full=strict)
+    cached = sum(1 for r in results if r[7])
     if quarantined:
         state["quarantined"] = sorted(quarantined)
         save_state(repo, state)
-    norm_results = [(feat, kind, cmd, (ok or q), out, code) for feat, kind, cmd, ok, out, code, q in results]
+    norm_results = [(feat, kind, cmd, (ok or q), out, code) for feat, kind, cmd, ok, out, code, q, _ in results]
     notes, bad = track(repo, norm_results, only, budget,
-                       failed + broken + bool(incomplete) + changed_during_run + bool(flaky_checks), strict, signature)
+                       failed + broken + bool(incomplete) + changed_during_run + bool(flaky_checks), strict, signature,
+                       tree_after)
     verify_line = (f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
                    f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
                    f"{journeys} journeys, {broken} broken")
@@ -964,6 +1023,9 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         print(verify_line)
         if quarantined_hits:
             print(f"  QUARANTINED: {len(quarantined_hits)} check(s) isolated from failure.")
+        if cached:
+            print(f"CACHED  {cached} check(s) reused: already proved passing on this exact content"
+                  + (" (full signature)" if strict else "") + "; --no-cache runs them again")
     red = bool(failed or broken or bad or incomplete or changed_during_run or flaky_checks)
     if as_json:
         report = {
@@ -981,16 +1043,18 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 "flaky": len(flaky_checks),
                 "unchallenged": bool(unchallenged),
                 "quarantined": len(quarantined_hits),
+                "cached": cached,
             },
             "results": [
                 {
                     "feature": feat, "kind": kind, "command": cmd, "ok": ok, "exit": code,
                     "cause": None if ok else extract_failure_summary(out),
-                    "quarantined": q,
+                    "quarantined": q, "cached": c,
                 }
-                for feat, kind, cmd, ok, out, code, q in results
+                for feat, kind, cmd, ok, out, code, q, c in results
             ],
             "blind_spots": blind,
+            "tree_sig": sig_info or dict(TREE_INFO),
             "verify_line": verify_line,
             "exit": 1 if red else 0,
         }
@@ -1094,10 +1158,14 @@ def load_state(repo):
     return data
 
 
-@contextlib.contextmanager
 def state_lock(repo, wait=30.0, stale=60.0):
+    return file_lock(os.path.join(repo, LOCK), wait, stale)
+
+
+@contextlib.contextmanager
+def file_lock(path, wait=30.0, stale=60.0):
     """Held only while one save merges and writes, so a lock older than `stale` is abandoned."""
-    path, end = os.path.join(repo, LOCK), time.time() + wait
+    end = time.time() + wait
     while True:
         try:
             os.close(os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY))
@@ -1177,24 +1245,181 @@ def save_state(repo, state):
                          lambda k: k not in SHARED_KEYS)
 
 
-def tree_sig(repo):
-    """Content signature outside SKIP_DIRS; preserved timestamps cannot hide an edit."""
-    h = hashlib.sha256()
-    for root, dirs, files in os.walk(repo):
-        dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS)
-        for f in sorted(files):
-            if is_state_file(f) or f.endswith(".pyc"):
-                continue
-            p = os.path.join(root, f)
+def git_common_dir(repo):
+    """The repository's shared .git directory (the same for every worktree), or None outside Git.
+    Read from disk, not from `git rev-parse`, so the inner loop spawns no process for it."""
+    here = os.path.abspath(repo)
+    while True:
+        dot = os.path.join(here, ".git")
+        if os.path.isdir(dot):
+            return dot
+        if os.path.isfile(dot):
             try:
-                h.update(os.path.relpath(p, repo).encode("utf-8", "replace") + b"\0")
-                with open(p, "rb") as fh:
-                    for chunk in iter(lambda: fh.read(65536), b""):
-                        h.update(chunk)
-                h.update(b"\0")
+                with open(dot, encoding="utf-8") as fh:
+                    line = fh.read().strip()
+            except OSError:
+                return None
+            if not line.startswith("gitdir:"):
+                return None
+            gitdir = os.path.normpath(os.path.join(here, line[len("gitdir:"):].strip()))
+            try:
+                with open(os.path.join(gitdir, "commondir"), encoding="utf-8") as fh:
+                    return os.path.normpath(os.path.join(gitdir, fh.read().strip()))
+            except OSError:
+                return gitdir
+        parent = os.path.dirname(here)
+        if parent == here:
+            return None
+        here = parent
+
+
+def cache_dir(repo):
+    """Where caches live: inside Git's common directory, so every worktree of a repo shares them,
+    else .verify-state-cache/ in the repo (left out of signatures and copies like the state files)."""
+    common = git_common_dir(repo)
+    return os.path.join(common, "verify-loop") if common else os.path.join(repo, ".verify-state-cache")
+
+
+def read_json(path):
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+        return data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def write_json(path, data):
+    """Replace the file whole, so a reader never sees half of it."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix=".verify-state.", suffix=".tmp", dir=os.path.dirname(path))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(data, fh, separators=(",", ":"), sort_keys=True)
+        retry(lambda: os.replace(tmp, path))
+    except BaseException:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def tree_files(repo):
+    """(relative path, stat) for every file outside TREE_SKIP and the state files, in a fixed order."""
+    out = []
+
+    def walk(d, prefix):
+        try:
+            entries = sorted(os.scandir(d), key=lambda e: e.name)
+        except OSError:
+            return
+        subdirs = []
+        for e in entries:
+            try:
+                if e.is_dir():
+                    if not e.is_symlink() and e.name not in TREE_SKIP and not is_state_file(e.name):
+                        subdirs.append(e)
+                elif e.name != ".git" and not is_state_file(e.name) and not e.name.endswith(".pyc"):
+                    out.append((prefix + e.name, e.stat()))
             except OSError:
                 continue
+        for e in subdirs:
+            walk(e.path, prefix + e.name + "/")
+
+    walk(repo, "")
+    return out
+
+
+RACY = 2.0  # seconds: a file modified this recently may change again within one timestamp tick
+TREE_INFO = {}  # what the last tree_sig call did: mode, files, hashed (shown by run --json)
+
+
+def tree_sig(repo, fast=False):
+    """Content signature of every file outside TREE_SKIP.
+
+    Full (the default, and what --strict, status, ci and challenge use) reads every byte, so
+    preserved timestamps cannot hide an edit. fast=True (non-strict runs and watch) reuses a file's
+    content hash while its size, mtime and (on POSIX) ctime match the last time it was hashed, as
+    git's index does: an edit that restores all of them goes unseen until a full pass. Both give
+    the same signature when the stat data is honest, so status can judge a fast-recorded run."""
+    path = os.path.join(cache_dir(repo), f"tree-{sha(os.path.realpath(repo))}.json")
+    old = read_json(path)
+    new, now, hashed = {}, time.time(), 0
+    h = hashlib.sha256()
+    files = tree_files(repo)
+    for rel, st in files:
+        stamp = [st.st_size, st.st_mtime_ns, st.st_ctime_ns if os.name != "nt" else 0]
+        entry = old.get(rel)
+        if fast and isinstance(entry, list) and entry[:3] == stamp:
+            digest = entry[3]
+        else:
+            try:
+                fh_hash = hashlib.sha256()
+                with open(os.path.join(repo, rel), "rb") as fh:
+                    for chunk in iter(lambda: fh.read(65536), b""):
+                        fh_hash.update(chunk)
+            except OSError:
+                continue
+            digest, hashed = fh_hash.hexdigest()[:32], hashed + 1
+        if now - st.st_mtime > RACY:
+            new[rel] = stamp + [digest]
+        h.update(rel.encode("utf-8", "replace") + b"\0" + digest.encode() + b"\0")
+    if new != old:
+        try:
+            write_json(path, new)
+        except OSError:
+            pass  # a cache that cannot be written only costs speed
+    TREE_INFO.clear()
+    TREE_INFO.update(mode="fast" if fast else "full", files=len(files), hashed=hashed)
     return h.hexdigest()[:16]
+
+
+# ---- shared result cache ------------------------------------------------------------------
+# A pass is a fact about one command on one tree. Any agent or worktree that runs the same command
+# on the same content reuses it instead of running it again. Only passes are kept, only from runs
+# whose tree did not move while they ran, and a pass recorded under the fast signature never serves
+# a strict run: strict reuses only passes keyed by a full, every-byte signature.
+CACHE_MAX = 1000
+
+
+def result_key(cmd, tree):
+    return sha("\0".join((cmd, tree, sys.platform)))
+
+
+def cached_passes(repo, cmds, tree, strict):
+    """{command: cache entry} for the commands with a reusable pass on this tree."""
+    entries = read_json(os.path.join(cache_dir(repo), "results.json"))
+    hits = {}
+    for cmd in cmds:
+        e = entries.get(result_key(cmd, tree))
+        if isinstance(e, dict) and e.get("cmd") == cmd and e.get("tree") == tree and (e.get("full") or not strict):
+            hits[cmd] = e
+    return hits
+
+
+def remember_passes(repo, passes, tree, full):
+    """Record passes ({command: (output, seconds)}) under the lock, keeping the newest CACHE_MAX."""
+    if not passes:
+        return
+    folder = cache_dir(repo)
+    path, at = os.path.join(folder, "results.json"), time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    try:
+        os.makedirs(folder, exist_ok=True)
+        with file_lock(os.path.join(folder, "results.lock")):
+            entries = read_json(path)
+            for cmd, (out, secs) in passes.items():
+                key = result_key(cmd, tree)
+                if (entries.get(key) or {}).get("full") and not full:
+                    continue  # never downgrade a full-signature pass
+                entries[key] = {"cmd": cmd, "tree": tree, "full": full, "at": at, "agent": agent_name(),
+                                "seconds": round(secs, 3), "output": out[-2000:]}
+            if len(entries) > CACHE_MAX:
+                keep = sorted(entries, key=lambda k: str(entries[k].get("at")))[-CACHE_MAX:]
+                entries = {k: entries[k] for k in keep}
+            write_json(path, entries)
+    except (OSError, TimeoutError):
+        pass  # a cache that cannot be written only costs speed
 
 
 def check_hashes(repo):
@@ -1277,7 +1502,7 @@ def fingerprint(cmd, out):
     return sha(cmd + "\0" + NOISE.sub("", tail))
 
 
-def track(repo, results, only, budget, failures, strict=False, signature=None):
+def track(repo, results, only, budget, failures, strict=False, signature=None, tree=None):
     """Compare this run to the last one and save it. (lines to print, True if the run must fail)."""
     if only:
         return ["note  --only run: loop state not updated (only a whole run can be compared)"], False
@@ -1326,7 +1551,7 @@ def track(repo, results, only, budget, failures, strict=False, signature=None):
         lines.append(f"BUDGET  {rounds} red runs in a row (budget {budget}): stop, report what passes, "
                      "what fails and what you would try next")
     state.update({"checks": checks, "rounds": rounds, "result": "red" if red else "green",
-                  "strict": strict, "tree": tree_sig(repo)})
+                  "strict": strict, "tree": tree or tree_sig(repo, fast=not strict)})
     save_state(repo, state)
     return lines, bool(changed or strays or state.get("forged"))
 
@@ -1335,7 +1560,7 @@ def file_sigs(repo):
     """{relative path: content hash} for every file outside SKIP_DIRS: what `scope` compares against."""
     sigs = {}
     for root, dirs, files in os.walk(repo):
-        dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS)
+        dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS and not is_state_file(d))
         for f in sorted(files):
             if is_state_file(f) or f.endswith(".pyc"):
                 continue
@@ -2098,12 +2323,12 @@ def cmd_watch(repo, interval=2.0, max_runs=0):
         print(f"no {RECIPE} in {repo}. Run `verify.py init` to draft one.")
         return 2
     print(f"Watching {repo} for changes (interval: {interval}s)... Press Ctrl+C to stop.")
-    last_sig = tree_sig(repo)
+    last_sig = tree_sig(repo, fast=True)
     runs_done = 0
     try:
         while True:
             time.sleep(interval)
-            cur_sig = tree_sig(repo)
+            cur_sig = tree_sig(repo, fast=True)
             if cur_sig != last_sig:
                 last_sig = cur_sig
                 t_str = time.strftime("%H:%M:%S")
@@ -2142,6 +2367,8 @@ def main():
                    help="output run results and summary as JSON")
     r.add_argument("--jobs", type=int, default=1,
                    help="run up to N checks at once; only for checks that share no app or files (default 1)")
+    r.add_argument("--no-cache", action="store_true",
+                   help="run every check even if an identical pass on this exact content is cached")
     b = sub.add_parser("baseline", help="freeze the check files; later edits to them fail the run")
     b.add_argument("repo", nargs="?", default=".")
     b.add_argument("--reviewed-by", help="the person who reviewed a change to a frozen check")
@@ -2270,7 +2497,8 @@ def main():
         sys.exit(cmd_triage(repo, a.json))
     if a.cmd == "tests":
         sys.exit(cmd_tests(repo, a.strict))
-    sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget, a.affected, a.stress, a.json, a.quarantine, a.jobs))
+    sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget, a.affected, a.stress, a.json, a.quarantine, a.jobs,
+                     not a.no_cache))
 
 
 if __name__ == "__main__":

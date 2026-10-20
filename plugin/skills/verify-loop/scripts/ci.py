@@ -83,7 +83,7 @@ def cmd_ci(v, repo, plan_file, output, timeout):
                         evidence = v.load_state(str(work)).get("challenge")
                         if evidence:
                             report["challenges"].append(evidence)
-                stage("strict run", lambda: v.cmd_run(str(work), None, timeout, True))
+                stage("strict run", lambda: v.cmd_run(str(work), None, timeout, True, use_cache=False))
                 stage("status", lambda: v.cmd_status(str(work)))
                 if v.check_hashes(str(work)) != report["check_hashes"]:
                     raise ValueError("frozen checks changed during CI")

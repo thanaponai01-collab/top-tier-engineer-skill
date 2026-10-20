@@ -60,6 +60,48 @@ memory and verdict match a serial run. Use it only when no two checks share an a
 or written file; the default of 1 is the safe choice for `## Run` recipes that drive one live app.
 A check that fails only under `--jobs` is sharing something: run it serially and fix the coupling.
 
+Every check gets two environment variables so it can stop sharing:
+
+- `VERIFY_SLOT`: `0`..`N-1`. No two checks running at the same time share a slot (serial runs: `0`).
+  Key scratch folders, database names or temp files on it: `tmp/run-$VERIFY_SLOT/`, `test_db_$VERIFY_SLOT`.
+- `VERIFY_PORT`: a TCP port that was free when the check started, fresh for each check. A check that
+  starts its own app binds it there and probes it there:
+
+```python
+port = int(os.environ.get("VERIFY_PORT", "8000"))  # default keeps the check runnable by hand
+app = start_app(port=port)
+assert get(f"http://127.0.0.1:{port}/health").status == 200, "expected 200 from /health"
+```
+
+The OS picked the port, so another process can still take it before the app binds; a check that
+sees "address already in use" should be rerun, not loosened. The `## Run` app is one shared
+instance: its checks do not use these variables, and `--jobs` stays 1 for them.
+
+## Fast inner loop and the shared result cache
+
+A non-strict `run` and `watch` fingerprint the tree from a stat cache: a file whose size, mtime and
+(on POSIX) ctime are unchanged since it was last hashed is not read again, as git's index works. An
+edit that restores all three goes unseen until a full pass. `run --strict`, `status`, `ci` and
+`challenge` always read every byte, and both ways give the same signature for honest stat data,
+so `status` can still judge a run the fast way recorded. Files changed in the last 2 seconds are
+always re-read.
+
+`run` then reuses a pass that any agent or worktree already proved for the same command on the
+same content (the key is the command plus the tree signature). The output says
+`[CACHED: proved <time> by <agent>]` and `CACHED  n check(s) reused`; `--json` sets `cached` per
+result and in the summary. The rules:
+
+- Only passes are kept, and only from runs whose tree did not move while they ran.
+- A pass recorded by a non-strict (stat-trusting) run never satisfies `--strict`; strict reuses
+  only passes recorded under a full, every-byte signature.
+- No caching with a `## Run` recipe (checks depend on a live app) or with `--stress`.
+- The cache lives in Git's common directory (`.git/verify-loop/`), shared by every worktree, or in
+  `.verify-state-cache/` outside Git.
+
+The signature covers files in the tree, not the machine: installed packages (`node_modules`,
+virtualenvs, `vendor`), environment variables, the clock and the network are outside it. After
+changing any of those, or for a check that depends on them, run with `--no-cache`.
+
 ## Many agents in one checkout: VERIFY_AGENT
 
 Saves are atomic and locked, and concurrent saves merge, so agents sharing a checkout do not
