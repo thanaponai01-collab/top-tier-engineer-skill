@@ -2053,8 +2053,16 @@ def answer(repo):
     dependent = [f"{feat} ({kind} `{cmd}`): frozen by {who or 'an unnamed agent'}"
                  for feat, kind, cmd, who in not_independent(state, features, agent_name(), signature, state.get("tree"))] \
         if features and "independent" in requirements(read(repo, RECIPE)) else []
+    todo, advice = [], None
+    if features:
+        from swarm import advise, swarm_items
+        items = swarm_items(sys.modules[__name__], repo, state)
+        todo = [{"feature": i["feature"], "action": i["action"], "detail": i["detail"], "next": i["next"]}
+                for i in items if i["action"] != "done"]
+        advice = advise(items)
     return {
         "verdict": VERDICTS[name], "state": name, "detail": detail, "exit": code,
+        "next": todo, "swarm": advice,
         "verify_line": state.get("verify_line"),
         "rejections": rejections, "passed": passed,
         "gaps": {"failing": failing, "unverified": unverified, "unproven": unproven,
@@ -2094,6 +2102,13 @@ def cmd_report(repo, as_json=False):
         print(f"GAP  {label}: {item}")
     if not rows:
         print("GAP  none recorded; green covers mapped claims only, not features nobody mapped")
+    for t in a["next"]:
+        print(f"NEXT  {t['feature']} [{t['action']}]: {t['next']}")
+    if a["swarm"]:
+        s = a["swarm"]
+        print(f"SWARM: {s['mode']} ({s['why']})")
+        if s["judge"] and s["mode"] != "judge":
+            print(f"SWARM: judge too ({', '.join(s['judge'])} need an agent that did not freeze them)")
     return a["exit"]
 
 

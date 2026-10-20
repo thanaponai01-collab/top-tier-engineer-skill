@@ -137,6 +137,30 @@ def swarm_items(v, repo, state=None, now=None):
     return items
 
 
+SPLIT_AT = 3
+
+
+def advise(items):
+    """Who should do the remaining work, so no caller has to know when a swarm pays off.
+    `split`: SPLIT_AT or more open features, enough to hand one to each helper agent.
+    `judge`: some feature needs strict verification by an agent that did not freeze it.
+    `solo`: work it through yourself. `done`: nothing left. `judge` is listed under any mode."""
+    todo = [i for i in items if i["action"] != "done"]
+    judge = [i["feature"] for i in todo if i["action"] == "independent"]
+    work = [i["feature"] for i in todo if i["action"] != "independent" and i["status"] == "open"]
+    if not todo:
+        mode, why = "done", "every mapped feature is verified"
+    elif len(work) >= SPLIT_AT:
+        mode, why = "split", (f"{len(work)} open features: start helper agents, each with its own "
+                              "VERIFY_AGENT, each repeating `swarm --claim` and its Next step until `SWARM: green`")
+    elif judge:
+        mode, why = "judge", ("start a fresh agent that did not see the implementation, with its own "
+                              "VERIFY_AGENT, to run `swarm --claim --role judge` and its Next step")
+    else:
+        mode, why = "solo", f"{len(todo)} feature(s) left: work them yourself in NEXT order"
+    return {"mode": mode, "why": why, "judge": judge, "open": work}
+
+
 def eligible(item, agent, role="any"):
     """True when `agent` is allowed to claim `item` under `role`."""
     act = item["action"]
@@ -506,6 +530,7 @@ def cmd_swarm(v, repo, claim=False, release=None, done=None, role="any", lease=6
         print(json.dumps({
             "verdict": "green" if all_done else "pending",
             "summary": counts,
+            "advice": advise(items),
             "items": items,
             "exit": 0 if all_done else 1,
         }, indent=2))
@@ -524,4 +549,6 @@ def cmd_swarm(v, repo, claim=False, release=None, done=None, role="any", lease=6
             extra = f" ({i['detail']})"
         print(f"  {tag}  {i['feature']}{extra}")
     print(f"SWARM: {counts['done']}/{counts['total']} done | {counts['claimed']} claimed | {counts['open']} open")
+    adv = advise(items)
+    print(f"SWARM-ADVICE: {adv['mode']} ({adv['why']})")
     return 0 if all_done else 1

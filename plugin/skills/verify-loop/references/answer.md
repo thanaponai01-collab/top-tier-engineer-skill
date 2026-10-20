@@ -50,6 +50,8 @@ Then:
 3. **What passed:** the feature and the command, for each check.
 4. **Gaps:** failing checks, features with no check, features never seen red, orphan tests and
    blind spots. Then whatever green cannot show, such as features nobody mapped.
+5. **What is left and who does it:** a `NEXT` line per unfinished feature (its step and command),
+   and a `SWARM:` line, `solo`, `split`, `judge` or `done` (see [swarm](swarm.md#when-the-helper-decides)).
 
 `verify.py report <repo>` prints this. `report --json` and `status --json` print it as one object,
 with the same exit codes as `status` (0 green or no VERIFY.md, 1 red, 3 stale, partial or never
@@ -64,6 +66,7 @@ run):
  "passed": [{"feature": "Create note", "command": "..."}],
  "gaps": {"failing": [], "unverified": [], "unproven": [], "orphan_tests": [], "unchallenged": [],
           "not_independent": [], "blind_spots": [], "rebaselined": []}, "rebaselines": [],
+ "next": [], "swarm": {"mode": "done", "why": "...", "judge": [], "open": []},
  "strict": true, "rounds": 0, "failing": [], "checks": 2, "receipts": ["..."], "challenge": null}
 ```
 

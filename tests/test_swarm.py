@@ -149,6 +149,43 @@ class SwarmCoordination(unittest.TestCase):
             self.assertEqual(code, 0, out)
             self.assertEqual(json.loads(out)["verdict"], "green")
 
+    def test_report_advises_solo_split_judge_and_done(self):
+        """The helper decides when a swarm pays off, so no caller has to know."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_two_feature_repo(tmp)
+            code, out, _ = run_as("alpha", "report", str(root))
+            self.assertIn("NEXT  Auth [prove]:", out)
+            self.assertIn("SWARM: solo", out)
+
+            vmd = (root / "VERIFY.md").read_text(encoding="utf-8")
+            (root / "VERIFY.md").write_text(vmd + "\n## Notes\n- test: `python test_auth.py`\n- fail-signal: NOTES_FAIL\n",
+                                            encoding="utf-8")
+            code, out, _ = run_as("alpha", "report", str(root), "--json")
+            adv = json.loads(out)["swarm"]
+            self.assertEqual(adv["mode"], "split", adv)
+            self.assertEqual(adv["open"], ["Auth", "Billing", "Notes"])
+            code, out, _ = run_as("alpha", "swarm", str(root))
+            self.assertIn("SWARM-ADVICE: split", out)
+
+            (root / "VERIFY.md").write_text("require: independent\n\n" + vmd, encoding="utf-8")
+            for feat, f, before, after in (("Auth", "auth.py", "return tok == 'secret'", "return tok != 'secret'"),
+                                           ("Billing", "billing.py", "return cents + tax", "return cents - tax")):
+                self.assertEqual(run_as("alpha", "challenge", str(root), "--feature", feat, "--file", f,
+                                        "--before", before, "--after", after)[0], 0)
+            self.assertEqual(run_as("alpha", "baseline", str(root))[0], 0)
+            run_as("alpha", "run", str(root), "--strict")
+            code, out, _ = run_as("alpha", "report", str(root), "--json")
+            adv = json.loads(out)["swarm"]
+            self.assertEqual((adv["mode"], adv["judge"]), ("judge", ["Auth", "Billing"]), adv)
+
+            self.assertEqual(run_as("beta", "run", str(root), "--strict")[0], 0)
+            code, out, _ = run_as("alpha", "report", str(root))
+            self.assertIn("NEXT  Auth [run]:", out)  # alpha's own last run is still red
+            self.assertEqual(run_as("alpha", "run", str(root), "--strict")[0], 0)
+            code, out, _ = run_as("alpha", "report", str(root))
+            self.assertIn("SWARM: done", out)
+            self.assertNotIn("NEXT  ", out)
+
     def test_swarm_auto_surveys_all_mapped_features_in_shared_lane(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = make_two_feature_repo(tmp)

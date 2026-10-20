@@ -4,6 +4,22 @@ Use `verify.py swarm` when two or more agents (`VERIFY_AGENT=<name>`) share a re
 pool and want to divide verification work without stepping on each other or deadlocking on
 `require: independent`.
 
+## When: the helper decides
+
+Nobody has to know when a swarm pays off. `report` and plain `swarm` print the advice
+(`SWARM:` / `SWARM-ADVICE:`; `swarm` in `report --json`, `advice` in `swarm --json`):
+
+| Mode | When | Do |
+|---|---|---|
+| `solo` | fewer than 3 open features, no judge needed | work the `NEXT` lines yourself |
+| `split` | 3 or more open (unclaimed) features | start helper agents, each with its own `VERIFY_AGENT`, each repeating `swarm --claim` and its Next step until `SWARM: green` |
+| `judge` | a feature needs `independent` verification | a fresh agent that did not freeze it runs `swarm --claim --role judge` |
+| `done` | every feature is verified | nothing left |
+
+`judge` features are listed under any mode, so a `split` still names them. With no way to start
+another agent, work the list yourself and report the `not_independent` gap. A second name for
+yourself is not a judge.
+
 ## Work-stealing queue
 
 ```bash

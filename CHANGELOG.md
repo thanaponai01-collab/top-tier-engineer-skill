@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.14.0 - 2026-10-20 - The helper decides when to swarm
+
+- **`report` says what is left and who does it.** A `NEXT` line per unfinished feature (its step and the command), then `SWARM: solo | split | judge | done`. `split` means 3 or more open features: start helper agents, each with its own `VERIFY_AGENT`, each claiming with `swarm --claim`. `judge` means a feature needs `independent` verification by an agent that did not freeze it. `report --json` adds `next` and `swarm`. Plain `swarm` prints `SWARM-ADVICE:`, and `swarm --json` adds `advice`. The user and the calling agent no longer need to know when a swarm pays off.
+- **SKILL.md: who does the work is the helper's call.** After recording checks, run `report` and follow its `SWARM:` line. With no way to start agents, work the list yourself and report `not_independent`. A second name for yourself does not count as a judge.
+
 ## 1.13.2 - 2026-10-20 - Survey maps files through the coverage map
 
 - **`swarm --auto` and `review` read the recorded coverage map.** A file that a feature's check executed under `run --record-coverage` now belongs to that feature, so the survey scores it per feature instead of as `UNMAPPED`. A check like `python -m unittest test_app` names no product file, so before this a feature needed a `paths:` line to own the code it tests. Features with declared `paths:` also own files their checks executed. As with `run --affected`, the map is as fresh as its last recording.

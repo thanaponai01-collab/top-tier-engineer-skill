@@ -60,6 +60,14 @@ evidence.
    gave; the re-baseline is recorded and shown in `status` and `report`. New checks need no review.
 8. **Finish**: `run --strict && status` → green. If you touched tests, `tests --strict`.
 
+**Who does the work is the helper's call, not yours.** After step 3, and whenever you are unsure
+what is left, run `report`. Its `NEXT` lines are the to-do list and its `SWARM:` line says who works
+it. `solo`: you. `split` (3+ open features): if you can start helper agents, start them, each
+with its own `VERIFY_AGENT`, each repeating `swarm --claim` and the printed Next step until
+`SWARM: green`. `judge`: a fresh agent that never saw the implementation runs
+`swarm --claim --role judge`. With no way to start agents, work the list yourself and report
+`not_independent` as a gap. Never give yourself a second name to stand in for a judge.
+
 ## Before you say done
 
 Green only covers what is mapped. Look for what it cannot show and report it:
@@ -107,7 +115,7 @@ contract is in [answer](references/answer.md).
 | Create a project `verify` skill | [create](references/create.md) |
 | Keep that skill honest as the app changes | [maintain](references/maintain.md) |
 | A red you have not classified yet | [triage](references/triage.md) |
-| Many agents verifying together (`swarm`, work-stealing, peer review) | [swarm](references/swarm.md) |
+| `report` says `SWARM: split` or `judge`, or agents share one repo | [swarm](references/swarm.md) |
 | `loop`, `watch`, `contract`, scaffolds, quarantine | [helper commands](references/helpers.md) |
 
 ## Other helper commands
