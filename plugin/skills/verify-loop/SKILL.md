@@ -16,6 +16,24 @@ Build the check before the work, make it hard to fool, loop until it passes.
 
 The point is not that you are sure; it is that someone who did not watch can trust the claim.
 
+## Quick path: is this check, or this claim, any good?
+
+Most requests only assess. `<skill-base>` is this skill's directory; `--assess` keeps every helper
+write in a temp folder, so the checked repo's `git status` stays unchanged:
+
+```
+python <skill-base>/scripts/verify.py run <repo> --assess
+python <skill-base>/scripts/verify.py challenge <repo> --feature "<F>" --auto --assess
+python <skill-base>/scripts/verify.py report <repo> --assess
+```
+
+`run`: do the checks pass, and is one `HOLLOW` (passes without calling the product)? `challenge
+--auto`: do they reject planted wrong results (`SURVIVED` = a weak check, `UNCOVERED` = a line no
+check reaches)? `report`: the verdict, gaps and `NEXT` to hand back. A `path:` line per feature makes
+`HOLLOW` judge those files and lets `challenge --auto` run without a file argument. No VERIFY.md
+yet? Write the feature's three lines (`## F`, `- path:`, `- test:`) and say you added it. The full
+loop below is for proving or repairing a change.
+
 **Done** = one mapped check seen rejecting a controlled wrong result, the highest-risk check seen
 catching a `challenge` mutation, checks frozen with `baseline`, then `run --strict` and `status`
 print `VERIFY-STATE: green` on unchanged inputs. `verify.py` decides these, not your confidence.
@@ -34,13 +52,12 @@ Anything less is reported as what it is: red, partial, stale or unverified.
 
 A check that loads no cases, asserts nothing or passes either way is broken machinery, not
 evidence. `run` flags it `HOLLOW` when a Python `test:` check passes without calling the product
-it imports. Give each feature a `path:` to its product files: that sharpens `HOLLOW` to those
-files, and `challenge --auto` then needs no file argument.
+it imports.
 
 ## The loop
 
-`<skill-base>` is this skill's directory; the helper is `python <skill-base>/scripts/verify.py`
-(pass the project as its repo argument; `--help` lists everything).
+The helper is `python <skill-base>/scripts/verify.py` (pass the project as its repo argument;
+`--help` lists everything).
 
 1. **Name the claim** observably. Not "refunds work" but "POST /refund on a paid order returns 200
    and the balance drops by the amount".
@@ -122,17 +139,10 @@ contract is in [answer](references/answer.md).
 
 ## Other helper commands
 
-`run --affected [--record-coverage] | --jobs N | --stress N | --quarantine | --json | --no-cache` (checks get
-`VERIFY_SLOT`/`VERIFY_PORT`; a pass already proved on identical content is reused, never a
-non-strict one for `--strict`) · `triage` · `scope <files>` (fence a fix;
-`OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto [<file>] [--diff [REF]] [--jobs N]` (mutation score; no file = the `path:` files, no fail-signal needed; `--diff` = only changed lines; `UNCOVERED` = no check reaches the line) ·
-`review [--base REF] [--no-mutate]` (weakened tests/checks + unproven changed lines; reads only) ·
-`loop --scope <f> --max N` (reruns, never edits) ·
-`VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline & peer `verified_by`) · `swarm [--claim | --auto]` ·
-`watch --max-runs N` (never exits without it) · `contract old new` · `scaffold-oracle | scaffold-ui |
-scaffold-driver` · `scaffold-skill` · `skill-check` · `maintain` · `ci`. What each does and
-when it is safe: [helper commands](references/helpers.md). Evidence lives in
-`.verify-evidence/` and `.verify-state.json`.
+`run --affected | --jobs N | --stress N | --json` · `triage` · `scope <files>` · `review` · `loop` ·
+`watch` · `swarm` · `contract` · scaffolds · `ci`; what each does and when it is safe:
+[helper commands](references/helpers.md). State lives in `.verify-state.json` (caches in
+`.git/verify-loop/`) unless `--assess`, `--state-dir DIR` or `VERIFY_STATE_DIR` moves it out.
 
 *Test:* the check existed before the change it judges, you can name the moment it was red, and
 `status` is green on the final inputs.

@@ -55,6 +55,7 @@ def cmd_ci(v, repo, plan_file, output, timeout):
                                stderr=subprocess.PIPE, check=True)
             work = Path(tmp, "project")
             work.mkdir()
+            v.keep_state_in(work)
             with tarfile.open(archive) as tar:
                 members = [m for m in tar.getmembers() if not v.is_state_file(Path(m.name).name)]
                 if any(not (m.isfile() or m.isdir()) for m in members):

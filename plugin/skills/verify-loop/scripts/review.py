@@ -169,7 +169,8 @@ def mutation_findings(v, repo, sha, base, jobs, limit, timeout):
                   if kind == "SURVIVED" else
                   f"[{r['feature']}] no check reaches `{r['before'].strip()}`")
         cmd = (f"python {json.dumps(script)} challenge {json.dumps(repo)} --feature {json.dumps(r['feature'])} "
-               f"--file {json.dumps(r['file'])} --before {json.dumps(r['before'])} --after {json.dumps(r['after'])}")
+               f"--file {json.dumps(r['file'])} --before {json.dumps(r['before'])} --after {json.dumps(r['after'])}"
+               + v.state_flag())
         out.append(finding(kind, r["file"], detail, line=r["line"], reproduce=cmd))
     count = {k: sum(r["verdict"] == k for r in results) for k in ("caught", "survived", "uncovered")}
     decided = sum(count.values())

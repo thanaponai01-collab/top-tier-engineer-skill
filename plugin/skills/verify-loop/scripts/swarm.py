@@ -16,6 +16,7 @@ Two jobs:
      `## Run` recipe) and reports per-feature and repo-wide mutation scores in one pass.
 """
 import json
+import os
 import tempfile
 import time
 from pathlib import Path
@@ -40,6 +41,14 @@ def _independently_verified(state, feat, signature, tree):
 
 
 def _next_command(repo, feat, action, freezers):
+    cmd = _bare_command(repo, feat, action, freezers)
+    root = os.environ.get("VERIFY_STATE_DIR", "").strip()  # keep the follow-up on the same state
+    if not root or "verify.py" not in cmd:
+        return cmd
+    return cmd.replace(f" {repo}", f' {repo} --state-dir "{os.path.abspath(root)}"')
+
+
+def _bare_command(repo, feat, action, freezers):
     name = feat["name"]
     q = f'"{name}"' if " " in name else name
     if action == "map":

@@ -22,7 +22,9 @@ VERIFY.md at the repo root maps each feature to the commands that prove it. Two 
          (OUT OF SCOPE), and every check that passed when the fix began stays on watch.
 
 `run` also remembers itself in .verify-state.json (gitignore .verify-state*; VERIFY_AGENT=<name>
-gives each agent its own loop memory while the baseline and receipts stay shared): it says NEWLY RED when a fix
+gives each agent its own loop memory while the baseline and receipts stay shared; --assess,
+--state-dir DIR or VERIFY_STATE_DIR keep that memory and the caches outside the repo, so assessing
+a repo leaves its tree untouched): it says NEWLY RED when a fix
 broke something that passed, SAME FAILURE when a check fails identically twice, and BUDGET after
 --budget red runs in a row. A `--only` run compares nothing and saves nothing.
 Strict runs require retained failure output for the current checks plus a fail-proof note;
@@ -1451,10 +1453,47 @@ def agent_name():
     return name or None
 
 
+# Assessing a repo should not change it. VERIFY_STATE_DIR (set by --state-dir or --assess) moves
+# the state files, the lock and the caches to <dir>/<repo name>-<hash of its path>, one folder per
+# repo. Scratch copies keep their state inside themselves, so it is deleted with them.
+_IN_PLACE = set()
+
+
+def keep_state_in(path):
+    """A scratch copy: its state stays inside it even when VERIFY_STATE_DIR is set."""
+    _IN_PLACE.add(os.path.realpath(path))
+
+
+def assess_dir():
+    """The default --assess state root: a per-user folder in the system temp directory."""
+    return os.path.join(tempfile.gettempdir(), "verify-loop-assess")
+
+
+def outside_home(repo):
+    """The folder outside the repo that holds its state, or None when state lives in the repo."""
+    root = os.environ.get("VERIFY_STATE_DIR", "").strip()
+    real = os.path.realpath(repo)
+    if not root or real in _IN_PLACE:
+        return None
+    return os.path.join(os.path.abspath(root), f"{os.path.basename(real) or 'repo'}-{sha(real)}")
+
+
+def state_flag():
+    """What a printed follow-up command needs to find the same state: ' --state-dir DIR' or ''."""
+    root = os.environ.get("VERIFY_STATE_DIR", "").strip()
+    return f' --state-dir "{os.path.abspath(root)}"' if root else ""
+
+
+def state_home(repo):
+    """Where the state files and the lock live: the repo, or its folder under VERIFY_STATE_DIR."""
+    return outside_home(repo) or repo
+
+
 def state_paths(repo):
     """(shared file, this agent's file); the same path when VERIFY_AGENT is unset."""
-    shared, name = os.path.join(repo, STATE), agent_name()
-    return shared, (os.path.join(repo, f".verify-state.{name}.json") if name else shared)
+    home, name = state_home(repo), agent_name()
+    shared = os.path.join(home, STATE)
+    return shared, (os.path.join(home, f".verify-state.{name}.json") if name else shared)
 
 
 def retry(fn, tries=100):
@@ -1504,7 +1543,9 @@ def load_state(repo):
 
 
 def state_lock(repo, wait=30.0, stale=60.0):
-    return file_lock(os.path.join(repo, LOCK), wait, stale)
+    home = state_home(repo)
+    os.makedirs(home, exist_ok=True)
+    return file_lock(os.path.join(home, LOCK), wait, stale)
 
 
 @contextlib.contextmanager
@@ -1619,8 +1660,12 @@ def git_common_dir(repo):
 
 
 def cache_dir(repo):
-    """Where caches live: inside Git's common directory, so every worktree of a repo shares them,
-    else .verify-state-cache/ in the repo (left out of signatures and copies like the state files)."""
+    """Where caches live: under VERIFY_STATE_DIR when set; else inside Git's common directory, so
+    every worktree of a repo shares them; else .verify-state-cache/ in the repo (left out of
+    signatures and copies like the state files)."""
+    home = outside_home(repo)
+    if home:
+        return os.path.join(home, "cache")
     common = git_common_dir(repo)
     return os.path.join(common, "verify-loop") if common else os.path.join(repo, ".verify-state-cache")
 
@@ -2871,8 +2916,24 @@ def main():
     ci.add_argument("--plan", required=True, help="committed repo-relative JSON feature/mutation list")
     ci.add_argument("--output", required=True, help="evidence directory outside the checkout")
     ci.add_argument("--timeout", type=int, default=120, help="seconds per check")
+    for p in sub.choices.values():
+        where = p.add_mutually_exclusive_group()
+        where.add_argument("--assess", action="store_true",
+                           help="read-only for the repo: keep state and caches in a temp folder "
+                                "(VERIFY_STATE_DIR, else verify-loop-assess in the system temp dir)")
+        where.add_argument("--state-dir", metavar="DIR",
+                           help="keep state and caches under DIR instead of the repo (= VERIFY_STATE_DIR)")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
+    if a.state_dir:
+        os.environ["VERIFY_STATE_DIR"] = os.path.abspath(a.state_dir)
+    elif a.assess:
+        os.environ["VERIFY_STATE_DIR"] = os.environ.get("VERIFY_STATE_DIR", "").strip() or assess_dir()
+    if a.assess:
+        # The checks themselves should not leave bytecode or a pytest cache behind either.
+        os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
+        if "no:cacheprovider" not in os.environ.get("PYTEST_ADDOPTS", ""):
+            os.environ["PYTEST_ADDOPTS"] = (os.environ.get("PYTEST_ADDOPTS", "") + " -p no:cacheprovider").strip()
     try:
         agent_name()
     except ValueError as exc:

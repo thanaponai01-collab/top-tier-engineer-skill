@@ -108,11 +108,25 @@ result and in the summary. The rules:
   only passes recorded under a full, every-byte signature.
 - No caching with a `## Run` recipe (checks depend on a live app) or with `--stress`.
 - The cache lives in Git's common directory (`.git/verify-loop/`), shared by every worktree, or in
-  `.verify-state-cache/` outside Git.
+  `.verify-state-cache/` outside Git; with a state directory (below), under that directory.
 
 The signature covers files in the tree, not the machine: installed packages (`node_modules`,
 virtualenvs, `vendor`), environment variables, the clock and the network are outside it. After
 changing any of those, or for a check that depends on them, run with `--no-cache`.
+
+## Assess without touching the repo: --assess, --state-dir, VERIFY_STATE_DIR
+
+By default `run`, `challenge`, `baseline`, `scope`, `swarm` and the rest write `.verify-state*.json`
+and a lock into the repo, and caches into `.git/verify-loop/`. Every subcommand takes `--assess` or
+`--state-dir DIR` (or reads `VERIFY_STATE_DIR`) to put all of it in `<dir>/<repo name>-<path hash>/`
+instead, one folder per repo; `--assess` uses `VERIFY_STATE_DIR` if set, else `verify-loop-assess`
+in the system temp directory, and also sets `PYTHONDONTWRITEBYTECODE=1` and
+`PYTEST_ADDOPTS=-p no:cacheprovider` so Python checks leave no bytecode or pytest cache behind. Pass
+the same option to every command of one assessment: `report --assess` reads what `run --assess`
+saved, and `report` without it reads the repo's own state. `NEXT` and `review` reproduce lines carry
+`--state-dir` so follow-ups land in the same place. Scratch copies made by `challenge`, `swarm --auto`
+and `ci` keep their state inside themselves. What stays out of reach: files the checks themselves
+write, and the `scaffold-*` commands, whose job is to add files to the project.
 
 ## Many agents in one checkout: VERIFY_AGENT
 

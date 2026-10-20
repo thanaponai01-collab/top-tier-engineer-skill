@@ -14,8 +14,9 @@ from pathlib import Path
 COPY_IGNORE = shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".verify-state*")
 
 
-def copy_repo(repo, dest):
+def copy_repo(v, repo, dest):
     shutil.copytree(repo, dest, ignore=COPY_IGNORE)
+    v.keep_state_in(dest)
 
 
 def prepare(v, repo, feature, need_signal=True):
@@ -140,7 +141,7 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
     try:
         with tempfile.TemporaryDirectory(prefix="verify-challenge-") as tmp:
             scratch = Path(tmp, "original")
-            copy_repo(repo, scratch)
+            copy_repo(v, repo, scratch)
             report["original"] = trial(scratch, only_feat=False)
             original = report["original"]
             relative = target.relative_to(Path(repo).resolve())
@@ -149,7 +150,7 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
             if original["exit"] == 0 and original["checks_unchanged"] and original["product_unchanged"]:
                 if v.tree_sig(str(scratch)) != original_tree:
                     scratch = Path(tmp, "mutated")
-                    copy_repo(repo, scratch)
+                    copy_repo(v, repo, scratch)
                 changed = scratch / relative
                 changed.write_text(wrong_source, encoding="utf-8")
                 report["mutated"] = trial(scratch, only_feat=True)

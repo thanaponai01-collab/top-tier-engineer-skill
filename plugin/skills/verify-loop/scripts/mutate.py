@@ -184,7 +184,7 @@ class Lane:
         from challenge import copy_repo
         if self.path.exists():
             shutil.rmtree(self.path)
-        copy_repo(self.repo, self.path)
+        copy_repo(self.v, self.repo, self.path)
         self.copies += 1
         rows, intact = self.trial(None)
         if not intact or not rows or not all(row and row["ok"] for _, _, row in rows):
