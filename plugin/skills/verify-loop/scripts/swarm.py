@@ -151,6 +151,20 @@ def eligible(item, agent, role="any"):
     return True
 
 
+RANK = {"inconclusive": 0, "uncovered": 1, "survived": 2, "caught": 3}
+
+
+def merge_mutants(results):
+    """One result per mutant (file, line, before, after): the best verdict any feature gave it.
+    A mutant is caught when ANY feature's checks catch it, so counts judge each mutant once."""
+    merged = {}
+    for r in results:
+        key = (r["file"], r["line"], r["before"], r["after"])
+        if key not in merged or RANK.get(r["verdict"], 0) > RANK.get(merged[key]["verdict"], 0):
+            merged[key] = r
+    return list(merged.values())
+
+
 class Unsurveyable(Exception):
     """The survey could not produce a score: (verdict, reason), verdict 'invalid' or 'inconclusive'."""
 
@@ -190,18 +204,23 @@ def survey(v, repo, diff=None, jobs=1, limit=20, timeout=120):
                 except (OSError, ValueError):
                     continue
 
+        def owns(f, rel):
+            if diff_files is None and f.get("paths"):
+                return any(rel == fp.rstrip("/") or rel.startswith(fp.rstrip("/") + "/") for fp in f["paths"])
+            return v.is_feature_affected(f, {rel}, repo)
+
+        # A feature surveys the files it maps; a file no feature maps goes to every feature, so it is
+        # still judged. A mapped file never goes to a feature that does not map it: that feature's
+        # checks would only report UNCOVERED for lines the owner's checks catch.
+        pool = list(diff_files) if diff_files is not None else all_product
+        own = {f["name"]: [p for p in pool if owns(f, p)] for f in candidates_by_feat}
+        unmapped = [p for p in pool if not any(p in files for files in own.values())]
+
         sources = {}
         tasks = []  # [(feat_dict, candidate_dict)]
         for f in candidates_by_feat:
             _, feat, _ = prepare(v, repo, f["name"])
-            if diff_files is not None:
-                f_files = [p for p in diff_files if v.is_feature_affected(f, {p}, repo)] or list(diff_files)
-            elif f.get("paths"):
-                f_files = [p for p in all_product
-                           if any(p == fp.rstrip("/") or p.startswith(fp.rstrip("/") + "/") for fp in f["paths"])]
-            else:
-                matched = [p for p in all_product if v.is_feature_affected(f, {p}, repo)]
-                f_files = matched or list(all_product)
+            f_files = own[f["name"]] + unmapped
             f_budget = limit
             for rel in f_files:
                 if f_budget <= 0:
@@ -212,7 +231,7 @@ def survey(v, repo, diff=None, jobs=1, limit=20, timeout=120):
                 only = changed_lines(repo, diff, rel) if diff else None
                 lang = detect_lang(rel)
                 for c in generate(sources[rel], f_budget, is_py=(lang == "py"), lang=lang, only=only):
-                    tasks.append((feat, dict(c, file=rel, feature=feat["name"])))
+                    tasks.append((feat, dict(c, file=rel, feature=feat["name"], mapped=rel not in unmapped)))
                     f_budget -= 1
     except (OSError, ValueError) as exc:
         raise Unsurveyable("invalid", str(exc))
@@ -298,9 +317,10 @@ def survey(v, repo, diff=None, jobs=1, limit=20, timeout=120):
     if v.tree_sig(repo) != original_tree or settled(v.load_state(repo)) != settled(original_state):
         raise Unsurveyable("inconclusive", "source files or verification state changed during survey")
 
+    # Per feature: only the files it maps. Unmapped files count once, repo-wide.
     per_feature = []
     for f in candidates_by_feat:
-        f_res = [r for r in results if r["feature"] == f["name"]]
+        f_res = [r for r in results if r["feature"] == f["name"] and r["mapped"]]
         if not f_res:
             continue
         f_c = sum(r["verdict"] == "caught" for r in f_res)
@@ -313,17 +333,19 @@ def survey(v, repo, diff=None, jobs=1, limit=20, timeout=120):
             "score": round(f_c / f_d, 3) if f_d else None,
         })
 
-    caught = sum(r["verdict"] == "caught" for r in results)
-    survived = [r for r in results if r["verdict"] == "survived"]
-    uncovered = [r for r in results if r["verdict"] == "uncovered"]
-    decided = caught + len(survived) + len(uncovered)
+    mutants = merge_mutants(results)
+    caught = sum(r["verdict"] == "caught" for r in mutants)
+    survived = sum(r["verdict"] == "survived" for r in mutants)
+    uncovered = sum(r["verdict"] == "uncovered" for r in mutants)
+    decided = caught + survived + uncovered
     score = round(caught / decided, 3) if decided else None
     return {
         "features": per_feature, "files": sorted(sources), "diff": diff,
+        "unmapped": sorted(p for p in unmapped if p in sources),
         "generated": len(tasks), "run": len(results), "caught": caught,
-        "survived": len(survived), "uncovered": len(uncovered),
-        "inconclusive": len(results) - decided, "score": score,
-        "jobs": jobs, "copies": copies, "results": results,
+        "survived": survived, "uncovered": uncovered,
+        "inconclusive": len(mutants) - decided, "score": score,
+        "jobs": jobs, "copies": copies, "results": results, "mutants": mutants,
     }
 
 
@@ -336,8 +358,8 @@ def cmd_swarm_auto(v, repo, diff=None, jobs=1, limit=20, timeout=120, as_json=Fa
         return 2
     per_feature, score, diff = summary["features"], summary["score"], summary["diff"]
     caught = summary["caught"]
-    survived = [r for r in summary["results"] if r["verdict"] == "survived"]
-    uncovered = [r for r in summary["results"] if r["verdict"] == "uncovered"]
+    survived = [r for r in summary["mutants"] if r["verdict"] == "survived"]
+    uncovered = [r for r in summary["mutants"] if r["verdict"] == "uncovered"]
     decided = caught + len(survived) + len(uncovered)
     if as_json:
         print(json.dumps(summary, indent=2))
@@ -350,6 +372,9 @@ def cmd_swarm_auto(v, repo, diff=None, jobs=1, limit=20, timeout=120, as_json=Fa
             pf_s = "n/a" if pf["score"] is None else f"{pf['score']:.0%}"
             print(f"  FEATURE {pf['feature']}: {pf['caught']}/{pf['caught'] + pf['survived'] + pf['uncovered']} "
                   f"caught ({pf_s}), {pf['survived']} survived, {pf['uncovered']} uncovered")
+        if summary["unmapped"]:
+            print(f"  UNMAPPED {', '.join(summary['unmapped'])}: no feature maps it; judged by every feature, "
+                  f"counted repo-wide only")
         for r in survived:
             print(f"  SURVIVED [{r['feature']}] {r['file']}:{r['line']} {r['operator']}: "
                   f"{r['before'].strip()} -> {r['after'].strip()}")

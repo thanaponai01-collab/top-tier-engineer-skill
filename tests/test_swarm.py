@@ -159,6 +159,63 @@ class SwarmCoordination(unittest.TestCase):
             self.assertEqual(report["survived"], 0)
             self.assertEqual({f["feature"] for f in report["features"]}, {"Auth", "Billing"})
 
+    def test_swarm_auto_diff_judges_each_mutant_once_across_features(self):
+        """1.13.1: a feature that maps none of the changed files no longer reports UNCOVERED for lines
+        another feature's checks catch; repo-wide counts judge each mutant once, caught if any feature catches it."""
+        from test_review import BONUS, BONUS_TESTS, committed
+        with tempfile.TemporaryDirectory() as root:
+            committed(root)
+            Path(root, "app.py").write_text(Path(root, "app.py").read_text() + BONUS)
+            Path(root, "test_app.py").write_text(Path(root, "test_app.py").read_text() + BONUS_TESTS)
+            # No feature names app.py, so both survey it; Prices reaches none of it, Grade catches all.
+            code, out, _ = run_as("alpha", "swarm", root, "--auto", "--diff", "HEAD", "--json")
+            report = json.loads(out)
+            self.assertEqual(report["uncovered"], 0, out)
+            self.assertEqual(report["survived"], 0, out)
+            self.assertEqual(code, 0, out)
+            keys = [(r["file"], r["line"], r["before"], r["after"]) for r in report["mutants"]]
+            self.assertEqual(len(keys), len(set(keys)), out)
+            self.assertEqual(report["caught"], len(keys), out)
+            self.assertEqual(report["unmapped"], ["app.py"], out)
+            self.assertEqual(report["features"], [], out)  # no feature owns it: no per-feature score
+            code, out, _ = run_as("alpha", "swarm", root, "--auto", "--diff", "HEAD")
+            self.assertNotIn("UNCOVERED [", out)
+
+            # Once Grade maps app.py, Prices does not survey it at all and Grade scores it per feature.
+            recipe = Path(root, "VERIFY.md")
+            recipe.write_text(recipe.read_text().replace("## Grade\n", "## Grade\n- paths: app.py\n"))
+            code, out, _ = run_as("alpha", "swarm", root, "--auto", "--diff", "HEAD", "--json")
+            report = json.loads(out)
+            self.assertEqual(code, 0, out)
+            self.assertEqual([f["feature"] for f in report["features"]], ["Grade"], out)
+            self.assertEqual(report["features"][0]["caught"], len(keys), out)
+            self.assertFalse([r for r in report["results"] if r["feature"] == "Prices"], out)
+            self.assertEqual(report["unmapped"], [], out)
+
+    def test_swarm_auto_unmapped_file_is_caught_if_any_feature_catches_it(self):
+        """A changed file no feature maps still goes to every feature; the repo-wide verdict per mutant
+        is the best one, so one feature's UNCOVERED does not hide another feature's catch."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_two_feature_repo(tmp)
+            (root / "rates.py").write_text("def rate():\n    return 2\n", encoding="utf-8")
+            (root / "test_billing.py").write_text(
+                (root / "test_billing.py").read_text(encoding="utf-8").replace(
+                    "from billing import total\n",
+                    "from billing import total\nimport importlib\n"
+                    "assert importlib.import_module('rat' + 'es').rate() == 2, 'BILLING_FAIL'\n"),
+                encoding="utf-8")
+            git(root, "add", "-A")
+            git(root, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base")
+            (root / "rates.py").write_text("def rate():\n    return 3 - 1\n", encoding="utf-8")
+            code, out, _ = run_as("alpha", "swarm", str(root), "--auto", "--diff", "HEAD", "--json")
+            report = json.loads(out)
+            self.assertEqual(report["features"], [], out)  # neither maps rates.py: no per-feature score
+            self.assertEqual(report["unmapped"], ["rates.py"], out)
+            self.assertEqual({r["feature"] for r in report["results"]}, {"Auth", "Billing"}, out)
+            self.assertEqual(report["uncovered"], 0, out)
+            self.assertGreater(report["caught"], 0, out)
+            self.assertEqual(code, 0, out)
+
 
 class TrustAndAntiGaming(unittest.TestCase):
     def test_signal_printed_in_passing_output_is_rejected(self):

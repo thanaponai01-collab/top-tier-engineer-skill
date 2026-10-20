@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.13.1 - 2026-10-20 - Swarm survey judges each mutant once
+
+- **`swarm --auto` no longer inflates `UNCOVERED`.** A feature that mapped none of the changed files used to get every changed file, so an unrelated feature reported `UNCOVERED` lines that another feature's checks catch. Now a feature surveys only the files it maps. A file no feature maps still goes to every feature, so it is still judged.
+- **Repo-wide counts are per mutant.** The repo-wide `caught`/`survived`/`uncovered`/score, and the `SURVIVED`/`UNCOVERED` lines, judge each mutant once: caught if ANY feature catches it. `swarm.merge_mutants()` does the merge, which moved from `review` and is now shared by `review` and `swarm --auto`. The JSON adds `mutants` (merged) next to `results` (one row per feature run).
+- **Per-feature scores count only mapped files.** Mutants of an unmapped file count repo-wide only and are listed as `UNMAPPED` (`unmapped` in JSON). A feature with no mapped file in the survey no longer appears per feature.
+
 ## 1.13.0 - 2026-10-20 - Review by proof
 
 - **`verify.py review [--base REF]`.** It reviews a change, a PR or another agent's work, and its output is findings a person can re-run. High findings are where the change weakened its own proof: a test function that existed at the base is removed, newly skipped, has fewer assertions or can no longer fail (Python, JS/TS, Go, with renames paired). Also a check, fail-signal, feature or `require:` word dropped from VERIFY.md, or an oracle or check script edited alongside the code. Medium findings are where the change is not proven: `UNCOVERED` and `SURVIVED` changed lines, each with a `reproduce:` `challenge` command, `UNMAPPED` product files, and `NOT SURVEYED`. It reads only. Exit 0 clean, 1 findings, 2 cannot review. `--no-mutate` returns the static part in about 0.3 s on this repo. Mode doc: `references/review.md`.

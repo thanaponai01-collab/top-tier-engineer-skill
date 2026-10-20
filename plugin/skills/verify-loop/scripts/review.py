@@ -148,9 +148,6 @@ def check_findings(v, repo, sha, pairs):
     return out
 
 
-RANK = {"inconclusive": 0, "uncovered": 1, "survived": 2, "caught": 3}
-
-
 def mutation_findings(v, repo, sha, base, jobs, limit, timeout):
     """(findings, summary). Survivors and unreached changed lines, one finding per line."""
     try:
@@ -160,14 +157,7 @@ def mutation_findings(v, repo, sha, base, jobs, limit, timeout):
         if reason.startswith(("no changed product file", "no mutable lines")):
             return [], {"skipped": reason}
         return [finding("NOT SURVEYED", v.RECIPE, f"mutation survey {verdict}: {reason}")], {"skipped": reason}
-    # The survey judges each mutant once per feature; a review asks whether ANY check catches it.
-    merged = {}
-    for r in s["results"]:
-        key = (r["file"], r["line"], r["before"], r["after"])
-        rank = RANK.get(r["verdict"], 0)
-        if key not in merged or rank > RANK.get(merged[key]["verdict"], 0):
-            merged[key] = r
-    results = list(merged.values())
+    results = s["mutants"]  # one per mutant: caught if ANY feature's checks catch it
     script = os.path.abspath(v.__file__)
     out, seen = [], set()
     for r in results:
