@@ -108,7 +108,7 @@ contract is in [answer](references/answer.md).
 ## Other helper commands
 
 `run --affected | --jobs N | --stress N | --quarantine | --json` · `triage` · `scope <files>` (fence a fix;
-`OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto <file>` (mutation score) ·
+`OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto <file> [--jobs N]` (mutation score; `UNCOVERED` = no check reaches the line) ·
 `loop --scope <f> --max N` (reruns, never edits) ·
 `VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline) ·
 `watch --max-runs N` (never exits without it) · `contract old new` · `scaffold-oracle | scaffold-ui |

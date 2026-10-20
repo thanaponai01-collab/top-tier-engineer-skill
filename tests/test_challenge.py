@@ -222,6 +222,101 @@ class AutoChallenge(unittest.TestCase):
         self.assertIn("true-to-false", ops)
 
 
+class AutoChallengeLanes(unittest.TestCase):
+    """1.9.0: one copy per lane, mutants judged in place, duplicates dropped, unreached lines named."""
+
+    BRANCHY = ("def grade(score):\n    if score < 0:\n        return 0 - score\n"
+               "    if score >= 50:\n        return 'pass'\n    return 'fail'\n")
+
+    def fixture(self, root, check, app=None):
+        Path(root, "app.py").write_text(app or self.BRANCHY)
+        Path(root, "test_grade.py").write_text("from app import grade\n" + check + "\n")
+        Path(root, "VERIFY.md").write_text(
+            "## Grade\n- test: `python test_grade.py`\n- fail-signal: expected\n")
+
+    def auto(self, root, *extra):
+        code, out, err = run("verify.py", "challenge", root, "--feature", "Grade", "--auto", "app.py",
+                             "--json", *extra)
+        return code, (json.loads(out) if out.strip().startswith("{") else out + err)
+
+    def test_operators_producing_the_same_line_are_one_mutant(self):
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent.parent / "plugin" / "skills" / "verify-loop" / "scripts"))
+        from mutate import generate
+        out = generate("def f(a):\n    return a >= 0\n", 50, lang="py")
+        afters = [(m["line"], m["after"]) for m in out]
+        self.assertEqual(len(afters), len(set(afters)))
+        self.assertEqual(sum(a.endswith(">= 1") for _, a in afters), 1)  # zero-to-one == int-off-by-one
+
+    def test_line_no_check_reaches_is_uncovered_not_survived(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "assert grade(50) == 'pass', 'expected pass at 50'\n"
+                               "assert grade(49) == 'fail', 'expected fail at 49'")
+            code, s = self.auto(root)
+            self.assertEqual(code, 1, s)
+            uncovered = {r["line"] for r in s["results"] if r["verdict"] == "uncovered"}
+            self.assertIn(3, uncovered)  # return 0 - score: never executed
+            self.assertNotIn(5, uncovered)
+            self.assertEqual(s["survived"], sum(r["verdict"] == "survived" for r in s["results"]))
+            self.assertEqual(s["score"], round(s["caught"] / (s["caught"] + s["survived"] + s["uncovered"]), 3))
+            self.assertEqual(Path(root, "app.py").read_text(), self.BRANCHY)
+
+    def test_reached_survivor_stays_survived(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "assert grade(90) == 'pass', 'expected pass at 90'")
+            code, s = self.auto(root)
+            self.assertEqual(code, 1, s)
+            boundary = [r for r in s["results"] if r["line"] == 4 and r["operator"] == "ge-to-gt"]
+            self.assertEqual([r["verdict"] for r in boundary], ["survived"])
+
+    def test_parallel_lanes_match_serial_and_copy_once_per_lane(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "assert grade(90) == 'pass', 'expected pass at 90'\n"
+                               "assert grade(10) == 'fail', 'expected fail at 10'")
+            code1, serial = self.auto(root)
+            code3, parallel = self.auto(root, "--jobs", "3")
+            self.assertEqual(code1, code3)
+            self.assertEqual([(r["line"], r["operator"], r["verdict"]) for r in serial["results"]],
+                             [(r["line"], r["operator"], r["verdict"]) for r in parallel["results"]])
+            self.assertEqual((serial["copies"], parallel["copies"]), (1, 3))
+            self.assertEqual(Path(root, "app.py").read_text(), self.BRANCHY)
+            self.assertFalse(Path(root, ".verify-state.json").exists())
+
+    def test_check_that_writes_files_gets_a_fresh_lane_each_time(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "import time, pathlib\npathlib.Path('out.txt').write_text(str(time.time()))\n"
+                               "assert grade(90) == 'pass', 'expected pass at 90'")
+            code, s = self.auto(root, "--max", "3")
+            self.assertGreater(s["copies"], 1, s)
+            self.assertEqual(s["inconclusive"], 0, s)
+            self.assertFalse(Path(root, "out.txt").exists())
+
+    def test_red_original_makes_every_mutant_inconclusive(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.fixture(root, "assert grade(90) == 'fail', 'expected fail at 90'")
+            code, s = self.auto(root, "--max", "3")
+            self.assertEqual(code, 2, s)
+            self.assertEqual(s["inconclusive"], s["run"])
+            self.assertIn("original checks must pass", s["results"][0]["reason"])
+
+
+class RunHashesOnce(unittest.TestCase):
+    def test_run_without_recipe_hashes_checks_before_and_after_only(self):
+        import contextlib, io, sys
+        sys.path.insert(0, str(Path(__file__).parent.parent / "plugin" / "skills" / "verify-loop" / "scripts"))
+        import verify
+        with tempfile.TemporaryDirectory() as root:
+            Path(root, "VERIFY.md").write_text("## A\n- test: `python -c \"print(1)\"`\n- fail-signal: expected\n")
+            calls, real = [], verify.check_hashes
+            verify.check_hashes = lambda repo: calls.append(repo) or real(repo)
+            try:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    verify.cmd_run(root, None, 30, False)
+            finally:
+                verify.check_hashes = real
+            self.assertEqual(len(calls), 2)
+
+
 class StatusJson(unittest.TestCase):
     def test_json_matches_text_verdict_and_exit(self):
         with tempfile.TemporaryDirectory() as root:

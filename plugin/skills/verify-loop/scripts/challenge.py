@@ -1,4 +1,6 @@
-"""One explicit mutation, two fresh copies, unchanged verification commands."""
+"""One explicit mutation, two fresh copies, unchanged verification commands.
+
+prepare, mutable_target, judge and copy_repo are shared with `challenge --auto` (mutate.py)."""
 import contextlib
 import io
 import json
@@ -8,8 +10,64 @@ import tempfile
 from pathlib import Path
 
 
+COPY_IGNORE = shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".verify-state*")
+
+
+def copy_repo(repo, dest):
+    shutil.copytree(repo, dest, ignore=COPY_IGNORE)
+
+
+def prepare(v, repo, feature):
+    """What every mutation of one feature shares, checked once: (frozen hashes, feature, Run recipe).
+    Raises ValueError when the feature or the tree cannot be challenged."""
+    frozen = v.check_hashes(repo)
+    features, _ = v.parse(v.read(repo, v.RECIPE))
+    selected = [f for f in features if f["name"] == feature]
+    if len(selected) != 1 or not selected[0]["checks"] or not selected[0]["signals"]:
+        raise ValueError("name one exact feature with checks and a declared fail-signal")
+    recipe = v.parse_run(v.read(repo, v.RECIPE))
+    if any(k == "run" for f in features for k, _ in f["checks"]) and not (recipe or {}).get("start"):
+        raise ValueError("live run checks need a scratch-local Run start recipe")
+    # A copied link could let a check or mutation write back into the source tree.
+    for here, dirs, files in os.walk(repo):
+        dirs[:] = [d for d in dirs if d not in (".git", "__pycache__")]
+        for name in dirs + files:
+            path = Path(here, name)
+            if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+                raise ValueError(f"scratch copy cannot contain links: {path.relative_to(repo)}")
+    return frozen, selected[0], recipe
+
+
+def mutable_target(v, repo, frozen, rel):
+    """The product file a mutation may change; raises ValueError for the recipe, state, tests or oracles."""
+    target = Path(repo, rel).resolve()
+    target.relative_to(Path(repo).resolve())
+    if not target.is_file():
+        raise ValueError("target must exist")
+    if target in {Path(repo, name).resolve() for name in frozen} or target.name == v.RECIPE or v.is_state_file(target.name):
+        raise ValueError("mutate product code, never the recipe, state, tests or frozen oracles")
+    return target
+
+
+def judge(v, feat, rows, intact):
+    """rows: [(kind, cmd, {ok, exit, output} or None)] for the feature's checks on the mutated tree.
+    (verdict, reason, {check key: row} that rejected it with the declared signal)."""
+    caught = {f"{feat['name']}|{cmd}": row for kind, cmd, row in rows
+              if row and not row["ok"] and row["exit"] is not None
+              and kind not in ("lint", "type", "types")
+              and any(signal in row["output"] for signal in feat["signals"])
+              and not v.HARNESS_FAILURE.search(row["output"])}
+    if not intact:
+        return "inconclusive", "check, oracle or mutated product changed during the run", {}
+    if rows and all(row and row["ok"] for _, _, row in rows):
+        return "survived", "selected feature checks still pass on the wrong implementation", {}
+    if caught:
+        return "caught", "selected behavioral check rejected the mutation with its declared signal", caught
+    return "inconclusive", "no expected behavioral rejection; inspect harness, timeout or signal mismatch", {}
+
+
 def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
-    """record=False: survey only. No state write, no receipts, one-line output (used by --auto)."""
+    """record=False: survey only. No state write, no receipts, one-line output."""
     try:
         if timeout <= 0:
             raise ValueError("timeout must be positive")
@@ -18,30 +76,13 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
                 not isinstance(mutation.get(k), str) or not mutation[k].strip()
                 for k in ("file", "before", "after", "claim")):
             raise ValueError("mutation needs nonempty file, before, after and claim strings")
-        target = Path(repo, mutation["file"]).resolve()
-        target.relative_to(Path(repo).resolve())
-        if not target.is_file() or mutation["before"] == mutation["after"]:
+        if mutation["before"] == mutation["after"]:
             raise ValueError("target must exist and replacement must change it")
-        frozen = v.check_hashes(repo)
-        if target in {Path(repo, name).resolve() for name in frozen} or target.name == v.RECIPE or v.is_state_file(target.name):
-            raise ValueError("mutate product code, never the recipe, state, tests or frozen oracles")
+        frozen, feat, _ = prepare(v, repo, feature)
+        target = mutable_target(v, repo, frozen, mutation["file"])
         source = target.read_text(encoding="utf-8")
         if source.count(mutation["before"]) != 1:
             raise ValueError("before must match exactly once; choose a more specific replacement")
-        features, _ = v.parse(v.read(repo, v.RECIPE))
-        selected = [f for f in features if f["name"] == feature]
-        if len(selected) != 1 or not selected[0]["checks"] or not selected[0]["signals"]:
-            raise ValueError("name one exact feature with checks and a declared fail-signal")
-        recipe = v.parse_run(v.read(repo, v.RECIPE))
-        if any(k == "run" for f in features for k, _ in f["checks"]) and not (recipe or {}).get("start"):
-            raise ValueError("live run checks need a scratch-local Run start recipe")
-        # A copied link could let a check or mutation write back into the source tree.
-        for here, dirs, files in os.walk(repo):
-            dirs[:] = [d for d in dirs if d not in (".git", "__pycache__")]
-            for name in dirs + files:
-                path = Path(here, name)
-                if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
-                    raise ValueError(f"scratch copy cannot contain links: {path.relative_to(repo)}")
     except (OSError, ValueError) as exc:
         print(f"CHALLENGE: invalid ({exc})")
         return 2
@@ -64,8 +105,7 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
         with tempfile.TemporaryDirectory(prefix="verify-challenge-") as tmp:
             copies = [Path(tmp, "original"), Path(tmp, "mutated")]
             for scratch in copies:
-                shutil.copytree(repo, scratch,
-                                ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".verify-state*"))
+                copy_repo(repo, scratch)
             report["original"] = trial(copies[0])
             original = report["original"]
             relative = target.relative_to(Path(repo).resolve())
@@ -78,21 +118,9 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
                 report["mutated"] = trial(copies[1])
                 mutated = report["mutated"]
                 mutated["mutation_unchanged"] = changed.read_text(encoding="utf-8") == wrong_source
-                rows = [(kind, cmd, mutated["checks"].get(f"{feature}|{cmd}"))
-                        for kind, cmd in selected[0]["checks"]]
-                caught_checks = {f"{feature}|{cmd}": row for kind, cmd, row in rows
-                                 if row and not row["ok"] and row["exit"] is not None
-                                 and kind not in ("lint", "type", "types")
-                                 and any(signal in row["output"] for signal in selected[0]["signals"])
-                                 and not v.HARNESS_FAILURE.search(row["output"])}
-                if not mutated["checks_unchanged"] or not mutated["mutation_unchanged"]:
-                    reason = "check, oracle or mutated product changed during the run"
-                elif rows and all(row and row["ok"] for _, _, row in rows):
-                    verdict, reason = "survived", "selected feature checks still pass on the wrong implementation"
-                elif caught_checks:
-                    verdict, reason = "caught", "selected behavioral check rejected the mutation with its declared signal"
-                else:
-                    reason = "no expected behavioral rejection; inspect harness, timeout or signal mismatch"
+                rows = [(kind, cmd, mutated["checks"].get(f"{feature}|{cmd}")) for kind, cmd in feat["checks"]]
+                verdict, reason, caught_checks = judge(
+                    v, feat, rows, mutated["checks_unchanged"] and mutated["mutation_unchanged"])
             report.update(verdict=verdict, reason=reason)
     except (OSError, ValueError) as exc:
         report.update(verdict="inconclusive", reason=str(exc))

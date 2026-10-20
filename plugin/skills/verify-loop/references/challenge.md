@@ -60,15 +60,25 @@ sensitive output. One caught mutation proves detection of that mistake, not comp
 ## Auto survey (mutation score)
 
 ```bash
-python <skill-base>/scripts/verify.py challenge . --feature Grade --auto app.py [--max 20] [--json]
+python <skill-base>/scripts/verify.py challenge . --feature Grade --auto app.py [--max 20] [--jobs N] [--json]
 ```
 
 Generates standard syntax-validated mutations for one product file (flip `==`/`!=`, move a `<`/`>=`
 boundary, swap `and`/`or`, flip booleans, swap `+`/`-`, swap `*`/`/`, invert `is`/`is not`, mutate
-`return` to `return None`, off-by-one integers, drop `not`) and runs each through the same scratch-copy runner.
-For Python files, candidate mutants are validated against Python AST to ensure syntax-breaking mutants
-are automatically excluded. It prints `caught/decided` as a score and lists each survivor with line and
-operator. Exit 0 all caught, 1 any survived, 2 nothing decided.
+`return` to `return None`, off-by-one integers, drop `not`). Two operators that produce the same line
+count once, and a Python mutant whose syntax tree equals the original is dropped.
+
+The tree is copied once per lane. The feature's checks must pass there unmutated, then each mutant is
+written in, judged against **that feature's checks only**, and reverted. A lane whose checks leave
+other files changed is recopied before the next mutant. `--jobs N` runs N lanes in parallel: worth it
+when checks are slow, not when copying the tree dominates. A `## Run` recipe forces one lane, since
+one app holds one port.
+
+Each survivor's line then gets a probe: an abort inserted before it. If every check still passes, no
+check reaches that line and its mutants are reported `UNCOVERED`, not `SURVIVED`: the gap is a missing
+check, not a weak one. Lines where a probe cannot be inserted safely stay `SURVIVED`. The score is
+`caught / (caught + survived + uncovered)`. Exit 0 all caught, 1 any survived or uncovered, 2 nothing
+decided.
 
 Generated mutations come from the code, not the spec, so the survey **never records fail-proof
 receipts or touches .verify-state.json**. A survivor is a lead: judge it as a real gap (write a

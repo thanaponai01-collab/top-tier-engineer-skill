@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.9.0 - 2026-10-20 - Faster, more honest mutation surveys
+
+- `challenge --auto` copies the tree once per lane instead of twice per mutant. Each lane runs the
+  unmutated checks once, then writes every mutant in place, judges it against the selected feature's
+  checks only, and reverts it. A lane whose checks leave other files changed is recopied first. On a
+  60 MB repo with one check, 6 mutants went from 203 s to 18.6 s.
+- `challenge --auto --jobs N` judges mutants in N parallel lanes. With a 1 s check, 6 mutants went
+  from 13.1 s (1.8.0) to 8.7 s with one lane and 3.4 s with `--jobs 6`. A `## Run` recipe forces one
+  lane. Where copying the tree dominates, more lanes do not help.
+- Duplicate mutants are dropped: two operators that produce the same line (`zero-to-one` and
+  `int-off-by-one` on `0`) count once, and so does a Python mutant whose syntax tree is unchanged.
+- A survivor on a line no check executes is now `UNCOVERED`, found by a probe that aborts before
+  that line and still passes. It counts against the score like a survivor, but it names a missing
+  check rather than a weak one. JSON adds `uncovered`, `jobs` and `copies`.
+- `run` without a `## Run` recipe hashes the checks twice (before and after) instead of three times.
+- `challenge.py` exposes `prepare`, `mutable_target`, `judge` and `copy_repo`, so `--mutation` and
+  `--auto` judge mutants by the same rules.
+
 ## 1.8.0 - 2026-10-20 - Many agents, one checkout
 
 - State writes are atomic: each save goes to a temp file and replaces `.verify-state.json` whole.

@@ -740,7 +740,7 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
             print(f"AFFECTED: running {len(features)} feature(s) affected by {len(changed_files)} changed file(s).")
 
     try:
-        check_hashes(repo)
+        hashes = check_hashes(repo)
     except (OSError, ValueError) as exc:
         if as_json:
             print(json.dumps({"error": f"Run: invalid oracle: {exc}", "exit": 1}))
@@ -750,6 +750,9 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
         return 1
 
     recipe = parse_run(read(repo, RECIPE))
+    # Without a ## Run recipe nothing runs between here and the checks, so the hashes just
+    # computed are the run's signature; setup or an app start could still rewrite a frozen file.
+    signature = None if recipe else sha(json.dumps(hashes, sort_keys=True))
     proc = log = None
     if recipe:
         for cmd in recipe["setup"]:
@@ -799,9 +802,9 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
                         print(f"        {line}")
                 track(repo, [], only, budget, 1, strict)
             else:
-                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs)
+                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature)
         else:
-            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs)
+            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature)
     finally:
         if proc or (recipe and recipe.get("stop")):
             ok, code, out, secs = stop_app(proc, recipe.get("stop"), repo, timeout)
@@ -827,7 +830,7 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
     return verdict
 
 
-def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None, jobs=1):
+def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None, jobs=1, signature=None):
     results = []
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
@@ -842,7 +845,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     missing_baseline = strict and not state.get("baseline")
     if missing_baseline and not as_json:
         print("  note  no baseline: freeze the finished checks before strict completion")
-    signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
+    signature = signature or sha(json.dumps(check_hashes(repo), sort_keys=True))
     receipts = current_receipts(state, signature)
     # --jobs: start every check now, then read results in recipe order, so output and loop memory
     # are the same as a serial run. Default 1: checks that share an app or files may collide.
@@ -2207,6 +2210,9 @@ def main():
     ch.add_argument("--max", type=int, default=20, help="most mutations to try with --auto (default 20)")
     ch.add_argument("--json", action="store_true", help="with --auto, print the score as JSON")
     ch.add_argument("--timeout", type=int, default=120, help="seconds per check")
+    ch.add_argument("--jobs", type=int, default=1,
+                    help="with --auto, judge mutations in N parallel scratch copies (default 1; "
+                         "a ## Run recipe forces 1)")
     ci = sub.add_parser("ci", help="fresh proof from committed inputs; ignore local verification state")
     ci.add_argument("repo", nargs="?", default=".")
     ci.add_argument("--plan", required=True, help="committed repo-relative JSON feature/mutation list")
@@ -2227,7 +2233,7 @@ def main():
             ap.error("challenge needs exactly one of --mutation or --auto")
         if a.auto:
             from mutate import cmd_auto
-            sys.exit(cmd_auto(sys.modules[__name__], repo, a.feature, a.auto, a.timeout, a.max, a.json))
+            sys.exit(cmd_auto(sys.modules[__name__], repo, a.feature, a.auto, a.timeout, a.max, a.json, a.jobs))
         from challenge import cmd_challenge
         sys.exit(cmd_challenge(sys.modules[__name__], repo, a.feature, a.mutation, a.timeout))
     if a.cmd == "scaffold-driver":
