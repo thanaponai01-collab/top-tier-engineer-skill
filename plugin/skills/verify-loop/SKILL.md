@@ -78,7 +78,9 @@ under test, loosen an assertion, narrow the claim. The stronger the agent, the m
 Guard structurally, not with good intentions:
 
 - **Separate judge from worker.** Where you can, have a fresh context (a subagent, a reviewer, CI)
-  write or challenge the check without seeing the implementation.
+  write or challenge the check without seeing the implementation. `require: independent` makes
+  strict enforce it: the `VERIFY_AGENT` that ran `baseline` on a check cannot be the one whose run
+  claims green (`NOT INDEPENDENT`). Names are not credentials; give each context its own honestly.
 - **Freeze before you build.** `baseline` comes before the work it judges, and re-freezing a
   weakened check needs a named reviewer (step 7).
 - **Prefer evidence a third party can re-run.** `.verify-state.json` is sealed, so a hand edit
@@ -107,10 +109,10 @@ contract is in [answer](references/answer.md).
 
 ## Other helper commands
 
-`run --affected | --jobs N | --stress N | --quarantine | --json | --no-cache` (checks get
+`run --affected [--record-coverage] | --jobs N | --stress N | --quarantine | --json | --no-cache` (checks get
 `VERIFY_SLOT`/`VERIFY_PORT`; a pass already proved on identical content is reused, never a
 non-strict one for `--strict`) · `triage` · `scope <files>` (fence a fix;
-`OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto <file> [--jobs N]` (mutation score; `UNCOVERED` = no check reaches the line) ·
+`OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto [<file>] [--diff [REF]] [--jobs N]` (mutation score, `--diff` = only changed lines; `UNCOVERED` = no check reaches the line) ·
 `loop --scope <f> --max N` (reruns, never edits) ·
 `VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline) ·
 `watch --max-runs N` (never exits without it) · `contract old new` · `scaffold-oracle | scaffold-ui |

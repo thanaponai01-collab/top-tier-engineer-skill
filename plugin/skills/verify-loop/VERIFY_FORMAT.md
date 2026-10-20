@@ -94,6 +94,10 @@ include: packages/auth/VERIFY.md
 - A top-level line (outside any section). `require: challenge` makes `run --strict` stay red
   (`UNCHALLENGED`) until `verify.py challenge` has caught a mutation for the current checks.
   `verify.py init` writes it. It is frozen by `baseline`: removing it later is `CHECK CHANGED`.
+- `require: independent` makes `run --strict` stay red (`NOT INDEPENDENT`) for every check whose
+  `baseline` was run by the same `VERIFY_AGENT` as the strict run, or by an unnamed agent. `baseline`
+  records who froze each check (`frozen_by`); a later baseline by someone else keeps the original
+  freezer of an unchanged check. Words combine: `require: challenge, independent`.
 
 ## Completion
 

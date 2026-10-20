@@ -7,7 +7,10 @@ lane whose checks leave the tree changed is recopied before the next mutation.
 
 Generated mutations are not spec-backed, so a caught one never becomes a fail-proof receipt;
 a survivor is a lead for a person to judge (a real gap, or an equivalent mutation). A survivor on
-a line no check reaches (a probe that aborts there still passes) is reported as uncovered."""
+a line no check reaches (a probe that aborts there still passes) is reported as uncovered.
+
+--diff [REF] mutates only the lines changed since REF (default HEAD): in the named file, or with no
+file in every changed product file (tests, oracles, the recipe and unknown languages are skipped)."""
 import ast
 import contextlib
 import io
@@ -15,6 +18,7 @@ import json
 import queue
 import re
 import shutil
+import subprocess
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -105,17 +109,18 @@ def detect_lang(filename):
     return "other"
 
 
-def generate(source, limit, is_py=False, lang=None):
+def generate(source, limit, is_py=False, lang=None, only=None):
     """Unique mutations, one per (line, resulting text): two operators that produce the same line
     (zero-to-one and int-off-by-one on `0`) are one mutant, and a Python mutant whose syntax tree
-    equals the original is no mutant at all."""
+    equals the original is no mutant at all. `only`: the line numbers that may be mutated."""
     if lang is None:
         lang = "py" if is_py else "other"
     lines = source.splitlines()
     original_tree = ast.dump(ast.parse(source)) if lang == "py" and is_valid_syntax(source, "py") else None
     out, seen = [], set()
     for no, line in enumerate(lines, 1):
-        if not line.strip() or COMMENT.match(line) or STRING_ONLY.match(line) or source.count(line) != 1:
+        if (only is not None and no not in only) or not line.strip() or COMMENT.match(line) \
+                or STRING_ONLY.match(line) or source.count(line) != 1:
             continue
         for name, pattern, repl in OPERATORS:
             mutated = re.sub(pattern, repl, line, count=1)
@@ -166,12 +171,12 @@ class LaneError(Exception):
 
 
 class Lane:
-    """One scratch copy of the repo. trial() writes a source into the target, runs the feature's
+    """One scratch copy of the repo. trial() writes a source into one target, runs the feature's
     checks, restores the target and recopies the lane if the checks left anything else changed."""
 
-    def __init__(self, v, repo, path, feat, frozen, recipe, timeout, rel, source):
+    def __init__(self, v, repo, path, feat, frozen, recipe, timeout, sources):
         self.v, self.repo, self.path, self.feat, self.frozen = v, repo, Path(path), feat, frozen
-        self.recipe, self.timeout, self.rel, self.source = recipe, timeout, rel, source
+        self.recipe, self.timeout, self.sources = recipe, timeout, sources  # {relative path: text}
         self.copies, self.sig = 0, None
 
     def fresh(self):
@@ -199,17 +204,19 @@ class Lane:
         return rows
 
     def trial(self, wrong):
-        """(rows, intact) for `wrong` in place of the target source; None runs the original."""
-        target = self.path / self.rel
-        expect = self.source if wrong is None else wrong
-        if wrong is not None:
-            target.write_text(wrong, encoding="utf-8")
+        """(rows, intact) for wrong = (relative path, text) in place of that target; None runs the
+        original."""
+        rel, text = wrong if wrong is not None else (None, None)
+        if rel is not None:
+            (self.path / rel).write_text(text, encoding="utf-8")
         try:
             rows = self.run_rows()
-            intact = (self.v.check_hashes(str(self.path)) == self.frozen
-                      and target.read_text(encoding="utf-8") == expect)
+            intact = self.v.check_hashes(str(self.path)) == self.frozen and all(
+                (self.path / r).read_text(encoding="utf-8") == (text if r == rel else src)
+                for r, src in self.sources.items())
         finally:
-            target.write_text(self.source, encoding="utf-8")
+            if rel is not None:
+                (self.path / rel).write_text(self.sources[rel], encoding="utf-8")
         if wrong is not None and self.v.tree_sig(str(self.path)) != self.sig:
             self.fresh()
         return rows, intact
@@ -243,22 +250,73 @@ def run_lanes(lanes, tasks, do):
     return results, errors
 
 
-def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1):
+def git_lines(repo, *args):
+    p = subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    if p.returncode:
+        raise ValueError(f"git {' '.join(args)} failed: {p.stderr.strip() or p.returncode}")
+    return [line for line in p.stdout.splitlines() if line.strip()]
+
+
+HUNK = re.compile(r"^@@ -\S+ \+(\d+)(?:,(\d+))? @@")
+
+
+def changed_lines(repo, ref, rel):
+    """Line numbers of `rel` (repo-relative) added or changed since `ref`; None (every line) if untracked."""
+    if not git_lines(repo, "ls-files", "--", rel):
+        return None
+    lines = set()
+    for line in git_lines(repo, "diff", "-U0", "--no-color", "--no-ext-diff", ref, "--", rel):
+        m = HUNK.match(line)
+        if m:
+            start, count = int(m.group(1)), int(m.group(2) or 1)
+            lines.update(range(start, start + count))
+    return lines
+
+
+def changed_files(v, repo, ref, frozen):
+    """Repo-relative product files changed since `ref` or untracked, in a language we can mutate."""
+    from challenge import mutable_target
+    names = set(git_lines(repo, "diff", "--name-only", "--relative", ref))
+    names |= set(git_lines(repo, "ls-files", "--others", "--exclude-standard"))
+    out = []
+    for name in sorted(names):
+        try:
+            mutable_target(v, repo, frozen, name)
+        except (OSError, ValueError):
+            continue
+        if detect_lang(name) != "other":
+            out.append(name)
+    return out
+
+
+def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1, diff=None):
     from challenge import prepare, mutable_target, judge
+    root = Path(repo).resolve()
     try:
         if timeout <= 0 or jobs < 1:
             raise ValueError("timeout and jobs must be positive")
         frozen, feat, recipe = prepare(v, repo, feature)
-        target = mutable_target(v, repo, frozen, rel_file)
-        source = target.read_text(encoding="utf-8")
+        names = [rel_file] if rel_file else changed_files(v, repo, diff, frozen)
+        if not names:
+            raise ValueError(f"no changed product file since {diff}")
+        sources, candidates = {}, []
+        for name in names:
+            target = mutable_target(v, repo, frozen, name)
+            rel = target.relative_to(root).as_posix()
+            sources[rel] = target.read_text(encoding="utf-8")
+            only = changed_lines(repo, diff, rel) if diff else None
+            lang = detect_lang(rel)
+            for c in generate(sources[rel], limit - len(candidates), is_py=(lang == "py"), lang=lang, only=only):
+                candidates.append(dict(c, file=rel))
+            if len(candidates) >= limit:
+                break
     except (OSError, ValueError) as exc:
         print(f"CHALLENGE-AUTO: invalid ({exc}); score n/a")
         return 2
-    rel = target.relative_to(Path(repo).resolve())
-    lang = detect_lang(rel_file)
-    candidates = generate(source, limit, is_py=(lang == "py"), lang=lang)
     if not candidates:
-        print(f"CHALLENGE-AUTO: invalid (no mutable lines in {rel_file}); score n/a")
+        since = f"changed since {diff} " if diff else ""
+        print(f"CHALLENGE-AUTO: invalid (no mutable lines {since}in {', '.join(names)}); score n/a")
         return 2
     if recipe:
         jobs = 1  # one app on one port: parallel lanes would collide
@@ -266,30 +324,33 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1):
     original_tree, original_state = v.tree_sig(repo), v.load_state(repo)
 
     def mutant(lane, c):
-        rows, intact = lane.trial(source.replace(c["before"], c["after"], 1))
+        rows, intact = lane.trial((c["file"], sources[c["file"]].replace(c["before"], c["after"], 1)))
         verdict, reason, _ = judge(v, feat, rows, intact)
         return dict(c, verdict=verdict, reason=reason)
 
-    def reached(lane, line):
-        rows, intact = lane.trial(probe(source, line, lang))
+    def probed(rel, line):
+        return probe(sources[rel], line, detect_lang(rel))
+
+    def reached(lane, spot):
+        rows, intact = lane.trial((spot[0], probed(*spot)))
         return not (intact and all(row and row["ok"] for _, _, row in rows))
 
     with tempfile.TemporaryDirectory(prefix="verify-auto-") as tmp:
-        lanes = [Lane(v, repo, Path(tmp, f"lane{i}"), feat, frozen, recipe, timeout, rel, source)
+        lanes = [Lane(v, repo, Path(tmp, f"lane{i}"), feat, frozen, recipe, timeout, sources)
                  for i in range(jobs)]
         done, errors = run_lanes(lanes, candidates, mutant)
         lane_error = next(iter(errors.values()), "lane stopped before this mutation")
         results = [done.get(i) or dict(c, verdict="inconclusive", reason=lane_error)
                    for i, c in enumerate(candidates)]
         # A survivor may be a weak check or a line no check runs; a probe that aborts there tells which.
-        lines = sorted({r["line"] for r in results
-                        if r["verdict"] == "survived" and probe(source, r["line"], lang)})
-        live = [lane for lane in lanes if lane not in errors][:len(lines)]
+        spots = sorted({(r["file"], r["line"]) for r in results
+                        if r["verdict"] == "survived" and probed(r["file"], r["line"])})
+        live = [lane for lane in lanes if lane not in errors][:len(spots)]
         if live:
-            hit, _ = run_lanes(live, lines, reached)
-            unreached = {line for i, line in enumerate(lines) if hit.get(i) is False}
+            hit, _ = run_lanes(live, spots, reached)
+            unreached = {spot for i, spot in enumerate(spots) if hit.get(i) is False}
             for r in results:
-                if r["verdict"] == "survived" and r["line"] in unreached:
+                if r["verdict"] == "survived" and (r["file"], r["line"]) in unreached:
                     r.update(verdict="uncovered",
                              reason="no check reaches this line: a probe that aborts there still passes")
         copies = sum(lane.copies for lane in lanes)
@@ -306,7 +367,8 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1):
     uncovered = [r for r in results if r["verdict"] == "uncovered"]
     decided = caught + len(survived) + len(uncovered)
     score = round(caught / decided, 3) if decided else None
-    summary = {"feature": feature, "file": rel_file, "generated": len(candidates), "run": len(results),
+    summary = {"feature": feature, "file": rel_file, "files": sorted(sources), "diff": diff,
+               "generated": len(candidates), "run": len(results),
                "caught": caught, "survived": len(survived), "uncovered": len(uncovered),
                "inconclusive": len(results) - decided, "score": score, "jobs": jobs, "copies": copies,
                "results": results}
@@ -314,15 +376,20 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1):
         print(json.dumps(summary, indent=2))
     else:
         shown = "n/a" if score is None else f"{score:.0%}"
+        scope = f" (lines changed since {diff})" if diff else ""
         print(f"CHALLENGE-AUTO: {caught}/{decided} caught (score {shown}), {len(uncovered)} uncovered, "
-              f"{summary['inconclusive']} inconclusive, feature {feature!r}, file {rel_file}")
+              f"{summary['inconclusive']} inconclusive, feature {feature!r}, "
+              f"file {', '.join(sorted(sources))}{scope}")
+
+        def at(r):
+            return f"line {r['line']}" if len(sources) == 1 else f"{r['file']}:{r['line']}"
         for r in survived:
-            print(f"  SURVIVED line {r['line']} {r['operator']}: {r['before'].strip()} -> {r['after'].strip()}")
+            print(f"  SURVIVED {at(r)} {r['operator']}: {r['before'].strip()} -> {r['after'].strip()}")
         for r in uncovered:
-            print(f"  UNCOVERED line {r['line']} {r['operator']}: no check reaches {r['before'].strip()}")
+            print(f"  UNCOVERED {at(r)} {r['operator']}: no check reaches {r['before'].strip()}")
         for r in results:
             if r["verdict"] == "inconclusive":
-                print(f"  INCONCLUSIVE line {r['line']} {r['operator']}: {r['reason']}")
+                print(f"  INCONCLUSIVE {at(r)} {r['operator']}: {r['reason']}")
         print("Survivors are leads, not verdicts: judge each as a real gap or an equivalent mutation. "
               "Uncovered lines need a check that reaches them. No fail-proof receipts were recorded.")
     if decided == 0:

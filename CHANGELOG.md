@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.11.0 - 2026-10-20 - Harder to fool
+
+- **`require: independent`.** `baseline` records which `VERIFY_AGENT` froze each check
+  (`frozen_by`, shared state; a later baseline keeps the original freezer of an unchanged check).
+  With `require: independent` in VERIFY.md, `run --strict` stays red with `NOT INDEPENDENT` for a
+  check frozen by the agent whose run claims green, or by an unnamed agent. `report` lists the
+  `not_independent` gap; run JSON counts it. Names are recorded, not authenticated.
+- **`challenge --auto --diff [REF]`.** Mutates only lines added or changed since REF (default
+  HEAD), uncommitted edits included. With no FILE (`--auto --diff`) it surveys every changed product
+  file and skips tests, oracles and the recipe. It uses the same lanes and verdicts; JSON adds `diff`,
+  `files` and a `file` per result. A change with no mutable line exits 2.
+- **Coverage-based `--affected`.** With coverage.py importable, `run --record-coverage` records the
+  repo files each check executes, and `--affected` selects by that map as well as by file names
+  (which miss imported helpers). This stays optional: without coverage.py the run says so and
+  proceeds. The coverage path is NOT exercised by the test suite on this machine: coverage.py is
+  not installed, and its two tests skip.
+- **Fix: `--affected` can no longer make `--strict` green.** 1.10 exited 0 for
+  `run --affected --strict` on a selection. Now it exits 1 with `SELECTED`, including when nothing
+  changed. Changed-file lists no longer include verify-loop's own state and cache files.
+
 ## 1.10.0 - 2026-10-20 - A fast, shared inner loop
 
 Timings are warm medians on this Windows machine (Python 3.13). The test repo is 60 MB of git:

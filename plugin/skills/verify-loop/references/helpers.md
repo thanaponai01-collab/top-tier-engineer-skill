@@ -77,6 +77,18 @@ The OS picked the port, so another process can still take it before the app bind
 sees "address already in use" should be rerun, not loosened. The `## Run` app is one shared
 instance: its checks do not use these variables, and `--jobs` stays 1 for them.
 
+## Selecting checks: --affected and --record-coverage
+
+`run --affected [REF]` runs only features whose commands, oracles, `paths:` or test files match a
+file changed since REF. File names miss imports: with coverage.py importable, `run --record-coverage`
+records the repo files each check's Python processes execute (in `.git/verify-loop/coverage.json`,
+shared by worktrees), and `--affected` also selects a feature when a changed file is in that set.
+Non-Python checks record `measured: false` and keep the name match. Re-record after large changes.
+Without coverage.py the flag says so and the run proceeds normally.
+
+A selection can still miss something (a data file, a new import), so `--affected` never makes
+`--strict` green: a strict affected run exits 1 with `SELECTED`. Prove done with a whole run.
+
 ## Fast inner loop and the shared result cache
 
 A non-strict `run` and `watch` fingerprint the tree from a stat cache: a file whose size, mtime and

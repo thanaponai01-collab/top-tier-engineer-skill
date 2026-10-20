@@ -1,7 +1,7 @@
 {
   "name": "verify-loop",
   "description": "Verify Loop: one place to verify a change or claim. It writes a check that can fail, loops until the check passes, keeps the proof, and returns a fixed answer (verdict, VERIFY: line, observed rejection, gaps). Users, skills and agents can all call it. Create mode generates a project /verify skill; maintain mode keeps it honest as the app changes. The install runs no hooks.",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "author": {
     "name": "Thanaponai01"
   },

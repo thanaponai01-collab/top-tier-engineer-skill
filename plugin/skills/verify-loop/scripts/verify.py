@@ -261,13 +261,18 @@ def get_affected_files(repo, ref=None):
                         changed.add(line.strip().replace("\\", "/"))
     except OSError:
         pass
-    return changed
+    return {c for c in changed if not any(is_state_file(part) for part in c.split("/"))}
 
 
-def is_feature_affected(feature, changed_files, repo):
-    """True if feature's checks, oracles, declared paths, or test files intersect with changed_files."""
+def is_feature_affected(feature, changed_files, repo, covmap=None):
+    """True if feature's checks, oracles, declared paths, or test files intersect with changed_files,
+    or a check's recorded coverage (run --record-coverage) executed one of them."""
     if not changed_files:
         return True
+    for _, cmd in feature["checks"]:
+        entry = (covmap or {}).get(f"{feature['name']}|{cmd}")
+        if isinstance(entry, dict) and entry.get("measured") and set(entry.get("files", [])) & set(changed_files):
+            return True
     all_cmds = [cmd for _, cmd in feature["checks"]]
     for cf in changed_files:
         for p in feature.get("paths", []):
@@ -287,10 +292,10 @@ def is_feature_affected(feature, changed_files, repo):
     return False
 
 
-def filter_affected(features, changed_files, repo):
+def filter_affected(features, changed_files, repo, covmap=None):
     affected_names = set()
     for f in features:
-        if not f["journey"] and is_feature_affected(f, changed_files, repo):
+        if not f["journey"] and is_feature_affected(f, changed_files, repo, covmap):
             affected_names.add(f["name"].lower())
     filtered = []
     for f in features:
@@ -300,6 +305,86 @@ def filter_affected(features, changed_files, repo):
         elif f["name"].lower() in affected_names:
             filtered.append(f)
     return filtered
+
+
+# ---- the coverage map ---------------------------------------------------------------------
+# File names in commands miss what a check imports. With coverage.py importable, `run
+# --record-coverage` runs each check with coverage started in every Python process it spawns (a
+# sitecustomize on PYTHONPATH) and records the repo files it executed. `--affected` then selects a
+# feature when a changed file is in that set, as well as by the name heuristic. Non-Python checks
+# record `measured: false` and keep the heuristic. Data files and new imports can still be missed,
+# which is why --affected never makes --strict green.
+
+SITECUSTOMIZE = """import os, sys
+_here = os.path.dirname(os.path.abspath(__file__))
+try:
+    import coverage
+    coverage.process_startup()
+except Exception:
+    pass
+sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != _here]
+del sys.modules["sitecustomize"]
+try:
+    import sitecustomize  # the one this file shadows, if any
+except ImportError:
+    pass
+"""
+
+
+def has_coverage():
+    import importlib.util
+    return importlib.util.find_spec("coverage") is not None
+
+
+def coverage_path(repo):
+    return os.path.join(cache_dir(repo), "coverage.json")
+
+
+def coverage_env(folder, repo):
+    """Environment additions that make every Python process a check starts record into `folder`."""
+    rc = os.path.join(folder, "coveragerc")
+    with open(rc, "w", encoding="utf-8") as fh:
+        fh.write(f"[run]\ndata_file = {os.path.join(folder, 'covdata')}\nparallel = True\n"
+                 f"source = {os.path.realpath(repo)}\n")
+    with open(os.path.join(folder, "sitecustomize.py"), "w", encoding="utf-8") as fh:
+        fh.write(SITECUSTOMIZE)
+    path = os.environ.get("PYTHONPATH")
+    return {"COVERAGE_PROCESS_START": rc, "PYTHONPATH": folder + (os.pathsep + path if path else "")}
+
+
+def coverage_files(folder, repo):
+    """{measured, files}: the repo-relative files the check's Python processes executed."""
+    from coverage import CoverageData
+    root, files, measured = os.path.realpath(repo), set(), False
+    for name in os.listdir(folder):
+        if not name.startswith("covdata"):
+            continue
+        data = CoverageData(basename=os.path.join(folder, name))
+        data.read()
+        measured = True
+        for f in data.measured_files():
+            rel = os.path.relpath(os.path.realpath(f), root)
+            if not rel.startswith(".."):
+                files.add(rel.replace(os.sep, "/"))
+    return {"measured": measured, "files": sorted(files)}
+
+
+def save_coverage(repo, entries):
+    if not entries:
+        return
+    path = coverage_path(repo)
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with file_lock(path + ".lock"):
+            data = read_json(path)
+            data.update(entries)
+            write_json(path, data)
+    except (OSError, TimeoutError) as exc:
+        print(f"note  coverage map not saved: {exc}")
+
+
+SELECTED = ("SELECTED  --affected chose checks by changed files and can miss one (an import, a data "
+            "file): a strict verdict needs the whole run, without --affected")
 
 
 # ---- the per-test map ---------------------------------------------------------------------
@@ -650,10 +735,11 @@ def free_port():
         return s.getsockname()[1]
 
 
-def slotted(jobs, repo, timeout, stress):
+def slotted(jobs, repo, timeout, stress, record=None):
     """attempt() for run --jobs: each check runs with VERIFY_SLOT (0..jobs-1, never two running
     checks in one slot) and a fresh VERIFY_PORT, so checks that start their own app, database or
-    scratch folder can key it on those and run in parallel without colliding."""
+    scratch folder can key it on those and run in parallel without colliding. With `record` (a
+    dict), each check also runs under coverage and record[cmd] gets the files it executed."""
     slots = queue.Queue()
     for i in range(max(1, jobs)):
         slots.put(i)
@@ -662,7 +748,16 @@ def slotted(jobs, repo, timeout, stress):
         slot = slots.get()
         try:
             env = dict(os.environ, VERIFY_SLOT=str(slot), VERIFY_PORT=str(free_port()))
-            return attempt(cmd, repo, timeout, stress, env)
+            if record is None:
+                return attempt(cmd, repo, timeout, stress, env)
+            with tempfile.TemporaryDirectory(prefix="verify-cov-") as folder:
+                env.update(coverage_env(folder, repo))
+                result = attempt(cmd, repo, timeout, stress, env)
+                try:
+                    record[cmd] = coverage_files(folder, repo)
+                except Exception as exc:  # unreadable data: keep the heuristic for this check
+                    record[cmd] = {"measured": False, "files": [], "error": str(exc)[:200]}
+                return result
         finally:
             slots.put(slot)
     return run_one
@@ -730,7 +825,7 @@ def tail_of(path):
 
 
 def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1, as_json=False, quarantine=False, jobs=1,
-            use_cache=True):
+            use_cache=True, record_coverage=False):
     path = os.path.join(repo, RECIPE)
     if not os.path.isfile(path):
         if as_json:
@@ -751,27 +846,35 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
         changed_files = get_affected_files(repo, affected if affected != "HEAD" else None)
         if not changed_files and affected == "HEAD":
             changed_files = get_affected_files(repo, "HEAD")
-        if not changed_files:
+        covmap = read_json(coverage_path(repo))
+        if changed_files:
+            features = filter_affected(features, changed_files, repo, covmap)
+        if not changed_files or not features:
+            detail = (f"no files changed vs {affected}" if not changed_files
+                      else f"{len(changed_files)} changed file(s) touched no mapped features")
+            code = 1 if strict else 0
             if as_json:
                 print(json.dumps({
-                    "verdict": "green", "detail": f"no files changed vs {affected}", "exit": 0,
-                    "summary": {"features": 0, "passed": 0, "failed": 0}, "results": [],
+                    "verdict": "red" if strict else "green", "detail": detail, "exit": code, "strict": strict,
+                    "selected": True, "summary": {"features": 0, "passed": 0, "failed": 0}, "results": [],
                 }, indent=2))
             else:
-                print(f"AFFECTED: no changed files detected vs {affected}; all mapped features current.")
-            return 0
-        features = filter_affected(features, changed_files, repo)
-        if not features:
-            if as_json:
-                print(json.dumps({
-                    "verdict": "green", "detail": f"{len(changed_files)} changed file(s) touched no mapped features",
-                    "exit": 0, "summary": {"features": 0, "passed": 0, "failed": 0}, "results": [],
-                }, indent=2))
-            else:
-                print(f"AFFECTED: {len(changed_files)} changed file(s) touched no mapped features or oracles.")
-            return 0
+                print(f"AFFECTED: {detail}; nothing to run.")
+                if strict:
+                    print(SELECTED)
+            return code
         if not as_json:
-            print(f"AFFECTED: running {len(features)} feature(s) affected by {len(changed_files)} changed file(s).")
+            mapped = sum(1 for f in features for _, c in f["checks"]
+                         if (covmap.get(f"{f['name']}|{c}") or {}).get("measured"))
+            print(f"AFFECTED: running {len(features)} feature(s) affected by {len(changed_files)} changed file(s)"
+                  + (f"; {mapped} of their checks have a coverage map." if mapped else "."))
+    record = None
+    if record_coverage:
+        if has_coverage():
+            record, use_cache = {}, False
+        elif not as_json:
+            print("note  --record-coverage: coverage.py is not importable, so no map was recorded; "
+                  "--affected keeps matching file names. `pip install coverage` to use it.")
 
     try:
         hashes = check_hashes(repo)
@@ -836,9 +939,11 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
                         print(f"        {line}")
                 track(repo, [], only, budget, 1, strict)
             else:
-                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature, use_cache)
+                verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature, use_cache,
+                                     affected is not None, record)
         else:
-            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature, use_cache)
+            verdict = run_checks(repo, features, blind, recipe, only, timeout, strict, budget, stress, as_json, quarantine, reports, jobs, signature, use_cache,
+                                     affected is not None, record)
     finally:
         if proc or (recipe and recipe.get("stop")):
             ok, code, out, secs = stop_app(proc, recipe.get("stop"), repo, timeout)
@@ -864,7 +969,8 @@ def cmd_run(repo, only, timeout, strict, budget=BUDGET, affected=None, stress=1,
     return verdict
 
 
-def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None, jobs=1, signature=None, use_cache=True):
+def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDGET, stress=1, as_json=False, quarantine=False, reports=None, jobs=1, signature=None, use_cache=True,
+               selected=False, record=None):
     results = []
     all_cmds = [c for f in features for _, c in f["checks"]]
     shown = [f for f in features if not only or only.lower() in f["name"].lower()]
@@ -891,7 +997,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     # --jobs: start every check now, then read results in recipe order, so output and loop memory
     # are the same as a serial run. Default 1: checks that share an app or files may collide.
     order = [cmd for f in shown for _, cmd in f["checks"]]
-    run_one = slotted(jobs, repo, timeout, stress)
+    run_one = slotted(jobs, repo, timeout, stress, record)
     pending = {}
     if jobs > 1:
         pool = ThreadPoolExecutor(max_workers=jobs)
@@ -992,7 +1098,17 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if unchallenged and not as_json:
         print("UNCHALLENGED  VERIFY.md requires a caught mutation for the current checks: run "
               "`verify.py challenge` on the highest-risk feature")
-    incomplete = strict and (unverified or unproven or orphans or missing_baseline or unchallenged)
+    dependent = (not_independent(state, shown, agent_name())
+                 if strict and "independent" in requirements(read(repo, RECIPE)) else [])
+    if not as_json:
+        for feat, kind, cmd, who in dependent:
+            print(f"NOT INDEPENDENT  {feat} ({kind}): frozen by {who or 'an unnamed agent'}, run by "
+                  f"{agent_name() or 'an unnamed agent'}. VERIFY.md requires the agent that froze a check to "
+                  "differ from the one claiming green: have a separate VERIFY_AGENT run `baseline` or this run")
+    if strict and selected and not as_json:
+        print(SELECTED)
+    incomplete = strict and (unverified or unproven or orphans or missing_baseline or unchallenged or dependent
+                             or selected)
     try:
         changed_during_run = signature != sha(json.dumps(check_hashes(repo), sort_keys=True))
     except (OSError, ValueError):
@@ -1003,6 +1119,16 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if caching and tree_after == tree_before and not changed_during_run:
         remember_passes(repo, fresh, tree_before, full=strict)
     cached = sum(1 for r in results if r[7])
+    recorded = {}
+    if record is not None:
+        at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        recorded = {f"{f['name']}|{c}": dict(record[c], at=at) for f in shown for _, c in f["checks"] if c in record}
+        save_coverage(repo, recorded)
+        if not as_json:
+            blind_checks = sum(1 for e in recorded.values() if not e["measured"])
+            print(f"COVERAGE  recorded the files {len(recorded)} check(s) execute; --affected selects by them"
+                  + (f" ({blind_checks} measured nothing: not Python, or no coverage.py in their interpreter)"
+                     if blind_checks else ""))
     if quarantined:
         state["quarantined"] = sorted(quarantined)
         save_state(repo, state)
@@ -1042,9 +1168,12 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 "broken": broken,
                 "flaky": len(flaky_checks),
                 "unchallenged": bool(unchallenged),
+                "not_independent": len(dependent),
                 "quarantined": len(quarantined_hits),
                 "cached": cached,
+                "coverage_recorded": sum(1 for e in recorded.values() if e["measured"]),
             },
+            "selected": selected,
             "results": [
                 {
                     "feature": feat, "kind": kind, "command": cmd, "ok": ok, "exit": code,
@@ -1088,7 +1217,7 @@ def seal_of(state):
 # it. With VERIFY_AGENT=<name>, loop memory (last run, rounds, scope, doctor) lives in
 # .verify-state.<name>.json; the baseline, re-baselines and rejection receipts stay in STATE for
 # every agent, so a new name neither escapes a freeze nor has to re-prove a check.
-SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures")
+SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures", "frozen_by")
 AGENT_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
 LOCK = ".verify-state.lock"
 _loaded = {}  # state file -> what this process last read from it: the base of the merge
@@ -1493,6 +1622,15 @@ def proven_by(feature, receipts, signature):
     return None
 
 
+def not_independent(state, features, runner):
+    """Checks whose freezer is not shown to differ from `runner`, the agent claiming green:
+    [(feature, kind, command, freezer)]. An unnamed freezer or runner cannot show independence."""
+    frozen = state.get("frozen_by") or {}
+    return [(f["name"], kind, cmd, frozen.get(f"{f['name']}|{kind}|{cmd}"))
+            for f in features for kind, cmd in f["checks"]
+            if not runner or frozen.get(f"{f['name']}|{kind}|{cmd}") in (None, runner)]
+
+
 NOISE = re.compile(r"\S*[\\/](?:tmp|temp)[\\/]\S*|/tmp/\S+|0x[0-9a-f]+|\d+(?:\.\d+)?s\b|\d{2}:\d{2}:\d{2}", re.I)
 
 
@@ -1692,6 +1830,11 @@ def cmd_baseline(repo, reviewed_by=None, reason=None):
             "reason": reason.strip(), "changed": changed, "head": git_head(repo)})
         print(f"RE-BASELINED  {len(changed)} frozen check change(s), reviewed by {reviewed_by.strip()}: "
               f"{reason.strip()}. `status` and `report` show this until it is committed.")
+    # Who froze each check: kept for a check already frozen, the current agent for a new one.
+    before = set((state.get("baseline_lines") or {}).get("checks", []))
+    frozen_by = state.get("frozen_by") or {}
+    state["frozen_by"] = {c: frozen_by[c] if c in before and frozen_by.get(c) else agent_name()
+                          for c in lines["checks"]}
     state["baseline"], state["baseline_lines"] = hashes, lines
     save_state(repo, state)
     print(f"baseline recorded: {len(state['baseline'])} check file(s). From here an edit to any of "
@@ -1792,12 +1935,15 @@ def answer(repo):
     unchallenged = ["no caught challenge mutation for the current checks"] if features and \
         "challenge" in requirements(read(repo, RECIPE)) and not any(
             r.get("mutation") and r.get("signature") == signature for r in receipts.values()) else []
+    dependent = [f"{feat} ({kind} `{cmd}`): frozen by {who or 'an unnamed agent'}"
+                 for feat, kind, cmd, who in not_independent(state, features, agent_name())]         if features and "independent" in requirements(read(repo, RECIPE)) else []
     return {
         "verdict": VERDICTS[name], "state": name, "detail": detail, "exit": code,
         "verify_line": state.get("verify_line"),
         "rejections": rejections, "passed": passed,
         "gaps": {"failing": failing, "unverified": unverified, "unproven": unproven,
-                 "orphan_tests": orphans, "unchallenged": unchallenged, "blind_spots": blind,
+                 "orphan_tests": orphans, "unchallenged": unchallenged, "not_independent": dependent,
+                 "blind_spots": blind,
                  "rebaselined": [rebaseline_text(r) for r in open_rebaselines(repo, state)]},
         "rebaselines": state.get("rebaselines", []),
         "strict": bool(state.get("strict")), "rounds": state.get("rounds", 0),
@@ -1824,7 +1970,8 @@ def cmd_report(repo, as_json=False):
         print(f"PASSED  {p['feature']}: `{p['command']}`")
     g = a["gaps"]
     labels = (("failing", "failing check"), ("unverified", "no check"), ("unproven", "never seen red"),
-              ("orphan_tests", "orphan test"), ("unchallenged", "unchallenged"), ("blind_spots", "blind spot"),
+              ("orphan_tests", "orphan test"), ("unchallenged", "unchallenged"),
+              ("not_independent", "not independent"), ("blind_spots", "blind spot"),
               ("rebaselined", "check changed under review"))
     rows = [(label, item) for key, label in labels for item in g[key]]
     for label, item in rows:
@@ -2369,6 +2516,9 @@ def main():
                    help="run up to N checks at once; only for checks that share no app or files (default 1)")
     r.add_argument("--no-cache", action="store_true",
                    help="run every check even if an identical pass on this exact content is cached")
+    r.add_argument("--record-coverage", action="store_true",
+                   help="with coverage.py importable, record the repo files each check executes so "
+                        "--affected can select by them")
     b = sub.add_parser("baseline", help="freeze the check files; later edits to them fail the run")
     b.add_argument("repo", nargs="?", default=".")
     b.add_argument("--reviewed-by", help="the person who reviewed a change to a frozen check")
@@ -2432,8 +2582,11 @@ def main():
     ch.add_argument("repo", nargs="?", default=".")
     ch.add_argument("--feature", required=True, help="exact feature name in VERIFY.md")
     ch.add_argument("--mutation", help="JSON file with file, before, after and claim")
-    ch.add_argument("--auto", metavar="FILE",
-                    help="generate standard mutations for this product file; report a mutation score")
+    ch.add_argument("--auto", metavar="FILE", nargs="?", const="",
+                    help="generate standard mutations for this product file; report a mutation score "
+                         "(with --diff the file may be left out: every changed product file)")
+    ch.add_argument("--diff", metavar="REF", nargs="?", const="HEAD",
+                    help="with --auto, mutate only lines changed since REF (default HEAD)")
     ch.add_argument("--max", type=int, default=20, help="most mutations to try with --auto (default 20)")
     ch.add_argument("--json", action="store_true", help="with --auto, print the score as JSON")
     ch.add_argument("--timeout", type=int, default=120, help="seconds per check")
@@ -2456,11 +2609,17 @@ def main():
         from ci import cmd_ci
         sys.exit(cmd_ci(sys.modules[__name__], repo, a.plan, a.output, a.timeout))
     if a.cmd == "challenge":
-        if bool(a.mutation) == bool(a.auto):
+        auto = a.auto is not None
+        if bool(a.mutation) == auto:
             ap.error("challenge needs exactly one of --mutation or --auto")
-        if a.auto:
+        if a.diff and not auto:
+            ap.error("--diff works with --auto")
+        if auto and not a.auto and not a.diff:
+            ap.error("--auto needs a FILE, or --diff to mutate every changed product file")
+        if auto:
             from mutate import cmd_auto
-            sys.exit(cmd_auto(sys.modules[__name__], repo, a.feature, a.auto, a.timeout, a.max, a.json, a.jobs))
+            sys.exit(cmd_auto(sys.modules[__name__], repo, a.feature, a.auto or None, a.timeout, a.max, a.json,
+                              a.jobs, a.diff))
         from challenge import cmd_challenge
         sys.exit(cmd_challenge(sys.modules[__name__], repo, a.feature, a.mutation, a.timeout))
     if a.cmd == "scaffold-driver":
@@ -2498,7 +2657,7 @@ def main():
     if a.cmd == "tests":
         sys.exit(cmd_tests(repo, a.strict))
     sys.exit(cmd_run(repo, a.only, a.timeout, a.strict, a.budget, a.affected, a.stress, a.json, a.quarantine, a.jobs,
-                     not a.no_cache))
+                     not a.no_cache, a.record_coverage))
 
 
 if __name__ == "__main__":

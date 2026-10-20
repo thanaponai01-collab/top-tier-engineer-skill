@@ -85,6 +85,21 @@ receipts or touches .verify-state.json**. A survivor is a lead: judge it as a re
 spec-backed check, then prove it with a normal `--mutation` challenge) or an equivalent mutation
 that changes no observable behavior. A high score on one file is not coverage of the feature.
 
+### Only what changed: --diff
+
+```bash
+python <skill-base>/scripts/verify.py challenge . --feature Grade --auto app.py --diff [REF]
+python <skill-base>/scripts/verify.py challenge . --feature Grade --auto --diff [REF]
+```
+
+`--diff` (default `HEAD`) mutates only lines added or changed since REF, uncommitted edits
+included; an untracked file counts as all new. With no FILE it surveys every changed product file in
+Python, JS/TS, Go or Rust, and skips tests, oracles, the recipe and other files. Use it to ask
+"would the checks catch a mistake in *my change*?" in seconds rather than surveying whole files.
+Same lanes, verdicts, probe and exit codes as a whole-file survey; `--max` caps the total, and
+JSON adds `diff`, `files` and a `file` per result. A change that touches no mutable line (comments,
+strings, deletions only) exits 2: there is nothing to score.
+
 ## Machine-readable reports
 
 `verify.py status --json` prints the same verdict and exit code as `status`, plus `failing`
