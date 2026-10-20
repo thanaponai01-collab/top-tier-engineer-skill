@@ -151,8 +151,13 @@ def eligible(item, agent, role="any"):
     return True
 
 
-def cmd_swarm_auto(v, repo, diff=None, jobs=1, limit=20, timeout=120, as_json=False):
-    """Run mutation surveys across every mapped feature with checks and a fail-signal in one pass."""
+class Unsurveyable(Exception):
+    """The survey could not produce a score: (verdict, reason), verdict 'invalid' or 'inconclusive'."""
+
+
+def survey(v, repo, diff=None, jobs=1, limit=20, timeout=120):
+    """Mutation survey across every mapped feature with checks and a fail-signal: the summary dict.
+    Reads only; raises Unsurveyable when nothing can be scored. Shared with `review`."""
     from challenge import prepare, mutable_target, judge
     from mutate import Lane, changed_files, changed_lines, detect_lang, generate, probe, run_lanes
 
@@ -161,8 +166,7 @@ def cmd_swarm_auto(v, repo, diff=None, jobs=1, limit=20, timeout=120, as_json=Fa
     features, _ = v.parse(text, repo=repo)
     candidates_by_feat = [f for f in features if f["checks"] and f["signals"]]
     if not candidates_by_feat:
-        print("SWARM-AUTO: invalid (no feature in VERIFY.md has both checks and a fail-signal); score n/a")
-        return 2
+        raise Unsurveyable("invalid", "no feature in VERIFY.md has both checks and a fail-signal")
 
     try:
         if timeout <= 0 or jobs < 1:
@@ -211,13 +215,11 @@ def cmd_swarm_auto(v, repo, diff=None, jobs=1, limit=20, timeout=120, as_json=Fa
                     tasks.append((feat, dict(c, file=rel, feature=feat["name"])))
                     f_budget -= 1
     except (OSError, ValueError) as exc:
-        print(f"SWARM-AUTO: invalid ({exc}); score n/a")
-        return 2
+        raise Unsurveyable("invalid", str(exc))
 
     if not tasks:
         since = f"changed since {diff} " if diff else ""
-        print(f"SWARM-AUTO: invalid (no mutable lines {since}across mapped features); score n/a")
-        return 2
+        raise Unsurveyable("invalid", f"no mutable lines {since}across mapped features")
 
     if recipe:
         jobs = 1
@@ -294,8 +296,7 @@ def cmd_swarm_auto(v, repo, diff=None, jobs=1, limit=20, timeout=120, as_json=Fa
         return {k: val for k, val in st.items() if k != "failures"}
 
     if v.tree_sig(repo) != original_tree or settled(v.load_state(repo)) != settled(original_state):
-        print("SWARM-AUTO: inconclusive (source files or verification state changed during survey); score n/a")
-        return 2
+        raise Unsurveyable("inconclusive", "source files or verification state changed during survey")
 
     per_feature = []
     for f in candidates_by_feat:
@@ -317,13 +318,27 @@ def cmd_swarm_auto(v, repo, diff=None, jobs=1, limit=20, timeout=120, as_json=Fa
     uncovered = [r for r in results if r["verdict"] == "uncovered"]
     decided = caught + len(survived) + len(uncovered)
     score = round(caught / decided, 3) if decided else None
-    summary = {
+    return {
         "features": per_feature, "files": sorted(sources), "diff": diff,
         "generated": len(tasks), "run": len(results), "caught": caught,
         "survived": len(survived), "uncovered": len(uncovered),
         "inconclusive": len(results) - decided, "score": score,
         "jobs": jobs, "copies": copies, "results": results,
     }
+
+
+def cmd_swarm_auto(v, repo, diff=None, jobs=1, limit=20, timeout=120, as_json=False):
+    """Run mutation surveys across every mapped feature with checks and a fail-signal in one pass."""
+    try:
+        summary = survey(v, repo, diff=diff, jobs=jobs, limit=limit, timeout=timeout)
+    except Unsurveyable as exc:
+        print(f"SWARM-AUTO: {exc.args[0]} ({exc.args[1]}); score n/a")
+        return 2
+    per_feature, score, diff = summary["features"], summary["score"], summary["diff"]
+    caught = summary["caught"]
+    survived = [r for r in summary["results"] if r["verdict"] == "survived"]
+    uncovered = [r for r in summary["results"] if r["verdict"] == "uncovered"]
+    decided = caught + len(survived) + len(uncovered)
     if as_json:
         print(json.dumps(summary, indent=2))
     else:

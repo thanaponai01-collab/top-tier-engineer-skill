@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.13.0 - 2026-10-20 - Review by proof
+
+- **`verify.py review [--base REF]`.** It reviews a change, a PR or another agent's work, and its output is findings a person can re-run. High findings are where the change weakened its own proof: a test function that existed at the base is removed, newly skipped, has fewer assertions or can no longer fail (Python, JS/TS, Go, with renames paired). Also a check, fail-signal, feature or `require:` word dropped from VERIFY.md, or an oracle or check script edited alongside the code. Medium findings are where the change is not proven: `UNCOVERED` and `SURVIVED` changed lines, each with a `reproduce:` `challenge` command, `UNMAPPED` product files, and `NOT SURVEYED`. It reads only. Exit 0 clean, 1 findings, 2 cannot review. `--no-mutate` returns the static part in about 0.3 s on this repo. Mode doc: `references/review.md`.
+- **Merged mutant verdicts.** The review counts a mutant as caught when any feature's check catches it. `swarm --auto` judges each feature on its own and falls back to every changed file for a feature that maps none, so an unrelated feature reports lines that another feature catches as `UNCOVERED`. `swarm --auto` itself is unchanged.
+- **Internals.** `swarm.survey()` returns the survey summary, shared by `swarm --auto` and `review`. `tests_in_text()` audits file content and counts assertions per test.
+
 ## 1.12.0 - 2026-10-20 - Multi-agent swarms, zero-dep coverage, and anti-gaming
 
 - **Multi-agent swarm coordinator (`verify.py swarm`).** `swarm` inspects `VERIFY.md` and `.verify-state.json` to classify every feature into its next required verification step (`map` -> `fix` -> `prove` -> `freeze` -> `challenge` -> `independent` -> `run` -> `done`). Agents with `VERIFY_AGENT=<name>` claim features atomically under the state lock (`swarm --claim [--role any|worker|judge] [--lease 600]`). Leases auto-advance as soon as the real receipt, baseline or strict pass lands in `.verify-state.json`, and `independent` / `judge` tasks are never routed to an agent in `frozen_by`. `swarm --auto [--diff [REF]] [--jobs N]` runs mutation surveys across every mapped feature in shared scratch lanes.

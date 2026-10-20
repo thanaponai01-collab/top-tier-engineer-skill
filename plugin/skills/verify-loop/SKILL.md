@@ -3,7 +3,8 @@ name: verify-loop
 description: >-
   Prove a change or claim with a check seen failing, then passing, and keep the evidence. Use when
   a user, skill or agent asks to verify a change, prove a task is done, check a claim against the
-  real app, or create or maintain a project verify skill; VERIFY.md recipes. Not for just running tests.
+  real app, review a PR or agent's change by proof, or create or maintain a project verify skill;
+  VERIFY.md recipes. Not for just running tests.
 metadata:
   stage: prove
   card: "check your own work until it really passes"
@@ -98,6 +99,7 @@ contract is in [answer](references/answer.md).
 | Situation | Read |
 |---|---|
 | Verify a task, diff, commit or branch | [verify this change](references/verify-change.md) |
+| Review a PR, branch or another agent's work | [review by proof](references/review.md) |
 | Would an existing check catch a wrong result? | [challenge](references/challenge.md) |
 | CI, or fresh proof of committed code | [CI](references/ci.md) |
 | The check must launch and drive an app | [project recipe](references/project-recipe.md) |
@@ -114,6 +116,7 @@ contract is in [answer](references/answer.md).
 `VERIFY_SLOT`/`VERIFY_PORT`; a pass already proved on identical content is reused, never a
 non-strict one for `--strict`) · `triage` · `scope <files>` (fence a fix;
 `OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto [<file>] [--diff [REF]] [--jobs N]` (mutation score, `--diff` = only changed lines; `UNCOVERED` = no check reaches the line) ·
+`review [--base REF] [--no-mutate]` (weakened tests/checks + unproven changed lines; reads only) ·
 `loop --scope <f> --max N` (reruns, never edits) ·
 `VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline & peer `verified_by`) · `swarm [--claim | --auto]` ·
 `watch --max-runs N` (never exits without it) · `contract old new` · `scaffold-oracle | scaffold-ui |

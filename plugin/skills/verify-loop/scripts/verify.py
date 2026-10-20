@@ -412,16 +412,15 @@ def _call_name(node):
     return f.attr if isinstance(f, ast.Attribute) else f.id if isinstance(f, ast.Name) else ""
 
 
+def _assert_count(fn, helpers):
+    """Assertions in the function, direct or by calling a helper that has one."""
+    return sum(isinstance(n, ast.Assert) or (isinstance(n, ast.Call) and (
+        _call_name(n).lower().startswith(ASSERTING) or _call_name(n) in helpers)) for n in ast.walk(fn))
+
+
 def _asserts(fn, helpers):
     """True if the function has an assertion, directly or by calling a helper that has one."""
-    for n in ast.walk(fn):
-        if isinstance(n, ast.Assert):
-            return True
-        if isinstance(n, ast.Call):
-            name = _call_name(n)
-            if name.lower().startswith(ASSERTING) or name in helpers:
-                return True
-    return False
+    return _assert_count(fn, helpers) > 0
 
 
 def _swallows(fn):
@@ -486,10 +485,11 @@ def _js_tests_in(text):
     for m in re.finditer(r"(?m)(?:^|[;{]\s*)(?:(x(?:it|test)|(?:it|test)\.(?:skip|todo))|(it|test))\s*\(\s*(['\"`])((?:\\.|(?!\3).)+)\3", text):
         skip, name = bool(m.group(1)), m.group(4)
         body = _balanced_body(text, m.start(), "(", ")") or ""
-        has_assert = bool(assert_rx.search(body)) or any(re.search(rf"\b{re.escape(h)}\s*\(", body) for h in helpers)
+        count = len(assert_rx.findall(body)) + sum(len(re.findall(rf"\b{re.escape(h)}\s*\(", body)) for h in helpers)
+        has_assert = count > 0
         flag = ("passes either way: it catches the exception and never fails"
                 if swallow_rx.search(body) and not has_assert else "" if has_assert else "no assertion")
-        found.append((name, flag, skip))
+        found.append((name, flag, skip, count))
     return found
 
 
@@ -502,15 +502,21 @@ def _go_tests_in(text):
         name, tvar = m.group(1), re.escape(m.group(2))
         body = _balanced_body(text, m.end() - 1, "{", "}") or ""
         skip = bool(re.search(rf"\b{tvar}\.Skip(?:Now|f)?\s*\(", body))
-        has_assert = bool(re.search(rf"\b{tvar}\.(?:Fatal|Fatalf|Error|Errorf|Fail|FailNow)\s*\(|\b(?:assert|require)\.\w+\s*\(", body))
-        found.append((name, "" if has_assert else "no assertion", skip))
+        count = len(re.findall(rf"\b{tvar}\.(?:Fatal|Fatalf|Error|Errorf|Fail|FailNow)\s*\(|\b(?:assert|require)\.\w+\s*\(", body))
+        found.append((name, "" if count else "no assertion", skip, count))
     return found
 
 
 def tests_in(repo, rel):
     """[(name, flag, skipped)] for the test functions in one Python, JS/TS or Go file; flag is '' or a reason.
     None when the file cannot be parsed."""
-    text = read(repo, rel)
+    found = tests_in_text(read(repo, rel), rel)
+    return None if found is None else [row[:3] for row in found]
+
+
+def tests_in_text(text, rel):
+    """tests_in for file content: [(name, flag, skipped, assertion count)], or None if unparsable.
+    `review` compares these between a base and the working tree."""
     base = rel.rsplit("/", 1)[-1]
     if TEST_JS.match(base):
         return _js_tests_in(text)
@@ -528,13 +534,14 @@ def tests_in(repo, rel):
     found = []
 
     def take(fn, name):
+        count = _assert_count(fn, helpers)
         if _swallows(fn):
             flag = "passes either way: it catches the exception and never fails"
-        elif not _asserts(fn, helpers):
+        elif not count:
             flag = "no assertion"
         else:
             flag = ""
-        found.append((name, flag, _skipped(fn)))
+        found.append((name, flag, _skipped(fn), count))
 
     for node in tree.body:
         if isinstance(node, defs) and node.name.startswith("test"):
@@ -2720,6 +2727,14 @@ def main():
     sw.add_argument("--jobs", type=int, default=2, help="with --auto, parallel scratch workers per feature (default: 2)")
     sw.add_argument("--timeout", type=int, default=120, help="with --auto, seconds per check (default: 120)")
     sw.add_argument("--json", action="store_true", help="print swarm plan, claim, or auto survey as JSON")
+    rv = sub.add_parser("review", help="review a change by proof: weakened tests/checks, unproven changed lines")
+    rv.add_argument("repo", nargs="?", default=".")
+    rv.add_argument("--base", default="HEAD", help="commit the change is measured from (default HEAD; a PR: its base)")
+    rv.add_argument("--no-mutate", action="store_true", help="static findings only; skip the mutation survey")
+    rv.add_argument("--max", type=int, default=20, help="most mutations per feature (default 20)")
+    rv.add_argument("--jobs", type=int, default=1, help="parallel scratch lanes for the survey")
+    rv.add_argument("--timeout", type=int, default=120, help="seconds per check")
+    rv.add_argument("--json", action="store_true", help="print findings as JSON (same exit codes)")
     ci = sub.add_parser("ci", help="fresh proof from committed inputs; ignore local verification state")
     ci.add_argument("repo", nargs="?", default=".")
     ci.add_argument("--plan", required=True, help="committed repo-relative JSON feature/mutation list")
@@ -2735,6 +2750,9 @@ def main():
     if a.cmd == "ci":
         from ci import cmd_ci
         sys.exit(cmd_ci(sys.modules[__name__], repo, a.plan, a.output, a.timeout))
+    if a.cmd == "review":
+        from review import cmd_review
+        sys.exit(cmd_review(sys.modules[__name__], repo, a.base, not a.no_mutate, a.jobs, a.max, a.timeout, a.json))
     if a.cmd == "swarm":
         from swarm import cmd_swarm
         sys.exit(cmd_swarm(sys.modules[__name__], repo, claim=a.claim, release=a.release, done=a.done,
