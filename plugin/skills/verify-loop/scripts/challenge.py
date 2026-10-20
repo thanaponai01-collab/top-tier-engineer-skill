@@ -1,6 +1,7 @@
-"""One explicit mutation, two fresh copies, unchanged verification commands.
+"""One explicit mutation, fresh scratch execution, unchanged verification commands.
 
 prepare, mutable_target, judge and copy_repo are shared with `challenge --auto` (mutate.py)."""
+import ast
 import contextlib
 import io
 import json
@@ -21,7 +22,7 @@ def prepare(v, repo, feature):
     """What every mutation of one feature shares, checked once: (frozen hashes, feature, Run recipe).
     Raises ValueError when the feature or the tree cannot be challenged."""
     frozen = v.check_hashes(repo)
-    features, _ = v.parse(v.read(repo, v.RECIPE))
+    features, _ = v.parse(v.read(repo, v.RECIPE), repo=repo)
     selected = [f for f in features if f["name"] == feature]
     if len(selected) != 1 or not selected[0]["checks"] or not selected[0]["signals"]:
         raise ValueError("name one exact feature with checks and a declared fail-signal")
@@ -49,13 +50,14 @@ def mutable_target(v, repo, frozen, rel):
     return target
 
 
-def judge(v, feat, rows, intact):
+def judge(v, feat, rows, intact, passing=None):
     """rows: [(kind, cmd, {ok, exit, output} or None)] for the feature's checks on the mutated tree.
     (verdict, reason, {check key: row} that rejected it with the declared signal)."""
     caught = {f"{feat['name']}|{cmd}": row for kind, cmd, row in rows
               if row and not row["ok"] and row["exit"] is not None
               and kind not in ("lint", "type", "types")
-              and any(signal in row["output"] for signal in feat["signals"])
+              and any(signal in row["output"] and signal not in ((passing or {}).get(f"{feat['name']}|{cmd}") or "")
+                      for signal in feat["signals"])
               and not v.HARNESS_FAILURE.search(row["output"])}
     if not intact:
         return "inconclusive", "check, oracle or mutated product changed during the run", {}
@@ -63,6 +65,11 @@ def judge(v, feat, rows, intact):
         return "survived", "selected feature checks still pass on the wrong implementation", {}
     if caught:
         return "caught", "selected behavioral check rejected the mutation with its declared signal", caught
+    if any(row and not row["ok"] and row["exit"] is not None
+           and any(s in row["output"] and s in ((passing or {}).get(f"{feat['name']}|{cmd}") or "")
+                   for s in feat["signals"])
+           for _, cmd, row in rows):
+        return "inconclusive", "original check also printed fail-signal on pass (SIGNAL IN PASS)", {}
     return "inconclusive", "no expected behavioral rejection; inspect harness, timeout or signal mismatch", {}
 
 
@@ -71,18 +78,28 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
     try:
         if timeout <= 0:
             raise ValueError("timeout must be positive")
-        mutation = json.loads(Path(mutation_file).read_text(encoding="utf-8"))
+        mutation = (mutation_file if isinstance(mutation_file, dict)
+                    else json.loads(Path(mutation_file).read_text(encoding="utf-8")))
         if not isinstance(mutation, dict) or any(
                 not isinstance(mutation.get(k), str) or not mutation[k].strip()
                 for k in ("file", "before", "after", "claim")):
             raise ValueError("mutation needs nonempty file, before, after and claim strings")
         if mutation["before"] == mutation["after"]:
             raise ValueError("target must exist and replacement must change it")
-        frozen, feat, _ = prepare(v, repo, feature)
+        frozen, feat, recipe = prepare(v, repo, feature)
         target = mutable_target(v, repo, frozen, mutation["file"])
         source = target.read_text(encoding="utf-8")
         if source.count(mutation["before"]) != 1:
             raise ValueError("before must match exactly once; choose a more specific replacement")
+        wrong_source = source.replace(mutation["before"], mutation["after"], 1)
+        if target.suffix.lower() == ".py":
+            try:
+                src_ast = ast.dump(ast.parse(source))
+                mut_ast = ast.dump(ast.parse(wrong_source))
+            except SyntaxError as exc:
+                raise ValueError(f"mutation introduces a Python syntax error: {exc.msg}") from exc
+            if src_ast == mut_ast:
+                raise ValueError("mutation changes only comments or formatting; mutate executable code")
     except (OSError, ValueError) as exc:
         print(f"CHALLENGE: invalid ({exc})")
         return 2
@@ -93,7 +110,20 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
               "check_signature": v.sha(json.dumps(frozen, sort_keys=True))}
     caught_checks = {}
 
-    def trial(scratch):
+    def trial(scratch, only_feat=False):
+        if only_feat and not recipe:
+            checks, out_lines, any_fail = {}, [feature], False
+            for kind, cmd in feat["checks"]:
+                ok, code, out, secs, _ = v.attempt(cmd, str(scratch), timeout, 1)
+                checks[f"{feature}|{cmd}"] = {"ok": ok, "exit": code, "output": out[-4000:]}
+                tag = "PASS" if ok else "FAIL"
+                extra = "" if ok else (" (timeout)" if code is None else f" (exit {code})")
+                out_lines.append(f"  {tag}  {kind}  {cmd}  [{secs:.1f}s]{extra}")
+                if not ok:
+                    any_fail = True
+                    out_lines.extend(f"        {ln}" for ln in out.rstrip().splitlines()[-v.TAIL_LINES:])
+            return {"exit": 1 if any_fail else 0, "output": ("\n".join(out_lines) + "\n")[-8000:],
+                    "checks": checks, "checks_unchanged": v.check_hashes(str(scratch)) == frozen}
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             code = v.cmd_run(str(scratch), None, timeout, False, use_cache=False)
@@ -103,24 +133,27 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
 
     try:
         with tempfile.TemporaryDirectory(prefix="verify-challenge-") as tmp:
-            copies = [Path(tmp, "original"), Path(tmp, "mutated")]
-            for scratch in copies:
-                copy_repo(repo, scratch)
-            report["original"] = trial(copies[0])
+            scratch = Path(tmp, "original")
+            copy_repo(repo, scratch)
+            report["original"] = trial(scratch, only_feat=False)
             original = report["original"]
             relative = target.relative_to(Path(repo).resolve())
-            original["product_unchanged"] = (copies[0] / relative).read_text(encoding="utf-8") == source
+            original["product_unchanged"] = (scratch / relative).read_text(encoding="utf-8") == source
             verdict, reason = "inconclusive", "original recipe must pass with stable checks first"
             if original["exit"] == 0 and original["checks_unchanged"] and original["product_unchanged"]:
-                changed = copies[1] / relative
-                wrong_source = source.replace(mutation["before"], mutation["after"], 1)
+                if v.tree_sig(str(scratch)) != original_tree:
+                    scratch = Path(tmp, "mutated")
+                    copy_repo(repo, scratch)
+                changed = scratch / relative
                 changed.write_text(wrong_source, encoding="utf-8")
-                report["mutated"] = trial(copies[1])
+                report["mutated"] = trial(scratch, only_feat=True)
                 mutated = report["mutated"]
                 mutated["mutation_unchanged"] = changed.read_text(encoding="utf-8") == wrong_source
                 rows = [(kind, cmd, mutated["checks"].get(f"{feature}|{cmd}")) for kind, cmd in feat["checks"]]
+                passing = {k: r.get("output", "") for k, r in (original.get("checks") or {}).items()
+                           if isinstance(r, dict) and r.get("ok")}
                 verdict, reason, caught_checks = judge(
-                    v, feat, rows, mutated["checks_unchanged"] and mutated["mutation_unchanged"])
+                    v, feat, rows, mutated["checks_unchanged"] and mutated["mutation_unchanged"], passing)
             report.update(verdict=verdict, reason=reason)
     except (OSError, ValueError) as exc:
         report.update(verdict="inconclusive", reason=str(exc))
@@ -140,7 +173,8 @@ def cmd_challenge(v, repo, feature, mutation_file, timeout, record=True):
         receipts = original_state.setdefault("failures", {})
         for key, row in caught_checks.items():
             receipts[key] = {"signature": report["check_signature"], "exit": row["exit"],
-                             "output": row["output"], "mutation": mutation, "tree": original_tree}
+                             "output": row["output"], "mutation": mutation, "tree": original_tree,
+                             "agent": v.agent_name()}
     v.save_state(repo, original_state)
     print(f"CHALLENGE: {report['verdict']} ({report['reason']})")
     print(f"Claim: {mutation['claim']}; mutation: {mutation['file']}")

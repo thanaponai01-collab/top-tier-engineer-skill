@@ -84,7 +84,7 @@ file changed since REF. File names miss imports: with coverage.py importable, `r
 records the repo files each check's Python processes execute (in `.git/verify-loop/coverage.json`,
 shared by worktrees), and `--affected` also selects a feature when a changed file is in that set.
 Non-Python checks record `measured: false` and keep the name match. Re-record after large changes.
-Without coverage.py the flag says so and the run proceeds normally.
+Without coverage.py the built-in stdlib profiler (`sys.setprofile`) still records every executed Python repo file out of the box.
 
 A selection can still miss something (a data file, a new import), so `--affected` never makes
 `--strict` green: a strict affected run exits 1 with `SELECTED`. Prove done with a whole run.

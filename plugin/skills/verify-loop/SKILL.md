@@ -105,6 +105,7 @@ contract is in [answer](references/answer.md).
 | Create a project `verify` skill | [create](references/create.md) |
 | Keep that skill honest as the app changes | [maintain](references/maintain.md) |
 | A red you have not classified yet | [triage](references/triage.md) |
+| Many agents verifying together (`swarm`, work-stealing, peer review) | [swarm](references/swarm.md) |
 | `loop`, `watch`, `contract`, scaffolds, quarantine | [helper commands](references/helpers.md) |
 
 ## Other helper commands
@@ -114,7 +115,7 @@ contract is in [answer](references/answer.md).
 non-strict one for `--strict`) · `triage` · `scope <files>` (fence a fix;
 `OUT OF SCOPE` / `KEEP-GREEN BROKEN`) · `challenge . --feature F --auto [<file>] [--diff [REF]] [--jobs N]` (mutation score, `--diff` = only changed lines; `UNCOVERED` = no check reaches the line) ·
 `loop --scope <f> --max N` (reruns, never edits) ·
-`VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline) ·
+`VERIFY_AGENT=<name>` (own loop memory per agent, shared baseline & peer `verified_by`) · `swarm [--claim | --auto]` ·
 `watch --max-runs N` (never exits without it) · `contract old new` · `scaffold-oracle | scaffold-ui |
 scaffold-driver` · `scaffold-skill` · `skill-check` · `maintain` · `ci`. What each does and
 when it is safe: [helper commands](references/helpers.md). Evidence lives in

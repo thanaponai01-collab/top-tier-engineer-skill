@@ -25,6 +25,8 @@ Run the bundled helper; it does the mutation in fresh scratch copies:
 
 ```bash
 python <skill-base>/scripts/verify.py challenge . --feature Refunds --mutation mutation.json
+# or inline with zero files written to the checkout:
+python <skill-base>/scripts/verify.py challenge . --feature Refunds --file refund.py --before "credit + amount" --after "credit - amount"
 ```
 
 The original recipe must pass first. Both copies execute the full recipe, including setup,

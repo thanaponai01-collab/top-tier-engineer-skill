@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.12.0 - 2026-10-20 - Multi-agent swarms, zero-dep coverage, and anti-gaming
+
+- **Multi-agent swarm coordinator (`verify.py swarm`).** `swarm` inspects `VERIFY.md` and `.verify-state.json` to classify every feature into its next required verification step (`map` -> `fix` -> `prove` -> `freeze` -> `challenge` -> `independent` -> `run` -> `done`). Agents with `VERIFY_AGENT=<name>` claim features atomically under the state lock (`swarm --claim [--role any|worker|judge] [--lease 600]`). Leases auto-advance as soon as the real receipt, baseline or strict pass lands in `.verify-state.json`, and `independent` / `judge` tasks are never routed to an agent in `frozen_by`. `swarm --auto [--diff [REF]] [--jobs N]` runs mutation surveys across every mapped feature in shared scratch lanes.
+- **Peer-swarm `verified_by` independence.** When an agent `runner != freezer` passes a check under `--strict`, `verified_by` records `(agent, signature, tree)` in shared state. Two peer agents (`alpha` freezes A & verifies B; `beta` freezes B & verifies A) can now reach strict green without deadlocking or needing a third agent. Any edit to the tree or check invalidates `verified_by`.
+- **Zero-file inline `challenge` and single-copy execution.** `verify.py challenge . --feature F --file <f> --before <a> --after <b> [--claim <c>]` runs a challenge without writing a JSON file into the checkout. When there is no `## Run` recipe, `challenge` copies the tree once, reuses the clean scratch tree in place, and runs only the target feature's checks on the mutated tree.
+- **Trust & anti-gaming hardening.** `proven_by` and `challenge` now reject a `fail-signal:` that also appears in the check's passing output (`SIGNAL IN PASS`), preventing banner or test-name signals that print on every run. Manual Python challenges validate syntax and AST change, rejecting comment-only or syntax-error mutations (`CHALLENGE: invalid`). Failure and challenge receipts record `"agent"` provenance.
+- **Zero-dependency stdlib Python coverage (`run --record-coverage`).** Replaced the external `coverage.py` dependency with a lightweight `sys.setprofile` hook in `sitecustomize.py`, so `--record-coverage` and coverage-based `--affected` work on every Python 3 interpreter out of the box, and the `CoverageMap` test suite now runs unconditionally.
+- **Polyglot `tests [--strict]` and fresh bytecode.** `verify.py tests` now audits JS/TS (`test`/`it`) and Go (`func Test...`) test functions alongside Python for hollow (`no assertion`), exception-swallowing and skipped tests. `run_check` and `start_app` set `PYTHONDONTWRITEBYTECODE=1` by default so same-second same-size edits and mutations never execute stale `.pyc` files.
+
 ## 1.11.0 - 2026-10-20 - Harder to fool
 
 - **`require: independent`.** `baseline` records which `VERIFY_AGENT` froze each check

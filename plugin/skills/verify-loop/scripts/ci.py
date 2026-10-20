@@ -46,7 +46,7 @@ def cmd_ci(v, repo, plan_file, output, timeout):
         archive_ref = report["commit"] + (":" + relative if relative != "." else "")
         tools = Path(__file__).parent
         report["verifier_hash"] = hashlib.sha256(b"".join(
-            (tools / name).read_bytes() for name in ("verify.py", "challenge.py", "ci.py"))).hexdigest()
+            (tools / name).read_bytes() for name in ("verify.py", "challenge.py", "mutate.py", "swarm.py", "ci.py"))).hexdigest()
         report["project_path"] = relative
         with tempfile.TemporaryDirectory(prefix="verify-ci-") as tmp:
             archive = Path(tmp, "input.tar")

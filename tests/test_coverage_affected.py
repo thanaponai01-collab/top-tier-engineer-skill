@@ -77,16 +77,14 @@ class AffectedNeverStrictGreen(unittest.TestCase):
             code, names = affected_names(root)
             self.assertEqual(names, [])  # the miss the coverage map exists to fix
 
-    @unittest.skipIf(HAS_COVERAGE, "coverage.py is importable here")
-    def test_record_coverage_without_coverage_says_so_and_still_runs(self):
+    def test_record_coverage_works_without_third_party_coverage_package(self):
         with tempfile.TemporaryDirectory() as root:
             project(root)
             code, out, _ = run("verify.py", "run", root, "--record-coverage")
             self.assertEqual(code, 0, out)
-            self.assertIn("coverage.py is not importable", out)
+            self.assertIn("COVERAGE  recorded the files 2 check(s) execute", out)
 
 
-@unittest.skipUnless(HAS_COVERAGE, "needs coverage.py importable (pip install coverage)")
 class CoverageMap(unittest.TestCase):
     def test_recorded_map_selects_the_check_that_executes_a_changed_file(self):
         with tempfile.TemporaryDirectory() as root:

@@ -93,6 +93,7 @@ SKIP_DIRS = {".git", "node_modules", "venv", ".venv", "__pycache__", "dist", "bu
              "vendor", ".tox", "fixture", "fixtures"}
 TEST_PY = re.compile(r"^(test_.+|.+_test)\.py$")
 TEST_JS = re.compile(r"^.+\.(test|spec)\.(js|jsx|ts|tsx|mjs|cjs)$")
+TEST_GO = re.compile(r"^.+_test\.go$")
 TAIL_LINES = 12
 STATE = ".verify-state.json"
 # The tree signature skips installed dependencies and build output, not test fixtures: a fixture is
@@ -218,7 +219,7 @@ def find_tests(repo):
     for root, dirs, files in os.walk(repo):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
         for f in files:
-            if TEST_PY.match(f) or TEST_JS.match(f):
+            if TEST_PY.match(f) or TEST_JS.match(f) or TEST_GO.match(f):
                 found.append(os.path.relpath(os.path.join(root, f), repo).replace("\\", "/"))
     return sorted(found)
 
@@ -308,20 +309,39 @@ def filter_affected(features, changed_files, repo, covmap=None):
 
 
 # ---- the coverage map ---------------------------------------------------------------------
-# File names in commands miss what a check imports. With coverage.py importable, `run
-# --record-coverage` runs each check with coverage started in every Python process it spawns (a
-# sitecustomize on PYTHONPATH) and records the repo files it executed. `--affected` then selects a
-# feature when a changed file is in that set, as well as by the name heuristic. Non-Python checks
-# record `measured: false` and keep the heuristic. Data files and new imports can still be missed,
-# which is why --affected never makes --strict green.
+# File names in commands miss what a check imports. `run --record-coverage` runs each check with a
+# stdlib sitecustomize on PYTHONPATH that hooks sys.setprofile in every Python process it spawns and
+# records the repo files executed (O(1) set lookup per seen file, zero external dependencies).
+# `--affected` then selects a feature when a changed file is in that set, as well as by the name
+# heuristic. Non-Python checks record `measured: false` and keep the heuristic. Data files and new
+# imports can still be missed, which is why --affected never makes --strict green.
 
 SITECUSTOMIZE = """import os, sys
 _here = os.path.dirname(os.path.abspath(__file__))
-try:
-    import coverage
-    coverage.process_startup()
-except Exception:
-    pass
+_root = os.environ.get("VERIFY_COV_ROOT", "")
+_seen = set()
+_out = os.path.join(_here, f"covdata.{os.getpid()}")
+if _root:
+    try:
+        open(_out, "a", encoding="utf-8").close()
+    except OSError:
+        pass
+    def _prof(frame, event, arg):
+        if event != "call":
+            return
+        fn = frame.f_code.co_filename
+        if fn in _seen or not fn or fn.startswith("<"):
+            return
+        _seen.add(fn)
+        try:
+            real = os.path.realpath(fn)
+            rel = os.path.relpath(real, _root)
+            if not rel.startswith("..") and os.path.dirname(real) != _here:
+                with open(_out, "a", encoding="utf-8") as fh:
+                    fh.write(rel.replace(os.sep, "/") + "\\n")
+        except Exception:
+            pass
+    sys.setprofile(_prof)
 sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != _here]
 del sys.modules["sitecustomize"]
 try:
@@ -332,8 +352,7 @@ except ImportError:
 
 
 def has_coverage():
-    import importlib.util
-    return importlib.util.find_spec("coverage") is not None
+    return True
 
 
 def coverage_path(repo):
@@ -342,30 +361,22 @@ def coverage_path(repo):
 
 def coverage_env(folder, repo):
     """Environment additions that make every Python process a check starts record into `folder`."""
-    rc = os.path.join(folder, "coveragerc")
-    with open(rc, "w", encoding="utf-8") as fh:
-        fh.write(f"[run]\ndata_file = {os.path.join(folder, 'covdata')}\nparallel = True\n"
-                 f"source = {os.path.realpath(repo)}\n")
     with open(os.path.join(folder, "sitecustomize.py"), "w", encoding="utf-8") as fh:
         fh.write(SITECUSTOMIZE)
     path = os.environ.get("PYTHONPATH")
-    return {"COVERAGE_PROCESS_START": rc, "PYTHONPATH": folder + (os.pathsep + path if path else "")}
+    return {"VERIFY_COV_ROOT": os.path.realpath(repo),
+            "PYTHONPATH": folder + (os.pathsep + path if path else "")}
 
 
 def coverage_files(folder, repo):
     """{measured, files}: the repo-relative files the check's Python processes executed."""
-    from coverage import CoverageData
-    root, files, measured = os.path.realpath(repo), set(), False
+    files, measured = set(), False
     for name in os.listdir(folder):
         if not name.startswith("covdata"):
             continue
-        data = CoverageData(basename=os.path.join(folder, name))
-        data.read()
         measured = True
-        for f in data.measured_files():
-            rel = os.path.relpath(os.path.realpath(f), root)
-            if not rel.startswith(".."):
-                files.add(rel.replace(os.sep, "/"))
+        with open(os.path.join(folder, name), encoding="utf-8", errors="replace") as fh:
+            files.update(ln.strip() for ln in fh if ln.strip())
     return {"measured": measured, "files": sorted(files)}
 
 
@@ -434,11 +445,79 @@ def _skipped(fn):
     return any(n.lower().startswith("skip") for n in names)
 
 
+def _balanced_body(text, pos, open_ch="(", close_ch=")"):
+    """Slice of `text` inside matching open_ch..close_ch starting at or after `pos`, or None."""
+    depth, in_str, esc, start = 0, None, False, None
+    for i in range(pos, len(text)):
+        ch = text[i]
+        if esc:
+            esc = False
+            continue
+        if ch == "\\":
+            esc = True
+            continue
+        if in_str:
+            if ch == in_str:
+                in_str = None
+            continue
+        if ch in ('"', "'", "`"):
+            in_str = ch
+            continue
+        if ch == open_ch:
+            if depth == 0:
+                start = i + 1
+            depth += 1
+        elif ch == close_ch:
+            depth -= 1
+            if depth == 0 and start is not None:
+                return text[start:i]
+    return None
+
+
+def _js_tests_in(text):
+    from mutate import is_balanced_delimiters
+    if not is_balanced_delimiters(text):
+        return None
+    assert_rx = re.compile(r"\b(?:expect|assert|should)\b|\.(?:toBe|toEqual|toMatch|toThrow|rejects)\b")
+    swallow_rx = re.compile(r"\btry\s*\{[^{}]*\}\s*catch\b[^{]*\{\s*\}")
+    helpers = {m.group(1) for m in re.finditer(r"\bfunction\s+(\w+)\s*\([^)]*\)\s*\{", text)
+               if assert_rx.search(_balanced_body(text, m.end() - 1, "{", "}") or "")}
+    found = []
+    for m in re.finditer(r"(?m)(?:^|[;{]\s*)(?:(x(?:it|test)|(?:it|test)\.(?:skip|todo))|(it|test))\s*\(\s*(['\"`])((?:\\.|(?!\3).)+)\3", text):
+        skip, name = bool(m.group(1)), m.group(4)
+        body = _balanced_body(text, m.start(), "(", ")") or ""
+        has_assert = bool(assert_rx.search(body)) or any(re.search(rf"\b{re.escape(h)}\s*\(", body) for h in helpers)
+        flag = ("passes either way: it catches the exception and never fails"
+                if swallow_rx.search(body) and not has_assert else "" if has_assert else "no assertion")
+        found.append((name, flag, skip))
+    return found
+
+
+def _go_tests_in(text):
+    from mutate import is_balanced_delimiters
+    if not is_balanced_delimiters(text):
+        return None
+    found = []
+    for m in re.finditer(r"(?m)^\s*func\s+(Test\w+)\s*\(\s*(\w+)\s+\*testing\.T\s*\)\s*\{", text):
+        name, tvar = m.group(1), re.escape(m.group(2))
+        body = _balanced_body(text, m.end() - 1, "{", "}") or ""
+        skip = bool(re.search(rf"\b{tvar}\.Skip(?:Now|f)?\s*\(", body))
+        has_assert = bool(re.search(rf"\b{tvar}\.(?:Fatal|Fatalf|Error|Errorf|Fail|FailNow)\s*\(|\b(?:assert|require)\.\w+\s*\(", body))
+        found.append((name, "" if has_assert else "no assertion", skip))
+    return found
+
+
 def tests_in(repo, rel):
-    """[(name, flag, skipped)] for the test functions in one Python file; flag is '' or a reason.
+    """[(name, flag, skipped)] for the test functions in one Python, JS/TS or Go file; flag is '' or a reason.
     None when the file cannot be parsed."""
+    text = read(repo, rel)
+    base = rel.rsplit("/", 1)[-1]
+    if TEST_JS.match(base):
+        return _js_tests_in(text)
+    if TEST_GO.match(base):
+        return _go_tests_in(text)
     try:
-        tree = ast.parse(read(repo, rel))
+        tree = ast.parse(text)
     except SyntaxError:
         return None
     defs = (ast.FunctionDef, ast.AsyncFunctionDef)
@@ -477,10 +556,8 @@ def cmd_tests(repo, strict):
         print(f"{RECIPE} has no '## <feature>' sections; nothing to map.")
         return 2
     files = find_tests(repo)
-    py = [t for t in files if t.endswith(".py")]
-    unread = [t for t in files if not t.endswith(".py")]
     per_file, bad = {}, []
-    for t in py:
+    for t in files:
         got = tests_in(repo, t)
         (bad.append(t) if got is None else per_file.__setitem__(t, got))
     print("Test map: every test under the feature whose command names its file")
@@ -514,8 +591,6 @@ def cmd_tests(repo, strict):
             show(t, per_file[t])
     for t in bad:
         print(f"note  could not parse {t}; its tests are not counted")
-    if unread:
-        print(f"note  {len(unread)} JS/TS test file(s) are not itemised: {', '.join(unread)}")
     unmapped = total - mapped
     print(f"TESTS: {total} tests | {mapped} mapped to a feature | {unmapped} unmapped | "
           f"{hollow} without an assertion or a way to fail | {skipped} skipped")
@@ -711,9 +786,11 @@ def extract_failure_summary(output):
 def run_check(cmd, repo, timeout, env=None):
     """(ok, exit code or None, combined output, seconds)."""
     t0 = time.time()
+    run_env = dict(os.environ if env is None else env)
+    run_env.setdefault("PYTHONDONTWRITEBYTECODE", "1")
     try:
         p = subprocess.run(cmd, shell=True, cwd=repo, capture_output=True, text=True,
-                           encoding="utf-8", errors="replace", timeout=timeout, env=env)
+                           encoding="utf-8", errors="replace", timeout=timeout, env=run_env)
         return p.returncode == 0, p.returncode, (p.stdout or "") + (p.stderr or ""), time.time() - t0
     except subprocess.TimeoutExpired:
         return False, None, f"timed out after {timeout}s", time.time() - t0
@@ -776,8 +853,10 @@ def start_app(cmd, repo):
     kw = ({"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if not posix
           else {"start_new_session": True})
     run_cmd = f"exec {cmd}" if posix else cmd
+    app_env = dict(os.environ)
+    app_env.setdefault("PYTHONDONTWRITEBYTECODE", "1")
     with os.fdopen(fd, "w") as fh:
-        proc = subprocess.Popen(run_cmd, shell=True, cwd=repo, stdout=fh, stderr=subprocess.STDOUT, **kw)
+        proc = subprocess.Popen(run_cmd, shell=True, cwd=repo, stdout=fh, stderr=subprocess.STDOUT, env=app_env, **kw)
     return proc, log
 
 
@@ -1068,10 +1147,15 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
             unproven += 1
             if not as_json:
                 print("  note  no fail-proof recorded: nobody has shown these checks can go red")
-        elif strict and not proven_by(f, receipts, signature):
-            unproven += 1
-            if not as_json:
-                print("  note  no recorded failing run matching fail-signal for the current checks; fail-proof prose alone is not evidence")
+        elif strict:
+            passing_out = {f"{fn}|{c}": o for fn, _, c, ok_r, o, *_ in results if ok_r and fn == f["name"]}
+            if not proven_by(f, receipts, signature, passing_out):
+                unproven += 1
+                if not as_json:
+                    if proven_by(f, receipts, signature):
+                        print("  SIGNAL IN PASS  fail-signal also appears in passing output: a signal printed on pass cannot prove rejection")
+                    else:
+                        print("  note  no recorded failing run matching fail-signal for the current checks; fail-proof prose alone is not evidence")
 
     for fn, k, c, p_cnt, tot in flaky_checks:
         if not as_json:
@@ -1098,24 +1182,32 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if unchallenged and not as_json:
         print("UNCHALLENGED  VERIFY.md requires a caught mutation for the current checks: run "
               "`verify.py challenge` on the highest-risk feature")
-    dependent = (not_independent(state, shown, agent_name())
-                 if strict and "independent" in requirements(read(repo, RECIPE)) else [])
-    if not as_json:
-        for feat, kind, cmd, who in dependent:
-            print(f"NOT INDEPENDENT  {feat} ({kind}): frozen by {who or 'an unnamed agent'}, run by "
-                  f"{agent_name() or 'an unnamed agent'}. VERIFY.md requires the agent that froze a check to "
-                  "differ from the one claiming green: have a separate VERIFY_AGENT run `baseline` or this run")
-    if strict and selected and not as_json:
-        print(SELECTED)
-    incomplete = strict and (unverified or unproven or orphans or missing_baseline or unchallenged or dependent
-                             or selected)
     try:
         changed_during_run = signature != sha(json.dumps(check_hashes(repo), sort_keys=True))
     except (OSError, ValueError):
         changed_during_run = True
     if changed_during_run and not as_json:
         print("CHECK CHANGED DURING RUN  repeat verification with stable checks and oracles")
-    tree_after = tree_sig(repo, fast=not strict) if caching else None
+    tree_after = tree_sig(repo, fast=not strict) if caching else (tree_sig(repo, fast=False) if strict else None)
+    runner = agent_name()
+    if strict and runner and not only and not selected and not changed_during_run:
+        frozen_map = state.get("frozen_by") or {}
+        v_by = state.setdefault("verified_by", {})
+        for feat_n, kind, cmd, ok_r, _, _, q_r, _ in results:
+            ckey = f"{feat_n}|{kind}|{cmd}"
+            if ok_r and not q_r and frozen_map.get(ckey) not in (None, runner):
+                v_by[ckey] = {"agent": runner, "signature": signature, "tree": tree_after}
+    dependent = (not_independent(state, shown, runner, signature, tree_after)
+                 if strict and "independent" in requirements(read(repo, RECIPE)) else [])
+    if not as_json:
+        for feat, kind, cmd, who in dependent:
+            print(f"NOT INDEPENDENT  {feat} ({kind}): frozen by {who or 'an unnamed agent'}, run by "
+                  f"{runner or 'an unnamed agent'}. VERIFY.md requires the agent that froze a check to "
+                  "differ from the one claiming green: have a separate VERIFY_AGENT run `baseline` or this run")
+    if strict and selected and not as_json:
+        print(SELECTED)
+    incomplete = strict and (unverified or unproven or orphans or missing_baseline or unchallenged or dependent
+                             or selected)
     if caching and tree_after == tree_before and not changed_during_run:
         remember_passes(repo, fresh, tree_before, full=strict)
     cached = sum(1 for r in results if r[7])
@@ -1131,6 +1223,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                      if blind_checks else ""))
     if quarantined:
         state["quarantined"] = sorted(quarantined)
+    if state.get("verified_by") or quarantined:
         save_state(repo, state)
     norm_results = [(feat, kind, cmd, (ok or q), out, code) for feat, kind, cmd, ok, out, code, q, _ in results]
     notes, bad = track(repo, norm_results, only, budget,
@@ -1217,7 +1310,7 @@ def seal_of(state):
 # it. With VERIFY_AGENT=<name>, loop memory (last run, rounds, scope, doctor) lives in
 # .verify-state.<name>.json; the baseline, re-baselines and rejection receipts stay in STATE for
 # every agent, so a new name neither escapes a freeze nor has to re-prove a check.
-SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures", "frozen_by")
+SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures", "frozen_by", "verified_by", "swarm")
 AGENT_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
 LOCK = ".verify-state.lock"
 _loaded = {}  # state file -> what this process last read from it: the base of the merge
@@ -1328,7 +1421,7 @@ def merge_state(disk, base, mine, owned):
             out.pop(k, None)  # this process removed it
         elif k in base and mine[k] == base[k]:
             continue
-        elif k == "failures" and isinstance(mine[k], dict):
+        elif k in ("failures", "verified_by", "swarm") and isinstance(mine[k], dict):
             out[k] = merge_state(disk.get(k) or {}, base.get(k) or {}, mine[k], lambda _: True)
         elif k == "rebaselines" and isinstance(mine[k], list):
             have = list(disk.get(k) or [])
@@ -1606,29 +1699,43 @@ def current_receipts(state, signature):
     return receipts
 
 
-def proven_by(feature, receipts, signature):
+def proven_by(feature, receipts, signature, passing=None):
     """The receipt that proves this feature's checks can go red: (command, signal, receipt) or None.
-    It must belong to the current checks, contain a declared fail-signal and not be a harness error."""
+    It must belong to the current checks, contain a declared fail-signal, not be a harness error,
+    and not match a signal that the same check also prints when it passes."""
     for kind, cmd in feature["checks"]:
         if kind in ("lint", "type", "types"):
             continue
-        r = receipts.get(f"{feature['name']}|{cmd}", {})
+        key = f"{feature['name']}|{cmd}"
+        r = receipts.get(key, {})
         out = r.get("output", "")
         if r.get("signature") != signature or HARNESS_FAILURE.search(out):
             continue
+        pass_out = (passing or {}).get(key) or ""
         for signal in feature["signals"]:
-            if signal in out:
+            if signal in out and signal not in pass_out:
                 return cmd, signal, r
     return None
 
 
-def not_independent(state, features, runner):
-    """Checks whose freezer is not shown to differ from `runner`, the agent claiming green:
-    [(feature, kind, command, freezer)]. An unnamed freezer or runner cannot show independence."""
+def not_independent(state, features, runner, signature=None, tree=None):
+    """Checks whose freezer is not shown to differ from `runner` (or from an agent in `verified_by`
+    that already proved the check on the same signature and tree): [(feature, kind, command, freezer)]."""
     frozen = state.get("frozen_by") or {}
-    return [(f["name"], kind, cmd, frozen.get(f"{f['name']}|{kind}|{cmd}"))
-            for f in features for kind, cmd in f["checks"]
-            if not runner or frozen.get(f"{f['name']}|{kind}|{cmd}") in (None, runner)]
+    verified = state.get("verified_by") or {}
+    out = []
+    for f in features:
+        for kind, cmd in f["checks"]:
+            ckey = f"{f['name']}|{kind}|{cmd}"
+            who = frozen.get(ckey)
+            if not runner or not who:
+                out.append((f["name"], kind, cmd, who))
+            elif runner == who:
+                v = verified.get(ckey) or {}
+                if not (v.get("agent") not in (None, who) and signature and v.get("signature") == signature
+                        and tree and v.get("tree") == tree):
+                    out.append((f["name"], kind, cmd, who))
+    return out
 
 
 NOISE = re.compile(r"\S*[\\/](?:tmp|temp)[\\/]\S*|/tmp/\S+|0x[0-9a-f]+|\d+(?:\.\d+)?s\b|\d{2}:\d{2}:\d{2}", re.I)
@@ -1656,7 +1763,7 @@ def track(repo, results, only, budget, failures, strict=False, signature=None, t
         count = (p.get("count", 0) + 1) if (not ok and p.get("fp") == fp) else (0 if ok else 1)
         checks[key] = {"ok": ok, "fp": fp, "count": count, "exit": code, "output": out[-4000:]}
         if not ok and code is not None and out.strip():
-            receipts[key] = {"signature": signature, "exit": code, "output": out[-4000:]}
+            receipts[key] = {"signature": signature, "exit": code, "output": out[-4000:], "agent": agent_name()}
         if p.get("ok") and not ok:
             lines.append(f"NEWLY RED  {feat} ({kind}): it passed last run, so the last change broke it")
         elif p and not p.get("ok") and ok:
@@ -1914,12 +2021,13 @@ def answer(repo):
     except (OSError, ValueError):
         signature = None
     receipts = current_receipts(state, signature) if signature else {}
+    passing_out = {k: r.get("output", "") for k, r in checks.items() if isinstance(r, dict) and r.get("ok")}
     rejections, unproven, unverified = [], [], []
     for f in features:
         if not f["checks"]:
             unverified.append(f["name"])
             continue
-        hit = proven_by(f, receipts, signature)
+        hit = proven_by(f, receipts, signature, passing_out)
         if not hit or not f["proofs"]:
             unproven.append(f["name"])
             continue
@@ -1936,7 +2044,8 @@ def answer(repo):
         "challenge" in requirements(read(repo, RECIPE)) and not any(
             r.get("mutation") and r.get("signature") == signature for r in receipts.values()) else []
     dependent = [f"{feat} ({kind} `{cmd}`): frozen by {who or 'an unnamed agent'}"
-                 for feat, kind, cmd, who in not_independent(state, features, agent_name())]         if features and "independent" in requirements(read(repo, RECIPE)) else []
+                 for feat, kind, cmd, who in not_independent(state, features, agent_name(), signature, state.get("tree"))] \
+        if features and "independent" in requirements(read(repo, RECIPE)) else []
     return {
         "verdict": VERDICTS[name], "state": name, "detail": detail, "exit": code,
         "verify_line": state.get("verify_line"),
@@ -2582,6 +2691,10 @@ def main():
     ch.add_argument("repo", nargs="?", default=".")
     ch.add_argument("--feature", required=True, help="exact feature name in VERIFY.md")
     ch.add_argument("--mutation", help="JSON file with file, before, after and claim")
+    ch.add_argument("--file", help="inline mutation target file (repo-relative), instead of --mutation JSON file")
+    ch.add_argument("--before", help="inline mutation unique substring to replace")
+    ch.add_argument("--after", help="inline mutation replacement string")
+    ch.add_argument("--claim", help="inline mutation claim description (defaults to '<feature>: <before> -> <after>')")
     ch.add_argument("--auto", metavar="FILE", nargs="?", const="",
                     help="generate standard mutations for this product file; report a mutation score "
                          "(with --diff the file may be left out: every changed product file)")
@@ -2593,6 +2706,20 @@ def main():
     ch.add_argument("--jobs", type=int, default=1,
                     help="with --auto, judge mutations in N parallel scratch copies (default 1; "
                          "a ## Run recipe forces 1)")
+    sw = sub.add_parser("swarm", help="coordinate multi-agent verification: work-stealing claims, independence routing, or repo-wide auto-challenge")
+    sw.add_argument("repo", nargs="?", default=".")
+    sw.add_argument("--claim", action="store_true", help="atomically claim the highest-priority task this agent is eligible for")
+    sw.add_argument("--release", metavar="FEATURE", nargs="?", const="*", help="release a claimed feature (or '*' for all claims held by this agent)")
+    sw.add_argument("--done", metavar="FEATURE", help="mark a claimed feature's current task step done and release its claim")
+    sw.add_argument("--role", choices=["any", "worker", "judge"], default="any",
+                    help="filter claimable tasks by role: worker (fix/prove/freeze/challenge) or judge (independent/challenge/run)")
+    sw.add_argument("--lease", type=int, default=600, help="claim lease duration in seconds before another agent can steal it (default: 600)")
+    sw.add_argument("--auto", action="store_true", help="run parallel mutation surveys across all mapped features and record receipts in the shared lane")
+    sw.add_argument("--diff", metavar="REF", nargs="?", const="HEAD", help="with --auto, mutate only lines changed since REF (default HEAD)")
+    sw.add_argument("--max", type=int, default=15, help="with --auto, max mutations per feature (default: 15)")
+    sw.add_argument("--jobs", type=int, default=2, help="with --auto, parallel scratch workers per feature (default: 2)")
+    sw.add_argument("--timeout", type=int, default=120, help="with --auto, seconds per check (default: 120)")
+    sw.add_argument("--json", action="store_true", help="print swarm plan, claim, or auto survey as JSON")
     ci = sub.add_parser("ci", help="fresh proof from committed inputs; ignore local verification state")
     ci.add_argument("repo", nargs="?", default=".")
     ci.add_argument("--plan", required=True, help="committed repo-relative JSON feature/mutation list")
@@ -2608,10 +2735,19 @@ def main():
     if a.cmd == "ci":
         from ci import cmd_ci
         sys.exit(cmd_ci(sys.modules[__name__], repo, a.plan, a.output, a.timeout))
+    if a.cmd == "swarm":
+        from swarm import cmd_swarm
+        sys.exit(cmd_swarm(sys.modules[__name__], repo, claim=a.claim, release=a.release, done=a.done,
+                           role=a.role, lease=a.lease, auto=a.auto, diff=a.diff, jobs=a.jobs,
+                           limit=a.max, timeout=a.timeout, as_json=a.json))
     if a.cmd == "challenge":
         auto = a.auto is not None
-        if bool(a.mutation) == auto:
-            ap.error("challenge needs exactly one of --mutation or --auto")
+        inline_parts = (a.file is not None, a.before is not None, a.after is not None)
+        inline = any(inline_parts)
+        if inline and not all(inline_parts):
+            ap.error("inline challenge requires --file, --before, and --after together")
+        if sum([bool(a.mutation), inline, auto]) != 1:
+            ap.error("challenge needs exactly one of --mutation, (--file --before --after), or --auto")
         if a.diff and not auto:
             ap.error("--diff works with --auto")
         if auto and not a.auto and not a.diff:
@@ -2621,7 +2757,9 @@ def main():
             sys.exit(cmd_auto(sys.modules[__name__], repo, a.feature, a.auto or None, a.timeout, a.max, a.json,
                               a.jobs, a.diff))
         from challenge import cmd_challenge
-        sys.exit(cmd_challenge(sys.modules[__name__], repo, a.feature, a.mutation, a.timeout))
+        mut_arg = {"file": a.file, "before": a.before, "after": a.after,
+                   "claim": a.claim or f"{a.feature}: {a.before.strip()} -> {a.after.strip()}"} if inline else a.mutation
+        sys.exit(cmd_challenge(sys.modules[__name__], repo, a.feature, mut_arg, a.timeout))
     if a.cmd == "scaffold-driver":
         sys.exit(cmd_scaffold_driver(repo, a.type))
     if a.cmd == "scaffold-ui":
