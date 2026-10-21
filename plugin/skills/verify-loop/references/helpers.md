@@ -51,7 +51,7 @@ changes, enum narrowing and response-shape changes. Keep the old spec as a commi
 | `scaffold-oracle spec.json [--type openapi\|schema]` | `scripts/smoke_api.py` or `scripts/validate_schema.py` | Expected bodies; the API probe only checks a successful status |
 
 Each prints a suggested VERIFY.md section; it does not edit VERIFY.md. Paste it, replace the
-suggested `fail-signal:` with the real behavioral one, then prove rejection as in step 4.
+suggested `fail-signal:` with the real behavioral one, then prove rejection (the `prove` step in SKILL.md).
 
 ## Parallel checks: --jobs
 

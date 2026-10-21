@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.17.0 - 2026-10-21 - Mechanism, not advice
+
+SKILL.md is cut from 148 lines to 99 and rebuilt around the helper as a state machine: run
+`report`, then do the step its `NEXT` line names (`map`, `fix`, `prove`, `freeze`, `challenge`,
+`independent`, `run`). A rule stays only if the evals show the skill arm beating the bare arm on
+it, or `verify.py` enforces it and the agent must know it to act on a verdict. The per-rule
+evidence is in `evals/SKILL_CUTS.md`. No agent runs were paid for; it rests on the historical
+ledger and run logs (`ddcd651~1:evals/`), the 2026-10-20 run and this changelog.
+
+- **Cut "A good check" items 2–5.** "Watches the real thing": `fake-check-and-decoy` was 3/3
+  both ways, and `HOLLOW` now flags the pattern. "Expects what the spec says": no difference on
+  `healthy-check` or the decoy case, and `references/answer.md` already says it. "Fails
+  specifically" and "one cheap command": never measured, and both are advice. Item 1 ("can fail")
+  stays as the `prove` step, which won `check-cannot-fail` (0/3 → 1/3; the winning run broke the
+  code and ran the check) and `make-it-verified` (the bare arm left no `fail-proof:` or baseline).
+- **Cut the check-strength ladder and "name the claim observably".** Neither was measured, both
+  are advice, and the claim wording is in `references/answer.md`.
+- **Cut the artifact-identity bullet.** `p07-running-artifact-identity` showed no difference
+  (1/1 vs 1/1, and replays missed the same finding on both sides). It stays in
+  `VERIFY_FORMAT.md#run` and `references/project-recipe.md`.
+- **Cut the fooled-checker intro, "an assessment edits no product code", `tests --strict` and
+  the closing *Test:* line.** All four were unmeasured or duplicated: assess mode is defined in
+  `references/answer.md`, `tests --strict` is in `references/verify-change.md`, and the *Test:*
+  line repeated Done. The guards themselves (`baseline` before the work, `require: independent`,
+  sealed state, CI) stay, one line each, because the helper enforces them.
+- **Kept, prominent: "a check you think is wrong is a finding, not an edit."** `check-is-wrong`
+  went 0/3 → 3/3, and none of the three winning runs called the helper. The prose did this alone.
+- **Kept because the helper enforces them:** the `--assess` quick path (added in 1.16.0 after an
+  eval agent skipped the helper because it wrote into the repo), Done, `NEWLY RED` /
+  `SAME FAILURE x2` / `BUDGET`, `SWARM:` and the no-second-name rule, `--reviewed-by`, `HOLLOW`
+  / `SURVIVED` / `UNCOVERED`.
+- **Kept, flagged as needing a mechanism:** green covers mapped features only. In
+  `green-with-unverified` (0/3 vs 0/3) both arms missed the unproven checks, which `report` now
+  prints as `GAP never seen red`. But `report` still prints `0 unverified` for `search.py`, a
+  feature with no section, so SKILL.md tells the agent to add what no feature maps. The fix is a
+  `report` gap for unmapped product files.
+- **New guards for the structural cases** (not run yet): never skip, mock, stub, loosen or drop a
+  check to get green, and a check that cannot run here stays red and is reported as blocked
+  (`real-check-unavailable`). A note saying a check went red is a claim and only a receipt
+  counts (`inherited-claim`). `references/triage.md` gains the missing-tool case.
+- Step-number references in `references/answer.md` and `references/helpers.md` now name the
+  `prove` step. No test asserted SKILL.md prose; `python -m unittest discover tests` passes
+  unchanged.
+
 ## 1.16.0 - 2026-10-20 - Assess without touching the repo
 
 - **`--assess` and `--state-dir DIR` keep every helper write outside the checked repo.** Every subcommand takes them, and `VERIFY_STATE_DIR` does the same from the environment. The state files, the lock and the caches go to `<dir>/<repo name>-<path hash>/`; `--assess` defaults the dir to `verify-loop-assess` in the system temp directory and also stops Python checks from writing bytecode or a pytest cache. After `run --assess`, `challenge --auto --assess` and `report --assess`, `git status --porcelain` of the repo is unchanged, and `report` reads the state back. `NEXT` and `review` reproduce commands carry `--state-dir` so follow-ups land in the same place. Scratch copies made by `challenge`, `swarm --auto` and `ci` keep their state inside themselves, so nothing is left behind for them. Before this, every `run` wrote `.verify-state.json` into the repo, and in the 2026-10-20 eval an agent skipped the helper for that reason. Without the options nothing changes. Files the checks themselves write and the `scaffold-*` commands, which exist to add project files, are not moved.

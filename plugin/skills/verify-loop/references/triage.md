@@ -22,6 +22,11 @@ When `verify.py run` fails, never blindly modify product code. Triage the failur
 - **Symptoms**: Port already in use, process failed to start, database connection refused, command timed out, missing local directory.
 - **Action**: Fix `## Run` in `VERIFY.md`, start scripts, or seed data.
 - **Rule**: Do NOT edit product logic.
+- **A tool or service this environment lacks** (a CLI not on `PATH`, no network, no credentials):
+  no repo edit turns that into a real pass. Leave the check red, list it under `## Blind spots`,
+  and report the claim as blocked, naming where the check does run (usually CI). Skipping,
+  mocking or stubbing it, or putting a stand-in binary in the repo, hands over a green that
+  proves nothing.
 
 ## 2. Doc / Spec Drift
 - **Symptoms**: Application behavior was intentionally updated or redesigned, but an existing test check still expects the obsolete behavior.

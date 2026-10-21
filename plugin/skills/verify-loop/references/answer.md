@@ -12,7 +12,7 @@ another AI.
   (build or repair the recipe) or `repair` (authorized fix);
 - **the wrong state the check must reject**, when the caller knows it: the proven cause
   reintroduced, a mutated boundary, the abuse request, the slow path, the removed connection.
-  It becomes the step-4 rejection or a `verify.py challenge` mutation in a scratch copy.
+  It becomes the `prove` rejection or a `verify.py challenge` mutation in a scratch copy.
 
 If the inputs are unchanged and only the current verdict is needed, `verify.py status --json` is
 enough. Load the skill only when proof is missing, stale or red.
