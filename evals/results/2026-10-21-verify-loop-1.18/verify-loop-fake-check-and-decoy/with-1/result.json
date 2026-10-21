@@ -1,0 +1,72 @@
+{
+  "case": "verify-loop-fake-check-and-decoy",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"the test for the SAVE10 code never calls the discount function. It does its own math and checks it against itself:\"\n  found   fail-proof-shows-it \u2014 \"I changed `total * 0.9` to `total * 0.5` in `discount.py`. Both tests still pass.\"\n  found   needs-a-real-check \u2014 \"Replace the SAVE10 test with one that calls the function, e.g. `assertEqual(apply_discount(100, \"SAVE10\"), 90)`.\"\n  held    passthrough-test-is-real",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 1986,
+      "cacheReadInputTokens": 150737,
+      "cacheCreationInputTokens": 10779,
+      "webSearchRequests": 0,
+      "costUSD": 0.1561554,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 199,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1561554,
+  "turns": 8,
+  "api_seconds": 34.124,
+  "helper_calls": [
+    "run",
+    "challenge",
+    "report",
+    "challenge",
+    "run",
+    "answer-check"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 39.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-7_w86f8_\\verify-loop"
+}

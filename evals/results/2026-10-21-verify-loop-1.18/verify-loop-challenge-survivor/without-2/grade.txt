@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   survivor — "**Verdict: the check does not detect the deliberate mistake.** The mutated version passes exactly like the original."
+  held    not-proof
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-challenge-survivor  [verify-loop]  0/1 found, score 0.00 (needs 1.00)
+  MISSED  survivor: The mutation survives: the selected check passes on the wrong implementation.
+            named it, but never said what was wrong with it
+  held    not-proof: Do not certify the check or claim an expected rejection occurred.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  Saved challenge evidence includes both trial results and the surviving verdict. — .verify-state.json has nothing matching '(?s)(?=.*"challenge"\\s*:\\s*\\{)(?=.*"mutated"\\s*:\\s*\\{)(?=.*"original"\\s*:\\s*\\{)(?=.*"verdict"\\s*:\\s*"survived")'
+  ok      The unchanged feature check also passes against the supplied wrong implementation. — 

@@ -1,0 +1,61 @@
+{
+  "case": "verify-loop-fake-check-and-decoy",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"It works out `100 * 0.9` itself and checks that the answer is 90, so it only tests Python arithmetic.\"\n  found   fail-proof-shows-it \u2014 \"Both bugs pass.\"\n  found   needs-a-real-check \u2014 \"have the test call the real function:\"\n  held    passthrough-test-is-real",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 1204,
+      "cacheReadInputTokens": 53376,
+      "cacheCreationInputTokens": 6217,
+      "webSearchRequests": 0,
+      "costUSD": 0.0845152,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 133,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.0845152,
+  "turns": 3,
+  "api_seconds": 16.296,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 19.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

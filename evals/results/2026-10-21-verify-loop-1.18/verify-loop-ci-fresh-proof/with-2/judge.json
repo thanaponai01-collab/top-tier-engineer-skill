@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "survivor",
+      "what": "The selected check does not observe the implementation, so the deliberate mutation is not rejected.",
+      "found": true,
+      "quote": "The mutation in `verification/mutation.json` changes `return 42` to `return 41` in `app.py`. `SPEC.md` says a result of 41 must be rejected, but the check passed on both versions:",
+      "quote_checked": true
+    },
+    {
+      "id": "freshness",
+      "what": "Local green state is insufficient; evidence is newly generated.",
+      "found": true,
+      "quote": "That is an old local claim, not proof. CI ignores it on purpose, and the fresh run contradicts it.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0230285,
+  "model": "claude-sonnet-5-5"
+}

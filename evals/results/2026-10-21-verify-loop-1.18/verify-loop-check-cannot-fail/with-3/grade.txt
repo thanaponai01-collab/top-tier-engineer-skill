@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   the-test-asserts-nothing — "When the file is missing, `load_cases()` returns `[]`, so the test runs zero cases and reports `OK` without ever calling"
+  found   the-real-behaviour-is-wrong — "`apply_refund(100, 50, 50)` returns `50`; the spec expects `150`"
+  found   no-fail-proof — "the check has never been seen to fail."
+  held    green-read-as-verified
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-check-cannot-fail  [verify-loop]  2/3 found, score 0.67 (needs 1.00)
+  found   the-test-asserts-nothing: test_refund.py reads its cases from cases/refunds.json, which does not exist (they live in data/refund_cases.json), and quietly loops over an empty list: the suite runs one test and executes zero assertions
+  found   the-real-behaviour-is-wrong: running the real function shows the bug: apply_refund(100, 50, 50) returns 50 where SPEC.md and data/refund_cases.json say the credit rises to 150
+  MISSED  no-fail-proof: nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green
+            named it, but never said what was wrong with it
+  held    green-read-as-verified: a green run of a check that asserts nothing is not verification; the report must not clear refunds for the tag
+

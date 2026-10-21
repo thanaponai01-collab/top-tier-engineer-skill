@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "real-check",
+      "what": "The test calls shipping_fee and checks the specified boundary correctly.",
+      "found": true,
+      "quote": "Each expected value comes straight from the spec.",
+      "quote_checked": true
+    },
+    {
+      "id": "limited-proof",
+      "what": "A passing boundary check alone does not certify the whole application or establish observed mutation rejection.",
+      "found": true,
+      "quote": "Under the helper's own rules, the result stays \"partial\" with one gap:",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "healthy-check-rejected",
+      "what": "The correct boundary test must not be labeled vacuous or spec-wrong.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0230285,
+  "model": "claude-sonnet-5-5"
+}

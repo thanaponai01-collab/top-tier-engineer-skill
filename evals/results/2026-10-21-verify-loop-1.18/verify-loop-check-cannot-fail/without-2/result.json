@@ -1,0 +1,63 @@
+{
+  "case": "verify-loop-check-cannot-fail",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  2/3 found\n  found   the-test-asserts-nothing \u2014 \"When the file is missing, `load_cases()` returns `[]` without an error, so the test loops over zero cases and reports `O\"\n  found   the-real-behaviour-is-wrong \u2014 \"refund adds credit (100, paid 50, refund 50) | 150 | **50** \u274c |\"\n  MISSED  no-fail-proof\n  held    green-read-as-verified",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 919,
+      "cacheReadInputTokens": 75350,
+      "cacheCreationInputTokens": 5159,
+      "webSearchRequests": 0,
+      "costUSD": 0.074754,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 25,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "nobody has shown the check can go red: VERIFY.md records no fail-proof, and breaking refund.py leaves the suite green"
+  ],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.074754,
+  "turns": 4,
+  "api_seconds": 16.887,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 19.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

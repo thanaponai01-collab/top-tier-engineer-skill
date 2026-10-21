@@ -1,0 +1,4 @@
+  1. Bash: cd fixture && ls -la && find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -50
+  2. Bash: cd fixture && for f in *; do echo "=== $f"; cat "$f"; echo; done; python -m pytest -q 2>&1 | tail -20
+  3. Bash: cd fixture && ls -la --time-style=full-iso; git -C .. log 2>&1 | head -3
+  4. Bash: cd fixture && sed -i 's/self.assertEqual(discount_pct(100), 0)/self.assertEqual(discount_pct(100), 10)/' test_discount.py && grep -n "100)" test_discount.py &&…

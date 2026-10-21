@@ -1,0 +1,89 @@
+{
+  "case": "verify-loop-ci-fresh-proof",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   survivor \u2014 \"It passes whatever `app.py` returns, so it can't detect the `return 41` mutation, and the passing baseline proves nothin\"\n  found   freshness \u2014 \"That's an earlier claim, not evidence from this run, so I didn't use it.\"",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2916,
+      "cacheReadInputTokens": 118825,
+      "cacheCreationInputTokens": 8075,
+      "webSearchRequests": 0,
+      "costUSD": 0.146733,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 179,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Independent CI report rejects the supplied check.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The report identifies the tested committed inputs.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Execution output records the mutation experiment.",
+      "ok": false,
+      "detail": "../ci-evidence/run.log has nothing matching '(?i)surviv|mutat'",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "ci-evidence/report.json",
+      "ci-evidence/run.log"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.146733,
+  "turns": 6,
+  "api_seconds": 31.706,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 35.8,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

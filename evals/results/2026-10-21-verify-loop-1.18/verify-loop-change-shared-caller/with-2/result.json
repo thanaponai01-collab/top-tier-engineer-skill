@@ -1,0 +1,139 @@
+{
+  "case": "verify-loop-change-shared-caller",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   adjacent-discount-regression \u2014 \"`discount()` uses the same constant, so it started giving 10 off for subtotals from 50 to 99.\"\n  found   shared-impact \u2014 \"`change.diff` lowered the shared `QUALIFY` constant from 100 to 50.\"\n  found   coverage-boundary \u2014 \"\"No rounding or currency changes\" is only tested with the 49.99 and 99.99 inputs.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 26,
+      "outputTokens": 5463,
+      "cacheReadInputTokens": 325014,
+      "cacheCreationInputTokens": 15894,
+      "webSearchRequests": 0,
+      "costUSD": 0.3015188,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 650,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "A targeted mutation was caught using the unchanged feature checks.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The recipe still maps the adjacent behavior.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The finished discount check rejects the originally changed shared threshold.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The finished checks accept the spec-correct separated thresholds.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Direct independent checks confirm both boundaries on the finished product.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "final helper status is strict, current and green",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/commerce.py",
+      "fixture/test_discount.py",
+      "fixture/test_shipping.py"
+    ],
+    "added": [
+      "fixture/.verify-state-cache/results.json",
+      "fixture/.verify-state-cache/tree-e5450a0cab19dbc3.json",
+      "fixture/.verify-state.json",
+      "out/answer.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.3015188,
+  "turns": 14,
+  "api_seconds": 67.059,
+  "helper_calls": [
+    "report",
+    "challenge",
+    "challenge",
+    "challenge",
+    "run",
+    "report",
+    "challenge",
+    "challenge",
+    "challenge",
+    "report",
+    "baseline",
+    "challenge",
+    "run",
+    "status",
+    "report",
+    "challenge",
+    "challenge",
+    "run",
+    "status",
+    "answer-check"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 85.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-crwpneed\\verify-loop"
+}

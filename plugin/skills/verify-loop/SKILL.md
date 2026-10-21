@@ -49,6 +49,7 @@ Each `NEXT` line names a feature's step. Repeat until none is left:
 
 | Step | Do |
 |---|---|
+| `repair` | The check is `HOLLOW` and not frozen: edit it until it calls the product, then `run`. No review needed |
 | `map` | Record the check in VERIFY.md: command, `oracle:` files, a `fail-signal:` naming the wrong result (`WEAK SIGNAL` rejects `FAILED`, `AssertionError`) |
 | `blocked` | The environment failed (missing tool, port, timeout). Report it blocked and where it runs; change no code |
 | `fix` | Fix what the failure text says. A red you have not classified: [triage](references/triage.md) |
@@ -64,7 +65,7 @@ try. `BUDGET`: stop and report. `SWARM: split`: start helper agents, each with i
 agents, work the list yourself and report `not_independent`. Never give yourself a second name to
 stand in for a judge.
 
-**A check you think is wrong is a finding, not an edit.** Stop and ask a person. Editing it gets
+**A check you think is wrong is a finding, not an edit**, unless `NEXT` says `[repair]`. Stop and ask a person. Editing it gets
 `CHECK CHANGED` (or `LOOSENED` before a baseline), and `baseline` refuses to freeze it without
 `--reviewed-by <name> --reason <why>`. Pass those only for a review a person actually gave.
 

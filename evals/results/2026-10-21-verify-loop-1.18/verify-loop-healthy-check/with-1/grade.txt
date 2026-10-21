@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   real-check — "The check is a good one: it matches SPEC.md and it fails when the product is wrong."
+  found   limited-proof — "On its own, that only shows the current code agrees with the check."
+  held    healthy-check-rejected
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-healthy-check  [verify-loop]  0/2 found, score 0.00 (needs 1.00)
+  MISSED  real-check: The test calls shipping_fee and checks the specified boundary correctly.
+            named it, but never said what was wrong with it
+  MISSED  limited-proof: A passing boundary check alone does not certify the whole application or establish observed mutation rejection.
+            named it, but never said what was wrong with it
+  held    healthy-check-rejected: The correct boundary test must not be labeled vacuous or spec-wrong.
+
+  ok      left the code untouched (a report-only task) — no code file changed
+  ok      The supplied product-backed check was actually executed. — ran it: cd "<tmp>/tte-eval-8hz14ewi/fixture" && python -m unittest -v test_shipping 2>&1; 

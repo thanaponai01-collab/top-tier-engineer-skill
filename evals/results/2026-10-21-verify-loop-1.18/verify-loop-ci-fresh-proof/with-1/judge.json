@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "survivor",
+      "what": "The selected check does not observe the implementation, so the deliberate mutation is not rejected.",
+      "found": true,
+      "quote": "The Answer test still **passed** with that change, so the run reported `CHALLENGE: survived`.",
+      "quote_checked": true
+    },
+    {
+      "id": "freshness",
+      "what": "Local green state is insufficient; evidence is newly generated.",
+      "found": true,
+      "quote": "That is a leftover claim from an earlier local run, not proof.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0222845,
+  "model": "claude-sonnet-5-5"
+}

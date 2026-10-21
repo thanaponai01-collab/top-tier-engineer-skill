@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "adjacent-discount-regression",
+      "what": "The shared threshold change incorrectly enables the discount below 100.",
+      "found": true,
+      "quote": "it also made `discount()` give 10 off orders between 50 and 99.99.",
+      "quote_checked": true
+    },
+    {
+      "id": "shared-impact",
+      "what": "The report explains that the changed shared threshold affects both behaviors.",
+      "found": true,
+      "quote": "Lowering the shared `QUALIFY` constant from 100 to 50 lowered the free-shipping threshold as intended, but it also made `discount()` give 10 off orders between 50 and 99.99.",
+      "quote_checked": true
+    },
+    {
+      "id": "coverage-boundary",
+      "what": "The report states the limits of verification.",
+      "found": true,
+      "quote": "I didn't run the rounding experiment against `discount()`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.023754499999999998,
+  "model": "claude-sonnet-5-5"
+}

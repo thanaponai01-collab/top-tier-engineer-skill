@@ -1389,6 +1389,9 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if not only:
         state = load_state(repo)
         state["verify_line"] = verify_line
+        if judge_reach:  # `report` turns a hollow, unfrozen check into a `repair` step
+            ran = {f["name"] for f in shown}
+            state["hollow"] = sorted((set(state.get("hollow") or []) - ran) | set(hollow_feats))
         save_state(repo, state)
     if not as_json:
         for n in notes:

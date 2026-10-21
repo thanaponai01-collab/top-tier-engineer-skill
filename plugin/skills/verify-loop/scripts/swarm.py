@@ -22,8 +22,8 @@ import time
 from pathlib import Path
 
 
-ACTIONS = ("map", "blocked", "fix", "prove", "freeze", "challenge", "independent", "run", "done")
-WORKER_ACTIONS = {"map", "fix", "prove", "freeze", "run", "challenge"}
+ACTIONS = ("repair", "map", "blocked", "fix", "prove", "freeze", "challenge", "independent", "run", "done")
+WORKER_ACTIONS = {"repair", "map", "fix", "prove", "freeze", "run", "challenge"}
 JUDGE_ACTIONS = {"independent", "challenge", "prove", "freeze"}
 
 
@@ -51,6 +51,10 @@ def _next_command(repo, feat, action, freezers):
 def _bare_command(repo, feat, action, freezers):
     name = feat["name"]
     q = f'"{name}"' if " " in name else name
+    if action == "repair":
+        paths = ", ".join(feat.get("paths") or ["the product"])
+        return (f"edit the check for `## {name}` so it calls {paths}: it passed without doing so, and nothing is "
+                f"frozen, so this edit is the work, not a finding. Then `python verify.py run {repo}`")
     if action == "map":
         return f"edit {repo}/VERIFY.md: add `- test: ...` and `- fail-signal: ...` under `## {name}`"
     if action == "blocked":
@@ -95,6 +99,7 @@ def swarm_items(v, repo, state=None, now=None, where=None):
     checks = state.get("checks", {}) or {}
     passing_out = {k: r.get("output", "") for k, r in checks.items() if isinstance(r, dict) and r.get("ok")}
     frozen_lines = set((state.get("baseline_lines") or {}).get("checks", []))
+    hollow = set(state.get("hollow") or [])
     frozen_by = state.get("frozen_by") or {}
     leases = state.get("swarm") or {}
     any_challenged = any(r.get("mutation") and r.get("signature") == signature for r in receipts.values())
@@ -114,7 +119,9 @@ def swarm_items(v, repo, state=None, now=None, where=None):
                               for k, r in receipts.items())
         causes = [v.gates.blocked(v, checks[f"{f['name']}|{c}"].get("output", ""), checks[f"{f['name']}|{c}"].get("exit"))
                   for c in failing]
-        if not f["checks"] or not f["signals"]:
+        if f["name"] in hollow and not any(k in frozen_lines for k in ckeys):
+            action, detail = "repair", "HOLLOW: the check passed without calling the product, and it is not frozen"
+        elif not f["checks"] or not f["signals"]:
             action, detail = "map", "no check or literal fail-signal in VERIFY.md"
         elif failing and all(causes):
             action, detail = "blocked", causes[0]

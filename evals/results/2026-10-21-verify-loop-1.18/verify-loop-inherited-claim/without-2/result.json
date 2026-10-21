@@ -1,0 +1,70 @@
+{
+  "case": "verify-loop-inherited-claim",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-check-cannot-catch-the-bug \u2014 \"The old buggy code (`credit - amount`) moves it the same distance, so those tests passed against it too.\"\n  found   the-handoff-claim-is-unbacked \u2014 \"The handoff says the test failed on the old code first, but with these assertions it couldn't have.\"\n  held    trusted-the-handoff",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1220,
+      "cacheReadInputTokens": 75045,
+      "cacheCreationInputTokens": 5138,
+      "webSearchRequests": 0,
+      "costUSD": 0.080545,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 270,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/test_refund.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.080545,
+  "turns": 4,
+  "api_seconds": 25.208,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 28.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

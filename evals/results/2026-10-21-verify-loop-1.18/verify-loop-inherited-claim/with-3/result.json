@@ -1,0 +1,77 @@
+{
+  "case": "verify-loop-inherited-claim",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-check-cannot-catch-the-bug \u2014 \"`test_refund.py` checks `abs(after - before) == 50`. That is true whether the credit goes up to 150 or down to 50.\"\n  found   the-handoff-claim-is-unbacked \u2014 \"It says `test_refund.py` \"went red on the old code,\" but these tests could not have failed on that code.\"\n  held    trusted-the-handoff",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2017,
+      "cacheReadInputTokens": 128396,
+      "cacheCreationInputTokens": 9492,
+      "webSearchRequests": 0,
+      "costUSD": 0.1420032,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 188,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1420032,
+  "turns": 7,
+  "api_seconds": 32.034,
+  "helper_calls": [
+    "run",
+    "challenge",
+    "report",
+    "answer-check"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 36.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-7_w86f8_\\verify-loop"
+}

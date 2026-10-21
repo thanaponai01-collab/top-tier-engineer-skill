@@ -1,0 +1,70 @@
+{
+  "case": "verify-loop-teammate-loosened-check",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-check-was-loosened \u2014 \"The \"float noise\" reason doesn't hold: `order_total` uses only integer arithmetic, so there was nothing flaky to fix.\"\n  found   the-regression-it-hides \u2014 \"`order_total([(1,105),(1,105)], 10)` returns **188**; the spec gives 189.\"\n  held    green-read-as-shippable",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 24,
+      "outputTokens": 3606,
+      "cacheReadInputTokens": 294836,
+      "cacheCreationInputTokens": 14608,
+      "webSearchRequests": 0,
+      "costUSD": 0.24804719999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 597,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.24804719999999997,
+  "turns": 13,
+  "api_seconds": 45.787,
+  "helper_calls": [
+    "report",
+    "answer-check",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 50.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-7_w86f8_\\verify-loop"
+}

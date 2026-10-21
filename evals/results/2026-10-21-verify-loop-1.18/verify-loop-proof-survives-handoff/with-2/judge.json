@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "names-the-observed-rejection",
+      "what": "the second session's answer rests on a rejection it observed or found recorded: a check that fails with the sign-flipped code (credit - amount, $50 where the spec says $150) and passes with the fix. A green run of the fixed code alone does not show the check can tell them apart",
+      "found": true,
+      "quote": "with the old bug put back in (`credit - amount` in `refund.py`), `test_refund_adds_to_store_credit` fails with `AssertionError: 50 != 150`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0221085,
+  "model": "claude-sonnet-5-5"
+}

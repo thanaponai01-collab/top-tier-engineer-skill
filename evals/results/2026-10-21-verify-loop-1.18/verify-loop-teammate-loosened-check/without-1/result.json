@@ -1,0 +1,61 @@
+{
+  "case": "verify-loop-teammate-loosened-check",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-check-was-loosened \u2014 \"both discount tests use `assertAlmostEqual(..., delta=2)`. A total that's off by up to 2 cents still passes. For integer\"\n  found   the-regression-it-hides \u2014 \"| `[(1,105),(1,105)]`, 10% | 188 | 189 (210 \u00d7 0.9) |\"\n  held    green-read-as-shippable",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1149,
+      "cacheReadInputTokens": 74690,
+      "cacheCreationInputTokens": 5438,
+      "webSearchRequests": 0,
+      "costUSD": 0.081454,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 179,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.081454,
+  "turns": 4,
+  "api_seconds": 15.706,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 18.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

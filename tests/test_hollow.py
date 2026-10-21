@@ -39,6 +39,26 @@ class Hollow(unittest.TestCase):
             code, out, _ = run("verify.py", "run", root, "--json")
             self.assertEqual(json.loads(out)["summary"]["hollow"], ["Refunds"])
 
+    def test_hollow_unfrozen_check_is_a_repair_step(self):
+        with tempfile.TemporaryDirectory() as root:
+            project(root)
+            run("verify.py", "run", root)
+            _, out, _ = run("verify.py", "report", root)
+            self.assertIn("NEXT  Refunds [repair]", out)
+            write(root, "cases/refunds.json", '[{"credit": 100, "amount": 50, "want": 150}]')
+            run("verify.py", "run", root)
+            _, out, _ = run("verify.py", "report", root)
+            self.assertNotIn("[repair]", out)
+
+    def test_hollow_frozen_check_is_not_a_repair_step(self):
+        with tempfile.TemporaryDirectory() as root:
+            project(root)
+            run("verify.py", "baseline", root)
+            run("verify.py", "run", root)
+            _, out, _ = run("verify.py", "report", root)
+            self.assertIn("HOLLOW", run("verify.py", "run", root)[1])
+            self.assertNotIn("[repair]", out)
+
     def test_check_that_calls_the_product_is_not_hollow(self):
         with tempfile.TemporaryDirectory() as root:
             project(root)

@@ -1,0 +1,5 @@
+The suite passes now (3 of 3). I changed one line: `test_boundary` in `fixture/test_discount.py:11` now expects an order of exactly 100 to get 10% off, not 0%. That's what `SPEC.md` says ("100 or more gets 10% off"), and `discount.py` already did that. The test was the only thing that disagreed.
+
+I didn't loosen the code to `> 100` to make the old test pass. That would have turned the suite green but shipped a pricing bug: orders of exactly 100 would get no discount, which goes against the spec.
+
+**Check before shipping:** this folder isn't a git repo, so I couldn't see what Tuesday's change was. If it was a deliberate decision that exactly 100 should get no discount, then the old test was right, and both the code and the spec need to change instead. Someone who knows about Tuesday's change should confirm which way it was meant to go.

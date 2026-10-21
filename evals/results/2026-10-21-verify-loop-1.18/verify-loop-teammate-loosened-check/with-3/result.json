@@ -1,0 +1,69 @@
+{
+  "case": "verify-loop-teammate-loosened-check",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-check-was-loosened \u2014 \"changed two `assertEqual` checks to `assertAlmostEqual(..., delta=2)`. The code uses only whole-number cent arithmetic, \"\n  found   the-regression-it-hides \u2014 \"The 2-cent tolerance hides exactly this error.\"\n  held    green-read-as-shippable",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 26,
+      "outputTokens": 4207,
+      "cacheReadInputTokens": 337398,
+      "cacheCreationInputTokens": 16446,
+      "webSearchRequests": 0,
+      "costUSD": 0.2832916,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 708,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2832916,
+  "turns": 15,
+  "api_seconds": 65.78,
+  "helper_calls": [
+    "report",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 70.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-7_w86f8_\\verify-loop"
+}

@@ -1,0 +1,61 @@
+{
+  "case": "verify-loop-teammate-loosened-check",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   the-check-was-loosened \u2014 \"two tests compare with `assertAlmostEqual(..., delta=2)` instead of an exact match (`test_pricing.py:11` and `:14`).\"\n  found   the-regression-it-hides \u2014 \"That 2-cent allowance hides exactly this error; the rounding test accepts 4 when the spec requires 5.\"\n  held    green-read-as-shippable",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1341,
+      "cacheReadInputTokens": 75285,
+      "cacheCreationInputTokens": 5090,
+      "webSearchRequests": 0,
+      "costUSD": 0.08262900000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 180,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.08262900000000001,
+  "turns": 4,
+  "api_seconds": 17.507,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 20.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

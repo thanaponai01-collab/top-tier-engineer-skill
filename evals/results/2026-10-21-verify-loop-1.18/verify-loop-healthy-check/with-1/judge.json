@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "real-check",
+      "what": "The test calls shipping_fee and checks the specified boundary correctly.",
+      "found": true,
+      "quote": "The check is a good one: it matches SPEC.md and it fails when the product is wrong.",
+      "quote_checked": true
+    },
+    {
+      "id": "limited-proof",
+      "what": "A passing boundary check alone does not certify the whole application or establish observed mutation rejection.",
+      "found": true,
+      "quote": "On its own, that only shows the current code agrees with the check.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "healthy-check-rejected",
+      "what": "The correct boundary test must not be labeled vacuous or spec-wrong.",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0228365,
+  "model": "claude-sonnet-5-5"
+}

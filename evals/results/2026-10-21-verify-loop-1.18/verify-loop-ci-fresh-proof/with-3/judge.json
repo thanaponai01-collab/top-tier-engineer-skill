@@ -1,0 +1,26 @@
+{
+  "ok": false,
+  "found": 0,
+  "total": 2,
+  "score": 0.0,
+  "planted": [
+    {
+      "id": "survivor",
+      "what": "The selected check does not observe the implementation, so the deliberate mutation is not rejected.",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "freshness",
+      "what": "Local green state is insufficient; evidence is newly generated.",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [],
+  "passed": false,
+  "cost_usd": 0,
+  "model": "claude-sonnet-5-5"
+}

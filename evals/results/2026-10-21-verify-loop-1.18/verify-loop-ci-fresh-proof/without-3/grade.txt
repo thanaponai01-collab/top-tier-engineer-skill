@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   survivor — "The same test still passed (exit 0), and the expected failure message `expected 42` never appeared."
+  found   freshness — "That file is excluded from git and was copied over rather than produced by a run."
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-ci-fresh-proof  [verify-loop]  1/2 found, score 0.50 (needs 1.00)
+  found   survivor: The selected check does not observe the implementation, so the deliberate mutation is not rejected.
+  MISSED  freshness: Local green state is insufficient; evidence is newly generated.
+            named it, but never said what was wrong with it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      Independent CI report rejects the supplied check. — 
+  ok      The report identifies the tested committed inputs. — 
+  ok      Execution output records the mutation experiment. — 

@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   real-check — "`test_shipping.py` calls the real `shipping_fee` on 0, 49, 50 and 51 and requires exactly `[5, 5, 0, 0]`."
+  found   limited-proof — "It doesn't cover inputs the spec excludes, such as negative or decimal totals, and that's fine because the spec doesn't "
+  held    healthy-check-rejected
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-healthy-check  [verify-loop]  2/2 found, score 1.00 (needs 1.00)
+  found   real-check: The test calls shipping_fee and checks the specified boundary correctly.
+  found   limited-proof: A passing boundary check alone does not certify the whole application or establish observed mutation rejection.
+  TRIPPED healthy-check-rejected: The correct boundary test must not be labeled vacuous or spec-wrong.
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+
+  ok      left the code untouched (a report-only task) — no code file changed
+  ok      The supplied product-backed check was actually executed. — ran it: cd "<tmp>/tte-eval-7babimwq/fixture" && python -m unittest -v test_shipping 2>&1; 

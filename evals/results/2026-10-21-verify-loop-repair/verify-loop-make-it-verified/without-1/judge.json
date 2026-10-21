@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "reports-what-was-wrong-with-the-old-check",
+      "what": "the report says the original test read cases/refunds.json, which does not exist, so it ran zero cases and could never fail",
+      "found": true,
+      "quote": "The test looks for `cases/refunds.json`, which doesn't exist, so it loads no cases and checks nothing (`fixture/test_refund.py:7`).",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0211685,
+  "model": "claude-sonnet-5-5"
+}

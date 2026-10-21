@@ -1,0 +1,96 @@
+{
+  "case": "verify-loop-ci-fresh-proof",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   survivor \u2014 \"The mutation in `verification/mutation.json` changes `return 42` to `return 41` in `app.py`. `SPEC.md` says a result of \"\n  found   freshness \u2014 \"That is an old local claim, not proof. CI ignores it on purpose, and the fresh run contradicts it.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 1861,
+      "cacheReadInputTokens": 132215,
+      "cacheCreationInputTokens": 10315,
+      "webSearchRequests": 0,
+      "costUSD": 0.146231,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 67,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Independent CI report rejects the supplied check.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The report identifies the tested committed inputs.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Execution output records the mutation experiment.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "ci-evidence/report.json",
+      "ci-evidence/run.log",
+      "ci-evidence/state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.146231,
+  "turns": 7,
+  "api_seconds": 24.054,
+  "helper_calls": [
+    "ci"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 27.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-crwpneed\\verify-loop"
+}

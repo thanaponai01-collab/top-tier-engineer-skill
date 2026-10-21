@@ -1,0 +1,72 @@
+{
+  "case": "verify-loop-check-cannot-fail",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   the-test-asserts-nothing \u2014 \"When the file is missing, `load_cases()` returns `[]`, so the test runs zero cases and reports `OK` without ever calling\"\n  found   the-real-behaviour-is-wrong \u2014 \"`apply_refund(100, 50, 50)` returns `50`; the spec expects `150`\"\n  found   no-fail-proof \u2014 \"the check has never been seen to fail.\"\n  held    green-read-as-verified",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 2152,
+      "cacheReadInputTokens": 151887,
+      "cacheCreationInputTokens": 9446,
+      "webSearchRequests": 0,
+      "costUSD": 0.1490414,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 153,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.verify-state-cache/tree-7b682ab6336dbf90.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1490414,
+  "turns": 8,
+  "api_seconds": 28.007,
+  "helper_calls": [
+    "run",
+    "report",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 32.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-crwpneed\\verify-loop"
+}

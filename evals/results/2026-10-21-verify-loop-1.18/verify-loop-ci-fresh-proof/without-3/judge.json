@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "survivor",
+      "what": "The selected check does not observe the implementation, so the deliberate mutation is not rejected.",
+      "found": true,
+      "quote": "The same test still passed (exit 0), and the expected failure message `expected 42` never appeared.",
+      "quote_checked": true
+    },
+    {
+      "id": "freshness",
+      "what": "Local green state is insufficient; evidence is newly generated.",
+      "found": true,
+      "quote": "That file is excluded from git and was copied over rather than produced by a run.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.021520499999999998,
+  "model": "claude-sonnet-5-5"
+}

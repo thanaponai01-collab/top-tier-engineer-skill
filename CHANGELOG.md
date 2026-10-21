@@ -7,6 +7,9 @@
 - Stop for foreign claims, executor contention, stale inputs, blocked environments and unchanged
   strict failures; retain the last executed transition batch in existing agent state.
 - Add CLI regression coverage for progression, stop conditions, limits and external state.
+- `run` records `HOLLOW` features in state, and `report` gives a hollow check that is not frozen a
+  `repair` step: fixing it is the work, not a finding for a person. In the 1.18.2 eval, all three
+  skill runs of `make-it-verified` stopped to ask before repointing the hollow test.
 
 ## 1.18.2 - 2026-10-21 - A missing `python` says so
 

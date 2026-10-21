@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "names-the-observed-rejection",
+      "what": "the second session's answer rests on a rejection it observed or found recorded: a check that fails with the sign-flipped code (credit - amount, $50 where the spec says $150) and passes with the fix. A green run of the fixed code alone does not show the check can tell them apart",
+      "found": true,
+      "quote": "I swapped in three broken versions of the function: `credit - amount`, `credit` (refund ignored) and `credit - paid + amount`. The suite failed on every one, so the passing result means something.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0221005,
+  "model": "claude-sonnet-5-5"
+}

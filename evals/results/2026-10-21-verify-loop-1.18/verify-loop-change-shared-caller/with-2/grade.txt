@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   adjacent-discount-regression — "`discount()` uses the same constant, so it started giving 10 off for subtotals from 50 to 99."
+  found   shared-impact — "`change.diff` lowered the shared `QUALIFY` constant from 100 to 50."
+  found   coverage-boundary — ""No rounding or currency changes" is only tested with the 49.99 and 99.99 inputs."
+
+Phrase grader (grade.py), for comparison:
+PASS  verify-loop-change-shared-caller  [verify-loop]  3/3 found, score 1.00 (needs 1.00)
+  found   adjacent-discount-regression: The shared threshold change incorrectly enables the discount below 100.
+  found   shared-impact: The report explains that the changed shared threshold affects both behaviors.
+  found   coverage-boundary: The report states the limits of verification.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      A targeted mutation was caught using the unchanged feature checks. — 
+  ok      The recipe still maps the adjacent behavior. — 
+  ok      The finished discount check rejects the originally changed shared threshold. — 
+  ok      The finished checks accept the spec-correct separated thresholds. — 
+  ok      Direct independent checks confirm both boundaries on the finished product. — 
+  ok      final helper status is strict, current and green — 

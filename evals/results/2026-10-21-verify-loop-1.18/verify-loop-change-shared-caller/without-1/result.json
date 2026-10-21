@@ -1,0 +1,109 @@
+{
+  "case": "verify-loop-change-shared-caller",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   adjacent-discount-regression \u2014 \"lowering it to 50 for free shipping also moved the discount threshold down to 50.\"\n  found   shared-impact \u2014 \"`QUALIFY` was used by both functions, so lowering it to 50 for free shipping also moved the discount threshold down to 5\"\n  found   coverage-boundary \u2014 \"The tests check specific values only, not every possible amount.\"",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 4541,
+      "cacheReadInputTokens": 146246,
+      "cacheCreationInputTokens": 11306,
+      "webSearchRequests": 0,
+      "costUSD": 0.21057320000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 708,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "A targeted mutation was caught using the unchanged feature checks.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "The recipe still maps the adjacent behavior.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The finished discount check rejects the originally changed shared threshold.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The finished checks accept the spec-correct separated thresholds.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Direct independent checks confirm both boundaries on the finished product.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "final helper status is strict, current and green",
+      "ok": false,
+      "detail": "VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/commerce.py",
+      "fixture/test_discount.py",
+      "fixture/test_shipping.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.21057320000000002,
+  "turns": 7,
+  "api_seconds": 67.473,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 73.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   names-the-observed-rejection — "Swapping `credit + amount` back to `credit - amount` in `refund.py` turns the test red with `AssertionError: 50 != 150 :"
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-proof-survives-handoff  [verify-loop]  0/1 found, score 0.00 (needs 1.00)
+  MISSED  names-the-observed-rejection: the second session's answer rests on a rejection it observed or found recorded: a check that fails with the sign-flipped code (credit - amount, $50 where the spec says $150) and passes with the fix. A green run of the fixed code alone does not show the check can tell them apart
+            named it, but never said what was wrong with it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  ok      SPEC.md still says a refund adds to the store credit — 
+  ok      the folder's own tests go red when refund.py is the original sign-flipped version — 
+  ok      the folder's own tests go green when refund.py is correct, so the red above is the bug and not a broken test — 
+  ok      the grader's own spec check passes on the refund.py the sessions left — 

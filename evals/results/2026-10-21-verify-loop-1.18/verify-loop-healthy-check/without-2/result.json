@@ -1,0 +1,74 @@
+{
+  "case": "verify-loop-healthy-check",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  1/2 found\n  found   real-check \u2014 \"it calls `shipping_fee` on 0, 49, 50 and 51 and expects 5, 5, 0, 0.\"\n  MISSED  limited-proof\n  held    healthy-check-rejected",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1509,
+      "cacheReadInputTokens": 95073,
+      "cacheCreationInputTokens": 4792,
+      "webSearchRequests": 0,
+      "costUSD": 0.0875706,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 196,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 2,
+  "missed": [
+    "A passing boundary check alone does not certify the whole application or establish observed mutation rejection."
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "The supplied product-backed check was actually executed.",
+      "ok": true,
+      "detail": "ran it: cd \"<tmp>/tte-eval-3up914hk/fixture\" && python -B -m unittest -v test_shipping 2>&"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.0875706,
+  "turns": 5,
+  "api_seconds": 21.45,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 26.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

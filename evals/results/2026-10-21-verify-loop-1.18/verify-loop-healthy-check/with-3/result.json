@@ -1,0 +1,81 @@
+{
+  "case": "verify-loop-healthy-check",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   real-check \u2014 \"`test_shipping.py` calls the real `shipping_fee` on 0, 49, 50 and 51 and requires exactly `[5, 5, 0, 0]`.\"\n  found   limited-proof \u2014 \"It doesn't cover inputs the spec excludes, such as negative or decimal totals, and that's fine because the spec doesn't \"\n  held    healthy-check-rejected",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 3782,
+      "cacheReadInputTokens": 185108,
+      "cacheCreationInputTokens": 12588,
+      "webSearchRequests": 0,
+      "costUSD": 0.2134296,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 783,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "The supplied product-backed check was actually executed.",
+      "ok": true,
+      "detail": "ran it: cd \"<tmp>/tte-eval-7babimwq/fixture\" && python -m unittest -v test_shipping 2>&1; "
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2134296,
+  "turns": 9,
+  "api_seconds": 54.154,
+  "helper_calls": [
+    "run",
+    "challenge",
+    "report",
+    "challenge"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 62.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-7_w86f8_\\verify-loop"
+}

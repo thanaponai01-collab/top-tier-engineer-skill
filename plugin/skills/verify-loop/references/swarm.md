@@ -35,7 +35,7 @@ VERIFY_AGENT=alpha python <skill-base>/scripts/verify.py swarm . --release [Feat
 
 `swarm` classifies each feature in `VERIFY.md` into its next required step:
 
-`map` -> `blocked` -> `fix` -> `prove` -> `freeze` -> `challenge` -> `independent` -> `run` -> `done`
+`repair` -> `map` -> `blocked` -> `fix` -> `prove` -> `freeze` -> `challenge` -> `independent` -> `run` -> `done`
 
 A `blocked` feature (every failing check failed on the environment: a missing tool, port, timeout)
 is never claimable: no agent can fix it from the repo, so it goes in the answer as blocked.

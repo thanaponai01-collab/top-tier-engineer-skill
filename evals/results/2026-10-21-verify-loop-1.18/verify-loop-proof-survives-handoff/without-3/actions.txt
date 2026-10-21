@@ -1,0 +1,6 @@
+  1. Bash: find . -type f | head -50 && cat fixture/ISSUE.md
+  2. Bash: cd <tmp>/tte-eval-hpw_n72p/fixture && cat refund.py SPEC.md test_refund.py VERIFY.md
+  3. Bash: sed -i 's/return credit - amount/return credit + amount/' refund.py && python - <<'EOF' import re p='test_refund.py' s=open(p).read() s=s.replace(''' refund.ap…
+  4. Bash: find . -type f | grep -v node_modules | head -50 && cat fixture/ISSUE.md
+  5. Bash: cd <tmp>/tte-eval-hpw_n72p/fixture && for f in SPEC.md VERIFY.md refund.py test_refund.py; do echo "=== $f"; cat $f; done
+  6. Bash: python -m unittest test_refund.py -v 2>&1; mkdir -p /tmp/mut && sed 's/credit + amount/credit - amount/' refund.py > /tmp/mut/refund.py && cp test_refund.py /t…

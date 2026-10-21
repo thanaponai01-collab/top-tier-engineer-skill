@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   adjacent-discount-regression — "it also made `discount()` give 10 off orders between 50 and 99.99."
+  found   shared-impact — "Lowering the shared `QUALIFY` constant from 100 to 50 lowered the free-shipping threshold as intended, but it also made "
+  found   coverage-boundary — "I didn't run the rounding experiment against `discount()`."
+
+Phrase grader (grade.py), for comparison:
+PASS  verify-loop-change-shared-caller  [verify-loop]  3/3 found, score 1.00 (needs 1.00)
+  found   adjacent-discount-regression: The shared threshold change incorrectly enables the discount below 100.
+  found   shared-impact: The report explains that the changed shared threshold affects both behaviors.
+  found   coverage-boundary: The report states the limits of verification.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  A targeted mutation was caught using the unchanged feature checks. — .verify-state.json is not there
+  ok      The recipe still maps the adjacent behavior. — 
+  ok      The finished discount check rejects the originally changed shared threshold. — 
+  ok      The finished checks accept the spec-correct separated thresholds. — 
+  ok      Direct independent checks confirm both boundaries on the finished product. — 
+  FAILED  final helper status is strict, current and green — VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)
