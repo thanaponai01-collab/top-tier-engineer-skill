@@ -71,6 +71,7 @@ def audit(v, repo, since=None):
         hashes, signature, baseline_drift = {}, None, [str(exc)]
     frozen = {k for k, h in (state.get("baseline") or {}).items() if hashes.get(k) == h}
     receipts = v.current_receipts(state, signature) if signature else {}
+    where = v.proof_where(repo, v.red_keys(state))
     checks = state.get("checks", {}) or {}
 
     ref = since or last_maintained(repo)
@@ -85,7 +86,7 @@ def audit(v, repo, since=None):
         last = [checks.get(f"{f['name']}|{cmd}", {}) for _, cmd in f["checks"]]
         run = ("never" if not f["checks"] or not all(last) else
                "fail" if any(not r.get("ok") for r in last) else "pass")
-        proven = bool(f["proofs"]) and bool(signature) and v.proven_by(f, receipts, signature) is not None
+        proven = bool(f["proofs"]) and bool(signature) and v.proven_by(f, receipts, signature, where=where) is not None
         action = ("map" if f["name"] not in mapped else
                   "re-prove" if not proven else
                   "fix" if run == "fail" else

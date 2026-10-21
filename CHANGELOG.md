@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.18.0 - 2026-10-21 - Gates: the model creates, the helper judges
+
+Six rules that SKILL.md only asked for are now verdicts `verify.py` prints and `run --strict`
+enforces (new `scripts/gates.py`, tests in `tests/test_gates.py`). The agent still chooses the claim,
+writes the check and picks the wrong state; the helper no longer takes its word for any of them.
+
+- **`answer-check`.** `verify.py answer-check <repo> --answer <file>` holds the agent's final answer
+  to `report`: it must say `VERDICT: <verdict>`, must not say "ready to merge", "all checks pass",
+  "fully verified" and the like unless the verdict is green, and must name every gap item. "Every
+  `GAP` goes in the answer" was prose; now an answer that drops one exits 1.
+- **`UNMAPPED`.** Product source that no feature's `path:`, command, `oracle:`, coverage map or a
+  mapped test's imports reach is a `GAP unmapped` and keeps strict red, unless a blind spot names it.
+  Fixes the `green-with-unverified` blind spot (`search.py`), which both eval arms missed 0/3.
+- **`WEAK SIGNAL`.** A `fail-signal:` that is only runner boilerplate (`FAILED`, `AssertionError`,
+  `exit code 1`) proves nothing: any failure prints it. The make-it-verified reference solution's
+  `AssertionError:` signal is now `refund credit mismatch`, with a message in its assertion.
+- **`PROOF NOT FROM PRODUCT`.** Failure receipts now record every file's hash. Once the check is
+  green again, a receipt counts only if a product file (inside `path:` when given) differed when it
+  went red; a red on the same files came from the environment. Turns "put the bug in, restore" into
+  a check. Receipts from before 1.18.0 must be proved again.
+- **`LOOSENED`.** For each mapped test file, the last 30 commits and the working tree are compared
+  test by test: removed, skipped, fewer assertions, an exact assertion made tolerant
+  (`assertEqual` -> `assertAlmostEqual(delta=2)`), or the same assertions with new expected values.
+  Each is listed with commit, author and subject; strict stays red and `baseline` refuses until a
+  person reviews it (`--reviewed-by --reason`). Catches `teammate-loosened-check`, where no baseline
+  existed for `CHECK CHANGED` to compare against.
+- **`BLOCKED`.** A failing check whose output is a missing tool, dependency, port or timeout is
+  printed as `BLOCKED`, listed as `GAP blocked by the environment`, and its `NEXT` step is
+  `[blocked]` (never claimable in a swarm) instead of `[fix]`.
+- `ci` resolves its scratch folder, so the CI tests pass on macOS (`/var` vs `/private/var`).
+
+Not solved, and said so: `VERIFY_AGENT` and `--reviewed-by` are names the agent supplies. Only CI
+that the agent cannot reach makes independence or review more than self-declared.
+
 ## 1.17.0 - 2026-10-21 - Mechanism, not advice
 
 SKILL.md is cut from 148 lines to 99 and rebuilt around the helper as a state machine: run

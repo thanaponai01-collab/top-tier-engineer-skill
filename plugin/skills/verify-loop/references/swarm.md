@@ -35,7 +35,10 @@ VERIFY_AGENT=alpha python <skill-base>/scripts/verify.py swarm . --release [Feat
 
 `swarm` classifies each feature in `VERIFY.md` into its next required step:
 
-`map` -> `fix` -> `prove` -> `freeze` -> `challenge` -> `independent` -> `run` -> `done`
+`map` -> `blocked` -> `fix` -> `prove` -> `freeze` -> `challenge` -> `independent` -> `run` -> `done`
+
+A `blocked` feature (every failing check failed on the environment: a missing tool, port, timeout)
+is never claimable: no agent can fix it from the repo, so it goes in the answer as blocked.
 
 - **Evidence advances the queue, not `--done`.** A lease is bound to `(feature, action)`. As soon as
    the real receipt (`challenge` / `run`), `baseline`, or strict pass lands in `.verify-state.json`,

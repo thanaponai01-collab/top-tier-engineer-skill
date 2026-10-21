@@ -21,7 +21,8 @@ When `verify.py run` fails, never blindly modify product code. Triage the failur
 ## 1. Harness / Env Gap
 - **Symptoms**: Port already in use, process failed to start, database connection refused, command timed out, missing local directory.
 - **Action**: Fix `## Run` in `VERIFY.md`, start scripts, or seed data.
-- **Rule**: Do NOT edit product logic.
+- **Rule**: Do NOT edit product logic. `run` prints `BLOCKED` under such a failure, `report` lists
+  it as `GAP blocked by the environment`, and `NEXT` says `[blocked]` instead of `[fix]`.
 - **A tool or service this environment lacks** (a CLI not on `PATH`, no network, no credentials):
   no repo edit turns that into a real pass. Leave the check red, list it under `## Blind spots`,
   and report the claim as blocked, naming where the check does run (usually CI). Skipping,

@@ -53,7 +53,7 @@ def cmd_ci(v, repo, plan_file, output, timeout):
             with archive.open("wb") as fh:
                 subprocess.run(["git", "-C", str(checkout), "archive", archive_ref], stdout=fh,
                                stderr=subprocess.PIPE, check=True)
-            work = Path(tmp, "project")
+            work = Path(tmp).resolve() / "project"
             work.mkdir()
             v.keep_state_in(work)
             with tarfile.open(archive) as tar:

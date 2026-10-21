@@ -24,7 +24,8 @@ class RefundTest(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         refund.apply_refund(*args)
                 else:
-                    self.assertEqual(refund.apply_refund(*args), case["expect"])
+                    self.assertEqual(refund.apply_refund(*args), case["expect"],
+                                     f"refund credit mismatch for {case['name']}")
 
 
 if __name__ == "__main__":

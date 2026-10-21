@@ -19,6 +19,7 @@ edit is `CHECK CHANGED`), **remembers across contexts** (`.verify-state.json`, `
 receipts), **keeps judge and worker apart** (`require: independent`, `swarm --role judge`),
 **does the exhaustive work every time** (`challenge --auto`, `HOLLOW`, coverage) and **reports in
 a form others can re-run** (`report`, `--json`, CI). Its verdicts decide, not your confidence.
+You choose the claim, write the check and pick the wrong state; the helper judges each of them.
 
 ## Assess: is this check, or this claim, any good?
 
@@ -31,8 +32,10 @@ python <skill-base>/scripts/verify.py report <repo> --assess
 ```
 
 `HOLLOW`: the check passes without calling the product. `SURVIVED`: a planted wrong result
-passed. `UNCOVERED`: no check reaches that line. No VERIFY.md? Write `## F`, `- path:`, `- test:`
-([format](VERIFY_FORMAT.md)) and say you added it.
+passed. `UNCOVERED`: no check reaches that line. `UNMAPPED`: product code no feature reaches.
+`LOOSENED`: a test lost an exact assertion or changed an expected value, in git history or the
+working tree. No VERIFY.md? Write `## F`, `- path:`, `- test:` ([format](VERIFY_FORMAT.md)) and
+say you added it.
 
 ## Prove or repair: run `report`, do what `NEXT` says
 
@@ -40,9 +43,10 @@ Each `NEXT` line names a feature's step. Repeat until none is left:
 
 | Step | Do |
 |---|---|
-| `map` | Record the check in VERIFY.md: command, `oracle:` files, a literal `fail-signal:` (`init` drafts one) |
+| `map` | Record the check in VERIFY.md: command, `oracle:` files, a `fail-signal:` naming the wrong result (`WEAK SIGNAL` rejects `FAILED`, `AssertionError`) |
+| `blocked` | The environment failed (missing tool, port, timeout). Report it blocked and where it runs; change no code |
 | `fix` | Fix what the failure text says. A red you have not classified: [triage](references/triage.md) |
-| `prove` | From a clean tree put in the bug or a wrong state, `run`, see the fail-signal, restore, `git diff` empty, `run`. Add a `fail-proof:` line; prose is not a receipt |
+| `prove` | Put the wrong result in the product (inside `path:`), `run`, see the fail-signal, restore, `run`. A red with no product change is `PROOF NOT FROM PRODUCT`. Add a `fail-proof:` line |
 | `freeze` | `baseline`, before the work it judges. From here change code, never the check |
 | `challenge` | `challenge` the highest-risk feature until a mutation is caught (`require: challenge`) |
 | `independent` | A fresh agent that never saw the implementation runs `swarm --claim --role judge` |
@@ -55,20 +59,20 @@ agents, work the list yourself and report `not_independent`. Never give yourself
 stand in for a judge.
 
 **A check you think is wrong is a finding, not an edit.** Stop and ask a person. Editing it gets
-`CHECK CHANGED`, and `baseline` refuses to re-freeze it without `--reviewed-by <name> --reason
-<why>`. Pass those only for a review a person actually gave.
+`CHECK CHANGED` (or `LOOSENED` before a baseline), and `baseline` refuses to freeze it without
+`--reviewed-by <name> --reason <why>`. Pass those only for a review a person actually gave.
 
-**Done** = a mapped check seen rejecting a controlled wrong result, a `challenge` mutation caught,
-checks frozen, then `run --strict` and `status` print `VERIFY-STATE: green` on unchanged inputs.
-Anything less is reported as what it is: red, partial, stale or unverified.
+**Done** = a mapped check seen rejecting a wrong product, a `challenge` mutation caught, checks
+frozen, no `UNMAPPED` or `LOOSENED`, then `run --strict` and `status` print `VERIFY-STATE: green`
+on unchanged inputs. Anything less is reported as what it is: red, partial, stale or unverified.
 
 ## Guards
 
 - Never skip, mock, stub, loosen or drop a check to get green. A check that cannot run here
   (missing tool, no network) stays red: report it as blocked and name where it does run.
 - A note, handoff or commit message saying a check went red is a claim. Only a receipt counts.
-- Green covers mapped features only. Every `GAP` line from `report` goes in the answer, and so
-  does any behavior, adjacent caller or file that no feature maps, since `report` cannot see it.
+- Green covers mapped features only. `report` lists product files nothing reaches as `GAP
+  unmapped`; behavior inside a mapped file that no check exercises still needs your eyes.
 - `require: independent` makes strict refuse green from the agent that froze the check
   (`NOT INDEPENDENT`). State is sealed (`tampered`) but has no secret; [CI](references/ci.md) is
   the guard nobody in the loop can reach.
@@ -77,7 +81,9 @@ Anything less is reported as what it is: red, partial, stale or unverified.
 
 Callers pass the **claim** (and where its expected result comes from), the **scope** and the
 **mode** (assess, prepare or repair). Finish with `report` (`--json` for machines); the contract
-is in [answer](references/answer.md).
+is in [answer](references/answer.md). Write your answer to a file outside the repo and run
+`verify.py answer-check <repo> --answer <file>` before you send it: it is rejected unless it says
+`VERDICT: <verdict>`, claims nothing the verdict does not support, and names every `GAP`.
 
 ## Modes
 

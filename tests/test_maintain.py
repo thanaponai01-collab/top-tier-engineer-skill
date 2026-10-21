@@ -67,7 +67,7 @@ def audit(root, *extra):
 class Maintain(unittest.TestCase):
     def repo(self, tmp):
         write(tmp, "src/app.py", "VALUE = 42\n")
-        write(tmp, "check.py", "import os, sys\nsys.exit(0 if os.path.exists('ok.flag') else "
+        write(tmp, "check.py", "import os, sys\nsys.exit(0 if os.path.exists('src/ok.flag') else "
                                "(print('expected ok.flag present') or 1))\n")
         write(tmp, "VERIFY.md", f"## Thing\n- path: src/\n- test: `{CHECK}`\n"
                                 "- fail-signal: expected ok.flag present\n- fail-proof: removed ok.flag, went red\n")
@@ -83,7 +83,7 @@ class Maintain(unittest.TestCase):
               f"# Map\n\nlast-maintained: {sha}\n\n- [Thing](./thing.md)\n")
         git(tmp, "commit", "-qam", "maintained")
         run("verify.py", "run", tmp)                     # rejection receipt
-        write(tmp, "ok.flag")
+        write(tmp, "src/ok.flag")
         run("verify.py", "baseline", tmp)
         run("verify.py", "run", tmp, "--strict")
         return sha
@@ -123,7 +123,7 @@ class Maintain(unittest.TestCase):
     def test_red_last_run_is_fix(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.repo(tmp)
-            os.remove(os.path.join(tmp, "ok.flag"))
+            os.remove(os.path.join(tmp, "src", "ok.flag"))
             run("verify.py", "run", tmp)
             self.assertEqual(audit(tmp)[2]["Thing"]["action"], "fix")
 
@@ -153,9 +153,9 @@ class Maintain(unittest.TestCase):
                 fh.write("# reviewed wording\n")
             git(tmp, "commit", "-qam", "harness repair")
             run("verify.py", "baseline", tmp, "--reviewed-by", "reviewer", "--reason", "harness repair")
-            os.remove(os.path.join(tmp, "ok.flag"))
+            os.remove(os.path.join(tmp, "src", "ok.flag"))
             run("verify.py", "run", tmp)
-            write(tmp, "ok.flag")
+            write(tmp, "src/ok.flag")
             run("verify.py", "run", tmp, "--strict")
             code, data, rows = audit(tmp)
             self.assertEqual((code, rows["Thing"]["action"]), (0, "drive"), data)

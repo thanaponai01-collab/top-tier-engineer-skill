@@ -30,7 +30,7 @@ class ApplicationRecipe(unittest.TestCase):
                 recipe += '- start: `python app.py serve`\n- ready: `python probe.py ready`\n'
             recipe += '- doctor: `python probe.py doctor`\n'
         recipe += '- stop: `python probe.py cleanup`\n\n## Persistence\n'
-        recipe += f'- path: app.py\n- run: `python probe.py {mode}`\n- oracle: probe.py\n'
+        recipe += f'- path: app.py, broken.flag\n- run: `python probe.py {mode}`\n- oracle: probe.py\n'
         recipe += '- fail-signal: expected persisted note, got\n- fail-proof: disabled saving; acknowledged write but second read rejected it\n'
         (root / 'VERIFY.md').write_text(recipe)
         return config

@@ -4,7 +4,7 @@ Two jobs:
 
   1. Work-stealing queue (`verify.py swarm [repo] [--claim | --release | --done]`):
      Inspects VERIFY.md and .verify-state.json to classify every feature into its next required
-     verification step (`map` -> `fix` -> `prove` -> `freeze` -> `challenge` -> `independent` ->
+     verification step (`map` -> `blocked` -> `fix` -> `prove` -> `freeze` -> `challenge` -> `independent` ->
      `run` -> `done`). Agents with `VERIFY_AGENT=<name>` claim one feature at a time under the
      state lock with an expiring lease (`--lease`, default 600s). A step advances automatically as
      soon as the real receipt, baseline or pass lands in .verify-state.json, so an agent cannot
@@ -22,7 +22,7 @@ import time
 from pathlib import Path
 
 
-ACTIONS = ("map", "fix", "prove", "freeze", "challenge", "independent", "run", "done")
+ACTIONS = ("map", "blocked", "fix", "prove", "freeze", "challenge", "independent", "run", "done")
 WORKER_ACTIONS = {"map", "fix", "prove", "freeze", "run", "challenge"}
 JUDGE_ACTIONS = {"independent", "challenge", "prove", "freeze"}
 
@@ -53,6 +53,9 @@ def _bare_command(repo, feat, action, freezers):
     q = f'"{name}"' if " " in name else name
     if action == "map":
         return f"edit {repo}/VERIFY.md: add `- test: ...` and `- fail-signal: ...` under `## {name}`"
+    if action == "blocked":
+        return ("report it as blocked: the environment failed, not the product. Name where the check does run; "
+                "do not change product code or the check for it")
     if action == "fix":
         paths = " ".join(feat.get("paths") or ["<files>"])
         return f"python verify.py scope {paths} --repo {repo} && python verify.py run {repo} --only {q}"
@@ -88,6 +91,7 @@ def swarm_items(v, repo, state=None, now=None):
         hashes, signature = {}, None
     cur_tree = v.tree_sig(repo, fast=False) if features else None
     receipts = v.current_receipts(state, signature) if signature else {}
+    where = v.proof_where(repo, v.red_keys(state)) if features else None
     checks = state.get("checks", {}) or {}
     passing_out = {k: r.get("output", "") for k, r in checks.items() if isinstance(r, dict) and r.get("ok")}
     frozen_lines = set((state.get("baseline_lines") or {}).get("checks", []))
@@ -110,9 +114,14 @@ def swarm_items(v, repo, state=None, now=None):
                               for k, r in receipts.items())
         if not f["checks"] or not f["signals"]:
             action, detail = "map", "no check or literal fail-signal in VERIFY.md"
+        elif failing and all(v.gates.blocked(v, checks[f"{f['name']}|{c}"].get("output", ""),
+                                             checks[f"{f['name']}|{c}"].get("exit")) for c in failing):
+            c = failing[0]
+            action = "blocked"
+            detail = v.gates.blocked(v, checks[f"{f['name']}|{c}"].get("output", ""), checks[f"{f['name']}|{c}"].get("exit"))
         elif failing:
             action, detail = "fix", f"{len(failing)} check(s) failing on last run"
-        elif not f["proofs"] or not signature or not v.proven_by(f, receipts, signature, passing_out):
+        elif not f["proofs"] or not signature or not v.proven_by(f, receipts, signature, passing_out, where):
             action, detail = "prove", "no valid failure receipt matching fail-signal (or no fail-proof note)"
         elif not state.get("baseline") or any(k not in frozen_lines for k in ckeys):
             action, detail = "freeze", "checks not yet frozen in baseline"
@@ -156,7 +165,7 @@ def advise(items):
     `solo`: work it through yourself. `done`: nothing left. `judge` is listed under any mode."""
     todo = [i for i in items if i["action"] != "done"]
     judge = [i["feature"] for i in todo if i["action"] == "independent"]
-    work = [i["feature"] for i in todo if i["action"] != "independent" and i["status"] == "open"]
+    work = [i["feature"] for i in todo if i["action"] not in ("independent", "blocked") and i["status"] == "open"]
     if not todo:
         mode, why = "done", "every mapped feature is verified"
     elif len(work) >= SPLIT_AT:
@@ -173,7 +182,7 @@ def advise(items):
 def eligible(item, agent, role="any"):
     """True when `agent` is allowed to claim `item` under `role`."""
     act = item["action"]
-    if act == "done":
+    if act in ("done", "blocked"):
         return False
     if role == "worker" and act not in WORKER_ACTIONS:
         return False

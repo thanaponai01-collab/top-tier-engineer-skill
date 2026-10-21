@@ -104,3 +104,18 @@ the helper already prints on that fixture (checked with `--assess`):
   already says `HARNESS-GAP … FileNotFoundError … Do NOT modify product logic`, but `report`
   only says `GAP failing check` and `NEXT [map]`. An agent that follows `NEXT` alone never sees
   the triage. `report` could carry the triage class on each failing-check gap.
+
+## 1.18.0: the three mechanisms, built
+
+All three items above now have a helper verdict (checked with `--assess` on each case fixture):
+
+| Case | Helper says in 1.18.0 |
+|---|---|
+| `green-with-unverified` | `UNMAPPED  search.py`, `GAP unmapped: search.py`; strict stays red |
+| `teammate-loosened-check` | `LOOSENED  test_pricing.py::OrderTotalTest.test_discount_applies_to_the_subtotal: 1 -> 0 exact assertions … by agent-b (test: deflake order totals …)`, and the same for `test_rounds_half_up` |
+| `real-check-unavailable` | `BLOCKED  Environment / dependency error: FileNotFoundError`, `GAP blocked by the environment: Refund posting\|…` |
+
+Three more rules moved from prose to verdicts in the same release: `answer-check` (every `GAP`
+goes in the answer, no overclaim), `WEAK SIGNAL` (a signal must name a behavior) and
+`PROOF NOT FROM PRODUCT` (the wrong state was in the product, then restored). No agent runs were
+paid for to measure them yet.

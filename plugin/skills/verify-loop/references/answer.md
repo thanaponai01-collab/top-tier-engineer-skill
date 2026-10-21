@@ -48,12 +48,19 @@ Then:
 2. **The observed rejection:** for each proven feature, which check went red, on which wrong state
    (its `fail-proof:`), with which `fail-signal:`, and the output line that was seen.
 3. **What passed:** the feature and the command, for each check.
-4. **Gaps:** failing checks, features with no check, features never seen red, orphan tests and
-   blind spots. Then whatever green cannot show, such as features nobody mapped.
+4. **Gaps:** failing checks, checks blocked by the environment, features with no check, features
+   never seen red, weak fail-signals, receipts whose red did not come from the product, loosened
+   tests, unmapped product files, orphan tests and blind spots.
 5. **What is left and who does it:** a `NEXT` line per unfinished feature (its step and command),
    and a `SWARM:` line, `solo`, `split`, `judge` or `done` (see [swarm](swarm.md#when-the-helper-decides)).
 
-`verify.py report <repo>` prints this. `report --json` and `status --json` print it as one object,
+`verify.py report <repo>` prints this. An answer written for a person goes through
+`verify.py answer-check <repo> --answer <file>` (or `-` for stdin) first. It exits 1 with
+`ANSWER NO VERDICT` when the text lacks `VERDICT: <verdict>`, `ANSWER OVERCLAIM` when a non-green
+answer says "ready to merge", "all checks pass", "fully verified" or the like without a negation
+just before it, and `ANSWER MISSING` for each gap item it does not name (feature names, file
+names, or most words of a blind spot). Keep the answer file outside the repo: writing inside it
+makes the tree stale. `report --json` and `status --json` print it as one object,
 with the same exit codes as `status` (0 green or no VERIFY.md, 1 red, 3 stale, partial or never
 run):
 
@@ -65,7 +72,9 @@ run):
                  "observed": "expected stored note 'Release checklist', got ['Grocery list']"}],
  "passed": [{"feature": "Create note", "command": "..."}],
  "gaps": {"failing": [], "unverified": [], "unproven": [], "orphan_tests": [], "unchallenged": [],
-          "not_independent": [], "blind_spots": [], "rebaselined": []}, "rebaselines": [],
+          "not_independent": [], "blocked": [], "unmapped": [], "weak_signal": [],
+          "proof_not_from_product": [], "loosened": [], "blind_spots": [], "rebaselined": []},
+ "rebaselines": [],
  "next": [], "swarm": {"mode": "done", "why": "...", "judge": [], "open": []},
  "strict": true, "rounds": 0, "failing": [], "checks": 2, "receipts": ["..."], "challenge": null}
 ```

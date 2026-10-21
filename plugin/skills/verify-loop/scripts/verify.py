@@ -88,6 +88,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _encoding import utf8_streams
+import gates
 
 RECIPE = "VERIFY.md"
 GENERIC_DIRS = {"tests", "test", "__tests__", "spec", "specs", "e2e", "integration", "unit"}
@@ -1170,6 +1171,8 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         print("  note  no baseline: freeze the finished checks before strict completion")
     signature = signature or sha(json.dumps(check_hashes(repo), sort_keys=True))
     receipts = current_receipts(state, signature)
+    red_now = set()
+    where = proof_where(repo, red_now) if strict else None
     # The result cache: a pass some agent proved for this command on this exact content is reused.
     # Not with a ## Run recipe (checks then depend on a live app) or --stress (which must re-run).
     caching = use_cache and not recipe and stress == 1
@@ -1237,6 +1240,8 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 quarantined_hits.append((f["name"], kind, cmd))
 
             results.append((f["name"], kind, cmd, ok, out, code, is_quarantined, bool(hit)))
+            if not ok:
+                red_now.add(key)
             if is_quarantined:
                 if not as_json:
                     print(f"  QUARANTINED  {kind}  {cmd}  [{secs:.1f}s] (flake isolated)")
@@ -1253,6 +1258,10 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                         cause = extract_failure_summary(out)
                         if cause:
                             print(f"        CAUSE  {cause}")
+                        env = gates.blocked(sys.modules[__name__], out, code)
+                        if env:
+                            print(f"        BLOCKED  {env} The environment failed, not the product: report the "
+                                  "check as blocked and name where it does run. Do not change product code for it")
                         for line in out.rstrip().splitlines()[-TAIL_LINES:]:
                             print(f"        {line}")
         mine = [(c, ok_r, hit_r) for fn, _, c, ok_r, _, _, q_r, hit_r in results if fn == f["name"] and not q_r]
@@ -1266,16 +1275,25 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                       + (" (imported, never called)" if targets[f["name"]] == INFER else "")
                       + ": it loads no cases, skips, or tests a copy. A pass that never runs the product "
                       "proves nothing about it")
+        if not as_json:
+            for sig in f["signals"]:
+                why = gates.weak_signal(sig)
+                if why:
+                    print(f"  WEAK SIGNAL  `{sig}`: {why}")
         if not f["proofs"]:
             unproven += 1
             if not as_json:
                 print("  note  no fail-proof recorded: nobody has shown these checks can go red")
         elif strict:
             passing_out = {f"{fn}|{c}": o for fn, _, c, ok_r, o, *_ in results if ok_r and fn == f["name"]}
-            if not proven_by(f, receipts, signature, passing_out):
+            if not proven_by(f, receipts, signature, passing_out, where):
                 unproven += 1
                 if not as_json:
-                    if proven_by(f, receipts, signature):
+                    if f["signals"] and all(gates.weak_signal(sig) for sig in f["signals"]):
+                        print("  note  no fail-signal that names a behavior, so no receipt can prove rejection")
+                    elif proven_by(f, receipts, signature, passing_out):
+                        print(f"  PROOF NOT FROM PRODUCT  {where_reason(f, receipts, where)}")
+                    elif proven_by(f, receipts, signature):
                         print("  SIGNAL IN PASS  fail-signal also appears in passing output: a signal printed on pass cannot prove rejection")
                     else:
                         print("  note  no recorded failing run matching fail-signal for the current checks; fail-proof prose alone is not evidence")
@@ -1292,7 +1310,18 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
             print("Orphan tests (no feature's command names them):")
             for t in orphans:
                 print(f"  {t}")
+    unmapped, loose = [], []
+    if not only and not selected:
+        unmapped = gates.unmapped(sys.modules[__name__], repo, features, blind)
+        if strict:
+            loose = gate_findings_loosened(repo, features, state)
     if not as_json:
+        for rel in unmapped:
+            print(f"UNMAPPED  {rel}: product code no feature's path:, command or checked imports reach. "
+                  "Map it to a feature in VERIFY.md, or name it under ## Blind spots and say why")
+        for x in loose:
+            print(f"LOOSENED  {gates.loosened_text(x)}. A weaker check is a finding, not a fix: restore it, "
+                  "or have a person review it and run `verify.py baseline --reviewed-by <name> --reason <why>`")
         if blind:
             print("Blind spots (a green run does not cover these):")
             for b in blind:
@@ -1330,7 +1359,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if strict and selected and not as_json:
         print(SELECTED)
     incomplete = strict and (unverified or unproven or orphans or missing_baseline or unchallenged or dependent
-                             or selected)
+                             or selected or unmapped or loose)
     if caching and tree_after == tree_before and not changed_during_run:
         remember_passes(repo, fresh, tree_before, full=strict)
     cached = sum(1 for r in results if r[7])
@@ -1355,7 +1384,8 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                        tree_after)
     verify_line = (f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
                    f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
-                   f"{journeys} journeys, {broken} broken" + (f" | {len(hollow_feats)} hollow" if hollow_feats else ""))
+                   f"{journeys} journeys, {broken} broken" + (f" | {len(hollow_feats)} hollow" if hollow_feats else "")
+                   + (f" | {len(unmapped)} unmapped" if unmapped else "") + (f" | {len(loose)} loosened" if loose else ""))
     if not only:
         state = load_state(repo)
         state["verify_line"] = verify_line
@@ -1385,6 +1415,8 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 "broken": broken,
                 "flaky": len(flaky_checks),
                 "hollow": hollow_feats,
+                "unmapped": unmapped,
+                "loosened": [gates.loosened_text(x) for x in loose],
                 "unchallenged": bool(unchallenged),
                 "not_independent": len(dependent),
                 "quarantined": len(quarantined_hits),
@@ -1435,7 +1467,8 @@ def seal_of(state):
 # it. With VERIFY_AGENT=<name>, loop memory (last run, rounds, scope, doctor) lives in
 # .verify-state.<name>.json; the baseline, re-baselines and rejection receipts stay in STATE for
 # every agent, so a new name neither escapes a freeze nor has to re-prove a check.
-SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures", "frozen_by", "verified_by", "swarm")
+SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures", "frozen_by", "verified_by", "swarm",
+               "loosened_reviewed")
 AGENT_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
 LOCK = ".verify-state.lock"
 _loaded = {}  # state file -> what this process last read from it: the base of the merge
@@ -1587,7 +1620,7 @@ def merge_state(disk, base, mine, owned):
             continue
         elif k in ("failures", "verified_by", "swarm") and isinstance(mine[k], dict):
             out[k] = merge_state(disk.get(k) or {}, base.get(k) or {}, mine[k], lambda _: True)
-        elif k == "rebaselines" and isinstance(mine[k], list):
+        elif k in ("rebaselines", "loosened_reviewed") and isinstance(mine[k], list):
             have = list(disk.get(k) or [])
             out[k] = have + [r for r in mine[k] if r not in have]
         else:
@@ -1867,10 +1900,11 @@ def current_receipts(state, signature):
     return receipts
 
 
-def proven_by(feature, receipts, signature, passing=None):
+def proven_by(feature, receipts, signature, passing=None, where=None):
     """The receipt that proves this feature's checks can go red: (command, signal, receipt) or None.
-    It must belong to the current checks, contain a declared fail-signal, not be a harness error,
-    and not match a signal that the same check also prints when it passes."""
+    It must belong to the current checks, contain a declared fail-signal that names a behavior, not
+    be a harness error, not match a signal that the same check also prints when it passes, and
+    (with `where`, see proof_where) have gone red on a wrong product, not on the environment."""
     for kind, cmd in feature["checks"]:
         if kind in ("lint", "type", "types"):
             continue
@@ -1880,10 +1914,71 @@ def proven_by(feature, receipts, signature, passing=None):
         if r.get("signature") != signature or HARNESS_FAILURE.search(out):
             continue
         pass_out = (passing or {}).get(key) or ""
+        if where and where(feature, key, r):
+            continue
         for signal in feature["signals"]:
-            if signal in out and signal not in pass_out:
+            if signal in out and signal not in pass_out and not gates.weak_signal(signal):
                 return cmd, signal, r
     return None
+
+
+def proof_where(repo, red=()):
+    """`where` for proven_by: why a receipt's red did not come from a wrong product, or None.
+    `red`: keys (feature|command) failing right now. Their receipt is the wrong state itself, not yet
+    restored, so it is judged once the check passes again."""
+    now = file_sigs(repo)
+    try:
+        frozen = set(check_hashes(repo))
+    except (OSError, ValueError):
+        frozen = set()
+    red = red if isinstance(red, set) else set(red)  # a live set: run_checks adds to it as checks fail
+    return lambda feature, key, receipt: None if key in red else \
+        gates.where_problem(sys.modules[__name__], repo, feature, receipt, now, frozen)
+
+
+def red_keys(state):
+    return {k for k, r in (state.get("checks") or {}).items() if isinstance(r, dict) and not r.get("ok")}
+
+
+def where_reason(feature, receipts, where):
+    """The first reason `where` gives for one of this feature's receipts."""
+    for k, r in receipts.items():
+        if k.startswith(feature["name"] + "|"):
+            why = where(feature, k, r)
+            if why:
+                return why
+    return None
+
+
+def gate_findings_loosened(repo, features, state):
+    """Weakenings of mapped test files a person has not reviewed (see gates.loosened)."""
+    commands = [c for f in features for _, c in f["checks"]]
+    tests = [t for t in find_tests(repo) if is_covered(t, commands, repo)]
+    reviewed = set(state.get("loosened_reviewed") or [])
+    return [x for x in gates.loosened(sys.modules[__name__], repo, tests) if x["id"] not in reviewed]
+
+
+def gate_findings(repo, features, blind, state):
+    """What the gates find on the current tree: {weak_signal, unmapped, loosened, proof_where}.
+    Each is a list of lines; every one of them keeps `run --strict` red."""
+    me = sys.modules[__name__]
+    weak = [f"{f['name']}: `{s}` {gates.weak_signal(s)}" for f in features for s in f["signals"]
+            if gates.weak_signal(s)]
+    unmapped = gates.unmapped(me, repo, features, blind)
+    loose = gate_findings_loosened(repo, features, state)
+    try:
+        signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
+    except (OSError, ValueError):
+        signature = None
+    receipts = current_receipts(state, signature) if signature else {}
+    where = proof_where(repo, red_keys(state))
+    bad_where = []
+    for f in features:
+        if not f["checks"] or not f["proofs"] or not signature:
+            continue
+        if proven_by(f, receipts, signature) and not proven_by(f, receipts, signature, where=where):
+            bad_where.append(f"{f['name']}: {where_reason(f, receipts, where)}")
+    return {"weak_signal": weak, "unmapped": unmapped, "loosened": loose, "proof_where": bad_where}
 
 
 def not_independent(state, features, runner, signature=None, tree=None):
@@ -1924,6 +2019,7 @@ def track(repo, results, only, budget, failures, strict=False, signature=None, t
     receipts = state.setdefault("failures", {})
     if results and signature is None:
         signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
+    files_now = file_sigs(repo) if any(not ok for *_, ok, _, _ in results) else None
     for feat, kind, cmd, ok, out, code in results:
         key = f"{feat}|{cmd}"
         p = prev.get(key, {})
@@ -1931,7 +2027,8 @@ def track(repo, results, only, budget, failures, strict=False, signature=None, t
         count = (p.get("count", 0) + 1) if (not ok and p.get("fp") == fp) else (0 if ok else 1)
         checks[key] = {"ok": ok, "fp": fp, "count": count, "exit": code, "output": out[-4000:]}
         if not ok and code is not None and out.strip():
-            receipts[key] = {"signature": signature, "exit": code, "output": out[-4000:], "agent": agent_name()}
+            receipts[key] = {"signature": signature, "exit": code, "output": out[-4000:], "agent": agent_name(),
+                             "files": files_now}
         if p.get("ok") and not ok:
             lines.append(f"NEWLY RED  {feat} ({kind}): it passed last run, so the last change broke it")
         elif p and not p.get("ok") and ok:
@@ -2092,10 +2189,13 @@ def cmd_baseline(repo, reviewed_by=None, reason=None):
         return 2
     lines = frozen_lines(repo)
     changed = weakened(repo, state, hashes, lines)
+    features, _ = parse(read(repo, RECIPE), repo=repo)
+    loose = gate_findings_loosened(repo, features, state)
+    changed += [f"loosened: {gates.loosened_text(x)}" for x in loose]
     if changed and not (reviewed_by and reviewed_by.strip() and reason and reason.strip()):
         for c in changed:
             print(f"BASELINE REFUSED  {c}")
-        print("A frozen check changed. The loop changes code, never the check: restore it, or have a "
+        print("A frozen check changed or a test was loosened. The loop changes code, never the check: restore it, or have a "
               "person review the change and run `verify.py baseline --reviewed-by <name> --reason <why>`. "
               "Never pass --reviewed-by for a review that did not happen.")
         return 1
@@ -2103,6 +2203,8 @@ def cmd_baseline(repo, reviewed_by=None, reason=None):
         state.setdefault("rebaselines", []).append({
             "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "by": reviewed_by.strip(),
             "reason": reason.strip(), "changed": changed, "head": git_head(repo)})
+        if loose:
+            state["loosened_reviewed"] = sorted(set(state.get("loosened_reviewed") or []) | {x["id"] for x in loose})
         print(f"RE-BASELINED  {len(changed)} frozen check change(s), reviewed by {reviewed_by.strip()}: "
               f"{reason.strip()}. `status` and `report` show this until it is committed.")
     # Who froze each check: kept for a check already frozen, the current agent for a new one.
@@ -2190,12 +2292,15 @@ def answer(repo):
         signature = None
     receipts = current_receipts(state, signature) if signature else {}
     passing_out = {k: r.get("output", "") for k, r in checks.items() if isinstance(r, dict) and r.get("ok")}
+    where = proof_where(repo, red_keys(state)) if features else None
+    found = gate_findings(repo, features, blind, state) if features else \
+        {"weak_signal": [], "unmapped": [], "loosened": [], "proof_where": []}
     rejections, unproven, unverified = [], [], []
     for f in features:
         if not f["checks"]:
             unverified.append(f["name"])
             continue
-        hit = proven_by(f, receipts, signature, passing_out)
+        hit = proven_by(f, receipts, signature, passing_out, where)
         if not hit or not f["proofs"]:
             unproven.append(f["name"])
             continue
@@ -2204,6 +2309,8 @@ def answer(repo):
         rejections.append({"feature": f["name"], "command": cmd, "wrong_state": f["proofs"][0],
                            "fail_signal": signal, "exit": r.get("exit"), "observed": line[:300]})
     failing = sorted(k for k, r in checks.items() if isinstance(r, dict) and not r.get("ok"))
+    blocked = [f"{k}: {why}" for k in failing
+               for why in [gates.blocked(sys.modules[__name__], checks[k].get("output", ""), checks[k].get("exit"))] if why]
     passed = [{"feature": k.split("|", 1)[0], "command": k.split("|", 1)[1]}
               for k, r in sorted(checks.items()) if isinstance(r, dict) and r.get("ok") and "|" in k]
     orphans = [t for t in find_tests(repo) if not is_covered(t, [c for f in features for _, c in f["checks"]], repo)] \
@@ -2228,6 +2335,9 @@ def answer(repo):
         "rejections": rejections, "passed": passed,
         "gaps": {"failing": failing, "unverified": unverified, "unproven": unproven,
                  "orphan_tests": orphans, "unchallenged": unchallenged, "not_independent": dependent,
+                 "blocked": blocked, "unmapped": found["unmapped"], "weak_signal": found["weak_signal"],
+                 "proof_not_from_product": found["proof_where"],
+                 "loosened": [gates.loosened_text(x) for x in found["loosened"]],
                  "blind_spots": blind,
                  "rebaselined": [rebaseline_text(r) for r in open_rebaselines(repo, state)]},
         "rebaselines": state.get("rebaselines", []),
@@ -2254,8 +2364,10 @@ def cmd_report(repo, as_json=False):
     for p in a["passed"]:
         print(f"PASSED  {p['feature']}: `{p['command']}`")
     g = a["gaps"]
-    labels = (("failing", "failing check"), ("unverified", "no check"), ("unproven", "never seen red"),
-              ("orphan_tests", "orphan test"), ("unchallenged", "unchallenged"),
+    labels = (("failing", "failing check"), ("blocked", "blocked by the environment"), ("unverified", "no check"),
+              ("unproven", "never seen red"), ("weak_signal", "weak signal"),
+              ("proof_not_from_product", "proof not from product"), ("loosened", "loosened"),
+              ("unmapped", "unmapped"), ("orphan_tests", "orphan test"), ("unchallenged", "unchallenged"),
               ("not_independent", "not independent"), ("blind_spots", "blind spot"),
               ("rebaselined", "check changed under review"))
     rows = [(label, item) for key, label in labels for item in g[key]]
@@ -2271,6 +2383,29 @@ def cmd_report(repo, as_json=False):
         if s["judge"] and s["mode"] != "judge":
             print(f"SWARM: judge too ({', '.join(s['judge'])} need an agent that did not freeze them)")
     return a["exit"]
+
+
+def cmd_answer_check(repo, path, as_json=False):
+    """The answer an agent hands back, held to what the helper knows: it must state the verdict, claim
+    nothing the verdict does not support, and name every gap `report` lists. Exit 0 ok, 1 not, 2 unreadable."""
+    try:
+        text = sys.stdin.read() if path == "-" else open(path, encoding="utf-8").read()
+    except OSError as exc:
+        print(f"answer-check: cannot read {path}: {exc}")
+        return 2
+    a = answer(repo)
+    problems = gates.check_answer(a, text)
+    if as_json:
+        print(json.dumps({"verdict": a["verdict"], "ok": not problems,
+                          "problems": [{"kind": k, "detail": d} for k, d in problems],
+                          "exit": 1 if problems else 0}, indent=2))
+    else:
+        for kind, detail in problems:
+            print(f"ANSWER {kind}  {detail}")
+        print(f"ANSWER-CHECK: {'ok' if not problems else 'rejected'} (verdict {a['verdict']}, "
+              f"{len(problems)} problem(s)). " + ("" if not problems else
+              "Fix the answer, not the state: say the verdict, take back the claim, name the gap."))
+    return 1 if problems else 0
 
 
 def diagnose_failure(out, exit_code, check_name, state=None):
@@ -2830,6 +2965,11 @@ def main():
     rp = sub.add_parser("report", help="the caller answer: verdict, VERIFY: line, rejections, passes, gaps")
     rp.add_argument("repo", nargs="?", default=".")
     rp.add_argument("--json", action="store_true", help="print the answer as JSON (same as status --json)")
+    ac = sub.add_parser("answer-check", help="check a final answer against report: verdict stated, no "
+                                             "overclaim, every gap named (exit 0 ok, 1 not)")
+    ac.add_argument("repo", nargs="?", default=".")
+    ac.add_argument("--answer", required=True, help="the answer file, or - for stdin")
+    ac.add_argument("--json", action="store_true", help="print the problems as JSON")
     tr = sub.add_parser("triage", help="diagnose latest failure into harness-gap, spec-drift, or product-gap")
     tr.add_argument("repo", nargs="?", default=".")
     tr.add_argument("--json", action="store_true", help="output triage report as JSON")
@@ -2998,6 +3138,8 @@ def main():
         sys.exit(cmd_maintain(sys.modules[__name__], repo, a.since, a.json))
     if a.cmd == "report":
         sys.exit(cmd_report(repo, a.json))
+    if a.cmd == "answer-check":
+        sys.exit(cmd_answer_check(repo, a.answer, a.json))
     if a.cmd == "triage":
         sys.exit(cmd_triage(repo, a.json))
     if a.cmd == "tests":
