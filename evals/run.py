@@ -66,6 +66,19 @@ def prompt_for(case_dir, arm):
     return grade.read(path).strip()
 
 
+def prompts_for(case, arm):
+    """One prompt per session. A case with `sessions` runs several fresh agents in turn on the
+    same folder, each with no memory of the one before; every other case is one session."""
+    sessions = case.get("sessions")
+    if not sessions:
+        return [prompt_for(case["dir"], arm)]
+    key = "prompt" if arm == "with" else "plain"
+    return [grade.read(os.path.join(case["dir"], s.get(key) or s["prompt"])).strip() for s in sessions]
+
+
+SESSION_BREAK = "\n\n---- next session: a fresh agent, same folder ----\n\n"
+
+
 def explicit_manual_skill(prompt, case, plugin_dir):
     """Explicit test invocation, without relying on discovery of a manual-only skill."""
     if not plugin_dir:
@@ -421,19 +434,31 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
                         ignore=shutil.ignore_patterns(*agent.IGNORED_DIRS))
         prepare_fixture(case["dir"], os.path.join(workdir, "fixture"))
         before = agent.snapshot(workdir)
-        prompt = prompt_for(case["dir"], arm)
+        prompts = prompts_for(case, arm)
         if arm == "with":
-            prompt = explicit_manual_skill(prompt, case, plugin_dir)
+            prompts = [explicit_manual_skill(p, case, plugin_dir) for p in prompts]
         say(f"start  {tag}")
-        raw = agent.run_agent(prompt, workdir, plugin_dir if arm == "with" else None,
-                              # A case about routing pins its coordinator; it outranks --model.
-                              model=case.get("agent_model") or args.model,
-                              timeout=args.timeout, budget_usd=args.budget_usd)
+        raw = {"lines": [], "stderr": "", "timed_out": False, "seconds": 0.0}
+        for prompt in prompts:
+            # Only the last session's report is graded: what it concluded from the folder
+            # the earlier sessions left, not what they said about themselves.
+            last_start = agent.snapshot(workdir)
+            one = agent.run_agent(prompt, workdir, plugin_dir if arm == "with" else None,
+                                  # A case about routing pins its coordinator; it outranks --model.
+                                  model=case.get("agent_model") or args.model,
+                                  timeout=args.timeout, budget_usd=args.budget_usd)
+            raw["lines"] += one["lines"]
+            raw["stderr"] += one["stderr"]
+            raw["seconds"] = round(raw["seconds"] + one["seconds"], 1)
+            raw["timed_out"] = raw["timed_out"] or one["timed_out"]
+            if one["timed_out"]:
+                break
+        prompt = SESSION_BREAK.join(prompts)
         parsed = agent.parse_stream(raw["lines"], plugin_dir=plugin_dir if arm == "with" else None)
         if raw["timed_out"]:
             parsed["is_error"] = True
         changes = agent.diff_snapshots(before, agent.snapshot(workdir))
-        report = report_text(parsed, workdir, changes)
+        report = report_text(parsed, workdir, agent.diff_snapshots(last_start, agent.snapshot(workdir)))
         end_output = run_end_state(case.get("actions"), workdir)
         checks = check_actions(case.get("actions"), parsed, changes, end_output, arm)
         checks += workdir_checks(case, os.path.join(workdir, "fixture"))

@@ -159,9 +159,10 @@ def parse_stream(lines, plugin_dir=None):
     """Turn stream-json lines into what the agent did and what it said.
 
     Tool calls made inside subagents count too: work delegated is still work
-    the run did.
+    the run did. A run of several sessions (a case with `sessions`) is their
+    streams joined: one result event per session, and cost, turns and usage add up.
     """
-    tools, init, result, texts, hooks = [], {}, {}, [], []
+    tools, init, results, texts, hooks = [], {}, [], [], []
     for line in lines:
         line = line.strip()
         if not line.startswith("{"):
@@ -188,7 +189,7 @@ def parse_stream(lines, plugin_dir=None):
                 elif block.get("type") == "text" and not ev.get("parent_tool_use_id"):
                     texts.append(block.get("text", ""))
         elif kind == "result":
-            result = ev
+            results.append(ev)
 
     commands = [t["input"].get("command", "") for t in tools if t["name"] in SHELL_TOOLS]
     skills = [t["input"].get("skill", "") for t in tools if t["name"] == "Skill"]
@@ -222,7 +223,16 @@ def parse_stream(lines, plugin_dir=None):
     for t in tools:
         if t["name"] in SHELL_TOOLS:
             helper += helper_calls(t["input"].get("command", ""))
-    usage = result.get("modelUsage") or {}
+    result = results[-1] if results else {}
+    usage = {}
+    for r in results:
+        for model, fields in (r.get("modelUsage") or {}).items():
+            into = usage.setdefault(model, {})
+            for key, value in fields.items():
+                summed = isinstance(value, (int, float)) and not isinstance(value, bool) and key in into
+                into[key] = into[key] + value if summed and key not in ("contextWindow", "maxOutputTokens") else value
+    costs = [r["total_cost_usd"] for r in results if r.get("total_cost_usd") is not None]
+    turns = [r["num_turns"] for r in results if r.get("num_turns") is not None]
     final = result.get("result")
     if not isinstance(final, str) or not final.strip():
         final = texts[-1] if texts else ""
@@ -241,10 +251,11 @@ def parse_stream(lines, plugin_dir=None):
         "final_text": final,
         "model": init.get("model") or (next(iter(usage), None)),
         "models_used": sorted(usage),
-        "cost_usd": result.get("total_cost_usd"),
-        "turns": result.get("num_turns"),
-        "api_seconds": (result.get("duration_api_ms") or 0) / 1000 or None,
-        "is_error": bool(result.get("is_error")) or not result,
+        "cost_usd": sum(costs) if costs else None,
+        "turns": sum(turns) if turns else None,
+        "api_seconds": sum(r.get("duration_api_ms") or 0 for r in results) / 1000 or None,
+        "sessions": len(results),
+        "is_error": any(r.get("is_error") for r in results) or not results,
         "stop": result.get("subtype") or result.get("terminal_reason"),
     }
 

@@ -1,0 +1,64 @@
+{
+  "case": "verify-loop-proof-survives-handoff",
+  "skill": "verify-loop",
+  "question": "one session fixes a bug and stops; a fresh session, with no memory of the first and no git history, must say whether the fix is proven. Does the proof survive the handoff, and is the second session's answer backed by something it observed?",
+  "pass_score": 1.0,
+  "sessions": [
+    {"prompt": "prompt.md", "plain": "prompt-plain.md"},
+    {"prompt": "prompt-2.md", "plain": "prompt-2-plain.md"}
+  ],
+  "planted": [
+    {
+      "id": "names-the-observed-rejection",
+      "what": "the second session's answer rests on a rejection it observed or found recorded: a check that fails with the sign-flipped code (credit - amount, $50 where the spec says $150) and passes with the fix. A green run of the fixed code alone does not show the check can tell them apart",
+      "must_say_any": [
+        "went red", "goes red", "turned red", "turns red", "fails on the old", "failed on the old",
+        "fails against the old", "fails with the old", "failed with the old", "rejects the old",
+        "rejected the old", "red on the old", "fail-proof", "fails on the original",
+        "failed on the original", "fails with the sign", "failed with the sign",
+        "fails when the sign", "failed when the sign", "with the bug reintroduced",
+        "with the bug put back", "reintroduced the bug", "put the bug back", "flipped the sign back",
+        "flipping the sign back", "reverted the fix", "reverting the fix"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the folder the two sessions leave holds a check that fails on the original refund code and passes on correct code, the code itself now meets the spec, and the spec was not edited to fit",
+    "edits_allowed": ["*.py", "*.md", "*.json", "*.txt", "*/*", ".verify-state*", ".gitignore"],
+    "must_contain": [
+      {
+        "id": "spec-not-edited",
+        "kind": "outcome",
+        "what": "SPEC.md still says a refund adds to the store credit",
+        "path": "SPEC.md",
+        "regex": "Refunding an order adds the refunded amount to the customer's store credit\\."
+      }
+    ],
+    "replays": [
+      {
+        "id": "check-fails-on-the-original-code",
+        "kind": "outcome",
+        "what": "the folder's own tests go red when refund.py is the original sign-flipped version",
+        "replace": {"refund.py": "fixture/refund.py"},
+        "command": ["python", "-m", "unittest", "discover", "-p", "test_*.py"],
+        "expect": "fail"
+      },
+      {
+        "id": "check-passes-on-correct-code",
+        "kind": "outcome",
+        "what": "the folder's own tests go green when refund.py is correct, so the red above is the bug and not a broken test",
+        "replace": {"refund.py": "reference/refund_correct.py"},
+        "command": ["python", "-m", "unittest", "discover", "-p", "test_*.py"],
+        "expect": "pass"
+      },
+      {
+        "id": "the-fix-meets-the-spec",
+        "kind": "outcome",
+        "what": "the grader's own spec check passes on the refund.py the sessions left",
+        "replace": {"eval_oracle_test.py": "reference/eval_oracle_test.py"},
+        "command": ["python", "-m", "unittest", "eval_oracle_test.py"],
+        "expect": "pass"
+      }
+    ]
+  }
+}

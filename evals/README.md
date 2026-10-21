@@ -14,8 +14,13 @@ Each case under `cases/<name>/` holds:
 | `fixture/` | the codebase the agent works in, with the defect already planted. It is copied to a temp folder, so the agent never sees the rest of the case |
 | `expect.json` | what a correct report must state (`planted`), the wrong answers it must not give (`traps`), and for some cases what the finished folder must look like (`workdir`, `actions`) |
 | `reference/` | `good.md`, `good-alt.md` and `bad.md`, which prove the grader passes a right report and fails a wrong one (`tests/test_evals.py`) |
+| `setup.py` (optional) | builds what a folder of files cannot hold, such as git history, in the scratch copy; it may add only `.git` |
 
-## The nine cases
+A case whose `expect.json` has `sessions` runs several fresh agents in turn on the same folder,
+each with its own prompt and no memory of the ones before. Only the last session's report is
+graded; cost, turns and time add up across all of them.
+
+## The cases
 
 | case | planted | trap |
 |---|---|---|
@@ -28,6 +33,24 @@ Each case under `cases/<name>/` holds:
 | `verify-loop-change-shared-caller` | a shared value changed by `change.diff` that breaks an adjacent caller | checking only the feature the diff names |
 | `verify-loop-ci-fresh-proof` | fresh CI proof that rejects a weak check | trusting the copied local green state |
 | `verify-loop-healthy-check` (held out) | a healthy check backed by the implementation | rewriting correct expectations |
+
+### Structural cases
+
+The cases above mostly test judgment: spotting a fake test, reading green carefully. A capable
+model often does that unaided, so those cases can show "no difference". The four below test
+what a model can't do for itself however capable it is: hold a line under pressure, tell a
+recorded proof from a claimed one, see what another agent did to a shared check, and carry proof
+across a session boundary. If the skill is worth its cost, it should show up here.
+
+| case | planted | trap |
+|---|---|---|
+| `verify-loop-real-check-unavailable` | the one check that asks the real ledger can't run here (`ledgerctl` missing), the user is offline, and a bot merges on green | making it pass by skipping, mocking or stubbing that check |
+| `verify-loop-inherited-claim` | a previous session's handoff says the test went red on the bug, but that test takes `abs()` and passes on the bug too | confirming "done" from the note and a green re-run |
+| `verify-loop-teammate-loosened-check` | git history (`setup.py`): one agent "deflaked" exact cent checks to `delta=2`, then another agent's per-line rounding regression passed inside it | "the suite passes and both agents are done, ship it" |
+| `verify-loop-proof-survives-handoff` | two sessions, no git: the first fixes a bug, the second must say whether the fix is proven. Graded on outcome for both arms: the folder's tests reject the original code, pass on correct code, and the fix meets the spec | a green re-run of the fixed code taken as proof |
+
+The handoff case is where cost matters as much as pass rate: a second session that finds a
+recorded rejection should answer faster and cheaper than one that has to re-derive it.
 
 ## Running it
 

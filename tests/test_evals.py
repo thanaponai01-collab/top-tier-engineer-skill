@@ -33,6 +33,18 @@ def read(path):
         return fh.read()
 
 
+def prompt_files(case):
+    """Every prompt an agent in this case is handed, both arms, every session."""
+    files = ["prompt.md", "prompt-plain.md"]
+    for session in case.get("sessions", []):
+        files += [session["prompt"], session.get("plain", session["prompt"])]
+    return sorted(set(files))
+
+
+def plain_prompt_files(case):
+    return sorted({"prompt-plain.md"} | {s["plain"] for s in case.get("sessions", []) if s.get("plain")})
+
+
 class Cases(unittest.TestCase):
     def test_manual_skill_invocation_points_only_to_its_entry_not_answer_keys(self):
         import importlib.util
@@ -58,8 +70,8 @@ class Cases(unittest.TestCase):
     def test_each_case_is_complete(self):
         for name in grade.case_names():
             case_dir = os.path.join(grade.CASES_DIR, name)
-            for part in ("prompt.md", "fixture", "reference/good.md",
-                         "reference/good-alt.md", "reference/bad.md"):
+            for part in ["prompt.md", "fixture", "reference/good.md", "reference/good-alt.md",
+                         "reference/bad.md"] + prompt_files(grade.load_case(name)):
                 path = os.path.join(case_dir, *part.split("/"))
                 self.assertTrue(os.path.exists(path), f"{name}: missing {part}")
 
@@ -94,7 +106,7 @@ class PromptsDoNotLeak(unittest.TestCase):
     def test_a_prompt_does_not_contain_its_own_answer(self):
         for name in grade.case_names():
             case = grade.load_case(name)
-            for file in ("prompt.md", "prompt-plain.md"):
+            for file in prompt_files(case):
                 prompt = grade.normalize(read(os.path.join(case["dir"], file)))
                 for item in case["planted"]:
                     for token in item.get("must_name", []):
@@ -114,7 +126,7 @@ class PromptsDoNotLeak(unittest.TestCase):
         """A report that quotes the question back must not trip a trap by doing so."""
         for name in grade.case_names():
             case = grade.load_case(name)
-            for file in ("prompt.md", "prompt-plain.md"):
+            for file in prompt_files(case):
                 prompt = grade.normalize(read(os.path.join(case["dir"], file)))
                 for trap in case.get("traps", []):
                     for phrase in trap.get("must_not_say_any", []):
@@ -137,11 +149,12 @@ class PlainPrompts(unittest.TestCase):
     def test_each_case_has_a_plain_prompt_naming_no_skill(self):
         skills = os.listdir(os.path.join(ROOT, "plugin", "skills"))
         for name in grade.case_names():
-            path = os.path.join(grade.CASES_DIR, name, "prompt-plain.md")
-            self.assertTrue(os.path.isfile(path), f"{name}: missing prompt-plain.md")
-            text = read(path)
-            for skill in skills:
-                self.assertNotIn(f"`{skill}`", text, f"{name}: prompt-plain.md names skill {skill}")
+            for file in plain_prompt_files(grade.load_case(name)):
+                path = os.path.join(grade.CASES_DIR, name, file)
+                self.assertTrue(os.path.isfile(path), f"{name}: missing {file}")
+                text = read(path)
+                for skill in skills:
+                    self.assertNotIn(f"`{skill}`", text, f"{name}: {file} names skill {skill}")
 
 
 class GraderDiscriminates(unittest.TestCase):
