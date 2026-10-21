@@ -345,6 +345,37 @@ class Blocked(unittest.TestCase):
             text = run("verify.py", "report", tmp)[1]
             self.assertIn("GAP  blocked by the environment: Total|", text)
 
+    def test_a_missing_python_suggests_python3(self):
+        import sys
+        from unittest import mock
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "plugin", "skills", "verify-loop", "scripts"))
+        import verify
+        for out in ("/bin/sh: python: command not found", "zsh: command not found: python",
+                    "/bin/sh: 1: python: not found", "bash: line 1: python: command not found",
+                    "xcode-select: Failed to locate 'python', requesting installation of command line developer tools.",
+                    "'python' is not recognized as an internal or external command"):
+            with mock.patch.object(verify.shutil, "which", return_value="/usr/bin/python3"):
+                category, summary, _ = verify.diagnose_failure(out, 127, "")
+            self.assertEqual(category, "harness-gap", out)
+            self.assertIn("`python3` is", summary, out)
+            with mock.patch.object(verify.shutil, "which", return_value=None):
+                category, summary, _ = verify.diagnose_failure(out, 127, "")
+            self.assertEqual(category, "harness-gap", out)
+            self.assertNotIn("python3", summary, out)
+        for out in ("sh: python3: command not found", "AssertionError: python: not found in list"):
+            with mock.patch.object(verify.shutil, "which", return_value="/usr/bin/python3"):
+                self.assertNotIn("`python3` is", verify.diagnose_failure(out, 1, "")[1], out)
+
+    def test_the_macos_python_stub_is_blocked_not_fix(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            write(tmp, "stub.py", "import sys\nsys.stderr.write(\"xcode-select: Failed to locate 'python', "
+                                  "requesting installation of command line developer tools.\\n\")\nsys.exit(72)\n")
+            write(tmp, "VERIFY.md", recipe().replace("python -m unittest test_calc.py", "python stub.py"))
+            out = run("verify.py", "run", tmp)[1]
+            self.assertIn("BLOCKED", out)
+            self.assertEqual([t["action"] for t in report(tmp)["next"]], ["blocked"])
+
 
 if __name__ == "__main__":
     unittest.main()

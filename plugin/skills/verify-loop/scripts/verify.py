@@ -83,7 +83,7 @@ Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is 
 unproven, or has orphan tests); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
-import argparse, ast, contextlib, fnmatch, hashlib, json, os, queue, re, signal, socket, subprocess, sys, tempfile, time
+import argparse, ast, contextlib, fnmatch, hashlib, json, os, queue, re, shutil, signal, socket, subprocess, sys, tempfile, time
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -1885,7 +1885,10 @@ def tampered(repo, state):
     return sorted(k for k in base if cur.get(k) != base[k])
 
 
-HARNESS_FAILURE = re.compile(r"ModuleNotFoundError|ImportError|FileNotFoundError|SyntaxError|missing dependency|command not found|not recognized as|can\'t open file", re.I)
+HARNESS_FAILURE = re.compile(r"ModuleNotFoundError|ImportError|FileNotFoundError|SyntaxError|missing dependency|command not found|not recognized as|can\'t open file|Failed to locate '|^\S*sh: \d+: \S+: not found", re.I | re.M)
+# The shell, zsh, dash, the macOS xcode-select stub and Windows each say "no `python`" differently.
+MISSING_PYTHON = re.compile(r"^(?:\S*sh: (?:line )?(?:\d+: )?)?python: (?:command )?not found|command not found: python\b|"
+                            r"Failed to locate 'python'|'python' is not recognized", re.I | re.M)
 
 
 def current_receipts(state, signature):
@@ -2437,6 +2440,11 @@ def diagnose_failure(out, exit_code, check_name, state=None):
     if "timed out after" in out_lower or exit_code is None:
         return ("harness-gap", "Execution timeout: command or readiness probe timed out.",
                 "Increase timeout using --timeout or fix slow initialization / hang in ## Run scripts.")
+    if MISSING_PYTHON.search(out or "") and shutil.which("python3"):
+        return ("harness-gap", "Environment / dependency error: `python` is not on PATH, but `python3` is. "
+                "Activate a virtualenv (it provides `python`) or put a `python` wrapper on PATH; a symlink to "
+                "macOS's /usr/bin/python3 stub does not work. Changing the check to `python3` is a check edit.",
+                "Provide `python` in the environment. Do NOT modify product logic.")
     if HARNESS_FAILURE.search(out or ""):
         m = HARNESS_FAILURE.search(out or "")
         return ("harness-gap", f"Environment / dependency error: {m.group(0)}.",

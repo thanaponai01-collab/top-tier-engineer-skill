@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.18.2 - 2026-10-21 - A missing `python` says so
+
+- A check that fails because `python` is not on PATH while `python3` is (sh, bash, dash, zsh,
+  Windows, or the macOS `xcode-select` stub) is now `BLOCKED` with that cause and how to provide
+  `python` (a virtualenv or a wrapper; not a symlink to macOS's `/usr/bin/python3` stub). Changing the
+  check to `python3` is named as a check edit. Recipes and examples keep `python`.
+- The macOS stub's `Failed to locate '<tool>'` and dash's `sh: 1: <tool>: not found` count as
+  environment failures; before, the stub's red read as a product failure.
+- The Codex `plugin.json` is back in step with the Claude one.
+
 ## 1.18.1 - 2026-10-21 - Gates, reviewed
 
 Fixes from a review of 1.18.0:
