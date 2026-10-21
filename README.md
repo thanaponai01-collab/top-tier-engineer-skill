@@ -33,6 +33,14 @@ drives every feature live and fixes map drift without touching product code or f
 `plugin/.codex-plugin/plugin.json` exposes `plugin/skills/`. Or copy `plugin/skills/verify-loop/`
 intact into a project's `.agents/skills/`.
 
+## Automatic progression
+
+Run `python <skill-base>/scripts/verify.py advance <repo> --json` to perform eligible mechanical
+steps, bounded by `--max-steps` (default 3). It runs checks, freezes a proof-ready baseline and
+finishes with strict verification. Missing proof, repairs and independent judgment return as
+structured tasks for the caller. Unchanged work is not rerun; `--refresh` rechecks external changes.
+See [the command contract](plugin/skills/verify-loop/references/helpers.md#advance-automatic-mechanical-progression).
+
 ## Layout
 
 - `plugin/skills/verify-loop/SKILL.md` — the skill; `references/` holds its modes (change, challenge,

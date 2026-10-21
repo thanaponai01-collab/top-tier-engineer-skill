@@ -3,6 +3,52 @@
 Commands beyond the core loop (`init`, `run`, `baseline`, `status`, `tests`, `scope`). None of them
 proves anything on its own: a scaffold is a draft, and only `run --strict` then `status` decides done.
 
+## advance: automatic mechanical progression
+
+```bash
+python <skill-base>/scripts/verify.py advance . --json
+```
+
+Runs a fresh whole check pass when inputs have changed or no run exists, freezes the baseline
+once every feature has proof and needs only freezing/running, then runs the whole recipe strictly.
+It reuses the existing feature state machine, receipts and gates. It never executes `NEXT` text,
+edits product/check/recipe files, invents mutations, overrides a refused baseline, or impersonates
+a judge. Checks run with the same authority and side effects as `run`.
+
+`--max-steps 3` bounds automatic actions, `--timeout 120` bounds each check and `--jobs 1` controls
+check concurrency. These are action/per-check limits, not a total wall-time or monetary budget.
+Use parallel checks only when their resources are isolated. Each automatic run bypasses the result
+cache. Unchanged completed or decision-bound work runs no checks; use `--refresh` after environment,
+package, service or other external inputs change. File signatures cannot observe those changes.
+
+The single JSON object contains `stop`, `steps` (action, exit, input fingerprint and the final 16 KB
+of output per action), `tasks` (feature, action, detail, paths and next instruction), `report` (the
+canonical caller answer) and `exit`. The last executed batch is also retained as `last_advance`
+in this agent's existing state. No state schema migration or second task queue is required.
+
+| Stop | Meaning | Exit |
+|---|---|---|
+| `done` | Current strict green, including existing gates | 0 |
+| `needs-agent` | Mapping, repair, proof, challenge, independent judgment or unresolved strict gate | 3 |
+| `waiting` | Another agent holds a feature lease, or another advance executor holds its lock | 3 |
+| `stale` | Inputs/state changed while planning, or product/check files changed while executing | 3 |
+| `budget` | Automatic action limit reached; resume with another invocation | 3 |
+| `blocked` | Environment failure; report where the check can run | 1 |
+| `guard` | Changed frozen checks, scope/state violation or refused baseline | 1 |
+| `invalid` | Missing/empty recipe, invalid limits or execution setup error | 2 |
+
+A returned task is an instruction for the caller, not authorization to spawn or message agents.
+After resolving it, invoke `advance` again. It stops on a current strict failure rather than
+rerunning unchanged gates. Independent verification always yields a task for a genuinely separate
+context; `advance` never assigns itself another identity.
+
+Automatic baseline/run operations affect the whole recipe, so a foreign active feature lease
+blocks both. A separate `.verify-state.advance.lock` serializes advance invocations for this
+checkout/state directory. It is never stolen by age: after a crashed process, confirm it has exited
+before removing that lock. Input fingerprints detect changes before dispatch and file changes
+after execution; they do not isolate arbitrary concurrent editors or other CLI commands. Use an
+isolated checkout when other processes may edit the same product/checks during execution.
+
 ## loop: rerun and triage, no edits
 
 ```bash

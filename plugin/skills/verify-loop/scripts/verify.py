@@ -3018,6 +3018,13 @@ def main():
     ct.add_argument("new_spec", help="updated specification file")
     ct.add_argument("repo", nargs="?", default=".")
     ct.add_argument("--json", action="store_true", help="output contract breaking changes as JSON")
+    adv = sub.add_parser("advance", help="execute bounded mechanical steps; yield decisions to an agent")
+    adv.add_argument("repo", nargs="?", default=".")
+    adv.add_argument("--max-steps", type=int, default=3, help="maximum automatic actions (default 3)")
+    adv.add_argument("--timeout", type=int, default=120, help="seconds per check (default 120)")
+    adv.add_argument("--jobs", type=int, default=1, help="parallel checks; use only for isolated checks")
+    adv.add_argument("--refresh", action="store_true", help="rerun unchanged inputs after external environment changes")
+    adv.add_argument("--json", action="store_true", help="print steps, pending tasks and the canonical report")
     lp = sub.add_parser("loop", help="autonomous iterative verification loop with scope enforcement and budget guardrails")
     lp.add_argument("repo", nargs="?", default=".")
     lp.add_argument("--scope", nargs="*", default=[], help="pin touched files/patterns for scope enforcement")
@@ -3097,6 +3104,9 @@ def main():
     except ValueError as exc:
         print(f"verify.py: {exc}")
         sys.exit(2)
+    if a.cmd == "advance":
+        from advance import cmd_advance
+        sys.exit(cmd_advance(sys.modules[__name__], repo, a.max_steps, a.timeout, a.jobs, a.refresh, a.json))
     if a.cmd == "ci":
         from ci import cmd_ci
         sys.exit(cmd_ci(sys.modules[__name__], repo, a.plan, a.output, a.timeout))

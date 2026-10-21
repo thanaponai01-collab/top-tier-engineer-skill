@@ -39,6 +39,12 @@ say you added it.
 
 ## Prove or repair: run `report`, do what `NEXT` says
 
+For mechanical progression, run `verify.py advance <repo> --json`. It runs checks, freezes a
+proof-ready baseline and runs strictly, up to three actions by default. Resolve returned `tasks`
+with judgment, then call it again. It stops for missing proof, repairs, independent judgment,
+foreign leases and guards; it never edits product/check files or executes `NEXT` strings. See
+[advance](references/helpers.md#advance-automatic-mechanical-progression) for stops and limits.
+
 Each `NEXT` line names a feature's step. Repeat until none is left:
 
 | Step | Do |
