@@ -1468,7 +1468,7 @@ def seal_of(state):
 # .verify-state.<name>.json; the baseline, re-baselines and rejection receipts stay in STATE for
 # every agent, so a new name neither escapes a freeze nor has to re-prove a check.
 SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures", "frozen_by", "verified_by", "swarm",
-               "loosened_reviewed")
+               "loosened_reviewed", "receipt_trees")
 AGENT_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
 LOCK = ".verify-state.lock"
 _loaded = {}  # state file -> what this process last read from it: the base of the merge
@@ -1618,7 +1618,7 @@ def merge_state(disk, base, mine, owned):
             out.pop(k, None)  # this process removed it
         elif k in base and mine[k] == base[k]:
             continue
-        elif k in ("failures", "verified_by", "swarm") and isinstance(mine[k], dict):
+        elif k in ("failures", "verified_by", "swarm", "receipt_trees") and isinstance(mine[k], dict):
             out[k] = merge_state(disk.get(k) or {}, base.get(k) or {}, mine[k], lambda _: True)
         elif k in ("rebaselines", "loosened_reviewed") and isinstance(mine[k], list):
             have = list(disk.get(k) or [])
@@ -1889,8 +1889,11 @@ HARNESS_FAILURE = re.compile(r"ModuleNotFoundError|ImportError|FileNotFoundError
 
 
 def current_receipts(state, signature):
-    """Failure receipts for the current checks, with a caught challenge's mutated run folded in."""
-    receipts = dict(state.get("failures", {}))
+    """Failure receipts for the current checks, with a caught challenge's mutated run folded in.
+    Each receipt's `files` (the file hashes when it went red) is looked up from its run's tree."""
+    trees = state.get("receipt_trees") or {}
+    receipts = {k: dict(r, files=trees.get(r["files_id"])) if isinstance(r, dict) and r.get("files_id") else r
+                for k, r in (state.get("failures") or {}).items()}
     challenge = state.get("challenge", {})
     if challenge.get("verdict") == "caught" and challenge.get("check_signature") == signature:
         for key, row in challenge.get("mutated", {}).get("checks", {}).items():
@@ -1958,7 +1961,7 @@ def gate_findings_loosened(repo, features, state):
     return [x for x in gates.loosened(sys.modules[__name__], repo, tests) if x["id"] not in reviewed]
 
 
-def gate_findings(repo, features, blind, state):
+def gate_findings(repo, features, blind, state, where=None):
     """What the gates find on the current tree: {weak_signal, unmapped, loosened, proof_where}.
     Each is a list of lines; every one of them keeps `run --strict` red."""
     me = sys.modules[__name__]
@@ -1971,7 +1974,7 @@ def gate_findings(repo, features, blind, state):
     except (OSError, ValueError):
         signature = None
     receipts = current_receipts(state, signature) if signature else {}
-    where = proof_where(repo, red_keys(state))
+    where = where or proof_where(repo, red_keys(state))
     bad_where = []
     for f in features:
         if not f["checks"] or not f["proofs"] or not signature:
@@ -2019,7 +2022,12 @@ def track(repo, results, only, budget, failures, strict=False, signature=None, t
     receipts = state.setdefault("failures", {})
     if results and signature is None:
         signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
+    # The files as they were when a check went red, stored once per run and shared by its receipts.
     files_now = file_sigs(repo) if any(not ok for *_, ok, _, _ in results) else None
+    files_id = sha(json.dumps(files_now, sort_keys=True)) if files_now is not None else None
+    trees = state.setdefault("receipt_trees", {})
+    if files_id:
+        trees[files_id] = files_now
     for feat, kind, cmd, ok, out, code in results:
         key = f"{feat}|{cmd}"
         p = prev.get(key, {})
@@ -2028,7 +2036,7 @@ def track(repo, results, only, budget, failures, strict=False, signature=None, t
         checks[key] = {"ok": ok, "fp": fp, "count": count, "exit": code, "output": out[-4000:]}
         if not ok and code is not None and out.strip():
             receipts[key] = {"signature": signature, "exit": code, "output": out[-4000:], "agent": agent_name(),
-                             "files": files_now}
+                             "files_id": files_id}
         if p.get("ok") and not ok:
             lines.append(f"NEWLY RED  {feat} ({kind}): it passed last run, so the last change broke it")
         elif p and not p.get("ok") and ok:
@@ -2036,6 +2044,8 @@ def track(repo, results, only, budget, failures, strict=False, signature=None, t
         if count >= 2:
             lines.append(f"SAME FAILURE x{count}  {feat} ({kind}): the same output again. Your picture of the "
                          "system is wrong; re-read the code and this output before another try")
+    used = {r.get("files_id") for r in receipts.values() if isinstance(r, dict)}
+    state["receipt_trees"] = {k: t for k, t in trees.items() if k in used}
     keep = (state.get("scope") or {}).get("keep", [])
     broke = [k for k in keep if k in checks and not checks[k]["ok"]]
     for k in broke:
@@ -2293,7 +2303,7 @@ def answer(repo):
     receipts = current_receipts(state, signature) if signature else {}
     passing_out = {k: r.get("output", "") for k, r in checks.items() if isinstance(r, dict) and r.get("ok")}
     where = proof_where(repo, red_keys(state)) if features else None
-    found = gate_findings(repo, features, blind, state) if features else \
+    found = gate_findings(repo, features, blind, state, where) if features else \
         {"weak_signal": [], "unmapped": [], "loosened": [], "proof_where": []}
     rejections, unproven, unverified = [], [], []
     for f in features:
@@ -2324,7 +2334,7 @@ def answer(repo):
     todo, advice = [], None
     if features:
         from swarm import advise, swarm_items
-        items = swarm_items(sys.modules[__name__], repo, state)
+        items = swarm_items(sys.modules[__name__], repo, state, where=where)
         todo = [{"feature": i["feature"], "action": i["action"], "detail": i["detail"], "next": i["next"]}
                 for i in items if i["action"] != "done"]
         advice = advise(items)

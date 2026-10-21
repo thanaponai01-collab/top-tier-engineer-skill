@@ -35,7 +35,7 @@ of to is was in on at by with value result output returned return
 """.split())
 
 
-RUNNER_NUMBERS = re.compile(r"(?i)\b(?:exit(?:ed)?(?:\s+with)?(?:\s+(?:code|status))?|code|status|line|returncode)"
+RUNNER_NUMBERS = re.compile(r"(?i)\b(?:exit(?:ed)?(?:\s+with)?(?:\s+(?:code|status))?|return\s?code|line)"
                             r"\s*[:=]?\s*-?\d+|\b\d+\s+(?:failed|passed|errors?|failures?|tests?)\b")
 
 
@@ -171,7 +171,7 @@ def unmapped(v, repo, features, blind):
     commands = [c for f in features for _, c in f["checks"]]
     paths = [p for f in features for p in f.get("paths") or []]
     frozen = {o.strip().replace("\\", "/") for f in features for o in f.get("oracles") or []}
-    named = {rel for rel in files if any(re.search(rf"(?:^|[\s/'\"`]){re.escape(rel)}(?:$|[\s'\"`])", c)
+    named = {rel for rel in files if any(re.search(rf"(?:^|[\s'\"`=])(?:\./)?{re.escape(rel)}(?:$|[\s'\"`;)])", c)
                                          for c in commands)}
     tests = [t for t in v.find_tests(repo) if v.is_covered(t, commands, repo)]
     covmap = v.read_json(v.coverage_path(repo)) or {}
@@ -249,7 +249,7 @@ def _py_strength(text):
                 if EXACT_PY.match(name_ or "") and not any(k.arg in TOLERANT_KW for k in n.keywords) and \
                         "approx" not in ast.dump(n):
                     exact += 1
-                    for a in n.args:
+                    for a in n.args[:2]:  # (actual, expected); a third is the failure message
                         lits += _consts(a)
         out[name] = (exact, sorted(lits))
 
@@ -351,7 +351,7 @@ def loosened(v, repo, test_files):
                 steps.append((sha[:10], author, subject, before, after))
         for commit, author, subject, before, after in steps:
             for test, detail in compare(v, before, after, rel):
-                out.append({"id": f"{rel}|{test}|{commit}", "file": rel, "test": test, "detail": detail,
+                out.append({"id": f"{rel}|{test}|{detail}", "file": rel, "test": test, "detail": detail,
                             "commit": commit, "author": author, "subject": subject[:80]})
     return out
 
@@ -380,14 +380,16 @@ NEGATION = re.compile(r"(?:\bnot|n't|\bno|\bnever|\bnor|\bcannot)\W+(?:\w+\W+){0
 
 
 def _says(text, item):
-    return item.strip().lower() in text
+    """`item` appears in `text` as a whole word or path, not inside another word."""
+    item = item.strip().lower()
+    return bool(item) and re.search(rf"(?<![\w./-]){re.escape(item)}(?![\w-])", text) is not None
 
 
 def _says_blind(text, item):
     if _says(text, item):
         return True
     words = [w for w in re.findall(r"[A-Za-z0-9_]{4,}", item.lower())]
-    return bool(words) and sum(w in text for w in words) * 2 >= len(words)
+    return bool(words) and sum(_says(text, w) for w in words) * 2 >= len(words)
 
 
 def check_answer(a, answer_text):

@@ -55,7 +55,7 @@ include: packages/auth/VERIFY.md
 - A check passes when its command exits 0.
 - `fail-proof:` explains the controlled wrong state and intended failure signal. Strict runs also
   require a retained failing command/output for the current check hashes; a sentence alone fails.
-  The receipt records every file's hash when the check went red. Once the check passes again it
+  The run records every file's hash when a check went red (once per run, shared by its receipts). Once the check passes again it
   counts only if a product file differed then: one inside `path:` when the feature has one, else
   any file that is not a test, a check, an oracle or Markdown. A red on the same files that pass
   now came from the environment (`PROOF NOT FROM PRODUCT`). A caught `challenge` mutation always

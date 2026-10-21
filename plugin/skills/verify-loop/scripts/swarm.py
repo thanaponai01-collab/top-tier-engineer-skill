@@ -77,7 +77,7 @@ def _bare_command(repo, feat, action, freezers):
     return ""
 
 
-def swarm_items(v, repo, state=None, now=None):
+def swarm_items(v, repo, state=None, now=None, where=None):
     """Compute the current verification state and active lease for every feature in VERIFY.md."""
     now = time.time() if now is None else now
     text = v.read(repo, v.RECIPE)
@@ -91,7 +91,7 @@ def swarm_items(v, repo, state=None, now=None):
         hashes, signature = {}, None
     cur_tree = v.tree_sig(repo, fast=False) if features else None
     receipts = v.current_receipts(state, signature) if signature else {}
-    where = v.proof_where(repo, v.red_keys(state)) if features else None
+    where = where or (v.proof_where(repo, v.red_keys(state)) if features else None)
     checks = state.get("checks", {}) or {}
     passing_out = {k: r.get("output", "") for k, r in checks.items() if isinstance(r, dict) and r.get("ok")}
     frozen_lines = set((state.get("baseline_lines") or {}).get("checks", []))
@@ -112,13 +112,12 @@ def swarm_items(v, repo, state=None, now=None):
             for _, c in f["checks"])
         feat_challenged = any(r.get("mutation") and r.get("signature") == signature and k.startswith(f["name"] + "|")
                               for k, r in receipts.items())
+        causes = [v.gates.blocked(v, checks[f"{f['name']}|{c}"].get("output", ""), checks[f"{f['name']}|{c}"].get("exit"))
+                  for c in failing]
         if not f["checks"] or not f["signals"]:
             action, detail = "map", "no check or literal fail-signal in VERIFY.md"
-        elif failing and all(v.gates.blocked(v, checks[f"{f['name']}|{c}"].get("output", ""),
-                                             checks[f"{f['name']}|{c}"].get("exit")) for c in failing):
-            c = failing[0]
-            action = "blocked"
-            detail = v.gates.blocked(v, checks[f"{f['name']}|{c}"].get("output", ""), checks[f"{f['name']}|{c}"].get("exit"))
+        elif failing and all(causes):
+            action, detail = "blocked", causes[0]
         elif failing:
             action, detail = "fix", f"{len(failing)} check(s) failing on last run"
         elif not f["proofs"] or not signature or not v.proven_by(f, receipts, signature, passing_out, where):

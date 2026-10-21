@@ -112,6 +112,15 @@ class AnswerCheck(unittest.TestCase):
             code, a = self.check(tmp, "Verdict: red. search.py has no check; the payment gateway is stubbed.\n")
             self.assertEqual((code, a["problems"]), (0, []), a)
 
+    def test_a_name_inside_another_word_does_not_count(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            write(tmp, "calc.py", BAD)
+            run("verify.py", "run", tmp)
+            code, a = self.check(tmp, "Verdict: red. In totality the work went fine.\n")
+            self.assertEqual(code, 1)
+            self.assertIn("failing: Total", [p["detail"] for p in a["problems"]])
+
 
 class Unmapped(unittest.TestCase):
     def test_product_code_nothing_reaches_keeps_strict_red(self):
@@ -142,6 +151,17 @@ class Unmapped(unittest.TestCase):
             self.assertEqual(code, 0, out)
             self.assertNotIn("UNMAPPED", out)
 
+    def test_a_same_named_file_in_a_subfolder_does_not_map_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            write(tmp, "tools/app.py", "def main():\n    return 0\n")
+            write(tmp, "app.py", "def serve():\n    return 1\n")
+            write(tmp, "VERIFY.md", recipe().replace("python -m unittest test_calc.py",
+                                                     "python tools/app.py && python -m unittest test_calc.py"))
+            code, out, _ = run("verify.py", "run", tmp)
+            self.assertIn("UNMAPPED  app.py", out)
+            self.assertNotIn("UNMAPPED  tools/app.py", out)
+
     def test_constants_and_empty_init_are_not_behavior(self):
         with tempfile.TemporaryDirectory() as tmp:
             project(tmp)
@@ -166,9 +186,11 @@ class WeakSignal(unittest.TestCase):
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "plugin", "skills", "verify-loop", "scripts"))
         import gates
         for signal in ("expected 42", "expected total 42", "NOTES_FAIL", "refund credit mismatch",
-                       "expected status 200, got 500", "SchemaValidationError"):
+                       "expected status 200, got 500", "SchemaValidationError", "expected status 200",
+                       "expected code 404"):
             self.assertIsNone(gates.weak_signal(signal), signal)
-        for signal in ("AssertionError:", "FAILED", "[UI FAIL]", "not ok", "expected", "Traceback"):
+        for signal in ("AssertionError:", "FAILED", "[UI FAIL]", "not ok", "expected", "Traceback",
+                       "exit code 1", "exited with status 2", "1 failed", "Error at line 12"):
             self.assertTrue(gates.weak_signal(signal), signal)
 
 
@@ -216,6 +238,19 @@ class WhereTheWrongStateWas(unittest.TestCase):
             a = report(tmp)
             self.assertEqual([r["feature"] for r in a["rejections"]], ["Total"])
 
+    def test_receipts_share_one_tree_per_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp, extra="\n## Total again\n- path: calc.py\n- test: `python -m unittest test_calc.py -q`\n"
+                               "- fail-signal: expected total 42\n- fail-proof: total adds one\n")
+            prove(tmp)
+            state = json.load(open(os.path.join(tmp, ".verify-state.json"), encoding="utf-8"))
+            receipts = state["failures"].values()
+            self.assertEqual(len(receipts), 2)
+            self.assertTrue(all("files" not in r for r in receipts))
+            self.assertEqual(len({r["files_id"] for r in receipts}), 1)
+            self.assertEqual(list(state["receipt_trees"]), [next(iter(receipts))["files_id"]])
+            self.assertEqual(report(tmp)["verdict"], "green")
+
 
 class Loosened(unittest.TestCase):
     def history(self, tmp, loosened):
@@ -245,7 +280,30 @@ class Loosened(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             self.history(tmp, ("total(40, 2), 42,", "total(40, 2), 43,"))
             code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertEqual(code, 1, out)
             self.assertIn("expected values changed", out)
+
+    def test_a_reworded_message_is_not_loosened(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.history(tmp, ("'expected total 42'", "'expected the total 42'"))
+            code, out, _ = run("verify.py", "run", tmp, "--strict")
+            self.assertNotIn("LOOSENED", out)
+
+    def test_a_review_before_the_commit_still_holds_after_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            git(tmp, "init", "-q")
+            write(tmp, ".gitignore", ".verify-state*\n__pycache__/\n")
+            git(tmp, "add", "-A")
+            git(tmp, "commit", "-qm", "exact")
+            write(tmp, "test_calc.py", TEST.replace("self.assertEqual(total(40, 2), 42,",
+                                                    "self.assertAlmostEqual(total(40, 2), 42, delta=2, msg="))
+            code, out, _ = run("verify.py", "baseline", tmp, "--reviewed-by", "maya", "--reason", "spec allows 2")
+            self.assertEqual(code, 0, out)
+            git(tmp, "commit", "-qam", "tolerance per spec")
+            code, out, _ = run("verify.py", "baseline", tmp)
+            self.assertEqual(code, 0, out)
+            self.assertNotIn("LOOSENED", run("verify.py", "run", tmp, "--strict")[1])
 
     def test_a_person_reviewing_it_clears_it(self):
         with tempfile.TemporaryDirectory() as tmp:

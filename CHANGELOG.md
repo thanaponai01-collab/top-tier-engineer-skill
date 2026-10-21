@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.18.1 - 2026-10-21 - Gates, reviewed
+
+Fixes from a review of 1.18.0:
+
+- `LOOSENED` no longer counts an assertion's message as an expected value, so rewording a message
+  is not a loosening. A loosening a person reviewed before it was committed stays reviewed after the
+  commit (findings are keyed by file, test and what changed, not by commit).
+- `WEAK SIGNAL` strips only runner exit codes, test counts and line numbers. `expected status 200`
+  names a behavior again.
+- `answer-check` matches gap items as whole words or paths: a feature named `Total` is not
+  "named" by the word "totality".
+- `UNMAPPED`: `python tools/app.py` in a command no longer maps a root `app.py`.
+- Receipts share one stored tree per run (`receipt_trees` in the state, `files_id` on each
+  receipt) instead of each carrying a full-tree hash map. `report` and `status` hash the tree for
+  receipt checks once instead of three times.
+
 ## 1.18.0 - 2026-10-21 - Gates: the model creates, the helper judges
 
 Six rules that SKILL.md only asked for are now verdicts `verify.py` prints and `run --strict`
