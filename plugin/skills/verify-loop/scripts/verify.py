@@ -2405,7 +2405,11 @@ def cmd_answer_check(repo, path, as_json=False):
     """The answer an agent hands back, held to what the helper knows: it must state the verdict, claim
     nothing the verdict does not support, and name every gap `report` lists. Exit 0 ok, 1 not, 2 unreadable."""
     try:
-        text = sys.stdin.read() if path == "-" else open(path, encoding="utf-8").read()
+        if path == "-":
+            text = sys.stdin.read()
+        else:
+            with open(path, encoding="utf-8") as fh:
+                text = fh.read()
     except OSError as exc:
         print(f"answer-check: cannot read {path}: {exc}")
         return 2

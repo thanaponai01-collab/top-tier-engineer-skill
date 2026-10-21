@@ -388,7 +388,8 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1, diff=N
             for r in results:
                 if r["verdict"] == "survived" and (r["file"], r["line"]) in unreached:
                     r.update(verdict="uncovered",
-                             reason="no check reaches this line: a probe that aborts there still passes")
+                             reason=f"breaking {r['before'].strip()} (e.g. -> {r['after'].strip()}) still passed: "
+                                    "no check reaches this line (a probe that aborts there still passes)")
         copies = sum(lane.copies for lane in lanes)
 
     # Receipts other agents add meanwhile are additive evidence; anything else changing is not.
@@ -423,9 +424,9 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1, diff=N
         def at(r):
             return f"line {r['line']}" if len(sources) == 1 else f"{r['file']}:{r['line']}"
         for r in survived:
-            print(f"  SURVIVED {at(r)} {r['operator']}: {r['before'].strip()} -> {r['after'].strip()}")
+            print(f"  SURVIVED {at(r)} {r['operator']}: {r['before'].strip()} -> {r['after'].strip()} (check still passed)")
         for r in uncovered:
-            print(f"  UNCOVERED {at(r)} {r['operator']}: no check reaches {r['before'].strip()}")
+            print(f"  UNCOVERED {at(r)} {r['operator']}: breaking {r['before'].strip()} (-> {r['after'].strip()}) still passed: no check reaches the line")
         for r in results:
             if r["verdict"] == "inconclusive":
                 print(f"  INCONCLUSIVE {at(r)} {r['operator']}: {r['reason']}")

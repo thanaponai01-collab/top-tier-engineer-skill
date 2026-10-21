@@ -21,14 +21,23 @@
       "what": "Local green state is insufficient; evidence is newly generated.",
       "must_say_any": [
         "ignored",
+        "ignores",
         "not trusted",
+        "didn't trust",
+        "did not trust",
+        "untrusted",
         "not reused",
         "discarded",
         "context only",
         "gitignored",
         "not imported",
         "did not use",
-        "excludes it"
+        "not used",
+        "excludes it",
+        "excluded",
+        "left out",
+        "left it out",
+        "not proof"
       ]
     }
   ],

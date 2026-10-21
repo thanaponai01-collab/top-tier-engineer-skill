@@ -99,7 +99,8 @@ def user_memory_leak():
     """Bytes in ~/.claude/CLAUDE.md, which `--setting-sources project,local` does NOT keep out
     (probed 2026-10-11). Empty is clean; anything else reaches both arms and is recorded."""
     try:
-        return len(open(USER_MEMORY, encoding="utf-8", errors="replace").read().strip())
+        with open(USER_MEMORY, encoding="utf-8", errors="replace") as fh:
+            return len(fh.read().strip())
     except OSError:
         return 0
 

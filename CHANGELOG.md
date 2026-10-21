@@ -10,6 +10,14 @@
 - `run` records `HOLLOW` features in state, and `report` gives a hollow check that is not frozen a
   `repair` step: fixing it is the work, not a finding for a person. In the 1.18.2 eval, all three
   skill runs of `make-it-verified` stopped to ask before repointing the hollow test.
+- In `challenge --auto`, report that an uncovered or surviving mutation "still passed" (e.g.
+  `breaking <before> (-> <after>) still passed`), making check passivity explicit in tool output.
+- Promote `advance` as the primary progression driver in `SKILL.md`: `advance` automatically freezes
+  proof-ready baselines and runs strict check passes, yielding only judgment tasks to the agent.
+- Clean up unmanaged file handles and explicit UTF-8 encodings across scripts, evals, and tests,
+  eliminating ResourceWarning unclosed file leaks on Windows and non-POSIX platforms.
+- Broaden phrase matcher inflection coverage in `ci-fresh-proof` eval to accept natural variants of
+  unbacked state rejection (e.g. "ignores", "excluded", "didn't trust", "left out").
 
 ## 1.18.2 - 2026-10-21 - A missing `python` says so
 

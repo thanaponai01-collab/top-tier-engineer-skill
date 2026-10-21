@@ -37,40 +37,38 @@ passed. `UNCOVERED`: no check reaches that line. `UNMAPPED`: product code no fea
 working tree. No VERIFY.md? Write `## F`, `- path:`, `- test:` ([format](VERIFY_FORMAT.md)) and
 say you added it.
 
-## Prove or repair: run `report`, do what `NEXT` says
+## Prove or repair: `advance` drives the loop
 
-For mechanical progression, run `verify.py advance <repo> --json`. It runs checks, freezes a
-proof-ready baseline and runs strictly, up to three actions by default. Resolve returned `tasks`
-with judgment, then call it again. It stops for missing proof, repairs, independent judgment,
-foreign leases and guards; it never edits product/check files or executes `NEXT` strings. See
+Run `python <skill-base>/scripts/verify.py advance <repo> --json`. It runs checks, freezes a
+proof-ready baseline and runs strictly, up to three actions by default. When it returns `"stop": "done"`,
+you are done. When it stops for judgment (`"stop": "needs-agent"`), resolve returned `tasks` and
+call it again. It never edits product/check files or executes `NEXT` strings. See
 [advance](references/helpers.md#advance-automatic-mechanical-progression) for stops and limits.
 
-Each `NEXT` line names a feature's step. Repeat until none is left:
+For returned tasks, or steps named in `report`'s `NEXT`:
 
-| Step | Do |
+| Step / Task | Do |
 |---|---|
-| `repair` | The check is `HOLLOW` and not frozen: edit it until it calls the product, then `run`. No review needed |
+| `repair` | The check is `HOLLOW` and not frozen: edit it until it calls the product, then call `advance`. No review needed |
 | `map` | Record the check in VERIFY.md: command, `oracle:` files, a `fail-signal:` naming the wrong result (`WEAK SIGNAL` rejects `FAILED`, `AssertionError`) |
 | `blocked` | The environment failed (missing tool, port, timeout). Report it blocked and where it runs; change no code |
 | `fix` | Fix what the failure text says. A red you have not classified: [triage](references/triage.md) |
 | `prove` | Put the wrong result in the product (inside `path:`), `run`, see the fail-signal, restore, `run`. A red with no product change is `PROOF NOT FROM PRODUCT`. Add a `fail-proof:` line |
-| `freeze` | `baseline`, before the work it judges. From here change code, never the check |
 | `challenge` | `challenge` the highest-risk feature until a mutation is caught (`require: challenge`) |
 | `independent` | A fresh agent that never saw the implementation runs `swarm --claim --role judge` |
-| `run` | `run --strict`, then `status` |
 
 While looping: `NEWLY RED`: undo your last change first. `SAME FAILURE x2`: re-read before a third
-try. `BUDGET`: stop and report. `SWARM: split`: start helper agents, each with its own
+try. `BUDGET`: resume with `advance` or report. `SWARM: split`: start helper agents, each with its own
 `VERIFY_AGENT`, each running `swarm --claim` ([swarm](references/swarm.md)); with no way to start
 agents, work the list yourself and report `not_independent`. Never give yourself a second name to
 stand in for a judge.
 
-**A check you think is wrong is a finding, not an edit**, unless `NEXT` says `[repair]`. Stop and ask a person. Editing it gets
+**A check you think is wrong is a finding, not an edit**, unless `NEXT` or task says `repair`. Stop and ask a person. Editing it gets
 `CHECK CHANGED` (or `LOOSENED` before a baseline), and `baseline` refuses to freeze it without
 `--reviewed-by <name> --reason <why>`. Pass those only for a review a person actually gave.
 
 **Done** = a mapped check seen rejecting a wrong product, a `challenge` mutation caught, checks
-frozen, no `UNMAPPED` or `LOOSENED`, then `run --strict` and `status` print `VERIFY-STATE: green`
+frozen, no `UNMAPPED` or `LOOSENED`, then `advance` (or `run --strict` and `status`) prints `green`
 on unchanged inputs. Anything less is reported as what it is: red, partial, stale or unverified.
 
 ## Guards

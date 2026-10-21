@@ -205,6 +205,13 @@ class AutoDefaults(unittest.TestCase):
         self.assertFalse(Path(self.root, ".verify-state.json").exists()
                          and json.loads(Path(self.root, ".verify-state.json").read_text()).get("failures"))
 
+    def test_auto_uncovered_prints_still_passed(self):
+        write(self.root, "app.py", "def grade(score):\n    if score >= 50:\n        return 'pass'\n"
+                                   "    if score == -999:\n        return 'special'\n    return 'fail'\n")
+        self.recipe("- path: app.py\n- fail-signal: expected\n")
+        code, out, _ = run("verify.py", "challenge", self.root, "--feature", "Grade", "--auto")
+        self.assertIn("still passed", out)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -146,7 +146,11 @@ def cmd_schema(schema_path, data_path, strict):
     try:
         with open(schema_path, encoding="utf-8") as fh:
             sch = json.load(fh)
-        raw = sys.stdin.read() if data_path == "-" else open(data_path, encoding="utf-8").read()
+        if data_path == "-":
+            raw = sys.stdin.read()
+        else:
+            with open(data_path, encoding="utf-8") as fh:
+                raw = fh.read()
         data = json.loads(raw)
     except (OSError, ValueError) as e:
         print(f"ERROR  cannot read schema or data: {e}")

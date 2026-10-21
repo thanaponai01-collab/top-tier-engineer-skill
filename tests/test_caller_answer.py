@@ -110,15 +110,18 @@ class ScaffoldSkill(unittest.TestCase):
             self.assertEqual(code, 0, out)
             self.assertIn("surface: web; harness: Playwright", out)
             base = os.path.join(tmp, ".claude", "skills", "verify")
-            skill = open(os.path.join(base, "SKILL.md"), encoding="utf-8").read()
+            with open(os.path.join(base, "SKILL.md"), encoding="utf-8") as fh:
+                skill = fh.read()
             self.assertTrue(skill.startswith("---\nname: verify\n"))
             self.assertNotIn("disable-model-invocation", skill)
             self.assertIn("`npm run dev`", skill)
             self.assertIn("../../../VERIFY.md", skill)
             feats = sorted(os.listdir(os.path.join(base, "features")))
             self.assertEqual(feats, ["README.md", "f0.md", "f1.md", "f2.md", "f3.md", "f4.md"])
-            self.assertIn("verify-section: F0", open(os.path.join(base, "features", "f0.md")).read())
-            self.assertIn("## Driving it with Playwright", open(os.path.join(base, "features", "f0.md")).read())
+            with open(os.path.join(base, "features", "f0.md"), encoding="utf-8") as fh:
+                f0_text = fh.read()
+            self.assertIn("verify-section: F0", f0_text)
+            self.assertIn("## Driving it with Playwright", f0_text)
             code, out, _ = run("verify.py", "scaffold-skill", tmp)
             self.assertEqual(code, 1)
             self.assertIn("not overwriting", out)
@@ -139,7 +142,8 @@ class ScaffoldSkill(unittest.TestCase):
             write(tmp, "compose.yaml", 'services:\n  web:\n    ports:\n      - "8080:80"\n')
             write(tmp, "Dockerfile", "EXPOSE 3000\n")
             run("verify.py", "scaffold-skill", tmp)
-            skill = open(os.path.join(tmp, ".claude", "skills", "verify", "SKILL.md")).read()
+            with open(os.path.join(tmp, ".claude", "skills", "verify", "SKILL.md"), encoding="utf-8") as fh:
+                skill = fh.read()
             self.assertIn("ports: 3000, 8080", skill)
             self.assertIn("docker compose -f compose.yaml up --wait", skill)
 
@@ -168,7 +172,8 @@ class SkillCheck(unittest.TestCase):
         return dst, os.path.join(dst, ".claude", "skills", "verify")
 
     def _edit(self, path, old, new):
-        text = open(path, encoding="utf-8").read()
+        with open(path, encoding="utf-8") as fh:
+            text = fh.read()
         self.assertIn(old, text)
         with open(path, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(text.replace(old, new))

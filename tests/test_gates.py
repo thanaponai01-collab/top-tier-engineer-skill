@@ -243,7 +243,8 @@ class WhereTheWrongStateWas(unittest.TestCase):
             project(tmp, extra="\n## Total again\n- path: calc.py\n- test: `python -m unittest test_calc.py -q`\n"
                                "- fail-signal: expected total 42\n- fail-proof: total adds one\n")
             prove(tmp)
-            state = json.load(open(os.path.join(tmp, ".verify-state.json"), encoding="utf-8"))
+            with open(os.path.join(tmp, ".verify-state.json"), encoding="utf-8") as fh:
+                state = json.load(fh)
             receipts = state["failures"].values()
             self.assertEqual(len(receipts), 2)
             self.assertTrue(all("files" not in r for r in receipts))

@@ -775,7 +775,8 @@ def main(argv=None):
 
     if args.rescore:
         results = rescore(args.rescore, use_judge=not args.no_judge, rejudge=args.rejudge, jobs=args.jobs)
-        meta = json.load(open(os.path.join(args.rescore, "meta.json"), encoding="utf-8"))
+        with open(os.path.join(args.rescore, "meta.json"), encoding="utf-8") as fh:
+            meta = json.load(fh)
         with open(os.path.join(args.rescore, "summary.json"), "w", encoding="utf-8") as fh:
             fh.write(agent.redact(json.dumps(results, indent=2)))
         if not args.no_scorecard:
