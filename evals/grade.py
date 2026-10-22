@@ -297,7 +297,80 @@ def check_workdir(case, workdir):
     return {"checked": True, "what": spec.get("what", ""), "violations": violations, "checks": checks}
 
 
-def grade(case, report_text, workdir=None):
+def _helper_subcommand(call):
+    parts = call.strip().split()
+    for i, p in enumerate(parts):
+        if p.endswith(".py") and i + 1 < len(parts):
+            return parts[i + 1]
+    return parts[0] if parts else ""
+
+
+def check_run(case, run_info):
+    """Checks on what the agent DID during the run: budgets and source inspection.
+
+    A try that reads or greps helper scripts/ inside the skill fails at any score:
+    the skill's output is supposed to be self-explaining, and inspecting helper
+    source proves it wasn't.
+    A try exceeding `max_turns` or `max_cost` also fails at any score.
+    """
+    if not run_info:
+        return None
+    checks = []
+    reads = run_info.get("helper_source_reads", [])
+    if case.get("actions", {}).get("no_helper_source_read", True) or reads:
+        checks.append({
+            "id": "no-helper-source-read",
+            "what": "never read or grepped scripts/ inside the skill",
+            "ok": not reads,
+            "gate": True,
+            "detail": f"inspected scripts: {', '.join(reads)[:120]}" if reads else "",
+        })
+
+    if "max_turns" in case:
+        max_turns = case["max_turns"]
+        turns = run_info.get("turns")
+        if turns is not None:
+            ok = turns <= max_turns
+            checks.append({
+                "id": "turn-budget",
+                "what": f"completed in <= {max_turns} turns",
+                "ok": ok,
+                "gate": True,
+                "detail": "" if ok else f"{turns} turns (budget: {max_turns})",
+            })
+
+    if "max_cost" in case:
+        max_cost = case["max_cost"]
+        cost = run_info.get("cost_usd")
+        if cost is not None:
+            ok = round(cost, 4) <= round(max_cost, 4)
+            checks.append({
+                "id": "cost-budget",
+                "what": f"stayed within ${max_cost:.2f} budget",
+                "ok": ok,
+                "gate": True,
+                "detail": "" if ok else f"${cost:.2f} (budget: ${max_cost:.2f})",
+            })
+
+    if run_info.get("arm") != "without":
+        must_helper = case.get("actions", {}).get("must_run_helper")
+        if must_helper:
+            called = {_helper_subcommand(c) for c in run_info.get("helper_subcommands", [])}
+            if not called and run_info.get("helper_calls"):
+                called = {_helper_subcommand(c) for c in run_info["helper_calls"]}
+            missing = [sub for sub in must_helper if sub not in called]
+            checks.append({
+                "id": "must-run-helper",
+                "what": f"executed helper subcommands: {', '.join(must_helper)}",
+                "ok": not missing,
+                "gate": True,
+                "detail": "" if not missing else f"missing: {', '.join(missing)}",
+            })
+
+    return {"checked": True, "checks": checks}
+
+
+def grade(case, report_text, workdir=None, run_info=None):
     report = normalize(report_text)
     planted = [check_planted(report, i) for i in case.get("planted", [])]
     traps = [check_trap(report, i) for i in case.get("traps", [])]
@@ -308,6 +381,9 @@ def grade(case, report_text, workdir=None):
     threshold = case.get("pass_score", 1.0)
     edits = check_workdir(case, workdir)
     tampered = bool(edits and (edits["violations"] or any(c["gate"] and not c["ok"] for c in edits["checks"])))
+
+    run_eval = check_run(case, run_info)
+    run_failed = bool(run_eval and any(c["gate"] and not c["ok"] for c in run_eval["checks"]))
 
     return {
         "case": case["case"],
@@ -320,7 +396,8 @@ def grade(case, report_text, workdir=None):
         "traps": traps,
         "tripped": len(tripped),
         "workdir": edits,
-        "passed": score >= threshold and not tripped and not tampered,
+        "run": run_eval,
+        "passed": score >= threshold and not tripped and not tampered and not run_failed,
     }
 
 
@@ -366,6 +443,15 @@ def render(result):
                 lines.append(f"            {c['detail']}")
         if any(c["gate"] and not c["ok"] for c in edits["checks"]):
             lines.append("  an unmet action check fails the case at any score")
+    run = result.get("run")
+    if run and run.get("checks"):
+        for c in run["checks"]:
+            tag = "held   " if c["ok"] else "UNMET  " if c.get("gate", True) else "note   "
+            lines.append(f"  {tag} {c['id']}: {c['what']}" + ("" if c.get("gate", True) else "  (advisory)"))
+            if not c["ok"] and c.get("detail"):
+                lines.append(f"            {c['detail']}")
+        if any(c.get("gate", True) and not c["ok"] for c in run["checks"]):
+            lines.append("  an unmet run check fails the case at any score")
     return "\n".join(lines)
 
 
@@ -383,6 +469,7 @@ def main(argv=None):
     ap.add_argument("--reports-dir", help="with --all: directory holding <case>.md")
     ap.add_argument("--workdir", help="the copy of fixture/ the agent worked in (single case)")
     ap.add_argument("--workdirs-dir", help="with --all: directory holding <case>/ working copies")
+    ap.add_argument("--transcript", help="agent transcript (.jsonl) to grade run actions and budgets")
     ap.add_argument("--report-only", action="store_true",
                     help="grade the words alone; a case that also grades actions is then NOT CHECKED")
     ap.add_argument("--list", action="store_true", help="list case names")
@@ -418,7 +505,27 @@ def main(argv=None):
             return path if os.path.isdir(path) else None
         return None
 
-    results = [grade(load_case(name), read(path), workdir_for(name)) for name, path in jobs]
+    def run_info_for(name):
+        tpath = args.transcript
+        if not tpath or not os.path.isfile(tpath):
+            return None
+        try:
+            import agent
+            parsed = agent.parse_stream(read(tpath).splitlines())
+            subs = []
+            for call in parsed.get("helper_calls", []):
+                subs.append(_helper_subcommand(call))
+            return {
+                "helper_source_reads": parsed.get("helper_source_reads", []),
+                "turns": parsed.get("turns"),
+                "cost_usd": parsed.get("cost_usd"),
+                "helper_calls": parsed.get("helper_calls", []),
+                "helper_subcommands": subs,
+            }
+        except Exception:
+            return None
+
+    results = [grade(load_case(name), read(path), workdir_for(name), run_info_for(name)) for name, path in jobs]
 
     if args.json:
         print(json.dumps(results, indent=2))

@@ -1,0 +1,153 @@
+{
+ "baseline": {
+  "VERIFY.md checks": "edaf5b5f3585485b",
+  "VERIFY.md require": "4f53cda18c2baa0c",
+  "VERIFY.md run": "74234e98afe7498f",
+  "VERIFY.md signals": "b8cc223ca075a698",
+  "test_fee.py": "dcf41548909eb168",
+  "test_payout.py": "0068d0e154401021"
+ },
+ "baseline_lines": {
+  "checks": [
+   "Fee|test|python -m unittest test_fee.py",
+   "Payout|test|python -m unittest test_payout.py"
+  ],
+  "require": [],
+  "signals": {
+   "Fee": [
+    "fee calculation mismatch"
+   ],
+   "Payout": [
+    "payout fee deduction mismatch"
+   ]
+  }
+ },
+ "challenge": {
+  "check_signature": "9ff7fb9598585c5b",
+  "feature": "Fee",
+  "mutated": {
+   "checks": {
+    "Fee|python -m unittest test_fee.py": {
+     "exit": 1,
+     "ok": false,
+     "output": "F.\n======================================================================\nFAIL: test_standard_fee (test_fee.FeeTest.test_standard_fee)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\thana\\AppData\\Local\\Temp\\verify-challenge-rh3y834x\\original\\test_fee.py\", line 7, in test_standard_fee\n    self.assertEqual(transaction_fee(1000), 10, \"fee calculation mismatch\")\nAssertionError: 50 != 10 : fee calculation mismatch\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n"
+    }
+   },
+   "checks_unchanged": true,
+   "exit": 1,
+   "mutation_unchanged": true,
+   "output": "Fee\n  FAIL  test  python -m unittest test_fee.py  [0.1s] (exit 1)\n        ======================================================================\n        FAIL: test_standard_fee (test_fee.FeeTest.test_standard_fee)\n        ----------------------------------------------------------------------\n        Traceback (most recent call last):\n          File \"C:\\Users\\thana\\AppData\\Local\\Temp\\verify-challenge-rh3y834x\\original\\test_fee.py\", line 7, in test_standard_fee\n            self.assertEqual(transaction_fee(1000), 10, \"fee calculation mismatch\")\n        AssertionError: 50 != 10 : fee calculation mismatch\n        \n        ----------------------------------------------------------------------\n        Ran 2 tests in 0.000s\n        \n        FAILED (failures=1)\n"
+  },
+  "mutation": {
+   "after": "amount * 0.05",
+   "before": "amount * 0.01",
+   "claim": "Fee: amount * 0.01 -> amount * 0.05",
+   "file": "fee.py"
+  },
+  "original": {
+   "checks": {
+    "Fee|python -m unittest test_fee.py": {
+     "count": 0,
+     "exit": 0,
+     "fp": null,
+     "ok": true,
+     "output": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+    },
+    "Payout|python -m unittest test_payout.py": {
+     "count": 0,
+     "exit": 0,
+     "fp": null,
+     "ok": true,
+     "output": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+    }
+   },
+   "checks_unchanged": true,
+   "exit": 0,
+   "output": "Payout\n  PASS  test  python -m unittest test_payout.py  [0.1s]\nFee\n  PASS  test  python -m unittest test_fee.py  [0.1s]\nBlind spots (a green run does not cover these):\n  - Cross-currency fx conversion is handled by payment gateway upstream.\nVERIFY: 2 features | 2 checks pass, 0 fail | 0 unverified | 0 unproven | 0 orphan tests | 0 journeys, 0 broken\n",
+   "product_unchanged": true
+  },
+  "reason": "selected behavioral check rejected the mutation with its declared signal",
+  "tree": "cf1adb3a4b202c19",
+  "verdict": "caught"
+ },
+ "checks": {
+  "Fee|python -m unittest test_fee.py": {
+   "count": 0,
+   "exit": 0,
+   "fp": null,
+   "ok": true,
+   "output": "Error in sitecustomize; set PYTHONVERBOSE for traceback:\nKeyError: 'sitecustomize'\n..\n----------------------------------------------------------------------\nRan 2 tests in 0.008s\n\nOK\n"
+  },
+  "Payout|python -m unittest test_payout.py": {
+   "count": 0,
+   "exit": 0,
+   "fp": null,
+   "ok": true,
+   "output": "Error in sitecustomize; set PYTHONVERBOSE for traceback:\nKeyError: 'sitecustomize'\n..\n----------------------------------------------------------------------\nRan 2 tests in 0.008s\n\nOK\n"
+  }
+ },
+ "failures": {
+  "Fee|python -m unittest test_fee.py": {
+   "agent": null,
+   "exit": 1,
+   "mutation": {
+    "after": "amount * 0.05",
+    "before": "amount * 0.01",
+    "claim": "Fee: amount * 0.01 -> amount * 0.05",
+    "file": "fee.py"
+   },
+   "output": "F.\n======================================================================\nFAIL: test_standard_fee (test_fee.FeeTest.test_standard_fee)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\thana\\AppData\\Local\\Temp\\verify-challenge-rh3y834x\\original\\test_fee.py\", line 7, in test_standard_fee\n    self.assertEqual(transaction_fee(1000), 10, \"fee calculation mismatch\")\nAssertionError: 50 != 10 : fee calculation mismatch\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+   "signature": "9ff7fb9598585c5b",
+   "tree": "cf1adb3a4b202c19"
+  },
+  "Payout|python -m unittest test_payout.py": {
+   "agent": null,
+   "exit": 1,
+   "mutation": {
+    "after": "sum(items) + fee_cents",
+    "before": "sum(items) - fee_cents",
+    "claim": "Payout: sum(items) - fee_cents -> sum(items) + fee_cents",
+    "file": "payout.py"
+   },
+   "output": "FF\n======================================================================\nFAIL: test_payout_deducts_fee (test_payout.PayoutTest.test_payout_deducts_fee)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\thana\\AppData\\Local\\Temp\\verify-challenge-l2ihlx2x\\original\\test_payout.py\", line 7, in test_payout_deducts_fee\n    self.assertEqual(calculate_payout([500, 300], 50), 750, \"payout fee deduction mismatch\")\nAssertionError: 850 != 750 : payout fee deduction mismatch\n\n======================================================================\nFAIL: test_payout_zero_floor (test_payout.PayoutTest.test_payout_zero_floor)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\thana\\AppData\\Local\\Temp\\verify-challenge-l2ihlx2x\\original\\test_payout.py\", line 10, in test_payout_zero_floor\n    self.assertEqual(calculate_payout([100], 200), 0)\nAssertionError: 300 != 0\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=2)\n",
+   "signature": "9ff7fb9598585c5b",
+   "tree": "cf1adb3a4b202c19"
+  }
+ },
+ "frozen_by": {
+  "Fee|test|python -m unittest test_fee.py": null,
+  "Payout|test|python -m unittest test_payout.py": null
+ },
+ "hollow": [],
+ "last_advance": {
+  "at": 1792651111.394353,
+  "steps": [
+   {
+    "action": "run",
+    "exit": 0,
+    "input": "6c62234fd00dfcc1",
+    "output": "  - Cross-currency fx conversion is handled by payment gateway upstream.\nVERIFY: 2 features | 2 checks pass, 0 fail | 0 unverified | 0 unproven | 0 orphan tests | 0 journeys, 0 broken\n"
+   },
+   {
+    "action": "freeze",
+    "exit": 0,
+    "input": "a071a0b123f300a8",
+    "output": "baseline recorded: 6 check file(s). From here an edit to any of them fails the run until a person reviews it and re-baselines.\n"
+   },
+   {
+    "action": "run-strict",
+    "exit": 0,
+    "input": "e0f8351ab8ad36a9",
+    "output": "  - Cross-currency fx conversion is handled by payment gateway upstream.\nVERIFY: 2 features | 2 checks pass, 0 fail | 0 unverified | 0 unproven | 0 orphan tests | 0 journeys, 0 broken\n"
+   }
+  ],
+  "stop": "done"
+ },
+ "receipt_trees": {},
+ "result": "green",
+ "rounds": 0,
+ "seal": "f326b9ede6b1f9a097fd7619f3cbab8aad7688f6e0c34712a430fc33339bba72",
+ "strict": true,
+ "tree": "be9170d9385afaa5",
+ "verify_line": "VERIFY: 2 features | 2 checks pass, 0 fail | 0 unverified | 0 unproven | 0 orphan tests | 0 journeys, 0 broken"
+}

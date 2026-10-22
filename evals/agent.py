@@ -55,6 +55,8 @@ SUBCOMMAND = r"[\"'}]*(?:\s+(-{0,2}[\w-]+))?"
 HELPER = re.compile(LAUNCH + r"verify\.py\b" + SUBCOMMAND, re.I)
 # Agents also name the helper once and call it through the variable: S=.../verify.py; python "$S" run
 HELPER_VAR = re.compile(r"\b(\w+)=[\"']?[^\"'\s;]*verify\.py\b")
+# Or assign the full command: V="python .../verify.py"; $V run
+HELPER_CMD_VAR = re.compile(r"\b(\w+)=[\"']?py(?:thon[\d.]*)?(?:\.exe)?\s+[^\"';\n]*verify\.py\b", re.I)
 
 
 def helper_calls(cmd):
@@ -63,7 +65,103 @@ def helper_calls(cmd):
     for var in set(HELPER_VAR.findall(cmd)):
         ref = LAUNCH + r"\$\{?" + re.escape(var) + r"\b" + SUBCOMMAND
         found += [(m.start(), m.group(1) or "?") for m in re.finditer(ref, cmd, re.I)]
+    for var in set(HELPER_CMD_VAR.findall(cmd)):
+        ref = r"(?:^|[;&|]|\s)\"?\$\{?" + re.escape(var) + r"\b\"?" + SUBCOMMAND
+        found += [(m.start(), m.group(1) or "?") for m in re.finditer(ref, cmd, re.I)]
     return [name for _, name in sorted(found)]
+
+
+HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1[^\n]*\n.*?\n\s*\2\s*(?=\n|$)", re.S)
+QUOTED = re.compile(r"'[^']*'|\"(?:[^\"\\]|\\.)*\"")
+
+
+def executed_part(cmd):
+    """A command with the text it only writes or quotes taken out."""
+    return QUOTED.sub("''", HEREDOC.sub("", cmd))
+
+
+HELPER_SCRIPTS = {
+    "verify.py", "gates.py", "advance.py", "mutate.py", "challenge.py",
+    "swarm.py", "review.py", "ci.py", "create.py", "maintain.py",
+    "compliance.py", "_encoding.py", "engine.py"
+}
+SKILL_SCRIPTS_PATH = re.compile(r"(?:^|[/\\])skills[/\\][\w-]+[/\\]scripts(?:[/\\]|$)", re.I)
+SHELL_INSPECTORS = re.compile(
+    r"(?<![\w.-])(cat|sed|head|tail|less|more|nl|bat|type|get-content|gc|grep|egrep|fgrep|rg|awk|findstr|select-string)(?![\w.-])",
+    re.I,
+)
+
+
+def helper_source_reads(tools, plugin_dir=None):
+    """List of tool calls or commands where the agent read or searched the helper's own scripts."""
+    reads = []
+    plugin_scripts = None
+    if plugin_dir:
+        plugin_scripts = os.path.normcase(os.path.abspath(os.path.join(plugin_dir, "skills"))).replace("\\", "/")
+
+    for t in tools:
+        name = t.get("name", "")
+        inp = t.get("input") or {}
+        if name == "Read":
+            fp = inp.get("file_path", "").replace("\\", "/")
+            norm = os.path.normcase(fp).replace("\\", "/")
+            if "/scripts/" in norm and (SKILL_SCRIPTS_PATH.search(norm) or (plugin_scripts and norm.startswith(plugin_scripts))):
+                reads.append(f"Read({fp})")
+        elif name in {"Grep", "Glob"}:
+            p = (inp.get("path") or inp.get("pattern") or "").replace("\\", "/")
+            norm = os.path.normcase(p).replace("\\", "/")
+            if ("/scripts" in norm or any(s in norm for s in HELPER_SCRIPTS)) and (
+                SKILL_SCRIPTS_PATH.search(norm) or (plugin_scripts and norm.startswith(plugin_scripts))
+            ):
+                reads.append(f"{name}({p})")
+        elif name in SHELL_TOOLS:
+            cmd = inp.get("command", "")
+            if not cmd:
+                continue
+            live = executed_part(cmd)
+            assigned_vars = {}
+            for m in re.finditer(
+                r"\b(\w+)=[\"']?([^\"'\s;]*?(?:skills[/\\][\w-]+[/\\]scripts|(?:\b|_)(?:verify|gates|advance|mutate|challenge|swarm|review|ci|maintain|compliance)\.py))[\"']?",
+                live,
+                re.I,
+            ):
+                assigned_vars[m.group(1)] = m.group(2)
+            in_scripts = bool(re.search(r"\bcd\s+[\"']?[^;&|\n]*?skills[/\\][\w-]+[/\\]scripts\b", live, re.I))
+
+            expanded = live
+            for var, val in assigned_vars.items():
+                expanded = re.sub(r"\$\{?" + re.escape(var) + r"\}?", val.replace("\\", "/"), expanded)
+
+            for seg in re.split(r"[;&\n]+", expanded):
+                seg_clean = seg.strip()
+                if not seg_clean:
+                    continue
+                pipes = seg_clean.split("|")
+                for pipe in pipes:
+                    stage = pipe.strip()
+                    stage_cmd = re.sub(r"^(?:[A-Za-z_]\w*=[\"']?[^\"'\s]*[\"']?\s+)+", "", stage)
+                    stage_cmd = re.sub(r">>?\s*['\"]?[\w./\\-]+['\"]?|\d+>&?\d+", "", stage_cmd).strip()
+                    m_insp = re.match(r"^(?:sudo\s+)?([A-Za-z0-9_.-]+)", stage_cmd)
+                    if m_insp and SHELL_INSPECTORS.match(m_insp.group(1)):
+                        has_script_arg = bool(
+                            SKILL_SCRIPTS_PATH.search(stage_cmd)
+                            or any(re.search(rf"\b{re.escape(s)}\b", stage_cmd) for s in HELPER_SCRIPTS if s in stage_cmd)
+                        )
+                        if has_script_arg:
+                            reads.append(f"shell({seg_clean[:80]})")
+                            break
+                        if in_scripts and (
+                            any(re.search(rf"\b{re.escape(s)}\b", stage_cmd) for s in HELPER_SCRIPTS)
+                            or re.search(r"\b(?:\*\.py|\.py|\.)\b", stage_cmd)
+                        ):
+                            reads.append(f"shell({seg_clean[:80]})")
+                            break
+                    if "python" in stage_cmd and re.search(
+                        r"-c\s+[\"'].*?(?:open|read).*?(?:scripts|gates|verify\.py)", stage_cmd, re.I
+                    ):
+                        reads.append(f"shell({seg_clean[:80]})")
+                        break
+    return reads
 
 
 def clean_env():
@@ -248,6 +346,7 @@ def parse_stream(lines, plugin_dir=None):
         "model_usage": usage,
         "hooks": hooks,
         "helper_calls": helper,
+        "helper_source_reads": helper_source_reads(tools, plugin_dir=plugin_dir),
         "mcp_servers": [m.get("name", "") for m in init.get("mcp_servers") or []],
         "final_text": final,
         "model": init.get("model") or (next(iter(usage), None)),

@@ -434,7 +434,7 @@ def check_answer(a, answer_text):
     """Problems with an answer against the helper's own answer `a`: [(kind, detail, fix)]. Each fix is
     a line that clears the problem as written, so a rejected agent edits instead of guessing."""
     text = answer_text.lower()
-    flat = re.sub(r"[*_`]", "", text)
+    flat = re.sub(r"[*`]", "", text)
     problems = []
     verdict = a["verdict"]
     if not re.search(rf"verdict\W{{0,4}}\s*{re.escape(verdict)}\b", flat):
