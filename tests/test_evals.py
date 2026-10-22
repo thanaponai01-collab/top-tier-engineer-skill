@@ -440,6 +440,15 @@ class ActionChecks(unittest.TestCase):
         self.assertFalse(ok)
         self.assertEqual(detail, "timed out")
 
+    def test_a_replay_that_ran_no_tests_meets_neither_expectation(self):
+        os.remove(os.path.join(self.work, "test_refund.py"))
+        for expect in ("pass", "fail"):
+            item = {"replace": {}, "command": ["python", "-m", "unittest", "discover", "-p", "test_*.py"],
+                    "expect": expect}
+            ok, detail = grade.run_replay(self.work, self.case["dir"], item)
+            self.assertFalse(ok, expect)
+            self.assertEqual(detail, "ran no tests")
+
     def test_every_action_check_says_what_it_proves(self):
         for name in grade.case_names():
             spec = grade.load_case(name).get("workdir") or {}

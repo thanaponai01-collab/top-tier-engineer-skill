@@ -192,6 +192,8 @@ def check_trap(report, item):
 # Files a run leaves behind that say nothing about what the agent did to the code.
 NOISE_DIRS = {"__pycache__", ".pytest_cache", ".git"}
 NOISE_SUFFIXES = (".pyc",)
+# unittest's "Ran 0 tests" and pytest's "no tests ran"
+NO_TESTS_RAN = re.compile(r"^Ran 0 tests\b|\bno tests ran\b", re.MULTILINE | re.IGNORECASE)
 
 
 def snapshot(root):
@@ -230,6 +232,7 @@ def run_replay(workdir, case_dir, item):
     `replace` maps a file in the copy to a path under the case directory, so the
     same tests can be pointed at the original broken code and at a correct
     version. `expect` is "pass" (exit 0) or "fail" (any other exit, no timeout).
+    A run that ran no tests meets neither: Python before 3.12 exits 0 on it.
     """
     want_pass = item["expect"] == "pass"
     with tempfile.TemporaryDirectory() as tmp:
@@ -246,6 +249,8 @@ def run_replay(workdir, case_dir, item):
                                   timeout=item.get("timeout", 60))
         except subprocess.TimeoutExpired:
             return False, "timed out"
+    if NO_TESTS_RAN.search(proc.stdout + proc.stderr):
+        return False, "ran no tests"
     ok = (proc.returncode == 0) == want_pass
     return ok, "" if ok else f"exit {proc.returncode}, expected {'0' if want_pass else 'non-zero'}"
 

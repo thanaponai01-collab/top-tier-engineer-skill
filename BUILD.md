@@ -37,5 +37,14 @@
   - Grade verification: `python evals/grade.py verify-loop-ci-fresh-proof --report ...` → `2/2 found, score 1.00`.
   - `git diff --check` passed.
 
+- Zero-test replays meet no expectation | proven
+  - `run_replay` in `evals/grade.py` fails any replay whose output says no tests ran
+    (`Ran 0 tests` / `no tests ran`), for `expect: pass` and `expect: fail` alike.
+  - Rejection before the fix: on Python 3.11, `unittest discover` exits 0 with no tests, so
+    `test_deleting_every_test_does_not_pass` failed (`check-passes-on-correct-code` was met);
+    the new `test_a_replay_that_ran_no_tests_meets_neither_expectation` failed against the old grader.
+  - Full proof: `python -m unittest discover tests` → `Ran 373 tests`, `OK (skipped=1)` (Python 3.11.9).
+  - `git diff --check` passed.
+
 ## Next
-No implementation work remains for this slice. Commit and push authorized by the user; release remains separate.
+No implementation work remains for this slice. Release remains separate.
