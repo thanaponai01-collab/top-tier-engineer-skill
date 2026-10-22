@@ -1,0 +1,85 @@
+{
+  "case": "verify-loop-green-with-unverified",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   search-has-no-check \u2014 \"Nothing in `VERIFY.md` covers `fixture/search.py`, and no test runs it.\"\n  found   the-checks-are-unproven \u2014 \"But no one has formally recorded either check failing on a broken product and then passing again.\"\n  found   an-orphan-that-asserts-nothing \u2014 \"Its only check is `assertTrue(True)`, so it would pass whatever the code does.\"\n  held    green-read-as-every-feature",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 20,
+      "outputTokens": 3799,
+      "cacheReadInputTokens": 231644,
+      "cacheCreationInputTokens": 11996,
+      "webSearchRequests": 0,
+      "costUSD": 0.2183568,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 222,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2183568,
+  "turns": 11,
+  "api_seconds": 42.746,
+  "helper_calls": [
+    "assess",
+    "answer-check",
+    "answer-check",
+    "answer-check",
+    "answer-check",
+    "answer-check",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_subcommands": [
+    "assess",
+    "answer-check",
+    "answer-check",
+    "answer-check",
+    "answer-check",
+    "answer-check",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_source_reads": [],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 47.3,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

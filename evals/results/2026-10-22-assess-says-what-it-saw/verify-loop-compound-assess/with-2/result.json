@@ -1,0 +1,94 @@
+{
+  "case": "verify-loop-compound-assess",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   hollow-tax-check \u2014 \"`test_tax.py` never calls `calculate_tax`.\"\n  found   coupon-cap-survivor \u2014 \"**Cap changed to 5001:** a real gap, since no test covers the cap.\"\n  found   loosened-invoice-check \u2014 \"the \"deflake\" commit `94e3659` by ci-bot changed both exact checks to `assertAlmostEqual(..., delta=2)`\"\n  found   regression-hidden-by-loosened-check \u2014 \"The code takes the discount off each line and rounds each line down, then adds them up.\"\n  found   unmapped-rebate-module \u2014 \"Not listed in VERIFY.md at all\"\n  held    green-read-as-shippable\n  held    healthy-shipping-check-called-fake",
+  "actions_passed": true,
+  "followed_skill": true,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 3841,
+      "cacheReadInputTokens": 135385,
+      "cacheCreationInputTokens": 15803,
+      "webSearchRequests": 0,
+      "costUSD": 0.230369,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 92,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "did not read or grep helper scripts",
+      "ok": true,
+      "detail": "did not inspect scripts"
+    },
+    {
+      "check": "executed helper subcommands: assess, answer-check",
+      "ok": true,
+      "detail": "called: advance, answer-check, assess",
+      "with_only": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.230369,
+  "turns": 7,
+  "api_seconds": 33.99,
+  "helper_calls": [
+    "assess",
+    "advance",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_subcommands": [
+    "assess",
+    "advance",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_source_reads": [],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 43.4,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,3 @@
+  1. Glob: fixture/**/*
+  2. Bash: cd fixture; for f in SPEC.md VERIFY.md *.py; do echo "=== $f"; cat $f; done; git log --stat | head -40; git status --short
+  3. Bash: cd fixture; for t in invoice tax coupons shipping; do python -m unittest test_$t.py 2>&1 | tail -3; done; python -c " from invoice import *; from tax import *;…

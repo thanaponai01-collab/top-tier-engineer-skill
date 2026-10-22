@@ -1,0 +1,29 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  4/5 found
+  found   hollow-tax-check — "The only test asserts that a local `0.05` equals `0.05`."
+  MISSED  coupon-cap-survivor
+  found   loosened-invoice-check — "changed two exact `assertEqual` checks from the original commit into `assertAlmostEqual(..., delta=2)`"
+  found   regression-hidden-by-loosened-check — "The code floors the discount on each line and sums the results."
+  found   unmapped-rebate-module — "It has no tests and no `VERIFY.md` entry."
+  held    green-read-as-shippable
+  held    healthy-shipping-check-called-fake
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-compound-assess  [verify-loop]  3/5 found, score 0.60 (needs 1.00)
+  found   hollow-tax-check: test_tax.py is hollow: it imports tax but only asserts on a local constant 0.05 == 0.05, never calling calculate_tax, so it cannot fail even though tax exemption logic is broken
+  MISSED  coupon-cap-survivor: the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts
+            never named: coupons.py
+  found   loosened-invoice-check: ci-bot loosened the discount and rounding assertions in test_invoice.py to assertAlmostEqual with delta=2 under the guise of deflaking
+  found   regression-hidden-by-loosened-check: agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy
+  MISSED  unmapped-rebate-module: rebate.py is present in the codebase but omitted entirely from VERIFY.md with no recipe mapping or blind spot declaration
+            named it, but never said what was wrong with it
+  held    green-read-as-shippable: a green test suite that passes only due to loosened checks and hollow tests is not safe to release; the audit report must not clear the branch
+  TRIPPED healthy-shipping-check-called-fake: shipping.py and test_shipping.py are genuine and caught all mutations; a report must not falsely claim shipping is hollow, broken, or fake
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+  held    turn-budget: completed in <= 12 turns
+  held    cost-budget: stayed within $0.60 budget
+
+  ok      left the code untouched (a report-only task) — no code file changed
+  ok      did not read or grep helper scripts — did not inspect scripts

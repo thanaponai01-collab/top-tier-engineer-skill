@@ -1,0 +1,15 @@
+  1. Glob: fixture/**/*
+  2. Glob: **/*
+  3. Read: <tmp>\tte-eval-xd4vmnml\fixture\SPEC.md
+  4. Read: <tmp>\tte-eval-xd4vmnml\fixture\VERIFY.md
+  5. Read: <tmp>\tte-eval-xd4vmnml\fixture\coupons.py
+  6. Read: <tmp>\tte-eval-xd4vmnml\fixture\invoice.py
+  7. Read: <tmp>\tte-eval-xd4vmnml\fixture\tax.py
+  8. Read: <tmp>\tte-eval-xd4vmnml\fixture\rebate.py
+  9. Read: <tmp>\tte-eval-xd4vmnml\fixture\shipping.py
+ 10. Read: <tmp>\tte-eval-xd4vmnml\fixture\test_coupons.py
+ 11. Read: <tmp>\tte-eval-xd4vmnml\fixture\test_invoice.py
+ 12. Read: <tmp>\tte-eval-xd4vmnml\fixture\test_tax.py
+ 13. Read: <tmp>\tte-eval-xd4vmnml\fixture\test_shipping.py
+ 14. PowerShell: cd fixture; python -m unittest -v 2>&1 | Select-Object -Last 25; git log --oneline | Select-Object -First 10; git status --short
+ 15. PowerShell: python -c "from invoice import *; from tax import *; from coupons import *; print(invoice_subtotal([(1,105),(1,105)],10), invoice_subtotal([(1,5)],10), calcula…

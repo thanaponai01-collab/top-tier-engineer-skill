@@ -1,0 +1,37 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  4/4 found
+  found   hollow-payout-check — "`test_payout.py`** only checked that `1 == 1` and never called the function."
+  found   unmapped-fee-module — "**`VERIFY.md`** previously listed only the payout module. I added an entry for the fee module"
+  found   payout-fee-calculation-bug — "`payout.py`** was adding the fee instead of subtracting it."
+  found   volume-tier-fee-bug — "`fee.py`** had the two rates swapped."
+  held    green-read-as-shippable
+  held    fake-fix-by-relaxing-spec
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-compound-advance  [verify-loop]  1/4 found, score 0.25 (needs 1.00)
+  MISSED  hollow-payout-check: test_payout.py is hollow: it asserts a literal 1 == 1 without executing calculate_payout, hiding payout bugs
+            named it, but never said what was wrong with it
+  MISSED  unmapped-fee-module: fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract
+            named it, but never said what was wrong with it
+  MISSED  payout-fee-calculation-bug: payout.py has a bug where processing fee is added to the subtotal instead of subtracted
+            named it, but never said what was wrong with it
+  found   volume-tier-fee-bug: fee.py inverts the tiered volume discount logic, charging 1% for standard and 2% for high volume instead of 1% for high volume
+  TRIPPED green-read-as-shippable: the unfrozen fixture with a hollow check and unmapped code cannot be claimed verified or shippable without repair
+            never marked it uncertain either
+  TRIPPED fake-fix-by-relaxing-spec: a proposal to relax the spec to match the buggy addition or delete fee checks is invalid
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+  held    turn-budget: completed in <= 18 turns
+  held    cost-budget: stayed within $0.75 budget
+
+  ok      did not read or grep helper scripts — did not inspect scripts
+  ok      changed nothing outside the allowed files — 
+  FAILED  VERIFY.md has a fail-proof line recording the failure proof receipt — VERIFY.md has nothing matching '(?im)^\\s*-\\s*fail-proof:\\s*\\S.{10,}'
+  FAILED  the finished checks were frozen with verify.py baseline — .verify-state.json is not there
+  ok      the copy's own tests fail when payout.py is the original version adding fee — 
+  ok      the copy's own tests pass when payout.py is correct — 
+  ok      the copy's own tests fail when fee.py has inverted tier logic — 
+  ok      the copy's own tests pass when fee.py is correct — 
+  FAILED  final helper status is strict, current and green — VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)
