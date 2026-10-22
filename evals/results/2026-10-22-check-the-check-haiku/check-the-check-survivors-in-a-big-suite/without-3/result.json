@@ -1,0 +1,67 @@
+{
+  "case": "check-the-check-survivors-in-a-big-suite",
+  "skill": "check-the-check",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"Every split test uses an amount that divides evenly (9000/3, 12000/4, 4321/1), so the \"parts add up\" test never sees a r\"\n  found   twenty-seat-tier-untested \u2014 \"Changing `(20, 10)` to `(21, 10)` passes.\"\n  held    gate-cleared",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 5921,
+      "cacheReadInputTokens": 114102,
+      "cacheCreationInputTokens": 12136,
+      "webSearchRequests": 0,
+      "costUSD": 0.006529719999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2883,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-haiku-5-5",
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.006529719999999999,
+  "turns": 7,
+  "api_seconds": 30.667,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 35.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

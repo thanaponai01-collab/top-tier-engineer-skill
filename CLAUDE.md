@@ -1,10 +1,11 @@
 # CLAUDE.md
 
-This repo is the `verify-loop` Claude Code plugin: one skill at `plugin/skills/verify-loop/SKILL.md`.
+This repo is the `verify-loop` Claude Code plugin: `plugin/skills/verify-loop/SKILL.md` (prove a change)
+and `plugin/skills/check-the-check/SKILL.md` (would an existing check catch a bug; read-only).
 
 - Mechanics, not advice: every rule is a script or test that can fail, never a tip for the agent.
 
-- Helper scripts live in `plugin/skills/verify-loop/scripts/` and are stdlib-only Python.
+- Each skill's helper scripts live in its own `scripts/` folder and are stdlib-only Python.
 - Before committing: `python -m unittest discover tests`.
 - Version lives in `plugin/.claude-plugin/plugin.json` (keep `plugin/.codex-plugin/plugin.json` in
   step); bump it and add a `CHANGELOG.md` entry per release.

@@ -1,0 +1,4 @@
+  1. Bash: cd fixture && cat PR.md && find . -type f -not -path './.git/*' | head -50 && git log --oneline -5 2>/dev/null; git diff HEAD~1 --stat 2>/dev/null
+  2. Bash: cd fixture && git diff HEAD~1 -- billing.py test_billing.py && cat billing.py test_billing.py
+  3. Bash: cd fixture && d=$(mktemp -d) && git show HEAD~1:billing.py > $d/billing.py && cp test_billing.py $d/ && cd $d && python -m unittest -v test_billing 2>&1 | tail…
+  4. Bash: cd fixture && python -c "from billing import invoice_total; from datetime import date; print('new:', invoice_total(200.0, date(2026,3,31), date(2026,3,31)))"

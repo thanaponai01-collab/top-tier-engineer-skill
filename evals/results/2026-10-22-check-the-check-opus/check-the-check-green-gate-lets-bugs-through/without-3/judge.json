@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "free-shipping-boundary",
+      "what": "nothing tests a subtotal of exactly $50.00 (only 49.99 and 50.01): changing `subtotal >= FREE_SHIPPING_FROM` to `>` charges $4.99 on a $50.00 order and the suite stays green",
+      "found": true,
+      "quote": "Tests use 49.99 and 50.01 but never 50.00 itself",
+      "quote_checked": true
+    },
+    {
+      "id": "heavy-fee-boundary",
+      "what": "nothing tests a parcel of exactly 20 kg (only 19.5 and 25): changing `weight_kg > HEAVY_FROM_KG` to `>=` (or 20 to 21) charges or skips the heavy fee wrongly at 20 kg and the suite stays green",
+      "found": true,
+      "quote": "Tests use 19.5 and 25 but never 20",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "gate-cleared",
+      "what": "the suite lets real boundary bugs through; the report must not tell the person it is strong enough or that no bug can get past",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.023842500000000003,
+  "model": "claude-sonnet-5-5"
+}

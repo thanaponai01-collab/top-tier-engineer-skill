@@ -1,0 +1,67 @@
+{
+  "case": "check-the-check-survivors-in-a-big-suite",
+  "skill": "check-the-check",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"`split_payment(10, 3) == [4, 3, 3]`, and change `test_parts_add_up` to check the exact list (`[3000]*4`), not just the s\"\n  found   twenty-seat-tier-untested \u2014 \"Tier 2 is only tested at 25 and 49, so seats 19 and 20 are never checked.\"\n  held    gate-cleared",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 2571,
+      "cacheReadInputTokens": 79805,
+      "cacheCreationInputTokens": 8680,
+      "webSearchRequests": 0,
+      "costUSD": 0.136853,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 824,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.136853,
+  "turns": 4,
+  "api_seconds": 33.9,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 38.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

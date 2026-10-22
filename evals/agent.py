@@ -52,9 +52,9 @@ LEAK_MARKERS = ("evals/cases", "reference/good", "reference/bad", "expect.json",
 # A python launch of verify.py, then its subcommand. `cat verify.py` is reading it, not using it.
 LAUNCH = r"\bpy(?:thon[\d.]*)?(?:\.exe)?[\"']?\s+[^;|&\n]*?"
 SUBCOMMAND = r"[\"'}]*(?:\s+(-{0,2}[\w-]+))?"
-HELPER = re.compile(LAUNCH + r"verify\.py\b" + SUBCOMMAND, re.I)
+HELPER = re.compile(LAUNCH + r"(?:verify|check)\.py\b" + SUBCOMMAND, re.I)
 # Agents also name the helper once and call it through the variable: S=.../verify.py; python "$S" run
-HELPER_VAR = re.compile(r"\b(\w+)=[\"']?[^\"'\s;]*verify\.py\b")
+HELPER_VAR = re.compile(r"\b(\w+)=[\"']?[^\"'\s;]*(?:verify|check)\.py\b")
 
 
 def helper_calls(cmd):

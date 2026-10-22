@@ -1,0 +1,3 @@
+  1. Skill: verify-loop:check-the-check
+  2. Bash: cd fixture && ls -la && cat billing.py && cat test_billing.py | head -150; ls .github 2>/dev/null; cat *.md *.toml *.cfg *.ini 2>/dev/null | head -50
+  3. Bash: cd fixture && python "<tmp>/tte-plugin-sct_p744/verify-loop/skills/check-the-check/scripts/check.py" . --check "python -m unittest …

@@ -1,0 +1,69 @@
+{
+  "case": "check-the-check-green-gate-lets-bugs-through",
+  "skill": "check-the-check",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  2/3 found\n  found   free-shipping-boundary \u2014 \"`subtotal >= 50` changed to `subtotal > 50`\"\n  found   heavy-fee-boundary \u2014 \"`weight_kg > 20` changed to `weight_kg >= 20`\"\n  MISSED  the-rest-holds\n  held    gate-cleared",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 3028,
+      "cacheReadInputTokens": 119630,
+      "cacheCreationInputTokens": 9298,
+      "webSearchRequests": 0,
+      "costUSD": 0.158918,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 662,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "the other amounts are pinned: changing the tax rate, the standard rate, or dropping the express add-on turns the suite red, so those parts of the gate do work"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.158918,
+  "turns": 6,
+  "api_seconds": 33.11,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 49.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

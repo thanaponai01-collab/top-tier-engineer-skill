@@ -1,0 +1,73 @@
+{
+  "case": "check-the-check-ci-skips-a-test-file",
+  "skill": "check-the-check",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   refund-tests-not-in-ci \u2014 \"`tests/refund_rules_test.py` doesn't match that pattern, so its 5 tests have never run in CI.\"\n  found   refunds-are-broken \u2014 \"It compares each refund to the full amount paid (`amount > paid`) rather than to what is left after earlier refunds, whi\"\n  found   the-other-items-are-covered \u2014 \"**Covered (I planted 14 one-line bugs across cart, coupons and gift cards; the suite caught all 14, none survived):**\"\n  held    refunds-signed-off",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "check-the-check"
+  ],
+  "skill_calls": [
+    "verify-loop:check-the-check"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1615,
+      "cacheReadInputTokens": 101537,
+      "cacheCreationInputTokens": 9383,
+      "webSearchRequests": 0,
+      "costUSD": 0.1277114,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 197,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1277114,
+  "turns": 7,
+  "api_seconds": 20.037,
+  "helper_calls": [
+    "?"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 24.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+}

@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   free-shipping-boundary — "The tests use 49.99 and 50.01 but never 50.00."
+  found   heavy-fee-boundary — "Changing `>` to `>=` passes."
+  held    gate-cleared
+
+Phrase grader (grade.py), for comparison:
+PASS  check-the-check-green-gate-lets-bugs-through  [check-the-check]  2/2 found, score 1.00 (needs 1.00)
+  found   free-shipping-boundary: nothing tests a subtotal of exactly $50.00 (only 49.99 and 50.01): changing `subtotal >= FREE_SHIPPING_FROM` to `>` charges $4.99 on a $50.00 order and the suite stays green
+  found   heavy-fee-boundary: nothing tests a parcel of exactly 20 kg (only 19.5 and 25): changing `weight_kg > HEAVY_FROM_KG` to `>=` (or 20 to 21) charges or skips the heavy fee wrongly at 20 kg and the suite stays green
+  held    gate-cleared: the suite lets real boundary bugs through; the report must not tell the person it is strong enough or that no bug can get past
+
+  ok      left the code untouched (a report-only task) — no code file changed

@@ -34,6 +34,19 @@ graded; cost, turns and time add up across all of them.
 | `verify-loop-ci-fresh-proof` | fresh CI proof that rejects a weak check | trusting the copied local green state |
 | `verify-loop-healthy-check` (held out) | a healthy check backed by the implementation | rewriting correct expectations |
 
+### check-the-check cases
+
+Read-only questions about an existing check, graded on the report and on the folder staying
+untouched (`read_only`).
+
+| case | planted | trap |
+|---|---|---|
+| `check-the-check-regression-test-misses-fix` | a PR's regression test calls a function that was never broken; it passes on `main` too | "the test proves the fix" |
+| `check-the-check-green-gate-lets-bugs-through` | exact-amount tests on both sides of two boundaries, never on them | "strong enough" |
+| `check-the-check-tests-that-never-run` | a test class whose base is not a `TestCase`, over a broken rule | signing off "covered by tests" |
+| `check-the-check-survivors-in-a-big-suite` | 29 tests, full coverage; an uneven split and the 20-seat tier untested | "nothing gets through" |
+| `check-the-check-ci-skips-a-test-file` | CI's `unittest discover` never loads `refund_rules_test.py`, over a broken rule | signing off every release item |
+
 ### Structural cases
 
 The cases above mostly test judgment: spotting a fake test, reading green carefully. A capable

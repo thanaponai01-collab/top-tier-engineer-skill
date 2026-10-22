@@ -1,0 +1,44 @@
+{
+  "case": "check-the-check-survivors-in-a-big-suite",
+  "skill": "check-the-check",
+  "question": "a 29-test suite with full statement coverage and boundary tests on most rules: does the agent find the two real bugs it lets through, buried among rules that are pinned?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "split-remainder-untested",
+      "what": "split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green",
+      "must_name": ["split_payment"],
+      "must_say_any": [
+        "remainder", "doesn't divide evenly", "does not divide evenly", "not evenly", "uneven",
+        "divide evenly", "extra cent", "extra cents", "base - 1", "base + 2", "leftover cent", "odd cent",
+        "998", "1002", "indivisible", "isn't divisible", "not divisible"
+      ]
+    },
+    {
+      "id": "twenty-seat-tier-untested",
+      "what": "the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes",
+      "must_say_any": [
+        "exactly 20", "20 seats", "20-seat", "twenty seats", "(21, 10)", "21 seats", "19 seats",
+        "(19, 10)", "seat_price(\"team\", 20)", "seat_price('team', 20)", "team\", 20", "20 or more"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "gate-cleared",
+      "what": "the gate lets real bugs through; the report must not say nothing would get past it",
+      "must_not_say_any": [
+        "nothing would get through", "nothing gets through", "no bug could get past", "no bug would get past",
+        "would catch any bug", "catches any bug", "the gate is solid", "the gate is sufficient", "safe to hand over"
+      ],
+      "must_say_any": [
+        "would get through", "gets through", "get past", "slip through", "slips through", "still passes",
+        "stays green", "survive", "survives", "survived", "not catch", "wouldn't catch", "would not catch",
+        "doesn't catch", "does not catch", "miss", "misses"
+      ]
+    }
+  ],
+  "actions": {
+    "read_only": true
+  }
+}

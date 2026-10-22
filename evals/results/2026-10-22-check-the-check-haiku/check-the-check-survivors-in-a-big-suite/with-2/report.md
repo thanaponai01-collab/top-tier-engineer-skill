@@ -1,0 +1,13 @@
+**No, the gate does not hold.** `check-the-check` planted 53 one-line bugs in `billing.py`, and 4 got through the 29 green tests. The verdict is `weak`. The check ran cleanly (exit 0, all 29 tests ran, all 29 statements executed), so the gaps are in what the tests assert, not in whether they run.
+
+Three of the four survivors are real gaps, measured against `SPEC.md`:
+
+1. **Volume discount tier boundary off by one.** An outside change to `(20, 10)` → `(21, 10)` ships. At 20 seats the team plan would be billed 2755 per seat instead of 2610, and the spec says 20 or more seats get 10% off. Nothing tests exactly 20 seats; the tests use 10, 25, 49 and 50. Close it with `seat_price("team", 20) == 2610`.
+
+2. **Split-payment remainder distribution.** Changing `base + 1` to `base - 1` ships. So does `base + 2`. Both break rule 6, which says the first parts carry the extra cents and the parts add up to the total. Every split test uses an exact division (9000/3, 4321/1, 12000/4), so `extra` is always 0 and the extra-cent branch never gets a non-zero input. Close it with `split_payment(10, 3) == [4, 3, 3]` and `sum(...) == 10`. The `base - 1` mutant gives `[2, 3, 3]`, which sums to 8, so the sum check alone would catch it too.
+
+3. **The fourth survivor changes nothing observable.** `days_late <= GRACE_DAYS` → `days_late < GRACE_DAYS` returns the same value at every input. At `days_late == 7` the formula gives `amount * 0 // 1000 = 0` either way. The "last grace day" test is green for both versions, and no input can tell them apart, so the gate is not missing anything here.
+
+**What held:** the other 49 one-line bugs were caught. That covers the list prices, the 5%/15% tier edges at 10 and 50 seats, rounding down on discounts, the unknown-plan and zero-seat errors, the monthly and annual amounts, proration rounding and range checks, credit in both directions, and the late-interest grace edge and rounding. Those rules are covered for the one-line changes the helper tried. The helper only plants one-line bugs, so multi-line changes are not measured here.
+
+Scope of this run: the check command was `python -m unittest test_billing`, run from `fixture/` with `--product billing.py`. The fixture has no CI file, so that command is my assumption about how the gate runs. There was no `--base`, because `fixture/` is not a git repo. I changed nothing in the repo. To fix the gaps, add the two tests above and rerun; that is a job for the verify-loop skill.

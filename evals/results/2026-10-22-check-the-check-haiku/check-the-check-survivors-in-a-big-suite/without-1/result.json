@@ -1,0 +1,69 @@
+{
+  "case": "check-the-check-survivors-in-a-big-suite",
+  "skill": "check-the-check",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  1/2 found\n  MISSED  split-remainder-untested\n  found   twenty-seat-tier-untested \u2014 \"**Tier boundary at 20.** No test uses 19 or 20.\"\n  held    gate-cleared",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 7927,
+      "cacheReadInputTokens": 144516,
+      "cacheCreationInputTokens": 14755,
+      "webSearchRequests": 0,
+      "costUSD": 0.008360860000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3112,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 2,
+  "missed": [
+    "split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-haiku-5-5",
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.008360860000000001,
+  "turns": 9,
+  "api_seconds": 41.271,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 49.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

@@ -1,0 +1,16 @@
+  1. Bash: cd "<tmp>/tte-eval-4_uw65e6" && ls -la && echo "--- fixture ---" && ls -laR fixture | head -200
+  2. Glob: **/RELEASE_NOTES.md
+  3. Glob: **/.github/workflows/ci.yml
+  4. Read: <tmp>\tte-eval-4_uw65e6\fixture\RELEASE_NOTES.md
+  5. Read: <tmp>\tte-eval-4_uw65e6\fixture\.github\workflows\ci.yml
+  6. Read: <tmp>\tte-eval-4_uw65e6\fixture\SPEC.md
+  7. Read: <tmp>\tte-eval-4_uw65e6\fixture\tests\refund_rules_test.py
+  8. Read: <tmp>\tte-eval-4_uw65e6\fixture\tests\test_cart.py
+  9. Read: <tmp>\tte-eval-4_uw65e6\fixture\tests\test_coupons.py
+ 10. Read: <tmp>\tte-eval-4_uw65e6\fixture\tests\test_gift_cards.py
+ 11. Read: <tmp>\tte-eval-4_uw65e6\fixture\shop\cart.py
+ 12. Read: <tmp>\tte-eval-4_uw65e6\fixture\shop\coupons.py
+ 13. Read: <tmp>\tte-eval-4_uw65e6\fixture\shop\gift_cards.py
+ 14. Read: <tmp>\tte-eval-4_uw65e6\fixture\shop\refunds.py
+ 15. Bash: cd "<tmp>/tte-eval-4_uw65e6/fixture" && echo "--- CI command (python -I) ---" && python -I -m unittest discover -s tests -t . -v 2>…
+ 16. Bash: cd "<tmp>/tte-eval-4_uw65e6/fixture" && python -I -c " import sys; sys.path.insert(0, '.') import unittest from tests import refund…

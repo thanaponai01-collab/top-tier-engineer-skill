@@ -1,0 +1,9 @@
+  1. Skill: verify-loop:check-the-check
+  2. Glob: **/*
+  3. Read: <tmp>\tte-eval-akwl57n3\PR.md
+  4. Read: <tmp>\tte-eval-akwl57n3\fixture\PR.md
+  5. Read: <tmp>\tte-eval-akwl57n3\fixture\billing.py
+  6. Read: <tmp>\tte-eval-akwl57n3\fixture\test_billing.py
+  7. Bash: cd "<tmp>/tte-eval-akwl57n3/fixture" && git status --short && git branch --show-current && git log --oneline -3 && git diff main --…
+  8. Bash: cd "<tmp>/tte-eval-akwl57n3/fixture" && git diff main -- billing.py && python "<tmp>/tte-plugin-tq4ai_j…
+  9. Bash: cd "<tmp>/tte-eval-akwl57n3/fixture" && git show main:billing.py && echo ---- && git show main:test_billing.py | grep -n "due"

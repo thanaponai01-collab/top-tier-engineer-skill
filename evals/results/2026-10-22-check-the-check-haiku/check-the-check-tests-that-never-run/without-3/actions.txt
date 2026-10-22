@@ -1,0 +1,9 @@
+  1. Glob: fixture/**/*
+  2. Bash: ls -la "<tmp>/tte-eval-8v0vswxj/fixture" 2>&1; ls -la "<tmp>/tte-eval-8v0vswxj" 2>&1
+  3. Read: <tmp>\tte-eval-8v0vswxj\fixture\RELEASE_NOTES.md
+  4. Read: <tmp>\tte-eval-8v0vswxj\fixture\SPEC.md
+  5. Read: <tmp>\tte-eval-8v0vswxj\fixture\test_points.py
+  6. Read: <tmp>\tte-eval-8v0vswxj\fixture\points.py
+  7. Read: <tmp>\tte-eval-8v0vswxj\fixture\points_fixtures.py
+  8. Bash: cd "<tmp>/tte-eval-8v0vswxj/fixture" && python test_points.py -v 2>&1; echo "exit=$?"
+  9. Bash: cd "<tmp>/tte-eval-8v0vswxj/fixture" && python -c " from points import points_for print('gold 42.99 ->', points_for(42.99, 'gold'),…

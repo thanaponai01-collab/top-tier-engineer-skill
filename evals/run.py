@@ -484,7 +484,7 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
         say(f"{'PASS ' if result['passed'] else 'fail '}  {tag}  "
             f"{result['found']}/{result['total']} found, ${result['cost_usd'] or 0:.2f}, "
             f"{raw['seconds']:.0f}s, {result['turns']} turns, "
-            f"verify.py: {' '.join(result['helper_calls']) or 'not used'}")
+            f"helper: {' '.join(result['helper_calls']) or 'not used'}")
         if result["errored"] and raw["stderr"].strip():
             say(f"       {tag} agent error: {raw['stderr'].strip().splitlines()[-1][:200]}")
         return result
@@ -574,7 +574,7 @@ def costs_cell(runs):
     if c is None or s is None or t is None:
         return "—"
     helper = sum(1 for r in runs if r.get("helper_used"))
-    return f"${c:.2f} · {s:.0f}s · {t:.0f} turns · verify.py {helper}/{len(runs)}"
+    return f"${c:.2f} · {s:.0f}s · {t:.0f} turns · helper {helper}/{len(runs)}"
 
 
 def write_scorecard(results, meta, path):
@@ -610,7 +610,7 @@ def write_scorecard(results, meta, path):
         L.append(f"| `{name}` | `{row['skill']}` | {c['question']} | {cell(row['without'])}{mark} | "
                  f"{cell(row['with'])} | "
                  f"{verdict(rate(row['with']), rate(row['without']), len(row['with']), len(row['without']))} |")
-    L.append("\n**Cost per try** (mean $ · wall seconds · turns · tries that ran scripts/verify.py):\n")
+    L.append("\n**Cost per try** (mean $ · wall seconds · turns · tries that ran the skill's helper, scripts/verify.py or scripts/check.py):\n")
     L.append("| Case | Without skills | With skills |")
     L.append("|---|---|---|")
     for name, row in sorted(by_case.items()):

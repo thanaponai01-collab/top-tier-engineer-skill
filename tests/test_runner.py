@@ -322,7 +322,7 @@ class ScoreAndScorecard(unittest.TestCase):
         self.assertIn("| `verify-loop-healthy-check` |", text)
         self.assertIn("1 of 1", text)
         self.assertIn("missed: the unrouted handler", text)
-        self.assertIn("| $0.20 · 30s · 6 turns · verify.py 0/1 | $0.40 · 30s · 6 turns · verify.py 1/1 |", text)
+        self.assertIn("| $0.20 · 30s · 6 turns · helper 0/1 | $0.40 · 30s · 6 turns · helper 1/1 |", text)
 
 
 class JudgeQuotes(unittest.TestCase):

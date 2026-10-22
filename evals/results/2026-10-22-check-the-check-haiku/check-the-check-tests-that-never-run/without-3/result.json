@@ -1,0 +1,67 @@
+{
+  "case": "check-the-check-tests-that-never-run",
+  "skill": "check-the-check",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   points-tests-never-run \u2014 \"`PointsEarnedTest` inherits from `PointsFixtures`, which is a plain class, not `unittest.TestCase`.\"\n  found   gold-is-broken \u2014 \"`points.py:4` checks `tier == \"silver\"`, but SPEC.md item 2 and RELEASE_NOTES.md say gold members earn double.\"\n  held    claim-signed-off",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 2749,
+      "cacheReadInputTokens": 103575,
+      "cacheCreationInputTokens": 7608,
+      "webSearchRequests": 0,
+      "costUSD": 0.00393285,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 996,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-haiku-5-5",
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.00393285,
+  "turns": 10,
+  "api_seconds": 16.709,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 19.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

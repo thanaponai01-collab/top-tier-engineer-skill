@@ -1,8 +1,14 @@
 # Verify Loop
 
-A single-skill Claude Code plugin cut from
-[top-tier-engineer](https://github.com/thanaponai01-collab/top-tier-engineer-skill). It holds only
-the `verify-loop` skill: write a check that can fail, then loop until it passes, with retained proof.
+A Claude Code plugin cut from
+[top-tier-engineer](https://github.com/thanaponai01-collab/top-tier-engineer-skill). It holds two
+skills:
+
+- `verify-loop`: write a check that can fail, then loop until it passes, with retained proof.
+- `check-the-check`: read-only. Would an existing test, suite or CI gate catch a bug? It runs the
+  check in scratch copies, plants one-line bugs, finds tests that never load or never run, and runs
+  a PR's new tests against the code before the change
+  (`python plugin/skills/check-the-check/scripts/check.py <repo> --check "<cmd>" [--base REF]`).
 
 ## Install (Claude Code)
 
@@ -46,6 +52,7 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
 - `plugin/skills/verify-loop/SKILL.md` — the skill; `references/` holds its modes (change, challenge,
   CI, project recipe, create, maintain, compliance, answer, triage).
 - `plugin/skills/verify-loop/scripts/` — stdlib-only Python helpers (`verify.py` is the entry point).
+- `plugin/skills/check-the-check/` — the read-only skill; `scripts/check.py` is its whole helper.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).
 - `examples/verify-create/` — a notes service with a generated, proven `.claude/skills/verify/`.
 - `tests/` — unit tests for the helpers: `python -m unittest discover tests`.

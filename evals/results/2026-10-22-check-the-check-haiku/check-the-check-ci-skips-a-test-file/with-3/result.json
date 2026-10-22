@@ -1,0 +1,74 @@
+{
+  "case": "check-the-check-ci-skips-a-test-file",
+  "skill": "check-the-check",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   refund-tests-not-in-ci \u2014 \"**CI never runs the refund tests.**\"\n  found   refunds-are-broken \u2014 \"`refund(paid=8000, already_refunded=3000, amount=6000)` returned 9000 instead of raising `ValueError`.\"\n  found   the-other-items-are-covered \u2014 \"`test_zero_quantity_rejected` runs in CI. The helper planted 14 one-line bugs in `shop/cart.py`, `shop/coupons.py` and `\"\n  held    refunds-signed-off",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "check-the-check"
+  ],
+  "skill_calls": [
+    "verify-loop:check-the-check"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2923,
+      "cacheReadInputTokens": 132462,
+      "cacheCreationInputTokens": 10273,
+      "webSearchRequests": 0,
+      "costUSD": 0.0048419199999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1086,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-haiku-5-5",
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0048419199999999996,
+  "turns": 7,
+  "api_seconds": 18.891,
+  "helper_calls": [
+    "?",
+    "?"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 23.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-tq4ai_jv\\verify-loop"
+}

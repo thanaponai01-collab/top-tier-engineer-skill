@@ -1,0 +1,53 @@
+{
+  "case": "check-the-check-regression-test-misses-fix",
+  "skill": "check-the-check",
+  "question": "a PR fixes a bug and adds a regression test, CI is green: does that test prove the fix, or would it have passed before the fix too?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "passes-before-the-fix",
+      "what": "test_due_date_is_not_late passes on the pre-fix code (main) as well: run against the old billing.py it is green, so it could never have caught bug #12",
+      "must_name": ["test_due_date_is_not_late"],
+      "must_say_any": [
+        "passes on main", "passes before the fix", "passes on the old code", "passes against the old",
+        "passed before the fix", "passes without the fix", "passes with the fix reverted",
+        "also passes on", "green on main", "green before", "green on the old", "would have passed",
+        "would pass before", "still passes", "never fails", "does not fail on", "doesn't fail on",
+        "did not fail", "didn't fail", "can't catch", "cannot catch", "wouldn't have caught",
+        "would not have caught", "would never have caught", "never caught", "does not reproduce",
+        "doesn't reproduce", "never reproduced"
+      ]
+    },
+    {
+      "id": "bug-lives-in-invoice-total",
+      "what": "the bug was in invoice_total (its own `paid >= due` check); late_fee was already correct before the PR, so a regression test must call invoice_total for a payment on the due date and expect 200.0",
+      "must_name": ["invoice_total"],
+      "must_say_any": [
+        "already correct", "already right", "was never broken", "wasn't broken", "was not broken",
+        "never had the bug", "unchanged", "didn't change", "did not change", "not changed",
+        "paid >= due", ">=", "own check", "own comparison", "computed the fee itself",
+        "inline", "bypassed late_fee", "didn't call late_fee", "did not call late_fee"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "test-read-as-proof",
+      "what": "a green regression test that also passes on the buggy code is not proof of the fix; the report must not tell the reviewer the test proves it",
+      "must_not_say_any": [
+        "the test proves the fix", "it proves the fix", "proves the bug is fixed",
+        "yes, it proves", "yes, the test proves", "is a good regression test",
+        "is a valid regression test", "is a solid regression test", "lgtm", "ready to approve as is",
+        "approve as is"
+      ],
+      "must_say_any": [
+        "does not prove", "doesn't prove", "not prove", "no proof", "proves nothing", "not a regression test",
+        "isn't a regression test", "is not a regression test", "can't catch", "cannot catch",
+        "wouldn't have caught", "would not have caught", "would never have caught"
+      ]
+    }
+  ],
+  "actions": {
+    "read_only": true
+  }
+}

@@ -1,0 +1,11 @@
+  1. Skill: verify-loop:check-the-check
+  2. Glob: **/*
+  3. Read: <tmp>\tte-eval-5myp9e41\RELEASE_NOTES.md
+  4. Read: <tmp>\tte-eval-5myp9e41\fixture\RELEASE_NOTES.md
+  5. Read: <tmp>\tte-eval-5myp9e41\fixture\SPEC.md
+  6. Read: <tmp>\tte-eval-5myp9e41\fixture\points.py
+  7. Read: <tmp>\tte-eval-5myp9e41\fixture\test_points.py
+  8. Read: <tmp>\tte-eval-5myp9e41\fixture\points_fixtures.py
+  9. Bash: cd "<tmp>/tte-eval-5myp9e41/fixture" && python "<tmp>/tte-plugin-tq4ai_jv/verify-loop/skills/check-the-…
+ 10. Bash: cd "<tmp>/tte-eval-5myp9e41/fixture" && python -I -m unittest test_points.PointsEarnedTest -v 2>&1; echo "---"; python -I -c " from…
+ 11. Bash: cd "<tmp>/tte-eval-5myp9e41/fixture" && python -m unittest test_points.PointsEarnedTest -v 2>&1; echo "---"; python -c " from point…

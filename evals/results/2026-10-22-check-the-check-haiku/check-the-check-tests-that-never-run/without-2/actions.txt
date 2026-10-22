@@ -1,0 +1,9 @@
+  1. Glob: fixture/**/*
+  2. Read: <tmp>\tte-eval-rntskpfk\fixture\RELEASE_NOTES.md
+  3. Read: <tmp>\tte-eval-rntskpfk\fixture\test_points.py
+  4. Read: <tmp>\tte-eval-rntskpfk\fixture\points.py
+  5. Read: <tmp>\tte-eval-rntskpfk\fixture\points_fixtures.py
+  6. Read: <tmp>\tte-eval-rntskpfk\fixture\SPEC.md
+  7. Bash: cd "<tmp>/tte-eval-rntskpfk/fixture" && python -I -m unittest -v test_points 2>&1; echo "exit=$?"
+  8. Bash: python -I -m unittest discover -v -s "<tmp>/tte-eval-rntskpfk/fixture" -p "test_points.py" 2>&1; echo "exit=$?"
+  9. Bash: cd "<tmp>/tte-eval-rntskpfk/fixture" && python -I -c "import sys; sys.path.insert(0,'.'); import test_points as t, unittest; print(…

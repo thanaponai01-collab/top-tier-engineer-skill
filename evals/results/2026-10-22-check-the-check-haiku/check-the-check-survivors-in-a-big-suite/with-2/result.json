@@ -1,0 +1,73 @@
+{
+  "case": "check-the-check-survivors-in-a-big-suite",
+  "skill": "check-the-check",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"Changing `base + 1` to `base - 1` ships. So does `base + 2`.\"\n  found   twenty-seat-tier-untested \u2014 \"Nothing tests exactly 20 seats; the tests use 10, 25, 49 and 50.\"\n  held    gate-cleared",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "check-the-check"
+  ],
+  "skill_calls": [
+    "verify-loop:check-the-check"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 3154,
+      "cacheReadInputTokens": 107562,
+      "cacheCreationInputTokens": 10215,
+      "webSearchRequests": 0,
+      "costUSD": 0.00469662,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1504,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-haiku-5-5",
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.00469662,
+  "turns": 8,
+  "api_seconds": 19.79,
+  "helper_calls": [
+    "?"
+  ],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 24.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-tq4ai_jv\\verify-loop"
+}

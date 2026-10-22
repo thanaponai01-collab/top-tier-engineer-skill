@@ -1,0 +1,6 @@
+  1. Skill: verify-loop:check-the-check
+  2. Bash: cd "<tmp>/tte-eval-kd5n7iam" && ls -la fixture && find fixture -maxdepth 3 -not -path '*/.git/*' | head -100 && ls -la fixture/.git…
+  3. Read: <tmp>\tte-eval-kd5n7iam\fixture\billing.py
+  4. Read: <tmp>\tte-eval-kd5n7iam\fixture\test_billing.py
+  5. Read: <tmp>\tte-eval-kd5n7iam\fixture\SPEC.md
+  6. Bash: cd "<tmp>/tte-eval-kd5n7iam/fixture" && python "<tmp>/tte-plugin-tq4ai_jv/verify-loop/skills/check-the-…

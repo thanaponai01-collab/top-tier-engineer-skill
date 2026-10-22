@@ -1,0 +1,69 @@
+{
+  "case": "check-the-check-ci-skips-a-test-file",
+  "skill": "check-the-check",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  2/3 found\n  found   refund-tests-not-in-ci \u2014 \"CI is green because it ran 12 tests from the other three files and none for refunds.\"\n  found   refunds-are-broken \u2014 \"So on an 8000 order with 3000 already refunded, a 6000 refund goes through and the total refunded reaches 9000.\"\n  MISSED  the-other-items-are-covered\n  held    refunds-signed-off",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1295,
+      "cacheReadInputTokens": 76781,
+      "cacheCreationInputTokens": 6953,
+      "webSearchRequests": 0,
+      "costUSD": 0.0969122,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 193,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.0969122,
+  "turns": 4,
+  "api_seconds": 23.341,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 26.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

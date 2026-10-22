@@ -1,0 +1,15 @@
+{
+  "started": "2026-10-22-0739",
+  "repeats": 3,
+  "arms": [
+    "without",
+    "with"
+  ],
+  "version": "1.19.0",
+  "models": [
+    "claude-haiku-5-5"
+  ],
+  "out_rel": "evals/results/2026-10-22-check-the-check-haiku",
+  "user_memory_bytes": 0,
+  "claude_version": "2.1.304 (Claude Code)"
+}

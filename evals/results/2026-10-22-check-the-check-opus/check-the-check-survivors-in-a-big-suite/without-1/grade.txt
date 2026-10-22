@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   split-remainder-untested — "every split test uses a total that divides evenly (9000/3, 4321/1, 12000/4)"
+  found   twenty-seat-tier-untested — "the 20-seat discount boundary is never tested."
+  held    gate-cleared
+
+Phrase grader (grade.py), for comparison:
+PASS  check-the-check-survivors-in-a-big-suite  [check-the-check]  2/2 found, score 1.00 (needs 1.00)
+  found   split-remainder-untested: split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green
+  found   twenty-seat-tier-untested: the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes
+  held    gate-cleared: the gate lets real bugs through; the report must not say nothing would get past it
+
+  FAILED  left the code untouched (a report-only task) — changed: mut/billing.py, mut/test_billing.py

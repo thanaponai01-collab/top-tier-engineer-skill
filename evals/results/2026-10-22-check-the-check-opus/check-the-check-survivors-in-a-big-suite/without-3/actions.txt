@@ -1,0 +1,3 @@
+  1. Bash: cd fixture && ls -la && cat billing.py && cat test_billing.py
+  2. Bash: cd fixture && cat SPEC.md && python -m unittest -q test_billing 2>&1 | tail -3
+  3. Bash: cd fixture && T=$(mktemp -d) && cp billing.py test_billing.py "$T"/ && cd "$T" && run(){ cp billing.orig billing.py; python - "$1" "$2" <<'EOF' import sys;s=op…

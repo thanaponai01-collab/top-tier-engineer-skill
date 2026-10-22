@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "passes-before-the-fix",
+      "what": "test_due_date_is_not_late passes on the pre-fix code (main) as well: run against the old billing.py it is green, so it could never have caught bug #12",
+      "found": true,
+      "quote": "The new test passes on the code from before the fix, so it doesn't show the bug is gone.",
+      "quote_checked": true
+    },
+    {
+      "id": "bug-lives-in-invoice-total",
+      "what": "the bug was in invoice_total (its own `paid >= due` check); late_fee was already correct before the PR, so a regression test must call invoice_total for a payment on the due date and expect 200.0",
+      "found": true,
+      "quote": "add a test to `InvoiceTotalTest` like this, so it fails before the fix and passes after:",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "test-read-as-proof",
+      "what": "a green regression test that also passes on the buggy code is not proof of the fix; the report must not tell the reviewer the test proves it",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0225125,
+  "model": "claude-sonnet-5-5"
+}

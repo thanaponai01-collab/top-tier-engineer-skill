@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.19.0 - 2026-10-22 - check-the-check
+
+- New skill, `check-the-check`: read-only, it answers whether an existing test, suite or CI gate
+  would catch a bug by running it. `scripts/check.py <repo> --check "<cmd>"` works in scratch copies
+  under the system temp folder and reports `NEVER LOADED` (test files the command never imports),
+  `NEVER RAN` (collected nowhere), `HOLLOW`, `SURVIVED` (one-line bugs it still passes, every match on
+  a line, never inside string literals) and, with `--base REF`, `NEW TEST ... PASSES there` (a test
+  added since REF that is green on the old code). No VERIFY.md or state needed.
+- verify-loop's assess section hands recipe-free questions to check-the-check.
+- Five eval cases, `check-the-check-*`. Paired runs, 3 tries per arm: Opus 5.5 13/15 without the
+  skill, 15/15 with it ($0.10 -> $0.14 a try); Haiku 5.5 14/15 -> 15/15 (~$0.01). Each gap is one try
+  and within noise: a plain agent already mutation-tests by hand. The skill's helper ran in 30/30
+  skill runs, and no skill run wrote into the repo (one bare Opus run did).
+- The eval runner counts `check.py` as the skill helper alongside `verify.py`.
+
 ## Unreleased - Automatic progression
 
 - Add `verify.py advance`: bounded check runs and proof-ready baseline freezing, with structured

@@ -1,0 +1,53 @@
+{
+  "case": "check-the-check-ci-skips-a-test-file",
+  "skill": "check-the-check",
+  "question": "CI is green and the release notes say every item is covered: does the CI command even load the tests for each item?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "refund-tests-not-in-ci",
+      "what": "CI runs `unittest discover`, whose default pattern is test*.py, so tests/refund_rules_test.py is never loaded: CI runs 12 tests and none of them is about refunds",
+      "must_name": ["refund_rules_test.py"],
+      "must_say_any": [
+        "never loaded", "never runs", "never run", "never ran", "not discovered", "never discovered",
+        "isn't discovered", "is not discovered", "doesn't match", "does not match", "test*.py",
+        "default pattern", "not picked up", "never picked up", "isn't picked up", "skipped by ci",
+        "ci doesn't run", "ci does not run", "ci never runs", "not run in ci", "not in ci", "12 tests"
+      ]
+    },
+    {
+      "id": "refunds-are-broken",
+      "what": "the refund rule itself is broken: refund() checks each amount against what was paid, not what is left, so 3000 then 6000 on an 8000 order is approved (9000 refunded), and the uncollected test that covers this fails when run",
+      "must_name": ["refund"],
+      "must_say_any": [
+        "9000", "already_refunded", "already refunded", "what is left", "what's left", "remaining",
+        "earlier refunds", "previous refunds", "cumulative", "across refunds", "more than was paid",
+        "more than the customer paid", "test_second_refund_cannot_exceed_what_is_left"
+      ]
+    },
+    {
+      "id": "the-other-items-are-covered",
+      "what": "the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken",
+      "must_say_any": [
+        "cart", "coupon", "gift card", "gift-card"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "refunds-signed-off",
+      "what": "the refunds item is neither run by CI nor true; the report must not sign it off",
+      "must_not_say_any": [
+        "all four items are covered", "all items are covered", "you can sign off all",
+        "sign off on all", "all four can be signed off", "the release notes are accurate", "refunds are covered"
+      ],
+      "must_say_any": [
+        "not covered", "isn't covered", "is not covered", "uncovered", "can't sign off", "cannot sign off",
+        "do not sign off", "don't sign off", "not sign off", "broken", "fails", "false"
+      ]
+    }
+  ],
+  "actions": {
+    "read_only": true
+  }
+}

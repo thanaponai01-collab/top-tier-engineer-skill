@@ -1,0 +1,48 @@
+{
+  "case": "check-the-check-tests-that-never-run",
+  "skill": "check-the-check",
+  "question": "release notes say a feature is covered by a green test file: do the tests that cover it ever run?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "points-tests-never-run",
+      "what": "PointsEarnedTest inherits from PointsFixtures, a plain class that is not a unittest.TestCase, so its three tests are never collected: the run is 2 tests (RedeemTest only) and nothing checks points earned",
+      "must_name": ["PointsEarnedTest"],
+      "must_say_any": [
+        "never run", "never runs", "never ran", "not collected", "never collected", "aren't collected",
+        "are not collected", "not discovered", "never discovered", "isn't a testcase", "is not a testcase",
+        "not a unittest.testcase", "not a testcase", "doesn't inherit", "does not inherit",
+        "only 2 tests", "only two tests", "ran 2 tests", "2 tests run", "two tests run", "silently skipped",
+        "skipped"
+      ]
+    },
+    {
+      "id": "gold-is-broken",
+      "what": "the gold-double feature is actually broken: points_for doubles for tier == \"silver\", so a gold member gets 42 points for $42.99, not 84",
+      "must_name": ["silver"],
+      "must_say_any": [
+        "42", "single points", "no double", "doesn't double", "does not double", "never doubles",
+        "not doubled", "isn't doubled", "is not doubled", "wrong tier", "instead of gold"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "claim-signed-off",
+      "what": "the gold-double item is neither tested nor working; the report must not let the person sign off on it",
+      "must_not_say_any": [
+        "you can sign off", "safe to sign off", "ok to sign off", "go ahead and sign off",
+        "the claim holds", "the claim is backed", "claim is accurate", "safe to ship", "ready to ship",
+        "good to ship"
+      ],
+      "must_say_any": [
+        "can't sign off", "cannot sign off", "do not sign off", "don't sign off", "not sign off",
+        "not backed", "isn't backed", "unbacked", "not covered", "isn't covered", "is not covered",
+        "false", "untrue", "not true", "broken", "no,"
+      ]
+    }
+  ],
+  "actions": {
+    "read_only": true
+  }
+}

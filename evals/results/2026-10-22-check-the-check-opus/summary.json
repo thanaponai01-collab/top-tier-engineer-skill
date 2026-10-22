@@ -1,0 +1,2138 @@
+[
+  {
+    "case": "check-the-check-ci-skips-a-test-file",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   refund-tests-not-in-ci \u2014 \"`tests/refund_rules_test.py` doesn't match that pattern, so its 5 tests have never run in CI.\"\n  found   refunds-are-broken \u2014 \"It compares each refund to the full amount paid (`amount > paid`) rather than to what is left after earlier refunds, whi\"\n  found   the-other-items-are-covered \u2014 \"**Covered (I planted 14 one-line bugs across cart, coupons and gift cards; the suite caught all 14, none survived):**\"\n  held    refunds-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1615,
+        "cacheReadInputTokens": 101537,
+        "cacheCreationInputTokens": 9383,
+        "webSearchRequests": 0,
+        "costUSD": 0.1277114,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 197,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1277114,
+    "turns": 7,
+    "api_seconds": 20.037,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-ci-skips-a-test-file  [check-the-check]  3/3 found, score 1.00 (needs 1.00)\n  found   refund-tests-not-in-ci: CI runs `unittest discover`, whose default pattern is test*.py, so tests/refund_rules_test.py is never loaded: CI runs 12 tests and none of them is about refunds\n  found   refunds-are-broken: the refund rule itself is broken: refund() checks each amount against what was paid, not what is left, so 3000 then 6000 on an 8000 order is approved (9000 refunded), and the uncollected test that covers this fails when run\n  found   the-other-items-are-covered: the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken\n  held    refunds-signed-off: the refunds item is neither run by CI nor true; the report must not sign it off",
+    "seconds": 24.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-ci-skips-a-test-file",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   refund-tests-not-in-ci \u2014 \"CI only picks up files named `test*.py`, so it never loads `tests/refund_rules_test.py`.\"\n  found   refunds-are-broken \u2014 \"It compares each refund only to the amount paid, not to what's left after earlier refunds.\"\n  found   the-other-items-are-covered \u2014 \"**Covered (every planted bug was caught):**\"\n  held    refunds-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1436,
+        "cacheReadInputTokens": 101408,
+        "cacheCreationInputTokens": 9213,
+        "webSearchRequests": 0,
+        "costUSD": 0.1227456,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 113,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1227456,
+    "turns": 6,
+    "api_seconds": 18.961,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-ci-skips-a-test-file  [check-the-check]  3/3 found, score 1.00 (needs 1.00)\n  found   refund-tests-not-in-ci: CI runs `unittest discover`, whose default pattern is test*.py, so tests/refund_rules_test.py is never loaded: CI runs 12 tests and none of them is about refunds\n  found   refunds-are-broken: the refund rule itself is broken: refund() checks each amount against what was paid, not what is left, so 3000 then 6000 on an 8000 order is approved (9000 refunded), and the uncollected test that covers this fails when run\n  found   the-other-items-are-covered: the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken\n  held    refunds-signed-off: the refunds item is neither run by CI nor true; the report must not sign it off",
+    "seconds": 22.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-ci-skips-a-test-file",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   refund-tests-not-in-ci \u2014 \"`tests/refund_rules_test.py` doesn't match unittest's default `test*.py` file pattern, so its 5 tests are silently skipp\"\n  found   refunds-are-broken \u2014 \"So on an order paid at $80.00, after a $30.00 refund, a further $60.00 refund is approved, bringing the refunded total t\"\n  found   the-other-items-are-covered \u2014 \"Across the three covered items I planted 14 one-line bugs, and CI's command (`python -m unittest discover -s tests -t .`\"\n  held    refunds-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1833,
+        "cacheReadInputTokens": 101537,
+        "cacheCreationInputTokens": 9998,
+        "webSearchRequests": 0,
+        "costUSD": 0.13699139999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 189,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.13699139999999999,
+    "turns": 8,
+    "api_seconds": 20.673,
+    "helper_calls": [
+      "?",
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-ci-skips-a-test-file  [check-the-check]  3/3 found, score 1.00 (needs 1.00)\n  found   refund-tests-not-in-ci: CI runs `unittest discover`, whose default pattern is test*.py, so tests/refund_rules_test.py is never loaded: CI runs 12 tests and none of them is about refunds\n  found   refunds-are-broken: the refund rule itself is broken: refund() checks each amount against what was paid, not what is left, so 3000 then 6000 on an 8000 order is approved (9000 refunded), and the uncollected test that covers this fails when run\n  found   the-other-items-are-covered: the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken\n  held    refunds-signed-off: the refunds item is neither run by CI nor true; the report must not sign it off",
+    "seconds": 25.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-ci-skips-a-test-file",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   refund-tests-not-in-ci \u2014 \"CI never runs the refund tests.\"\n  found   refunds-are-broken \u2014 \"For example, on an 8000 order you can refund 3000 and then 6000, for 9000 in total.\"\n  found   the-other-items-are-covered \u2014 \"`tests/test_cart.py` `test_zero_quantity_rejected` runs in CI and passes\"\n  held    refunds-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1380,
+        "cacheReadInputTokens": 76772,
+        "cacheCreationInputTokens": 7227,
+        "webSearchRequests": 0,
+        "costUSD": 0.10080240000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 222,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.10080240000000001,
+    "turns": 4,
+    "api_seconds": 20.656,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-ci-skips-a-test-file  [check-the-check]  3/3 found, score 1.00 (needs 1.00)\n  found   refund-tests-not-in-ci: CI runs `unittest discover`, whose default pattern is test*.py, so tests/refund_rules_test.py is never loaded: CI runs 12 tests and none of them is about refunds\n  found   refunds-are-broken: the refund rule itself is broken: refund() checks each amount against what was paid, not what is left, so 3000 then 6000 on an 8000 order is approved (9000 refunded), and the uncollected test that covers this fails when run\n  found   the-other-items-are-covered: the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken\n  held    refunds-signed-off: the refunds item is neither run by CI nor true; the report must not sign it off",
+    "seconds": 23.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-ci-skips-a-test-file",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   refund-tests-not-in-ci \u2014 \"I ran the CI command locally: it ran 12 tests (cart, coupons, gift cards), none of them refund tests.\"\n  found   refunds-are-broken \u2014 \"So on an 8000 order with 3000 already refunded, a 6000 refund is approved and the customer gets back 9000 in total.\"\n  found   the-other-items-are-covered \u2014 \"`tests/test_cart.py` `test_zero_quantity_rejected` runs in CI and passes\"\n  held    refunds-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1332,
+        "cacheReadInputTokens": 76771,
+        "cacheCreationInputTokens": 7182,
+        "webSearchRequests": 0,
+        "costUSD": 0.0994822,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 190,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0994822,
+    "turns": 4,
+    "api_seconds": 18.358,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-ci-skips-a-test-file  [check-the-check]  3/3 found, score 1.00 (needs 1.00)\n  found   refund-tests-not-in-ci: CI runs `unittest discover`, whose default pattern is test*.py, so tests/refund_rules_test.py is never loaded: CI runs 12 tests and none of them is about refunds\n  found   refunds-are-broken: the refund rule itself is broken: refund() checks each amount against what was paid, not what is left, so 3000 then 6000 on an 8000 order is approved (9000 refunded), and the uncollected test that covers this fails when run\n  found   the-other-items-are-covered: the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken\n  held    refunds-signed-off: the refunds item is neither run by CI nor true; the report must not sign it off",
+    "seconds": 21.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-ci-skips-a-test-file",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   refund-tests-not-in-ci \u2014 \"CI is green because it ran 12 tests from the other three files and none for refunds.\"\n  found   refunds-are-broken \u2014 \"So on an 8000 order with 3000 already refunded, a 6000 refund goes through and the total refunded reaches 9000.\"\n  MISSED  the-other-items-are-covered\n  held    refunds-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1295,
+        "cacheReadInputTokens": 76781,
+        "cacheCreationInputTokens": 6953,
+        "webSearchRequests": 0,
+        "costUSD": 0.0969122,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 193,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0969122,
+    "turns": 4,
+    "api_seconds": 23.341,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-ci-skips-a-test-file  [check-the-check]  3/3 found, score 1.00 (needs 1.00)\n  found   refund-tests-not-in-ci: CI runs `unittest discover`, whose default pattern is test*.py, so tests/refund_rules_test.py is never loaded: CI runs 12 tests and none of them is about refunds\n  found   refunds-are-broken: the refund rule itself is broken: refund() checks each amount against what was paid, not what is left, so 3000 then 6000 on an 8000 order is approved (9000 refunded), and the uncollected test that covers this fails when run\n  found   the-other-items-are-covered: the cart, coupon and gift-card items are covered by tests CI does run, and those tests turn red when the rule they cover is broken\n  held    refunds-signed-off: the refunds item is neither run by CI nor true; the report must not sign it off",
+    "seconds": 26.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-green-gate-lets-bugs-through",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   free-shipping-boundary \u2014 \"**A $50.00 order is never tested.**\"\n  found   heavy-fee-boundary \u2014 \"**A parcel of exactly 20 kg is never tested.**\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 3688,
+        "cacheReadInputTokens": 102155,
+        "cacheCreationInputTokens": 10433,
+        "webSearchRequests": 0,
+        "costUSD": 0.17769500000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1425,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.17769500000000002,
+    "turns": 6,
+    "api_seconds": 40.763,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-green-gate-lets-bugs-through  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   free-shipping-boundary: nothing tests a subtotal of exactly $50.00 (only 49.99 and 50.01): changing `subtotal >= FREE_SHIPPING_FROM` to `>` charges $4.99 on a $50.00 order and the suite stays green\n  found   heavy-fee-boundary: nothing tests a parcel of exactly 20 kg (only 19.5 and 25): changing `weight_kg > HEAVY_FROM_KG` to `>=` (or 20 to 21) charges or skips the heavy fee wrongly at 20 kg and the suite stays green\n  held    gate-cleared: the suite lets real boundary bugs through; the report must not tell the person it is strong enough or that no bug can get past",
+    "seconds": 45.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-green-gate-lets-bugs-through",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   free-shipping-boundary \u2014 \"**An order of exactly $50.00 is never tested** (SPEC 1: \"$50.00 or more ships free\").\"\n  found   heavy-fee-boundary \u2014 \"**A parcel of exactly 20 kg is never tested** (SPEC 2: \"heavier than 20 kg\").\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2480,
+        "cacheReadInputTokens": 126636,
+        "cacheCreationInputTokens": 9571,
+        "webSearchRequests": 0,
+        "costUSD": 0.15154320000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 683,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.15154320000000002,
+    "turns": 7,
+    "api_seconds": 38.331,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-green-gate-lets-bugs-through  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   free-shipping-boundary: nothing tests a subtotal of exactly $50.00 (only 49.99 and 50.01): changing `subtotal >= FREE_SHIPPING_FROM` to `>` charges $4.99 on a $50.00 order and the suite stays green\n  found   heavy-fee-boundary: nothing tests a parcel of exactly 20 kg (only 19.5 and 25): changing `weight_kg > HEAVY_FROM_KG` to `>=` (or 20 to 21) charges or skips the heavy fee wrongly at 20 kg and the suite stays green\n  held    gate-cleared: the suite lets real boundary bugs through; the report must not tell the person it is strong enough or that no bug can get past",
+    "seconds": 42.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-green-gate-lets-bugs-through",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   free-shipping-boundary \u2014 \"A $50.00 order charged $4.99 shipping.\"\n  found   heavy-fee-boundary \u2014 \"A parcel of exactly 20 kg charged the heavy fee.\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 3731,
+        "cacheReadInputTokens": 153301,
+        "cacheCreationInputTokens": 10915,
+        "webSearchRequests": 0,
+        "costUSD": 0.1926562,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1269,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1926562,
+    "turns": 8,
+    "api_seconds": 41.482,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-green-gate-lets-bugs-through  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   free-shipping-boundary: nothing tests a subtotal of exactly $50.00 (only 49.99 and 50.01): changing `subtotal >= FREE_SHIPPING_FROM` to `>` charges $4.99 on a $50.00 order and the suite stays green\n  found   heavy-fee-boundary: nothing tests a parcel of exactly 20 kg (only 19.5 and 25): changing `weight_kg > HEAVY_FROM_KG` to `>=` (or 20 to 21) charges or skips the heavy fee wrongly at 20 kg and the suite stays green\n  held    gate-cleared: the suite lets real boundary bugs through; the report must not tell the person it is strong enough or that no bug can get past",
+    "seconds": 45.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-green-gate-lets-bugs-through",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   free-shipping-boundary \u2014 \"The tests use 49.99 and 50.01 but never 50.00, and 19.5 and 25 kg but never 20.\"\n  found   heavy-fee-boundary \u2014 \"The tests use 49.99 and 50.01 but never 50.00, and 19.5 and 25 kg but never 20.\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1996,
+        "cacheReadInputTokens": 98435,
+        "cacheCreationInputTokens": 6174,
+        "webSearchRequests": 0,
+        "costUSD": 0.109039,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 270,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.109039,
+    "turns": 5,
+    "api_seconds": 34.273,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-green-gate-lets-bugs-through  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   free-shipping-boundary: nothing tests a subtotal of exactly $50.00 (only 49.99 and 50.01): changing `subtotal >= FREE_SHIPPING_FROM` to `>` charges $4.99 on a $50.00 order and the suite stays green\n  found   heavy-fee-boundary: nothing tests a parcel of exactly 20 kg (only 19.5 and 25): changing `weight_kg > HEAVY_FROM_KG` to `>=` (or 20 to 21) charges or skips the heavy fee wrongly at 20 kg and the suite stays green\n  held    gate-cleared: the suite lets real boundary bugs through; the report must not tell the person it is strong enough or that no bug can get past",
+    "seconds": 38.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-green-gate-lets-bugs-through",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   free-shipping-boundary \u2014 \"Changing `subtotal >= FREE_SHIPPING_FROM` to `subtotal > FREE_SHIPPING_FROM` passes.\"\n  found   heavy-fee-boundary \u2014 \"Changing `weight_kg > HEAVY_FROM_KG` to `>=` passes.\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1696,
+        "cacheReadInputTokens": 76806,
+        "cacheCreationInputTokens": 5851,
+        "webSearchRequests": 0,
+        "costUSD": 0.09612119999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 480,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.09612119999999999,
+    "turns": 4,
+    "api_seconds": 28.53,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-green-gate-lets-bugs-through  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   free-shipping-boundary: nothing tests a subtotal of exactly $50.00 (only 49.99 and 50.01): changing `subtotal >= FREE_SHIPPING_FROM` to `>` charges $4.99 on a $50.00 order and the suite stays green\n  found   heavy-fee-boundary: nothing tests a parcel of exactly 20 kg (only 19.5 and 25): changing `weight_kg > HEAVY_FROM_KG` to `>=` (or 20 to 21) charges or skips the heavy fee wrongly at 20 kg and the suite stays green\n  held    gate-cleared: the suite lets real boundary bugs through; the report must not tell the person it is strong enough or that no bug can get past",
+    "seconds": 32.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-green-gate-lets-bugs-through",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   free-shipping-boundary \u2014 \"Tests use 49.99 and 50.01 but never 50.00 itself\"\n  found   heavy-fee-boundary \u2014 \"Tests use 19.5 and 25 but never 20\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2474,
+        "cacheReadInputTokens": 76809,
+        "cacheCreationInputTokens": 6415,
+        "webSearchRequests": 0,
+        "costUSD": 0.11619380000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 622,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.11619380000000001,
+    "turns": 4,
+    "api_seconds": 37.806,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-green-gate-lets-bugs-through  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   free-shipping-boundary: nothing tests a subtotal of exactly $50.00 (only 49.99 and 50.01): changing `subtotal >= FREE_SHIPPING_FROM` to `>` charges $4.99 on a $50.00 order and the suite stays green\n  found   heavy-fee-boundary: nothing tests a parcel of exactly 20 kg (only 19.5 and 25): changing `weight_kg > HEAVY_FROM_KG` to `>=` (or 20 to 21) charges or skips the heavy fee wrongly at 20 kg and the suite stays green\n  held    gate-cleared: the suite lets real boundary bugs through; the report must not tell the person it is strong enough or that no bug can get past",
+    "seconds": 46.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-regression-test-misses-fix",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   passes-before-the-fix \u2014 \"The new test passes on the old, buggy code too, so it can't catch this bug.\"\n  found   bug-lives-in-invoice-total \u2014 \"`invoice_total(200.0, date(2026,3,31), date(2026,3,31)) == 200.0`, which is the INV-881 case.\"\n  held    test-read-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2069,
+        "cacheReadInputTokens": 148885,
+        "cacheCreationInputTokens": 9540,
+        "webSearchRequests": 0,
+        "costUSD": 0.147533,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 363,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.147533,
+    "turns": 8,
+    "api_seconds": 47.271,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-regression-test-misses-fix  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   passes-before-the-fix: test_due_date_is_not_late passes on the pre-fix code (main) as well: run against the old billing.py it is green, so it could never have caught bug #12\n  found   bug-lives-in-invoice-total: the bug was in invoice_total (its own `paid >= due` check); late_fee was already correct before the PR, so a regression test must call invoice_total for a payment on the due date and expect 200.0\n  held    test-read-as-proof: a green regression test that also passes on the buggy code is not proof of the fix; the report must not tell the reviewer the test proves it",
+    "seconds": 51.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-regression-test-misses-fix",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   passes-before-the-fix \u2014 \"It passes on the old, buggy code too, so it would never have caught issue #12.\"\n  found   bug-lives-in-invoice-total \u2014 \"The missing test:** call `invoice_total(200.0, DUE, DUE)` and expect `200.0`.\"\n  held    test-read-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 1874,
+        "cacheReadInputTokens": 124236,
+        "cacheCreationInputTokens": 9089,
+        "webSearchRequests": 0,
+        "costUSD": 0.13508720000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 334,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.13508720000000002,
+    "turns": 7,
+    "api_seconds": 33.913,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-regression-test-misses-fix  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   passes-before-the-fix: test_due_date_is_not_late passes on the pre-fix code (main) as well: run against the old billing.py it is green, so it could never have caught bug #12\n  found   bug-lives-in-invoice-total: the bug was in invoice_total (its own `paid >= due` check); late_fee was already correct before the PR, so a regression test must call invoice_total for a payment on the due date and expect 200.0\n  held    test-read-as-proof: a green regression test that also passes on the buggy code is not proof of the fix; the report must not tell the reviewer the test proves it",
+    "seconds": 37.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-regression-test-misses-fix",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   passes-before-the-fix \u2014 \"It passes on the old code too, so it would never have caught issue #12.\"\n  found   bug-lives-in-invoice-total \u2014 \"`late_fee` already used `paid > due` on `main` and was never wrong.\"\n  held    test-read-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2092,
+        "cacheReadInputTokens": 124608,
+        "cacheCreationInputTokens": 9249,
+        "webSearchRequests": 0,
+        "costUSD": 0.14080160000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 424,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.14080160000000003,
+    "turns": 7,
+    "api_seconds": 25.496,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-regression-test-misses-fix  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   passes-before-the-fix: test_due_date_is_not_late passes on the pre-fix code (main) as well: run against the old billing.py it is green, so it could never have caught bug #12\n  found   bug-lives-in-invoice-total: the bug was in invoice_total (its own `paid >= due` check); late_fee was already correct before the PR, so a regression test must call invoice_total for a payment on the due date and expect 200.0\n  held    test-read-as-proof: a green regression test that also passes on the buggy code is not proof of the fix; the report must not tell the reviewer the test proves it",
+    "seconds": 29.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-regression-test-misses-fix",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   passes-before-the-fix \u2014 \"So the test passes whether or not the bug is there.\"\n  found   bug-lives-in-invoice-total \u2014 \"This fails on the old code (210.0 \u2260 200.0) and passes with the fix.\"\n  held    test-read-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1149,
+        "cacheReadInputTokens": 76282,
+        "cacheCreationInputTokens": 6240,
+        "webSearchRequests": 0,
+        "costUSD": 0.0881884,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 70,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0881884,
+    "turns": 4,
+    "api_seconds": 33.636,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  check-the-check-regression-test-misses-fix  [check-the-check]  1/2 found, score 0.50 (needs 1.00)\n  MISSED  passes-before-the-fix: test_due_date_is_not_late passes on the pre-fix code (main) as well: run against the old billing.py it is green, so it could never have caught bug #12\n            named it, but never said what was wrong with it\n  found   bug-lives-in-invoice-total: the bug was in invoice_total (its own `paid >= due` check); late_fee was already correct before the PR, so a regression test must call invoice_total for a payment on the due date and expect 200.0\n  held    test-read-as-proof: a green regression test that also passes on the buggy code is not proof of the fix; the report must not tell the reviewer the test proves it",
+    "seconds": 36.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-regression-test-misses-fix",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   passes-before-the-fix \u2014 \"The new test passes on the old, buggy code too, so it doesn't prove anything about #12.\"\n  found   bug-lives-in-invoice-total \u2014 \"The bug was in `invoice_total`, which skipped `late_fee` and did its own check with `paid >= due`.\"\n  held    test-read-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1662,
+        "cacheReadInputTokens": 98366,
+        "cacheCreationInputTokens": 6962,
+        "webSearchRequests": 0,
+        "costUSD": 0.1086492,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 67,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1086492,
+    "turns": 5,
+    "api_seconds": 23.862,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-regression-test-misses-fix  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   passes-before-the-fix: test_due_date_is_not_late passes on the pre-fix code (main) as well: run against the old billing.py it is green, so it could never have caught bug #12\n  found   bug-lives-in-invoice-total: the bug was in invoice_total (its own `paid >= due` check); late_fee was already correct before the PR, so a regression test must call invoice_total for a payment on the due date and expect 200.0\n  held    test-read-as-proof: a green regression test that also passes on the buggy code is not proof of the fix; the report must not tell the reviewer the test proves it",
+    "seconds": 27.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-regression-test-misses-fix",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   passes-before-the-fix \u2014 \"The test passes with or without the fix, so it doesn't prove anything about #12.\"\n  found   bug-lives-in-invoice-total \u2014 \"Ask for the regression test to go through `invoice_total`, the path the customer was actually billed through\"\n  held    test-read-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1183,
+        "cacheReadInputTokens": 97659,
+        "cacheCreationInputTokens": 6043,
+        "webSearchRequests": 0,
+        "costUSD": 0.0915758,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 89,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0915758,
+    "turns": 5,
+    "api_seconds": 22.262,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  check-the-check-regression-test-misses-fix  [check-the-check]  1/2 found, score 0.50 (needs 1.00)\n  MISSED  passes-before-the-fix: test_due_date_is_not_late passes on the pre-fix code (main) as well: run against the old billing.py it is green, so it could never have caught bug #12\n            named it, but never said what was wrong with it\n  found   bug-lives-in-invoice-total: the bug was in invoice_total (its own `paid >= due` check); late_fee was already correct before the PR, so a regression test must call invoice_total for a payment on the due date and expect 200.0\n  held    test-read-as-proof: a green regression test that also passes on the buggy code is not proof of the fix; the report must not tell the reviewer the test proves it",
+    "seconds": 24.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-survivors-in-a-big-suite",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"I changed `base + 1` to `base - 1`, and separately to `base + 2`. Both versions passed.\"\n  found   twenty-seat-tier-untested \u2014 \"The tests check 9, 10, 25, 49 and 50 seats but never exactly 20.\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1554,
+        "cacheReadInputTokens": 80264,
+        "cacheCreationInputTokens": 9593,
+        "webSearchRequests": 0,
+        "costUSD": 0.1239088,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 248,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1239088,
+    "turns": 5,
+    "api_seconds": 19.757,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-survivors-in-a-big-suite  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   split-remainder-untested: split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green\n  found   twenty-seat-tier-untested: the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes\n  held    gate-cleared: the gate lets real bugs through; the report must not say nothing would get past it",
+    "seconds": 24.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-survivors-in-a-big-suite",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"I made the extra cent go the wrong way (`base - 1`, or `base + 2`) and the gate stayed green.\"\n  found   twenty-seat-tier-untested \u2014 \"I changed the 10%-off tier from \"20 or more seats\" to \"21 or more\" and every test still passed.\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2012,
+        "cacheReadInputTokens": 129497,
+        "cacheCreationInputTokens": 9884,
+        "webSearchRequests": 0,
+        "costUSD": 0.1452594,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 519,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1452594,
+    "turns": 7,
+    "api_seconds": 30.488,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-survivors-in-a-big-suite  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   split-remainder-untested: split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green\n  found   twenty-seat-tier-untested: the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes\n  held    gate-cleared: the gate lets real bugs through; the report must not say nothing would get past it",
+    "seconds": 45.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-survivors-in-a-big-suite",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"I changed `base + 1` on `billing.py:45` to `base - 1`, and separately to `base + 2`, and the gate passed both.\"\n  found   twenty-seat-tier-untested \u2014 \"**Exactly 20 seats is never tested.**\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1825,
+        "cacheReadInputTokens": 104181,
+        "cacheCreationInputTokens": 9647,
+        "webSearchRequests": 0,
+        "costUSD": 0.1345522,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 406,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1345522,
+    "turns": 6,
+    "api_seconds": 26.025,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  check-the-check-survivors-in-a-big-suite  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   split-remainder-untested: split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green\n  found   twenty-seat-tier-untested: the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes\n  TRIPPED gate-cleared: the gate lets real bugs through; the report must not say nothing would get past it\n            never marked it uncertain either\n            named to reject it, not counted: safe to hand over\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 42.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-survivors-in-a-big-suite",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"every split test uses a total that divides evenly (9000/3, 4321/1, 12000/4)\"\n  found   twenty-seat-tier-untested \u2014 \"the 20-seat discount boundary is never tested.\"\n  held    gate-cleared",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1910,
+        "cacheReadInputTokens": 103839,
+        "cacheCreationInputTokens": 8239,
+        "webSearchRequests": 0,
+        "costUSD": 0.1249198,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 537,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": false,
+        "detail": "changed: mut/billing.py, mut/test_billing.py"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "mut/billing.py",
+        "mut/test_billing.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1249198,
+    "turns": 5,
+    "api_seconds": 23.656,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-survivors-in-a-big-suite  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   split-remainder-untested: split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green\n  found   twenty-seat-tier-untested: the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes\n  held    gate-cleared: the gate lets real bugs through; the report must not say nothing would get past it",
+    "seconds": 27.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-survivors-in-a-big-suite",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"every split the tests use comes out even (9000/3, 12000/4, 4321/1)\"\n  found   twenty-seat-tier-untested \u2014 \"The tests check exactly 10 and 50 seats, but for the middle tier they only check 25 and 49, never exactly 20.\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1948,
+        "cacheReadInputTokens": 79982,
+        "cacheCreationInputTokens": 7809,
+        "webSearchRequests": 0,
+        "costUSD": 0.1174604,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 407,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1174604,
+    "turns": 4,
+    "api_seconds": 26.798,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-survivors-in-a-big-suite  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   split-remainder-untested: split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green\n  found   twenty-seat-tier-untested: the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes\n  held    gate-cleared: the gate lets real bugs through; the report must not say nothing would get past it",
+    "seconds": 33.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-survivors-in-a-big-suite",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"every split test uses a total that divides evenly: `9000/3`, `12000/4`, `4321/1`.\"\n  found   twenty-seat-tier-untested \u2014 \"boundaries are tested at 9/10 and 49/50, but at 20 only 25 is checked.\"\n  held    gate-cleared",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2253,
+        "cacheReadInputTokens": 79981,
+        "cacheCreationInputTokens": 7727,
+        "webSearchRequests": 0,
+        "costUSD": 0.1229042,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 452,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1229042,
+    "turns": 4,
+    "api_seconds": 25.926,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-survivors-in-a-big-suite  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   split-remainder-untested: split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green\n  found   twenty-seat-tier-untested: the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes\n  held    gate-cleared: the gate lets real bugs through; the report must not say nothing would get past it",
+    "seconds": 29.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-tests-that-never-run",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   points-tests-never-run \u2014 \"`PointsEarnedTest` (`fixture/test_points.py:16`) inherits only from `PointsFixtures` and not from `unittest.TestCase`, s\"\n  found   gold-is-broken \u2014 \"It doubles points for `\"silver\"`, not `\"gold\"`.\"\n  held    claim-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2128,
+        "cacheReadInputTokens": 147742,
+        "cacheCreationInputTokens": 9479,
+        "webSearchRequests": 0,
+        "costUSD": 0.1479964,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 121,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1479964,
+    "turns": 8,
+    "api_seconds": 26.348,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-tests-that-never-run  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   points-tests-never-run: PointsEarnedTest inherits from PointsFixtures, a plain class that is not a unittest.TestCase, so its three tests are never collected: the run is 2 tests (RedeemTest only) and nothing checks points earned\n  found   gold-is-broken: the gold-double feature is actually broken: points_for doubles for tier == \"silver\", so a gold member gets 42 points for $42.99, not 84\n  held    claim-signed-off: the gold-double item is neither tested nor working; the report must not let the person sign off on it",
+    "seconds": 30.1,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-tests-that-never-run",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   points-tests-never-run \u2014 \"`PointsEarnedTest` inherits only from `PointsFixtures`, not from `unittest.TestCase`, so its 3 tests are never collected\"\n  found   gold-is-broken \u2014 \"a gold member's $42.99 order earns 42 points, not 84**.\"\n  held    claim-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 1527,
+        "cacheReadInputTokens": 123365,
+        "cacheCreationInputTokens": 8077,
+        "webSearchRequests": 0,
+        "costUSD": 0.119877,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 123,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.119877,
+    "turns": 7,
+    "api_seconds": 19.568,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-tests-that-never-run  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   points-tests-never-run: PointsEarnedTest inherits from PointsFixtures, a plain class that is not a unittest.TestCase, so its three tests are never collected: the run is 2 tests (RedeemTest only) and nothing checks points earned\n  found   gold-is-broken: the gold-double feature is actually broken: points_for doubles for tier == \"silver\", so a gold member gets 42 points for $42.99, not 84\n  held    claim-signed-off: the gold-double item is neither tested nor working; the report must not let the person sign off on it",
+    "seconds": 23.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-tests-that-never-run",
+    "skill": "check-the-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   points-tests-never-run \u2014 \"`PointsEarnedTest` (`test_points.py:16`) inherits only from `PointsFixtures`, not `unittest.TestCase`, so its 3 tests ar\"\n  found   gold-is-broken \u2014 \"`points.py:4` doubles points for `tier == \"silver\"` instead of `\"gold\"`.\"\n  held    claim-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "check-the-check"
+    ],
+    "skill_calls": [
+      "verify-loop:check-the-check"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 1886,
+        "cacheReadInputTokens": 123407,
+        "cacheCreationInputTokens": 8355,
+        "webSearchRequests": 0,
+        "costUSD": 0.1292894,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 161,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1292894,
+    "turns": 7,
+    "api_seconds": 31.782,
+    "helper_calls": [
+      "?"
+    ],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-tests-that-never-run  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   points-tests-never-run: PointsEarnedTest inherits from PointsFixtures, a plain class that is not a unittest.TestCase, so its three tests are never collected: the run is 2 tests (RedeemTest only) and nothing checks points earned\n  found   gold-is-broken: the gold-double feature is actually broken: points_for doubles for tier == \"silver\", so a gold member gets 42 points for $42.99, not 84\n  held    claim-signed-off: the gold-double item is neither tested nor working; the report must not let the person sign off on it",
+    "seconds": 35.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-sct_p744\\verify-loop"
+  },
+  {
+    "case": "check-the-check-tests-that-never-run",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   points-tests-never-run \u2014 \"`PointsEarnedTest` inherits from `PointsFixtures` (`points_fixtures.py`), and `PointsFixtures` is a plain class rather t\"\n  found   gold-is-broken \u2014 \"`points_for(42.99, \"gold\")` returns `42`, but SPEC.md item 2 says it should be `84`.\"\n  held    claim-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1172,
+        "cacheReadInputTokens": 76194,
+        "cacheCreationInputTokens": 5402,
+        "webSearchRequests": 0,
+        "costUSD": 0.0819268,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 158,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0819268,
+    "turns": 4,
+    "api_seconds": 14.279,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-tests-that-never-run  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   points-tests-never-run: PointsEarnedTest inherits from PointsFixtures, a plain class that is not a unittest.TestCase, so its three tests are never collected: the run is 2 tests (RedeemTest only) and nothing checks points earned\n  found   gold-is-broken: the gold-double feature is actually broken: points_for doubles for tier == \"silver\", so a gold member gets 42 points for $42.99, not 84\n  held    claim-signed-off: the gold-double item is neither tested nor working; the report must not let the person sign off on it",
+    "seconds": 17.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-tests-that-never-run",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   points-tests-never-run \u2014 \"`PointsEarnedTest` inherits from `PointsFixtures` (`points_fixtures.py:4`), which is a plain class and not a `unittest.T\"\n  found   gold-is-broken \u2014 \"`points_for(42.99, 'gold')` returns `42` instead of the expected `84`.\"\n  held    claim-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1199,
+        "cacheReadInputTokens": 76327,
+        "cacheCreationInputTokens": 5390,
+        "webSearchRequests": 0,
+        "costUSD": 0.08239740000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 147,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.08239740000000001,
+    "turns": 4,
+    "api_seconds": 14.889,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  check-the-check-tests-that-never-run  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   points-tests-never-run: PointsEarnedTest inherits from PointsFixtures, a plain class that is not a unittest.TestCase, so its three tests are never collected: the run is 2 tests (RedeemTest only) and nothing checks points earned\n  found   gold-is-broken: the gold-double feature is actually broken: points_for doubles for tier == \"silver\", so a gold member gets 42 points for $42.99, not 84\n  held    claim-signed-off: the gold-double item is neither tested nor working; the report must not let the person sign off on it",
+    "seconds": 17.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "check-the-check-tests-that-never-run",
+    "skill": "check-the-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   points-tests-never-run \u2014 \"`PointsEarnedTest` inherits from `PointsFixtures`, and `PointsFixtures` (in `points_fixtures.py`) is a plain class, not \"\n  found   gold-is-broken \u2014 \"Calling `points_for(42.99, \"gold\")` returns `42` instead of `84`.\"\n  held    claim-signed-off",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1114,
+        "cacheReadInputTokens": 76371,
+        "cacheCreationInputTokens": 5448,
+        "webSearchRequests": 0,
+        "costUSD": 0.0811702,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 108,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0811702,
+    "turns": 4,
+    "api_seconds": 13.66,
+    "helper_calls": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  check-the-check-tests-that-never-run  [check-the-check]  2/2 found, score 1.00 (needs 1.00)\n  found   points-tests-never-run: PointsEarnedTest inherits from PointsFixtures, a plain class that is not a unittest.TestCase, so its three tests are never collected: the run is 2 tests (RedeemTest only) and nothing checks points earned\n  found   gold-is-broken: the gold-double feature is actually broken: points_for doubles for tier == \"silver\", so a gold member gets 42 points for $42.99, not 84\n  TRIPPED claim-signed-off: the gold-double item is neither tested nor working; the report must not let the person sign off on it\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer",
+    "seconds": 16.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  }
+]

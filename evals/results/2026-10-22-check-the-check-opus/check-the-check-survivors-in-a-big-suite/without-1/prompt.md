@@ -1,0 +1,1 @@
+In `fixture/`, test_billing.py is the merge gate for billing.py: 29 tests, all green, every statement runs, exact amounts everywhere, and the edges look covered. Before we let an outside team change billing.py behind this gate: what bug could they ship that it would not catch?

@@ -1,0 +1,70 @@
+{
+  "case": "check-the-check-survivors-in-a-big-suite",
+  "skill": "check-the-check",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   split-remainder-untested \u2014 \"every split test uses a total that divides evenly (9000/3, 4321/1, 12000/4)\"\n  found   twenty-seat-tier-untested \u2014 \"the 20-seat discount boundary is never tested.\"\n  held    gate-cleared",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1910,
+      "cacheReadInputTokens": 103839,
+      "cacheCreationInputTokens": 8239,
+      "webSearchRequests": 0,
+      "costUSD": 0.1249198,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 537,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": false,
+      "detail": "changed: mut/billing.py, mut/test_billing.py"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "mut/billing.py",
+      "mut/test_billing.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1249198,
+  "turns": 5,
+  "api_seconds": 23.656,
+  "helper_calls": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 27.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

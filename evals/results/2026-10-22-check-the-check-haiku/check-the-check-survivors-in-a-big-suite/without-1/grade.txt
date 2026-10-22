@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  1/2 found
+  MISSED  split-remainder-untested
+  found   twenty-seat-tier-untested — "**Tier boundary at 20.** No test uses 19 or 20."
+  held    gate-cleared
+
+Phrase grader (grade.py), for comparison:
+FAIL  check-the-check-survivors-in-a-big-suite  [check-the-check]  1/2 found, score 0.50 (needs 1.00)
+  MISSED  split-remainder-untested: split_payment is never tested with a total that doesn't divide evenly: changing `base + 1` to `base - 1` (or `base + 2`) passes, so splitting 1000 three ways could return parts that add up to 998 and the gate stays green
+            never named: split_payment
+            named it, but never said what was wrong with it
+  found   twenty-seat-tier-untested: the 20-seat volume tier is never tested at exactly 20 (only 25 and 49, while 10 and 50 are tested exactly): moving it to 21 seats in VOLUME_TIERS, or 19, passes
+  held    gate-cleared: the gate lets real bugs through; the report must not say nothing would get past it
+
+  ok      left the code untouched (a report-only task) — no code file changed

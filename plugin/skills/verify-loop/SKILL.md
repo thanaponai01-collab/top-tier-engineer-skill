@@ -23,6 +23,8 @@ You choose the claim, write the check and pick the wrong state; the helper judge
 
 ## Assess: is this check, or this claim, any good?
 
+For a test, suite, CI gate or PR regression test with no VERIFY.md to keep, load the
+check-the-check skill instead: it answers the same question with no recipe and no state. Here,
 `--assess` keeps every helper write in a temp folder, so the repo's `git status` stays unchanged:
 
 ```
