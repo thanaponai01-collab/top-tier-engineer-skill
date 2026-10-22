@@ -195,6 +195,30 @@ class OneCallAssess(unittest.TestCase):
             self.assertEqual(listing(tmp), ["calc.py"])
 
 
+class AssessSaysWhatItSaw(unittest.TestCase):
+    """An agent copies the draft. A draft that says nothing went red after the survey saw every
+    wrong result caught hands the agent a false line, and calls a healthy check fake."""
+
+    def test_a_caught_survey_is_not_reported_as_nothing_seen_red(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            code, out, _ = run("verify.py", "assess", tmp)
+            self.assertRegex(out, r"CHALLENGE-AUTO: (\d+)/\1 caught", out)
+            draft = draft_of(out)
+            self.assertNotIn("no check here has been seen rejecting a wrong result", draft)
+            self.assertRegex(draft, r"Total caught (\d+)/\1 wrong results", draft)
+            self.assertIn("not a fail-proof receipt", draft)
+            self.assertNotIn("nothing here is proven able to fail", out)
+
+    def test_a_read_only_question_is_not_sent_to_more_commands(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            code, out, _ = run("verify.py", "assess", tmp)
+            self.assertNotIn("run --strict", out, "assess answers; it does not ask for a strict run")
+            self.assertNotIn("SWARM:", out, "a report does not start helper agents")
+            self.assertIn("advance", out.split("ANSWER DRAFT", 1)[0])
+
+
 class AdvanceOutputIsReadable(unittest.TestCase):
     """What a step printed is evidence when it failed and noise when it passed."""
 

@@ -2338,7 +2338,10 @@ def answer(repo):
                  for feat, kind, cmd, who in not_independent(state, features, agent_name(), signature, state.get("tree"))] \
         if features and "independent" in requirements(read(repo, RECIPE)) else []
     survey = state.get("survey") or {}
-    survived = list(survey.get("items") or []) if survey.get("tree") == tree_sig(repo) else []
+    current = survey.get("tree") == tree_sig(repo)
+    survived = list(survey.get("items") or []) if current else []
+    surveyed = [{"feature": k, "caught": c, "decided": d}
+                for k, (c, d) in sorted((survey.get("caught") or {}).items())] if current else []
     todo, advice = [], None
     if features:
         from swarm import advise, swarm_items
@@ -2350,7 +2353,7 @@ def answer(repo):
         "verdict": VERDICTS[name], "state": name, "detail": detail, "exit": code,
         "next": todo, "swarm": advice,
         "verify_line": state.get("verify_line"),
-        "rejections": rejections, "passed": passed,
+        "rejections": rejections, "passed": passed, "surveyed": surveyed,
         "gaps": {"failing": failing, "unverified": unverified, "unproven": unproven,
                  "orphan_tests": orphans, "unchallenged": unchallenged, "not_independent": dependent,
                  "blocked": blocked, "unmapped": found["unmapped"], "weak_signal": found["weak_signal"],
@@ -2379,19 +2382,26 @@ def print_draft(repo, a):
     print(f"Then: {follow_up(repo, 'answer-check')} --answer <file>")
 
 
-def cmd_report(repo, as_json=False):
+def cmd_report(repo, as_json=False, assess=False):
     """Print the caller answer: verdict first, then VERIFY:, rejections, passes and gaps, then the
-    answer drafted from them. Exit as status."""
+    answer drafted from them. Exit as status. `assess` answers a read-only question, so it points at
+    `advance` instead of at more commands, and starts no helper agents."""
     a = answer(repo)
     if as_json:
         print(json.dumps(a, indent=2))
         return a["exit"]
-    print(f"VERDICT: {a['verdict']}" + (f" ({a['detail']})" if a["detail"] else ""))
+    detail = a["detail"]
+    if assess and a["state"] == "partial":
+        detail = "assess makes no strict run; `advance` makes it proven"
+    print(f"VERDICT: {a['verdict']}" + (f" ({detail})" if detail else ""))
     print(a["verify_line"] or "VERIFY: no whole run recorded")
     for r in a["rejections"]:
         print(f"REJECTED  {r['feature']}: `{r['command']}` went red (exit {r['exit']}) on {r['wrong_state']}"
               f" | signal: {r['fail_signal']} | observed: {r['observed']}")
-    if not a["rejections"]:
+    seen = gates.survey_caught(a)
+    if not a["rejections"] and seen:
+        print(f"REJECTED  no fail-proof receipt for the current checks; this survey saw {seen}")
+    elif not a["rejections"]:
         print("REJECTED  none observed for the current checks: nothing here is proven able to fail")
     for p in a["passed"]:
         print(f"PASSED  {p['feature']}: `{p['command']}`")
@@ -2402,7 +2412,7 @@ def cmd_report(repo, as_json=False):
         print("GAP  none recorded; green covers mapped claims only, not features nobody mapped")
     for t in a["next"]:
         print(f"NEXT  {t['feature']} [{t['action']}]: {t['next']}")
-    if a["swarm"]:
+    if a["swarm"] and not assess:
         s = a["swarm"]
         print(f"SWARM: {s['mode']} ({s['why']})")
         if s["judge"] and s["mode"] != "judge":
@@ -2477,13 +2487,19 @@ def cmd_assess(repo, timeout=120, limit=8, jobs=1):
         for rel in files[:3]:
             cmd_auto(sys.modules[__name__], repo, f["name"], rel, timeout, limit, False, jobs, found=found)
     # Survivors go into the answer, so a copied draft cannot drop them and answer-check asks for them.
+    # Catches go in too, so the draft does not say nothing went red after the survey saw it go red.
+    caught = {}
+    for r in found:
+        c = caught.setdefault(r["feature"], [0, 0])
+        c[0] += r["verdict"] == "caught"
+        c[1] += 1
     state = load_state(repo)
     state["survey"] = {"tree": tree_sig(repo), "items": [
         f"{r['file']}:{r['line']} {r['before'].strip()} -> {r['after'].strip()} ({r['feature']}: {r['verdict']}, "
-        "the check still passed)" for r in found]}
+        "the check still passed)" for r in found if r["verdict"] != "caught"], "caught": caught}
     save_state(repo, state)
     print("--")
-    return cmd_report(repo)
+    return cmd_report(repo, assess=True)
 
 
 def diagnose_failure(out, exit_code, check_name, state=None):

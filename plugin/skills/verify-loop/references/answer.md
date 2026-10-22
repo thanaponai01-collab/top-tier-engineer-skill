@@ -75,6 +75,7 @@ run):
                  "fail_signal": "expected stored note 'Release checklist'", "exit": 1,
                  "observed": "expected stored note 'Release checklist', got ['Grocery list']"}],
  "passed": [{"feature": "Create note", "command": "..."}],
+ "surveyed": [{"feature": "Create note", "caught": 4, "decided": 5}],
  "gaps": {"failing": [], "unverified": [], "unproven": [], "orphan_tests": [], "unchallenged": [],
           "not_independent": [], "blocked": [], "unmapped": [], "weak_signal": [], "survived": [],
           "proof_not_from_product": [], "loosened": [], "blind_spots": [], "rebaselined": []},
@@ -85,6 +86,8 @@ run):
 
 `gaps.survived` lists mutations an
 `assess` survey planted that every check still passed, while the tree is unchanged since.
+`surveyed` counts, per feature, the wrong results that survey planted and how many a check caught.
+A catch there is seen red in a scratch copy, not a fail-proof receipt: `unproven` still lists it.
 `state` is the finer status (`tampered`, `out-of-scope`, `never-run`, `none`) behind the verdict.
 `unchallenged` is non-empty when VERIFY.md has `require: challenge` and no `challenge` mutation was
 caught for the current checks. `not_independent` is non-empty when VERIFY.md has

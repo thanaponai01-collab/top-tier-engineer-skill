@@ -58,6 +58,16 @@
   - Full proof: `python -m unittest discover tests` → `Ran 392 tests`, `OK (skipped=1)` (Python 3.11.9).
   - `git diff --check` passed.
 
+- Assess says what it saw | proven
+  - The `assess` draft and `REJECTED` line name what the survey caught per feature (`surveyed` in
+    the answer JSON) and say that a catch is not a fail-proof receipt. Before, they said nothing had
+    been seen red after the survey caught every wrong result. On `compound-assess` that pointed at
+    the healthy-shipping decoy (6/6 caught).
+  - `assess` points a partial verdict at `advance` instead of `run --strict`, and prints no `SWARM:`
+    line. A read-only question doesn't start helper agents.
+  - Rejection before implementation: `tests/test_agent_path.py` `AssessSaysWhatItSaw` → 2 of 2 failed.
+  - Full proof: `python -m unittest discover tests` → `Ran 409 tests`, `OK (skipped=1)` (Python 3.11.9).
+
 ## Next
 - Pay for an eval subset (`fake-check-and-decoy`, `green-with-unverified`, `teammate-loosened-check`)
   to measure turns and cost against the 1.18 numbers in `work/verify-loop-design.md`.

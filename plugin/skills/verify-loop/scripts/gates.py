@@ -408,6 +408,12 @@ def gap_rows(a):
     return [(label, item) for key, label in GAP_LABELS for item in a["gaps"][key]]
 
 
+def survey_caught(a):
+    """What an `assess` survey saw go red, as `Total caught 2/2 wrong results; ...`, or ''."""
+    return "; ".join(f"{s['feature']} caught {s['caught']}/{s['decided']} wrong results"
+                     for s in a.get("surveyed") or [] if s["caught"])
+
+
 def draft(a):
     """An answer that passes `check_answer` once each [[fill: ...]] holds the agent's own words.
     The helper writes what it knows; the slots are only what needs judgment."""
@@ -416,7 +422,11 @@ def draft(a):
     for r in a["rejections"]:
         lines.append(f"Proven: {r['feature']} went red on {r['wrong_state']} (`{r['command']}`, "
                      f"signal: {r['fail_signal']})")
-    if not a["rejections"]:
+    seen = survey_caught(a)
+    if not a["rejections"] and seen:
+        lines.append(f"Proven: {seen} in assess's scratch copies; that is not a fail-proof receipt, "
+                     "so the GAP lines below stand")
+    elif not a["rejections"]:
         lines.append("Proven: nothing yet; no check here has been seen rejecting a wrong result")
     for p in a["passed"]:
         lines.append(f"Passed: {p['feature']} (`{p['command']}`)")

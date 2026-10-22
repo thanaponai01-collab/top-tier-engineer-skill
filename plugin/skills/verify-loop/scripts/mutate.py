@@ -319,7 +319,8 @@ def path_files(v, repo, frozen, feat):
 
 
 def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1, diff=None, found=None):
-    """found: a list that gets each survived or uncovered mutation, for a caller that reports them."""
+    """found: a list that gets each decided mutation (caught, survived or uncovered), for a caller
+    that reports them."""
     from challenge import prepare, mutable_target, judge
     root = Path(repo).resolve()
     try:
@@ -402,7 +403,7 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1, diff=N
         return 2
     caught = sum(r["verdict"] == "caught" for r in results)
     if found is not None:
-        found += [dict(r, feature=feature) for r in results if r["verdict"] in ("survived", "uncovered")]
+        found += [dict(r, feature=feature) for r in results if r["verdict"] in ("caught", "survived", "uncovered")]
     survived = [r for r in results if r["verdict"] == "survived"]
     uncovered = [r for r in results if r["verdict"] == "uncovered"]
     decided = caught + len(survived) + len(uncovered)
