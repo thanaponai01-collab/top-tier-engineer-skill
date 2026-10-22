@@ -2337,6 +2337,8 @@ def answer(repo):
     dependent = [f"{feat} ({kind} `{cmd}`): frozen by {who or 'an unnamed agent'}"
                  for feat, kind, cmd, who in not_independent(state, features, agent_name(), signature, state.get("tree"))] \
         if features and "independent" in requirements(read(repo, RECIPE)) else []
+    survey = state.get("survey") or {}
+    survived = list(survey.get("items") or []) if survey.get("tree") == tree_sig(repo) else []
     todo, advice = [], None
     if features:
         from swarm import advise, swarm_items
@@ -2354,7 +2356,7 @@ def answer(repo):
                  "blocked": blocked, "unmapped": found["unmapped"], "weak_signal": found["weak_signal"],
                  "proof_not_from_product": found["proof_where"],
                  "loosened": [gates.loosened_text(x) for x in found["loosened"]],
-                 "blind_spots": blind,
+                 "blind_spots": blind, "survived": survived,
                  "rebaselined": [rebaseline_text(r) for r in open_rebaselines(repo, state)]},
         "rebaselines": state.get("rebaselines", []),
         "strict": bool(state.get("strict")), "rounds": state.get("rounds", 0),
@@ -2364,8 +2366,22 @@ def answer(repo):
     }
 
 
+def follow_up(repo, cmd):
+    """A command an agent can paste as it is: this helper's real path, on the same state."""
+    root = os.environ.get("VERIFY_STATE_DIR", "").strip()
+    where = " --assess" if root and os.path.abspath(root) == os.path.abspath(assess_dir()) else state_flag()
+    return f'python "{os.path.abspath(__file__)}" {cmd} "{repo}"{where}'
+
+
+def print_draft(repo, a):
+    print("ANSWER DRAFT: replace each [[fill: ...]], keep every other line, save it outside the repo")
+    print(gates.draft(a), end="")
+    print(f"Then: {follow_up(repo, 'answer-check')} --answer <file>")
+
+
 def cmd_report(repo, as_json=False):
-    """Print the caller answer: verdict first, then VERIFY:, rejections, passes and gaps. Exit as status."""
+    """Print the caller answer: verdict first, then VERIFY:, rejections, passes and gaps, then the
+    answer drafted from them. Exit as status."""
     a = answer(repo)
     if as_json:
         print(json.dumps(a, indent=2))
@@ -2379,14 +2395,7 @@ def cmd_report(repo, as_json=False):
         print("REJECTED  none observed for the current checks: nothing here is proven able to fail")
     for p in a["passed"]:
         print(f"PASSED  {p['feature']}: `{p['command']}`")
-    g = a["gaps"]
-    labels = (("failing", "failing check"), ("blocked", "blocked by the environment"), ("unverified", "no check"),
-              ("unproven", "never seen red"), ("weak_signal", "weak signal"),
-              ("proof_not_from_product", "proof not from product"), ("loosened", "loosened"),
-              ("unmapped", "unmapped"), ("orphan_tests", "orphan test"), ("unchallenged", "unchallenged"),
-              ("not_independent", "not independent"), ("blind_spots", "blind spot"),
-              ("rebaselined", "check changed under review"))
-    rows = [(label, item) for key, label in labels for item in g[key]]
+    rows = gates.gap_rows(a)
     for label, item in rows:
         print(f"GAP  {label}: {item}")
     if not rows:
@@ -2398,6 +2407,7 @@ def cmd_report(repo, as_json=False):
         print(f"SWARM: {s['mode']} ({s['why']})")
         if s["judge"] and s["mode"] != "judge":
             print(f"SWARM: judge too ({', '.join(s['judge'])} need an agent that did not freeze them)")
+    print_draft(repo, a)
     return a["exit"]
 
 
@@ -2417,15 +2427,63 @@ def cmd_answer_check(repo, path, as_json=False):
     problems = gates.check_answer(a, text)
     if as_json:
         print(json.dumps({"verdict": a["verdict"], "ok": not problems,
-                          "problems": [{"kind": k, "detail": d} for k, d in problems],
+                          "problems": [{"kind": k, "detail": d, "fix": f} for k, d, f in problems],
                           "exit": 1 if problems else 0}, indent=2))
     else:
-        for kind, detail in problems:
-            print(f"ANSWER {kind}  {detail}")
+        for kind, detail, fix in problems:
+            print(f"ANSWER {kind}  {detail}" + ("" if kind in ("NO VERDICT", "MISSING") else f": {fix}"))
         print(f"ANSWER-CHECK: {'ok' if not problems else 'rejected'} (verdict {a['verdict']}, "
               f"{len(problems)} problem(s)). " + ("" if not problems else
-              "Fix the answer, not the state: say the verdict, take back the claim, name the gap."))
+              "Fix the answer, not the state: every problem is listed, none is hidden behind another."))
+        lines = [fix for kind, _, fix in problems if kind in ("NO VERDICT", "MISSING")]
+        if lines:
+            print("ADD THESE LINES as they are (or say the same in your own words):")
+            print("\n".join(lines))
     return 1 if problems else 0
+
+
+def cmd_assess(repo, timeout=120, limit=8, jobs=1):
+    """One call answers "is this check, or this claim, any good?": a fresh whole run, a mutation
+    survey of every passing feature with a `path:`, the report and the answer drafted from it. Its
+    state lives outside the repo (main() sets it), so the repo is left as it was."""
+    if not os.path.isfile(os.path.join(repo, RECIPE)):
+        print(f"ASSESS: no {RECIPE} in {repo}. Write one section per claim: `## <Feature>`, `- path: <product "
+              f"file>`, `- test: `<command>``, `- fail-signal: <words the failure prints>` (VERIFY_FORMAT.md). "
+              "Say in your answer that you added it, then run assess again.")
+        return 2
+    code = cmd_run(repo, None, timeout, strict=False, jobs=jobs, use_cache=False, record_coverage=True)
+    if code == 2:
+        return 2
+    from mutate import cmd_auto
+    features, _ = parse(read(repo, RECIPE), repo=repo)
+    checks = load_state(repo).get("checks", {}) or {}
+    cov = read_json(coverage_path(repo))
+    found = []
+    for f in features:
+        ran = [checks.get(f"{f['name']}|{cmd}") for _, cmd in f["checks"]]
+        if f["journey"] or not f["checks"] or not all(r and r.get("ok") for r in ran):
+            continue  # a mutation of a red or unchecked feature tells nothing
+        if f["paths"]:
+            cmd_auto(sys.modules[__name__], repo, f["name"], None, timeout, limit, False, jobs, found=found)
+            continue
+        # No `path:`: the product is what its checks imported, as HOLLOW reads it.
+        files = sorted({rel for _, c in f["checks"] for rel in (cov.get(f"{f['name']}|{c}") or {}).get("files", [])
+                        if rel.endswith(".py") and not is_test_file(rel) and defines_function(repo, rel)})
+        if not files:
+            print(f"CHALLENGE-AUTO: skipped {f['name']!r}: no `path:` names its product file and its checks "
+                  "imported none, so nothing was mutated. Add a `path:` to survey it.")
+            continue
+        print(f"CHALLENGE-AUTO: {f['name']!r} has no `path:`; surveying what its checks imported: {', '.join(files)}")
+        for rel in files[:3]:
+            cmd_auto(sys.modules[__name__], repo, f["name"], rel, timeout, limit, False, jobs, found=found)
+    # Survivors go into the answer, so a copied draft cannot drop them and answer-check asks for them.
+    state = load_state(repo)
+    state["survey"] = {"tree": tree_sig(repo), "items": [
+        f"{r['file']}:{r['line']} {r['before'].strip()} -> {r['after'].strip()} ({r['feature']}: {r['verdict']}, "
+        "the check still passed)" for r in found]}
+    save_state(repo, state)
+    print("--")
+    return cmd_report(repo)
 
 
 def diagnose_failure(out, exit_code, check_name, state=None):
@@ -3025,6 +3083,11 @@ def main():
     ct.add_argument("new_spec", help="updated specification file")
     ct.add_argument("repo", nargs="?", default=".")
     ct.add_argument("--json", action="store_true", help="output contract breaking changes as JSON")
+    asx = sub.add_parser("assess", help="one read-only call: run, mutation survey, report and answer draft")
+    asx.add_argument("repo", nargs="?", default=".")
+    asx.add_argument("--timeout", type=int, default=120, help="seconds per check (default 120)")
+    asx.add_argument("--max", type=int, default=8, help="most mutations per feature (default 8)")
+    asx.add_argument("--jobs", type=int, default=1, help="parallel checks and mutations; only for isolated checks")
     adv = sub.add_parser("advance", help="execute bounded mechanical steps; yield decisions to an agent")
     adv.add_argument("repo", nargs="?", default=".")
     adv.add_argument("--max-steps", type=int, default=3, help="maximum automatic actions (default 3)")
@@ -3097,6 +3160,8 @@ def main():
                            help="keep state and caches under DIR instead of the repo (= VERIFY_STATE_DIR)")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
+    if a.cmd == "assess" and not a.state_dir:
+        a.assess = True  # assess never writes to the repo
     if a.state_dir:
         os.environ["VERIFY_STATE_DIR"] = os.path.abspath(a.state_dir)
     elif a.assess:
@@ -3111,6 +3176,8 @@ def main():
     except ValueError as exc:
         print(f"verify.py: {exc}")
         sys.exit(2)
+    if a.cmd == "assess":
+        sys.exit(cmd_assess(repo, a.timeout, a.max, a.jobs))
     if a.cmd == "advance":
         from advance import cmd_advance
         sys.exit(cmd_advance(sys.modules[__name__], repo, a.max_steps, a.timeout, a.jobs, a.refresh, a.json))

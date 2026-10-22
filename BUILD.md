@@ -46,5 +46,20 @@
   - Full proof: `python -m unittest discover tests` → `Ran 373 tests`, `OK (skipped=1)` (Python 3.11.9).
   - `git diff --check` passed.
 
+- The lazy path is the correct path | proven | commit: The lazy path is the correct path
+  - `verify.py assess` (one read-only call), `ANSWER DRAFT` with `[[fill: ...]]` slots, `answer-check`
+    fixes and `ADD THESE LINES`, `ANSWER UNFILLED`, `gaps.survived`, runnable `NEXT` paths, short
+    passing `advance` steps, SKILL.md rewritten as a router (body 6.9 KB → 4.9 KB).
+  - Rejection before implementation: `tests/test_agent_path.py` → 15 of 18 failed/errored against the
+    old helper and SKILL.md (no `assess`, no draft, no fixes, body 98 lines).
+  - Fixture check: `assess` on `fake-check-and-decoy` (no `path:`) now prints `UNCOVERED line 4 …
+    still passed` on `discount.py`; before, the three-command path mutated nothing there.
+  - Review: `report --json` must equal `status --json`, so the draft stays text-only.
+  - Full proof: `python -m unittest discover tests` → `Ran 392 tests`, `OK (skipped=1)` (Python 3.11.9).
+  - `git diff --check` passed.
+
 ## Next
-No implementation work remains for this slice. Release remains separate.
+- Pay for an eval subset (`fake-check-and-decoy`, `green-with-unverified`, `teammate-loosened-check`)
+  to measure turns and cost against the 1.18 numbers in `work/verify-loop-design.md`.
+- Then add `max_turns`/`max_cost` and a helper-source-read failure to `grade.py` from that data.
+- Release remains separate.

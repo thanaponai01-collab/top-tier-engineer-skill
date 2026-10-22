@@ -54,12 +54,16 @@ Then:
 5. **What is left and who does it:** a `NEXT` line per unfinished feature (its step and command),
    and a `SWARM:` line, `solo`, `split`, `judge` or `done` (see [swarm](swarm.md#when-the-helper-decides)).
 
-`verify.py report <repo>` prints this. An answer written for a person goes through
+`verify.py report <repo>` prints this, then an `ANSWER DRAFT` built from it: the verdict, each
+rejection and pass, every `GAP` line, and `[[fill: ...]]` slots for what needs judgment (the claim
+and its source, what is left, how each survivor reads). An answer written for a person goes through
 `verify.py answer-check <repo> --answer <file>` (or `-` for stdin) first. It exits 1 with
-`ANSWER NO VERDICT` when the text lacks `VERDICT: <verdict>`, `ANSWER OVERCLAIM` when a non-green
-answer says "ready to merge", "all checks pass", "fully verified" or the like without a negation
-just before it, and `ANSWER MISSING` for each gap item it does not name (feature names, file
-names, or most words of a blind spot). Keep the answer file outside the repo: writing inside it
+`ANSWER NO VERDICT` when the text lacks `VERDICT: <verdict>`, `ANSWER UNFILLED` when a
+`[[fill: ...]]` slot is left, `ANSWER OVERCLAIM` when a non-green answer says "ready to merge",
+"all checks pass", "fully verified" or the like without a negation just before it, and
+`ANSWER MISSING` for each gap item it does not name (feature names, file names, or most words of a
+blind spot). It lists every problem in one pass and ends with `ADD THESE LINES`: the exact lines
+that clear the verdict and missing-gap problems. `--json` gives each problem a `fix`. Keep the answer file outside the repo: writing inside it
 makes the tree stale. `report --json` and `status --json` print it as one object,
 with the same exit codes as `status` (0 green or no VERIFY.md, 1 red, 3 stale, partial or never
 run):
@@ -72,13 +76,15 @@ run):
                  "observed": "expected stored note 'Release checklist', got ['Grocery list']"}],
  "passed": [{"feature": "Create note", "command": "..."}],
  "gaps": {"failing": [], "unverified": [], "unproven": [], "orphan_tests": [], "unchallenged": [],
-          "not_independent": [], "blocked": [], "unmapped": [], "weak_signal": [],
+          "not_independent": [], "blocked": [], "unmapped": [], "weak_signal": [], "survived": [],
           "proof_not_from_product": [], "loosened": [], "blind_spots": [], "rebaselined": []},
  "rebaselines": [],
  "next": [], "swarm": {"mode": "done", "why": "...", "judge": [], "open": []},
  "strict": true, "rounds": 0, "failing": [], "checks": 2, "receipts": ["..."], "challenge": null}
 ```
 
+`gaps.survived` lists mutations an
+`assess` survey planted that every check still passed, while the tree is unchanged since.
 `state` is the finer status (`tampered`, `out-of-scope`, `never-run`, `none`) behind the verdict.
 `unchallenged` is non-empty when VERIFY.md has `require: challenge` and no `challenge` mutation was
 caught for the current checks. `not_independent` is non-empty when VERIFY.md has

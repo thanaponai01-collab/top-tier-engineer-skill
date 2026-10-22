@@ -40,8 +40,12 @@ def _independently_verified(state, feat, signature, tree):
     return True
 
 
+HELPER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verify.py")
+
+
 def _next_command(repo, feat, action, freezers):
-    cmd = _bare_command(repo, feat, action, freezers)
+    # An agent pastes NEXT as it is: name this helper's real path, not a bare verify.py.
+    cmd = _bare_command(repo, feat, action, freezers).replace("python verify.py", f'python "{HELPER}"')
     root = os.environ.get("VERIFY_STATE_DIR", "").strip()  # keep the follow-up on the same state
     if not root or "verify.py" not in cmd:
         return cmd

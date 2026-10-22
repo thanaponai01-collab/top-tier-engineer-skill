@@ -69,6 +69,9 @@ def cmd_advance(v, repo, max_steps=3, timeout=120, jobs=1, refresh=False, as_jso
             print(f"ADVANCE: {stop}")
             for step in result['steps']:
                 print(f"  {step['action']}: exit {step['exit']}")
+                if step['exit']:  # the failure is the evidence the next task acts on
+                    for line in step['output'].rstrip().splitlines()[-20:]:
+                        print(f"    | {line}")
             for task in tasks:
                 print(f"  {task['feature']} [{task['action']}]: {task['detail']}")
                 print(f"  Next: {task['next']}")
@@ -79,9 +82,7 @@ def cmd_advance(v, repo, max_steps=3, timeout=120, jobs=1, refresh=False, as_jso
                 print(f"VERDICT: {report['verdict']}")
                 if report['verify_line']:
                     print(report['verify_line'])
-                for kind, gaps in report['gaps'].items():
-                    for gap in gaps:
-                        print(f"  GAP {kind}: {gap}")
+                v.print_draft(repo, report)
         return result['exit']
 
     if min(max_steps, timeout, jobs) <= 0:
@@ -115,8 +116,10 @@ def cmd_advance(v, repo, max_steps=3, timeout=120, jobs=1, refresh=False, as_jso
                     else:
                         code = v.cmd_run(repo, only=None, timeout=timeout,
                                          strict=action == 'run-strict', jobs=jobs, use_cache=False)
-                result['steps'].append({'action': action, 'exit': code, 'input': planned,
-                                        'output': log.getvalue()[-16000:]})
+                out = log.getvalue()
+                # A pass is summarized by its last lines; a failure keeps its tail as evidence.
+                out = '\n'.join(out.rstrip().splitlines()[-2:]) + '\n' if code == 0 else out[-16000:]
+                result['steps'].append({'action': action, 'exit': code, 'input': planned, 'output': out})
                 refresh = False
                 if v.tree_sig(repo, fast=False) != before_tree:
                     return finish('stale', error='product or checks changed during execution')
