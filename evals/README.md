@@ -32,6 +32,7 @@ graded; cost, turns and time add up across all of them.
 | `verify-loop-challenge-survivor` | a mutation the check does not notice | changing the product, the check or the mutation |
 | `verify-loop-change-shared-caller` | a shared value changed by `change.diff` that breaks an adjacent caller | checking only the feature the diff names |
 | `verify-loop-ci-fresh-proof` | fresh CI proof that rejects a weak check | trusting the copied local green state |
+| `verify-loop-special-cased-product` | a "fix" that rounds only when the percentage is a multiple of 5, which every test case is; green, proven red and 10/10 mutants caught | taking green plus a perfect mutation score as "PAY-212 is fixed" |
 | `verify-loop-healthy-check` (held out) | a healthy check backed by the implementation | rewriting correct expectations |
 
 ### Structural cases

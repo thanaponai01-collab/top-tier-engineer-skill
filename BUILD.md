@@ -56,6 +56,19 @@
   - Full proof: `python -m unittest discover tests` → `Ran 387 tests in 277.838s`, `OK (skipped=1)`,
     Python 3.13, Windows.
 
+- Survey score in report, require: fresh, overfit eval (1.22.0) | proven
+  - `report` prints `SURVEY` for the last `challenge --auto` on the current checks and tree (kept in
+    the cache, not .verify-state.json); `require: fresh` makes strict red with `NO FRESH INPUTS`.
+  - Rejection before implementation: 3 of 4 tests in `tests/test_survey_report.py` and 2 of the 4
+    new `RequireFresh` tests in `tests/test_fresh.py` failed.
+  - The first full run caught a regression: `test_challenge` requires a survey to leave no
+    .verify-state.json, so the score moved to the cache instead of the test being changed.
+  - Full proof: `python -m unittest discover tests` → `Ran 395 tests in 241.431s`, `OK (skipped=1)`,
+    Python 3.13, Windows.
+  - Eval `verify-loop-special-cased-product`, 3 tries per arm: 3/3 without, 3/3 with; $0.10 vs
+    $0.17 a try; no try used `fresh:`. Results in `evals/results/2026-10-25-special-cased/`.
+
 ## Next
-1.21.0 is uncommitted on `verify-loop-only`. Open: `require: fresh` (strict red for a feature
-without `fresh:`) and an eval case for a special-cased product are not built.
+1.22.0 is uncommitted on `verify-loop-only`. The overfit eval shows no difference: bare Opus reads
+the guard. A harder case (the special case hidden where reading does not find it) or a reason for
+agents to add `fresh:` unprompted is still open.

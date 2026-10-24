@@ -79,7 +79,8 @@ include: packages/auth/VERIFY.md
   <command>` reproduces it. Fix the product, not the check. `SEED UNUSED` (also red) means no test
   file, script, oracle or command of the feature names `VERIFY_SEED`, so a fresh run would only
   repeat the own cases. Frozen by `baseline`: removing `fresh:` is `CHECK CHANGED`, and a
-  re-baseline that lowers N needs review. Not run inside `challenge` copies.
+  re-baseline that lowers N needs review. Not run inside `challenge` copies. `require: fresh` makes
+  it mandatory.
 - Failure receipts bind all mapped commands, tests, oracles and the Run recipe. After changing
   these definitions, demonstrate rejection again. A timeout is not a receipt.
 
@@ -132,6 +133,9 @@ include: packages/auth/VERIFY.md
   `baseline` was run by the same `VERIFY_AGENT` as the strict run, or by an unnamed agent. `baseline`
   records who froze each check (`frozen_by`); a later baseline by someone else keeps the original
   freezer of an unchanged check. Words combine: `require: challenge, independent`.
+- `require: fresh` makes `run --strict` stay red (`NO FRESH INPUTS`) for every feature with checks,
+  journeys aside, that declares no `fresh: N`. Use it when a claim covers a range of inputs
+  (any amount, any percentage) that fixed cases cannot.
 
 ## Completion
 

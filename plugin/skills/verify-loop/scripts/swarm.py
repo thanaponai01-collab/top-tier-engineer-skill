@@ -86,6 +86,10 @@ def _fresh_step(repo, feat, action, detail):
     if detail.startswith("SEED UNUSED"):
         return (f"{detail}. Edit the check for `## {feat['name']}` to draw its cases from VERIFY_SEED and "
                 f"its expected values from the spec. Then `python verify.py run {repo}`")
+    if detail.startswith("NO FRESH INPUTS"):
+        return (f"{detail}. Add `- fresh: 3` under `## {feat['name']}` in {repo}/VERIFY.md and have its check "
+                "draw cases from VERIFY_SEED, with expected values from the spec. Do it before proving: it changes "
+                f"the check signature. Then `python verify.py run {repo}`")
     if detail.startswith("OVERFIT"):
         return (f"{detail}. Reproduce it with that seed set, then fix the product so it implements the behavior, "
                 f"not the cases; the check is not the thing to change. Then "
@@ -143,6 +147,8 @@ def swarm_items(v, repo, state=None, now=None, where=None):
                                      "the product may special-case the check's inputs")
         elif not f["checks"] or not f["signals"]:
             action, detail = "map", "no check or literal fail-signal in VERIFY.md"
+        elif "fresh" in reqs and not f["journey"] and f["fresh"] is None:
+            action, detail = "map", "NO FRESH INPUTS: require: fresh is set and this feature has no `fresh: N`"
         elif failing and all(causes):
             action, detail = "blocked", causes[0]
         elif failing:

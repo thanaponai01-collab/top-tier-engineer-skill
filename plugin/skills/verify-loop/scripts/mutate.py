@@ -21,6 +21,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -409,6 +410,11 @@ def cmd_auto(v, repo, feature, rel_file, timeout, limit, as_json, jobs=1, diff=N
                "caught": caught, "survived": len(survived), "uncovered": len(uncovered),
                "inconclusive": len(results) - decided, "score": score, "jobs": jobs, "copies": copies,
                "results": results}
+    if decided:  # a score for `report` in the cache, never a receipt: these mutants come from the code, not the spec
+        v.save_survey(repo, feature, dict(
+            {k: summary[k] for k in ("files", "diff", "caught", "survived", "uncovered", "score")},
+            signature=v.sha(json.dumps(v.check_hashes(repo), sort_keys=True)), tree=original_tree,
+            at=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())))
     if as_json:
         print(json.dumps(summary, indent=2))
     else:

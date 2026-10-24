@@ -498,6 +498,13 @@ def fresh_count(raw):
     return 0, f"wants a number of seeded runs (1-{FRESH_MAX}), got '{raw}'"
 
 
+def no_fresh_inputs(features, recipe_text):
+    """Features `require: fresh` holds red: every feature with checks that declares no `fresh:`."""
+    if "fresh" not in requirements(recipe_text):
+        return []
+    return [f["name"] for f in features if not f["journey"] and f["checks"] and f["fresh"] is None]
+
+
 def reads_seed(repo, feature):
     """True when a test file, script or oracle of the feature names VERIFY_SEED. A check that never
     reads it repeats its own cases on every fresh run, which proves nothing new."""
@@ -529,6 +536,20 @@ def fresh_runs(repo, feature, runs, timeout):
                 return passed, {"kind": kind, "command": cmd, "seed": seed, "exit": code, "output": out[-4000:]}
         passed.append(seed)
     return passed, None
+
+
+def save_survey(repo, feature, entry):
+    """Keep the last `challenge --auto` score per feature in the cache, outside .verify-state.json:
+    a survey is a lead, so it leaves the verification state as it found it."""
+    path = os.path.join(cache_dir(repo), "surveys.json")
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with file_lock(path + ".lock"):
+            data = read_json(path)
+            data[feature] = entry
+            write_json(path, data)
+    except (OSError, TimeoutError) as exc:
+        print(f"note  survey score not saved: {exc}")
 
 
 def save_coverage(repo, entries):
@@ -1424,6 +1445,12 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if unchallenged and not as_json:
         print("UNCHALLENGED  VERIFY.md requires a caught mutation for the current checks: run "
               "`verify.py challenge` on the highest-risk feature")
+    no_fresh = no_fresh_inputs(shown, read(repo, RECIPE)) if strict else []
+    if not as_json:
+        for name in no_fresh:
+            print(f"NO FRESH INPUTS  {name}: VERIFY.md has `require: fresh` and this feature has no `fresh: N`, so "
+                  f"nothing shows the product handles inputs its check was not written with. Add `fresh:` and draw "
+                  f"the check's cases from {SEED}")
     try:
         changed_during_run = signature != sha(json.dumps(check_hashes(repo), sort_keys=True))
     except (OSError, ValueError):
@@ -1449,7 +1476,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     if strict and selected and not as_json:
         print(SELECTED)
     incomplete = strict and (unverified or unproven or orphans or missing_baseline or unchallenged or dependent
-                             or selected or unmapped or loose)
+                             or selected or unmapped or loose or no_fresh)
     if caching and tree_after == tree_before and not changed_during_run:
         remember_passes(repo, fresh, tree_before, full=strict)
     cached = sum(1 for r in results if r[7])
@@ -1518,6 +1545,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 "unmapped": unmapped,
                 "loosened": [gates.loosened_text(x) for x in loose],
                 "unchallenged": bool(unchallenged),
+                "no_fresh": no_fresh,
                 "not_independent": len(dependent),
                 "quarantined": len(quarantined_hits),
                 "cached": cached,
@@ -2453,6 +2481,7 @@ def answer(repo):
         "rejections": rejections, "passed": passed,
         "gaps": {"failing": failing, "unverified": unverified, "unproven": unproven,
                  "orphan_tests": orphans, "unchallenged": unchallenged, "not_independent": dependent,
+                 "no_fresh": no_fresh_inputs(features, read(repo, RECIPE)) if features else [],
                  "blocked": blocked, "unmapped": found["unmapped"], "weak_signal": found["weak_signal"],
                  "proof_not_from_product": found["proof_where"],
                  "loosened": [gates.loosened_text(x) for x in found["loosened"]],
@@ -2463,7 +2492,19 @@ def answer(repo):
         "failing": failing, "checks": len(checks), "receipts": sorted((state.get("failures") or {}).keys()),
         "challenge": {"feature": challenge.get("feature"), "verdict": challenge.get("verdict")}
         if challenge else None,
+        "surveys": current_surveys(repo, signature),
     }
+
+
+def current_surveys(repo, signature):
+    """`challenge --auto` scores taken on the current checks and tree. A lead, not a receipt: the
+    mutants come from the code, so they prove the checks notice changes, not that the code meets the spec."""
+    surveys = read_json(os.path.join(cache_dir(repo), "surveys.json"))
+    if not surveys or not signature:
+        return {}
+    tree = tree_sig(repo)
+    return {f: {k: s[k] for k in ("files", "caught", "survived", "uncovered", "score", "at")}
+            for f, s in sorted(surveys.items()) if s.get("signature") == signature and s.get("tree") == tree}
 
 
 def cmd_report(repo, as_json=False):
@@ -2478,7 +2519,14 @@ def cmd_report(repo, as_json=False):
         print(f"REJECTED  {r['feature']}: `{r['command']}` went red (exit {r['exit']}) on {r['wrong_state']}"
               f" | signal: {r['fail_signal']} | observed: {r['observed']}")
     if not a["rejections"]:
-        print("REJECTED  none observed for the current checks: nothing here is proven able to fail")
+        print("REJECTED  none observed for the current checks: "
+              + ("no spec-backed rejection is recorded" if a["surveys"] else "nothing here is proven able to fail"))
+    for feat, s in a["surveys"].items():
+        decided = s["caught"] + s["survived"] + s["uncovered"]
+        print(f"SURVEY  {feat}: {s['caught']}/{decided} generated mutants caught ({s['score']:.0%}), "
+              f"{s['survived']} survived, {s['uncovered']} uncovered, on {', '.join(s['files'])}. The mutants come "
+              "from the code, so this is a lead, not a receipt: it shows the checks notice changes, not that the "
+              "code meets the spec")
     for p in a["passed"]:
         print(f"PASSED  {p['feature']}: `{p['command']}`")
     g = a["gaps"]
@@ -2486,7 +2534,7 @@ def cmd_report(repo, as_json=False):
               ("unproven", "never seen red"), ("weak_signal", "weak signal"),
               ("proof_not_from_product", "proof not from product"), ("loosened", "loosened"),
               ("unmapped", "unmapped"), ("orphan_tests", "orphan test"), ("unchallenged", "unchallenged"),
-              ("not_independent", "not independent"), ("blind_spots", "blind spot"),
+              ("not_independent", "not independent"), ("no_fresh", "no fresh inputs"), ("blind_spots", "blind spot"),
               ("rebaselined", "check changed under review"))
     rows = [(label, item) for key, label in labels for item in g[key]]
     for label, item in rows:

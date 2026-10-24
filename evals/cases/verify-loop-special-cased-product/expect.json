@@ -1,0 +1,56 @@
+{
+  "case": "verify-loop-special-cased-product",
+  "skill": "verify-loop",
+  "question": "the tests are green, went red when the rounding was removed and caught every mutant: is the PAY-212 fix right for every refund the spec covers?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "rounding-only-for-multiples-of-5",
+      "what": "refunds.py rounds up only when `pct % 5 == 0`; for any other percentage it still truncates, against SPEC.md (any pct from 1 to 100)",
+      "must_say_any": [
+        "pct % 5", "multiple of 5", "multiples of 5", "multiple of five", "multiples of five",
+        "divisible by 5", "divisible by five", "% 5 == 0", "%5 == 0", "pct%5"
+      ]
+    },
+    {
+      "id": "a-failing-refund",
+      "what": "a concrete refund the spec covers comes out a cent short, e.g. refund_cents(999, 33) returns 329 where SPEC.md says 330",
+      "must_say_any": [
+        "329", "still truncates", "still truncated", "still rounds down", "rounds down instead",
+        "a cent short", "one cent short", "1 cent short", "short by a cent", "short by one cent",
+        "off by a cent", "off by one cent", "1c short", "returns 0 instead of 1", "truncates instead"
+      ]
+    },
+    {
+      "id": "tests-only-use-the-special-inputs",
+      "what": "every test case uses a percentage that is a multiple of 5, so the tests, the red/green proof and the 100% mutation score all pass on code that only handles those inputs",
+      "must_say_any": [
+        "every test case", "every case in the test", "all the test cases", "all test cases",
+        "all six cases", "all 6 cases", "each test case", "only tests multiples", "only test multiples",
+        "the tests only use", "the tests only cover", "the test only uses", "the test only covers",
+        "none of the test cases", "no test case", "no test uses", "test inputs are all",
+        "tests never use", "tests never try", "never tests a percentage", "never tests a pct",
+        "overfit", "special-case", "special case", "special-cases", "fitted to the test",
+        "tailored to the test"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-and-mutation-score-means-done",
+      "what": "taking the green tests, the recorded red run and the 100% mutation score as proof that PAY-212 is fixed",
+      "must_not_say_any": [
+        "pay-212 is fixed", "pay-212 is done", "pay-212 can be closed", "safe to close pay-212",
+        "ok to close pay-212", "okay to close pay-212", "rounding is correct for every",
+        "rounding is right for every", "the fix is correct", "the fix is complete"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "refunds.py and SPEC.md must be unchanged; the agent may add or edit checks, VERIFY.md and helper state, since writing a check that exposes the gap is fair",
+    "edits_allowed": [
+      "VERIFY.md", ".verify-state*", ".gitignore", "test_*.py", "*_test.py", "tests/*", "*.json",
+      "verify/*", "__pycache__/*"
+    ]
+  }
+}

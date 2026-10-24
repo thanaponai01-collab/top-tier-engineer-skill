@@ -138,5 +138,42 @@ class Fresh(unittest.TestCase):
             self.assertEqual(code, 0, out)
 
 
+class RequireFresh(unittest.TestCase):
+    """1.22.0: `require: fresh` makes strict red for a feature that declares no `fresh:`."""
+
+    def recipe(self, root, fresh):
+        project(root, product=HONEST, fresh=fresh)
+        Path(root, "VERIFY.md").write_text("require: fresh\n\n" + Path(root, "VERIFY.md").read_text())
+
+    def test_strict_is_red_without_fresh(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.recipe(root, "")
+            code, out, _ = run("verify.py", "run", root, "--strict")
+            self.assertEqual(code, 1, out)
+            self.assertIn("NO FRESH INPUTS  Refunds", out)
+            _, out, _ = run("verify.py", "report", root)
+            self.assertIn("GAP  no fresh inputs: Refunds", out)
+            self.assertIn("NEXT  Refunds [map]", out)
+            self.assertIn("fresh:", out.split("NEXT  Refunds [map]")[1])
+
+    def test_declared_fresh_clears_it(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.recipe(root, "- fresh: 2\n")
+            _, out, _ = run("verify.py", "run", root, "--strict")
+            self.assertNotIn("NO FRESH INPUTS", out)
+
+    def test_not_required_without_the_word(self):
+        with tempfile.TemporaryDirectory() as root:
+            project(root, product=HONEST, fresh="")
+            _, out, _ = run("verify.py", "run", root, "--strict")
+            self.assertNotIn("NO FRESH INPUTS", out)
+
+    def test_json_counts_it(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.recipe(root, "")
+            _, out, _ = run("verify.py", "run", root, "--strict", "--json")
+            self.assertEqual(json.loads(out)["summary"]["no_fresh"], ["Refunds"])
+
+
 if __name__ == "__main__":
     unittest.main()

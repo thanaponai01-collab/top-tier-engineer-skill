@@ -87,7 +87,8 @@ check, not a weak one. Lines where a probe cannot be inserted safely stay `SURVI
 decided.
 
 Generated mutations come from the code, not the spec, so the survey **never records fail-proof
-receipts or touches .verify-state.json**. A survivor is a lead: judge it as a real gap (write a
+receipts or touches .verify-state.json**. It keeps only its score in the cache (`surveys.json`),
+which `report` prints as `SURVEY` while the checks and tree are unchanged: a lead, never a proof. A survivor is a lead: judge it as a real gap (write a
 spec-backed check, then prove it with a normal `--mutation` challenge) or an equivalent mutation
 that changes no observable behavior. A high score on one file is not coverage of the feature.
 

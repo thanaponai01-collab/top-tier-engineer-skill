@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.22.0 - 2026-10-25 - Survey scores in report, require: fresh, an overfit eval
+
+- `report` prints `SURVEY <feature>: N/M generated mutants caught` for the last `challenge --auto`
+  on the current checks and tree. Before, a 10/10 survey still read "nothing here is proven able
+  to fail". It stays a lead, not a receipt: `GAP never seen red` and the `prove` step remain until
+  a spec-backed rejection is recorded. `report --json` gains `surveys`. The score lives in the cache
+  (`surveys.json`), so a survey still writes no receipt and leaves .verify-state.json untouched.
+- `require: fresh` keeps `run --strict` red (`NO FRESH INPUTS`) for any non-journey feature with
+  checks and no `fresh: N`. `report` lists it as `GAP no fresh inputs` with a `map` step, ordered
+  before `prove` because adding `fresh:` changes the check signature. `run --json` gains `no_fresh`.
+- New eval case `verify-loop-special-cased-product`: the fix rounds only when the percentage is a
+  multiple of 5, and every test case is one. The checks are green, proven red, and 10/10 mutants
+  are caught. First run (3 tries per arm, Opus 5.5): 3/3 without the skill, 3/3 with it, at $0.10
+  vs $0.17 a try. No try in either arm used `fresh:`. Bare Opus found the guard by reading the
+  code, so this case does not show the skill helping.
+
 ## 1.21.0 - 2026-10-25 - Fresh inputs: product code that special-cases its tests
 
 Anthropic's formal-verification work (anthropic.com/research/formal-verification) names the main
