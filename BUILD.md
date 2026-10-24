@@ -37,5 +37,14 @@
   - Grade verification: `python evals/grade.py verify-loop-ci-fresh-proof --report ...` → `2/2 found, score 1.00`.
   - `git diff --check` passed.
 
+- Claude Code's own /verify (1.20.0) | proven
+  - Generated verify skill gets `## Before a commit` (`verify.py run . --affected`), enforced by
+    `skill-check`/`maintain`; `scaffold-skill --adopt` completes a recipe the bundled `/verify` recorded.
+  - Rejection before implementation: the 5 new tests in `test_caller_answer.py` failed (4 FAIL,
+    1 ERROR) with `create.py`/`verify.py` stashed.
+  - A first version of the gate passed when the command was swapped for `--strict` (prose also said
+    `--affected`); the gate now requires `verify.py run <repo> --affected` literally.
+  - Full proof: `python -m unittest discover tests` on Python 3.13, Windows.
+
 ## Next
 No implementation work remains for this slice. Commit and push authorized by the user; release remains separate.

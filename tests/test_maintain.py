@@ -28,6 +28,8 @@ nothing
 none
 ## Verdict
 verify.py report
+## Before a commit
+verify.py run . --affected
 """
 FEATURE = """# Thing
 

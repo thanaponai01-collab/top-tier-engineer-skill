@@ -4,8 +4,14 @@ Use when a repo has no scripted way to launch and drive its real app, or someone
 "verify skill", "driver skill" or `/verify` for this project. The output is a project-local skill
 at `.claude/skills/verify/` named `verify`. At the repo root, a project skill with that name
 replaces Claude Code's built-in user-only `/verify`, so any skill, agent or person can call it. In
-a monorepo, write it in the touched package and pass that package as the repo argument. Write it
-for an agent that reads it cold, in the middle of a task.
+a monorepo, write it in the touched package and pass that package as the repo argument; Claude
+Code then calls it `/<package path>:verify`. Write it for an agent that reads it cold, in the
+middle of a task.
+
+Because Claude can invoke it, Claude Code (v2.1.286+) runs it before each commit that is not docs
+or tests only. Its `## Before a commit` section keeps that cheap: `verify.py run . --affected`,
+never a full launch and drive. If Claude Code's built-in `/verify` already recorded a recipe at
+the same path, `scaffold-skill --adopt` keeps that text and adds only what is missing.
 
 The generated skill says how to reach and watch the app. VERIFY.md decides pass or fail, and
 verify-loop returns the answer. The generated skill never decides a verdict on its own.
@@ -47,7 +53,11 @@ Dockerfile, compose, Makefile) and writes a draft:
   instance), **Drive** (real selectors, routes and commands from this repo), **Evidence** (the real
   user path; the action, resulting state and side effects; mocks only at production boundaries;
   proof in a named place that survives cleanup), **Cleanup** (kill only what you started),
-  **Helpers**, and **Verdict** (route back through verify.py).
+  **Helpers**, **Verdict** (route back through verify.py) and **Before a commit** (only
+  `verify.py run . --affected`; `skill-check` rejects the section without it).
+- With `--adopt`, an existing SKILL.md stays as written. The helper adds frontmatter if there is
+  none, the VERIFY.md link, the missing sections and any missing feature file, and never
+  overwrites a feature file. Move the recorded launch and drive steps into Launch and Drive.
 - `features/README.md` plus one file per VERIFY.md feature. Each file has an H1, one paragraph, a
   `verify-section: <VERIFY.md feature>` line, and exactly these H2s: `Sub-features`,
   `How to get to it (user POV)`, `Driving it with <harness>`, `Gotchas`.

@@ -147,6 +147,75 @@ class ScaffoldSkill(unittest.TestCase):
             self.assertIn("ports: 3000, 8080", skill)
             self.assertIn("docker compose -f compose.yaml up --wait", skill)
 
+    def test_draft_has_a_cheap_path_for_the_pre_commit_run(self):
+        # Claude Code runs a model-invocable project `verify` skill before each commit.
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "app.py", "")
+            run("verify.py", "scaffold-skill", tmp)
+            with open(os.path.join(tmp, ".claude", "skills", "verify", "SKILL.md"), encoding="utf-8") as fh:
+                commit = fh.read().split("## Before a commit", 1)[1]
+            self.assertIn("verify.py run . --affected", commit)
+            self.assertNotIn("TODO(verify-create)", commit)
+
+
+class AdoptSkill(unittest.TestCase):
+    """Claude Code's bundled /verify records its recipe at .claude/skills/verify/SKILL.md."""
+    RECORDED = ("---\nname: verify\ndescription: Build and run shop to confirm a change works.\n---\n\n"
+                "# Verify shop\n\n## Launch\n\n1. `docker compose up -d db`\n2. `npm run dev` on port 5173\n\n"
+                "## Check a change\n\nOpen http://localhost:5173 and click the changed page.\n")
+
+    def _skill(self, tmp):
+        with open(os.path.join(tmp, ".claude", "skills", "verify", "SKILL.md"), encoding="utf-8") as fh:
+            return fh.read()
+
+    def test_recorded_recipe_is_kept_and_completed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "package.json", json.dumps({"name": "shop", "scripts": {"dev": "vite"}}))
+            write(tmp, "VERIFY.md", "## Cart\n- test: `x`\n")
+            write(tmp, ".claude/skills/verify/SKILL.md", self.RECORDED)
+            code, out, _ = run("verify.py", "scaffold-skill", tmp)
+            self.assertEqual(code, 1)
+            self.assertIn("--adopt", out)
+            self.assertEqual(self._skill(tmp), self.RECORDED)
+            code, out, _ = run("verify.py", "scaffold-skill", tmp, "--adopt")
+            self.assertEqual(code, 0, out)
+            self.assertIn("adopted", out)
+            skill = self._skill(tmp)
+            self.assertIn("1. `docker compose up -d db`\n2. `npm run dev` on port 5173", skill)
+            self.assertIn("## Check a change", skill)
+            self.assertEqual(skill.count("## Launch"), 1)
+            self.assertIn("../../../VERIFY.md", skill)
+            problems = run("verify.py", "skill-check", tmp)[1]
+            self.assertNotIn("missing `##", problems)
+            self.assertNotIn("does not link VERIFY.md", problems)
+            self.assertIn("TODO(verify-create)", problems)
+            self.assertTrue(os.path.isfile(os.path.join(tmp, ".claude", "skills", "verify", "features", "cart.md")))
+
+    def test_adopt_twice_changes_nothing_and_keeps_edited_feature_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "app.py", "")
+            write(tmp, ".claude/skills/verify/SKILL.md", self.RECORDED)
+            run("verify.py", "scaffold-skill", tmp, "--adopt")
+            write(tmp, ".claude/skills/verify/features/primary-feature.md", "edited\n")
+            first = self._skill(tmp)
+            code, out, _ = run("verify.py", "scaffold-skill", tmp, "--adopt")
+            self.assertEqual(code, 0, out)
+            self.assertIn("added nothing; wrote 0", out)
+            self.assertEqual(self._skill(tmp), first)
+            with open(os.path.join(tmp, ".claude", "skills", "verify", "features", "primary-feature.md"),
+                      encoding="utf-8") as fh:
+                self.assertEqual(fh.read(), "edited\n")
+
+    def test_recipe_without_frontmatter_gets_one(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "app.py", "")
+            write(tmp, ".claude/skills/verify/SKILL.md", "Run `python app.py`, then curl /health.\n")
+            run("verify.py", "scaffold-skill", tmp, "--adopt")
+            skill = self._skill(tmp)
+            self.assertTrue(skill.startswith("---\nname: verify\n"))
+            self.assertIn("Run `python app.py`, then curl /health.", skill)
+            self.assertNotIn("no YAML frontmatter", run("verify.py", "skill-check", tmp)[1])
+
 
 class SkillCheck(unittest.TestCase):
     EXAMPLE = os.path.join(ROOT, "examples", "verify-create")
@@ -183,6 +252,9 @@ class SkillCheck(unittest.TestCase):
             ("SKILL.md", "name: verify\n", "name: verify\ndisable-model-invocation: true\n", "disable-model-invocation"),
             ("SKILL.md", "name: verify\n", "name: notes-verify\n", "name must be `verify`"),
             ("SKILL.md", "## Doctor", "## Health", "missing `## Doctor`"),
+            ("SKILL.md", "## Before a commit", "## Before committing", "missing `## Before a commit`"),
+            ("SKILL.md", "verify.py run . --affected", "verify.py run . --strict",
+             "`## Before a commit` must run `verify.py run . --affected`"),
             ("features/create-note.md", "verify-section: Create note", "", "no `verify-section:`"),
             ("features/create-note.md", "verify-section: Create note", "verify-section: Nope", "not a VERIFY.md feature"),
             ("features/create-note.md", "## Gotchas", "## Notes", "exactly these H2s"),

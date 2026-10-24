@@ -80,3 +80,13 @@ options `--port 8765 --data .verify-data --evidence .verify-evidence`. Its docst
 Never weaken a journey or expectation to make it pass. If verify-loop is absent, run the checks
 directly before and after, keep both outputs, and report the verdict as `unverified`. When the app
 changes, use verify-loop's maintain mode (`verify.py maintain .`) to keep this skill honest.
+
+## Before a commit
+
+Claude Code runs this skill right before each commit (not for docs- or test-only changes). Here,
+run only the mapped checks the change touches; do not launch or drive the app by hand:
+
+    python <verify-loop>/scripts/verify.py run . --affected
+
+`nothing to run` or green: commit. Red: do not commit; fix it, or report it blocked. This gate is
+not done: `--affected` can miss a check, so done is still the whole strict run under Verdict.

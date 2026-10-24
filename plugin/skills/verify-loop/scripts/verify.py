@@ -2980,6 +2980,8 @@ def main():
     t.add_argument("--json", action="store_true", help="print one JSON object (same exit codes)")
     ss = sub.add_parser("scaffold-skill", help="create mode: draft .claude/skills/verify/ + feature map from the stack")
     ss.add_argument("repo", nargs="?", default=".", help="repo root, or the touched package in a monorepo")
+    ss.add_argument("--adopt", action="store_true",
+                    help="keep an existing SKILL.md (e.g. one Claude Code's /verify recorded) and add what is missing")
     sk = sub.add_parser("skill-check", help="create mode: lint the project verify skill and its VERIFY.md links")
     sk.add_argument("repo", nargs="?", default=".")
     sk.add_argument("--json", action="store_true", help="print problems as JSON")
@@ -3166,7 +3168,7 @@ def main():
     if a.cmd in ("scaffold-skill", "skill-check"):
         from create import cmd_scaffold_skill, cmd_skill_check
         if a.cmd == "scaffold-skill":
-            sys.exit(cmd_scaffold_skill(sys.modules[__name__], repo))
+            sys.exit(cmd_scaffold_skill(sys.modules[__name__], repo, a.adopt))
         sys.exit(cmd_skill_check(sys.modules[__name__], repo, a.json))
     if a.cmd == "maintain":
         from maintain import cmd_maintain

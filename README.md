@@ -21,8 +21,10 @@ the gaps (`verify.py report`, or `status --json` as JSON). See
 
 **Create mode** generates a project-local `.claude/skills/verify/` skill named `verify`, with a
 feature map, wired to the project's VERIFY.md. Any skill can then call `/verify` for that repo, and
-its verdicts come back through verify-loop. The scaffold is `verify.py scaffold-skill`, the lint is
-`verify.py skill-check`, and `examples/verify-create/` is a finished run.
+its verdicts come back through verify-loop. The scaffold is `verify.py scaffold-skill` (`--adopt`
+completes a recipe Claude Code's built-in `/verify` recorded), the lint is `verify.py skill-check`,
+and `examples/verify-create/` is a finished run. Claude Code runs that skill before each commit,
+so it carries a cheap `## Before a commit` path: `verify.py run . --affected`.
 
 **Maintain mode** keeps that skill honest as the app changes. `verify.py maintain` audits it
 against VERIFY.md, the saved rejection proof and the git churn since the last pass. A pass then

@@ -4,9 +4,13 @@ scaffold-skill  Detect the stack (package.json, pyproject.toml, go.mod, Cargo.to
                 compose, Makefile) and write .claude/skills/verify/SKILL.md plus a feature map
                 stub per VERIFY.md feature. Every guess is marked TODO(verify-create): a draft
                 is not a skill until an agent replaces them from the repo and proves it once.
+                --adopt keeps a SKILL.md already there (Claude Code's bundled /verify records
+                one at the same path) and adds only what is missing.
 skill-check     Lint the generated skill: callable frontmatter, the required sections, no
                 placeholder left, executable helpers, and every feature file tied to a VERIFY.md
-                section that has a literal fail-signal and a fail-proof.
+                section that has a literal fail-signal and a fail-proof. Claude Code runs a
+                model-invocable project `verify` skill before each commit, so the skill must
+                also have a cheap `## Before a commit` path.
 """
 import json
 import os
@@ -14,7 +18,8 @@ import re
 
 SKILL_DIR = os.path.join(".claude", "skills", "verify")
 TODO = "TODO(verify-create)"
-SECTIONS = ("Launch", "Doctor", "Drive", "Evidence", "Cleanup", "Helpers", "Verdict")
+COMMIT = "Before a commit"
+SECTIONS = ("Launch", "Doctor", "Drive", "Evidence", "Cleanup", "Helpers", "Verdict", COMMIT)
 FEATURE_H2 = ("Sub-features", "How to get to it (user POV)", "Driving it with ", "Gotchas")
 WEB_DEPS = ("next", "vite", "react", "vue", "svelte", "@angular/core", "nuxt", "astro", "electron")
 API_DEPS = ("express", "fastify", "koa", "@nestjs/core", "hono", "fastapi", "flask", "django",
@@ -151,8 +156,63 @@ def _bullets(items, empty):
     return "\n".join(f"  - `{i}`" for i in items) if items else f"  - {empty}"
 
 
+def _intro():
+    return """Written for an agent reading it cold. Pass/fail is never decided here: each mapped feature has a
+check in [VERIFY.md](../../../VERIFY.md) with a literal `fail-signal:` and a `fail-proof:`, and
+verify-loop's `verify.py` runs it. This file says how to reach and watch the real app."""
+
+
+def section_bodies(facts):
+    """The required sections in order, as (heading, body). Adopt appends the missing ones."""
+    harness = facts["harness"][0]
+    return [
+        ("Launch", f"""{TODO}: the repo's own dev command, from an empty disposable data dir (migrations, seed), on owned
+ports/profiles. Ready means usable, not just that a process answers. Mirror it in VERIFY.md
+`## Run` (`setup`, `start`, `ready`, `stop`) so `verify.py run` launches the same way. Teardown is
+under Cleanup. For a short-lived CLI: build once, then run each drive in its own process/PTY.
+Isolation: {TODO}: can two instances run side by side? If not, refuse to drive a shared one."""),
+        ("Doctor", f"""{TODO}: one read-only command answering "is this the right, healthy instance?" (owned port/PID,
+expected build, auth). It is VERIFY.md's `## Run` `doctor:`; for a build-sensitive service it
+checks the running artifact identity, not just health. Run it first, and again after any surprise."""),
+        ("Drive", f"""Harness: {harness}. Existing harnesses first; real selectors, routes and commands from this repo
+(ARIA names, data attributes, prompts, paths), never coordinates. One file per feature in
+[features/](features/README.md).
+{TODO}: the shared recipe (how to invoke the harness against the launched instance)."""),
+        ("Evidence", f"""Drive the real user path, not internal setters or test-only routes. Capture the action, the
+resulting state and side effects (files, rows, messages) through a second read; mocks only at
+production boundaries. Evidence for this surface: {facts['evidence'][-1]}.
+Proof goes to `.verify-evidence/<feature>/` and survives cleanup; output tails and rejection
+receipts also stay in `.verify-state.json`. Keep secrets out.
+{TODO}: confirm the evidence location is git-ignored."""),
+        ("Cleanup", f"""Stop only what this run started (PID/port you own); never kill by process name. Remove scratch
+data, never evidence. Afterwards, confirm the evidence files still exist.
+{TODO}: exact teardown commands (VERIFY.md `stop:`)."""),
+        ("Helpers", f"""{TODO}: each helper script lives in `scripts/` here, is executable, and is shown with its exact
+invocation. Delete this section's TODO if there are none."""),
+        ("Verdict", """`<verify-loop>` is the installed verify-loop skill's directory. Every caller gets its answer:
+
+1. Prove a feature can fail: in a scratch copy, put the product in its `fail-proof:` state and run
+   `python <verify-loop>/scripts/verify.py run .` until its `fail-signal:` shows; restore.
+2. Freeze: `verify.py baseline .`. A check that seems wrong is a finding for a person, not an edit.
+3. Done: `verify.py run . --strict`, then `verify.py report .` (or `status --json`). Return that
+   output unchanged: verdict, `VERIFY:` line, observed rejection, passes and gaps.
+
+Never weaken a journey or expectation to make it pass. If verify-loop is absent, run the checks
+directly before and after, keep both outputs, and report the verdict as `unverified`. When the app
+changes, use verify-loop's maintain mode (`verify.py maintain .`) to keep this skill honest."""),
+        (COMMIT, """Claude Code runs this skill right before each commit (not for docs- or test-only changes). Here,
+run only the mapped checks the change touches; do not launch or drive the app by hand:
+
+    python <verify-loop>/scripts/verify.py run . --affected
+
+`nothing to run` or green: commit. Red: do not commit; fix it, or report it blocked. This gate is
+not done: `--affected` can miss a check, so done is still the whole strict run under Verdict."""),
+    ]
+
+
 def skill_text(facts):
-    surface, harness = facts["surfaces"][0], facts["harness"][0]
+    surface = facts["surfaces"][0]
+    body = "\n\n".join(f"## {h}\n\n{b}" for h, b in section_bodies(facts))
     return f"""---
 name: verify
 description: >-
@@ -163,9 +223,7 @@ description: >-
 
 # Verify {facts['name']}
 
-Written for an agent reading it cold. Pass/fail is never decided here: each mapped feature has a
-check in [VERIFY.md](../../../VERIFY.md) with a literal `fail-signal:` and a `fail-proof:`, and
-verify-loop's `verify.py` runs it. This file says how to reach and watch the real app.
+{_intro()}
 
 Detected (verify each against the repo, then delete this list):
 - stacks: {", ".join(facts['stacks']) or "none"}; surfaces: {", ".join(facts['surfaces'])}
@@ -176,60 +234,7 @@ Detected (verify each against the repo, then delete this list):
 - harnesses: {", ".join(facts['harness'])}; ports: {", ".join(facts['ports']) or "none declared"}
 {TODO}: confirm these, pick the primary surface, note the others, then remove this block.
 
-## Launch
-
-{TODO}: the repo's own dev command, from an empty disposable data dir (migrations, seed), on owned
-ports/profiles. Ready means usable, not just that a process answers. Mirror it in VERIFY.md
-`## Run` (`setup`, `start`, `ready`, `stop`) so `verify.py run` launches the same way. Teardown is
-under Cleanup. For a short-lived CLI: build once, then run each drive in its own process/PTY.
-Isolation: {TODO}: can two instances run side by side? If not, refuse to drive a shared one.
-
-## Doctor
-
-{TODO}: one read-only command answering "is this the right, healthy instance?" (owned port/PID,
-expected build, auth). It is VERIFY.md's `## Run` `doctor:`; for a build-sensitive service it
-checks the running artifact identity, not just health. Run it first, and again after any surprise.
-
-## Drive
-
-Harness: {harness}. Existing harnesses first; real selectors, routes and commands from this repo
-(ARIA names, data attributes, prompts, paths), never coordinates. One file per feature in
-[features/](features/README.md).
-{TODO}: the shared recipe (how to invoke the harness against the launched instance).
-
-## Evidence
-
-Drive the real user path, not internal setters or test-only routes. Capture the action, the
-resulting state and side effects (files, rows, messages) through a second read; mocks only at
-production boundaries. Evidence for this surface: {facts['evidence'][-1]}.
-Proof goes to `.verify-evidence/<feature>/` and survives cleanup; output tails and rejection
-receipts also stay in `.verify-state.json`. Keep secrets out.
-{TODO}: confirm the evidence location is git-ignored.
-
-## Cleanup
-
-Stop only what this run started (PID/port you own); never kill by process name. Remove scratch
-data, never evidence. Afterwards, confirm the evidence files still exist.
-{TODO}: exact teardown commands (VERIFY.md `stop:`).
-
-## Helpers
-
-{TODO}: each helper script lives in `scripts/` here, is executable, and is shown with its exact
-invocation. Delete this section's TODO if there are none.
-
-## Verdict
-
-`<verify-loop>` is the installed verify-loop skill's directory. Every caller gets its answer:
-
-1. Prove a feature can fail: in a scratch copy, put the product in its `fail-proof:` state and run
-   `python <verify-loop>/scripts/verify.py run .` until its `fail-signal:` shows; restore.
-2. Freeze: `verify.py baseline .`. A check that seems wrong is a finding for a person, not an edit.
-3. Done: `verify.py run . --strict`, then `verify.py report .` (or `status --json`). Return that
-   output unchanged: verdict, `VERIFY:` line, observed rejection, passes and gaps.
-
-Never weaken a journey or expectation to make it pass. If verify-loop is absent, run the checks
-directly before and after, keep both outputs, and report the verdict as `unverified`. When the app
-changes, use verify-loop's maintain mode (`verify.py maintain .`) to keep this skill honest.
+{body}
 """
 
 
@@ -294,10 +299,36 @@ Preconditions:
 """
 
 
-def cmd_scaffold_skill(v, repo):
+def adopt_text(text, facts):
+    """Keep an existing SKILL.md as written; add frontmatter, the VERIFY.md link and missing sections.
+
+    Returns (new text, what was added)."""
+    added = []
+    text = text.replace("\r\n", "\n")
+    front = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    if not front:
+        head = skill_text(facts).split("\n---\n", 1)[0] + "\n---\n\n"
+        text, added = head + text, ["frontmatter"]
+    if "VERIFY.md" not in text:
+        end = re.match(r"^---\n.*?\n---\n", text, re.S).end()
+        text = text[:end] + "\n" + _intro() + "\n" + text[end:]
+        added.append("VERIFY.md link")
+    heads = _sections(text)
+    missing = [(h, b) for h, b in section_bodies(facts) if h not in heads]
+    if missing:
+        text = text.rstrip("\n") + "\n\n" + "\n\n".join(f"## {h}\n\n{b}" for h, b in missing) + "\n"
+        added += [f"## {h}" for h, _ in missing]
+    return text, added
+
+
+def cmd_scaffold_skill(v, repo, adopt=False):
     target = os.path.join(repo, SKILL_DIR)
-    if os.path.exists(os.path.join(target, "SKILL.md")):
-        print(f"{os.path.join(SKILL_DIR, 'SKILL.md')} already exists; not overwriting. Use skill-check.")
+    skill_path = os.path.join(target, "SKILL.md")
+    existing = _read(skill_path) if os.path.exists(skill_path) else None
+    if existing is not None and not adopt:
+        print(f"{os.path.join(SKILL_DIR, 'SKILL.md')} already exists; not overwriting. If Claude Code's "
+              "/verify recorded it, `scaffold-skill --adopt` keeps it and adds what is missing. "
+              "Otherwise use skill-check.")
         return 1
     facts = detect_stack(repo)
     features = []
@@ -305,15 +336,28 @@ def cmd_scaffold_skill(v, repo):
         features, _ = v.parse(v.read(repo, v.RECIPE), repo=repo)
     names = [f["name"] for f in features if not f["journey"]][:5] or ["Primary feature"]
     os.makedirs(os.path.join(target, "features"), exist_ok=True)
-    files = {"SKILL.md": skill_text(facts), os.path.join("features", "README.md"): readme_text(facts, names)}
+    if existing is None:
+        files, added = {"SKILL.md": skill_text(facts)}, None
+    else:
+        text, added = adopt_text(existing, facts)
+        files = {"SKILL.md": text} if added else {}
+    files[os.path.join("features", "README.md")] = readme_text(facts, names)
     for n in names:
         files[os.path.join("features", slug(n) + ".md")] = feature_text(n, facts["harness"][0])
+    if existing is not None:
+        files = {rel: t for rel, t in files.items()
+                 if rel == "SKILL.md" or not os.path.exists(os.path.join(target, rel))}
     for rel, text in files.items():
         with open(os.path.join(target, rel), "w", encoding="utf-8", newline="\n") as fh:
             fh.write(text)
-    print(f"wrote {SKILL_DIR}: SKILL.md + {len(names)} feature file(s) "
-          f"({', '.join(names)}). Stack: {', '.join(facts['stacks']) or 'unknown'}; "
-          f"surface: {facts['surfaces'][0]}; harness: {facts['harness'][0]}.")
+    if existing is not None:
+        print(f"adopted {os.path.join(SKILL_DIR, 'SKILL.md')}: kept its text; added "
+              f"{', '.join(added) or 'nothing'}; wrote {len(files) - (1 if added else 0)} missing feature file(s). "
+              "Move its recorded launch and drive steps into Launch and Drive.")
+    else:
+        print(f"wrote {SKILL_DIR}: SKILL.md + {len(names)} feature file(s) "
+              f"({', '.join(names)}). Stack: {', '.join(facts['stacks']) or 'unknown'}; "
+              f"surface: {facts['surfaces'][0]}; harness: {facts['harness'][0]}.")
     if not features:
         print(f"no {v.RECIPE} features: map the top 3-5 user-facing features in {v.RECIPE} and the map.")
     print(f"DRAFT: replace every {TODO} from the repo, prove it once, then run `verify.py skill-check`.")
@@ -348,6 +392,10 @@ def skill_problems(v, repo):
             problems.append(f"SKILL.md is missing `## {s}`")
     if "VERIFY.md" not in skill:
         problems.append("SKILL.md does not link VERIFY.md: verdicts must come from its checks")
+    commit = re.search(rf"(?ms)^##\s+{COMMIT}\s*$(.*?)(?=^##\s|\Z)", skill)
+    if commit and not re.search(r"verify\.py\s+run\s+\S+\s+--affected", commit.group(1)):
+        problems.append(f"`## {COMMIT}` must run `verify.py run . --affected`: Claude Code runs this "
+                        "skill before every commit, and a full launch and drive there is slow")
     for root, _, files in os.walk(base):
         for f in sorted(files):
             p = os.path.join(root, f)

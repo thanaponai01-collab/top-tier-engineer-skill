@@ -1,6 +1,23 @@
 # Changelog
 
-## Unreleased - Automatic progression
+## 1.20.0 - 2026-10-24 - Claude Code's own /verify
+
+Claude Code now ships a built-in `/verify` and, since v2.1.286, runs a project skill named
+`verify` that Claude can invoke before each commit that is not docs or tests only. Create mode
+generates exactly that skill.
+
+- The generated skill has a `## Before a commit` section that runs only
+  `verify.py run . --affected`, so the per-commit run no longer launches and drives the whole app.
+  `skill-check` reports the section missing, or present without that command, and so does
+  `maintain`: a skill generated before 1.20.0 is flagged until the section is added.
+- `scaffold-skill --adopt` keeps a SKILL.md already at `.claude/skills/verify/` (where the built-in
+  `/verify` records its recipe) and adds only what is missing: frontmatter, the VERIFY.md link,
+  required sections and feature files. It never overwrites a feature file, and a second run
+  changes nothing. Without `--adopt`, the refusal now names it.
+- `examples/verify-create/` and the create reference carry the new section; the reference names
+  the monorepo call form `/<package path>:verify`.
+
+Also released in 1.20.0, from the automatic progression work:
 
 - Add `verify.py advance`: bounded check runs and proof-ready baseline freezing, with structured
   agent tasks and the canonical verdict. Preserve existing proof and independence gates.
