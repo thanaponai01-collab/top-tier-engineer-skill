@@ -37,6 +37,37 @@
   - Grade verification: `python evals/grade.py verify-loop-ci-fresh-proof --report ...` → `2/2 found, score 1.00`.
   - `git diff --check` passed.
 
+- Zero-test replays meet no expectation | proven
+  - `run_replay` in `evals/grade.py` fails any replay whose output says no tests ran
+    (`Ran 0 tests` / `no tests ran`), for `expect: pass` and `expect: fail` alike.
+  - Rejection before the fix: on Python 3.11, `unittest discover` exits 0 with no tests, so
+    `test_deleting_every_test_does_not_pass` failed (`check-passes-on-correct-code` was met);
+    the new `test_a_replay_that_ran_no_tests_meets_neither_expectation` failed against the old grader.
+  - Full proof: `python -m unittest discover tests` → `Ran 373 tests`, `OK (skipped=1)` (Python 3.11.9).
+  - `git diff --check` passed.
+
+- The lazy path is the correct path | proven | commit: The lazy path is the correct path
+  - `verify.py assess` (one read-only call), `ANSWER DRAFT` with `[[fill: ...]]` slots, `answer-check`
+    fixes and `ADD THESE LINES`, `ANSWER UNFILLED`, `gaps.survived`, runnable `NEXT` paths, short
+    passing `advance` steps, SKILL.md rewritten as a router (body 6.9 KB → 4.9 KB).
+  - Rejection before implementation: `tests/test_agent_path.py` → 15 of 18 failed/errored against the
+    old helper and SKILL.md (no `assess`, no draft, no fixes, body 98 lines).
+  - Fixture check: `assess` on `fake-check-and-decoy` (no `path:`) now prints `UNCOVERED line 4 …
+    still passed` on `discount.py`; before, the three-command path mutated nothing there.
+  - Review: `report --json` must equal `status --json`, so the draft stays text-only.
+  - Full proof: `python -m unittest discover tests` → `Ran 392 tests`, `OK (skipped=1)` (Python 3.11.9).
+  - `git diff --check` passed.
+
+- Assess says what it saw | proven
+  - The `assess` draft and `REJECTED` line name what the survey caught per feature (`surveyed` in
+    the answer JSON) and say that a catch is not a fail-proof receipt. Before, they said nothing had
+    been seen red after the survey caught every wrong result. On `compound-assess` that pointed at
+    the healthy-shipping decoy (6/6 caught).
+  - `assess` points a partial verdict at `advance` instead of `run --strict`, and prints no `SWARM:`
+    line. A read-only question doesn't start helper agents.
+  - Rejection before implementation: `tests/test_agent_path.py` `AssessSaysWhatItSaw` → 2 of 2 failed.
+  - Full proof: `python -m unittest discover tests` → `Ran 409 tests`, `OK (skipped=1)` (Python 3.11.9).
+
 - Claude Code's own /verify (1.20.0) | proven
   - Generated verify skill gets `## Before a commit` (`verify.py run . --affected`), enforced by
     `skill-check`/`maintain`; `scaffold-skill --adopt` completes a recipe the bundled `/verify` recorded.
@@ -78,8 +109,23 @@
     `OK (skipped=1)`, Python 3.13, Windows.
   - Results in `evals/results/trigger-2026-10-25-*`; cost about $18.
 
+- Merge of the Oct 22 agent-path line with 1.20.0-1.23.0 | proven
+  - `report` keeps the agent-path layout (`ANSWER DRAFT`, `gates.gap_rows`, assess `surveyed`) and
+    the 1.22.0 cache `SURVEY` lines; `no fresh inputs` joins `gates.GAP_LABELS`.
+  - SKILL.md keeps the router body; `OVERFIT` stays in the `fix` row, `fresh:` lives in
+    VERIFY_FORMAT.md, body 4,955 of 5,000 characters.
+  - Description cap 400 -> 800: a 384-character candidate scored held-out 8/12 (Sonnet 2/6) against
+    10/12 (4/6) for the measured one; results in `evals/results/trigger-2026-10-25-cand-{c,d}-*`.
+  - `compound-advance` reference solution read stale on Windows (autocrlf rewrote its .md files
+    under a byte-hashed state); `.gitattributes` pins `reference/solution/**` to LF.
+  - Full proof: `python -m unittest discover tests` -> `Ran 444 tests`, `OK (skipped=1)`, Python 3.13, Windows.
+
 ## Next
-1.20.0 to 1.23.0 are committed on `verify-loop-only` but unpushed, and GitHub
-main still ships top-tier-engineer 4.66.0, so installs get none of verify-loop. The held-out miss
-"double-check the fix before I merge" needs new train prompts in that shape before tuning, never
-the test prompt itself. The overfit eval still shows no difference (see 1.22.0).
+1.20.0 to 1.23.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
+4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before
+I merge" needs new train prompts in that shape before tuning, never the test prompt itself. The
+overfit eval still shows no difference (see 1.22.0).
+- Pay for an eval subset (`fake-check-and-decoy`, `green-with-unverified`, `teammate-loosened-check`)
+  to measure turns and cost against the 1.18 numbers in `work/verify-loop-design.md`.
+- Then add `max_turns`/`max_cost` and a helper-source-read failure to `grade.py` from that data.
+- Release remains separate.

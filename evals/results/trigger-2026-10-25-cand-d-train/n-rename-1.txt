@@ -1,0 +1,6 @@
+Rename format_currency to format_money everywhere.
+
+{"id": "n-rename", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0615702, "turns": 3, "seconds": 35.9}
+
+  1. Grep: format_currency
+  2. Bash: cd "<tmp>/tte-trigger-vf_7_cmf" && sed -i 's/\bformat_currency\b/format_money/g' pricing.py tests/test_pricing.py && grep -rn "form…

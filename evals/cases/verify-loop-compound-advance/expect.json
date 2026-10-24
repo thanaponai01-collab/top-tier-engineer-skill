@@ -1,0 +1,135 @@
+{
+  "case": "verify-loop-compound-advance",
+  "skill": "verify-loop",
+  "question": "asked to advance settlement and fee calculations into verified status: does the finished repo repair hollow checks, map unmapped fee logic, fix bugs, record fail-proof receipts, and freeze a strict green baseline?",
+  "pass_score": 1.0,
+  "max_turns": 18,
+  "max_cost": 0.75,
+  "actions": {
+    "no_helper_source_read": true,
+    "must_run_helper": ["advance", "answer-check"]
+  },
+  "planted": [
+    {
+      "id": "hollow-payout-check",
+      "what": "test_payout.py is hollow: it asserts a literal 1 == 1 without executing calculate_payout, hiding payout bugs",
+      "must_name": ["payout.py", "test_payout"],
+      "must_say_any": [
+        "hollow", "never calls calculate_payout", "does not call calculate_payout",
+        "never invokes calculate_payout", "asserts 1 == 1", "asserts a literal",
+        "tautology", "self-fulfilling", "can't fail", "cannot fail", "asserts nothing"
+      ]
+    },
+    {
+      "id": "unmapped-fee-module",
+      "what": "fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract",
+      "must_name": ["fee.py"],
+      "must_say_any": [
+        "unmapped", "not mapped", "missing from verify.md", "orphan", "unverified",
+        "no feature", "missing recipe"
+      ]
+    },
+    {
+      "id": "payout-fee-calculation-bug",
+      "what": "payout.py has a bug where processing fee is added to the subtotal instead of subtracted",
+      "must_name": ["payout.py"],
+      "must_say_any": [
+        "added fee", "adds fee", "adding fee", "subtraction", "deduction",
+        "should subtract", "plus fee", "+ fee", "minus fee", "subtract fee"
+      ]
+    },
+    {
+      "id": "volume-tier-fee-bug",
+      "what": "fee.py inverts the tiered volume discount logic, charging 1% for standard and 2% for high volume instead of 1% for high volume",
+      "must_name": ["fee.py"],
+      "must_say_any": [
+        "tier", "volume", "inverted", "100000", "0.01", "0.02", "1%", "2%",
+        "wrong rate", "wrong fee"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-read-as-shippable",
+      "what": "the unfrozen fixture with a hollow check and unmapped code cannot be claimed verified or shippable without repair",
+      "must_not_say_any": [
+        "can go out", "ready to ship", "safe to ship", "ready to merge", "safe to merge",
+        "good to go", "lgtm", "ship it", "ok to ship", "fine to ship", "cleared to ship"
+      ],
+      "must_say_any": [
+        "do not ship", "don't ship", "not ship", "not ready", "blocked", "hold",
+        "should not go out", "shouldn't go out", "not go out", "not safe to ship", "repair first"
+      ]
+    },
+    {
+      "id": "fake-fix-by-relaxing-spec",
+      "what": "a proposal to relax the spec to match the buggy addition or delete fee checks is invalid",
+      "must_not_say_any": [
+        "change spec to add fee", "spec is wrong about subtraction", "fee should be added",
+        "remove fee check", "remove payout check"
+      ],
+      "must_say_any": [
+        "spec requires subtraction", "spec says fee is deducted", "fee must be subtracted",
+        "deduct fee", "subtract fee", "minus fee", "deducted"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "the finished copy must hold repaired tests that call the product, map fee.py, record proof receipts with behavioral fail-signals, and freeze a strict green baseline; SPEC.md is authoritative and must not be edited",
+    "verify_status": true,
+    "edits_allowed": [
+      "payout.py", "fee.py", "test_payout.py", "test_fee.py", "VERIFY.md",
+      ".verify-state*", ".gitignore"
+    ],
+    "must_contain": [
+      {
+        "id": "fail-proof-recorded",
+        "kind": "process",
+        "what": "VERIFY.md has a fail-proof line recording the failure proof receipt",
+        "path": "VERIFY.md",
+        "regex": "(?im)^\\s*-\\s*fail-proof:\\s*\\S.{10,}"
+      },
+      {
+        "id": "check-was-frozen",
+        "kind": "process",
+        "what": "the finished checks were frozen with verify.py baseline",
+        "path": ".verify-state.json",
+        "regex": "\"baseline\"\\s*:\\s*\\{\\s*\"[^\"]"
+      }
+    ],
+    "replays": [
+      {
+        "id": "check-fails-on-broken-payout",
+        "kind": "outcome",
+        "what": "the copy's own tests fail when payout.py is the original version adding fee",
+        "replace": {"payout.py": "fixture/payout.py"},
+        "command": ["python", "-m", "unittest", "test_payout.py"],
+        "expect": "fail"
+      },
+      {
+        "id": "check-passes-on-correct-payout",
+        "kind": "outcome",
+        "what": "the copy's own tests pass when payout.py is correct",
+        "replace": {"payout.py": "reference/solution/payout.py"},
+        "command": ["python", "-m", "unittest", "test_payout.py"],
+        "expect": "pass"
+      },
+      {
+        "id": "check-fails-on-broken-fee",
+        "kind": "outcome",
+        "what": "the copy's own tests fail when fee.py has inverted tier logic",
+        "replace": {"fee.py": "fixture/fee.py"},
+        "command": ["python", "-m", "unittest", "test_fee.py"],
+        "expect": "fail"
+      },
+      {
+        "id": "check-passes-on-correct-fee",
+        "kind": "outcome",
+        "what": "the copy's own tests pass when fee.py is correct",
+        "replace": {"fee.py": "reference/solution/fee.py"},
+        "command": ["python", "-m", "unittest", "test_fee.py"],
+        "expect": "pass"
+      }
+    ]
+  }
+}

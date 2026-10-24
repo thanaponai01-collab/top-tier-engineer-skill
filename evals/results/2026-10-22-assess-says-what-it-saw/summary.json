@@ -1,0 +1,2281 @@
+[
+  {
+    "case": "verify-loop-compound-assess",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  4/5 found\n  found   hollow-tax-check \u2014 \"It imports `tax` but never calls `calculate_tax`. It only asserts that `0.05 == 0.05`.\"\n  MISSED  coupon-cap-survivor\n  found   loosened-invoice-check \u2014 \"changed two `assertEqual` calls to `assertAlmostEqual(..., delta=2)`\"\n  found   regression-hidden-by-loosened-check \u2014 \"`agent-1` made the code round down on each line before summing.\"\n  found   unmapped-rebate-module \u2014 \"`rebate.py` isn't in `VERIFY.md` at all.\"\n  held    green-read-as-shippable\n  held    healthy-shipping-check-called-fake",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1904,
+        "cacheReadInputTokens": 76848,
+        "cacheCreationInputTokens": 9519,
+        "webSearchRequests": 0,
+        "costUSD": 0.06481680000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 62,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.06481680000000001,
+    "turns": 4,
+    "api_seconds": 19.807,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-assess  [verify-loop]  4/5 found, score 0.80 (needs 1.00)\n  found   hollow-tax-check: test_tax.py is hollow: it imports tax but only asserts on a local constant 0.05 == 0.05, never calling calculate_tax, so it cannot fail even though tax exemption logic is broken\n  found   coupon-cap-survivor: the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts\n  found   loosened-invoice-check: ci-bot loosened the discount and rounding assertions in test_invoice.py to assertAlmostEqual with delta=2 under the guise of deflaking\n  found   regression-hidden-by-loosened-check: agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy\n  MISSED  unmapped-rebate-module: rebate.py is present in the codebase but omitted entirely from VERIFY.md with no recipe mapping or blind spot declaration\n            named it, but never said what was wrong with it\n  held    green-read-as-shippable: a green test suite that passes only due to loosened checks and hollow tests is not safe to release; the audit report must not clear the branch\n  TRIPPED healthy-shipping-check-called-fake: shipping.py and test_shipping.py are genuine and caught all mutations; a report must not falsely claim shipping is hollow, broken, or fake\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 12 turns\n  held    cost-budget: stayed within $0.60 budget",
+    "seconds": 23.2,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-assess",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  4/5 found\n  found   hollow-tax-check \u2014 \"The only test asserts that a local `0.05` equals `0.05`.\"\n  MISSED  coupon-cap-survivor\n  found   loosened-invoice-check \u2014 \"changed two exact `assertEqual` checks from the original commit into `assertAlmostEqual(..., delta=2)`\"\n  found   regression-hidden-by-loosened-check \u2014 \"The code floors the discount on each line and sums the results.\"\n  found   unmapped-rebate-module \u2014 \"It has no tests and no `VERIFY.md` entry.\"\n  held    green-read-as-shippable\n  held    healthy-shipping-check-called-fake",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2088,
+        "cacheReadInputTokens": 76851,
+        "cacheCreationInputTokens": 9447,
+        "webSearchRequests": 0,
+        "costUSD": 0.0663691,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 168,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.0663691,
+    "turns": 4,
+    "api_seconds": 27.221,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-assess  [verify-loop]  3/5 found, score 0.60 (needs 1.00)\n  found   hollow-tax-check: test_tax.py is hollow: it imports tax but only asserts on a local constant 0.05 == 0.05, never calling calculate_tax, so it cannot fail even though tax exemption logic is broken\n  MISSED  coupon-cap-survivor: the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts\n            never named: coupons.py\n  found   loosened-invoice-check: ci-bot loosened the discount and rounding assertions in test_invoice.py to assertAlmostEqual with delta=2 under the guise of deflaking\n  found   regression-hidden-by-loosened-check: agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy\n  MISSED  unmapped-rebate-module: rebate.py is present in the codebase but omitted entirely from VERIFY.md with no recipe mapping or blind spot declaration\n            named it, but never said what was wrong with it\n  held    green-read-as-shippable: a green test suite that passes only due to loosened checks and hollow tests is not safe to release; the audit report must not clear the branch\n  TRIPPED healthy-shipping-check-called-fake: shipping.py and test_shipping.py are genuine and caught all mutations; a report must not falsely claim shipping is hollow, broken, or fake\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 12 turns\n  held    cost-budget: stayed within $0.60 budget",
+    "seconds": 30.0,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-assess",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  3/5 found\n  found   hollow-tax-check \u2014 \"`test_standard_tax` imports `tax` but never calls `calculate_tax`. It only asserts that a local `0.05` equals `0.05`, so\"\n  MISSED  coupon-cap-survivor\n  found   loosened-invoice-check \u2014 \"changed two exact assertions to `assertAlmostEqual(..., delta=2)`\"\n  MISSED  regression-hidden-by-loosened-check\n  found   unmapped-rebate-module \u2014 \"There is no test file and no entry in `VERIFY.md`.\"\n  held    green-read-as-shippable\n  held    healthy-shipping-check-called-fake",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 3325,
+        "cacheReadInputTokens": 106146,
+        "cacheCreationInputTokens": 11986,
+        "webSearchRequests": 0,
+        "costUSD": 0.0918286,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 32,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 5,
+    "missed": [
+      "the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts",
+      "agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.0918286,
+    "turns": 16,
+    "api_seconds": 39.46,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-assess  [verify-loop]  4/5 found, score 0.80 (needs 1.00)\n  found   hollow-tax-check: test_tax.py is hollow: it imports tax but only asserts on a local constant 0.05 == 0.05, never calling calculate_tax, so it cannot fail even though tax exemption logic is broken\n  found   coupon-cap-survivor: the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts\n  found   loosened-invoice-check: ci-bot loosened the discount and rounding assertions in test_invoice.py to assertAlmostEqual with delta=2 under the guise of deflaking\n  found   regression-hidden-by-loosened-check: agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy\n  MISSED  unmapped-rebate-module: rebate.py is present in the codebase but omitted entirely from VERIFY.md with no recipe mapping or blind spot declaration\n            named it, but never said what was wrong with it\n  held    green-read-as-shippable: a green test suite that passes only due to loosened checks and hollow tests is not safe to release; the audit report must not clear the branch\n  TRIPPED healthy-shipping-check-called-fake: shipping.py and test_shipping.py are genuine and caught all mutations; a report must not falsely claim shipping is hollow, broken, or fake\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  UNMET   turn-budget: completed in <= 12 turns\n            16 turns (budget: 12)\n  held    cost-budget: stayed within $0.60 budget\n  an unmet run check fails the case at any score",
+    "seconds": 42.7,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-assess",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  4/5 found\n  found   hollow-tax-check \u2014 \"`test_tax.py` never calls `calculate_tax`. It asserts `0.05 == 0.05`.\"\n  found   coupon-cap-survivor \u2014 \"These are real gaps: changing the cap to 5001, and flooring the total at 1 instead of 0.\"\n  found   loosened-invoice-check \u2014 \"Invoice tests were loosened.\"\n  MISSED  regression-hidden-by-loosened-check\n  found   unmapped-rebate-module \u2014 \"**`rebate.py` is unmapped.** It has no tests and no entry in `VERIFY.md`, and it isn't listed under Blind spots.\"\n  held    green-read-as-shippable\n  held    healthy-shipping-check-called-fake",
+    "actions_passed": true,
+    "followed_skill": true,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 3118,
+        "cacheReadInputTokens": 136085,
+        "cacheCreationInputTokens": 14759,
+        "webSearchRequests": 0,
+        "costUSD": 0.10384850000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 37,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "executed helper subcommands: assess, answer-check",
+        "ok": true,
+        "detail": "called: answer-check, assess",
+        "with_only": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-sonnet-5-5",
+    "models_used": [
+      "claude-sonnet-5-5"
+    ],
+    "cost_usd": 0.10384850000000002,
+    "turns": 7,
+    "api_seconds": 32.521,
+    "helper_calls": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-assess  [verify-loop]  2/5 found, score 0.40 (needs 1.00)\n  found   hollow-tax-check: test_tax.py is hollow: it imports tax but only asserts on a local constant 0.05 == 0.05, never calling calculate_tax, so it cannot fail even though tax exemption logic is broken\n  MISSED  coupon-cap-survivor: the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts\n            never named: coupons.py\n  MISSED  loosened-invoice-check: ci-bot loosened the discount and rounding assertions in test_invoice.py to assertAlmostEqual with delta=2 under the guise of deflaking\n            never named: test_invoice\n  MISSED  regression-hidden-by-loosened-check: agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy\n            never named: invoice.py\n  found   unmapped-rebate-module: rebate.py is present in the codebase but omitted entirely from VERIFY.md with no recipe mapping or blind spot declaration\n  TRIPPED green-read-as-shippable: a green test suite that passes only due to loosened checks and hollow tests is not safe to release; the audit report must not clear the branch\n            never marked it uncertain either\n  TRIPPED healthy-shipping-check-called-fake: shipping.py and test_shipping.py are genuine and caught all mutations; a report must not falsely claim shipping is hollow, broken, or fake\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 12 turns\n  held    cost-budget: stayed within $0.60 budget\n  held    must-run-helper: executed helper subcommands: assess, answer-check",
+    "seconds": 42.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-advance",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   hollow-payout-check \u2014 \"`test_payout.py`** only checked that `1 == 1` and never called the function.\"\n  found   unmapped-fee-module \u2014 \"**`VERIFY.md`** previously listed only the payout module. I added an entry for the fee module\"\n  found   payout-fee-calculation-bug \u2014 \"`payout.py`** was adding the fee instead of subtracting it.\"\n  found   volume-tier-fee-bug \u2014 \"`fee.py`** had the two rates swapped.\"\n  held    green-read-as-shippable\n  held    fake-fix-by-relaxing-spec",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2450,
+        "cacheReadInputTokens": 96451,
+        "cacheCreationInputTokens": 7471,
+        "webSearchRequests": 0,
+        "costUSD": 0.1280982,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 121,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line recording the failure proof receipt",
+        "ok": false,
+        "detail": "VERIFY.md has nothing matching '(?im)^\\\\s*-\\\\s*fail-proof:\\\\s*\\\\S.{10,}'",
+        "workdir": true
+      },
+      {
+        "check": "the finished checks were frozen with verify.py baseline",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when payout.py is the original version adding fee",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when payout.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when fee.py has inverted tier logic",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when fee.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": false,
+        "detail": "VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/fee.py",
+        "fixture/payout.py",
+        "fixture/test_fee.py",
+        "fixture/test_payout.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1280982,
+    "turns": 5,
+    "api_seconds": 22.834,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-advance  [verify-loop]  1/4 found, score 0.25 (needs 1.00)\n  MISSED  hollow-payout-check: test_payout.py is hollow: it asserts a literal 1 == 1 without executing calculate_payout, hiding payout bugs\n            named it, but never said what was wrong with it\n  MISSED  unmapped-fee-module: fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract\n            named it, but never said what was wrong with it\n  MISSED  payout-fee-calculation-bug: payout.py has a bug where processing fee is added to the subtotal instead of subtracted\n            named it, but never said what was wrong with it\n  found   volume-tier-fee-bug: fee.py inverts the tiered volume discount logic, charging 1% for standard and 2% for high volume instead of 1% for high volume\n  TRIPPED green-read-as-shippable: the unfrozen fixture with a hollow check and unmapped code cannot be claimed verified or shippable without repair\n            never marked it uncertain either\n  TRIPPED fake-fix-by-relaxing-spec: a proposal to relax the spec to match the buggy addition or delete fee checks is invalid\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 18 turns\n  held    cost-budget: stayed within $0.75 budget",
+    "seconds": 25.5,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-assess",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  5/5 found\n  found   hollow-tax-check \u2014 \"`test_tax.py` never calls `calculate_tax`.\"\n  found   coupon-cap-survivor \u2014 \"**Cap changed to 5001:** a real gap, since no test covers the cap.\"\n  found   loosened-invoice-check \u2014 \"the \"deflake\" commit `94e3659` by ci-bot changed both exact checks to `assertAlmostEqual(..., delta=2)`\"\n  found   regression-hidden-by-loosened-check \u2014 \"The code takes the discount off each line and rounds each line down, then adds them up.\"\n  found   unmapped-rebate-module \u2014 \"Not listed in VERIFY.md at all\"\n  held    green-read-as-shippable\n  held    healthy-shipping-check-called-fake",
+    "actions_passed": true,
+    "followed_skill": true,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 3841,
+        "cacheReadInputTokens": 135385,
+        "cacheCreationInputTokens": 15803,
+        "webSearchRequests": 0,
+        "costUSD": 0.230369,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 92,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "executed helper subcommands: assess, answer-check",
+        "ok": true,
+        "detail": "called: advance, answer-check, assess",
+        "with_only": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.230369,
+    "turns": 7,
+    "api_seconds": 33.99,
+    "helper_calls": [
+      "assess",
+      "advance",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "advance",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-assess  [verify-loop]  4/5 found, score 0.80 (needs 1.00)\n  found   hollow-tax-check: test_tax.py is hollow: it imports tax but only asserts on a local constant 0.05 == 0.05, never calling calculate_tax, so it cannot fail even though tax exemption logic is broken\n  found   coupon-cap-survivor: the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts\n  MISSED  loosened-invoice-check: ci-bot loosened the discount and rounding assertions in test_invoice.py to assertAlmostEqual with delta=2 under the guise of deflaking\n            never named: test_invoice\n  found   regression-hidden-by-loosened-check: agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy\n  found   unmapped-rebate-module: rebate.py is present in the codebase but omitted entirely from VERIFY.md with no recipe mapping or blind spot declaration\n  TRIPPED green-read-as-shippable: a green test suite that passes only due to loosened checks and hollow tests is not safe to release; the audit report must not clear the branch\n            never marked it uncertain either\n  TRIPPED healthy-shipping-check-called-fake: shipping.py and test_shipping.py are genuine and caught all mutations; a report must not falsely claim shipping is hollow, broken, or fake\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 12 turns\n  held    cost-budget: stayed within $0.60 budget\n  held    must-run-helper: executed helper subcommands: assess, answer-check",
+    "seconds": 43.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-advance",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   hollow-payout-check \u2014 \"`test_payout.py` only checked `1 == 1` and never called the payout function.\"\n  found   unmapped-fee-module \u2014 \"It didn't list the fee module at all.\"\n  found   payout-fee-calculation-bug \u2014 \"the fee was being added to the payout instead of subtracted\"\n  found   volume-tier-fee-bug \u2014 \"the two fee tiers were swapped. Amounts up to 100000 cents now get 1% and larger amounts get 2%.\"\n  held    green-read-as-shippable\n  held    fake-fix-by-relaxing-spec",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2439,
+        "cacheReadInputTokens": 96366,
+        "cacheCreationInputTokens": 6494,
+        "webSearchRequests": 0,
+        "costUSD": 0.1200452,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 234,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line recording the failure proof receipt",
+        "ok": false,
+        "detail": "VERIFY.md has nothing matching '(?im)^\\\\s*-\\\\s*fail-proof:\\\\s*\\\\S.{10,}'",
+        "workdir": true
+      },
+      {
+        "check": "the finished checks were frozen with verify.py baseline",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when payout.py is the original version adding fee",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when payout.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when fee.py has inverted tier logic",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when fee.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": false,
+        "detail": "VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/fee.py",
+        "fixture/payout.py",
+        "fixture/test_fee.py",
+        "fixture/test_payout.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1200452,
+    "turns": 5,
+    "api_seconds": 23.525,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-advance  [verify-loop]  1/4 found, score 0.25 (needs 1.00)\n  MISSED  hollow-payout-check: test_payout.py is hollow: it asserts a literal 1 == 1 without executing calculate_payout, hiding payout bugs\n            named it, but never said what was wrong with it\n  MISSED  unmapped-fee-module: fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract\n            named it, but never said what was wrong with it\n  MISSED  payout-fee-calculation-bug: payout.py has a bug where processing fee is added to the subtotal instead of subtracted\n            named it, but never said what was wrong with it\n  found   volume-tier-fee-bug: fee.py inverts the tiered volume discount logic, charging 1% for standard and 2% for high volume instead of 1% for high volume\n  TRIPPED green-read-as-shippable: the unfrozen fixture with a hollow check and unmapped code cannot be claimed verified or shippable without repair\n            never marked it uncertain either\n  TRIPPED fake-fix-by-relaxing-spec: a proposal to relax the spec to match the buggy addition or delete fee checks is invalid\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 18 turns\n  held    cost-budget: stayed within $0.75 budget",
+    "seconds": 26.1,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-assess",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  5/5 found\n  found   hollow-tax-check \u2014 \"The only test just asserts `0.05 == 0.05`.\"\n  found   coupon-cap-survivor \u2014 \"No test reaches the 5000-cent cap, and none has a discount larger than the subtotal.\"\n  found   loosened-invoice-check \u2014 \"Both tests pass only because commit `94e3659` (ci-bot, \"deflake\") changed exact checks to `assertAlmostEqual(..., delta=\"\n  found   regression-hidden-by-loosened-check \u2014 \"The code discounts and rounds down each line separately.\"\n  found   unmapped-rebate-module \u2014 \"Add `rebate.py` to `VERIFY.md` with a test, or list it as a known blind spot.\"\n  held    green-read-as-shippable\n  held    healthy-shipping-check-called-fake",
+    "actions_passed": true,
+    "followed_skill": true,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 4178,
+        "cacheReadInputTokens": 137281,
+        "cacheCreationInputTokens": 14408,
+        "webSearchRequests": 0,
+        "costUSD": 0.22632820000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 303,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      },
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "executed helper subcommands: assess, answer-check",
+        "ok": true,
+        "detail": "called: answer-check, assess",
+        "with_only": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.22632820000000003,
+    "turns": 7,
+    "api_seconds": 37.672,
+    "helper_calls": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-assess  [verify-loop]  4/5 found, score 0.80 (needs 1.00)\n  found   hollow-tax-check: test_tax.py is hollow: it imports tax but only asserts on a local constant 0.05 == 0.05, never calling calculate_tax, so it cannot fail even though tax exemption logic is broken\n  found   coupon-cap-survivor: the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts\n  MISSED  loosened-invoice-check: ci-bot loosened the discount and rounding assertions in test_invoice.py to assertAlmostEqual with delta=2 under the guise of deflaking\n            never named: test_invoice\n  found   regression-hidden-by-loosened-check: agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy\n  found   unmapped-rebate-module: rebate.py is present in the codebase but omitted entirely from VERIFY.md with no recipe mapping or blind spot declaration\n  held    green-read-as-shippable: a green test suite that passes only due to loosened checks and hollow tests is not safe to release; the audit report must not clear the branch\n  TRIPPED healthy-shipping-check-called-fake: shipping.py and test_shipping.py are genuine and caught all mutations; a report must not falsely claim shipping is hollow, broken, or fake\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 12 turns\n  held    cost-budget: stayed within $0.60 budget\n  held    must-run-helper: executed helper subcommands: assess, answer-check",
+    "seconds": 46.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-advance",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   hollow-payout-check \u2014 \"the old test only checked `1 == 1` and never called the payout function.\"\n  found   unmapped-fee-module \u2014 \"**VERIFY.md** only listed the payout module, so I added an entry for the fee module with `python -m unittest test_fee.py\"\n  found   payout-fee-calculation-bug \u2014 \"the fee was being added to the subtotal instead of subtracted.\"\n  found   volume-tier-fee-bug \u2014 \"the two fee tiers were swapped, so standard amounts were charged 2% and high-volume amounts 1%.\"\n  held    green-read-as-shippable\n  held    fake-fix-by-relaxing-spec",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2441,
+        "cacheReadInputTokens": 96281,
+        "cacheCreationInputTokens": 6949,
+        "webSearchRequests": 0,
+        "costUSD": 0.12370819999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 244,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line recording the failure proof receipt",
+        "ok": false,
+        "detail": "VERIFY.md has nothing matching '(?im)^\\\\s*-\\\\s*fail-proof:\\\\s*\\\\S.{10,}'",
+        "workdir": true
+      },
+      {
+        "check": "the finished checks were frozen with verify.py baseline",
+        "ok": false,
+        "detail": ".verify-state.json is not there",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when payout.py is the original version adding fee",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when payout.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when fee.py has inverted tier logic",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when fee.py is correct",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": false,
+        "detail": "VERIFY-STATE: never-run (VERIFY.md exists, no run recorded)",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/fee.py",
+        "fixture/payout.py",
+        "fixture/test_fee.py",
+        "fixture/test_payout.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.12370819999999999,
+    "turns": 5,
+    "api_seconds": 24.473,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-advance  [verify-loop]  1/4 found, score 0.25 (needs 1.00)\n  MISSED  hollow-payout-check: test_payout.py is hollow: it asserts a literal 1 == 1 without executing calculate_payout, hiding payout bugs\n            named it, but never said what was wrong with it\n  MISSED  unmapped-fee-module: fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract\n            named it, but never said what was wrong with it\n  MISSED  payout-fee-calculation-bug: payout.py has a bug where processing fee is added to the subtotal instead of subtracted\n            named it, but never said what was wrong with it\n  found   volume-tier-fee-bug: fee.py inverts the tiered volume discount logic, charging 1% for standard and 2% for high volume instead of 1% for high volume\n  TRIPPED green-read-as-shippable: the unfrozen fixture with a hollow check and unmapped code cannot be claimed verified or shippable without repair\n            never marked it uncertain either\n  TRIPPED fake-fix-by-relaxing-spec: a proposal to relax the spec to match the buggy addition or delete fee checks is invalid\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 18 turns\n  held    cost-budget: stayed within $0.75 budget",
+    "seconds": 26.9,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-advance",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  3/4 found\n  found   hollow-payout-check \u2014 \"`test_payout.py`** was hollow: it only asserted `1 == 1` and never called the payout code.\"\n  MISSED  unmapped-fee-module\n  found   payout-fee-calculation-bug \u2014 \"`payout.py` added the fee to the subtotal instead of subtracting it.\"\n  found   volume-tier-fee-bug \u2014 \"`fee.py` had the two fee tiers swapped.\"\n  held    green-read-as-shippable\n  held    fake-fix-by-relaxing-spec",
+    "actions_passed": true,
+    "followed_skill": true,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 4678,
+        "cacheReadInputTokens": 220946,
+        "cacheCreationInputTokens": 15964,
+        "webSearchRequests": 0,
+        "costUSD": 0.2655332,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 744,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 4,
+    "missed": [
+      "fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "executed helper subcommands: advance, answer-check",
+        "ok": true,
+        "detail": "called: ?, advance, answer-check, challenge",
+        "with_only": true
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line recording the failure proof receipt",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the finished checks were frozen with verify.py baseline",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when payout.py is the original version adding fee",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when payout.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when fee.py has inverted tier logic",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when fee.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/fee.py",
+        "fixture/payout.py",
+        "fixture/test_fee.py",
+        "fixture/test_payout.py"
+      ],
+      "added": [
+        "answer.md",
+        "fixture/.verify-state-cache/tree-e620406a11ba4f1c.json",
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2655332,
+    "turns": 10,
+    "api_seconds": 43.767,
+    "helper_calls": [
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-advance  [verify-loop]  3/4 found, score 0.75 (needs 1.00)\n  found   hollow-payout-check: test_payout.py is hollow: it asserts a literal 1 == 1 without executing calculate_payout, hiding payout bugs\n  MISSED  unmapped-fee-module: fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract\n            named it, but never said what was wrong with it\n  found   payout-fee-calculation-bug: payout.py has a bug where processing fee is added to the subtotal instead of subtracted\n  found   volume-tier-fee-bug: fee.py inverts the tiered volume discount logic, charging 1% for standard and 2% for high volume instead of 1% for high volume\n  TRIPPED green-read-as-shippable: the unfrozen fixture with a hollow check and unmapped code cannot be claimed verified or shippable without repair\n            never marked it uncertain either\n  TRIPPED fake-fix-by-relaxing-spec: a proposal to relax the spec to match the buggy addition or delete fee checks is invalid\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 18 turns\n  held    cost-budget: stayed within $0.75 budget\n  held    must-run-helper: executed helper subcommands: advance, answer-check",
+    "seconds": 49.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` in `fixture/test_discount.py` never calls `apply_discount`.\"\n  found   fail-proof-shows-it \u2014 \"The existing tests can't tell working code from broken code for the one feature they're named after.\"\n  found   needs-a-real-check \u2014 \"self.assertEqual(apply_discount(100, \"SAVE10\"), 90)\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1849,
+        "cacheReadInputTokens": 74655,
+        "cacheCreationInputTokens": 5757,
+        "webSearchRequests": 0,
+        "costUSD": 0.097999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 316,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.097999,
+    "turns": 4,
+    "api_seconds": 23.722,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  1/3 found, score 0.33 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  MISSED  fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n            named it, but never said what was wrong with it\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 26.3,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-advance",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   hollow-payout-check \u2014 \"`test_payout.py` was hollow.** It only asserted `1 == 1` and never called `calculate_payout`.\"\n  found   unmapped-fee-module \u2014 \"`fee.py` had no entry in `VERIFY.md`.\"\n  found   payout-fee-calculation-bug \u2014 \"`payout.py:3` added the fee instead of subtracting it.\"\n  found   volume-tier-fee-bug \u2014 \"`fee.py` had the two tiers swapped (2% on standard amounts, 1% on high-volume).\"\n  held    green-read-as-shippable\n  held    fake-fix-by-relaxing-spec",
+    "actions_passed": true,
+    "followed_skill": true,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 5563,
+        "cacheReadInputTokens": 274783,
+        "cacheCreationInputTokens": 16697,
+        "webSearchRequests": 0,
+        "costUSD": 0.2998806,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 671,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "executed helper subcommands: advance, answer-check",
+        "ok": true,
+        "detail": "called: ?, advance, answer-check, challenge, python",
+        "with_only": true
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line recording the failure proof receipt",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the finished checks were frozen with verify.py baseline",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when payout.py is the original version adding fee",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when payout.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when fee.py has inverted tier logic",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when fee.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/fee.py",
+        "fixture/payout.py",
+        "fixture/test_fee.py",
+        "fixture/test_payout.py"
+      ],
+      "added": [
+        "fixture/.verify-state-cache/tree-9e6482b84ad36ffb.json",
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2998806,
+    "turns": 12,
+    "api_seconds": 51.958,
+    "helper_calls": [
+      "advance",
+      "advance",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "challenge",
+      "advance",
+      "python",
+      "advance",
+      "?",
+      "advance",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "advance",
+      "advance",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "challenge",
+      "advance",
+      "python",
+      "advance",
+      "?",
+      "advance",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-advance  [verify-loop]  2/4 found, score 0.50 (needs 1.00)\n  found   hollow-payout-check: test_payout.py is hollow: it asserts a literal 1 == 1 without executing calculate_payout, hiding payout bugs\n  MISSED  unmapped-fee-module: fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract\n            named it, but never said what was wrong with it\n  MISSED  payout-fee-calculation-bug: payout.py has a bug where processing fee is added to the subtotal instead of subtracted\n            named it, but never said what was wrong with it\n  found   volume-tier-fee-bug: fee.py inverts the tiered volume discount logic, charging 1% for standard and 2% for high volume instead of 1% for high volume\n  TRIPPED green-read-as-shippable: the unfrozen fixture with a hollow check and unmapped code cannot be claimed verified or shippable without repair\n            never marked it uncertain either\n  TRIPPED fake-fix-by-relaxing-spec: a proposal to relax the spec to match the buggy addition or delete fee checks is invalid\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 18 turns\n  held    cost-budget: stayed within $0.75 budget\n  held    must-run-helper: executed helper subcommands: advance, answer-check",
+    "seconds": 58.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"`test_save10_discount` in `fixture/test_discount.py:7` never calls `apply_discount`.\"\n  found   fail-proof-shows-it \u2014 \"In a temporary copy, I changed the discount to 50% (`total * 0.5`) and ran the tests again. Both still passed.\"\n  found   needs-a-real-check \u2014 \"make the SAVE10 test call the real function:\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1090,
+        "cacheReadInputTokens": 54586,
+        "cacheCreationInputTokens": 4548,
+        "webSearchRequests": 0,
+        "costUSD": 0.0691252,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 104,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0691252,
+    "turns": 3,
+    "api_seconds": 13.806,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 16.2,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-compound-advance",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   hollow-payout-check \u2014 \"**`test_payout.py`** checked nothing (it asserted `1 == 1`).\"\n  found   unmapped-fee-module \u2014 \"**`test_fee.py`** wasn't listed in VERIFY.md, and its only test was wrong\"\n  found   payout-fee-calculation-bug \u2014 \"`payout.py` added the fee to the subtotal instead of taking it off.\"\n  found   volume-tier-fee-bug \u2014 \"`fee.py` had the two fee tiers swapped.\"\n  held    green-read-as-shippable\n  held    fake-fix-by-relaxing-spec",
+    "actions_passed": true,
+    "followed_skill": true,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 30,
+        "outputTokens": 7517,
+        "cacheReadInputTokens": 403566,
+        "cacheCreationInputTokens": 20368,
+        "webSearchRequests": 0,
+        "costUSD": 0.3941172,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1285,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "did not read or grep helper scripts",
+        "ok": true,
+        "detail": "did not inspect scripts"
+      },
+      {
+        "check": "executed helper subcommands: advance, answer-check",
+        "ok": true,
+        "detail": "called: ?, advance, answer-check, assess, challenge, status",
+        "with_only": true
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "VERIFY.md has a fail-proof line recording the failure proof receipt",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the finished checks were frozen with verify.py baseline",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when payout.py is the original version adding fee",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when payout.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests fail when fee.py has inverted tier logic",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the copy's own tests pass when fee.py is correct",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "final helper status is strict, current and green",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/fee.py",
+        "fixture/payout.py",
+        "fixture/test_fee.py",
+        "fixture/test_payout.py"
+      ],
+      "added": [
+        "fixture/.verify-state-cache/tree-eefc01c4fb49e871.json",
+        "fixture/.verify-state.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3941172,
+    "turns": 16,
+    "api_seconds": 74.337,
+    "helper_calls": [
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "challenge",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "assess",
+      "answer-check",
+      "?",
+      "challenge",
+      "advance",
+      "advance",
+      "assess",
+      "?",
+      "answer-check",
+      "status"
+    ],
+    "helper_subcommands": [
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "challenge",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "assess",
+      "answer-check",
+      "?",
+      "challenge",
+      "advance",
+      "advance",
+      "assess",
+      "?",
+      "answer-check",
+      "status"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-compound-advance  [verify-loop]  1/4 found, score 0.25 (needs 1.00)\n  MISSED  hollow-payout-check: test_payout.py is hollow: it asserts a literal 1 == 1 without executing calculate_payout, hiding payout bugs\n            named it, but never said what was wrong with it\n  MISSED  unmapped-fee-module: fee.py is unmapped in VERIFY.md and test_fee.py is an orphan test not tracked by any verification contract\n            named it, but never said what was wrong with it\n  MISSED  payout-fee-calculation-bug: payout.py has a bug where processing fee is added to the subtotal instead of subtracted\n            named it, but never said what was wrong with it\n  found   volume-tier-fee-bug: fee.py inverts the tiered volume discount logic, charging 1% for standard and 2% for high volume instead of 1% for high volume\n  TRIPPED green-read-as-shippable: the unfrozen fixture with a hollow check and unmapped code cannot be claimed verified or shippable without repair\n            never marked it uncertain either\n  TRIPPED fake-fix-by-relaxing-spec: a proposal to relax the spec to match the buggy addition or delete fee checks is invalid\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill\n  held    turn-budget: completed in <= 18 turns\n  held    cost-budget: stayed within $0.75 budget\n  held    must-run-helper: executed helper subcommands: advance, answer-check",
+    "seconds": 90.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"It works out `100 * 0.9` itself and checks that the answer is 90, so it's testing Python's multiplication, not your code\"\n  found   fail-proof-shows-it \u2014 \"SAVE10 gives 50% off instead of 10% | **passes** |\"\n  found   needs-a-real-check \u2014 \"have the test call the real function:\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1397,
+        "cacheReadInputTokens": 74758,
+        "cacheCreationInputTokens": 4985,
+        "webSearchRequests": 0,
+        "costUSD": 0.0828036,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 136,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0828036,
+    "turns": 4,
+    "api_seconds": 26.36,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  1/3 found, score 0.33 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  MISSED  fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n            named it, but never said what was wrong with it\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 29.0,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   fake-check-never-calls-real-code \u2014 \"never calls `apply_discount`. It works out `100 * 0.9` itself and checks that the result is 90, so it passes no matter w\"\n  MISSED  fail-proof-shows-it\n  found   needs-a-real-check \u2014 \"self.assertEqual(apply_discount(100, \"SAVE10\"), 90)\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2112,
+        "cacheReadInputTokens": 102535,
+        "cacheCreationInputTokens": 9604,
+        "webSearchRequests": 0,
+        "costUSD": 0.139619,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 110,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.139619,
+    "turns": 6,
+    "api_seconds": 24.135,
+    "helper_calls": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 27.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"It works out `100 * 0.9` itself and checks that the result is 90, so it passes no matter what `discount.py` does.\"\n  found   fail-proof-shows-it \u2014 \"**Not caught:** `total * 0.9` changed to `total / 0.9`, so the discount became a 10% markup. The suite still passed.\"\n  found   needs-a-real-check \u2014 \"replace the tautology with a test that calls the function:\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2141,
+        "cacheReadInputTokens": 102939,
+        "cacheCreationInputTokens": 8986,
+        "webSearchRequests": 0,
+        "costUSD": 0.1353358,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 127,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1353358,
+    "turns": 6,
+    "api_seconds": 24.618,
+    "helper_calls": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  MISSED  needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n            named it, but never said what was wrong with it\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 28.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"`VERIFY.md` only lists Login and Cart, and no test file imports `search.py`.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"Passes, but it only runs `assertTrue(True)`, so it checks nothing\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 989,
+        "cacheReadInputTokens": 53798,
+        "cacheCreationInputTokens": 5042,
+        "webSearchRequests": 0,
+        "costUSD": 0.0708996,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 129,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0708996,
+    "turns": 3,
+    "api_seconds": 13.294,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 15.7,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"It's also missing from `VERIFY.md`, which only lists Login and Cart.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` tests nothing.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 880,
+        "cacheReadInputTokens": 54289,
+        "cacheCreationInputTokens": 4526,
+        "webSearchRequests": 0,
+        "costUSD": 0.0646898,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 97,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0646898,
+    "turns": 3,
+    "api_seconds": 12.442,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 14.7,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   search-has-no-check \u2014 \"`search.py` is a shipped feature, but no test file covers it and `VERIFY.md` doesn't mention it.\"\n  MISSED  the-checks-are-unproven\n  found   an-orphan-that-asserts-nothing \u2014 \"It's just `assertTrue(True)`, so its \"pass\" says nothing about legacy import.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 958,
+        "cacheReadInputTokens": 74279,
+        "cacheCreationInputTokens": 4579,
+        "webSearchRequests": 0,
+        "costUSD": 0.0706798,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 88,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the checks that do exist were never shown able to go red: no fail-proof lines"
+    ],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0706798,
+    "turns": 4,
+    "api_seconds": 16.554,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 18.8,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-fake-check-and-decoy",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   fake-check-never-calls-real-code \u2014 \"It works out `100 * 0.9` itself and checks that equals 90, which is always true.\"\n  found   fail-proof-shows-it \u2014 \"`return total * 0.9` changed to `return total / 0.9` (100 becomes about 111.1). The suite still passed.\"\n  found   needs-a-real-check \u2014 \"change `test_save10_discount` to assert `apply_discount(100, \"SAVE10\") == 90`.\"\n  held    passthrough-test-is-real",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2333,
+        "cacheReadInputTokens": 103209,
+        "cacheCreationInputTokens": 9330,
+        "webSearchRequests": 0,
+        "costUSD": 0.1419818,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 139,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1419818,
+    "turns": 6,
+    "api_seconds": 30.859,
+    "helper_calls": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-fake-check-and-decoy  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   fake-check-never-calls-real-code: test_save10_discount recomputes `100 * 0.9` itself and asserts it equals 90; it never calls apply_discount, so it can never fail\n  found   fail-proof-shows-it: breaking apply_discount (e.g. 0.9 -> 0.8) leaves test_save10_discount green, proving the check is fake\n  found   needs-a-real-check: the discount feature needs a check that actually calls apply_discount and asserts its return value\n  TRIPPED passthrough-test-is-real: test_invalid_code_passthrough does call apply_discount(100, \"BAD\") and would fail if passthrough broke; it is not fake like the other test\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 34.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-has-no-check \u2014 \"**No check at all.** No test touches `search.py`, so a broken search would ship unnoticed.\"\n  found   the-checks-are-unproven \u2014 \"nobody has recorded seeing it fail, so it doesn't count as verified yet.\"\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` only runs `assertTrue(True)`.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2159,
+        "cacheReadInputTokens": 128034,
+        "cacheCreationInputTokens": 10241,
+        "webSearchRequests": 0,
+        "costUSD": 0.1507628,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 182,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1507628,
+    "turns": 7,
+    "api_seconds": 27.348,
+    "helper_calls": [
+      "assess",
+      "answer-check",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "answer-check",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  2/3 found, score 0.67 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  MISSED  the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n            named it, but never said what was wrong with it\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  held    green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 31.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-has-no-check \u2014 \"**Search has no checks at all.** No test or VERIFY.md entry covers `search.py`.\"\n  found   the-checks-are-unproven \u2014 \"Nobody has shown these checks going red on the real code, and VERIFY.md doesn't say what failure each test should report\"\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` tests nothing.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2215,
+        "cacheReadInputTokens": 128495,
+        "cacheCreationInputTokens": 9676,
+        "webSearchRequests": 0,
+        "costUSD": 0.14745499999999997,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 79,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.14745499999999997,
+    "turns": 7,
+    "api_seconds": 32.526,
+    "helper_calls": [
+      "assess",
+      "answer-check",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "answer-check",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  found   the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  TRIPPED green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes\n            claimed: all three features\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 36.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "verify-loop-green-with-unverified",
+    "skill": "verify-loop",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-has-no-check \u2014 \"Nothing in `VERIFY.md` covers `fixture/search.py`, and no test runs it.\"\n  found   the-checks-are-unproven \u2014 \"But no one has formally recorded either check failing on a broken product and then passing again.\"\n  found   an-orphan-that-asserts-nothing \u2014 \"Its only check is `assertTrue(True)`, so it would pass whatever the code does.\"\n  held    green-read-as-every-feature",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop"
+    ],
+    "skill_calls": [
+      "verify-loop:verify-loop"
+    ],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 3799,
+        "cacheReadInputTokens": 231644,
+        "cacheCreationInputTokens": 11996,
+        "webSearchRequests": 0,
+        "costUSD": 0.2183568,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 222,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2183568,
+    "turns": 11,
+    "api_seconds": 42.746,
+    "helper_calls": [
+      "assess",
+      "answer-check",
+      "answer-check",
+      "answer-check",
+      "answer-check",
+      "answer-check",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "answer-check",
+      "answer-check",
+      "answer-check",
+      "answer-check",
+      "answer-check",
+      "answer-check",
+      "answer-check"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "FAIL  verify-loop-green-with-unverified  [verify-loop]  3/3 found, score 1.00 (needs 1.00)\n  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section\n  found   the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines\n  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing\n  TRIPPED green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 47.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

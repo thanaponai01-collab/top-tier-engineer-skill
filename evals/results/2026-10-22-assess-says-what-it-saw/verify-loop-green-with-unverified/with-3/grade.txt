@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   search-has-no-check — "**Search has no checks at all.** No test or VERIFY.md entry covers `search.py`."
+  found   the-checks-are-unproven — "Nobody has shown these checks going red on the real code, and VERIFY.md doesn't say what failure each test should report"
+  found   an-orphan-that-asserts-nothing — "`test_legacy_import.py` tests nothing."
+  held    green-read-as-every-feature
+
+Phrase grader (grade.py), for comparison:
+FAIL  verify-loop-green-with-unverified  [verify-loop]  3/3 found, score 1.00 (needs 1.00)
+  found   search-has-no-check: search.py is a feature with no section in VERIFY.md and no test, so a green run says nothing about it; verify.py itself shows 0 unverified because it cannot see a feature that has no section
+  found   the-checks-are-unproven: the checks that do exist were never shown able to go red: no fail-proof lines
+  found   an-orphan-that-asserts-nothing: test_legacy_import.py belongs to no feature and only asserts True, so it inflates the picture and checks nothing
+  TRIPPED green-read-as-every-feature: two green checks do not cover three features; the report must not clear the release notes
+            claimed: all three features
+  a tripped trap fails the case at any score: it is a confident wrong answer
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+

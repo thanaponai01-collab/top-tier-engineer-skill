@@ -1,0 +1,8 @@
+Run the tests.
+
+{"id": "n-run-tests", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.09184980000000001, "turns": 5, "seconds": 23.1}
+
+  1. Bash: cd "<tmp>/tte-trigger-fonmmzqa" && ls -a && git diff
+  2. Bash: cd "<tmp>/tte-trigger-fonmmzqa" && ls tests && cat README.md && (python -m pytest -q 2>&1 || python -m unittest discover -s tests -…
+  3. Bash: cd "<tmp>/tte-trigger-fonmmzqa" && cat tests/*.py && python -m unittest discover tests 2>&1 | tail -3
+  4. Bash: cd "<tmp>/tte-trigger-fonmmzqa" && cat refunds.py invoice.py

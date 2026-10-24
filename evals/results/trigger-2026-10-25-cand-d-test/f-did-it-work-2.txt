@@ -1,0 +1,9 @@
+Did the pricing change work? Show me evidence, not a summary.
+
+{"id": "f-did-it-work", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.1431372, "turns": 6, "seconds": 39.7}
+
+  1. Bash: cd "<tmp>/tte-trigger-c4u1vioc" && git diff && ls -la
+  2. Bash: cd "<tmp>/tte-trigger-c4u1vioc" && cat README.md invoice.py refunds.py; ls tests; cat tests/*.py
+  3. Bash: cd "<tmp>/tte-trigger-c4u1vioc" && grep -n format_currency pricing.py; git show HEAD:pricing.py | grep -n format_currency; python -…
+  4. Bash: cd /tmp/pv && python -I -c " import sys; sys.path.insert(0,'.') import old_pricing as o, new_pricing as n for a,p in [(100,10),(2.675,0),(1.005,0),(0.125,0),(1…
+  5. Bash: cd /tmp/pv && python -I -c " import sys; sys.path.insert(0,'.') from decimal import Decimal as D, ROUND_HALF_UP as H import new_pricing as n c=0 for cents in r…

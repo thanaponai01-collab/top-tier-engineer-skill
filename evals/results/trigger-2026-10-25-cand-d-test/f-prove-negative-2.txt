@@ -1,0 +1,7 @@
+Prove that calculate_total rejects negative quantities now.
+
+{"id": "f-prove-negative", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.10114519999999999, "turns": 4, "seconds": 34.9}
+
+  1. Bash: cd "<tmp>/tte-trigger-901rt2kc" && git diff && ls && cat pricing.py
+  2. Bash: cd "<tmp>/tte-trigger-901rt2kc" && ls tests && grep -rn "calculate_total" --include=*.py . && cat refunds.py
+  3. Bash: cd "<tmp>/tte-trigger-901rt2kc" && mkdir -p /tmp/vold && git show HEAD:pricing.py > /tmp/vold/pricing.py cat > /tmp/check_neg.py <<…

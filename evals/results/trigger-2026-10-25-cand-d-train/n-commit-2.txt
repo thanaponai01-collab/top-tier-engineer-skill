@@ -1,0 +1,6 @@
+Commit the current changes with a good message.
+
+{"id": "n-commit", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.066886, "turns": 3, "seconds": 37.3}
+
+  1. Bash: git diff; git log --oneline -3
+  2. Bash: git add pricing.py && git commit -q -F - <<'EOF' Round discounts half-up with Decimal and reject negative quantities apply_discount now uses Decimal arithmetic…

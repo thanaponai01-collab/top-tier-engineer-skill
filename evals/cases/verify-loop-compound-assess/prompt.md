@@ -1,0 +1,3 @@
+Run `verify-loop` assess on `fixture/`.
+
+Teammates worked on billing, order discounts, taxes, and checkout promotions in `fixture/` overnight and the automated test suite is green. Produce an audit report on verification health and whether these changes are verified.

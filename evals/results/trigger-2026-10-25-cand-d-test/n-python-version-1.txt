@@ -1,0 +1,7 @@
+Which Python version does this project need?
+
+{"id": "n-python-version", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.08075, "turns": 4, "seconds": 17.1}
+
+  1. Bash: cd "<tmp>/tte-trigger-9ig3yavk" && ls -a && cat pyproject.toml setup.py setup.cfg .python-version tox.ini requirements*.txt 2>/dev/…
+  2. Bash: cd "<tmp>/tte-trigger-9ig3yavk" && cat README.md; ls tests; grep -nE "match |case |:=|\| None|list\[|dict\[|tuple\[|from __future__…
+  3. Bash: cd "<tmp>/tte-trigger-9ig3yavk" && grep -nE "^\s*(import|from) " *.py tests/*.py; git diff --stat

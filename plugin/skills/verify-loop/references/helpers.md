@@ -21,9 +21,11 @@ Use parallel checks only when their resources are isolated. Each automatic run b
 cache. Unchanged completed or decision-bound work runs no checks; use `--refresh` after environment,
 package, service or other external inputs change. File signatures cannot observe those changes.
 
-The single JSON object contains `stop`, `steps` (action, exit, input fingerprint and the final 16 KB
-of output per action), `tasks` (feature, action, detail, paths and next instruction), `report` (the
-canonical caller answer) and `exit`. The last executed batch is also retained as `last_advance`
+The single JSON object contains `stop`, `steps` (action, exit, input fingerprint and output: the
+last two lines of a passing action, the final 16 KB of a failing one), `tasks` (feature, action,
+detail, paths and next instruction), `report` (the canonical caller answer) and `exit`. Plain output
+prints the last 20 lines of each failing action and ends with the `ANSWER DRAFT`, so an agent needs
+no `--json` and no second command to see why a step failed. The last executed batch is also retained as `last_advance`
 in this agent's existing state. No state schema migration or second task queue is required.
 
 | Stop | Meaning | Exit |
@@ -159,6 +161,19 @@ result and in the summary. The rules:
 The signature covers files in the tree, not the machine: installed packages (`node_modules`,
 virtualenvs, `vendor`), environment variables, the clock and the network are outside it. After
 changing any of those, or for a check that depends on them, run with `--no-cache`.
+
+## assess: one read-only call
+
+```bash
+python <skill-base>/scripts/verify.py assess . [--max 8] [--timeout 120] [--jobs 1]
+```
+
+A fresh whole run (recording which files each check executes), then `challenge --auto` on every
+feature whose checks all passed: its `path:` files, or with no `path:` the non-test files its
+checks imported (up to three), at most `--max` mutations each. Then `report` and its
+`ANSWER DRAFT`. Every survived or uncovered mutation becomes `GAP survived a wrong result`, which
+`answer-check` asks the answer to name. State goes to the `--assess` folder unless `--state-dir` is
+given; the printed `Then:` line carries the same option.
 
 ## Assess without touching the repo: --assess, --state-dir, VERIFY_STATE_DIR
 

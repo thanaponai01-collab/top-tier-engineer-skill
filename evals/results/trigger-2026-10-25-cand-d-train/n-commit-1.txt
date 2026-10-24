@@ -1,0 +1,6 @@
+Commit the current changes with a good message.
+
+{"id": "n-commit", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.06884780000000001, "turns": 3, "seconds": 41.5}
+
+  1. Bash: cd "<tmp>/tte-trigger-bqd0h4an" && git status --short && git diff
+  2. Bash: cd "<tmp>/tte-trigger-bqd0h4an" && git add pricing.py && git commit -q -F - <<'EOF' Round discounts half-up with Decimal and reject…

@@ -1,0 +1,6 @@
+Run the tests.
+
+{"id": "n-run-tests", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.055180799999999995, "turns": 3, "seconds": 32.6}
+
+  1. Bash: cd "<tmp>/tte-trigger-x2authfc" && ls -a && git diff --stat
+  2. Bash: cd "<tmp>/tte-trigger-x2authfc" && ls tests && cat README.md && python -m pytest -q 2>&1 | tail -30

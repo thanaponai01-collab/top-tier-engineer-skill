@@ -440,6 +440,15 @@ class ActionChecks(unittest.TestCase):
         self.assertFalse(ok)
         self.assertEqual(detail, "timed out")
 
+    def test_a_replay_that_ran_no_tests_meets_neither_expectation(self):
+        os.remove(os.path.join(self.work, "test_refund.py"))
+        for expect in ("pass", "fail"):
+            item = {"replace": {}, "command": ["python", "-m", "unittest", "discover", "-p", "test_*.py"],
+                    "expect": expect}
+            ok, detail = grade.run_replay(self.work, self.case["dir"], item)
+            self.assertFalse(ok, expect)
+            self.assertEqual(detail, "ran no tests")
+
     def test_every_action_check_says_what_it_proves(self):
         for name in grade.case_names():
             spec = grade.load_case(name).get("workdir") or {}
@@ -497,6 +506,124 @@ class NegationGuard(unittest.TestCase):
         """The cue has to belong to the phrase, not merely precede it."""
         text = grade.normalize("csv_out has no importer, so delete app/plugins/csv_out.py.")
         self.assertTrue(grade.says_as_claim(text, "delete app/plugins/csv_out"))
+
+
+class CompoundAdvanceWorkdir(unittest.TestCase):
+    """Workdir grading for verify-loop-compound-advance: active progression and strict green state."""
+
+    CASE = "verify-loop-compound-advance"
+
+    def setUp(self):
+        self.case = grade.load_case(self.CASE)
+        self.good = read(os.path.join(self.case["dir"], "reference", "good.md"))
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.work = os.path.join(self._tmp.name, "work")
+        shutil.copytree(os.path.join(self.case["dir"], "fixture"), self.work)
+
+    def solve(self):
+        shutil.copytree(os.path.join(self.case["dir"], "reference", "solution"),
+                        self.work, dirs_exist_ok=True)
+
+    def result(self, report=None):
+        return grade.grade(self.case, self.good if report is None else report, self.work)
+
+    def unmet(self, result):
+        return {c["id"] for c in result["workdir"]["checks"] if not c["ok"]}
+
+    def test_reference_solution_passes_all_action_checks(self):
+        self.solve()
+        result = self.result()
+        self.assertTrue(result["passed"], grade.render(result))
+        self.assertEqual(self.unmet(result), set())
+
+    def test_untouched_fixture_fails_workdir_checks(self):
+        result = self.result()
+        self.assertFalse(result["passed"])
+        self.assertIn("fail-proof-recorded", self.unmet(result))
+        self.assertIn("check-was-frozen", self.unmet(result))
+        self.assertIn("strict-current-green", self.unmet(result))
+
+    def test_editing_oracle_spec_violates_allowed_edits(self):
+        self.solve()
+        with open(os.path.join(self.work, "SPEC.md"), "a", encoding="utf-8") as fh:
+            fh.write("\n# invalid edit to spec\n")
+        result = self.result()
+        self.assertFalse(result["passed"])
+        self.assertEqual([v["path"] for v in result["workdir"]["violations"]], ["SPEC.md"])
+
+
+class RunBudgetAndSourceInspectionGrading(unittest.TestCase):
+    """grade.py fails runs that exceed turn or cost budgets, or inspect helper sources."""
+
+    def setUp(self):
+        self.case = grade.load_case("verify-loop-compound-assess")
+        self.good = read(os.path.join(self.case["dir"], "reference", "good.md"))
+
+    def test_run_within_budgets_passes(self):
+        run_info = {
+            "turns": 8,
+            "cost_usd": 0.40,
+            "helper_subcommands": ["assess", "answer-check"],
+            "helper_source_reads": [],
+        }
+        res = grade.grade(self.case, self.good, run_info=run_info)
+        self.assertTrue(res["passed"], grade.render(res))
+
+    def test_reading_helper_source_fails_run(self):
+        run_info = {
+            "turns": 8,
+            "cost_usd": 0.40,
+            "helper_subcommands": ["assess", "answer-check"],
+            "helper_source_reads": ["cat plugin/skills/verify-loop/scripts/verify.py"],
+        }
+        res = grade.grade(self.case, self.good, run_info=run_info)
+        self.assertFalse(res["passed"])
+        unmet = [c["id"] for c in res["run"]["checks"] if not c["ok"]]
+        self.assertIn("no-helper-source-read", unmet)
+
+    def test_exceeding_turn_budget_fails_run(self):
+        run_info = {
+            "turns": 15,  # max_turns is 12
+            "cost_usd": 0.40,
+            "helper_subcommands": ["assess", "answer-check"],
+        }
+        res = grade.grade(self.case, self.good, run_info=run_info)
+        self.assertFalse(res["passed"])
+        unmet = [c["id"] for c in res["run"]["checks"] if not c["ok"]]
+        self.assertIn("turn-budget", unmet)
+
+    def test_exceeding_cost_budget_fails_run(self):
+        run_info = {
+            "turns": 8,
+            "cost_usd": 0.95,  # max_cost is 0.60
+            "helper_subcommands": ["assess", "answer-check"],
+        }
+        res = grade.grade(self.case, self.good, run_info=run_info)
+        self.assertFalse(res["passed"])
+        unmet = [c["id"] for c in res["run"]["checks"] if not c["ok"]]
+        self.assertIn("cost-budget", unmet)
+
+    def test_missing_required_helper_subcommand_fails_run(self):
+        run_info = {
+            "turns": 8,
+            "cost_usd": 0.40,
+            "helper_subcommands": ["assess"],  # missing answer-check
+        }
+        res = grade.grade(self.case, self.good, run_info=run_info)
+        self.assertFalse(res["passed"])
+        unmet = [c["id"] for c in res["run"]["checks"] if not c["ok"]]
+        self.assertIn("must-run-helper", unmet)
+
+    def test_arm_without_skips_must_run_helper(self):
+        run_info = {
+            "arm": "without",
+            "turns": 8,
+            "cost_usd": 0.40,
+            "helper_subcommands": [],
+        }
+        res = grade.grade(self.case, self.good, run_info=run_info)
+        self.assertTrue(res["passed"], grade.render(res))
 
 
 if __name__ == "__main__":

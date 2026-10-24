@@ -1,0 +1,7 @@
+Add a docstring to next_invoice_number in invoice.py.
+
+{"id": "n-docstring", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0698858, "turns": 4, "seconds": 32.3}
+
+  1. Bash: cd "<tmp>/tte-trigger-rbgreogi" && grep -n "next_invoice_number" -A25 invoice.py
+  2. Read: <tmp>\tte-trigger-rbgreogi\invoice.py
+  3. Edit: <tmp>\tte-trigger-rbgreogi\invoice.py

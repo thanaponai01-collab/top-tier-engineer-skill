@@ -1,0 +1,77 @@
+{
+  "case": "verify-loop-green-with-unverified",
+  "skill": "verify-loop",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   search-has-no-check \u2014 \"**No check at all.** No test touches `search.py`, so a broken search would ship unnoticed.\"\n  found   the-checks-are-unproven \u2014 \"nobody has recorded seeing it fail, so it doesn't count as verified yet.\"\n  found   an-orphan-that-asserts-nothing \u2014 \"`test_legacy_import.py` only runs `assertTrue(True)`.\"\n  held    green-read-as-every-feature",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "verify-loop"
+  ],
+  "skill_calls": [
+    "verify-loop:verify-loop"
+  ],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2159,
+      "cacheReadInputTokens": 128034,
+      "cacheCreationInputTokens": 10241,
+      "webSearchRequests": 0,
+      "costUSD": 0.1507628,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 182,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1507628,
+  "turns": 7,
+  "api_seconds": 27.348,
+  "helper_calls": [
+    "assess",
+    "answer-check",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_subcommands": [
+    "assess",
+    "answer-check",
+    "answer-check",
+    "answer-check"
+  ],
+  "helper_source_reads": [],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 31.4,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-4kwxi_xm\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

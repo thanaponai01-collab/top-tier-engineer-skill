@@ -1,0 +1,6 @@
+Rename format_currency to format_money everywhere.
+
+{"id": "n-rename", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0706464, "turns": 3, "seconds": 17.4}
+
+  1. Bash: cd "<tmp>/tte-trigger-9sqpuerz" && git ls-files && grep -rn "format_currency" --exclude-dir=.git . ; git diff
+  2. Bash: cd "<tmp>/tte-trigger-9sqpuerz" && grep -rni "currency" --exclude-dir=.git . ; sed -i 's/\bformat_currency\b/format_money/g' pricin…

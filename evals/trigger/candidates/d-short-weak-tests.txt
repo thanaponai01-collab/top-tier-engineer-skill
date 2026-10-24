@@ -1,0 +1,4 @@
+Use when someone needs to know a change really works or a task is really done: before a commit,
+doubting a fix or an agent's "done", wanting proof not opinion, verifying or reviewing a diff or
+PR, or doubting that passing tests would notice a broken result. Also makes or maintains a project
+/verify skill. Proves a check fails on broken code, then passes. Not for just running tests.

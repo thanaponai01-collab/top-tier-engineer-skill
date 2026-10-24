@@ -1,0 +1,7 @@
+Add a function to invoice.py that parses an invoice number back into year and sequence.
+
+{"id": "n-feature", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.08012200000000001, "turns": 4, "seconds": 17.8}
+
+  1. Bash: cd "<tmp>/tte-trigger-py7d08r9" && ls && cat invoice.py && git diff --stat
+  2. Bash: cd "<tmp>/tte-trigger-py7d08r9" && ls tests && grep -rn "invoice" tests refunds.py README.md | head -20
+  3. Bash: cd "<tmp>/tte-trigger-py7d08r9" && cat >> invoice.py <<'EOF' def parse_invoice_number(invoice_number): """Return (year, sequence) a…

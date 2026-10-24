@@ -1,0 +1,6 @@
+Add a docstring to next_invoice_number in invoice.py.
+
+{"id": "n-docstring", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.029255499999999997, "turns": 3, "seconds": 7.7}
+
+  1. Grep: def next_invoice_number
+  2. Edit: invoice.py

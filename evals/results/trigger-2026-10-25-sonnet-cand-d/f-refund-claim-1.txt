@@ -1,0 +1,8 @@
+Is the refund total right after this change, or are we just hoping? I need to be sure.
+
+{"id": "f-refund-claim", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0680435, "turns": 5, "seconds": 26.6}
+
+  1. Bash: git diff; echo ----; cat pricing.py; echo ----; ls
+  2. Bash: cat refunds.py; echo ----; cat invoice.py; echo ----; ls tests; cat tests/*.py | head -150; python --version
+  3. Bash: mkdir -p /tmp/chk && git show HEAD:pricing.py > /tmp/chk/old_pricing.py && cat > /tmp/chk/diff.py <<'EOF' import sys, random from decimal import Decimal as D, …
+  4. Bash: cat >> /tmp/chk/diff.py <<'EOF' # attribution: exact tax step on top of new discount def total_taxfix(lines,pct): sub=sum(D(str(q))*D(str(p)) for q,p in lines)…

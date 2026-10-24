@@ -1,0 +1,4 @@
+  1. Skill: verify-loop:verify-loop
+  2. Bash: python "<tmp>/tte-plugin-4kwxi_xm/verify-loop/skills/verify-loop/scripts/verify.py" assess fixture/ 2>&1 | tail -80
+  3. Bash: cd <tmp>/tte-eval-lhyzkr9n/fixture && ls -a && cat VERIFY.md discount.py test_discount.py
+  4. Bash: mkdir -p <tmp>/vl-answer && cat > <tmp>/vl-answer/answer.md <<'EOF' VERDICT: partial Claim: apply_disco…

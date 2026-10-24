@@ -1,0 +1,5 @@
+Verify my git config has a user email set for this repo.
+
+{"id": "n-git-email", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0487424, "turns": 2, "seconds": 10.9}
+
+  1. Bash: cd "<tmp>/tte-trigger-e8afjciv" && echo "local: $(git config --local user.email)"; echo "effective: $(git config --show-origin user…

@@ -1,0 +1,77 @@
+{
+  "case": "verify-loop-compound-assess",
+  "skill": "verify-loop",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  3/5 found\n  found   hollow-tax-check \u2014 \"`test_standard_tax` imports `tax` but never calls `calculate_tax`. It only asserts that a local `0.05` equals `0.05`, so\"\n  MISSED  coupon-cap-survivor\n  found   loosened-invoice-check \u2014 \"changed two exact assertions to `assertAlmostEqual(..., delta=2)`\"\n  MISSED  regression-hidden-by-loosened-check\n  found   unmapped-rebate-module \u2014 \"There is no test file and no entry in `VERIFY.md`.\"\n  held    green-read-as-shippable\n  held    healthy-shipping-check-called-fake",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 3325,
+      "cacheReadInputTokens": 106146,
+      "cacheCreationInputTokens": 11986,
+      "webSearchRequests": 0,
+      "costUSD": 0.0918286,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 32,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 5,
+  "missed": [
+    "the Coupons contract has no path: in VERIFY.md; mutation analysis surveys coupons.py and finds mutations to the 5000-cent cap survive because test_coupons.py only tests small discounts",
+    "agent-1's commit introduced a per-line rounding bug in invoice.py that rounds down each line before summing instead of rounding the total half-up, passing only because delta=2 absorbs the discrepancy"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "did not read or grep helper scripts",
+      "ok": true,
+      "detail": "did not inspect scripts"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-sonnet-5-5",
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0918286,
+  "turns": 16,
+  "api_seconds": 39.46,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 42.7,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -236,6 +236,34 @@ def check_actions(spec, parsed, changes, end_output=None, arm="with"):
                        if exit_code is None else f"exit {exit_code}; requires exit 0 and matching output")
                       + "; printed: " + " ".join(raw_output.split())[-200:],
         })
+
+    reads = parsed.get("helper_source_reads", [])
+    if spec.get("no_helper_source_read") or reads:
+        checks.append({
+            "check": "did not read or grep helper scripts",
+            "ok": not reads,
+            "detail": f"inspected scripts: {', '.join(reads)[:120]}" if reads else "did not inspect scripts",
+        })
+
+    must_helper = spec.get("must_run_helper")
+    if must_helper and arm == "with":
+        called_subs = set()
+        for call in parsed.get("helper_calls", []):
+            parts = call.strip().split()
+            sub = parts[0] if parts else ""
+            for i, p in enumerate(parts):
+                if p.endswith(".py") and i + 1 < len(parts):
+                    sub = parts[i + 1]
+                    break
+            if sub:
+                called_subs.add(sub)
+        missing = [sub for sub in must_helper if sub not in called_subs]
+        checks.append({
+            "check": f"executed helper subcommands: {', '.join(must_helper)}",
+            "ok": not missing,
+            "detail": f"called: {', '.join(sorted(called_subs)) or 'none'}; missing: {', '.join(missing)}" if missing else f"called: {', '.join(sorted(called_subs))}",
+            "with_only": True,
+        })
     return checks
 
 
@@ -382,7 +410,26 @@ def score_run(case, arm, parsed, report, checks, changes, verdict=None):
     checked against the report), and by grade.py's phrase match otherwise. The
     phrase verdict is kept either way, so the two can be compared.
     """
-    graded = grade.grade(case, report)
+    helper_subs = []
+    for call in parsed.get("helper_calls", []):
+        parts = call.strip().split()
+        sub = parts[0] if parts else ""
+        for i, p in enumerate(parts):
+            if p.endswith(".py") and i + 1 < len(parts):
+                sub = parts[i + 1]
+                break
+        if sub:
+            helper_subs.append(sub)
+
+    run_info = {
+        "arm": arm,
+        "helper_source_reads": parsed.get("helper_source_reads", []),
+        "turns": parsed.get("turns"),
+        "cost_usd": parsed.get("cost_usd"),
+        "helper_calls": parsed.get("helper_calls", []),
+        "helper_subcommands": helper_subs,
+    }
+    graded = grade.grade(case, report, run_info=run_info)
     by_meaning = bool(verdict and verdict.get("ok"))
     main = verdict if by_meaning else graded
     leaked = agent.touched_answer_key(parsed)
@@ -418,6 +465,8 @@ def score_run(case, arm, parsed, report, checks, changes, verdict=None):
         "cost_usd": parsed["cost_usd"], "turns": parsed["turns"],
         "api_seconds": parsed.get("api_seconds"),
         "helper_calls": parsed.get("helper_calls", []),
+        "helper_subcommands": helper_subs,
+        "helper_source_reads": parsed.get("helper_source_reads", []),
         "helper_used": bool(parsed.get("helper_calls")),
         "mcp_servers": parsed.get("mcp_servers", []),
         "grade_text": grade.render(graded),

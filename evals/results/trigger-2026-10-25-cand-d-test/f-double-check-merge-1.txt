@@ -1,0 +1,8 @@
+Double-check the rounding fix in pricing.py is correct before I merge it.
+
+{"id": "f-double-check-merge", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.1318502, "turns": 5, "seconds": 29.3}
+
+  1. Bash: git diff; echo ----; cat pricing.py; ls
+  2. Bash: cat refunds.py invoice.py; ls tests; cat tests/*.py | head -80; grep -rn "calculate_total\|apply_discount" --include=*.py .
+  3. Bash: python -m unittest discover -s tests 2>&1 | tail -3 git show HEAD:pricing.py > /tmp/old_pricing.py python - <<'EOF' import sys, importlib.util sys.path.insert(…
+  4. Bash: mkdir -p ../oldp && git show HEAD:pricing.py > ../oldp/old_pricing.py python - <<'EOF' import sys, importlib.util sys.path.insert(0,'.') import pricing as new …

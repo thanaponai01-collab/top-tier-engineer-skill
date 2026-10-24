@@ -1,0 +1,7 @@
+Explain what refunds.py does.
+
+{"id": "n-explain", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.08348900000000001, "turns": 4, "seconds": 20.6}
+
+  1. Glob: **/refunds*
+  2. Read: <tmp>\tte-trigger-eeepfhuj\refunds.py
+  3. Bash: cd "<tmp>/tte-trigger-eeepfhuj" && cat pricing.py && git diff pricing.py

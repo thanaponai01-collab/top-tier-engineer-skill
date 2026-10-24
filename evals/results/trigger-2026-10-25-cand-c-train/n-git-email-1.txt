@@ -1,0 +1,5 @@
+Verify my git config has a user email set for this repo.
+
+{"id": "n-git-email", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0494868, "turns": 2, "seconds": 10.5}
+
+  1. Bash: git config --show-origin --show-scope --get-all user.email; echo "local:"; git config --local user.email; echo "exit $?"

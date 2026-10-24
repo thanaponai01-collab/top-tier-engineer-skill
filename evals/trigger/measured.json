@@ -32,9 +32,33 @@
     "evals/results/trigger-2026-10-25-cand-b-train",
     "evals/results/trigger-2026-10-25-cand-b-test",
     "evals/results/trigger-2026-10-25-sonnet-baseline",
-    "evals/results/trigger-2026-10-25-sonnet-cand-b"
+    "evals/results/trigger-2026-10-25-sonnet-cand-b",
+    "evals/results/trigger-2026-10-25-cand-c-train",
+    "evals/results/trigger-2026-10-25-cand-d-train",
+    "evals/results/trigger-2026-10-25-cand-d-test",
+    "evals/results/trigger-2026-10-25-sonnet-cand-d"
   ],
   "still_missed": [
     "f-double-check-merge (both models, held out, not tuned for)"
-  ]
+  ],
+  "shorter_tried": {
+    "d-short-weak-tests (384 chars)": {
+      "claude-opus-5-5": {
+        "train": "13/14",
+        "test": "8/12",
+        "false_fires": "0/26"
+      },
+      "claude-sonnet-5-5": {
+        "train": "7/7",
+        "test": "2/6",
+        "false_fires": "0/13"
+      }
+    },
+    "c-short (383 chars)": {
+      "claude-opus-5-5": {
+        "train": "11/14"
+      }
+    },
+    "why_kept": "the 400-character cap from the agent-path line cost held-out recall on both models"
+  }
 }

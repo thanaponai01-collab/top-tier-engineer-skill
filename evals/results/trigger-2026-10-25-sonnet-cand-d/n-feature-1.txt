@@ -1,0 +1,8 @@
+Add a function to invoice.py that parses an invoice number back into year and sequence.
+
+{"id": "n-feature", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0353923, "turns": 5, "seconds": 9.3}
+
+  1. Glob: **/invoice*.py
+  2. Grep: invoice
+  3. Read: <tmp>\tte-trigger-bmshmj3r\invoice.py
+  4. Edit: <tmp>\tte-trigger-bmshmj3r\invoice.py

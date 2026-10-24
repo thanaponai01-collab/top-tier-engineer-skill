@@ -1,0 +1,7 @@
+Which Python version does this project need?
+
+{"id": "n-python-version", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.032662500000000004, "turns": 4, "seconds": 8.9}
+
+  1. Glob: {pyproject.toml,setup.py,setup.cfg,.python-version,tox.ini,Pipfile,runtime.txt,requirements*.txt}
+  2. Grep: python_requires|requires-python|python_version|sys\.version_info|^from __future__|match .*:$|:=
+  3. Read: <tmp>\tte-trigger-i57wbsfm\pricing.py

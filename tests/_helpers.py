@@ -4,6 +4,11 @@ Run everything with: python -m unittest discover tests
 """
 import subprocess, sys, os
 
+# Windows putenv limit guard: prevent patch.dict(os.environ) from failing on oversized external vars
+for _k, _v in list(os.environ.items()):
+    if len(_v) > 30000:
+        del os.environ[_k]
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPTS = {
     "verify.py": os.path.join(ROOT, "plugin", "skills", "verify-loop", "scripts"),

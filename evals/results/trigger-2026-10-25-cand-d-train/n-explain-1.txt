@@ -1,0 +1,6 @@
+Explain what refunds.py does.
+
+{"id": "n-explain", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.08189199999999999, "turns": 3, "seconds": 38.9}
+
+  1. Bash: cd "<tmp>/tte-trigger-dlux16_5" && ls -la && cat refunds.py
+  2. Bash: cd "<tmp>/tte-trigger-dlux16_5" && cat pricing.py && git diff pricing.py

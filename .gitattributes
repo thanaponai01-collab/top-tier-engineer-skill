@@ -7,3 +7,7 @@
 
 # CI workflows carry bash `run:` blocks; same reason as *.sh.
 *.yml text eol=lf
+
+# A reference solution can ship a .verify-state.json whose tree signature hashes the files byte for
+# byte; CRLF on a Windows checkout would make that frozen state read as stale.
+evals/cases/**/reference/solution/** text eol=lf

@@ -1,0 +1,7 @@
+Tidy up the imports and formatting in pricing.py; no behaviour change.
+
+{"id": "n-style", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0835866, "turns": 4, "seconds": 19.3}
+
+  1. Bash: cd "<tmp>/tte-trigger-_zgkymic" && git diff && echo ---- && cat -A pricing.py | head -100 && ls
+  2. Edit: <tmp>\tte-trigger-_zgkymic\pricing.py
+  3. Bash: cd "<tmp>/tte-trigger-_zgkymic" && python -m pytest -q tests 2>&1 | tail -5

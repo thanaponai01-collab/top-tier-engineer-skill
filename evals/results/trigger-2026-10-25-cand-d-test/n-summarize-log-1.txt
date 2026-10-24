@@ -1,0 +1,6 @@
+Summarize what the git history says about this repo.
+
+{"id": "n-summarize-log", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.07293, "turns": 3, "seconds": 15.2}
+
+  1. Bash: cd "<tmp>/tte-trigger-n0g2y76o" && git log --all --stat --format='%H%n%an <%ae>%n%ad%n%s%n%b' && git branch -a && git diff --stat
+  2. Bash: cd "<tmp>/tte-trigger-n0g2y76o" && git diff pricing.py && cat README.md

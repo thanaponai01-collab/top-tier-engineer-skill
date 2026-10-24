@@ -1,0 +1,6 @@
+Run the tests.
+
+{"id": "n-run-tests", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.025250300000000003, "turns": 3, "seconds": 7.9}
+
+  1. Glob: **/*{test,pytest,package.json,pyproject,setup.cfg,tox.ini}*
+  2. PowerShell: python -m pytest -q 2>&1 | Select-Object -Last 40

@@ -392,19 +392,72 @@ def _says_blind(text, item):
     return bool(words) and sum(_says(text, w) for w in words) * 2 >= len(words)
 
 
+FILL = re.compile(r"\[\[fill:[^\]]*\]\]")
+
+# (gaps key, label): the order and words `report` and the draft print each gap with.
+GAP_LABELS = (("failing", "failing check"), ("blocked", "blocked by the environment"), ("unverified", "no check"),
+              ("unproven", "never seen red"), ("weak_signal", "weak signal"),
+              ("proof_not_from_product", "proof not from product"), ("loosened", "loosened"),
+              ("survived", "survived a wrong result"), ("unmapped", "unmapped"), ("orphan_tests", "orphan test"),
+              ("unchallenged", "unchallenged"),
+              ("not_independent", "not independent"), ("no_fresh", "no fresh inputs"), ("blind_spots", "blind spot"),
+              ("rebaselined", "check changed under review"))
+
+
+def gap_rows(a):
+    return [(label, item) for key, label in GAP_LABELS for item in a["gaps"][key]]
+
+
+def survey_caught(a):
+    """What an `assess` survey saw go red, as `Total caught 2/2 wrong results; ...`, or ''."""
+    return "; ".join(f"{s['feature']} caught {s['caught']}/{s['decided']} wrong results"
+                     for s in a.get("surveyed") or [] if s["caught"])
+
+
+def draft(a):
+    """An answer that passes `check_answer` once each [[fill: ...]] holds the agent's own words.
+    The helper writes what it knows; the slots are only what needs judgment."""
+    lines = [f"VERDICT: {a['verdict']}",
+             "Claim: [[fill: the claim in product terms, and where its expected result comes from]]"]
+    for r in a["rejections"]:
+        lines.append(f"Proven: {r['feature']} went red on {r['wrong_state']} (`{r['command']}`, "
+                     f"signal: {r['fail_signal']})")
+    seen = survey_caught(a)
+    if not a["rejections"] and seen:
+        lines.append(f"Proven: {seen} in assess's scratch copies; that is not a fail-proof receipt, "
+                     "so the GAP lines below stand")
+    elif not a["rejections"]:
+        lines.append("Proven: nothing yet; no check here has been seen rejecting a wrong result")
+    for p in a["passed"]:
+        lines.append(f"Passed: {p['feature']} (`{p['command']}`)")
+    lines += [f"GAP {label}: {item}" for label, item in gap_rows(a)]
+    if a["gaps"].get("survived"):
+        lines.append("Survivors: [[fill: for each, a real gap in the check or an equivalent mutation, and why]]")
+    if a["verdict"] == "green":
+        lines.append("Covers: the mapped features only; behavior no check exercises is not covered")
+    else:
+        lines.append("Next: [[fill: what is left for each GAP, and who does it]]")
+    return "\n".join(lines) + "\n"
+
+
 def check_answer(a, answer_text):
-    """Problems with an answer against the helper's own answer `a`: [(kind, detail)]."""
+    """Problems with an answer against the helper's own answer `a`: [(kind, detail, fix)]. Each fix is
+    a line that clears the problem as written, so a rejected agent edits instead of guessing."""
     text = answer_text.lower()
-    flat = re.sub(r"[*_`]", "", text)
+    flat = re.sub(r"[*`]", "", text)
     problems = []
     verdict = a["verdict"]
     if not re.search(rf"verdict\W{{0,4}}\s*{re.escape(verdict)}\b", flat):
-        problems.append(("NO VERDICT", f"say `VERDICT: {verdict}` as `report` does"))
+        problems.append(("NO VERDICT", f"say `VERDICT: {verdict}` as `report` does", f"VERDICT: {verdict}"))
+    if FILL.search(answer_text):
+        problems.append(("UNFILLED", "a [[fill: ...]] slot from the draft is still there",
+                         "replace each [[fill: ...]] with your own words"))
     if verdict != "green":
         for phrase in OVERCLAIM:
             for m in re.finditer(re.escape(phrase), flat):
                 if not NEGATION.search(flat[max(0, m.start() - 40):m.start()]):
-                    problems.append(("OVERCLAIM", f"\"{phrase}\" while the verdict is {verdict}"))
+                    problems.append(("OVERCLAIM", f"\"{phrase}\" while the verdict is {verdict}",
+                                     f"take back \"{phrase}\", or negate it (\"not {phrase}\")"))
                     break
     g = a["gaps"]
     wants = []
@@ -413,6 +466,7 @@ def check_answer(a, answer_text):
     wants += [("blocked", item.split("|", 1)[0]) for item in g.get("blocked", [])]
     wants += [("orphan test", t) for t in g.get("orphan_tests", [])]
     wants += [("unmapped", t) for t in g.get("unmapped", [])]
+    wants += [("survived", item.split(":", 1)[0]) for item in g.get("survived", [])]
     wants += [("weak signal", item.split(":", 1)[0]) for item in g.get("weak_signal", [])]
     wants += [("loosened", item.split("::", 1)[0]) for item in g.get("loosened", [])]
     wants += [("not independent", item.split(" (", 1)[0]) for item in g.get("not_independent", [])]
@@ -420,12 +474,13 @@ def check_answer(a, answer_text):
     for label, item in wants:
         base = item.rsplit("/", 1)[-1]
         if not (_says(flat, item) or (base != item and _says(flat, base))):
-            problems.append(("MISSING", f"{label}: {item}"))
+            problems.append(("MISSING", f"{label}: {item}", f"GAP {label}: {item}"))
     if g.get("unchallenged") and "challeng" not in flat:
-        problems.append(("MISSING", "unchallenged: no caught challenge mutation for the current checks"))
+        what = "unchallenged: no caught challenge mutation for the current checks"
+        problems.append(("MISSING", what, f"GAP {what}"))
     for b in g.get("blind_spots", []):
         if not _says_blind(flat, b):
-            problems.append(("MISSING", f"blind spot: {b}"))
+            problems.append(("MISSING", f"blind spot: {b}", f"GAP blind spot: {b}"))
     seen, out = set(), []
     for p in problems:
         if p not in seen:

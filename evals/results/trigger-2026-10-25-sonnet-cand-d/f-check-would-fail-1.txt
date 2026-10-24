@@ -1,0 +1,9 @@
+Add a check that fails if the discount logic breaks, and show me it really fails on a broken version.
+
+{"id": "f-check-would-fail", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0660921, "turns": 7, "seconds": 24.3}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: cat pricing.py; git diff; ls
+  3. Bash: ls tests; head -30 tests/*.py | head -60; python --version; python -m pytest --version
+  4. Edit: <tmp>\tte-trigger-o5d8t2c6\tests\test_pricing.py
+  5. Bash: python -m pytest -q tests 2>&1 | tail -5 cp pricing.py /tmp/pricing.good echo "--- break 1: discount adds instead of subtracts"; sed -i 's/(100 - Decimal(str(p…

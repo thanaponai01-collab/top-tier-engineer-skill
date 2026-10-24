@@ -562,5 +562,72 @@ class WorkdirChecksAreWiredIntoARun(unittest.TestCase):
         self.assertTrue(any(c.get("workdir") for c in r["action_checks"]))
 
 
+class HelperSourceReadsDetection(unittest.TestCase):
+    def test_detects_tool_reads_of_verify_scripts(self):
+        tools = [
+            {"name": "Read", "input": {"file_path": "plugin/skills/verify-loop/scripts/verify.py"}},
+            {"name": "Read", "input": {"file_path": "fixture/app.py"}},
+        ]
+        reads = agent.helper_source_reads(tools)
+        self.assertEqual(reads, ["Read(plugin/skills/verify-loop/scripts/verify.py)"])
+
+    def test_detects_shell_cat_and_grep_of_scripts(self):
+        tools = [
+            {"name": "Bash", "input": {"command": "cat plugin/skills/verify-loop/scripts/engine.py"}},
+            {"name": "Bash", "input": {"command": "python plugin/skills/verify-loop/scripts/verify.py assess ."}},
+        ]
+        reads = agent.helper_source_reads(tools)
+        self.assertEqual(len(reads), 1)
+        self.assertIn("engine.py", reads[0])
+
+    def test_executing_verify_script_is_not_a_source_read(self):
+        tools = [
+            {"name": "Bash", "input": {"command": "python plugin/skills/verify-loop/scripts/verify.py assess ."}},
+            {"name": "Bash", "input": {"command": 'V="python plugin/skills/verify-loop/scripts/verify.py"; $V status .'}},
+        ]
+        reads = agent.helper_source_reads(tools)
+        self.assertEqual(reads, [])
+
+
+class RunnerHelperActionChecks(unittest.TestCase):
+    def test_helper_source_reads_triggers_failure(self):
+        parsed = {
+            "commands": [],
+            "tools": [],
+            "helper_source_reads": ["plugin/skills/verify-loop/scripts/verify.py"],
+            "helper_calls": ["verify.py assess"],
+        }
+        spec = {"no_helper_source_read": True}
+        checks = run.check_actions(spec, parsed, NO_CHANGES, arm="with")
+        self.assertFalse(all(c["ok"] for c in checks))
+        self.assertTrue(any("scripts" in c["check"] and not c["ok"] for c in checks))
+
+    def test_must_run_helper_checks_subcommands(self):
+        spec = {"must_run_helper": ["assess", "answer-check"]}
+        # Missing answer-check
+        parsed_incomplete = {
+            "commands": [],
+            "tools": [],
+            "helper_calls": ["verify.py assess ."],
+        }
+        checks = run.check_actions(spec, parsed_incomplete, NO_CHANGES, arm="with")
+        self.assertFalse(all(c["ok"] for c in checks))
+
+        # Both present
+        parsed_complete = {
+            "commands": [],
+            "tools": [],
+            "helper_calls": ["verify.py assess .", "verify.py answer-check . --answer a.md"],
+        }
+        checks = run.check_actions(spec, parsed_complete, NO_CHANGES, arm="with")
+        self.assertTrue(all(c["ok"] for c in checks))
+
+    def test_arm_without_skips_must_run_helper(self):
+        spec = {"must_run_helper": ["assess", "answer-check"]}
+        parsed = {"commands": [], "tools": [], "helper_calls": []}
+        checks = run.check_actions(spec, parsed, NO_CHANGES, arm="without")
+        self.assertEqual(checks, [])
+
+
 if __name__ == "__main__":
     unittest.main()

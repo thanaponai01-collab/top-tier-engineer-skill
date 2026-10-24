@@ -1,0 +1,6 @@
+Explain what refunds.py does.
+
+{"id": "n-explain", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.07549600000000001, "turns": 3, "seconds": 16.7}
+
+  1. Bash: ls; cat refunds.py 2>/dev/null || find . -name "refunds*"
+  2. Bash: cat pricing.py; git diff pricing.py

@@ -92,6 +92,29 @@ Also released in 1.20.0, from the automatic progression work:
 - Broaden phrase matcher inflection coverage in `ci-fresh-proof` eval to accept natural variants of
   unbacked state rejection (e.g. "ignores", "excluded", "didn't trust", "left out").
 
+### The lazy path is the correct path
+
+Eval runs showed where turns went: agents grepped `gates.py` to learn why `answer-check` said
+`MISSING`, chained 4–5 helper calls to answer one read-only question, and pasted `NEXT` commands
+that named a bare `verify.py`. Each of these is now a helper mechanic.
+
+- Add `verify.py assess`: one read-only call runs every check, surveys each passing feature with
+  `challenge --auto` (its `path:` files, or with no `path:` the files its checks imported), and
+  prints `report` and an answer draft. It replaces the three-command Assess section.
+- Survivors of that survey become `GAP survived a wrong result` in `report`, and `answer-check`
+  asks the answer to name them, so a copied draft cannot drop the finding.
+- `report`, `assess` and `advance` end with an `ANSWER DRAFT` the helper writes from what it knows,
+  with `[[fill: ...]]` slots only for judgment, and a `Then:` line with the runnable
+  `answer-check` command on the same state.
+- `answer-check` lists every problem in one pass with its fix (`--json`: `fix`), ends with
+  `ADD THESE LINES`, and rejects an unfilled slot as `ANSWER UNFILLED`.
+- `NEXT` commands name the helper's real path, quoted, so they run when pasted.
+- `advance` keeps two lines of a passing step's output and the tail of a failing one; plain output
+  shows the failing tail and the draft, so `--json` is no longer needed to see why a step failed.
+- SKILL.md is a router: one command per question, "read the output, not the scripts", the task
+  table, the done rule and the answer path. Body 6.9 KB → 4.9 KB. `tests/test_agent_path.py` holds
+  it to 5,000 characters, and checks that every command, link, anchor and verdict name it uses exists.
+
 ## 1.18.2 - 2026-10-21 - A missing `python` says so
 
 - A check that fails because `python` is not on PATH while `python3` is (sh, bash, dash, zsh,

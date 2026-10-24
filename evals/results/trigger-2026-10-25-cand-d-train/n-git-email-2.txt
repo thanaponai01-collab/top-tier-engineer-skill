@@ -1,0 +1,5 @@
+Verify my git config has a user email set for this repo.
+
+{"id": "n-git-email", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0493682, "turns": 2, "seconds": 36.1}
+
+  1. Bash: cd "<tmp>/tte-trigger-ba_8rjgv" && echo "local: $(git config --local user.email)"; echo "effective: $(git config user.email)"; git …

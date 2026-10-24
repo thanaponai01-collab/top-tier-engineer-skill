@@ -1,0 +1,6 @@
+Commit the current changes with a good message.
+
+{"id": "n-commit", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.030272999999999998, "turns": 3, "seconds": 10.3}
+
+  1. Bash: git diff
+  2. Bash: git add pricing.py && git commit -q -m "Round discounts half up with Decimal and reject negative quantities apply_discount now uses Decimal with ROUND_HALF_UP …
