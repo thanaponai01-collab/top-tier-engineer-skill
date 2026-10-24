@@ -68,7 +68,18 @@
   - Eval `verify-loop-special-cased-product`, 3 tries per arm: 3/3 without, 3/3 with; $0.10 vs
     $0.17 a try; no try used `fresh:`. Results in `evals/results/2026-10-25-special-cased/`.
 
+- Trigger eval and description (1.23.0) | proven
+  - `python evals/trigger.py`: 26 prompts, train/test split, isolation checked per try (0 invalid
+    in 160 tries). Baseline Opus 5.5 fired on 9/26 wanted, 0/26 unwanted.
+  - Candidate A (intents) train 12/14; missed "tests pass but test nothing". Candidate B adds the
+    weak-tests intent: train 14/14, held-out 10/12, Sonnet 11/13, false fires 0 throughout.
+  - Rejection: `test_live_description_is_the_measured_one` failed on an unmeasured description edit,
+    passed once restored. Full proof: `python -m unittest discover tests` -> `Ran 407 tests`,
+    `OK (skipped=1)`, Python 3.13, Windows.
+  - Results in `evals/results/trigger-2026-10-25-*`; cost about $18.
+
 ## Next
-1.22.0 is uncommitted on `verify-loop-only`. The overfit eval shows no difference: bare Opus reads
-the guard. A harder case (the special case hidden where reading does not find it) or a reason for
-agents to add `fresh:` unprompted is still open.
+1.23.0 is uncommitted on `verify-loop-only`; 1.20.0 to 1.22.0 are committed but unpushed, and GitHub
+main still ships top-tier-engineer 4.66.0, so installs get none of verify-loop. The held-out miss
+"double-check the fix before I merge" needs new train prompts in that shape before tuning, never
+the test prompt itself. The overfit eval still shows no difference (see 1.22.0).

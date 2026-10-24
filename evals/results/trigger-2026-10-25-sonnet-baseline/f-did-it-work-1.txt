@@ -1,0 +1,8 @@
+Did the pricing change work? Show me evidence, not a summary.
+
+{"id": "f-did-it-work", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0438216, "turns": 5, "seconds": 19.3}
+
+  1. Bash: git diff; ls; git log --oneline | head
+  2. Bash: ls tests; python -m pytest -q 2>&1 | tail -20; git stash -q; echo "--- BASELINE ---"; python -m pytest -q 2>&1 | tail -8; git stash pop -q; git status --short
+  3. Bash: python -I -c " import sys; sys.path.insert(0,'.') from pricing import * print(apply_discount(2.675,0), apply_discount(1.005,0), apply_discount(0.125,0), apply_…
+  4. Bash: cat refunds.py; grep -n "def test\|-" tests/test_pricing.py | head -30

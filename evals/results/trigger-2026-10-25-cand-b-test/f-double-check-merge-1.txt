@@ -1,0 +1,8 @@
+Double-check the rounding fix in pricing.py is correct before I merge it.
+
+{"id": "f-double-check-merge", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.1215376, "turns": 5, "seconds": 39.0}
+
+  1. Bash: cd "<tmp>/tte-trigger-ngxf3ltr" && git diff && ls && cat pricing.py
+  2. Bash: cd "<tmp>/tte-trigger-ngxf3ltr" && cat refunds.py invoice.py; ls tests; cat tests/*.py; python -m pytest -q 2>&1 | tail -15
+  3. Bash: cd "<tmp>/tte-trigger-ngxf3ltr" && cat README.md; git log -p --stat -1 | head -5; python -I -c " import sys; sys.path.insert(0,'.')…
+  4. Bash: cd "<tmp>/tte-trigger-ngxf3ltr" && python -I -c " from decimal import Decimal as D, ROUND_HALF_UP as H for d in [0.5,1.5,2.5,4.5,7.…

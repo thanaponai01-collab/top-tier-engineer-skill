@@ -1,0 +1,10 @@
+The tests pass, but I'm not convinced they test anything. Get this repo to where green actually means it works.
+
+{"id": "f-trust-green", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.08881879999999999, "turns": 7, "seconds": 31.8}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: ls; git diff --stat; ls <tmp>/tte-trigger-plugin-xotdbkgi/plugin/skills/verify-loop/scripts; python <home>/AppData/Local/Te…
+  3. Bash: cat README.md; ls tests; wc -l *.py tests/*; git diff; cat tests/*.py | head -150
+  4. Bash: cat pricing.py refunds.py invoice.py; python -m unittest discover tests 2>&1 | tail -3
+  5. Bash: cat > tests/test_pricing.py <<'EOF' import os, sys, unittest sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) from pricing impor…
+  6. Bash: cp -r . /tmp/m && cd /tmp/m && rm -rf .git t(){ python -m unittest discover tests >/dev/null 2>&1 && echo "SURVIVED: $1" || echo "caught: $1"; } m(){ cp /tmp/m…

@@ -1,0 +1,11 @@
+Set this project up so every change gets checked properly before it's committed: a verify skill for this repo.
+
+{"id": "f-create-verify-skill", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.1025628, "turns": 7, "seconds": 31.2}
+
+  1. Skill: verify-loop:verify-loop
+  2. Read: <tmp>\tte-trigger-plugin-s1q3ek7_\plugin\skills\verify-loop\references\create.md
+  3. Bash: ls -a; git diff --stat; head -50 pricing.py
+  4. Bash: cat README.md invoice.py refunds.py; ls tests; head -40 tests/*; python --version; python -m pytest -q 2>&1 | tail -5
+  5. Bash: V=<tmp>/tte-trigger-plugin-s1q3ek7_/plugin/skills/verify-loop; python $V/scripts/verify.py scaffold-skill . 2>&1 | tail -20; git st…
+  6. Bash: cat .claude/skills/verify/SKILL.md; ls -R .claude; cat .claude/skills/verify/features/*.md | head -60; cat .gitignore
+  7. Bash: cat > tests/test_invoice.py <<'EOF' import os, sys, unittest sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) from invoice impor…

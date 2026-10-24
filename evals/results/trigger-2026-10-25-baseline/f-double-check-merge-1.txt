@@ -1,0 +1,7 @@
+Double-check the rounding fix in pricing.py is correct before I merge it.
+
+{"id": "f-double-check-merge", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.1086028, "turns": 4, "seconds": 30.3}
+
+  1. Bash: cd "<tmp>/tte-trigger-nkjpcg25" && git diff && ls && cat pricing.py
+  2. Bash: cd "<tmp>/tte-trigger-nkjpcg25" && cat refunds.py invoice.py; ls tests; grep -rn "calculate_total\|apply_discount" --include=*.py .…
+  3. Bash: cd "<tmp>/tte-trigger-nkjpcg25" && python -c " from pricing import * print(apply_discount(2.675,0), round(2.675,2)) print(apply_dis…

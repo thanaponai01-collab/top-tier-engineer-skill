@@ -1,0 +1,9 @@
+Verify this change.
+
+{"id": "f-verify-change", "try": 2, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.1573874, "turns": 7, "seconds": 33.9}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: cd "<tmp>/tte-trigger-jpyc12u_" && git diff && ls -a && cat VERIFY.md 2>/dev/null
+  3. Bash: cd "<tmp>/tte-trigger-jpyc12u_" && cat README.md invoice.py refunds.py && ls tests && cat tests/*.py
+  4. Bash: cd "<tmp>/tte-trigger-jpyc12u_" && cat pricing.py; python -m unittest discover tests 2>&1 | tail -15; git stash -q && python -m uni…
+  5. Bash: cd "<tmp>/tte-trigger-jpyc12u_" && python -c " from decimal import Decimal as D, ROUND_HALF_UP as H from pricing import calculate_t…

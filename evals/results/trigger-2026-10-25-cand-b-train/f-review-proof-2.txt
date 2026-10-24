@@ -1,0 +1,9 @@
+Review the uncommitted change in this repo. I want proof it does what it says, not an opinion.
+
+{"id": "f-review-proof", "try": 2, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.16764839999999998, "turns": 7, "seconds": 38.6}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: cd "<tmp>/tte-trigger-x6emrmry" && git diff && ls -a && cat VERIFY.md 2>/dev/null; git log --format=%B -1
+  3. Bash: cd "<tmp>/tte-trigger-x6emrmry" && ls tests && cat tests/* refunds.py invoice.py README.md
+  4. Bash: cd "<tmp>/tte-trigger-x6emrmry" && grep -n "def " pricing.py; mkdir -p /tmp/vprobe && cat > /tmp/vprobe/probe.py <<'EOF' import sys…
+  5. Bash: cd "<tmp>/tte-trigger-x6emrmry" && python -I -c "import sys;sys.path.insert(0,'.');from pricing import calculate_total as c;print(c…

@@ -1,0 +1,7 @@
+Which Python version does this project need?
+
+{"id": "n-python-version", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.08376339999999999, "turns": 4, "seconds": 20.2}
+
+  1. Bash: cd "<tmp>/tte-trigger-jdnswn57" && ls -a && cat pyproject.toml setup.py setup.cfg .python-version tox.ini requirements*.txt 2>/dev/…
+  2. Bash: cd "<tmp>/tte-trigger-jdnswn57" && cat README.md; ls tests; head -40 *.py; git diff --stat
+  3. Bash: cd "<tmp>/tte-trigger-jdnswn57" && cat tests/*.py | head -60

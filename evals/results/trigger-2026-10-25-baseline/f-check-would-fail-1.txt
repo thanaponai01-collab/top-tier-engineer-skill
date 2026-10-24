@@ -1,0 +1,8 @@
+Add a check that fails if the discount logic breaks, and show me it really fails on a broken version.
+
+{"id": "f-check-would-fail", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.1416462, "turns": 5, "seconds": 47.6}
+
+  1. Bash: cd "<tmp>/tte-trigger-cg_a0jfj" && ls -a && git diff && cat pricing.py && ls tests 2>/dev/null
+  2. Bash: cd "<tmp>/tte-trigger-cg_a0jfj" && cat tests/test_pricing.py README.md && python -m pytest -q 2>&1 | tail -5
+  3. Edit: <tmp>\tte-trigger-cg_a0jfj\tests\test_pricing.py
+  4. Bash: cd "<tmp>/tte-trigger-cg_a0jfj" && echo "== current ==" && python -m unittest discover tests 2>&1 | tail -3 B=$(mktemp -d); cp -r p…

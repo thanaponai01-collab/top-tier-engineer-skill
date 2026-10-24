@@ -1,0 +1,9 @@
+The tests pass, but I'm not convinced they test anything. Get this repo to where green actually means it works.
+
+{"id": "f-trust-green", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.077525, "turns": 6, "seconds": 33.2}
+
+  1. Bash: git ls-files; git diff; wc -l $(git ls-files)
+  2. Bash: cat README.md invoice.py refunds.py tests/*.py; python -m pytest -q 2>&1 | tail -5
+  3. Bash: sed -n 20,30p pricing.py
+  4. Bash: cat > tests/test_pricing.py <<'EOF' import os, sys, unittest sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) from pricing impor…
+  5. Bash: run(){ cp "$1" /tmp/bak; sed -i "$2" "$1"; python -m unittest discover tests 2>&1 | tail -1; cp /tmp/bak "$1"; } run pricing.py 's/ROUND_HALF_UP)/ROUND_HALF_EV…

@@ -1,0 +1,6 @@
+Run the tests.
+
+{"id": "n-run-tests", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.06745680000000001, "turns": 3, "seconds": 17.1}
+
+  1. Bash: cd "<tmp>/tte-trigger-g833kus8" && ls -a && git diff && python -m pytest -q 2>&1 | tail -30
+  2. Bash: cd "<tmp>/tte-trigger-g833kus8" && ls tests && grep -rn "negative\|ValueError\|apply_discount\|0.5\|raises" tests

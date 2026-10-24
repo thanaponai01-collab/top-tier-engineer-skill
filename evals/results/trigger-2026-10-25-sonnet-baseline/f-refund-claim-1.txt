@@ -1,0 +1,10 @@
+Is the refund total right after this change, or are we just hoping? I need to be sure.
+
+{"id": "f-refund-claim", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.07756060000000001, "turns": 7, "seconds": 34.7}
+
+  1. Bash: git diff; echo ----; cat pricing.py; echo ----; ls
+  2. Bash: cat refunds.py; echo ----; ls tests; cat tests/*refund* 2>/dev/null; echo ----; grep -n "refund\|calculate_total\|apply_discount" invoice.py README.md
+  3. Bash: mkdir -p /tmp/chk && git show HEAD:pricing.py > /tmp/chk/old_pricing.py && cat > /tmp/chk/cmp.py <<'EOF' import sys, random, importlib.util from decimal import…
+  4. Bash: D="$(cygpath -w /tmp/chk)"; sed -i "s#\"/tmp/chk/old_pricing.py\"#r\"$D\\\\old_pricing.py\"#" /tmp/chk/cmp.py && python -I /tmp/chk/cmp.py
+  5. Bash: cd /tmp/chk && sed -i '5s#.*#spec = importlib.util.spec_from_file_location("old_pricing", "<tmp>/chk/old_pricing.py")#' cmp.py && p…
+  6. Bash: cd /tmp/chk && cat >> cmp.py <<'EOF' print("---- model B: exact decimal total(all) - total(kept)") def tot(lines,disc): q=lambda x:x.quantize(D("0.01"),roundin…

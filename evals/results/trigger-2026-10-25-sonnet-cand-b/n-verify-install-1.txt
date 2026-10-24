@@ -1,0 +1,5 @@
+Check that Python is installed and tell me the version.
+
+{"id": "n-verify-install", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0218096, "turns": 2, "seconds": 6.2}
+
+  1. PowerShell: python --version

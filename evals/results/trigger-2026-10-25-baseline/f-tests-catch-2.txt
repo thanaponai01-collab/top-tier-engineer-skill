@@ -1,0 +1,7 @@
+Would our tests even notice if apply_discount returned the wrong number?
+
+{"id": "f-tests-catch", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.12080479999999999, "turns": 4, "seconds": 29.9}
+
+  1. Bash: cd "<tmp>/tte-trigger-8k2xvl1u" && git ls-files && git diff && cat pricing.py && ls; cat test*.py tests/*.py 2>/dev/null
+  2. Bash: cd "<tmp>/tte-trigger-8k2xvl1u" && cat refunds.py invoice.py | head -60; python -m unittest discover -s tests 2>&1 | tail -3 T=$(mk…
+  3. Bash: cd "<tmp>/tte-trigger-8k2xvl1u" && cat refunds.py invoice.py | head -60; python -m unittest discover -s tests 2>&1 | tail -3 T=$(mk…

@@ -1,0 +1,6 @@
+Explain what refunds.py does.
+
+{"id": "n-explain", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0810464, "turns": 3, "seconds": 18.6}
+
+  1. Bash: cd "<tmp>/tte-trigger-k75ursnz" && ls -la && cat refunds.py 2>/dev/null || find . -name "refunds*" -not -path "./.git/*"
+  2. Bash: cd "<tmp>/tte-trigger-k75ursnz" && cat pricing.py && git diff pricing.py

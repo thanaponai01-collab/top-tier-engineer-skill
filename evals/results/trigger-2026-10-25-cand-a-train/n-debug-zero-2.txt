@@ -1,0 +1,5 @@
+Why does calculate_total return 0.0 for an empty list? Explain it, don't change anything.
+
+{"id": "n-debug-zero", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0694842, "turns": 2, "seconds": 15.5}
+
+  1. Bash: cd "<tmp>/tte-trigger-lymyqgik" && grep -rn "calculate_total" --include=*.py . ; git diff pricing.py

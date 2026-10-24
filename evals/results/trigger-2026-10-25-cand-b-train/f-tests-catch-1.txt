@@ -1,0 +1,9 @@
+Would our tests even notice if apply_discount returned the wrong number?
+
+{"id": "f-tests-catch", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.1548776, "turns": 7, "seconds": 59.5}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: cd "<tmp>/tte-trigger-8bqeut_1" && ls -a && cat VERIFY.md 2>/dev/null; git diff; grep -rn "apply_discount" --include=*.py .
+  3. Bash: cd "<tmp>/tte-trigger-8bqeut_1" && cat tests/test_pricing.py && ls tests && python -m pytest -q tests 2>&1 | tail -5
+  4. Bash: cd "<tmp>/tte-trigger-8bqeut_1" && cat > VERIFY.md <<'EOF' ## pricing - path: pricing.py - test: python -m pytest -q tests/test_pri…
+  5. Bash: cd "<tmp>/tte-trigger-8bqeut_1" && cp pricing.py /tmp/pricing.bak && for m in ROUND_DOWN ROUND_HALF_EVEN; do sed -i "s/rounding=ROU…

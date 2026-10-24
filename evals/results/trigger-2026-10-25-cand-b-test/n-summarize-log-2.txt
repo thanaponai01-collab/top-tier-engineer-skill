@@ -1,0 +1,6 @@
+Summarize what the git history says about this repo.
+
+{"id": "n-summarize-log", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0668008, "turns": 3, "seconds": 19.8}
+
+  1. PowerShell: git log --stat --format="%H%n%an <%ae>%n%ad%n%n%B" -n 20; git branch -a; git diff --stat
+  2. PowerShell: git diff pricing.py; Get-Content README.md

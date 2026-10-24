@@ -1,0 +1,6 @@
+Rename format_currency to format_money everywhere.
+
+{"id": "n-rename", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0275735, "turns": 3, "seconds": 8.9}
+
+  1. Grep: format_currency
+  2. Bash: sed -i 's/format_currency/format_money/g' pricing.py tests/test_pricing.py && grep -rn "format_currency\|format_money" . --include=* -I --exclude-dir=.git

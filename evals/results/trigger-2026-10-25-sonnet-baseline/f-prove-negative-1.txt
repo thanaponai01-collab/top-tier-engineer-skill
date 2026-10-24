@@ -1,0 +1,7 @@
+Prove that calculate_total rejects negative quantities now.
+
+{"id": "f-prove-negative", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.058669900000000004, "turns": 5, "seconds": 20.7}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: cd "<tmp>/tte-trigger-_kdyz3az" && git diff && ls && cat pricing.py
+  3. Bash: cd "<tmp>/tte-trigger-_kdyz3az" && T=$(mktemp -d) && mkdir "$T/old" && git show HEAD:pricing.py > "$T/old/pricing.py" && cat > "$T/…

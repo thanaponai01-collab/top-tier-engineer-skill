@@ -1,0 +1,8 @@
+Is the refund total right after this change, or are we just hoping? I need to be sure.
+
+{"id": "f-refund-claim", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.13996, "turns": 5, "seconds": 36.3}
+
+  1. Bash: cd "<tmp>/tte-trigger-okfr7qpr" && git diff && ls && cat pricing.py
+  2. Bash: cd "<tmp>/tte-trigger-okfr7qpr" && cat refunds.py invoice.py README.md; ls tests; cat tests/*
+  3. Bash: cd "<tmp>/tte-trigger-okfr7qpr" && python -m unittest discover tests 2>&1 | tail -3; mkdir -p /tmp/rchk && git show HEAD:pricing.py…
+  4. Bash: cd "<tmp>/tte-trigger-okfr7qpr" && python -c " from pricing import apply_discount from decimal import Decimal as D for lines in ([(…

@@ -1,0 +1,5 @@
+Summarize what the git history says about this repo.
+
+{"id": "n-summarize-log", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.025761199999999998, "turns": 2, "seconds": 8.2}
+
+  1. Bash: git log --all --stat --format='%h %an %ad %s' --date=short | head -50; git branch -a; git diff --stat

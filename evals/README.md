@@ -93,6 +93,22 @@ Reports are graded on meaning by `judge.py`, a separate Sonnet call that is neve
 wrote the report. Every finding it credits must quote the report, and an invented quote does not
 count. Pass `--no-judge` to use only the free phrase grader in `grade.py`.
 
+## Trigger: does the skill load at all?
+
+`run.py` asks whether the skill helps once loaded. `trigger.py` asks the step before: given a
+request in a person's own words, does Claude load verify-loop? That depends only on the
+description, so any description change is scored here first.
+
+```bash
+python evals/trigger.py --dry-run
+python evals/trigger.py --split train --description candidate.txt   # tune here
+python evals/trigger.py --split test --description candidate.txt    # judge here, once
+```
+
+Prompts live in `trigger/cases.json` with `fire` and `split`; never tune on `test`. Each try runs in
+`trigger/fixture/` with `trigger/working/` laid over it as an uncommitted change. After adopting a
+description, update `trigger/measured.json`: `tests/test_trigger.py` fails until it matches.
+
 ## Isolation
 
 Each child agent gets:

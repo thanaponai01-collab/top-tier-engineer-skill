@@ -1,0 +1,8 @@
+Which Python version does this project need?
+
+{"id": "n-python-version", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0353194, "turns": 5, "seconds": 11.7}
+
+  1. Grep: python_requires|requires-python|python_version|python:|FROM python|target-version|Programming Language :: Python
+  2. Glob: *
+  3. Read: <tmp>\tte-trigger-qod1q736\README.md
+  4. Grep: ^\s*(match |from __future__|import |from .* import|.*:\s*\w+ \| |.*:=)

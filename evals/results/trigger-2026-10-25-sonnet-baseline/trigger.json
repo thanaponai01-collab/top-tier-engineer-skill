@@ -1,0 +1,536 @@
+{
+  "meta": {
+    "stamp": "2026-10-25-0411",
+    "model": "claude-sonnet-5-5",
+    "repeats": 1,
+    "max_turns": 6,
+    "description": "Prove a change or claim with a check seen failing, then passing, and keep the evidence. Use when a user, skill or agent asks to verify a change, prove a task is done, check a claim against the real app, review a PR or agent's change by proof, or create or maintain a project verify skill; VERIFY.md recipes. Not for just running tests.",
+    "description_source": "plugin SKILL.md",
+    "cost_usd": 1.1732066,
+    "memory_bytes": 0
+  },
+  "summary": {
+    "invalid": 0,
+    "splits": {
+      "train": {
+        "fired_when_wanted": "3/7",
+        "fired_when_not": "0/7",
+        "recall": 0.43,
+        "false_rate": 0.0,
+        "right": "10/14"
+      },
+      "test": {
+        "fired_when_wanted": "1/6",
+        "fired_when_not": "0/6",
+        "recall": 0.17,
+        "false_rate": 0.0,
+        "right": "7/12"
+      },
+      "all": {
+        "fired_when_wanted": "4/13",
+        "fired_when_not": "0/13",
+        "recall": 0.31,
+        "false_rate": 0.0,
+        "right": "17/26"
+      }
+    },
+    "cases": {
+      "f-tests-catch": {
+        "fire": true,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-make-sure": {
+        "fire": true,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-agent-said-done": {
+        "fire": true,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-review-proof": {
+        "fire": true,
+        "split": "train",
+        "fired": 1,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-verify-change": {
+        "fire": true,
+        "split": "train",
+        "fired": 1,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-create-verify-skill": {
+        "fire": true,
+        "split": "train",
+        "fired": 1,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-double-check-merge": {
+        "fire": true,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-prove-negative": {
+        "fire": true,
+        "split": "test",
+        "fired": 1,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-confirm-claude-fixed": {
+        "fire": true,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-trust-green": {
+        "fire": true,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-docstring": {
+        "fire": false,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-run-tests": {
+        "fire": false,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-did-it-work": {
+        "fire": true,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-check-would-fail": {
+        "fire": true,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-explain": {
+        "fire": false,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-git-email": {
+        "fire": false,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-rename": {
+        "fire": false,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "f-refund-claim": {
+        "fire": true,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-commit": {
+        "fire": false,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-summarize-log": {
+        "fire": false,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-debug-zero": {
+        "fire": false,
+        "split": "train",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-style": {
+        "fire": false,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-verify-install": {
+        "fire": false,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-write-test": {
+        "fire": false,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-feature": {
+        "fire": false,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      },
+      "n-python-version": {
+        "fire": false,
+        "split": "test",
+        "fired": 0,
+        "tries": 1,
+        "other_skills": []
+      }
+    }
+  },
+  "tries": [
+    {
+      "id": "f-agent-said-done",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0441599,
+      "turns": 4,
+      "seconds": 21.3
+    },
+    {
+      "id": "f-check-would-fail",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0578949,
+      "turns": 6,
+      "seconds": 26.8
+    },
+    {
+      "id": "f-confirm-claude-fixed",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0387873,
+      "turns": 3,
+      "seconds": 17.1
+    },
+    {
+      "id": "f-create-verify-skill",
+      "try": 1,
+      "fired": true,
+      "fired_at": 1,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.1025628,
+      "turns": 7,
+      "seconds": 31.2
+    },
+    {
+      "id": "f-did-it-work",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0438216,
+      "turns": 5,
+      "seconds": 19.3
+    },
+    {
+      "id": "f-double-check-merge",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.048334,
+      "turns": 4,
+      "seconds": 17.9
+    },
+    {
+      "id": "f-make-sure",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0390171,
+      "turns": 4,
+      "seconds": 18.9
+    },
+    {
+      "id": "f-prove-negative",
+      "try": 1,
+      "fired": true,
+      "fired_at": 1,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.058669900000000004,
+      "turns": 5,
+      "seconds": 20.7
+    },
+    {
+      "id": "f-refund-claim",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.07756060000000001,
+      "turns": 7,
+      "seconds": 34.7
+    },
+    {
+      "id": "f-review-proof",
+      "try": 1,
+      "fired": true,
+      "fired_at": 1,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0644295,
+      "turns": 6,
+      "seconds": 26.1
+    },
+    {
+      "id": "f-tests-catch",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.044912,
+      "turns": 5,
+      "seconds": 17.5
+    },
+    {
+      "id": "f-trust-green",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.077525,
+      "turns": 6,
+      "seconds": 33.2
+    },
+    {
+      "id": "f-verify-change",
+      "try": 1,
+      "fired": true,
+      "fired_at": 1,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.07601480000000001,
+      "turns": 8,
+      "seconds": 30.9
+    },
+    {
+      "id": "n-commit",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.030399999999999996,
+      "turns": 3,
+      "seconds": 9.6
+    },
+    {
+      "id": "n-debug-zero",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0317838,
+      "turns": 3,
+      "seconds": 10.7
+    },
+    {
+      "id": "n-docstring",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0296863,
+      "turns": 3,
+      "seconds": 8.8
+    },
+    {
+      "id": "n-explain",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.028616000000000003,
+      "turns": 3,
+      "seconds": 8.4
+    },
+    {
+      "id": "n-feature",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0332938,
+      "turns": 4,
+      "seconds": 9.7
+    },
+    {
+      "id": "n-git-email",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0225573,
+      "turns": 2,
+      "seconds": 7.9
+    },
+    {
+      "id": "n-python-version",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0353194,
+      "turns": 5,
+      "seconds": 11.7
+    },
+    {
+      "id": "n-rename",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0322029,
+      "turns": 5,
+      "seconds": 8.6
+    },
+    {
+      "id": "n-run-tests",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.026260500000000003,
+      "turns": 4,
+      "seconds": 10.7
+    },
+    {
+      "id": "n-style",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0382712,
+      "turns": 4,
+      "seconds": 13.1
+    },
+    {
+      "id": "n-summarize-log",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.025761199999999998,
+      "turns": 2,
+      "seconds": 8.2
+    },
+    {
+      "id": "n-verify-install",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0214212,
+      "turns": 2,
+      "seconds": 6.6
+    },
+    {
+      "id": "n-write-test",
+      "try": 1,
+      "fired": false,
+      "fired_at": null,
+      "other_skills": [],
+      "leaks": [],
+      "error": null,
+      "cost_usd": 0.0439436,
+      "turns": 7,
+      "seconds": 14.0
+    }
+  ]
+}

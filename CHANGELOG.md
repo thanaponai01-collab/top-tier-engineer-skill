@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.23.0 - 2026-10-25 - A trigger eval, and a description that fires on people's words
+
+- New `evals/trigger.py`: 26 prompts (13 should load verify-loop, 13 should not), each run headless
+  in a small billing repo with an uncommitted change, with only this plugin loaded. Every try is
+  checked for isolation from its init event: a user skill, another plugin, an MCP server or a
+  non-empty `~/.claude/CLAUDE.md` makes the try invalid. Prompts are split train/test so a
+  description tuned on train is judged on prompts it was not fitted to. `--description FILE`
+  scores a candidate on a staged copy without touching the plugin.
+- The old description fired only on the words "verify", "prove" or "proof": Opus 5.5 9/26 wanted
+  tries, Sonnet 5.5 4/13. "Make sure it works before I commit", "another agent said it's done",
+  "would our tests notice" and "green means it works" never loaded it.
+- New description, in the intents people use. Opus 5.5: train 6/14 -> 14/14, held-out test 3/12
+  -> 10/12. Sonnet 5.5: train 3/7 -> 7/7, test 1/6 -> 4/6. False fires 0 before and after on both.
+  Still missed on both models (held out, not tuned for): "double-check the fix before I merge".
+- `evals/trigger/measured.json` holds the description last scored; `tests/test_trigger.py` fails
+  when SKILL.md's description differs from it, so a description edit has to be re-measured.
+
 ## 1.22.0 - 2026-10-25 - Survey scores in report, require: fresh, an overfit eval
 
 - `report` prints `SURVEY <feature>: N/M generated mutants caught` for the last `challenge --auto`

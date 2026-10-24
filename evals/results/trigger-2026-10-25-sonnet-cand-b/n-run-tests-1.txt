@@ -1,0 +1,7 @@
+Run the tests.
+
+{"id": "n-run-tests", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0263449, "turns": 4, "seconds": 10.4}
+
+  1. Glob: **/*test*
+  2. Glob: {pyproject.toml,pytest.ini,setup.cfg,tox.ini,Makefile}
+  3. PowerShell: python -m pytest -q

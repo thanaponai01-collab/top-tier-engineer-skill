@@ -1,10 +1,14 @@
 ---
 name: verify-loop
 description: >-
-  Prove a change or claim with a check seen failing, then passing, and keep the evidence. Use when
-  a user, skill or agent asks to verify a change, prove a task is done, check a claim against the
-  real app, review a PR or agent's change by proof, or create or maintain a project verify skill;
-  VERIFY.md recipes. Not for just running tests.
+  Use whenever someone wants to know that a change really works or a task is really done, not just
+  hear that it is: making sure a change works before committing, doubting a fix or another agent's
+  "done", asking for proof instead of an opinion, asking to verify or review a diff, commit, branch
+  or PR, or doubting that passing tests check anything (would they notice a broken result, does
+  green mean working). Also for creating or maintaining a project's /verify skill or VERIFY.md. Its
+  helper shows a check failing on a broken product and passing on the fixed one, finds tests that
+  cannot fail, and keeps that record, which checking by hand does not. Not for just running tests,
+  building features or explaining code.
 metadata:
   stage: prove
   card: "check your own work until it really passes"

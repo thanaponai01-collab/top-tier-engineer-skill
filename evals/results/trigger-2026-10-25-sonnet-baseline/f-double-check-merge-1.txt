@@ -1,0 +1,7 @@
+Double-check the rounding fix in pricing.py is correct before I merge it.
+
+{"id": "f-double-check-merge", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.048334, "turns": 4, "seconds": 17.9}
+
+  1. Bash: git diff pricing.py; echo ----; cat pricing.py
+  2. Bash: python -I -c " import pricing as p print(p.apply_discount(2.675,0), p.apply_discount(1.005,0), p.apply_discount(10.05,50), p.apply_discount(0.5,50)) print(p.ca…
+  3. Bash: PYTHONPATH=. python -I -c "print(1)" >/dev/null; PYTHONPATH=. python -c " import pricing as p print(p.apply_discount(2.675,0), p.apply_discount(1.005,0), p.app…

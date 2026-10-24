@@ -1,0 +1,7 @@
+Tidy up the imports and formatting in pricing.py; no behaviour change.
+
+{"id": "n-style", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0361643, "turns": 4, "seconds": 10.3}
+
+  1. Read: <tmp>\tte-trigger-gzmiu8dg\pricing.py
+  2. Bash: git diff
+  3. Edit: <tmp>\tte-trigger-gzmiu8dg\pricing.py

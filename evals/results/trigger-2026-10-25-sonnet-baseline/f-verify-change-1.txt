@@ -1,0 +1,10 @@
+Verify this change.
+
+{"id": "f-verify-change", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.07601480000000001, "turns": 8, "seconds": 30.9}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: cd "<tmp>/tte-trigger-8rfsyb08" && git diff && ls
+  3. Read: <tmp>\tte-trigger-plugin-s1q3ek7_\plugin\skills\verify-loop\references\verify-change.md
+  4. Bash: cd "<tmp>/tte-trigger-8rfsyb08" && ls tests; cat invoice.py refunds.py; grep -rn "pricing\|apply_discount\|calculate_total" --inclu…
+  5. Bash: cd "<tmp>/tte-trigger-8rfsyb08" && cat tests/test_refunds.py | head -30; python -c " from pricing import * import subprocess print(…
+  6. Bash: cd "<tmp>/tte-trigger-8rfsyb08" && git status --short && python -m pytest -q 2>&1 | tail -2

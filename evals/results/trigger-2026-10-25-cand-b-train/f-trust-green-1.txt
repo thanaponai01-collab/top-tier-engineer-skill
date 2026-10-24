@@ -1,0 +1,10 @@
+The tests pass, but I'm not convinced they test anything. Get this repo to where green actually means it works.
+
+{"id": "f-trust-green", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.21635320000000002, "turns": 7, "seconds": 52.8}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: cd "<tmp>/tte-trigger-e7pfjvli" && ls -a && git diff && cat *.py | head -150; cat VERIFY.md 2>/dev/null
+  3. Bash: cd "<tmp>/tte-trigger-e7pfjvli" && cat README.md; ls tests; cat tests/*
+  4. Bash: cd "<tmp>/tte-trigger-e7pfjvli" && python - <<'EOF' import re p='tests/test_pricing.py'; s=open(p).read() s=s.replace(''' def test_…
+  5. Bash: cd "<tmp>/tte-trigger-e7pfjvli" && python - <<'EOF' s=open('VERIFY.md').read() s=s.replace("- path: pricing.py\n- test: python -m u…
+  6. Bash: cd "<tmp>/tte-trigger-e7pfjvli" && V="python <tmp>/tte-trigger-plugin-chvcbxzs/plugin/skills/verify-loo…

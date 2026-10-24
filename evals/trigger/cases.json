@@ -1,0 +1,32 @@
+{
+  "about": "Does verify-loop load when it should and stay out when it should not? Each prompt runs in a copy of fixture/ with working/ laid over it as an uncommitted change. `fire` is the right answer; `split` keeps the test prompts out of description tuning, so a tuned description is judged on prompts it was not fitted to.",
+  "cases": [
+    {"id": "f-make-sure", "fire": true, "split": "train", "prompt": "I just changed the discount rounding in pricing.py. Make sure it actually works before I commit."},
+    {"id": "f-agent-said-done", "fire": true, "split": "train", "prompt": "Another agent said it finished the negative-quantity fix in pricing.py, but I don't trust it. Is it really done?"},
+    {"id": "f-review-proof", "fire": true, "split": "train", "prompt": "Review the uncommitted change in this repo. I want proof it does what it says, not an opinion."},
+    {"id": "f-tests-catch", "fire": true, "split": "train", "prompt": "Would our tests even notice if apply_discount returned the wrong number?"},
+    {"id": "f-verify-change", "fire": true, "split": "train", "prompt": "Verify this change."},
+    {"id": "f-create-verify-skill", "fire": true, "split": "train", "prompt": "Set this project up so every change gets checked properly before it's committed: a verify skill for this repo."},
+    {"id": "f-trust-green", "fire": true, "split": "train", "prompt": "The tests pass, but I'm not convinced they test anything. Get this repo to where green actually means it works."},
+    {"id": "f-double-check-merge", "fire": true, "split": "test", "prompt": "Double-check the rounding fix in pricing.py is correct before I merge it."},
+    {"id": "f-prove-negative", "fire": true, "split": "test", "prompt": "Prove that calculate_total rejects negative quantities now."},
+    {"id": "f-confirm-claude-fixed", "fire": true, "split": "test", "prompt": "Claude told me it fixed the half-cent rounding bug. Can you confirm it's actually fixed?"},
+    {"id": "f-check-would-fail", "fire": true, "split": "test", "prompt": "Add a check that fails if the discount logic breaks, and show me it really fails on a broken version."},
+    {"id": "f-refund-claim", "fire": true, "split": "test", "prompt": "Is the refund total right after this change, or are we just hoping? I need to be sure."},
+    {"id": "f-did-it-work", "fire": true, "split": "test", "prompt": "Did the pricing change work? Show me evidence, not a summary."},
+
+    {"id": "n-run-tests", "fire": false, "split": "train", "prompt": "Run the tests."},
+    {"id": "n-docstring", "fire": false, "split": "train", "prompt": "Add a docstring to next_invoice_number in invoice.py."},
+    {"id": "n-explain", "fire": false, "split": "train", "prompt": "Explain what refunds.py does."},
+    {"id": "n-rename", "fire": false, "split": "train", "prompt": "Rename format_currency to format_money everywhere."},
+    {"id": "n-git-email", "fire": false, "split": "train", "prompt": "Verify my git config has a user email set for this repo."},
+    {"id": "n-commit", "fire": false, "split": "train", "prompt": "Commit the current changes with a good message."},
+    {"id": "n-debug-zero", "fire": false, "split": "train", "prompt": "Why does calculate_total return 0.0 for an empty list? Explain it, don't change anything."},
+    {"id": "n-summarize-log", "fire": false, "split": "test", "prompt": "Summarize what the git history says about this repo."},
+    {"id": "n-write-test", "fire": false, "split": "test", "prompt": "Add a unit test for format_currency with a negative amount."},
+    {"id": "n-style", "fire": false, "split": "test", "prompt": "Tidy up the imports and formatting in pricing.py; no behaviour change."},
+    {"id": "n-python-version", "fire": false, "split": "test", "prompt": "Which Python version does this project need?"},
+    {"id": "n-feature", "fire": false, "split": "test", "prompt": "Add a function to invoice.py that parses an invoice number back into year and sequence."},
+    {"id": "n-verify-install", "fire": false, "split": "test", "prompt": "Check that Python is installed and tell me the version."}
+  ]
+}

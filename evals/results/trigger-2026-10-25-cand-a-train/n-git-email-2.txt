@@ -1,0 +1,5 @@
+Verify my git config has a user email set for this repo.
+
+{"id": "n-git-email", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.05008540000000001, "turns": 2, "seconds": 9.5}
+
+  1. PowerShell: git config --show-origin --show-scope --get-all user.email; git config --show-origin --show-scope --get-all user.name

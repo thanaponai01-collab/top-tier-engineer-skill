@@ -1,0 +1,6 @@
+Add a docstring to next_invoice_number in invoice.py.
+
+{"id": "n-docstring", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.06263239999999999, "turns": 3, "seconds": 9.9}
+
+  1. Bash: cat -n invoice.py
+  2. Edit: <tmp>\tte-trigger-eyf4vk3q\invoice.py

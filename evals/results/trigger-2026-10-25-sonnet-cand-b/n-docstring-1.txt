@@ -1,0 +1,6 @@
+Add a docstring to next_invoice_number in invoice.py.
+
+{"id": "n-docstring", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.029370700000000003, "turns": 3, "seconds": 8.2}
+
+  1. Grep: def next_invoice_number
+  2. Edit: <tmp>\tte-trigger-ojneethm\invoice.py

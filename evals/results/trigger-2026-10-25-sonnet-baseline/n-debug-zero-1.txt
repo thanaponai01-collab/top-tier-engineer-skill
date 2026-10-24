@@ -1,0 +1,6 @@
+Why does calculate_total return 0.0 for an empty list? Explain it, don't change anything.
+
+{"id": "n-debug-zero", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0317838, "turns": 3, "seconds": 10.7}
+
+  1. Grep: def calculate_total
+  2. Read: <tmp>\tte-trigger-eky1kfzf\pricing.py

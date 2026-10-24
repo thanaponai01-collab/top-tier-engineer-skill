@@ -1,0 +1,6 @@
+Which Python version does this project need?
+
+{"id": "n-python-version", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0289212, "turns": 3, "seconds": 8.5}
+
+  1. Glob: {pyproject.toml,setup.py,setup.cfg,.python-version,tox.ini,Pipfile,runtime.txt,requirements*.txt}
+  2. Grep: python_requires|requires-python|python_version|match |:=|from __future__|import

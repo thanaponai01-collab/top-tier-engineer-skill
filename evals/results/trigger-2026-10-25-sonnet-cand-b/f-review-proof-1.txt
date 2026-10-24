@@ -1,0 +1,10 @@
+Review the uncommitted change in this repo. I want proof it does what it says, not an opinion.
+
+{"id": "f-review-proof", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.082949, "turns": 8, "seconds": 31.8}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: git diff; ls -a; cat VERIFY.md 2>/dev/null | head -30
+  3. Read: <tmp>\tte-trigger-plugin-xotdbkgi\plugin\skills\verify-loop\references\verify-change.md
+  4. Bash: cat invoice.py refunds.py README.md; ls tests; cat tests/*; grep -rn "pricing\|apply_discount\|calculate_total" --include=*.py . | grep -v "^./tests"
+  5. Bash: cat pricing.py | tail -8; echo ---; python -m unittest discover tests 2>&1 | tail -8 echo --- HEAD; d=$(mktemp -d); git archive HEAD | tar -x -C $d; (cd $d && …
+  6. Bash: d=$(mktemp -d); cp -r pricing.py refunds.py tests $d/; cd $d sed -i 's/ROUND_HALF_UP))/"ROUND_HALF_EVEN"))/;s/"ROUND_HALF_EVEN"))/ROUND_HALF_EVEN))/;s/import D…

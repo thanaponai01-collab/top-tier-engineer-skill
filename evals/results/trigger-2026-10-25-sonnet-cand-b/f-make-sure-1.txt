@@ -1,0 +1,9 @@
+I just changed the discount rounding in pricing.py. Make sure it actually works before I commit.
+
+{"id": "f-make-sure", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.06597, "turns": 7, "seconds": 26.6}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: git diff; ls -a
+  3. Bash: ls tests; cat tests/*.py | head -80; grep -n "pricing\|apply_discount\|calculate_total" invoice.py refunds.py; python -m pytest -q 2>&1 | tail -15
+  4. Bash: python -c " import sys; sys.path.insert(0,'.') from pricing import apply_discount as a, calculate_total as t # (amount, percent, expected half-up) cases=[(0.25…
+  5. Bash: cat refunds.py invoice.py | head -40; python -c " import sys; sys.path.insert(0,'.') from pricing import calculate_total as t print(t([(1,0.1),(1,0.2)],0), t([…

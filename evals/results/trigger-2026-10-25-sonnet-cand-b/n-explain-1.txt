@@ -1,0 +1,6 @@
+Explain what refunds.py does.
+
+{"id": "n-explain", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0296552, "turns": 3, "seconds": 9.4}
+
+  1. Glob: **/refunds.py
+  2. Read: <tmp>\tte-trigger-6_iyj0lx\refunds.py

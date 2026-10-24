@@ -1,0 +1,8 @@
+Review the uncommitted change in this repo. I want proof it does what it says, not an opinion.
+
+{"id": "f-review-proof", "try": 1, "fired": true, "fired_at": 1, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0644295, "turns": 6, "seconds": 26.1}
+
+  1. Skill: verify-loop:verify-loop
+  2. Bash: git diff; ls
+  3. Bash: ls -a . tests; cat README.md; cat tests/*.py | head -80; ls VERIFY.md 2>&1; grep -n "pricing\|apply_discount\|calculate_total" *.py | grep -v "^pricing.py"
+  4. Bash: cat refunds.py; mkdir -p /tmp/v/old && git show HEAD:pricing.py > /tmp/v/old/pricing.py cat > /tmp/v/check.py <<'EOF' import sys; sys.path.insert(0, sys.argv[1…

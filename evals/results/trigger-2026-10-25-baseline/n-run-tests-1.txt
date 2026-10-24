@@ -1,0 +1,6 @@
+Run the tests.
+
+{"id": "n-run-tests", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0543582, "turns": 3, "seconds": 12.3}
+
+  1. Bash: ls; git diff --stat
+  2. Bash: ls tests; python -m pytest -q 2>&1 | tail -30

@@ -1,0 +1,8 @@
+Would our tests even notice if apply_discount returned the wrong number?
+
+{"id": "f-tests-catch", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.044912, "turns": 5, "seconds": 17.5}
+
+  1. Grep: apply_discount
+  2. Glob: **/*test*.py
+  3. Read: <tmp>\tte-trigger-thf46v49\pricing.py
+  4. Read: <tmp>\tte-trigger-thf46v49\tests\test_pricing.py

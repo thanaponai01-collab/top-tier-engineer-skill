@@ -1,0 +1,6 @@
+Rename format_currency to format_money everywhere.
+
+{"id": "n-rename", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0658624, "turns": 3, "seconds": 17.9}
+
+  1. Bash: cd "<tmp>/tte-trigger-sn_okqrv" && grep -rn "format_currency" . --exclude-dir=.git; git diff
+  2. Bash: cd "<tmp>/tte-trigger-sn_okqrv" && sed -i 's/\bformat_currency\b/format_money/g' pricing.py tests/test_pricing.py && grep -rn "form…

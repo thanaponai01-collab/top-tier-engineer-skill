@@ -1,0 +1,5 @@
+Summarize what the git history says about this repo.
+
+{"id": "n-summarize-log", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0256415, "turns": 2, "seconds": 9.7}
+
+  1. Bash: git log --stat --format='%h %an %ad %s' --date=short -n 30; git branch -a; git status --short

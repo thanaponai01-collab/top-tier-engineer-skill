@@ -1,0 +1,6 @@
+Summarize what the git history says about this repo.
+
+{"id": "n-summarize-log", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0709476, "turns": 3, "seconds": 15.3}
+
+  1. Bash: git log --stat --format='%H%n%an <%ae>%n%ad%n%B' -n 20; git branch -a; git diff --stat
+  2. Bash: git diff pricing.py; cat README.md

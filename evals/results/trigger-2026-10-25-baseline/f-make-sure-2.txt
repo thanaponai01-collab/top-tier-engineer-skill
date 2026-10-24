@@ -1,0 +1,8 @@
+I just changed the discount rounding in pricing.py. Make sure it actually works before I commit.
+
+{"id": "f-make-sure", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.12414259999999999, "turns": 5, "seconds": 33.2}
+
+  1. Bash: cd "<tmp>/tte-trigger-k2g_90f8" && git diff && ls && cat pricing.py
+  2. Bash: cd "<tmp>/tte-trigger-k2g_90f8" && cat refunds.py invoice.py README.md; ls tests; cat tests/*.py
+  3. Bash: cd "<tmp>/tte-trigger-k2g_90f8" && python -m unittest discover tests 2>&1 | tail -3; mkdir -p /tmp/vchk && git show HEAD:pricing.py…
+  4. Bash: rm -rf /tmp/vchk

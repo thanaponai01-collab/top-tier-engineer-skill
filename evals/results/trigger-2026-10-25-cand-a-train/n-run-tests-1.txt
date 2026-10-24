@@ -1,0 +1,6 @@
+Run the tests.
+
+{"id": "n-run-tests", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.06644979999999999, "turns": 3, "seconds": 13.4}
+
+  1. Bash: cd "<tmp>/tte-trigger-pxtunil8" && ls -a && git diff && python -m pytest -q 2>&1 | tail -30
+  2. Bash: cd "<tmp>/tte-trigger-pxtunil8" && ls tests && grep -rn "def test\|negative\|ValueError\|0.5\|\.005" tests

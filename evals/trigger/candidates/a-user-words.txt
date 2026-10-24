@@ -1,0 +1,7 @@
+Use whenever someone wants to know that a change really works or a task is really done, not just
+hear that it is: making sure a change works before committing, doubting a fix or another agent's
+"done", asking for proof instead of an opinion, asking whether the tests would notice a broken
+result, or asking to verify or review a diff, commit, branch or PR. Also for creating or
+maintaining a project's /verify skill or VERIFY.md. Its helper shows a check failing on a broken
+product and passing on the fixed one, and keeps that record, which checking by hand does not.
+Not for just running tests, building features or explaining code.

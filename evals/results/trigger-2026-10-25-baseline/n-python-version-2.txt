@@ -1,0 +1,6 @@
+Which Python version does this project need?
+
+{"id": "n-python-version", "try": 2, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0743934, "turns": 3, "seconds": 12.7}
+
+  1. Bash: cd "<tmp>/tte-trigger-54egg2l8" && ls -a && cat pyproject.toml setup.py setup.cfg .python-version runtime.txt tox.ini requirements*…
+  2. Bash: cd "<tmp>/tte-trigger-54egg2l8" && cat README.md && ls tests && cat *.py tests/*

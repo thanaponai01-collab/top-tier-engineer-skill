@@ -1,0 +1,9 @@
+Would our tests even notice if apply_discount returned the wrong number?
+
+{"id": "f-tests-catch", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.13667739999999998, "turns": 6, "seconds": 37.5}
+
+  1. Bash: cd "<tmp>/tte-trigger-j49fh65p" && ls -R | head -50 && git diff && cat pricing.py && grep -rn "apply_discount" --include=*.py .
+  2. Bash: cd "<tmp>/tte-trigger-j49fh65p" && cat tests/test_pricing.py; grep -n "pricing\|discount" refunds.py invoice.py tests/test_refunds.…
+  3. Bash: cd "<tmp>/tte-trigger-j49fh65p" && cat > /tmp/mut.py <<'EOF' import sys, unittest, importlib sys.path.insert(0, ".") import pricing…
+  4. Bash: cd "<tmp>/tte-trigger-j49fh65p" && sed -i 's|open("/dev/null","w")|__import__("io").StringIO()|; $d' /tmp/mut.py && touch tests/__i…
+  5. Bash: cd "<tmp>/tte-trigger-j49fh65p" && rm -rf __pycache__ tests/__pycache__ .pytest_cache && git status --short

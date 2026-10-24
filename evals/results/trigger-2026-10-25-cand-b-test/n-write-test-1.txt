@@ -1,0 +1,8 @@
+Add a unit test for format_currency with a negative amount.
+
+{"id": "n-write-test", "try": 1, "fired": false, "fired_at": null, "other_skills": [], "leaks": [], "error": null, "cost_usd": 0.0972768, "turns": 5, "seconds": 21.9}
+
+  1. Bash: cd "<tmp>/tte-trigger-pa9ni0w1" && ls -R | grep -v __pycache__ | head -50 && git diff && cat pricing.py && ls test* tests 2>/dev/nu…
+  2. Bash: cd "<tmp>/tte-trigger-pa9ni0w1" && cat tests/test_pricing.py README.md && grep -rn "format_currency\|negative\|-\\$\|\\$-" --includ…
+  3. Edit: <tmp>\tte-trigger-pa9ni0w1\tests\test_pricing.py
+  4. Bash: cd "<tmp>/tte-trigger-pa9ni0w1" && python -m unittest discover tests -v 2>&1 | tail -15
