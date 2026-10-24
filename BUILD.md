@@ -79,7 +79,7 @@
   - Results in `evals/results/trigger-2026-10-25-*`; cost about $18.
 
 ## Next
-1.23.0 is uncommitted on `verify-loop-only`; 1.20.0 to 1.22.0 are committed but unpushed, and GitHub
+1.20.0 to 1.23.0 are committed on `verify-loop-only` but unpushed, and GitHub
 main still ships top-tier-engineer 4.66.0, so installs get none of verify-loop. The held-out miss
 "double-check the fix before I merge" needs new train prompts in that shape before tuning, never
 the test prompt itself. The overfit eval still shows no difference (see 1.22.0).
