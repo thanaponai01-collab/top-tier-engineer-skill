@@ -46,5 +46,16 @@
     `--affected`); the gate now requires `verify.py run <repo> --affected` literally.
   - Full proof: `python -m unittest discover tests` on Python 3.13, Windows.
 
+- Fresh inputs: OVERFIT (1.21.0) | proven
+  - `- fresh: N` re-runs a feature's passing checks under N random `VERIFY_SEED` values; a product
+    that passes its own cases and fails a fresh one is `OVERFIT` (red, `fix` step). `SEED UNUSED`
+    when no check file reads the seed; a bad count is `BROKEN`; `fresh:` is frozen by `baseline`.
+  - Rejection before implementation: 9 of the 11 tests in `tests/test_fresh.py` failed; `fresh: 3`
+    was run as a shell command (`'3' is not recognized`).
+  - Focused proof: `python -m unittest discover -s tests -p test_fresh.py` → `Ran 11 tests`, `OK`.
+  - Full proof: `python -m unittest discover tests` → `Ran 387 tests in 277.838s`, `OK (skipped=1)`,
+    Python 3.13, Windows.
+
 ## Next
-No implementation work remains for this slice. Commit and push authorized by the user; release remains separate.
+1.21.0 is uncommitted on `verify-loop-only`. Open: `require: fresh` (strict red for a feature
+without `fresh:`) and an eval case for a special-cased product are not built.

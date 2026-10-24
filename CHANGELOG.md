@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.21.0 - 2026-10-25 - Fresh inputs: product code that special-cases its tests
+
+Anthropic's formal-verification work (anthropic.com/research/formal-verification) names the main
+failure of a prove-and-patch loop: the model changes the program so the check passes trivially.
+verify-loop guarded the check (`HOLLOW`, `LOOSENED`, `CHECK CHANGED`) but not the product side.
+Product code such as `if (credit, amount) == (100, 50): return 150` passes its fixed case, and
+every mutation on that line is caught, so the mutation score looks perfect.
+
+- A feature bullet `fresh: N` (1-20) makes `run` repeat the feature's passing checks N times,
+  each with a random `VERIFY_SEED` the check draws its cases from. A red fresh run is `OVERFIT`:
+  the run is red, the seed is printed with a reproduce command, and `report` makes it a `fix` step
+  that says to fix the product, not the check.
+- The own cases always run with `VERIFY_SEED` unset, even when the caller's environment sets it.
+- `SEED UNUSED` (red, and a `repair` step while unfrozen): `fresh:` is declared but no test file,
+  script, oracle or command of the feature names `VERIFY_SEED`.
+- An invalid `fresh:` value is `BROKEN`. Before 1.21.0 the bullet was parsed as a shell command.
+- `fresh:` is frozen by `baseline`: removing it is `CHECK CHANGED`; a re-baseline that lowers N
+  is listed for review, and raising it is not. Recipes without `fresh:` keep their signatures.
+- `run --json` summary gains `overfit` and `seed_unused`.
+
+The guard is opt-in and only as good as the check's generator: it cannot tell overfitting from a
+generator that disagrees with its oracle, and it is not run inside `challenge` copies.
+
 ## 1.20.0 - 2026-10-24 - Claude Code's own /verify
 
 Claude Code now ships a built-in `/verify` and, since v2.1.286, runs a project skill named

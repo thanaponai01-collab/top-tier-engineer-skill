@@ -17,6 +17,7 @@ include: packages/auth/VERIFY.md
 - privacy: `python scripts/compliance.py privacy out/`
 - fail-signal: expected status 200, got 500
 - fail-proof: changed the return status, test went red, reverted
+- fresh: 3
 
 ## Journey: Complete Flow
 - features: Feature A, Feature B
@@ -41,7 +42,7 @@ include: packages/auth/VERIFY.md
 ## Sections Explained
 
 ### 1. `## <Feature>`
-- Each bullet is `kind: <command>`, `fail-proof: <text>` or `oracle: <files>`.
+- Each bullet is `kind: <command>`, `fail-proof: <text>`, `oracle: <files>` or `fresh: <runs>`.
 - `path:` lists the product files or folders the feature covers. It does four jobs: `--affected`
   selects the feature when they change, `challenge --auto` mutates them when no FILE is given, a
   failure receipt counts only if the files differed inside it when the check went red (see
@@ -69,6 +70,16 @@ include: packages/auth/VERIFY.md
 - `oracle:` lists comma-separated repo-relative spec, fixture and helper files to freeze, alongside
   automatically frozen tests, directly named script paths and commands. List imported helpers
   and expectation data explicitly; dependency discovery is not exhaustive. Missing files fail. Keep implementation files out.
+- `fresh: N` (1-20) guards against product code that special-cases the inputs its check was
+  written with (`if (credit, amount) == (100, 50): return 150`), which every mutation on that line
+  and the `HOLLOW` gate both miss. The feature's checks first run with `VERIFY_SEED` unset: their
+  own cases. When all pass, `run` repeats them N times, each with a random `VERIFY_SEED`, and the
+  check draws fresh cases from it, with expected values from the spec, never from the product. A
+  red fresh run is `OVERFIT` and keeps the run red; it prints the seed, so `VERIFY_SEED=<seed>
+  <command>` reproduces it. Fix the product, not the check. `SEED UNUSED` (also red) means no test
+  file, script, oracle or command of the feature names `VERIFY_SEED`, so a fresh run would only
+  repeat the own cases. Frozen by `baseline`: removing `fresh:` is `CHECK CHANGED`, and a
+  re-baseline that lowers N needs review. Not run inside `challenge` copies.
 - Failure receipts bind all mapped commands, tests, oracles and the Run recipe. After changing
   these definitions, demonstrate rejection again. A timeout is not a receipt.
 

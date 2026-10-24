@@ -81,6 +81,18 @@ def _bare_command(repo, feat, action, freezers):
     return ""
 
 
+def _fresh_step(repo, feat, action, detail):
+    """The step for a fresh-input finding, or None: the generic repair and fix texts name the wrong cause."""
+    if detail.startswith("SEED UNUSED"):
+        return (f"{detail}. Edit the check for `## {feat['name']}` to draw its cases from VERIFY_SEED and "
+                f"its expected values from the spec. Then `python verify.py run {repo}`")
+    if detail.startswith("OVERFIT"):
+        return (f"{detail}. Reproduce it with that seed set, then fix the product so it implements the behavior, "
+                f"not the cases; the check is not the thing to change. Then "
+                f"{_next_command(repo, feat, action, [])}")
+    return None
+
+
 def swarm_items(v, repo, state=None, now=None, where=None):
     """Compute the current verification state and active lease for every feature in VERIFY.md."""
     now = time.time() if now is None else now
@@ -100,6 +112,8 @@ def swarm_items(v, repo, state=None, now=None, where=None):
     passing_out = {k: r.get("output", "") for k, r in checks.items() if isinstance(r, dict) and r.get("ok")}
     frozen_lines = set((state.get("baseline_lines") or {}).get("checks", []))
     hollow = set(state.get("hollow") or [])
+    overfit = state.get("overfit") or {}
+    seed_unused = set(state.get("seed_unused") or [])
     frozen_by = state.get("frozen_by") or {}
     leases = state.get("swarm") or {}
     any_challenged = any(r.get("mutation") and r.get("signature") == signature for r in receipts.values())
@@ -121,6 +135,12 @@ def swarm_items(v, repo, state=None, now=None, where=None):
                   for c in failing]
         if f["name"] in hollow and not any(k in frozen_lines for k in ckeys):
             action, detail = "repair", "HOLLOW: the check passed without calling the product, and it is not frozen"
+        elif f["name"] in seed_unused and not any(k in frozen_lines for k in ckeys):
+            action, detail = "repair", f"SEED UNUSED: `fresh:` is declared but no check reads {v.SEED}, and it is not frozen"
+        elif f["name"] in overfit:
+            miss = overfit[f["name"]]
+            action, detail = "fix", (f"OVERFIT: passed its own cases, failed {v.SEED}={miss.get('seed')}: "
+                                     "the product may special-case the check's inputs")
         elif not f["checks"] or not f["signals"]:
             action, detail = "map", "no check or literal fail-signal in VERIFY.md"
         elif failing and all(causes):
@@ -156,7 +176,7 @@ def swarm_items(v, repo, state=None, now=None, where=None):
             "freezers": freezers,
             "paths": f.get("paths") or [],
             "claim": active_claim,
-            "next": _next_command(repo, f, action, freezers),
+            "next": _fresh_step(repo, f, action, detail) or _next_command(repo, f, action, freezers),
         })
     return items
 

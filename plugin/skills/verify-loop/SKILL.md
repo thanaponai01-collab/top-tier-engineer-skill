@@ -34,7 +34,8 @@ python <skill-base>/scripts/verify.py report <repo> --assess
 `HOLLOW`: the check passes without calling the product. `SURVIVED`: a planted wrong result
 passed. `UNCOVERED`: no check reaches that line. `UNMAPPED`: product code no feature reaches.
 `LOOSENED`: a test lost an exact assertion or changed an expected value, in git history or the
-working tree. No VERIFY.md? Write `## F`, `- path:`, `- test:` ([format](VERIFY_FORMAT.md)) and
+working tree. `OVERFIT`: the product passed its own cases and failed fresh ones (`fresh: N`: the
+check draws cases from `VERIFY_SEED`), so it may special-case the test inputs. No VERIFY.md? Write `## F`, `- path:`, `- test:` ([format](VERIFY_FORMAT.md)) and
 say you added it.
 
 ## Prove or repair: `advance` drives the loop
@@ -52,7 +53,7 @@ For returned tasks, or steps named in `report`'s `NEXT`:
 | `repair` | The check is `HOLLOW` and not frozen: edit it until it calls the product, then call `advance`. No review needed |
 | `map` | Record the check in VERIFY.md: command, `oracle:` files, a `fail-signal:` naming the wrong result (`WEAK SIGNAL` rejects `FAILED`, `AssertionError`) |
 | `blocked` | The environment failed (missing tool, port, timeout). Report it blocked and where it runs; change no code |
-| `fix` | Fix what the failure text says. A red you have not classified: [triage](references/triage.md) |
+| `fix` | Fix what the failure text says. A red you have not classified: [triage](references/triage.md). `OVERFIT`: fix the product, not the check |
 | `prove` | Put the wrong result in the product (inside `path:`), `run`, see the fail-signal, restore, `run`. A red with no product change is `PROOF NOT FROM PRODUCT`. Add a `fail-proof:` line |
 | `challenge` | `challenge` the highest-risk feature until a mutation is caught (`require: challenge`) |
 | `independent` | A fresh agent that never saw the implementation runs `swarm --claim --role judge` |

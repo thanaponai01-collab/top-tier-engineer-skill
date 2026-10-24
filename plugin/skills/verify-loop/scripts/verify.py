@@ -83,7 +83,7 @@ Exit: run 0 = no check failed; 1 = a check failed (or --strict and something is 
 unproven, or has orphan tests); 2 = no usable VERIFY.md. Summary line:
   VERIFY: <f> features | <p> checks pass, <x> fail | <u> unverified | <n> unproven | <o> orphan tests | <j> journeys, <b> broken
 """
-import argparse, ast, contextlib, fnmatch, hashlib, json, os, queue, re, shutil, signal, socket, subprocess, sys, tempfile, time
+import argparse, ast, contextlib, fnmatch, hashlib, json, os, queue, random, re, shutil, signal, socket, subprocess, sys, tempfile, time
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -159,7 +159,8 @@ def parse(text, repo=None, seen=None):
             else:
                 j = re.match(r"(?i)^journey:\s*(.+)$", title)
                 cur = {"name": j.group(1) if j else title, "checks": [], "proofs": [],
-                       "journey": bool(j), "members": [], "oracles": [], "signals": [], "paths": []}
+                       "journey": bool(j), "members": [], "oracles": [], "signals": [], "paths": [],
+                       "fresh": None}
                 features.append(cur)
                 in_blind = False
             continue
@@ -188,6 +189,8 @@ def parse(text, repo=None, seen=None):
             cur["oracles"].extend(p.strip() for p in val.split(",") if p.strip())
         elif kind in ("path", "paths"):
             cur["paths"].extend(p.strip() for p in val.split(",") if p.strip())
+        elif kind == "fresh":
+            cur["fresh"] = val
         elif val:
             cur["checks"].append((kind, val))
     return features, blind
@@ -473,6 +476,59 @@ def hollow(repo, targets, rows, reach):
         return sorted({f for e in entries for f in e.get("files", []) if f.endswith(".py")
                        and not is_test_file(f) and defines_function(repo, f)})
     return [] if targets & called else sorted(targets)
+
+
+# ---- fresh inputs -------------------------------------------------------------------------
+# Mutation testing and HOLLOW judge the check; neither sees product code that special-cases the
+# inputs the check was written with (`if x == 3: return 9` catches every mutant on that line). A
+# feature with `fresh: N` has its passing checks run N more times, each with a random VERIFY_SEED
+# the check draws its cases from. A product that passes its own cases and fails a fresh one is
+# OVERFIT. The own cases always run with no seed, so they stay the ones the check was written with.
+
+SEED = "VERIFY_SEED"
+FRESH_MAX = 20
+
+
+def fresh_count(raw):
+    """(runs, error) for a `fresh:` value; (0, None) when the feature declares none."""
+    if raw is None:
+        return 0, None
+    if raw.isdigit() and 1 <= int(raw) <= FRESH_MAX:
+        return int(raw), None
+    return 0, f"wants a number of seeded runs (1-{FRESH_MAX}), got '{raw}'"
+
+
+def reads_seed(repo, feature):
+    """True when a test file, script or oracle of the feature names VERIFY_SEED. A check that never
+    reads it repeats its own cases on every fresh run, which proves nothing new."""
+    cmds = [c for _, c in feature["checks"]]
+    files = set(feature["oracles"]) | {t for t in find_tests(repo) if is_covered(t, cmds, repo)}
+    for cmd in cmds:
+        files |= {tok.strip("\"'") for tok in re.findall(r'"[^"\n]*"|\'[^\'\n]*\'|[^\s]+', cmd)}
+    if any(SEED in c for c in cmds):
+        return True
+    for rel in files:
+        if os.path.isfile(os.path.join(repo, rel)):
+            try:
+                if SEED in read(repo, rel):
+                    return True
+            except (OSError, ValueError):
+                continue
+    return False
+
+
+def fresh_runs(repo, feature, runs, timeout):
+    """(seeds that passed, failure or None): each check again under `runs` random seeds, stopping at
+    the first red. A failure is {kind, command, seed, exit, output}."""
+    pick, passed = random.SystemRandom(), []
+    for _ in range(runs):
+        seed = pick.randrange(1, 2 ** 31)
+        for kind, cmd in feature["checks"]:
+            ok, code, out, _ = run_check(cmd, repo, timeout, dict(os.environ, **{SEED: str(seed)}))
+            if not ok:
+                return passed, {"kind": kind, "command": cmd, "seed": seed, "exit": code, "output": out[-4000:]}
+        passed.append(seed)
+    return passed, None
 
 
 def save_coverage(repo, entries):
@@ -889,6 +945,8 @@ def run_check(cmd, repo, timeout, env=None):
     """(ok, exit code or None, combined output, seconds)."""
     t0 = time.time()
     run_env = dict(os.environ if env is None else env)
+    if env is None:
+        run_env.pop(SEED, None)  # only a fresh run sets the seed
     run_env.setdefault("PYTHONDONTWRITEBYTECODE", "1")
     try:
         p = subprocess.run(cmd, shell=True, cwd=repo, capture_output=True, text=True,
@@ -928,6 +986,7 @@ def slotted(jobs, repo, timeout, stress, record=None, measure=()):
         slot = slots.get()
         try:
             env = dict(os.environ, VERIFY_SLOT=str(slot), VERIFY_PORT=str(free_port()))
+            env.pop(SEED, None)  # the own cases: the ones the check was written with
             if record is None or (measure and cmd not in measure):
                 return attempt(cmd, repo, timeout, stress, env)
             with tempfile.TemporaryDirectory(prefix="verify-cov-") as folder:
@@ -1192,6 +1251,7 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
     run_one = slotted(jobs, repo, timeout, stress, reach if (record is not None or measure) else None,
                       () if record is not None else measure)
     hollow_feats = []
+    overfit, seed_unused = {}, []  # feature: the fresh run that went red; features whose checks ignore the seed
     pending = {}
     if jobs > 1:
         pool = ThreadPoolExecutor(max_workers=jobs)
@@ -1275,6 +1335,36 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                       + (" (imported, never called)" if targets[f["name"]] == INFER else "")
                       + ": it loads no cases, skips, or tests a copy. A pass that never runs the product "
                       "proves nothing about it")
+        runs, bad_fresh = fresh_count(f["fresh"])
+        if bad_fresh:
+            broken += 1
+            if not as_json:
+                print(f"  BROKEN  fresh: {bad_fresh}")
+        elif runs and judge_reach and not reads_seed(repo, f):
+            seed_unused.append(f["name"])
+            if not as_json:
+                print(f"  SEED UNUSED  `fresh: {runs}` is declared, but no test, script or oracle of this feature "
+                      f"reads {SEED}: every fresh run would repeat the own cases. Draw the cases from the seed, "
+                      "and the expected values from the spec, not from the product")
+        elif runs and judge_reach and mine and all(ok_r for _, ok_r, _ in mine):
+            seeds, miss = fresh_runs(repo, f, runs, timeout)
+            if miss:
+                overfit[f["name"]] = {k: miss[k] for k in ("kind", "command", "seed", "exit")}
+                for c, _, _ in mine:
+                    fresh.pop(c, None)
+                if not as_json:
+                    print(f"  OVERFIT  {miss['kind']}  {miss['command']}: passed its own cases, failed on fresh "
+                          f"inputs ({SEED}={miss['seed']}"
+                          + (", timeout" if miss["exit"] is None else f", exit {miss['exit']}") + "). The product "
+                          "may special-case the inputs the check was written with. Fix the product, not the check. "
+                          f"Reproduce: {SEED}={miss['seed']} {miss['command']}")
+                    cause = extract_failure_summary(miss["output"])
+                    if cause:
+                        print(f"        CAUSE  {cause}")
+                    for line in miss["output"].rstrip().splitlines()[-TAIL_LINES:]:
+                        print(f"        {line}")
+            elif not as_json:
+                print(f"  FRESH  {len(seeds)} seeded run(s) passed ({SEED}={', '.join(map(str, seeds))})")
         if not as_json:
             for sig in f["signals"]:
                 why = gates.weak_signal(sig)
@@ -1379,12 +1469,14 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         save_state(repo, state)
     norm_results = [(feat, kind, cmd, (ok or q), out, code) for feat, kind, cmd, ok, out, code, q, _ in results]
     notes, bad = track(repo, norm_results, only, budget,
-                       failed + broken + bool(incomplete) + changed_during_run + bool(flaky_checks) + len(hollow_feats),
+                       failed + broken + bool(incomplete) + changed_during_run + bool(flaky_checks) + len(hollow_feats)
+                       + len(overfit) + len(seed_unused),
                        strict, signature,
                        tree_after)
     verify_line = (f"VERIFY: {len(shown) - journeys} features | {passed} checks pass, {failed} fail | "
                    f"{unverified} unverified | {unproven} unproven | {len(orphans)} orphan tests | "
                    f"{journeys} journeys, {broken} broken" + (f" | {len(hollow_feats)} hollow" if hollow_feats else "")
+                   + (f" | {len(overfit)} overfit" if overfit else "") + (f" | {len(seed_unused)} seed unused" if seed_unused else "")
                    + (f" | {len(unmapped)} unmapped" if unmapped else "") + (f" | {len(loose)} loosened" if loose else ""))
     if not only:
         state = load_state(repo)
@@ -1392,6 +1484,8 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         if judge_reach:  # `report` turns a hollow, unfrozen check into a `repair` step
             ran = {f["name"] for f in shown}
             state["hollow"] = sorted((set(state.get("hollow") or []) - ran) | set(hollow_feats))
+            state["overfit"] = dict({k: v for k, v in (state.get("overfit") or {}).items() if k not in ran}, **overfit)
+            state["seed_unused"] = sorted((set(state.get("seed_unused") or []) - ran) | set(seed_unused))
         save_state(repo, state)
     if not as_json:
         for n in notes:
@@ -1402,7 +1496,8 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
         if cached:
             print(f"CACHED  {cached} check(s) reused: already proved passing on this exact content"
                   + (" (full signature)" if strict else "") + "; --no-cache runs them again")
-    red = bool(failed or broken or bad or incomplete or changed_during_run or flaky_checks or hollow_feats)
+    red = bool(failed or broken or bad or incomplete or changed_during_run or flaky_checks or hollow_feats
+               or overfit or seed_unused)
     if as_json:
         report = {
             "verdict": "red" if red else "green",
@@ -1418,6 +1513,8 @@ def run_checks(repo, features, blind, recipe, only, timeout, strict, budget=BUDG
                 "broken": broken,
                 "flaky": len(flaky_checks),
                 "hollow": hollow_feats,
+                "overfit": sorted(overfit),
+                "seed_unused": seed_unused,
                 "unmapped": unmapped,
                 "loosened": [gates.loosened_text(x) for x in loose],
                 "unchallenged": bool(unchallenged),
@@ -1877,6 +1974,8 @@ def check_hashes(repo):
     hashes[RECIPE + " signals"] = sha(json.dumps([(f["name"], f["signals"]) for f in features]))
     hashes[RECIPE + " run"] = sha(json.dumps(parse_run(read(repo, RECIPE)), sort_keys=True))
     hashes[RECIPE + " require"] = sha(json.dumps(requirements(recipe_text)))
+    if any(f["fresh"] is not None for f in features):  # absent key: older baselines keep their signature
+        hashes[RECIPE + " fresh"] = sha(json.dumps([(f["name"], f["fresh"]) for f in features]))
     return hashes
 
 
@@ -2158,12 +2257,13 @@ def cmd_scope(repo, patterns, add, clear, check):
 
 
 def frozen_lines(repo):
-    """What a re-baseline compares line by line: each check command, each feature's signals and the
-    recipe's `require:` words."""
+    """What a re-baseline compares line by line: each check command, each feature's signals and
+    `fresh:` runs, and the recipe's `require:` words."""
     text = read(repo, RECIPE)
     features, _ = parse(text, repo=repo)
     return {"checks": sorted(f"{f['name']}|{k}|{c}" for f in features for k, c in f["checks"]),
-            "signals": {f["name"]: f["signals"] for f in features}, "require": requirements(text)}
+            "signals": {f["name"]: f["signals"] for f in features}, "require": requirements(text),
+            "fresh": {f["name"]: fresh_count(f["fresh"])[0] for f in features if f["fresh"] is not None}}
 
 
 def weakened(repo, state, hashes, lines):
@@ -2174,13 +2274,15 @@ def weakened(repo, state, hashes, lines):
     old = state.get("baseline_lines")
     includes = {os.path.normpath(i).replace("\\", "/") for i in find_includes(read(repo, RECIPE))}
     skip = {RECIPE + " run"} | includes | ({RECIPE + " checks", RECIPE + " signals"} if old else set()) \
-        | ({RECIPE + " require"} if old and "require" in old else set())
+        | ({RECIPE + " require"} if old and "require" in old else set())         | ({RECIPE + " fresh"} if old and "fresh" in old else set())
     out = [k for k in sorted(base) if k not in skip and hashes.get(k) != base[k]]
     if old:
         out += [f"check removed or edited: {c}" for c in old.get("checks", []) if c not in lines["checks"]]
         out += [f"fail-signal changed: {name}" for name, sig in sorted(old.get("signals", {}).items())
                 if name in lines["signals"] and lines["signals"][name] != sig]
         out += [f"requirement removed: require: {w}" for w in old.get("require", []) if w not in lines["require"]]
+        out += [f"fresh runs cut: {name} (fresh: {n} -> {lines['fresh'].get(name, 0)})"
+                for name, n in sorted(old.get("fresh", {}).items()) if lines["fresh"].get(name, 0) < n]
     return out
 
 
