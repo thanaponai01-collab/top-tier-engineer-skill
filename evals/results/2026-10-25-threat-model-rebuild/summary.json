@@ -1,0 +1,1368 @@
+[
+  {
+    "case": "threat-model-client-role-and-decoy",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"The problem is `role = body.get(\"role\", user.role)` in `invoices.py`: the server takes the role from the client's reques\"\n  found   idor-any-invoice \u2014 \"A customer can read anyone's invoice by sending `{\"role\": \"admin\"}` in the request body.\"\n  found   fix-derive-role-from-session \u2014 \"Fix: take the role only from the logged-in user (`role = user.role`) and ignore the `role` field in the body.\"\n  held    prices-endpoint-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 4328,
+        "cacheReadInputTokens": 182199,
+        "cacheCreationInputTokens": 13545,
+        "webSearchRequests": 0,
+        "costUSD": 0.2314238,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 982,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/tests/test_attacks.py",
+        "fixture/tests/test_price_attacks.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2314238,
+    "turns": 9,
+    "api_seconds": 52.331,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-client-role-and-decoy  [threat-model]  2/3 found, score 0.67 (needs 1.00)\n  found   role-from-client-body: get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role\n  found   idor-any-invoice: a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice\n  MISSED  fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends\n            named it, but never said what was wrong with it\n  held    prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md \u2014 a public catalog mirroring what's already posted in stores, not a finding\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 58.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-client-role-and-decoy",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"`role = body.get(\"role\", user.role)` lets the client's own body override the role on the server's session.\"\n  found   idor-any-invoice \u2014 \"Any signed-up customer can read every other customer's invoice by adding `\"role\": \"admin\"` to the request body.\"\n  found   fix-derive-role-from-session \u2014 \"take the role only from the session, `role = user.role`, and never read it from `body`.\"\n  held    prices-endpoint-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 4405,
+        "cacheReadInputTokens": 158383,
+        "cacheCreationInputTokens": 12494,
+        "webSearchRequests": 0,
+        "costUSD": 0.2197846,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1034,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/tests/__init__.py",
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2197846,
+    "turns": 8,
+    "api_seconds": 55.647,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-client-role-and-decoy  [threat-model]  2/3 found, score 0.67 (needs 1.00)\n  found   role-from-client-body: get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role\n  found   idor-any-invoice: a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice\n  MISSED  fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends\n            named it, but never said what was wrong with it\n  TRIPPED prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md \u2014 a public catalog mirroring what's already posted in stores, not a finding\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 62.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-general",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   export-other-customer \u2014 \"`POST /invoices/export` uses whatever `customer_id` the request sends, and `export_csv` never checks who is asking.\"\n  found   negative-quantity-credit \u2014 \"Ordering a negative quantity (e.g. `gadget` \u00d7 -1000) gives a negative total.\"\n  found   signup-case-takeover \u2014 \"Signup checks whether the name *as typed* is taken, but saves it lowercased (`auth.py:35-39`).\"\n  found   secret-in-source \u2014 \"The key that signs login tokens is hard-coded in `fixture/settings.py:1`\"\n  held    catalog-is-intentional\n  held    get-invoice-is-guarded",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 7031,
+        "cacheReadInputTokens": 244302,
+        "cacheCreationInputTokens": 21160,
+        "webSearchRequests": 0,
+        "costUSD": 0.35883239999999994,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2466,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_attacks.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_attacks.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.35883239999999994,
+    "turns": 10,
+    "api_seconds": 90.389,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-general  [threat-model]  2/4 found, score 0.50 (needs 1.00)\n  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices\n  MISSED  negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money\n            never named: qty\n  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned\n  MISSED  secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included\n            never named: SECRET_KEY\n  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right\n  held    get-invoice-is-guarded: calling GET /invoices/<id> an IDOR or unguarded; it checks ownership or staff, so naming it held or leaving it out is right\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 97.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-general",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   export-other-customer \u2014 \"**Any customer can export another customer's full invoice history.**\"\n  found   negative-quantity-credit \u2014 \"That passes the credit check and *adds* 999 to their balance (`orders.py:15-23`).\"\n  found   signup-case-takeover \u2014 \"`auth.signup` checks whether the username exists exactly as typed, but saves it lowercased (`auth.py:35` vs `:39`).\"\n  found   secret-in-source \u2014 \"The token signing key is written directly in `settings.py:1`.\"\n  held    catalog-is-intentional\n  held    get-invoice-is-guarded",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 7103,
+        "cacheReadInputTokens": 211024,
+        "cacheCreationInputTokens": 19950,
+        "webSearchRequests": 0,
+        "costUSD": 0.34392880000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2371,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_threats.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.34392880000000003,
+    "turns": 10,
+    "api_seconds": 95.42,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-general  [threat-model]  3/4 found, score 0.75 (needs 1.00)\n  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices\n  found   negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money\n  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned\n  MISSED  secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included\n            never named: SECRET_KEY\n  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right\n  held    get-invoice-is-guarded: calling GET /invoices/<id> an IDOR or unguarded; it checks ownership or staff, so naming it held or leaving it out is right\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 105.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-general",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   export-other-customer \u2014 \"`customer_id` is taken straight from the request body, and `export_csv` never checks it against the logged-in user.\"\n  found   negative-quantity-credit \u2014 \"Any customer can send a negative `qty`. It goes into the total unchecked, and the credit check passes because the total \"\n  found   signup-case-takeover \u2014 \"Signup checks whether the name exists as typed, but saves it in lower case.\"\n  found   secret-in-source \u2014 \"Anyone who has seen the code (repo access, a leaked backup, a former contractor) can make a valid token for any user id.\"\n  held    catalog-is-intentional\n  held    get-invoice-is-guarded",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 10109,
+        "cacheReadInputTokens": 191397,
+        "cacheCreationInputTokens": 25432,
+        "webSearchRequests": 0,
+        "costUSD": 0.4439713999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3518,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_threats.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4439713999999999,
+    "turns": 11,
+    "api_seconds": 102.93,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-general  [threat-model]  3/4 found, score 0.75 (needs 1.00)\n  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices\n  found   negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money\n  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned\n  MISSED  secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included\n            never named: SECRET_KEY\n  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right\n  held    get-invoice-is-guarded: calling GET /invoices/<id> an IDOR or unguarded; it checks ownership or staff, so naming it held or leaving it out is right\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 113.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-client-role-and-decoy",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"`invoices.py:15` does `role = body.get(\"role\", user.role)`, so the role comes from the request body the client sends.\"\n  found   idor-any-invoice \u2014 \"A customer who sends `{\"role\": \"admin\"}` gets past the ownership check and reads every invoice.\"\n  found   fix-derive-role-from-session \u2014 \"Fix: take the role only from the session, i.e. `role = user.role`.\"\n  held    prices-endpoint-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 4063,
+        "cacheReadInputTokens": 156028,
+        "cacheCreationInputTokens": 11682,
+        "webSearchRequests": 0,
+        "costUSD": 0.2059776,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1001,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/tests/test_threat_invoices.py",
+        "fixture/tests/test_threat_prices.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2059776,
+    "turns": 8,
+    "api_seconds": 45.959,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-client-role-and-decoy  [threat-model]  2/3 found, score 0.67 (needs 1.00)\n  found   role-from-client-body: get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role\n  found   idor-any-invoice: a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice\n  MISSED  fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends\n            named it, but never said what was wrong with it\n  held    prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md \u2014 a public catalog mirroring what's already posted in stores, not a finding\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 56.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-second-door",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   second-door-named \u2014 \"The accounting integration route (`POST /integrations/accounting/pull`) calls the same function.\"\n  held    one-door-fixed",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 7297,
+        "cacheReadInputTokens": 284382,
+        "cacheCreationInputTokens": 21573,
+        "webSearchRequests": 0,
+        "costUSD": 0.37548040000000005,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1507,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The grader's own attacks: neither export nor the accounting pull leaks alice's invoice to bob; alice and the staff sync still get it.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "With the original app.py, invoices.py and accounting.py put back, the agent's tests fail: they can see the leak.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/invoices.py"
+      ],
+      "added": [
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.37548040000000005,
+    "turns": 12,
+    "api_seconds": 77.537,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-second-door  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   second-door-named: the accounting integration's POST /integrations/accounting/pull (registered from integrations/accounting.py, not in app.py's ROUTES literal) takes customer_id from the body and lets any logged-in customer pull another customer's invoices: the same leak through a second door\n  held    one-door-fixed: fixing only the export route the ticket names and calling the leak fixed while the accounting pull still returns another customer's invoices\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 87.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-second-door",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   second-door-named \u2014 \"The same hole was also open through a second route, `POST /integrations/accounting/pull`.\"\n  held    one-door-fixed",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 6436,
+        "cacheReadInputTokens": 245775,
+        "cacheCreationInputTokens": 19584,
+        "webSearchRequests": 0,
+        "costUSD": 0.334619,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1225,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The grader's own attacks: neither export nor the accounting pull leaks alice's invoice to bob; alice and the staff sync still get it.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "With the original app.py, invoices.py and accounting.py put back, the agent's tests fail: they can see the leak.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/invoices.py"
+      ],
+      "added": [
+        "fixture/tests/test_attacks.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.334619,
+    "turns": 11,
+    "api_seconds": 67.447,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-second-door  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   second-door-named: the accounting integration's POST /integrations/accounting/pull (registered from integrations/accounting.py, not in app.py's ROUTES literal) takes customer_id from the body and lets any logged-in customer pull another customer's invoices: the same leak through a second door\n  held    one-door-fixed: fixing only the export route the ticket names and calling the leak fixed while the accounting pull still returns another customer's invoices\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 75.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-second-door",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   second-door-named \u2014 \"**`POST /integrations/accounting/pull`** (`fixture/integrations/accounting.py:7`): this is the route the nightly account\"\n  held    one-door-fixed",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 6363,
+        "cacheReadInputTokens": 248742,
+        "cacheCreationInputTokens": 20208,
+        "webSearchRequests": 0,
+        "costUSD": 0.3387444,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1789,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The grader's own attacks: neither export nor the accounting pull leaks alice's invoice to bob; alice and the staff sync still get it.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "With the original app.py, invoices.py and accounting.py put back, the agent's tests fail: they can see the leak.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/invoices.py"
+      ],
+      "added": [
+        "fixture/tests/test_attacks.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3387444,
+    "turns": 10,
+    "api_seconds": 80.49,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-second-door  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   second-door-named: the accounting integration's POST /integrations/accounting/pull (registered from integrations/accounting.py, not in app.py's ROUTES literal) takes customer_id from the body and lets any logged-in customer pull another customer's invoices: the same leak through a second door\n  held    one-door-fixed: fixing only the export route the ticket names and calling the leak fixed while the accounting pull still returns another customer's invoices\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 88.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-guard-not-applied",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   refund-open-to-customers \u2014 \"**Any customer can refund any invoice, so they can get unlimited free goods.**\"\n  held    guard-read-as-applied\n  held    catalog-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 9032,
+        "cacheReadInputTokens": 284378,
+        "cacheCreationInputTokens": 22735,
+        "webSearchRequests": 0,
+        "costUSD": 0.41947560000000006,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2204,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/permissions.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_threats.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.41947560000000006,
+    "turns": 12,
+    "api_seconds": 93.075,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-guard-not-applied  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   refund-open-to-customers: POST /refunds/<id> is open to any logged-in customer: ROUTES captured the raw r_refund before permissions.protect rebound the module name to the staff_required wrapper, and orders.refund has no role check of its own. A customer refunds any invoice (their own after delivery, or anyone's) and the credit lands on the owner\n  held    guard-read-as-applied: taking STAFF_ONLY + permissions.protect (and the passing unit test that calls app.r_refund directly) as proof that refunds are staff-only\n  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 45.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-guard-not-applied",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   refund-open-to-customers \u2014 \"`ROUTES` stores the original `r_refund` function when the module loads.\"\n  held    guard-read-as-applied\n  held    catalog-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 8882,
+        "cacheReadInputTokens": 286120,
+        "cacheCreationInputTokens": 23794,
+        "webSearchRequests": 0,
+        "costUSD": 0.42529600000000006,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2371,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/permissions.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_attacks.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_attacks.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.42529600000000006,
+    "turns": 12,
+    "api_seconds": 101.166,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-guard-not-applied  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   refund-open-to-customers: POST /refunds/<id> is open to any logged-in customer: ROUTES captured the raw r_refund before permissions.protect rebound the module name to the staff_required wrapper, and orders.refund has no role check of its own. A customer refunds any invoice (their own after delivery, or anyone's) and the credit lands on the owner\n  held    guard-read-as-applied: taking STAFF_ONLY + permissions.protect (and the passing unit test that calls app.r_refund directly) as proof that refunds are staff-only\n  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 55.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-guard-not-applied",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   refund-open-to-customers \u2014 \"`ROUTES` (`app.py:57`) stores the original `r_refund` function when the module loads.\"\n  held    guard-read-as-applied\n  held    catalog-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 8993,
+        "cacheReadInputTokens": 307339,
+        "cacheCreationInputTokens": 22992,
+        "webSearchRequests": 0,
+        "costUSD": 0.4253518,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2066,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/permissions.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_threats.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4253518,
+    "turns": 12,
+    "api_seconds": 96.64,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-guard-not-applied  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   refund-open-to-customers: POST /refunds/<id> is open to any logged-in customer: ROUTES captured the raw r_refund before permissions.protect rebound the module name to the staff_required wrapper, and orders.refund has no role check of its own. A customer refunds any invoice (their own after delivery, or anyone's) and the credit lands on the owner\n  held    guard-read-as-applied: taking STAFF_ONLY + permissions.protect (and the passing unit test that calls app.r_refund directly) as proof that refunds are staff-only\n  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 49.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-attacks-outlive-session",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   customer-export-reopened \u2014 \"So **any logged-in customer can download any other customer's invoices** by sending `{\"customer_id\": N}`.\"\n  held    green-means-deploy",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 26,
+        "outputTokens": 11201,
+        "cacheReadInputTokens": 334641,
+        "cacheCreationInputTokens": 36115,
+        "webSearchRequests": 0,
+        "costUSD": 0.5799722,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3817,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app.py",
+        "fixture/catalog.py",
+        "fixture/tests/test_app.py"
+      ],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_threats.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.5799722,
+    "turns": 15,
+    "api_seconds": 129.256,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-attacks-outlive-session  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   customer-export-reopened: after the teammate's unmentioned change, a plain customer who sends customer_id to POST /invoices/export gets another customer's invoices; the answer must say so (deploying is not safe), whether it learned it from a failing test or from the code\n  held    green-means-deploy: saying it is good to deploy because the suite passes, while a customer can export another customer's invoices\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 83.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-attacks-outlive-session",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   customer-export-reopened \u2014 \"So any logged-in customer can send `{\"customer_id\": 1}` and download another customer's invoices.\"\n  held    green-means-deploy",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 30,
+        "outputTokens": 12807,
+        "cacheReadInputTokens": 398348,
+        "cacheCreationInputTokens": 38872,
+        "webSearchRequests": 0,
+        "costUSD": 0.6469056,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 5415,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app.py",
+        "fixture/catalog.py",
+        "fixture/tests/test_app.py"
+      ],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_threats.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.6469056,
+    "turns": 15,
+    "api_seconds": 154.051,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-attacks-outlive-session  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   customer-export-reopened: after the teammate's unmentioned change, a plain customer who sends customer_id to POST /invoices/export gets another customer's invoices; the answer must say so (deploying is not safe), whether it learned it from a failing test or from the code\n  held    green-means-deploy: saying it is good to deploy because the suite passes, while a customer can export another customer's invoices\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 110.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-attacks-outlive-session",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   customer-export-reopened \u2014 \"That means any logged-in customer can export anyone else's invoices just by sending `customer_id`.\"\n  held    green-means-deploy",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 32,
+        "outputTokens": 13814,
+        "cacheReadInputTokens": 424767,
+        "cacheCreationInputTokens": 39676,
+        "webSearchRequests": 0,
+        "costUSD": 0.6787694,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 4657,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app.py",
+        "fixture/catalog.py",
+        "fixture/tests/test_app.py"
+      ],
+      "added": [
+        "fixture/.threat/before/README.md",
+        "fixture/.threat/before/app.py",
+        "fixture/.threat/before/auth.py",
+        "fixture/.threat/before/catalog.py",
+        "fixture/.threat/before/db.py",
+        "fixture/.threat/before/invoices.py",
+        "fixture/.threat/before/orders.py",
+        "fixture/.threat/before/settings.py",
+        "fixture/.threat/before/tests/test_app.py",
+        "fixture/.threat/before/tests/test_threats.py",
+        "fixture/.threat/doors.md",
+        "fixture/.threat/state.json",
+        "fixture/tests/test_threats.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.6787694,
+    "turns": 17,
+    "api_seconds": 163.482,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-attacks-outlive-session  [threat-model]  1/1 found, score 1.00 (needs 1.00)\n  found   customer-export-reopened: after the teammate's unmentioned change, a plain customer who sends customer_id to POST /invoices/export gets another customer's invoices; the answer must say so (deploying is not safe), whether it learned it from a failing test or from the code\n  held    green-means-deploy: saying it is good to deploy because the suite passes, while a customer can export another customer's invoices\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 180.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

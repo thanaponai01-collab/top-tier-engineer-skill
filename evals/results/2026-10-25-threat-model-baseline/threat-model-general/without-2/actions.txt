@@ -1,0 +1,3 @@
+  1. Bash: cd fixture && find . -type f | grep -v node_modules | head -100 && wc -l $(find . -type f -not -path '*/node_modules/*' | head -100)
+  2. Bash: cd fixture && for f in README.md settings.py db.py auth.py catalog.py orders.py invoices.py app.py tests/test_app.py; do echo "=== $f"; cat -n $f; done
+  3. Bash: mkdir -p /tmp/probe && cat > /tmp/probe/p.py <<'EOF' import sys; sys.path.insert(0, sys.argv[1]) import app, db def L(n,p): s,b=app.handle("POST","/login",body…

@@ -1,0 +1,21 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  4/4 found
+  found   export-other-customer — "`POST /invoices/export` uses whatever `customer_id` the request sends, and `export_csv` never checks who is asking."
+  found   negative-quantity-credit — "Ordering a negative quantity (e.g. `gadget` × -1000) gives a negative total."
+  found   signup-case-takeover — "Signup checks whether the name *as typed* is taken, but saves it lowercased (`auth.py:35-39`)."
+  found   secret-in-source — "The key that signs login tokens is hard-coded in `fixture/settings.py:1`"
+  held    catalog-is-intentional
+  held    get-invoice-is-guarded
+
+Phrase grader (grade.py), for comparison:
+FAIL  threat-model-general  [threat-model]  2/4 found, score 0.50 (needs 1.00)
+  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices
+  MISSED  negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money
+            never named: qty
+  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned
+  MISSED  secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included
+            never named: SECRET_KEY
+  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right
+  held    get-invoice-is-guarded: calling GET /invoices/<id> an IDOR or unguarded; it checks ownership or staff, so naming it held or leaving it out is right
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+

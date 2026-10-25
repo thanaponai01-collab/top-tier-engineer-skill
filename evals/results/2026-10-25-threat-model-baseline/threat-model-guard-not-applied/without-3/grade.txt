@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   refund-open-to-customers — "Bob, a customer, called `POST /refunds/100` on Alice's invoice and got `200`."
+  held    guard-read-as-applied
+  held    catalog-is-intentional
+
+Phrase grader (grade.py), for comparison:
+PASS  threat-model-guard-not-applied  [threat-model]  1/1 found, score 1.00 (needs 1.00)
+  found   refund-open-to-customers: POST /refunds/<id> is open to any logged-in customer: ROUTES captured the raw r_refund before permissions.protect rebound the module name to the staff_required wrapper, and orders.refund has no role check of its own. A customer refunds any invoice (their own after delivery, or anyone's) and the credit lands on the owner
+  held    guard-read-as-applied: taking STAFF_ONLY + permissions.protect (and the passing unit test that calls app.r_refund directly) as proof that refunds are staff-only
+  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+

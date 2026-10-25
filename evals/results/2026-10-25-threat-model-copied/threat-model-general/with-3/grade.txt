@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  4/4 found
+  found   export-other-customer — "`customer_id` comes from the request body and is never checked against the logged-in user."
+  found   negative-quantity-credit — "The server accepts `qty` from the client without checking its sign."
+  found   signup-case-takeover — "The "taken" check uses the username as typed, but the account is stored under the lowercased name."
+  found   secret-in-source — "The HMAC signing key is hardcoded in the source."
+  held    catalog-is-intentional
+  held    get-invoice-is-guarded
+
+Phrase grader (grade.py), for comparison:
+FAIL  threat-model-general  [threat-model]  3/4 found, score 0.75 (needs 1.00)
+  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices
+  found   negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money
+  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned
+  MISSED  secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included
+            never named: SECRET_KEY
+  held    catalog-is-intentional: GET /catalog has no login, by design (README): the printed price list. Flagging it is noise
+  held    get-invoice-is-guarded: GET /invoices/<id> checks ownership or staff correctly; calling it an IDOR is wrong
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+

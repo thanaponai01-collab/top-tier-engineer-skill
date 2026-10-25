@@ -1,0 +1,65 @@
+{
+  "case": "threat-model-second-door",
+  "skill": "threat-model",
+  "question": "a customer reports one leaky door; is every door to the same data shut, and held by a test?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "second-door-named",
+      "what": "the accounting integration's POST /integrations/accounting/pull (registered from integrations/accounting.py, not in app.py's ROUTES literal) takes customer_id from the body and lets any logged-in customer pull another customer's invoices: the same leak through a second door",
+      "must_name": ["accounting"],
+      "must_say_any": [
+        "customer_id", "another customer", "any customer", "same leak", "same hole", "second door",
+        "also leak", "also exposed", "same data", "pull"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "one-door-fixed",
+      "what": "fixing only the export route the ticket names and calling the leak fixed while the accounting pull still returns another customer's invoices",
+      "must_not_say_any": [
+        "no other route exposes", "the only route that", "no other way to reach", "only place that exports"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "Every door to another customer's invoices is shut, the owner and the staff sync still work, and the agent's tests reject the original code.",
+    "edits_allowed": [
+      "app.py", "invoices.py", "auth.py", "routes.py", "integrations/*", "tests/*", "README.md",
+      "VERIFY.md", "FEATURES.md", "AGENTS.md", "SECURITY.md", "THREATS.md", ".gitignore",
+      ".verify-state.json", ".verify-evidence/*", ".verify-state-cache/*", "verification/*",
+      "evidence/*", ".threat/*", ".debug/*"
+    ],
+    "replays": [
+      {
+        "id": "every-door-shut",
+        "kind": "outcome",
+        "what": "The grader's own attacks: neither export nor the accounting pull leaks alice's invoice to bob; alice and the staff sync still get it.",
+        "replace": {"tests/test_zz_grader_attacks.py": "reference/attack_test.py"},
+        "command": ["python", "-m", "unittest", "discover", "tests", "-p", "test_zz_grader_attacks.py"],
+        "expect": "pass"
+      },
+      {
+        "id": "suite-green",
+        "kind": "outcome",
+        "what": "The agent's tests pass on the finished code.",
+        "replace": {},
+        "command": ["python", "-m", "unittest", "discover", "tests"],
+        "expect": "pass"
+      },
+      {
+        "id": "tests-see-the-leak",
+        "kind": "outcome",
+        "what": "With the original app.py, invoices.py and accounting.py put back, the agent's tests fail: they can see the leak.",
+        "replace": {
+          "app.py": "reference/original/app.py",
+          "invoices.py": "reference/original/invoices.py",
+          "integrations/accounting.py": "reference/original/integrations/accounting.py"
+        },
+        "command": ["python", "-m", "unittest", "discover", "tests"],
+        "expect": "fail"
+      }
+    ]
+  }
+}

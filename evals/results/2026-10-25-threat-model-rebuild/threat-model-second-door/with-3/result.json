@@ -1,0 +1,102 @@
+{
+  "case": "threat-model-second-door",
+  "skill": "threat-model",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   second-door-named \u2014 \"The same hole was also open through a second route, `POST /integrations/accounting/pull`.\"\n  held    one-door-fixed",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "threat-model"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "threat-model",
+      "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 6436,
+      "cacheReadInputTokens": 245775,
+      "cacheCreationInputTokens": 19584,
+      "webSearchRequests": 0,
+      "costUSD": 0.334619,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1225,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The grader's own attacks: neither export nor the accounting pull leaks alice's invoice to bob; alice and the staff sync still get it.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "With the original app.py, invoices.py and accounting.py put back, the agent's tests fail: they can see the leak.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/invoices.py"
+    ],
+    "added": [
+      "fixture/tests/test_attacks.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.334619,
+  "turns": 11,
+  "api_seconds": 67.447,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 75.8,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

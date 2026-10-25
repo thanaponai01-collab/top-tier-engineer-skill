@@ -1,0 +1,5 @@
+  1. Bash: cd fixture && find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | head -100
+  2. Bash: cd fixture && for f in *.py integrations/*.py tests/*.py README.md; do echo "=== $f"; cat "$f"; done
+  3. Edit: <tmp>\tte-eval-hk6or2zh\fixture\invoices.py
+  4. Edit: <tmp>\tte-eval-hk6or2zh\fixture\tests\test_app.py
+  5. Bash: cd fixture && python -m unittest discover tests 2>&1 | tail -3; cp invoices.py /tmp/inv.bak; sed -i '/not your invoices/d; /customer_id != user.id and user.rol…

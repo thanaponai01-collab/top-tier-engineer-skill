@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "export-other-customer",
+      "what": "POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices",
+      "found": true,
+      "quote": "`POST /invoices/export` takes `customer_id` from the request body and never checks it against the logged-in user.",
+      "quote_checked": true
+    },
+    {
+      "id": "negative-quantity-credit",
+      "what": "place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money",
+      "found": true,
+      "quote": "`qty` is never checked to be positive.",
+      "quote_checked": true
+    },
+    {
+      "id": "signup-case-takeover",
+      "what": "signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned",
+      "found": true,
+      "quote": "The \"username taken\" check uses the name exactly as typed, but the account is saved under the lowercased name.",
+      "quote_checked": true
+    },
+    {
+      "id": "secret-in-source",
+      "what": "SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included",
+      "found": true,
+      "quote": "Anyone who sees the repo (a leak, an ex-contractor, a public fork) can make a valid token for any user ID.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "catalog-is-intentional",
+      "what": "flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "get-invoice-is-guarded",
+      "what": "calling GET /invoices/<id> an IDOR or unguarded; it checks ownership or staff, so naming it held or leaving it out is right",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.028703100000000002,
+  "model": "claude-sonnet-5-5"
+}

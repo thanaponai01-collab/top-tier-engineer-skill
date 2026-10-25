@@ -1,0 +1,52 @@
+{
+  "case": "threat-model-client-role-and-decoy",
+  "skill": "threat-model",
+  "question": "what can a signed-up customer account be made to do here?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "role-from-client-body",
+      "what": "get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role",
+      "must_name": ["invoices.py"],
+      "must_say_any": [
+        "role from the request body", "role from the body", "client-supplied role",
+        "body.get(\"role\"", "body[\"role\"]", "trusts the body", "trusts the client",
+        "role sent in the body", "role in the body", "role passed in the body"
+      ]
+    },
+    {
+      "id": "idor-any-invoice",
+      "what": "a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice",
+      "must_say_any": [
+        "view any invoice", "read another customer's invoice", "read another user's invoice",
+        "view invoice 11", "read invoice 11", "bypass ownership", "bypass the ownership check",
+        "idor", "escalate to admin", "claim role", "claim admin", "role=admin", "role: admin",
+        "\"role\": \"admin\""
+      ]
+    },
+    {
+      "id": "fix-derive-role-from-session",
+      "what": "the fix is to use the session's own role and ignore any role field the client sends",
+      "must_say_any": [
+        "use user.role", "ignore the body", "ignore any role in the body", "never trust the body's role",
+        "server-side role", "derive role from the session", "session's role", "role must come from the session",
+        "drop the body.get", "stop reading role from body"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "prices-endpoint-is-intentional",
+      "what": "get_price has no authentication check at all, but this is intentional and documented in README.md — a public catalog mirroring what's already posted in stores, not a finding",
+      "must_not_say_any": [
+        "get_price is unauthenticated and", "get_price has no auth and needs", "prices.py is missing authentication",
+        "add authentication to get_price", "get_price should require a session", "flag get_price as a finding",
+        "prices endpoint is a vulnerability", "get_price is a finding"
+      ],
+      "must_say_any": [
+        "intentionally public", "public catalog", "no login required by design", "matches the readme",
+        "get_price is fine", "nothing behind it worth protecting", "not a finding"
+      ]
+    }
+  ]
+}

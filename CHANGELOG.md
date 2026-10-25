@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.33.0 - 2026-10-25 - threat-model: three stages built on what plain Opus already does
+
+- threat-model joins the plugin (manual-only, from top-tier-engineer main) with main's eval case,
+  then rebuilt from a trace of plain Opus. Plain Opus lists the files, reads every one in a single
+  call, runs one probe script that tries each suspicion, and reports worst first. It finds every
+  planted abuse here, including a staff guard that reads as applied but never reaches the route. Its
+  probe lives outside the repo and is deleted, so no attack outlives the session.
+- `scripts/threat.py`: doors (a scan of route tables, registering decorators and calls, handler
+  methods, `__main__` blocks; unparsed code listed too), attack (`--attack CMD --door FILE::FUNC
+  --gets TEXT` runs a test in a throwaway copy under a call tracer: `open` when it fails, `held` when
+  it passes; refused when it never enters the door, runs no tests, crashes, lives outside the repo,
+  or sits where the suite does not run it; every door is attacked or has an `out:` line in
+  `.threat/doors.md` whose reason does not lean on a defense), hold (attacks rerun; after a fix each
+  passes and each one that was open fails again with the changed files put back, attack files
+  excluded). It prints a drafted answer, worst first, that never says secure.
+- SKILL.md is a goal, three stages and the helper. verify-loop, debug-protocol and structure-report
+  skip `.threat/`.
+- Four new eval cases: `threat-model-general` (four holes across surfaces, two decoys),
+  `threat-model-second-door` (fix a reported leak; a plugin route reaches the same data),
+  `threat-model-guard-not-applied` (the wrapper rebinds a name after the route table captured the
+  raw handler; a unit test calls the wrapped name), `threat-model-attacks-outlive-session` (a teammate
+  reopens export unmentioned; a bare second session only adds a product).
+- Results, 3 tries per arm: plain 15/15, rebuilt skill 15/15; mean $0.20 vs $0.40 a try. Main's skill
+  as copied: 6/6 on the two cases run. No quality gain on code small enough to read in one call; what
+  the skill adds is the attacks left in the suite (in the handoff case the second session saw the
+  suite go red rather than finding the leak by reading). Tests: `tests/test_threat.py`, 19; 16
+  disabled guards each caught.
+
 ## 1.32.0 - 2026-10-25 - structure-gate: three stages built on what plain Opus already does
 
 - structure-gate joins the plugin (manual-only, from top-tier-engineer main) with its scripts

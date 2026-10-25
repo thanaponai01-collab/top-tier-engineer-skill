@@ -19,6 +19,7 @@ SCRIPTS = {
     "debug.py": os.path.join(ROOT, "plugin", "skills", "debug-protocol", "scripts"),
     "structure-report.py": os.path.join(ROOT, "plugin", "skills", "structure-gate", "scripts"),
     "structure.py": os.path.join(ROOT, "plugin", "skills", "structure-gate", "scripts"),
+    "threat.py": os.path.join(ROOT, "plugin", "skills", "threat-model", "scripts"),
 }
 
 

@@ -1,0 +1,73 @@
+{
+  "case": "threat-model-general",
+  "skill": "threat-model",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  4/4 found\n  found   export-other-customer \u2014 \"`customer_id` comes from the request body and is never checked against the logged-in user.\"\n  found   negative-quantity-credit \u2014 \"The server accepts `qty` from the client without checking its sign.\"\n  found   signup-case-takeover \u2014 \"The \"taken\" check uses the username as typed, but the account is stored under the lowercased name.\"\n  found   secret-in-source \u2014 \"The HMAC signing key is hardcoded in the source.\"\n  held    catalog-is-intentional\n  held    get-invoice-is-guarded",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "threat-model"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "threat-model",
+      "path": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 10169,
+      "cacheReadInputTokens": 119930,
+      "cacheCreationInputTokens": 20214,
+      "webSearchRequests": 0,
+      "costUSD": 0.38911799999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3422,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.38911799999999996,
+  "turns": 6,
+  "api_seconds": 107.865,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 111.8,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "export-other-customer",
+      "what": "POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices",
+      "found": true,
+      "quote": "`POST /invoices/export` uses whatever `customer_id` the request sends, and `export_csv` never checks who is asking.",
+      "quote_checked": true
+    },
+    {
+      "id": "negative-quantity-credit",
+      "what": "place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money",
+      "found": true,
+      "quote": "Ordering a negative quantity (e.g. `gadget` \u00d7 -1000) gives a negative total.",
+      "quote_checked": true
+    },
+    {
+      "id": "signup-case-takeover",
+      "what": "signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned",
+      "found": true,
+      "quote": "Signup checks whether the name *as typed* is taken, but saves it lowercased (`auth.py:35-39`).",
+      "quote_checked": true
+    },
+    {
+      "id": "secret-in-source",
+      "what": "SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included",
+      "found": true,
+      "quote": "The key that signs login tokens is hard-coded in `fixture/settings.py:1`",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "catalog-is-intentional",
+      "what": "flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "get-invoice-is-guarded",
+      "what": "calling GET /invoices/<id> an IDOR or unguarded; it checks ownership or staff, so naming it held or leaving it out is right",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.028745100000000003,
+  "model": "claude-sonnet-5-5"
+}

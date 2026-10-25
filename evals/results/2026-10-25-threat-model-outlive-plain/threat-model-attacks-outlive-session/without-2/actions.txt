@@ -1,0 +1,6 @@
+  1. Bash: cd fixture && find . -type f | head -100 && wc -l $(find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*') | tail -1
+  2. Bash: cd fixture && for f in README.md settings.py db.py auth.py app.py catalog.py orders.py invoices.py tests/test_app.py; do echo "=== $f"; cat -n $f; done
+  3. Bash: mkdir -p /tmp/probe && cat > /tmp/probe/p.py <<'EOF' import sys; sys.path.insert(0, sys.argv[1]) import app, db def L(u,p): return {"Authorization":"Bearer "+a…
+  4. Bash: cd fixture && find . -type f -not -path '*/node_modules/*' | head -50 && cat * 2>/dev/null | head -200
+  5. Bash: cd fixture && cat invoices.py orders.py settings.py tests/test_app.py
+  6. Bash: cd fixture && sed -i 's/"gizmo": 4.50}/"gizmo": 4.50, "gizmo-pro": 12.00}/' catalog.py && head -1 catalog.py && python -m unittest discover tests 2>&1 | tail -…

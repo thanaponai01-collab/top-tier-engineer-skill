@@ -1,0 +1,91 @@
+{
+  "case": "threat-model-second-door",
+  "skill": "threat-model",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   second-door-named \u2014 \"`POST /integrations/accounting/pull` only checked that someone was logged in, so any customer could call it with any `cu\"\n  held    one-door-fixed",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 2142,
+      "cacheReadInputTokens": 104472,
+      "cacheCreationInputTokens": 10669,
+      "webSearchRequests": 0,
+      "costUSD": 0.1491264,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 347,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The grader's own attacks: neither export nor the accounting pull leaks alice's invoice to bob; alice and the staff sync still get it.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "With the original app.py, invoices.py and accounting.py put back, the agent's tests fail: they can see the leak.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/invoices.py",
+      "fixture/tests/test_app.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1491264,
+  "turns": 6,
+  "api_seconds": 30.021,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 33.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

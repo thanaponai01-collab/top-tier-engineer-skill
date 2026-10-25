@@ -1,0 +1,98 @@
+{
+  "case": "threat-model-general",
+  "skill": "threat-model",
+  "question": "general, not built around one trap: an ordinary storefront about to open signups; what can a customer account, or anyone, be made to do?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "export-other-customer",
+      "what": "POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices",
+      "must_name": [
+        "export"
+      ],
+      "must_say_any": [
+        "customer_id",
+        "another customer's invoices",
+        "other customers' invoices",
+        "any customer's invoices",
+        "idor",
+        "someone else's invoices",
+        "not checked against the caller",
+        "no ownership check"
+      ]
+    },
+    {
+      "id": "negative-quantity-credit",
+      "what": "place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money",
+      "must_name": [
+        "qty"
+      ],
+      "must_say_any": [
+        "negative",
+        "qty=-",
+        "qty: -",
+        "\"qty\": -",
+        "below zero",
+        "minus"
+      ]
+    },
+    {
+      "id": "signup-case-takeover",
+      "what": "signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned",
+      "must_name": [
+        "auth.py"
+      ],
+      "must_say_any": [
+        "lower",
+        "case",
+        "Alice",
+        "ALICE",
+        "overwrite",
+        "overwrites",
+        "replaces",
+        "takeover",
+        "take over",
+        "hijack"
+      ]
+    },
+    {
+      "id": "secret-in-source",
+      "what": "SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included",
+      "must_name": [
+        "SECRET_KEY"
+      ],
+      "must_say_any": [
+        "hard-coded",
+        "hardcoded",
+        "in source",
+        "committed",
+        "in the repo",
+        "forge",
+        "rotate"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "catalog-is-intentional",
+      "what": "flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right",
+      "must_not_say_any": [
+        "catalog is unauthenticated and",
+        "add authentication to the catalog",
+        "catalog should require",
+        "/catalog is a vulnerability",
+        "catalog requires no auth, which is a finding"
+      ]
+    },
+    {
+      "id": "get-invoice-is-guarded",
+      "what": "calling GET /invoices/<id> an IDOR or unguarded; it checks ownership or staff, so naming it held or leaving it out is right",
+      "must_not_say_any": [
+        "get_invoice has no ownership check",
+        "get_invoice lets any customer",
+        "/invoices/<id> is an idor",
+        "get_invoice is vulnerable"
+      ]
+    }
+  ]
+}

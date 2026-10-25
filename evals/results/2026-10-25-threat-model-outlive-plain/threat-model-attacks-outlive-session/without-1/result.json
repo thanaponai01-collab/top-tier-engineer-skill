@@ -1,0 +1,74 @@
+{
+  "case": "threat-model-attacks-outlive-session",
+  "skill": "threat-model",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   customer-export-reopened \u2014 \"`POST /invoices/export` lets any logged-in customer download any other customer's invoices.\"\n  held    green-means-deploy",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 6986,
+      "cacheReadInputTokens": 139366,
+      "cacheCreationInputTokens": 21740,
+      "webSearchRequests": 0,
+      "costUSD": 0.3415692,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3256,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/app.py",
+      "fixture/catalog.py",
+      "fixture/tests/test_app.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.3415692,
+  "turns": 7,
+  "api_seconds": 88.54,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 93.8,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

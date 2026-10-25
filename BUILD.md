@@ -183,6 +183,19 @@
     general 3/3 vs 2/3 ($0.21 vs $0.17). Plain Opus finds every tangle by reading; what it lacks is the denominator.
   - Not covered: a repo too big to read, non-Python depth (JS gets length and copies only), the baseline ratchet in CI.
 
+- threat-model as three stages (1.33.0) | proven (mechanics) / ties plain Opus on all five cases at about 2x cost (eval)
+  - `scripts/threat.py`: doors (a scan of route tables, registering decorators, handlers and scripts),
+    attack (each door entered by a kept attack in `tests/test_*.py`, or `out:` with a reason that does
+    not lean on a defense), hold (attacks rerun; a fix shuts each open one and is seen failing with the
+    change put back). `tests/test_threat.py` 19 tests; 16 disabled guards each caught.
+  - Plain `evals/results/2026-10-25-threat-model-baseline` + `-outlive-plain`: 15/15 ($0.11-0.35).
+    Main's skill as copied `-copied`: 6/6. Rebuild `-rebuild`: 15/15 ($0.22-0.64, mean $0.40 vs $0.20).
+  - Plain Opus reads the whole small app, probes every suspicion and finds each planted abuse, including
+    a guard that reads as applied and an unmentioned teammate change during an unrelated task. What it
+    never leaves is the attacks: its probes are deleted. The skill leaves them in the suite.
+  - Not covered: an app too big to read in one call (the case the doors count is for), and open attacks
+    kept as plain tests leave the suite red until fixed (a later session saw 8-10 failures).
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

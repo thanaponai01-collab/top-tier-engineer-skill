@@ -1,0 +1,4 @@
+  1. Bash: cat "<tmp>/tte-plugin-44hmk_mf/verify-loop/skills/threat-model/SKILL.md"; echo ----; find fixture -type f | head -50
+  2. Bash: cd fixture; for f in *; do echo "=== $f"; cat -n "$f"; done
+  3. Bash: mkdir -p ../tm-scratch && cat > ../tm-scratch/attack.py <<'EOF' import sys; sys.path.insert(0, sys.argv[1]) from store import Store from invoices import get_in…
+  4. Bash: cd fixture && python -m unittest -v test_invoices 2>&1 | tail -8

@@ -1,0 +1,57 @@
+{
+  "case": "threat-model-guard-not-applied",
+  "skill": "threat-model",
+  "question": "a staff-only guard that reads as applied: does the answer come from running the door or from reading it?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "refund-open-to-customers",
+      "what": "POST /refunds/<id> is open to any logged-in customer: ROUTES captured the raw r_refund before permissions.protect rebound the module name to the staff_required wrapper, and orders.refund has no role check of its own. A customer refunds any invoice (their own after delivery, or anyone's) and the credit lands on the owner",
+      "must_name": [
+        "refund"
+      ],
+      "must_say_any": [
+        "any customer",
+        "any logged-in",
+        "customers can refund",
+        "customer can refund",
+        "bob refunded",
+        "not applied",
+        "never applied",
+        "unwrapped",
+        "raw r_refund",
+        "raw handler",
+        "original function",
+        "captured",
+        "before the wrap",
+        "before protect",
+        "bypass",
+        "200"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "guard-read-as-applied",
+      "what": "taking STAFF_ONLY + permissions.protect (and the passing unit test that calls app.r_refund directly) as proof that refunds are staff-only",
+      "must_not_say_any": [
+        "refunds are staff-only and",
+        "refunds correctly reject",
+        "refund correctly rejects",
+        "refunds are properly restricted",
+        "refunds are protected by staff_required",
+        "staff-only check on refunds holds",
+        "refunds reject non-staff"
+      ]
+    },
+    {
+      "id": "catalog-is-intentional",
+      "what": "flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right",
+      "must_not_say_any": [
+        "add authentication to the catalog",
+        "catalog should require",
+        "/catalog is a vulnerability"
+      ]
+    }
+  ]
+}

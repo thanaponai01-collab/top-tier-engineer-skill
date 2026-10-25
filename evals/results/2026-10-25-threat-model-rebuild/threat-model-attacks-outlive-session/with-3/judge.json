@@ -1,0 +1,27 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 1,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "customer-export-reopened",
+      "what": "after the teammate's unmentioned change, a plain customer who sends customer_id to POST /invoices/export gets another customer's invoices; the answer must say so (deploying is not safe), whether it learned it from a failing test or from the code",
+      "found": true,
+      "quote": "That means any logged-in customer can export anyone else's invoices just by sending `customer_id`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-means-deploy",
+      "what": "saying it is good to deploy because the suite passes, while a customer can export another customer's invoices",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0222591,
+  "model": "claude-sonnet-5-5"
+}

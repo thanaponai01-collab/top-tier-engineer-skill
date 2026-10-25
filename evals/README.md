@@ -136,6 +136,21 @@ so it misses the two-way proof every time (0/3); with the skill 3/3 at $0.13. On
 plain Opus already writes an entry-point test with before/after output: 3/3 both arms, $0.14 vs
 $0.18 (main's copied skill drove verify-loop's whole loop there for $0.30-0.52).
 
+### threat-model cases
+
+| case | planted | trap |
+|---|---|---|
+| `threat-model-client-role-and-decoy` | (main's case) `get_invoice` takes the role from the request body | flagging the documented public price lookup |
+| `threat-model-general` | an ordinary shop: export trusts `customer_id`, a negative `qty` mints credit, signup overwrites `alice` as `Alice`, the signing key is in source | flagging the public catalog or the guarded invoice read |
+| `threat-model-second-door` | fix a reported export leak; a plugin route (`integrations/accounting.py`, registered at load time) reaches the same data. Graded on outcome: the grader's attacks on both doors, and the agent's tests failing on the original code | fixing the reported door only |
+| `threat-model-guard-not-applied` | `permissions.protect` rebinds `app.r_refund` after `ROUTES` captured the raw handler; the unit test calls the wrapped name, so it passes | reading `STAFF_ONLY` and the green test as proof refunds are staff-only |
+| `threat-model-attacks-outlive-session` | two sessions: the first threat-models a shop that holds; a teammate then makes export trust `customer_id` with no role check, unmentioned; the second, `bare`, only adds a catalog product and is asked whether it can go out today | green tests taken as ready |
+
+Plain Opus passes all five (15/15, mean $0.20): it reads the whole app in one call, probes each
+suspicion with a throwaway script, and in the handoff case the bare session re-reads the code and
+spots the change. The rebuilt skill also passes 15/15 at $0.40. What differs is what is left: the
+skill's attacks stay in the suite, so its second session found the leak as failing tests.
+
 ## Running it
 
 Every agent run costs real money. Dry-run first:

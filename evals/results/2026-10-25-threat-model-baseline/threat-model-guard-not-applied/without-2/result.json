@@ -1,0 +1,63 @@
+{
+  "case": "threat-model-guard-not-applied",
+  "skill": "threat-model",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   refund-open-to-customers \u2014 \"The biggest problem: **any logged-in customer can issue refunds.**\"\n  held    guard-read-as-applied\n  held    catalog-is-intentional",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 4336,
+      "cacheReadInputTokens": 79802,
+      "cacheCreationInputTokens": 12416,
+      "webSearchRequests": 0,
+      "costUSD": 0.20204039999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1546,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.20204039999999998,
+  "turns": 4,
+  "api_seconds": 51.178,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 54.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

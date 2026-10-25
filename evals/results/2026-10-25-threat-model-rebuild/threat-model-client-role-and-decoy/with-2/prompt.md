@@ -1,0 +1,5 @@
+Run `threat-model` over `fixture/`. It's a small storefront API: viewing invoices, and a price
+catalog. We're about to open signups to the public and want to know what a customer account could
+be made to do before it ships.
+
+The explicitly requested threat-model skill is at <tmp>\tte-plugin-7kogqlor\verify-loop\skills\threat-model\SKILL.md. Read and follow that SKILL.md before starting.

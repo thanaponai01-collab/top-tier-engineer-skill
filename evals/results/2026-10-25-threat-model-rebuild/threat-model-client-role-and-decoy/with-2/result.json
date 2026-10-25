@@ -1,0 +1,76 @@
+{
+  "case": "threat-model-client-role-and-decoy",
+  "skill": "threat-model",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"The problem is `role = body.get(\"role\", user.role)` in `invoices.py`: the server takes the role from the client's reques\"\n  found   idor-any-invoice \u2014 \"A customer can read anyone's invoice by sending `{\"role\": \"admin\"}` in the request body.\"\n  found   fix-derive-role-from-session \u2014 \"Fix: take the role only from the logged-in user (`role = user.role`) and ignore the `role` field in the body.\"\n  held    prices-endpoint-is-intentional",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "threat-model"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "threat-model",
+      "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 4328,
+      "cacheReadInputTokens": 182199,
+      "cacheCreationInputTokens": 13545,
+      "webSearchRequests": 0,
+      "costUSD": 0.2314238,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 982,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/tests/test_attacks.py",
+      "fixture/tests/test_price_attacks.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2314238,
+  "turns": 9,
+  "api_seconds": 52.331,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 58.5,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

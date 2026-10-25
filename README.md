@@ -19,6 +19,10 @@ And `structure-gate` (manual-only, `/verify-loop:structure-gate`): is it spaghet
 `structure.py --gate` reports the share of code a parser actually entered before any finding, makes
 every region no parser entered get a counted reading or UNKNOWN, and refuses a clean verdict over
 code no linter or test can reach.
+And `threat-model` (manual-only, `/verify-loop:threat-model`): what can an attacker make it do?
+`threat.py` counts every way in, makes each one attacked or shown to have nothing behind it, keeps
+each attack as a test the suite runs, and accepts a fix only when every open attack passes and fails
+again with the change put back.
 
 ## Install (Claude Code)
 
@@ -72,6 +76,8 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
   `--prove FILE:LINE --as`, `--gate --regress CMD`).
 - `plugin/skills/structure-gate/` — the structure-gate skill; `scripts/structure.py` (`--gate PATHS`,
   notes in `.structure/notes.md`) over `scripts/structure-report.py` (`--json`, `--baseline FILE`).
+- `plugin/skills/threat-model/` — the threat-model skill; `scripts/threat.py` (doors, `--attack CMD
+  --door FILE::FUNC --gets TEXT`, `--gate`; notes in `.threat/doors.md`).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

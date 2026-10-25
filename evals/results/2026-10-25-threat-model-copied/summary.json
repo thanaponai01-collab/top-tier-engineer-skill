@@ -1,0 +1,447 @@
+[
+  {
+    "case": "threat-model-client-role-and-decoy",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"The server takes the role from that client-supplied field instead of from the session.\"\n  found   idor-any-invoice \u2014 \"any signed-up customer can read any other customer's invoice by adding `\"role\": \"admin\"` to the request body.\"\n  found   fix-derive-role-from-session \u2014 \"Use `role = user.role` and ignore `body[\"role\"]`.\"\n  held    prices-endpoint-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2979,
+        "cacheReadInputTokens": 81739,
+        "cacheCreationInputTokens": 9873,
+        "webSearchRequests": 0,
+        "costUSD": 0.15494380000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 382,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.15494380000000002,
+    "turns": 5,
+    "api_seconds": 35.889,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-client-role-and-decoy  [threat-model]  2/3 found, score 0.67 (needs 1.00)\n  found   role-from-client-body: get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role\n  found   idor-any-invoice: a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice\n  MISSED  fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends\n            named it, but never said what was wrong with it\n  held    prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md \u2014 a public catalog mirroring what's already posted in stores, not a finding\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 39.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-client-role-and-decoy",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"`invoices.py:15` sets `role = body.get(\"role\", user.role)`, so the role is read from the request body instead of the ses\"\n  found   idor-any-invoice \u2014 \"anyone who signs up can read every customer's invoice by adding `{\"role\": \"admin\"}` to the request body.\"\n  found   fix-derive-role-from-session \u2014 \"Take the role only from the session: `role = user.role`.\"\n  held    prices-endpoint-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 3093,
+        "cacheReadInputTokens": 81750,
+        "cacheCreationInputTokens": 9919,
+        "webSearchRequests": 0,
+        "costUSD": 0.15759399999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 433,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.15759399999999998,
+    "turns": 5,
+    "api_seconds": 37.472,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-client-role-and-decoy  [threat-model]  2/3 found, score 0.67 (needs 1.00)\n  found   role-from-client-body: get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role\n  found   idor-any-invoice: a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice\n  MISSED  fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends\n            named it, but never said what was wrong with it\n  TRIPPED prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md \u2014 a public catalog mirroring what's already posted in stores, not a finding\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 40.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-client-role-and-decoy",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"Client \u2192 server: `invoices.py:15`, `role = body.get(\"role\", user.role)`\"\n  found   idor-any-invoice \u2014 \"any customer can read any other customer's invoice by adding `\"role\": \"admin\"` to the request body.\"\n  found   fix-derive-role-from-session \u2014 \"Take the role only from the server-side session: `role = user.role`.\"\n  held    prices-endpoint-is-intentional",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 3152,
+        "cacheReadInputTokens": 106153,
+        "cacheCreationInputTokens": 10071,
+        "webSearchRequests": 0,
+        "costUSD": 0.1648786,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 437,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1648786,
+    "turns": 5,
+    "api_seconds": 38.653,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-client-role-and-decoy  [threat-model]  2/3 found, score 0.67 (needs 1.00)\n  found   role-from-client-body: get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role\n  found   idor-any-invoice: a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice\n  MISSED  fix-derive-role-from-session: the fix is to use the session's own role and ignore any role field the client sends\n            named it, but never said what was wrong with it\n  held    prices-endpoint-is-intentional: get_price has no authentication check at all, but this is intentional and documented in README.md \u2014 a public catalog mirroring what's already posted in stores, not a finding\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 42.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-general",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  4/4 found\n  found   export-other-customer \u2014 \"`customer_id` comes from the request body, and `export_csv` never checks who owns it.\"\n  found   negative-quantity-credit \u2014 \"`qty` comes from the client and is never checked for \u2265 1, so a negative line makes the total negative and `credit - tota\"\n  found   signup-case-takeover \u2014 \"The \"taken\" check uses the raw name, but the account is stored under the lowercased name.\"\n  found   secret-in-source \u2014 \"the token-signing key is hardcoded in source, so anyone who can read the code can make a staff token without a password.\"\n  held    catalog-is-intentional\n  held    get-invoice-is-guarded",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 5915,
+        "cacheReadInputTokens": 85460,
+        "cacheCreationInputTokens": 15583,
+        "webSearchRequests": 0,
+        "costUSD": 0.260088,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1445,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.260088,
+    "turns": 5,
+    "api_seconds": 62.414,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  threat-model-general  [threat-model]  4/4 found, score 1.00 (needs 1.00)\n  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices\n  found   negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money\n  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned\n  found   secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included\n  held    catalog-is-intentional: GET /catalog has no login, by design (README): the printed price list. Flagging it is noise\n  held    get-invoice-is-guarded: GET /invoices/<id> checks ownership or staff correctly; calling it an IDOR is wrong\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 65.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-general",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   export-other-customer \u2014 \"**Any customer can read any other customer's invoices.** `customer_id` comes from the request body and `export_csv` neve\"\n  found   negative-quantity-credit \u2014 \"`qty` is never checked to be \u2265 1, so a negative line makes the total negative and `credit - total` adds money.\"\n  found   signup-case-takeover \u2014 \"The \"taken\" check uses the raw name, but the account is stored under the lowercased name.\"\n  found   secret-in-source \u2014 \"The token-signing key is hardcoded in `settings.py`.\"\n  held    catalog-is-intentional\n  held    get-invoice-is-guarded",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 8522,
+        "cacheReadInputTokens": 117718,
+        "cacheCreationInputTokens": 18352,
+        "webSearchRequests": 0,
+        "costUSD": 0.34083959999999996,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2918,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [
+        "_attacks/attacks.py",
+        "_attacks/race.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.34083959999999996,
+    "turns": 5,
+    "api_seconds": 93.638,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-general  [threat-model]  3/4 found, score 0.75 (needs 1.00)\n  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices\n  found   negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money\n  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned\n  MISSED  secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included\n            never named: SECRET_KEY\n  held    catalog-is-intentional: GET /catalog has no login, by design (README): the printed price list. Flagging it is noise\n  held    get-invoice-is-guarded: GET /invoices/<id> checks ownership or staff correctly; calling it an IDOR is wrong\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 97.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "threat-model-general",
+    "skill": "threat-model",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   export-other-customer \u2014 \"`customer_id` comes from the request body and is never checked against the logged-in user.\"\n  found   negative-quantity-credit \u2014 \"The server accepts `qty` from the client without checking its sign.\"\n  found   signup-case-takeover \u2014 \"The \"taken\" check uses the username as typed, but the account is stored under the lowercased name.\"\n  found   secret-in-source \u2014 \"The HMAC signing key is hardcoded in the source.\"\n  held    catalog-is-intentional\n  held    get-invoice-is-guarded",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "threat-model"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "threat-model",
+        "path": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 10169,
+        "cacheReadInputTokens": 119930,
+        "cacheCreationInputTokens": 20214,
+        "webSearchRequests": 0,
+        "costUSD": 0.38911799999999996,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3422,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.38911799999999996,
+    "turns": 6,
+    "api_seconds": 107.865,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  threat-model-general  [threat-model]  3/4 found, score 0.75 (needs 1.00)\n  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices\n  found   negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money\n  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned\n  MISSED  secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included\n            never named: SECRET_KEY\n  held    catalog-is-intentional: GET /catalog has no login, by design (README): the printed price list. Flagging it is noise\n  held    get-invoice-is-guarded: GET /invoices/<id> checks ownership or staff correctly; calling it an IDOR is wrong\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 111.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  4/4 found
+  found   export-other-customer — "`customer_id` is taken straight from the request body, and `export_csv` never checks it against the logged-in user."
+  found   negative-quantity-credit — "Any customer can send a negative `qty`. It goes into the total unchecked, and the credit check passes because the total "
+  found   signup-case-takeover — "Signup checks whether the name exists as typed, but saves it in lower case."
+  found   secret-in-source — "Anyone who has seen the code (repo access, a leaked backup, a former contractor) can make a valid token for any user id."
+  held    catalog-is-intentional
+  held    get-invoice-is-guarded
+
+Phrase grader (grade.py), for comparison:
+FAIL  threat-model-general  [threat-model]  3/4 found, score 0.75 (needs 1.00)
+  found   export-other-customer: POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices
+  found   negative-quantity-credit: place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money
+  found   signup-case-takeover: signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned
+  MISSED  secret-in-source: SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included
+            never named: SECRET_KEY
+  held    catalog-is-intentional: flagging GET /catalog's missing login as a finding or asking to add auth to it; it is public by design (README), so naming it intentional or leaving it out is right
+  held    get-invoice-is-guarded: calling GET /invoices/<id> an IDOR or unguarded; it checks ownership or staff, so naming it held or leaving it out is right
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+

@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "export-other-customer",
+      "what": "POST /invoices/export takes customer_id from the request body and export_csv never checks it against the caller, so any logged-in customer downloads another customer's invoices",
+      "found": true,
+      "quote": "`customer_id` comes from the request body, and `export_csv` never checks who owns it.",
+      "quote_checked": true
+    },
+    {
+      "id": "negative-quantity-credit",
+      "what": "place_order accepts a negative qty, so the total goes negative, passes the credit check and adds store credit: free money",
+      "found": true,
+      "quote": "`qty` comes from the client and is never checked for \u2265 1, so a negative line makes the total negative and `credit - total` adds to the balance.",
+      "quote_checked": true
+    },
+    {
+      "id": "signup-case-takeover",
+      "what": "signup checks the username as typed but stores it lowercased, so registering 'Alice' overwrites alice's account: her login stops working and her credit and invoices are orphaned",
+      "found": true,
+      "quote": "The \"taken\" check uses the raw name, but the account is stored under the lowercased name.",
+      "quote_checked": true
+    },
+    {
+      "id": "secret-in-source",
+      "what": "SECRET_KEY is hard-coded in settings.py; anyone with the source (or the repo's history) forges a token for any user id, staff included",
+      "found": true,
+      "quote": "the token-signing key is hardcoded in source, so anyone who can read the code can make a staff token without a password.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "catalog-is-intentional",
+      "what": "GET /catalog has no login, by design (README): the printed price list. Flagging it is noise",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "get-invoice-is-guarded",
+      "what": "GET /invoices/<id> checks ownership or staff correctly; calling it an IDOR is wrong",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0330391,
+  "model": "claude-sonnet-5-5"
+}

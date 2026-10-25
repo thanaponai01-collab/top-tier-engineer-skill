@@ -1,0 +1,88 @@
+{
+  "case": "threat-model-guard-not-applied",
+  "skill": "threat-model",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   refund-open-to-customers \u2014 \"**Any customer can refund any invoice, so they can get unlimited free goods.**\"\n  held    guard-read-as-applied\n  held    catalog-is-intentional",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "threat-model"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "threat-model",
+      "path": "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-7kogqlor\\verify-loop\\skills\\threat-model\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 20,
+      "outputTokens": 9032,
+      "cacheReadInputTokens": 284378,
+      "cacheCreationInputTokens": 22735,
+      "webSearchRequests": 0,
+      "costUSD": 0.41947560000000006,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2204,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.threat/before/README.md",
+      "fixture/.threat/before/app.py",
+      "fixture/.threat/before/auth.py",
+      "fixture/.threat/before/catalog.py",
+      "fixture/.threat/before/db.py",
+      "fixture/.threat/before/invoices.py",
+      "fixture/.threat/before/orders.py",
+      "fixture/.threat/before/permissions.py",
+      "fixture/.threat/before/settings.py",
+      "fixture/.threat/before/tests/test_app.py",
+      "fixture/.threat/before/tests/test_threats.py",
+      "fixture/.threat/doors.md",
+      "fixture/.threat/state.json",
+      "fixture/tests/test_threats.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.41947560000000006,
+  "turns": 12,
+  "api_seconds": 93.075,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 45.4,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-7kogqlor\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

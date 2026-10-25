@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "role-from-client-body",
+      "what": "get_invoice reads role from body.get(\"role\", user.role) instead of only trusting the session's own role, so the caller can supply its own role",
+      "found": true,
+      "quote": "`invoices.py:15` does `role = body.get(\"role\", user.role)`, so the role comes from the request body the client sends.",
+      "quote_checked": true
+    },
+    {
+      "id": "idor-any-invoice",
+      "what": "a plain authenticated customer, sending {\"role\": \"admin\"} in the body, can read another customer's invoice",
+      "found": true,
+      "quote": "A customer who sends `{\"role\": \"admin\"}` gets past the ownership check and reads every invoice.",
+      "quote_checked": true
+    },
+    {
+      "id": "fix-derive-role-from-session",
+      "what": "the fix is to use the session's own role and ignore any role field the client sends",
+      "found": true,
+      "quote": "Fix: take the role only from the session, i.e. `role = user.role`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "prices-endpoint-is-intentional",
+      "what": "get_price has no authentication check at all, but this is intentional and documented in README.md \u2014 a public catalog mirroring what's already posted in stores, not a finding",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0251131,
+  "model": "claude-sonnet-5-5"
+}

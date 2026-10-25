@@ -1,0 +1,73 @@
+{
+  "case": "threat-model-client-role-and-decoy",
+  "skill": "threat-model",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   role-from-client-body \u2014 \"The server takes the role from that client-supplied field instead of from the session.\"\n  found   idor-any-invoice \u2014 \"any signed-up customer can read any other customer's invoice by adding `\"role\": \"admin\"` to the request body.\"\n  found   fix-derive-role-from-session \u2014 \"Use `role = user.role` and ignore `body[\"role\"]`.\"\n  held    prices-endpoint-is-intentional",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "threat-model"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "threat-model",
+      "path": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-44hmk_mf\\verify-loop\\skills\\threat-model\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 2979,
+      "cacheReadInputTokens": 81739,
+      "cacheCreationInputTokens": 9873,
+      "webSearchRequests": 0,
+      "costUSD": 0.15494380000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 382,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.15494380000000002,
+  "turns": 5,
+  "api_seconds": 35.889,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 39.2,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-44hmk_mf\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}
