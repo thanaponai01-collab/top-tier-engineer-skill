@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "set-rating-broken",
+      "what": "the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.",
+      "found": true,
+      "quote": "`set-rating 1 3` and `by-rating 3` reject 3 with \"rating must be 1-5\", even though 3 is in range.",
+      "quote_checked": true
+    },
+    {
+      "id": "count-owner-broken",
+      "what": "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
+      "found": true,
+      "quote": "`count-owner` crashes with a `TypeError` when some notes have no owner (`commands/fields/owner.py:51`).",
+      "quote_checked": true
+    },
+    {
+      "id": "clear-sprint-broken",
+      "what": "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.",
+      "found": true,
+      "quote": "`clear-sprint 1` crashes with `KeyError: 'sprint'` on a note that has no sprint set (`commands/fields/sprint.py:35`).",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0236351,
+  "model": "claude-sonnet-5-5"
+}

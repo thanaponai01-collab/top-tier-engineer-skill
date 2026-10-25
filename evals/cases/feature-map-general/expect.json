@@ -1,0 +1,209 @@
+{
+  "case": "feature-map-general",
+  "skill": "feature-map",
+  "question": "general, not built around one trap: session 1 maps an ordinary small app with three surfaces (CLI, web page, JSON API); session 2, a fresh agent with no skill in either arm, answers nine everyday questions about how to reach each part and whether it works. Scored on how many it gets right and on what session 2 costs.",
+  "pass_score": 0.85,
+  "sessions": [
+    {
+      "prompt": "prompt.md",
+      "plain": "prompt-plain.md"
+    },
+    {
+      "prompt": "prompt-2.md",
+      "plain": "prompt-2.md",
+      "bare": true
+    }
+  ],
+  "planted": [
+    {
+      "id": "use-control",
+      "what": "the per-row `Use 1` button ([data-testid=use-btn]) sends POST /api/items/<id>/use with body {\"n\": 1}",
+      "must_name": [
+        "use-btn"
+      ],
+      "must_say_any": [
+        "/use",
+        "api/items/"
+      ]
+    },
+    {
+      "id": "shop-cli",
+      "what": "`python pantry.py shop` prints the shopping list; an item is on it when its qty is below its min (buy = min - qty)",
+      "must_name": [
+        "pantry.py shop"
+      ],
+      "must_say_any": [
+        "below",
+        "less than",
+        "under",
+        "< min",
+        "minimum",
+        "min -",
+        "qty < min"
+      ]
+    },
+    {
+      "id": "shortcuts",
+      "what": "two shortcuts: `/` focuses the search box, Ctrl+Enter submits the add-item form",
+      "must_name": [
+        "enter"
+      ],
+      "must_say_any": [
+        "ctrl+enter",
+        "ctrl + enter",
+        "ctrl-enter",
+        "ctrl+return",
+        "control+enter",
+        "ctrl enter"
+      ]
+    },
+    {
+      "id": "import-broken",
+      "what": "no: `import` reads a `quantity` column but `export` writes `qty`, so importing an export fails with KeyError: 'quantity'",
+      "must_name": [
+        "quantity"
+      ],
+      "must_say_any": [
+        "keyerror",
+        "fails",
+        "broken",
+        "crash",
+        "doesn't work",
+        "does not work",
+        "qty"
+      ]
+    },
+    {
+      "id": "stats-broken",
+      "what": "no: the button calls GET /api/stats, and store.stats sums u[\"qty\"] over usage entries that store \"n\", so it raises KeyError: 'qty' and nothing shows",
+      "must_name": [
+        "/api/stats"
+      ],
+      "must_say_any": [
+        "keyerror",
+        "fails",
+        "broken",
+        "crash",
+        "doesn't work",
+        "does not work",
+        "error",
+        "500"
+      ]
+    },
+    {
+      "id": "scan-not-built",
+      "what": "barcode scanning does not exist: there is no `scan` command (argparse rejects it); the README is wrong",
+      "must_name": [],
+      "must_say_any": [
+        "not exist",
+        "doesn't exist",
+        "no scan",
+        "not implemented",
+        "isn't implemented",
+        "not built",
+        "invalid choice",
+        "no such",
+        "there is no",
+        "you can't",
+        "cannot",
+        "not available",
+        "readme is wrong",
+        "stale"
+      ]
+    },
+    {
+      "id": "debug-dump",
+      "what": "GET /debug/dump returns the raw pantry JSON, only when the PANTRY_DEBUG environment variable is set; otherwise 404, so not a normal user feature",
+      "must_name": [
+        "/debug/dump"
+      ],
+      "must_say_any": [
+        "pantry_debug"
+      ]
+    },
+    {
+      "id": "use-function",
+      "what": "store.use_item (called from web/server.py's do_POST for /api/items/<id>/use) decrements qty and logs the use",
+      "must_name": [
+        "use_item"
+      ],
+      "must_say_any": [
+        "store.py",
+        "store.use_item"
+      ]
+    },
+    {
+      "id": "wipe-effect",
+      "what": "`wipe --yes` empties every item and the usage log in pantry.json; without --yes it refuses",
+      "must_name": [
+        "--yes"
+      ],
+      "must_say_any": [
+        "every item",
+        "all items",
+        "all the items",
+        "everything",
+        "empties",
+        "clears",
+        "usage log",
+        "used log"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "stats-called-working",
+      "what": "saying the Usage stats button or /api/stats works",
+      "must_not_say_any": [
+        "stats works",
+        "stats button works",
+        "/api/stats works",
+        "usage stats works"
+      ]
+    },
+    {
+      "id": "scan-invented",
+      "what": "giving a way to scan a barcode as if it exists",
+      "must_not_say_any": [
+        "run python pantry.py scan to",
+        "use pantry.py scan to add"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the real pantry survived both sessions (wipe.log appears only if wipe --yes ran on pantry.json, and it is not an allowed edit)",
+    "edits_allowed": [
+      "*.md",
+      "features/*",
+      "docs/*",
+      "*.json",
+      "*.csv",
+      "*.txt",
+      "*.png",
+      "*.html",
+      ".features/*",
+      "tests/*",
+      "evidence/*",
+      "tmp/*",
+      "out/*",
+      "scratch/*",
+      "tools/*"
+    ],
+    "replays": [
+      {
+        "id": "pantry-kept",
+        "kind": "outcome",
+        "what": "pantry.json still holds the four original items",
+        "replace": {
+          "_check_pantry.py": "reference/check_pantry.py"
+        },
+        "command": [
+          "python",
+          "_check_pantry.py"
+        ],
+        "expect": "pass",
+        "timeout": 60
+      }
+    ]
+  }
+}

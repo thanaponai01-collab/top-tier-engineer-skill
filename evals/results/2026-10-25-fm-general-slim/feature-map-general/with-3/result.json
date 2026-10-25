@@ -1,0 +1,100 @@
+{
+  "case": "feature-map-general",
+  "skill": "feature-map",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  9/9 found\n  found   use-control \u2014 \"Clicking it sends `POST /api/items/<id>/use` with body `{\"n\": 1}`\"\n  found   shop-cli \u2014 \"An item goes on the list when its `qty` is below its `min`, and the amount to buy is `min - qty` (`store.py:57`).\"\n  found   shortcuts \u2014 \"`Ctrl+Enter` submits the Add form, which is the same as clicking **Add**.\"\n  found   import-broken \u2014 \"Importing a file made by `export` fails with `KeyError: 'quantity'`.\"\n  found   stats-broken \u2014 \"so it fails right away with `KeyError: 'qty'`\"\n  found   scan-not-built \u2014 \"`python pantry.py scan` is listed in the README but was never written.\"\n  found   debug-dump \u2014 \"but only if the server was started with the `PANTRY_DEBUG` environment variable set\"\n  found   use-function \u2014 \"It loads the file, refuses to go below zero, decreases `qty` by `n`, logs `{id, n, date}`, and saves.\"\n  found   wipe-effect \u2014 \"That removes every item and the entire usage log, and there is no backup.\"\n  held    stats-called-working\n  held    scan-invented",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "feature-map"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "feature-map",
+      "path": "<tmp>\\tte-plugin-pg1m2ihl\\verify-loop\\skills\\feature-map\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 50,
+      "outputTokens": 14995,
+      "cacheReadInputTokens": 965876,
+      "cacheCreationInputTokens": 60796,
+      "webSearchRequests": 0,
+      "costUSD": 0.9796432000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3475,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 9,
+  "total": 9,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "pantry.json still holds the four original items",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.features/add-item.json",
+      "fixture/.features/export-csv.json",
+      "fixture/.features/features.py",
+      "fixture/.features/import-csv.json",
+      "fixture/.features/list-items.json",
+      "fixture/.features/restock-item.json",
+      "fixture/.features/search.json",
+      "fixture/.features/shopping-list.json",
+      "fixture/.features/usage-stats.json",
+      "fixture/.features/use-item.json",
+      "fixture/.features/web-app.json",
+      "fixture/.features/wipe.json",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.9796432000000002,
+  "turns": 26,
+  "api_seconds": 159.604,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 228.4,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-pg1m2ihl\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

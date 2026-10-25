@@ -1,0 +1,136 @@
+{
+  "case": "feature-map-alarm-on-narrow-task",
+  "skill": "feature-map",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   set-rating-broken \u2014 \"**Rating field:** `set-rating 1 5` and `by-rating 4` both stop with \"rating must be 1-5\", even though 5 and 4 are in ran\"\n  found   count-owner-broken \u2014 \"**Owner field:** `count-owner` crashes with `TypeError: '<' not supported between instances of 'str' and 'NoneType'`.\"\n  found   clear-sprint-broken \u2014 \"**Sprint field:** `clear-sprint 1` crashes with `KeyError: 'sprint'`.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "feature-map"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "feature-map",
+      "path": "<tmp>\\tte-plugin-yx83njob\\verify-loop\\skills\\feature-map\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-yx83njob\\verify-loop\\skills\\feature-map\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 46,
+      "outputTokens": 11249,
+      "cacheReadInputTokens": 743238,
+      "cacheCreationInputTokens": 59800,
+      "webSearchRequests": 0,
+      "costUSD": 0.8522116000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2451,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/commands/fields/mood.py",
+      "fixture/commands/fields/owner.py",
+      "fixture/commands/fields/rating.py",
+      "fixture/commands/fields/sprint.py",
+      "fixture/notes.py"
+    ],
+    "added": [
+      "fixture/.features/add.json",
+      "fixture/.features/area-field.json",
+      "fixture/.features/budget-field.json",
+      "fixture/.features/category-field.json",
+      "fixture/.features/channel-field.json",
+      "fixture/.features/client-field.json",
+      "fixture/.features/color-field.json",
+      "fixture/.features/context-field.json",
+      "fixture/.features/deadline-field.json",
+      "fixture/.features/effort-field.json",
+      "fixture/.features/energy-field.json",
+      "fixture/.features/estimate-field.json",
+      "fixture/.features/export.json",
+      "fixture/.features/features.py",
+      "fixture/.features/language-field.json",
+      "fixture/.features/list.json",
+      "fixture/.features/location-field.json",
+      "fixture/.features/mood-field.json",
+      "fixture/.features/owner-field.json",
+      "fixture/.features/priority-field.json",
+      "fixture/.features/project-field.json",
+      "fixture/.features/purge.json",
+      "fixture/.features/rating-field.json",
+      "fixture/.features/reviewer-field.json",
+      "fixture/.features/risk-field.json",
+      "fixture/.features/search.json",
+      "fixture/.features/show.json",
+      "fixture/.features/source-field.json",
+      "fixture/.features/sprint-field.json",
+      "fixture/.features/status-field.json",
+      "fixture/.features/tag.json",
+      "fixture/.features/team-field.json",
+      "fixture/.features/version-field.json",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md",
+      "fixture/features/fields-text-1.md",
+      "fixture/features/fields-text-2.md",
+      "fixture/features/fields-typed.md",
+      "gen/gen.py",
+      "gen/prove.sh",
+      "notes.json.bak"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.8522116000000001,
+  "turns": 23,
+  "api_seconds": 155.866,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [
+    "shell(grep -n '' <tmp>/tte-plugin-yx83njob/verify-loop/ski)"
+  ],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 390.1,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-yx83njob\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

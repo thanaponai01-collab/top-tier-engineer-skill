@@ -156,6 +156,15 @@
   - Rebuild `evals/results/2026-10-25-wire-check-rebuild`: 15/15 both arms, $0.44 vs $0.17 a try;
     the too-big and narrow-follow-up cases did not separate the arms.
 
+- feature-map as three stages (1.30.0) | proven (mechanics) / ties plain Opus on a general map, 2.2x cost; wins the narrow follow-up 8/9 vs 0/3 (eval)
+  - `features.py gate` (Inventory, Run, Hand off), `prove --serve/--request`, controls proven through
+    their route. `tests/test_features.py` 51 tests.
+  - General case `evals/results/2026-10-25-fm-general-{base,rebuild,rebuild2}`: 9/9 every try in both
+    arms; mapping session $0.26 plain, $0.91 -> $0.57 with the skill. Session 2 costs the same: a fresh
+    agent re-reads the code whether or not a map is there, so the map pays only once code moves.
+  - Alarm `evals/results/2026-10-25-fm-alarm-{rebuild,rebuild-b,slim}`: 8/9; the miss left no passing rating receipt.
+  - SKILL.md is goal + steps (done when, checked by) + tools; `-slim` batches match the longer doc.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

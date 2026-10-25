@@ -1,0 +1,130 @@
+{
+  "case": "feature-map-alarm-on-narrow-task",
+  "skill": "feature-map",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   set-rating-broken \u2014 \"`by-rating 4`: `rating must be 1-5`\"\n  found   count-owner-broken \u2014 \"`count-owner`: `TypeError: '<' not supported between instances of 'str' and 'NoneType'`\"\n  found   clear-sprint-broken \u2014 \"`clear-sprint 1`: `KeyError: 'sprint'`\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "feature-map"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "feature-map",
+      "path": "<tmp>\\tte-plugin-arj98z8i\\verify-loop\\skills\\feature-map\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 56,
+      "outputTokens": 12089,
+      "cacheReadInputTokens": 995301,
+      "cacheCreationInputTokens": 62651,
+      "webSearchRequests": 0,
+      "costUSD": 0.9422722000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3233,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/commands/fields/mood.py",
+      "fixture/commands/fields/owner.py",
+      "fixture/commands/fields/rating.py",
+      "fixture/commands/fields/sprint.py",
+      "fixture/notes.py"
+    ],
+    "added": [
+      "fixture/.features/add.json",
+      "fixture/.features/debug-dump.json",
+      "fixture/.features/export.json",
+      "fixture/.features/features.py",
+      "fixture/.features/field-area.json",
+      "fixture/.features/field-budget.json",
+      "fixture/.features/field-category.json",
+      "fixture/.features/field-channel.json",
+      "fixture/.features/field-client.json",
+      "fixture/.features/field-color.json",
+      "fixture/.features/field-context.json",
+      "fixture/.features/field-deadline.json",
+      "fixture/.features/field-effort.json",
+      "fixture/.features/field-energy.json",
+      "fixture/.features/field-estimate.json",
+      "fixture/.features/field-language.json",
+      "fixture/.features/field-location.json",
+      "fixture/.features/field-mood.json",
+      "fixture/.features/field-owner.json",
+      "fixture/.features/field-priority.json",
+      "fixture/.features/field-project.json",
+      "fixture/.features/field-rating.json",
+      "fixture/.features/field-reviewer.json",
+      "fixture/.features/field-risk.json",
+      "fixture/.features/field-source.json",
+      "fixture/.features/field-sprint.json",
+      "fixture/.features/field-status.json",
+      "fixture/.features/field-team.json",
+      "fixture/.features/field-version.json",
+      "fixture/.features/list.json",
+      "fixture/.features/purge.json",
+      "fixture/.features/search.json",
+      "fixture/.features/show.json",
+      "fixture/.features/tag.json",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md",
+      "fixture/features/core.md",
+      "fixture/features/fields.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.9422722000000001,
+  "turns": 28,
+  "api_seconds": 157.244,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 306.8,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-arj98z8i\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

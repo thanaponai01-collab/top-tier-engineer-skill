@@ -56,7 +56,9 @@ Usage:
   python scripts/features.py init   [repo]
   python scripts/features.py prove  [--repo R] --feature NAME [--entry 'kind: anchor'] [--copy] -- <command>
   python scripts/features.py prove  [--repo R] --feature NAME --entry 'kind: anchor' --file F --note TEXT
+  python scripts/features.py prove  [--repo R] --feature NAME [--entry 'click: anchor'] --serve 'CMD {port}' --request 'GET /path' ...
   python scripts/features.py check  [repo] [--strict] [--rerun]
+  python scripts/features.py gate   [repo]     check --strict --rerun as three stages; FEATURE-GATE: done
   python scripts/features.py impact [repo] [--base REF | --files a b]
 
 Exit: check 0 = nothing stale or broken; 1 = something stale or broken (or --strict and something is
@@ -68,7 +70,8 @@ Summary line:
   <v> unlinked | <l> unlabeled | <d> undescribed | <r> drifted | <p> unproven | <k> unbacked |
   <n> unfenced | <a> unannounced | <i> not features [| <g> regressed, with --rerun]
 """
-import argparse, hashlib, json, os, re, shutil, subprocess, sys, tempfile, time
+import argparse, contextlib, hashlib, io, json, os, re, shlex, shutil, socket, subprocess, sys, tempfile, time
+import urllib.error, urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
@@ -105,7 +108,7 @@ MODS = {"ctrl": "mod", "control": "mod", "cmd": "mod", "command": "mod", "meta":
 DETECT = [
     ("route", r"@\w+\.(?:route|get|post|put|delete|patch)\(\s*['\"]([^'\"]+)['\"]"),
     ("route", r"\b(?:app|router|server|api)\.(?:get|post|put|delete|patch)\(\s*['\"`](/[^'\"`]*)"),
-    ("route", r"\bpath\s*[=:]\s*\{?['\"](/[^'\"]*)['\"]"),
+    ("route", r"\bpath\s*(?:==?|:)\s*\{?['\"](/[^'\"]*)['\"]"),
     ("click", r"data-(?:testid|test|cy|qa)\s*=\s*\{?['\"]([\w-]+)['\"]"),
     ("click", r"<button[^>]*\bid\s*=\s*['\"]([\w-]+)['\"]"),
     ("shortcut", r"\baccelerator\s*:\s*['\"]([^'\"]+)['\"]"),
@@ -289,8 +292,16 @@ def cmd_init(repo):
         f"  recorded run ({PROOFS}/<feature>.json) run again, naming what moved or stopped working.",
         f"- `python {PROOFS}/features.py prove --feature \"<name>\" [--copy] -- <command>`: run an entry",
         "  point and record it (`--copy` runs it in a throwaway copy, for anything that writes data).",
+        f"- `python {PROOFS}/features.py prove --feature \"<name>\" --serve \"<start cmd with {{port}}>\" --request",
+        "  \"GET /path\"`: the same for a web route, served from a throwaway copy.",
         "- status: `proven` (a passing run is recorded), `failing` (a failing run is recorded), `traced`",
-        "  (read start to end, not run) or `suspected`, then how you know.", "",
+        "  (read start to end, not run) or `suspected`, then how you know.",
+        "- format: entry lines are ``kind: `anchor` @ file :: needle`` (kinds route, click, shortcut, cli,",
+        "  menu; the needle, found in the file as a whole token, defaults from the anchor). A trace is",
+        "  steps ``symbol` @ file`` joined by ` > `, each named in the step before; a page reaches the",
+        "  server by the path it sends (`/api/x` @ server.py). `## Not features` lists entry lines that",
+        "  are not features, each with `: <reason>`; `## Not built` is prose for what the code lacks.",
+        "  Past ~150 lines, keep this file as `- include: features/<area>.md` lines.", "",
         "This draft was found from the code: regroup by real feature, write what each does, add the",
         "entry points a scan cannot see, label each, and replace every TODO.", "",
     ]
@@ -416,6 +427,8 @@ def live_runs(repo, f):
 
 def named_in(kind, anchor, needle, text):
     """Whether a command line or note names the entry point (its needle as a whole token)."""
+    if kind in ("route", "api"):  # a route is hit by a path in the command, never by its needle as a word
+        return any(route_matches(anchor, p) for p in re.findall(r"(/[^\s'\"`]*)", text))
     n = needle or default_needle(kind, anchor)
     if kind == "shortcut" and not needle:
         return norm_combo(anchor) in {norm_combo(t) for t in re.findall(r"[\w+-]+", text)}
@@ -460,14 +473,125 @@ def execute(repo, command, timeout, in_copy):
     return code, out
 
 
-def cmd_prove(repo, name, command, shot, wanted, note, timeout, in_copy=False):
+def route_matches(anchor, path):
+    """Whether a request path hits a route anchor: `<id>`, `{id}`, `:id` and `*` match one segment."""
+    pattern = re.sub(r"<[^>/]+>|\\\{[^}/]+\\\}|:\w+|\\\*", "[^/]+", re.escape(anchor.split("?")[0]))
+    return re.fullmatch(pattern, path.split("?")[0]) is not None
+
+
+def literal_prefix(path):
+    """The request path up to its first segment that names a record (a number), e.g. /api/items/."""
+    out = ""
+    for seg in path.split("?")[0].strip("/").split("/"):
+        if seg.isdigit():
+            return out + "/"
+        out += "/" + seg
+    return out
+
+
+def serve_and_request(repo, serve, requests, timeout):
+    """(exit code, output) of starting `serve` (its `{port}` filled with a free port) in a throwaway
+    copy of the repo, sending each `METHOD /path [json body]`, then stopping it. Exit 0 only when
+    every request got a status below 400. The server's own output is kept: a traceback lands there."""
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+    tmp = tempfile.mkdtemp(prefix="features-serve-")
+    where = os.path.join(tmp, "repo")
+    lines, code, proc, log, server = [], 0, None, None, []
+    try:
+        shutil.copytree(repo, where, ignore=shutil.ignore_patterns(".git", PROOFS, "__pycache__"))
+        log = open(os.path.join(tmp, "server.log"), "w+", encoding="utf-8", errors="replace")
+        argv = [sys.executable if a == "python" else a for a in shlex.split(serve.replace("{port}", str(port)))]
+        proc = subprocess.Popen(argv, cwd=where, stdout=log, stderr=subprocess.STDOUT)
+        deadline = time.time() + min(timeout, 30)
+        while time.time() < deadline and proc.poll() is None:
+            try:
+                socket.create_connection(("127.0.0.1", port), timeout=0.5).close()
+                break
+            except OSError:
+                time.sleep(0.2)
+        else:
+            code = 1
+            lines.append(f"server did not listen on port {port}" + (f" (exit {proc.returncode})" if proc.poll() is not None else ""))
+        for req in requests if code == 0 else []:
+            method, _, rest = req.strip().partition(" ")
+            path, _, body = rest.strip().partition(" ")
+            data = body.strip().encode("utf-8") if body.strip() else None
+            r = urllib.request.Request(f"http://127.0.0.1:{port}{path}", data=data, method=method.upper(),
+                                       headers={"Content-Type": "application/json"} if data else {})
+            try:
+                with urllib.request.urlopen(r, timeout=timeout) as resp:
+                    status, text = resp.status, resp.read().decode("utf-8", "replace")
+            except urllib.error.HTTPError as e:
+                status, text = e.code, e.read().decode("utf-8", "replace")
+            except (urllib.error.URLError, OSError) as e:
+                status, text = "no response", str(getattr(e, "reason", e))
+            if not isinstance(status, int) or status >= 400:
+                code = 1
+            lines.append(f"{method.upper()} {path} -> {status} {' '.join(text.split())[:200]}")
+    finally:
+        if proc and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(5)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+        if log:
+            log.seek(0)
+            server = log.read().strip().splitlines()
+            log.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+    out = "\n".join(lines + ([f"server: {x}" for x in server[-12:]] if server else []))
+    for form in {where, where.replace("\\", "/"), repo, repo.replace("\\", "/")}:
+        out = out.replace(form, "<repo>")
+    return code, out
+
+
+def cmd_prove(repo, name, command, shot, wanted, note, timeout, in_copy=False, serve=None, requests=None):
     features, _ = split_ignored(parse(load(repo, MAP)))
     f = next((x for x in features if x["name"].lower() == (name or "").lower()), None)
     if not f:
         print(f"no feature '{name}' in {MAP}. Features: " + ", ".join(x["name"] for x in features))
         return 2
     labels = {entry_label(k, a): (k, a, r, n) for k, a, r, n in f["entries"]}
-    if wanted:
+    via = []
+    if serve:
+        if "{port}" not in serve or not requests:
+            print("--serve needs the command that starts the app with `{port}` where the port goes "
+                  "(e.g. --serve \"python app.py --port {port}\") and at least one --request \"GET /path\".")
+            return 2
+        paths = [r.strip().partition(" ")[2].strip().partition(" ")[0] for r in requests]
+        covers = [lab for lab, (k, a, _r, _n) in labels.items()
+                  if k in ("route", "api") and any(route_matches(a, p) for p in paths)]
+        route_files = {r for lab, (k, _a, r, _n) in labels.items() if lab in covers and r}
+        trace_files = {m for m in re.findall(r"`[^`]+`\s*@\s*([^\s>]+)", f["trace"] or "")} - route_files
+        for w in wanted or []:
+            if w not in labels:
+                print(f"not an entry point of '{f['name']}': {w}. Its entry points: " + "; ".join(labels))
+                return 2
+            k, a, rel, _n = labels[w]
+            if k in ("route", "api"):
+                covers.append(w)
+                continue
+            files = ({rel} if rel else set()) | trace_files
+            hits = [p for p in paths if len(literal_prefix(p)) > 1 and any(
+                literal_prefix(p).rstrip("/") in read(os.path.join(repo, x)) for x in files)]
+            if not hits:
+                wanted_text = ", ".join(sorted({literal_prefix(p).rstrip("/") for p in paths}))
+                print(f"{w}: looked for {wanted_text} in {', '.join(sorted(files)) or 'no file'} and found none. "
+                      "A page control is proven through a route only when its own file, or a trace step not in "
+                      "the route's file, contains the path it sends: add that step to the feature's trace "
+                      "(e.g. `handler` @ app.js), or leave the control read, not run.")
+                return 2
+            covers.append(w)
+            via.append(w)
+        if not covers:
+            print(f"the requests hit none of the routes of '{f['name']}' ({'; '.join(labels)}); name the "
+                  "route in the map, or --entry \"route: <anchor>\".")
+            return 2
+        covers = list(dict.fromkeys(covers))
+    elif wanted:
         unknown = [w for w in wanted if w not in labels]
         if unknown:
             print(f"not an entry point of '{f['name']}': {', '.join(unknown)}. Its entry points: "
@@ -495,6 +619,12 @@ def cmd_prove(repo, name, command, shot, wanted, note, timeout, in_copy=False):
             return 2
         run.update(kind="file", file=os.path.relpath(full, repo).replace("\\", "/"), file_sha=file_sha(full))
         code = 0
+    elif serve:
+        code, out = serve_and_request(repo, serve, requests, timeout)
+        lines = out.rstrip().splitlines()
+        run.update(kind="run", command=f"serve: {serve} | " + " ; ".join(requests), serve=serve,
+                   requests=list(requests), via_route=via, in_copy=True, exit=code, output_tail=lines[-TAIL:],
+                   output_sha=hashlib.sha256(out.encode("utf-8")).hexdigest(), output_lines=len(lines))
     else:
         code, out = execute(repo, command, timeout, in_copy)
         lines = out.rstrip().splitlines()
@@ -543,7 +673,11 @@ def cmd_again(repo, name, timeout):
     worst = 0
     for f in features:
         for r in live_runs(repo, f):
-            if r.get("kind") == "run" and r.get("argv"):
+            if r.get("kind") == "run" and r.get("serve"):
+                code = cmd_prove(repo, f["name"], None, None, r.get("entries"), r.get("note"), timeout,
+                                 serve=r["serve"], requests=r.get("requests"))
+                worst = max(worst, code)
+            elif r.get("kind") == "run" and r.get("argv"):
                 code = cmd_prove(repo, f["name"], r["argv"], None, r.get("entries"), r.get("note"),
                                  timeout, r.get("in_copy", False))
                 worst = max(worst, code)
@@ -562,11 +696,17 @@ def proof_problems(repo, f):
     unproven, drifted = [], []
     if not runs:
         unproven.append(f"proven, but no receipt in {PROOFS}/{slug(f['name'])}.json")
+    ran = any(r.get("kind") == "run" and r.get("exit") == 0 for r in runs)
     for k, a, _r, _n in f["entries"]:
         lab = entry_label(k, a)
+        if ran and k in ("click", "shortcut", "menu"):
+            continue  # a control that sends no request is read, not run; the Proof line says so
         if not any(lab in r.get("entries", []) for r in runs):
-            how = (f"--entry \"{lab}\" -- <the command that drives it>" if k in ("cli", "route", "api")
-                   else f"--entry \"{lab}\" --file <screenshot in the repo> --note \"<what it shows>\"")
+            how = (f"--entry \"{lab}\" -- <the command that drives it>" if k == "cli"
+                   else f"--entry \"{lab}\" -- <the command that drives it>, or --serve \"<start command with "
+                        f"{{port}}>\" --request \"GET {a}\"" if k in ("route", "api")
+                   else f"--entry \"{lab}\" --serve \"<start command with {{port}}>\" --request \"<the request it "
+                        f"sends>\" (proven through the route it calls), or --file <screenshot> --note \"<what it shows>\"")
             unproven.append(f"{lab} has no receipt; to prove it: {me} {how}")
     for r in runs:
         what = "; ".join(r.get("entries", []))
@@ -647,6 +787,9 @@ def trace_problems(repo, trace, entry_files=()):
             out.append(("STALE", f"unreadable step: {raw.strip()[:40]}"))
             continue
         sym, rel, needle = m.group(1), m.group(2) or "", m.group(3) or m.group(1)
+        if not m.group(3) and sym.startswith("/") and re.search(r"<|\{|:\w|\*", sym):
+            # a parameterised route: the code holds its fixed part (`/api/items/${id}/use`, a regex)
+            needle = re.split(r"/?(?:<|\{|:\w|\*)", sym, 1)[0].rstrip("/") or sym
         text = read(os.path.join(repo, rel)) if rel else ""
         if not rel or not os.path.isfile(os.path.join(repo, rel)):
             out.append(("STALE", f"{sym}: {rel or 'no file given'} does not exist"))
@@ -660,7 +803,10 @@ def trace_problems(repo, trace, entry_files=()):
             defined = re.search(rf"\b(?:def|function|func|fn|class|const|let|var)\s+{re.escape(needle)}\b", text)
             need = 2 if rel == prev_rel and defined else 1
             if uses(prev_text, needle) < need:
-                out.append(("BROKEN", f"{sym} is not called from {prev_rel}"))
+                hop = ("; a page reaches the server by a request, so name that step by the path it sends "
+                       f"(`/api/...` @ {rel})" if os.path.splitext(prev_rel)[1] in (".js", ".jsx", ".ts", ".tsx", ".html", ".vue", ".svelte", ".mjs")
+                       and os.path.splitext(rel)[1] not in (".js", ".jsx", ".ts", ".tsx", ".html", ".vue", ".svelte", ".mjs") else "")
+                out.append(("BROKEN", f"{sym} is not called from {prev_rel}{hop}"))
         elif i == 0 and entry_files and rel not in entry_files and not any(
                 uses(read(os.path.join(repo, e)), needle) for e in entry_files):
             out.append(("BROKEN", f"{sym}, the first step, is not reached from the entry point file "
@@ -803,9 +949,10 @@ def cmd_check(repo, strict, rerun=False):
                 print(f"  note  drifted: {msg}; re-run `features.py prove`, never relabel without running")
         if rerun:
             for r in live_runs(repo, f):
-                if r.get("kind") != "run" or not r.get("argv"):
+                if r.get("kind") != "run" or not (r.get("argv") or r.get("serve")):
                     continue
-                code, out = execute(repo, r["argv"], 120, r.get("in_copy"))
+                code, out = (serve_and_request(repo, r["serve"], r.get("requests") or [], 120) if r.get("serve")
+                             else execute(repo, r["argv"], 120, r.get("in_copy")))
                 what = "; ".join(r.get("entries", []))
                 last = (out.strip().splitlines() or [""])[-1][:120]
                 if r.get("exit") == 0 and code != 0:
@@ -846,18 +993,27 @@ def cmd_check(repo, strict, rerun=False):
     if orphans:
         print(f"In {VERIFY} but linked from no feature here: " + ", ".join(orphans))
         unlinked += len(orphans)
-    ran = {"here": [], "in a throwaway copy": [], "failing": [], "shown in a file": []}
-    unrun = []
+    ran = {"here": [], "in a throwaway copy": [], "failing": [], "shown in a file": [],
+           "through the route it calls": [], "read, not run": []}
+    unrun, unexplained = [], []
     for f in features:
         runs = live_runs(repo, f)
+        why_not = re.sub(r"^\w+\s*:?\s*", "", f["status"]) if f["status"].lower().startswith(("traced", "suspected")) else ""
         for k, a, _r, _n in f["entries"]:
-            r = next((r for r in runs if entry_label(k, a) in r.get("entries", [])), None)
+            lab = entry_label(k, a)
+            r = next((r for r in runs if lab in r.get("entries", [])), None)
             where = (None if r is None else "shown in a file" if r.get("kind") == "file"
-                     else "failing" if r.get("exit") != 0 else "in a throwaway copy" if r.get("in_copy") else "here")
+                     else "failing" if r.get("exit") != 0
+                     else "through the route it calls" if lab in r.get("via_route", [])
+                     else "in a throwaway copy" if r.get("in_copy") else "here")
+            if where is None and k in ("click", "shortcut", "menu") and f["status"].lower().startswith("proven"):
+                where = "read, not run"
             (ran[where] if where else unrun).append(f"{a}")
-    print("Proof: " + "; ".join(f"ran {w}: {', '.join(v)}" if w not in ("failing", "shown in a file")
-                                else f"{w}: {', '.join(v)}" for w, v in ran.items() if v)
-          + (f"; never run: {', '.join(unrun)}" if unrun else ""))
+            if where is None and k in ("cli", "route", "api") and len(why_not.split()) < 3:
+                unexplained.append(f"{f['name']}: {lab}")
+    print("Proof: " + "; ".join([f"ran {w}: {', '.join(v)}" if w not in ("failing", "shown in a file", "read, not run")
+                                 else f"{w}: {', '.join(v)}" for w, v in ran.items() if v]
+                                + ([f"never run: {', '.join(unrun)}"] if unrun else [])))
     unannounced = int(not any(MAP in t and "features.py check" in t
                               for t in (read(os.path.join(repo, n)) for n in AGENT_FILES)))
     if unannounced:
@@ -869,9 +1025,75 @@ def cmd_check(repo, strict, rerun=False):
           f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed | {drifted} drifted | {unproven} unproven | {unbacked} unbacked | "
           f"{unfenced} unfenced | {unannounced} unannounced | {skipped} not features"
           + (f" | {regressed} regressed" if rerun else ""))
+    COUNTS.clear()
+    COUNTS.update(stale=stale, broken=broken, untraced=untraced, unmapped=len(unmapped), unlinked=unlinked,
+                  unlabeled=unlabeled, undescribed=undescribed, drifted=drifted, unproven=unproven,
+                  unbacked=unbacked, unfenced=unfenced, unannounced=unannounced, regressed=regressed,
+                  unexplained=unexplained, verify=bool(vtext))
     if stale or broken or regressed or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed
                                        or drifted or unproven or unbacked or unfenced or unannounced)):
         return 1
+    return 0
+
+
+COUNTS = {}  # what the last cmd_check found, for gate
+STAGES = (
+    ("1. Inventory", "every entry point in the code is mapped (or a Not feature with its reason), each "
+     "feature has what, trace and status, and no line is stale or broken",
+     ("stale", "broken", "unmapped", "untraced", "undescribed", "unlabeled")),
+    ("2. Run", "every command and route has a receipt from `prove` (passing or failing), or its feature says "
+     "`traced: <why it was not run>`; every `proven` claim is backed by receipts that still pass",
+     ("unexplained", "unproven", "drifted", "regressed")),
+    ("3. Hand off", "AGENTS.md or CLAUDE.md points at the map and its check (and, with a VERIFY.md, every "
+     "feature links a section that covers it)", ("unannounced", "unlinked", "unbacked", "unfenced")),
+)
+
+
+def cmd_gate(repo):
+    """check --strict --rerun, sorted into the three stages: which is open and what fixes it."""
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = cmd_check(repo, True, rerun=True)
+    text = buf.getvalue()
+    if code == 2:
+        print(text.strip())
+        print("FEATURE-GATE: open 1. Inventory (no map yet: `features.py init` drafts one)")
+        return 1
+    problems, lines, feature = [], text.splitlines(), None
+    for i, ln in enumerate(lines):
+        if ln and not ln.startswith(" ") and ":" not in ln:
+            feature = ln  # a feature heading in check's output
+        elif re.match(r"\s*(STALE|BROKEN|FAILS|note)\b", ln):
+            problems.append(f"{feature}: {ln.strip()}" if feature else ln.rstrip())
+        elif ln.startswith(("Unmapped", "Unannounced", "In VERIFY")):
+            feature = None
+            problems.append(ln.rstrip())
+            if ln.startswith("Unannounced") and i + 1 < len(lines):
+                problems.append(lines[i + 1].rstrip())
+        elif feature is None and ln.startswith("  ") and "@" in ln:
+            problems.append(ln.rstrip())
+    if not COUNTS.get("verify"):
+        COUNTS.update(unlinked=0, unbacked=0, unfenced=0)
+    first_open = None
+    for title, holds, keys in STAGES:
+        bad = {k: (len(COUNTS[k]) if isinstance(COUNTS.get(k), list) else COUNTS.get(k, 0)) for k in keys}
+        bad = {k: v for k, v in bad.items() if v}
+        print(f"{'open' if bad else 'ok  '}  {title}: {holds}"
+              + (f"  [{', '.join(f'{v} {k}' for k, v in bad.items())}]" if bad else ""))
+        if bad and first_open is None:
+            first_open = title
+    if COUNTS.get("unexplained"):
+        problems.append("Not run, and no reason why (prove it, or label the feature `traced: <why not run>`):")
+        problems += [f"  {x}" for x in COUNTS["unexplained"]]
+    proof = next((ln for ln in text.splitlines() if ln.startswith("Proof:")), "")
+    if first_open:
+        print("To fix:")
+        for ln in problems:
+            print(ln)
+        print(f"FEATURE-GATE: open {first_open}")
+        return 1
+    print(proof)
+    print("FEATURE-GATE: done (report the Proof line: it says what ran where)")
     return 0
 
 
@@ -903,6 +1125,12 @@ def main():
     p.add_argument("--timeout", type=int, default=120)
     p.add_argument("--copy", action="store_true",
                    help="run in a throwaway copy of the repo, for an entry point that writes data")
+    p.add_argument("--serve", help="start the app with this command (`{port}` is filled with a free port) in "
+                   "a throwaway copy, send each --request, then stop it: proves the routes the requests hit, "
+                   "and with --entry a page control whose code sends that request")
+    p.add_argument("--request", action="append", help="'METHOD /path [json body]' sent to the --serve app")
+    g = sub.add_parser("gate", help="check --strict --rerun as three stages: which is open and what fixes it")
+    g.add_argument("repo", nargs="?", default=".")
     p.add_argument("command", nargs=argparse.REMAINDER, help="-- then the command that drives the entry point")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
@@ -914,7 +1142,10 @@ def main():
         if not a.feature:
             ap.error("prove needs --feature (or --again)")
         cmd = a.command[1:] if a.command[:1] == ["--"] else a.command
-        sys.exit(cmd_prove(repo, a.feature, cmd, a.file, a.entry, a.note, a.timeout, a.copy))
+        sys.exit(cmd_prove(repo, a.feature, cmd, a.file, a.entry, a.note, a.timeout, a.copy,
+                           serve=a.serve, requests=a.request))
+    if a.cmd == "gate":
+        sys.exit(cmd_gate(repo))
     if a.cmd == "impact":
         sys.exit(cmd_impact(repo, a.files, a.base))
     sys.exit(cmd_check(repo, a.strict, a.rerun))

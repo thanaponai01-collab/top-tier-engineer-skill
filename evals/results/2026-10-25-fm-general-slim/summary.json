@@ -1,0 +1,304 @@
+[
+  {
+    "case": "feature-map-general",
+    "skill": "feature-map",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  9/9 found\n  found   use-control \u2014 \"Clicking it sends `POST /api/items/<id>/use` with the JSON body `{\"n\": 1}`\"\n  found   shop-cli \u2014 \"An item goes on the list when its `qty` is below its `min`, and the amount to buy is `min - qty`\"\n  found   shortcuts \u2014 \"`Ctrl+Enter` submits the Add form.\"\n  found   import-broken \u2014 \"`import` reads a `quantity` column (`pantry.py:50`). I tried it and it fails with `KeyError: 'quantity'`.\"\n  found   stats-broken \u2014 \"I confirmed it raises `KeyError: 'qty'`, so the server returns a 500 and the page shows nothing useful.\"\n  found   scan-not-built \u2014 \"`pantry.py` has no `scan` subcommand, so running it gives an argparse \"invalid choice\" error.\"\n  found   debug-dump \u2014 \"It only answers when the server was started with the `PANTRY_DEBUG` environment variable set; otherwise it returns 404.\"\n  found   use-function \u2014 \"`store.use_item` (`store.py:36`) does it.\"\n  found   wipe-effect \u2014 \"`python pantry.py wipe --yes` replaces the database with `{\"items\": [], \"used\": []}`, which removes every item and the w\"\n  held    stats-called-working\n  held    scan-invented",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "feature-map"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "feature-map",
+        "path": "<tmp>\\tte-plugin-pg1m2ihl\\verify-loop\\skills\\feature-map\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 34,
+        "outputTokens": 11040,
+        "cacheReadInputTokens": 506190,
+        "cacheCreationInputTokens": 41734,
+        "webSearchRequests": 0,
+        "costUSD": 0.656046,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2092,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 9,
+    "total": 9,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "pantry.json still holds the four original items",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.features/add-item.json",
+        "fixture/.features/export-csv.json",
+        "fixture/.features/features.py",
+        "fixture/.features/import-csv.json",
+        "fixture/.features/list-and-search-items.json",
+        "fixture/.features/restock-item.json",
+        "fixture/.features/shopping-list.json",
+        "fixture/.features/usage-stats.json",
+        "fixture/.features/use-item.json",
+        "fixture/.features/web-app.json",
+        "fixture/.features/wipe.json",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.656046,
+    "turns": 17,
+    "api_seconds": 122.087,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-general  [feature-map]  9/9 found, score 1.00 (needs 0.85)\n  found   use-control: the per-row `Use 1` button ([data-testid=use-btn]) sends POST /api/items/<id>/use with body {\"n\": 1}\n  found   shop-cli: `python pantry.py shop` prints the shopping list; an item is on it when its qty is below its min (buy = min - qty)\n  found   shortcuts: two shortcuts: `/` focuses the search box, Ctrl+Enter submits the add-item form\n  found   import-broken: no: `import` reads a `quantity` column but `export` writes `qty`, so importing an export fails with KeyError: 'quantity'\n  found   stats-broken: no: the button calls GET /api/stats, and store.stats sums u[\"qty\"] over usage entries that store \"n\", so it raises KeyError: 'qty' and nothing shows\n  found   scan-not-built: barcode scanning does not exist: there is no `scan` command (argparse rejects it); the README is wrong\n  found   debug-dump: GET /debug/dump returns the raw pantry JSON, only when the PANTRY_DEBUG environment variable is set; otherwise 404, so not a normal user feature\n  found   use-function: store.use_item (called from web/server.py's do_POST for /api/items/<id>/use) decrements qty and logs the use\n  found   wipe-effect: `wipe --yes` empties every item and the usage log in pantry.json; without --yes it refuses\n  held    stats-called-working: saying the Usage stats button or /api/stats works\n  held    scan-invented: giving a way to scan a barcode as if it exists\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 165.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-pg1m2ihl\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-general",
+    "skill": "feature-map",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  9/9 found\n  found   use-control \u2014 \"Clicking it sends `POST /api/items/<id>/use` with body `{\"n\": 1}`\"\n  found   shop-cli \u2014 \"An item goes on the list when its `qty` is below its `min`, and the amount to buy is `min - qty` (`store.py:57`).\"\n  found   shortcuts \u2014 \"`Ctrl+Enter` submits the Add form, which is the same as clicking **Add**.\"\n  found   import-broken \u2014 \"Importing a file made by `export` fails with `KeyError: 'quantity'`.\"\n  found   stats-broken \u2014 \"so it fails right away with `KeyError: 'qty'`\"\n  found   scan-not-built \u2014 \"`python pantry.py scan` is listed in the README but was never written.\"\n  found   debug-dump \u2014 \"but only if the server was started with the `PANTRY_DEBUG` environment variable set\"\n  found   use-function \u2014 \"It loads the file, refuses to go below zero, decreases `qty` by `n`, logs `{id, n, date}`, and saves.\"\n  found   wipe-effect \u2014 \"That removes every item and the entire usage log, and there is no backup.\"\n  held    stats-called-working\n  held    scan-invented",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "feature-map"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "feature-map",
+        "path": "<tmp>\\tte-plugin-pg1m2ihl\\verify-loop\\skills\\feature-map\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 50,
+        "outputTokens": 14995,
+        "cacheReadInputTokens": 965876,
+        "cacheCreationInputTokens": 60796,
+        "webSearchRequests": 0,
+        "costUSD": 0.9796432000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3475,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 9,
+    "total": 9,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "pantry.json still holds the four original items",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.features/add-item.json",
+        "fixture/.features/export-csv.json",
+        "fixture/.features/features.py",
+        "fixture/.features/import-csv.json",
+        "fixture/.features/list-items.json",
+        "fixture/.features/restock-item.json",
+        "fixture/.features/search.json",
+        "fixture/.features/shopping-list.json",
+        "fixture/.features/usage-stats.json",
+        "fixture/.features/use-item.json",
+        "fixture/.features/web-app.json",
+        "fixture/.features/wipe.json",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.9796432000000002,
+    "turns": 26,
+    "api_seconds": 159.604,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-general  [feature-map]  9/9 found, score 1.00 (needs 0.85)\n  found   use-control: the per-row `Use 1` button ([data-testid=use-btn]) sends POST /api/items/<id>/use with body {\"n\": 1}\n  found   shop-cli: `python pantry.py shop` prints the shopping list; an item is on it when its qty is below its min (buy = min - qty)\n  found   shortcuts: two shortcuts: `/` focuses the search box, Ctrl+Enter submits the add-item form\n  found   import-broken: no: `import` reads a `quantity` column but `export` writes `qty`, so importing an export fails with KeyError: 'quantity'\n  found   stats-broken: no: the button calls GET /api/stats, and store.stats sums u[\"qty\"] over usage entries that store \"n\", so it raises KeyError: 'qty' and nothing shows\n  found   scan-not-built: barcode scanning does not exist: there is no `scan` command (argparse rejects it); the README is wrong\n  found   debug-dump: GET /debug/dump returns the raw pantry JSON, only when the PANTRY_DEBUG environment variable is set; otherwise 404, so not a normal user feature\n  found   use-function: store.use_item (called from web/server.py's do_POST for /api/items/<id>/use) decrements qty and logs the use\n  found   wipe-effect: `wipe --yes` empties every item and the usage log in pantry.json; without --yes it refuses\n  held    stats-called-working: saying the Usage stats button or /api/stats works\n  held    scan-invented: giving a way to scan a barcode as if it exists\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 228.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-pg1m2ihl\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-general",
+    "skill": "feature-map",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  9/9 found\n  found   use-control \u2014 \"It sends `POST /api/items/<id>/use` with the body `{\"n\": 1}`\"\n  found   shop-cli \u2014 \"An item appears when its `qty` drops below its `min`, and the \"buy\" number is `min - qty`\"\n  found   shortcuts \u2014 \"There are two (`web/static/app.js:49-57`):\"\n  found   import-broken \u2014 \"It stops with `KeyError: 'quantity'`, which I confirmed.\"\n  found   stats-broken \u2014 \"It raises `KeyError: 'qty'` whenever anything has been used, as it has in your pantry.\"\n  found   scan-not-built \u2014 \"but that command doesn't exist\"\n  found   debug-dump \u2014 \"It only works if the server was started with the `PANTRY_DEBUG` environment variable set\"\n  found   use-function \u2014 \"That function lowers `qty`, adds `{id, n, at}` to the `used` log, and writes the file with `store.save`.\"\n  found   wipe-effect \u2014 \"so every item and the whole usage log are gone\"\n  held    stats-called-working\n  held    scan-invented",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "feature-map"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "feature-map",
+        "path": "<tmp>\\tte-plugin-pg1m2ihl\\verify-loop\\skills\\feature-map\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 42,
+        "outputTokens": 13385,
+        "cacheReadInputTokens": 687274,
+        "cacheCreationInputTokens": 51159,
+        "webSearchRequests": 0,
+        "costUSD": 0.8145948000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2869,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 9,
+    "total": 9,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "pantry.json still holds the four original items",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.features/add-item.json",
+        "fixture/.features/debug-dump.json",
+        "fixture/.features/export-csv.json",
+        "fixture/.features/features.py",
+        "fixture/.features/import-csv.json",
+        "fixture/.features/list-and-search-items.json",
+        "fixture/.features/restock-item.json",
+        "fixture/.features/shopping-list.json",
+        "fixture/.features/usage-stats.json",
+        "fixture/.features/use-item.json",
+        "fixture/.features/web-app.json",
+        "fixture/.features/wipe.json",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.8145948000000001,
+    "turns": 21,
+    "api_seconds": 156.236,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-general  [feature-map]  8/9 found, score 0.89 (needs 0.85)\n  found   use-control: the per-row `Use 1` button ([data-testid=use-btn]) sends POST /api/items/<id>/use with body {\"n\": 1}\n  found   shop-cli: `python pantry.py shop` prints the shopping list; an item is on it when its qty is below its min (buy = min - qty)\n  found   shortcuts: two shortcuts: `/` focuses the search box, Ctrl+Enter submits the add-item form\n  found   import-broken: no: `import` reads a `quantity` column but `export` writes `qty`, so importing an export fails with KeyError: 'quantity'\n  MISSED  stats-broken: no: the button calls GET /api/stats, and store.stats sums u[\"qty\"] over usage entries that store \"n\", so it raises KeyError: 'qty' and nothing shows\n            never named: /api/stats\n  found   scan-not-built: barcode scanning does not exist: there is no `scan` command (argparse rejects it); the README is wrong\n  found   debug-dump: GET /debug/dump returns the raw pantry JSON, only when the PANTRY_DEBUG environment variable is set; otherwise 404, so not a normal user feature\n  found   use-function: store.use_item (called from web/server.py's do_POST for /api/items/<id>/use) decrements qty and logs the use\n  found   wipe-effect: `wipe --yes` empties every item and the usage log in pantry.json; without --yes it refuses\n  held    stats-called-working: saying the Usage stats button or /api/stats works\n  held    scan-invented: giving a way to scan a barcode as if it exists\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 233.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-pg1m2ihl\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

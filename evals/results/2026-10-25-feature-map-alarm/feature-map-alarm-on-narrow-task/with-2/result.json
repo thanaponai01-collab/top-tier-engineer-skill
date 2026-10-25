@@ -6,24 +6,15 @@
   "report_passed": true,
   "graded_by": "meaning",
   "phrase_passed": true,
-  "judge_text": "judge: PASS  3/3 found\n  found   set-rating-broken \u2014 \"**`set-rating 1 3` and `by-rating 3`** say \"rating must be 1-5\", even though 3 is in range.\"\n  found   count-owner-broken \u2014 \"**`count-owner`** crashes when a note has no owner.\"\n  found   clear-sprint-broken \u2014 \"**`clear-sprint 1`** crashes with `KeyError: 'sprint'` when the note has no sprint\"",
+  "judge_text": "judge: PASS  3/3 found\n  found   set-rating-broken \u2014 \"**`set-rating 1 3` and `by-rating 3`** say \"rating must be 1-5\", even though 3 is in range.\"\n  found   count-owner-broken \u2014 \"**`count-owner`** crashes when a note has no owner.\"\n  found   clear-sprint-broken \u2014 \"**`clear-sprint 1`** crashes with `KeyError: 'sprint'` when the note has no sprint (`commands/fields/sprint.py:35`).\"",
   "actions_passed": true,
   "followed_skill": null,
   "leaked": false,
   "errored": false,
-  "used_skill": true,
-  "skills_loaded": [
-    "feature-map"
-  ],
+  "used_skill": false,
+  "skills_loaded": [],
   "skill_calls": [],
-  "skill_reads": [
-    {
-      "skill": "feature-map",
-      "path": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\skill.md",
-      "sub": false,
-      "via": "shell"
-    }
-  ],
+  "skill_reads": [],
   "skill_read_candidates": [],
   "model_usage": {
     "claude-opus-5-5": {
@@ -127,7 +118,7 @@
   "mcp_servers": [],
   "seconds": 291.3,
   "timed_out": false,
-  "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop",
   "stderr_tail": "",
-  "end_output": null
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop"
 }

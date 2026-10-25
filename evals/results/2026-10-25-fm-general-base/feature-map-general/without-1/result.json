@@ -1,0 +1,79 @@
+{
+  "case": "feature-map-general",
+  "skill": "feature-map",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  9/9 found\n  found   use-control \u2014 \"Clicking it sends `POST /api/items/<id>/use` with the JSON body `{\"n\": 1}`\"\n  found   shop-cli \u2014 \"An item goes on the list when its `qty` is less than its `min`, and the amount to buy is `min \u2212 qty`\"\n  found   shortcuts \u2014 \"`/` focuses the search box.\"\n  found   import-broken \u2014 \"`python pantry.py import out.csv` crashes with `KeyError: 'quantity'`\"\n  found   stats-broken \u2014 \"`store.stats` crashes with `KeyError: 'qty'`\"\n  found   scan-not-built \u2014 \"`python pantry.py scan` doesn't exist and is rejected with `invalid choice: 'scan'`.\"\n  found   debug-dump \u2014 \"but only if the `PANTRY_DEBUG` environment variable was set when the server started. Otherwise it returns 404.\"\n  found   use-function \u2014 \"It's `store.use_item` (`store.py:36`).\"\n  found   wipe-effect \u2014 \"`python pantry.py wipe --yes` replaces the whole database with `{\"items\": [], \"used\": []}`\"\n  held    stats-called-working\n  held    scan-invented",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 22,
+      "outputTokens": 7199,
+      "cacheReadInputTokens": 248922,
+      "cacheCreationInputTokens": 29107,
+      "webSearchRequests": 0,
+      "costUSD": 0.4267084,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 831,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 9,
+  "total": 9,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "pantry.json still holds the four original items",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/AGENTS.md",
+      "fixture/CLAUDE.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4267084,
+  "turns": 12,
+  "api_seconds": 81.013,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 94.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

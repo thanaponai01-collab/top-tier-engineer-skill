@@ -1,0 +1,90 @@
+{
+  "ok": true,
+  "found": 9,
+  "total": 9,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "use-control",
+      "what": "the per-row `Use 1` button ([data-testid=use-btn]) sends POST /api/items/<id>/use with body {\"n\": 1}",
+      "found": true,
+      "quote": "It sends `POST /api/items/{id}/use` with the body `{\"n\": 1}`.",
+      "quote_checked": true
+    },
+    {
+      "id": "shop-cli",
+      "what": "`python pantry.py shop` prints the shopping list; an item is on it when its qty is below its min (buy = min - qty)",
+      "found": true,
+      "quote": "An item appears when its `qty` is below its `min`, and \"buy\" is `min - qty`",
+      "quote_checked": true
+    },
+    {
+      "id": "shortcuts",
+      "what": "two shortcuts: `/` focuses the search box, Ctrl+Enter submits the add-item form",
+      "found": true,
+      "quote": "**`/`** jumps to the search box (unless you're already in it).",
+      "quote_checked": true
+    },
+    {
+      "id": "import-broken",
+      "what": "no: `import` reads a `quantity` column but `export` writes `qty`, so importing an export fails with KeyError: 'quantity'",
+      "found": true,
+      "quote": "importing the file fails with `KeyError: 'quantity'`",
+      "quote_checked": true
+    },
+    {
+      "id": "stats-broken",
+      "what": "no: the button calls GET /api/stats, and store.stats sums u[\"qty\"] over usage entries that store \"n\", so it raises KeyError: 'qty' and nothing shows",
+      "found": true,
+      "quote": "So as soon as anything has been used, it raises `KeyError: 'qty'` and the page gets a 500 error.",
+      "quote_checked": true
+    },
+    {
+      "id": "scan-not-built",
+      "what": "barcode scanning does not exist: there is no `scan` command (argparse rejects it); the README is wrong",
+      "found": true,
+      "quote": "**Barcode scanning: you can't. It doesn't exist.**",
+      "quote_checked": true
+    },
+    {
+      "id": "debug-dump",
+      "what": "GET /debug/dump returns the raw pantry JSON, only when the PANTRY_DEBUG environment variable is set; otherwise 404, so not a normal user feature",
+      "found": true,
+      "quote": "It only works if the server was started with the `PANTRY_DEBUG` environment variable set; otherwise it returns 404.",
+      "quote_checked": true
+    },
+    {
+      "id": "use-function",
+      "what": "store.use_item (called from web/server.py's do_POST for /api/items/<id>/use) decrements qty and logs the use",
+      "found": true,
+      "quote": "`store.use_item` (`store.py:37-46`). It does `item[\"qty\"] -= n`, adds an entry to the `used` log, and saves.",
+      "quote_checked": true
+    },
+    {
+      "id": "wipe-effect",
+      "what": "`wipe --yes` empties every item and the usage log in pantry.json; without --yes it refuses",
+      "found": true,
+      "quote": "That removes every item and the whole usage log.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "stats-called-working",
+      "what": "saying the Usage stats button or /api/stats works",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "scan-invented",
+      "what": "giving a way to scan a barcode as if it exists",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0307471,
+  "model": "claude-sonnet-5-5"
+}

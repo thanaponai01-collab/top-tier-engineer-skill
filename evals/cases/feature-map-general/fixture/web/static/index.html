@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Pantry</title></head>
+<body>
+  <h1>Pantry</h1>
+  <input data-testid="search-box" id="search" placeholder="Search (/)">
+  <form id="add-form">
+    <input name="name" placeholder="Item"> <input name="qty" type="number" value="1">
+    <input name="min" type="number" value="1">
+    <button type="submit" data-testid="add-item-btn">Add</button>
+  </form>
+  <table id="items"></table>
+  <p>
+    <a href="#" data-testid="shopping-link" id="shopping-link">Shopping list</a> ·
+    <button data-testid="stats-btn" id="stats-btn">Usage stats</button>
+  </p>
+  <ul id="shopping"></ul>
+  <pre id="stats"></pre>
+  <script src="/app.js"></script>
+</body>
+</html>

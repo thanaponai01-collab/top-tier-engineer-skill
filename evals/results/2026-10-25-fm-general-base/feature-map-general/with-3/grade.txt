@@ -1,0 +1,32 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  9/9 found
+  found   use-control — "Clicking it sends `POST /api/items/<id>/use` with the JSON body `{"n": 1}`"
+  found   shop-cli — "An item goes on the list only when its stock is below its minimum (`qty < min`, `store.py:57`), and the amount to buy is"
+  found   shortcuts — "There are only two:"
+  found   import-broken — "Importing a file you just exported fails with `KeyError: 'quantity'`; I reproduced this."
+  found   stats-broken — "So it fails with `KeyError: 'qty'`, which I reproduced on your data."
+  found   scan-not-built — "The README lists `python pantry.py scan`, but there's no `scan` command; running it gives an argparse "invalid choice" e"
+  found   debug-dump — "It only works if the server was started with the `PANTRY_DEBUG` environment variable set; otherwise it returns 404."
+  found   use-function — "That's `store.use_item` (`store.py:36`)."
+  found   wipe-effect — "`python pantry.py wipe --yes` replaces the data file with `{"items": [], "used": []}`, which removes every item and the "
+  held    stats-called-working
+  held    scan-invented
+
+Phrase grader (grade.py), for comparison:
+PASS  feature-map-general  [feature-map]  9/9 found, score 1.00 (needs 0.85)
+  found   use-control: the per-row `Use 1` button ([data-testid=use-btn]) sends POST /api/items/<id>/use with body {"n": 1}
+  found   shop-cli: `python pantry.py shop` prints the shopping list; an item is on it when its qty is below its min (buy = min - qty)
+  found   shortcuts: two shortcuts: `/` focuses the search box, Ctrl+Enter submits the add-item form
+  found   import-broken: no: `import` reads a `quantity` column but `export` writes `qty`, so importing an export fails with KeyError: 'quantity'
+  found   stats-broken: no: the button calls GET /api/stats, and store.stats sums u["qty"] over usage entries that store "n", so it raises KeyError: 'qty' and nothing shows
+  found   scan-not-built: barcode scanning does not exist: there is no `scan` command (argparse rejects it); the README is wrong
+  found   debug-dump: GET /debug/dump returns the raw pantry JSON, only when the PANTRY_DEBUG environment variable is set; otherwise 404, so not a normal user feature
+  found   use-function: store.use_item (called from web/server.py's do_POST for /api/items/<id>/use) decrements qty and logs the use
+  found   wipe-effect: `wipe --yes` empties every item and the usage log in pantry.json; without --yes it refuses
+  held    stats-called-working: saying the Usage stats button or /api/stats works
+  held    scan-invented: giving a way to scan a barcode as if it exists
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  FAILED  left tools/drive.py alone — added: outside the files this run may change
+  ok      pantry.json still holds the four original items — 

@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   set-rating-broken — "**`by-rating 4`** exits 1 with "rating must be 1-5", even though 4 is in that range."
+  found   count-owner-broken — "**`count-owner`** exits 1 with `TypeError: '<' not supported between 'str' and 'NoneType'`."
+  found   clear-sprint-broken — "**`clear-sprint 2`** exits 1 with `KeyError: 'sprint'`."
+
+Phrase grader (grade.py), for comparison:
+PASS  feature-map-alarm-on-narrow-task  [feature-map]  3/3 found, score 1.00 (needs 1.00)
+  found   set-rating-broken: the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.
+  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.
+  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes — 

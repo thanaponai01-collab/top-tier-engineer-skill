@@ -1,5 +1,5 @@
 """feature-map: `features.py check` must go red when the code drifts from the map."""
-import os, shutil, subprocess, sys, tempfile, unittest
+import json, os, shutil, subprocess, sys, tempfile, unittest
 
 from _helpers import run, SCRIPTS
 
@@ -130,7 +130,7 @@ class CheckDrift(unittest.TestCase):
         self.assertIn("1 unproven", out)
         # check says how to prove each entry, so the agent never reads this script to find out
         self.assertIn('--feature "Checkout" --entry "route: /checkout" -- <the command that drives it>', out)
-        self.assertIn('--entry "click: [data-testid=pay-btn]" --file <screenshot in the repo>', out)
+        self.assertIn('--entry "click: [data-testid=pay-btn]" --serve', out)
 
     def test_map_alone_passes_strict_without_verify_loop(self):
         os.remove(os.path.join(self.repo, "VERIFY.md"))
@@ -471,6 +471,127 @@ class Init(unittest.TestCase):
             # one self-contained file, so reading receipts never reads a helper's module
             self.assertEqual(sorted(os.listdir(os.path.join(repo, ".features"))), ["features.py"])
 
+
+SERVER = '''import json, sys
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+class H(BaseHTTPRequestHandler):
+    def log_message(self, *a):
+        pass
+    def do_GET(self):
+        if self.path == "/api/items":
+            body = json.dumps([{"id": 1}]).encode()
+        elif self.path == "/api/stats":
+            raise KeyError("qty")
+        else:
+            self.send_response(404); self.end_headers(); return
+        self.send_response(200); self.end_headers(); self.wfile.write(body)
+
+HTTPServer(("127.0.0.1", int(sys.argv[1])), H).serve_forever()
+'''
+PAGE = ('<button data-testid="load-btn">Load</button>\n'
+        '<script>fetch("/api/items")</script>\n<button data-testid="other-btn">x</button>\n')
+WEB_MAP = """## Items
+- what: List the items.
+- route: `/api/items` @ server.py
+- click: `[data-testid=load-btn]` @ page.html
+- click: `[data-testid=other-btn]` @ page.html :: other-btn
+- trace: `do_GET` @ server.py
+- status: {status}
+"""
+
+
+class ServeAndGate(unittest.TestCase):
+    """prove --serve runs a web app in a throwaway copy; gate sorts check into its three stages."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.repo = self.tmp.name
+        for rel, text in (("server.py", SERVER), ("page.html", PAGE), ("FEATURES.md", WEB_MAP.format(status="proven: served"))):
+            with open(os.path.join(self.repo, rel), "w", encoding="utf-8", newline="\n") as fh:
+                fh.write(text)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def prove(self, *args):
+        return run("features.py", "prove", "--repo", self.repo, "--feature", "Items",
+                   "--serve", "python server.py {port}", *args)
+
+    def test_route_and_the_control_that_sends_it_are_proven_through_the_server(self):
+        code, out, _ = self.prove("--entry", "click: [data-testid=load-btn]", "--request", "GET /api/items")
+        self.assertEqual(code, 0, out)
+        self.assertIn("route: /api/items; click: [data-testid=load-btn] ran, exit 0", out)
+        with open(os.path.join(self.repo, ".features", "items.json"), encoding="utf-8") as fh:
+            receipt = json.load(fh)["runs"][-1]
+        self.assertEqual(receipt["via_route"], ["click: [data-testid=load-btn]"])
+        self.assertIn("GET /api/items -> 200", "\n".join(receipt["output_tail"]))
+        code, out, _ = run("features.py", "check", self.repo)
+        self.assertIn("ran through the route it calls: [data-testid=load-btn]", out)
+
+    def test_a_control_whose_code_never_sends_the_request_is_refused(self):
+        with open(os.path.join(self.repo, "page.html"), "w", encoding="utf-8") as fh:
+            fh.write('<button data-testid="load-btn">Load</button>\n<button data-testid="other-btn">x</button>\n')
+        code, out, _ = self.prove("--entry", "click: [data-testid=load-btn]", "--request", "GET /api/items")
+        self.assertEqual(code, 2, out)
+        self.assertIn("looked for /api/items in page.html", out)
+
+    def test_a_server_error_is_a_failed_receipt_with_the_traceback(self):
+        code, out, _ = self.prove("--entry", "route: /api/items", "--request", "GET /api/stats")
+        self.assertEqual(code, 1, out)
+        self.assertIn("KeyError", out)
+
+    def test_rerun_repeats_the_served_requests(self):
+        self.assertEqual(self.prove("--request", "GET /api/items")[0], 0)
+        with open(os.path.join(self.repo, "server.py"), "w", encoding="utf-8") as fh:
+            fh.write(SERVER.replace('self.path == "/api/items"', 'self.path == "/api/things"'))
+        code, out, _ = run("features.py", "check", self.repo, "--rerun")
+        self.assertEqual(code, 1, out)
+        self.assertIn("FAILS  route: /api/items", out)
+
+    def test_a_command_naming_the_route_word_does_not_prove_the_route(self):
+        code, out, _ = run("features.py", "prove", "--repo", self.repo, "--feature", "Items", "--",
+                           sys.executable, "-c", "print('items')")
+        self.assertEqual(code, 2, out)
+
+    def test_scan_finds_routes_compared_with_double_equals(self):
+        code, out, _ = run("features.py", "check", self.repo)
+        self.assertIn("route  /api/stats  @ server.py", out)  # unmapped: found by `self.path == "/api/stats"`
+
+    def test_gate_names_the_open_stage_and_the_fix_then_says_done(self):
+        code, out, _ = run("features.py", "gate", self.repo)
+        self.assertEqual(code, 1, out)
+        self.assertIn("FEATURE-GATE: open 1. Inventory", out)
+        self.assertIn("route  /api/stats  @ server.py", out)
+        with open(os.path.join(self.repo, "FEATURES.md"), "a", encoding="utf-8") as fh:
+            fh.write("\n## Stats\n- what: Usage numbers.\n- route: `/api/stats` @ server.py\n"
+                     "- trace: `do_GET` @ server.py\n- status: failing: KeyError\n")
+        run("features.py", "prove", "--repo", self.repo, "--feature", "Stats", "--serve", "python server.py {port}",
+            "--request", "GET /api/stats")
+        self.prove("--entry", "click: [data-testid=load-btn]", "--request", "GET /api/items")
+        code, out, _ = run("features.py", "gate", self.repo)
+        self.assertIn("FEATURE-GATE: open 3. Hand off", out)
+        self.assertIn("Read FEATURES.md before driving", out)
+        with open(os.path.join(self.repo, "AGENTS.md"), "w", encoding="utf-8") as fh:
+            fh.write("Read FEATURES.md; run `python .features/features.py check --rerun`.\n")
+        code, out, _ = run("features.py", "gate", self.repo)
+        self.assertEqual(code, 0, out)
+        self.assertIn("FEATURE-GATE: done", out)
+        self.assertIn("failing: /api/stats", out)
+        # a control that sends no request is read, not run, and the Proof line says so
+        self.assertIn("read, not run: [data-testid=other-btn]", out)
+
+    def test_a_parameterised_route_step_is_found_by_its_fixed_part(self):
+        with open(os.path.join(self.repo, "server.py"), "a", encoding="utf-8") as fh:
+            fh.write('ITEM = re.compile(r"^/api/items/(\\d+)/use$")\n')
+        with open(os.path.join(self.repo, "page.html"), "a", encoding="utf-8") as fh:
+            fh.write('<script>fetch(`/api/items/${id}/use`)</script>\n')
+        with open(os.path.join(self.repo, "FEATURES.md"), "a", encoding="utf-8") as fh:
+            fh.write("\n## Use\n- what: Use one.\n- click: `[data-testid=load-btn]` @ page.html\n"
+                     "- trace: `load-btn` @ page.html > `/api/items/<id>/use` @ server.py\n- status: traced: read\n")
+        code, out, _ = run("features.py", "check", self.repo)
+        self.assertNotIn("/api/items/<id>/use: ", out)  # neither STALE nor BROKEN
+        self.assertNotIn("BROKEN", out)
 
 if __name__ == "__main__":
     unittest.main()

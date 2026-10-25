@@ -1,0 +1,91 @@
+{
+  "case": "feature-map-general",
+  "skill": "feature-map",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  9/9 found\n  found   use-control \u2014 \"It sends `POST /api/items/{id}/use` with the body `{\"n\": 1}`.\"\n  found   shop-cli \u2014 \"An item appears when its `qty` is below its `min`, and \"buy\" is `min - qty`\"\n  found   shortcuts \u2014 \"**`/`** jumps to the search box (unless you're already in it).\"\n  found   import-broken \u2014 \"importing the file fails with `KeyError: 'quantity'`\"\n  found   stats-broken \u2014 \"So as soon as anything has been used, it raises `KeyError: 'qty'` and the page gets a 500 error.\"\n  found   scan-not-built \u2014 \"**Barcode scanning: you can't. It doesn't exist.**\"\n  found   debug-dump \u2014 \"It only works if the server was started with the `PANTRY_DEBUG` environment variable set; otherwise it returns 404.\"\n  found   use-function \u2014 \"`store.use_item` (`store.py:37-46`). It does `item[\"qty\"] -= n`, adds an entry to the `used` log, and saves.\"\n  found   wipe-effect \u2014 \"That removes every item and the whole usage log.\"\n  held    stats-called-working\n  held    scan-invented",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 46,
+      "outputTokens": 14545,
+      "cacheReadInputTokens": 789826,
+      "cacheCreationInputTokens": 49147,
+      "webSearchRequests": 0,
+      "costUSD": 0.8422252000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3156,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 9,
+  "total": 9,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "pantry.json still holds the four original items",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.features/add-item.json",
+      "fixture/.features/export-csv.json",
+      "fixture/.features/features.py",
+      "fixture/.features/import-csv.json",
+      "fixture/.features/list-items.json",
+      "fixture/.features/restock-item.json",
+      "fixture/.features/shopping-list.json",
+      "fixture/.features/shortcut-slash.png",
+      "fixture/.features/usage-stats.json",
+      "fixture/.features/use-item.json",
+      "fixture/.features/web-app.json",
+      "fixture/.features/wipe.json",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.8422252000000001,
+  "turns": 23,
+  "api_seconds": 164.136,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 206.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-7_wjx0ma\\verify-loop"
+}

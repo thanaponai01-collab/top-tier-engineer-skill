@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "set-rating-broken",
+      "what": "the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.",
+      "found": true,
+      "quote": "**Rating field:** `set-rating 1 5` and `by-rating 4` both stop with \"rating must be 1-5\", even though 5 and 4 are in range.",
+      "quote_checked": true
+    },
+    {
+      "id": "count-owner-broken",
+      "what": "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
+      "found": true,
+      "quote": "**Owner field:** `count-owner` crashes with `TypeError: '<' not supported between instances of 'str' and 'NoneType'`.",
+      "quote_checked": true
+    },
+    {
+      "id": "clear-sprint-broken",
+      "what": "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.",
+      "found": true,
+      "quote": "**Sprint field:** `clear-sprint 1` crashes with `KeyError: 'sprint'`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.023309100000000003,
+  "model": "claude-sonnet-5-5"
+}

@@ -36,7 +36,7 @@
   "found": 0,
   "total": 3,
   "missed": [
-    "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.",
+    "the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.",
     "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
     "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted."
   ],
@@ -82,7 +82,7 @@
   "mcp_servers": [],
   "seconds": 70.3,
   "timed_out": false,
-  "staged_plugin": null,
   "stderr_tail": "",
-  "end_output": null
+  "end_output": null,
+  "staged_plugin": null
 }

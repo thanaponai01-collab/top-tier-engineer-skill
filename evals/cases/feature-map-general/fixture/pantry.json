@@ -1,0 +1,12 @@
+{
+  "items": [
+    {"id": 1, "name": "Rice", "qty": 3, "min": 2, "unit": "kg"},
+    {"id": 2, "name": "Eggs", "qty": 4, "min": 6, "unit": "pcs"},
+    {"id": 3, "name": "Olive oil", "qty": 1, "min": 1, "unit": "bottle"},
+    {"id": 4, "name": "Coffee", "qty": 0, "min": 1, "unit": "bag"}
+  ],
+  "used": [
+    {"id": 2, "n": 2, "at": "2026-10-20"},
+    {"id": 4, "n": 1, "at": "2026-10-20"}
+  ]
+}

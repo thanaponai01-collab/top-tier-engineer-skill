@@ -11,18 +11,10 @@
   "followed_skill": null,
   "leaked": false,
   "errored": false,
-  "used_skill": true,
-  "skills_loaded": [
-    "feature-map"
-  ],
+  "used_skill": false,
+  "skills_loaded": [],
   "skill_calls": [],
-  "skill_reads": [
-    {
-      "skill": "feature-map",
-      "path": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\SKILL.md",
-      "sub": false
-    }
-  ],
+  "skill_reads": [],
   "skill_read_candidates": [
     "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\SKILL.md"
   ],
@@ -126,7 +118,7 @@
   "mcp_servers": [],
   "seconds": 283.4,
   "timed_out": false,
-  "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop",
   "stderr_tail": "",
-  "end_output": null
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop"
 }

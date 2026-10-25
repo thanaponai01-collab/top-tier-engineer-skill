@@ -2,27 +2,19 @@
   "case": "feature-map-alarm-on-narrow-task",
   "skill": "feature-map",
   "arm": "with",
-  "passed": false,
-  "report_passed": false,
+  "passed": true,
+  "report_passed": true,
   "graded_by": "meaning",
-  "phrase_passed": false,
-  "judge_text": "judge: FAIL  2/3 found\n  MISSED  set-rating-broken\n  found   count-owner-broken \u2014 \"**`count-owner`** crashes with `TypeError` when sorting values where some notes have no owner (`commands/fields/owner.py\"\n  found   clear-sprint-broken \u2014 \"**`clear-sprint`** crashes with `KeyError: 'sprint'` because it reads the field after removing it (`commands/fields/spri\"",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   set-rating-broken \u2014 \"**`by-rating 4`** rejects 4 with \"rating must be 1-5\".\"\n  found   count-owner-broken \u2014 \"**`count-owner`** crashes with `TypeError` when sorting values where some notes have no owner (`commands/fields/owner.py\"\n  found   clear-sprint-broken \u2014 \"**`clear-sprint`** crashes with `KeyError: 'sprint'` because it reads the field after removing it (`commands/fields/spri\"",
   "actions_passed": true,
   "followed_skill": null,
   "leaked": false,
   "errored": false,
-  "used_skill": true,
-  "skills_loaded": [
-    "feature-map"
-  ],
+  "used_skill": false,
+  "skills_loaded": [],
   "skill_calls": [],
-  "skill_reads": [
-    {
-      "skill": "feature-map",
-      "path": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\SKILL.md",
-      "sub": false
-    }
-  ],
+  "skill_reads": [],
   "skill_read_candidates": [
     "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\SKILL.md"
   ],
@@ -43,11 +35,9 @@
     }
   },
   "dispatch_count": 0,
-  "found": 2,
+  "found": 3,
   "total": 3,
-  "missed": [
-    "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted."
-  ],
+  "missed": [],
   "tripped": [],
   "action_checks": [
     {
@@ -161,7 +151,7 @@
   "mcp_servers": [],
   "seconds": 330.8,
   "timed_out": false,
-  "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop",
   "stderr_tail": "",
-  "end_output": null
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop"
 }

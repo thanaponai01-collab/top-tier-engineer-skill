@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.30.0 - 2026-10-25 - feature-map: three stages built on what plain Opus already does
+
+- New general eval `feature-map-general`, not built around one trap: an ordinary pantry app with a CLI,
+  a web page and a JSON API, and the faults real repos have (import can't read export, a stats route
+  that raises, a README command never built, a debug route behind an env var). Session 2, bare in
+  both arms, answers nine everyday "how do I reach X / does it work" questions.
+- Baseline (1.29.0): both arms 9/9 every try, session 2 identical (~$0.18). Mapping session $0.26 plain
+  vs $0.91 with the skill. Traced route of plain Opus: list, read every file in one call, run every
+  command and route on a scratch copy of the data (live server + curl), write AGENTS.md. The skill's
+  extra cost: a home-made server driver, browser screenshots of page controls, reading features.py.
+- SKILL.md is now a goal, three steps (each: done when, checked by) and a tool list, 40 lines from
+  185. How to read, run and write is left to the agent; `features.py gate` checks each step, prints
+  the open one and the fix, and ends `FEATURE-GATE: done`. The map's format moved into the draft
+  header `init` writes.
+- `prove --serve "<cmd with {port}>" --request "METHOD /path [json]"`: starts the app in a throwaway
+  copy, sends the requests, keeps status, body and the server's traceback; `--rerun` and `--again`
+  repeat it. With `--entry "click: ..."`, a page control is proven through the route it calls, only
+  when its file or a trace step outside the server sends that request.
+- A `proven` feature needs receipts for its commands and routes; a control that sends no request is
+  listed as `read, not run` in the Proof line instead of needing a screenshot.
+- Stage 2 also fails a command or route never run whose feature gives no `traced: <why>` reason.
+- Fixes: a CLI command no longer proves a route because the route's word appears in it; `init` finds
+  routes written `path == "/x"` (stdlib http.server); a trace step `/api/items/<id>/use` is found by its
+  fixed part; a page-to-server BROKEN hop says to name the step by its path; `Proof: ; never run`.
+- Eval `feature-map-alarm-on-narrow-task`: `set-rating`'s broken check is shared with `by-rating`, so
+  naming either now counts (reports saying `by-rating 4` were right and graded wrong). Re-judged:
+  1.26.0 3/3, plain 0/3.
+- Results: general 9/9 tries with the rebuild, mapping session $0.57-0.64 (about 2.3x plain, was
+  3.5x); alarm 8/9 (plain 0/3) at ~$0.90. The goal-and-steps SKILL.md (`*-slim` batches) scored the
+  same as the longer one: 3/3 and 3/3. Tests: 8 new in `tests/test_features.py` (serve, via-route refusal, server
+  traceback, rerun of served requests, route-word fix, `==` scan, gate stages, parameterised step).
+
 ## 1.29.0 - 2026-10-25 - wire-check: three stages built on what plain Opus already does
 
 - wire-check joins the plugin (manual-only, from top-tier-engineer main), then rebuilt from a trace of

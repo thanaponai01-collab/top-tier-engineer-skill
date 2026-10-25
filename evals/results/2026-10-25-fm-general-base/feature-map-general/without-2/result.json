@@ -1,0 +1,78 @@
+{
+  "case": "feature-map-general",
+  "skill": "feature-map",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  9/9 found\n  found   use-control \u2014 \"Clicking it sends `POST /api/items/<id>/use` with the body `{\"n\": 1}`\"\n  found   shop-cli \u2014 \"An item goes on the list when its `qty` is below its `min`, and the amount to buy is `min - qty`\"\n  found   shortcuts \u2014 \"**`/`** focuses the search box, unless you're already in it.\"\n  found   import-broken \u2014 \"But `python pantry.py import file.csv` reads a `quantity` column that doesn't exist and fails with `KeyError: 'quantity'\"\n  found   stats-broken \u2014 \"`store.stats` raises `KeyError: 'qty'` because it sums `u[\"qty\"]` when the log entries use `n`\"\n  found   scan-not-built \u2014 \"`python pantry.py scan` is listed in the README but doesn't exist.\"\n  found   debug-dump \u2014 \"It only works if the server was started with the `PANTRY_DEBUG` environment variable set (to anything non-empty). Otherw\"\n  found   use-function \u2014 \"It checks there's enough stock, subtracts `n`, adds `{id, n, at}` to the `used` log, and saves.\"\n  found   wipe-effect \u2014 \"`python pantry.py wipe --yes` replaces the database with `{\"items\": [], \"used\": []}`, which removes every item and the w\"\n  held    stats-called-working\n  held    scan-invented",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 22,
+      "outputTokens": 6995,
+      "cacheReadInputTokens": 254935,
+      "cacheCreationInputTokens": 30170,
+      "webSearchRequests": 0,
+      "costUSD": 0.432335,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 839,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 9,
+  "total": 9,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "pantry.json still holds the four original items",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/CLAUDE.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.432335,
+  "turns": 11,
+  "api_seconds": 84.548,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 99.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

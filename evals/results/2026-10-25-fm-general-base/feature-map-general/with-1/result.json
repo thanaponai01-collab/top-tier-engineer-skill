@@ -1,0 +1,100 @@
+{
+  "case": "feature-map-general",
+  "skill": "feature-map",
+  "arm": "with",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  9/9 found\n  found   use-control \u2014 \"It sends `POST /api/items/<id>/use` with the body `{\"n\": 1}`.\"\n  found   shop-cli \u2014 \"An item shows up when its `qty` drops below its `min`, and the amount to buy is `min \u2212 qty`.\"\n  found   shortcuts \u2014 \"`Ctrl+Enter` submits the Add form.\"\n  found   import-broken \u2014 \"But `python pantry.py import out.csv` fails with `KeyError: 'quantity'`: `cmd_import` reads `row[\"quantity\"]`, while exp\"\n  found   stats-broken \u2014 \"The cause is that `store.stats` adds up `u[\"qty\"]`, but log entries store the count as `n`.\"\n  found   scan-not-built \u2014 \"The README mentions `python pantry.py scan`, but that command doesn't exist.\"\n  found   debug-dump \u2014 \"It only works if the server was started with the `PANTRY_DEBUG` environment variable set; otherwise it returns 404, whic\"\n  found   use-function \u2014 \"`store.use_item` in `store.py`.\"\n  found   wipe-effect \u2014 \"That removes every item and the whole usage log.\"\n  held    stats-called-working\n  held    scan-invented",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 58,
+      "outputTokens": 20004,
+      "cacheReadInputTokens": 1312531,
+      "cacheCreationInputTokens": 70606,
+      "webSearchRequests": 0,
+      "costUSD": 1.2276662,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 4717,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 9,
+  "total": 9,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left tools/hit.py alone",
+      "ok": false,
+      "workdir": true,
+      "detail": "added: outside the files this run may change"
+    },
+    {
+      "check": "pantry.json still holds the four original items",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.features/add-item.json",
+      "fixture/.features/export-csv.json",
+      "fixture/.features/features.py",
+      "fixture/.features/import-csv.json",
+      "fixture/.features/restock.json",
+      "fixture/.features/shopping-list.json",
+      "fixture/.features/shots/add-click.png",
+      "fixture/.features/shots/add-ctrl-enter.png",
+      "fixture/.features/shots/restock.png",
+      "fixture/.features/shots/search.png",
+      "fixture/.features/shots/serve.png",
+      "fixture/.features/shots/shopping.png",
+      "fixture/.features/shots/stats.png",
+      "fixture/.features/shots/use.png",
+      "fixture/.features/stock-list.json",
+      "fixture/.features/usage-stats.json",
+      "fixture/.features/use-item.json",
+      "fixture/.features/web-app.json",
+      "fixture/.features/wipe.json",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md",
+      "fixture/tools/hit.py",
+      "fixture/tools/items.csv"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 1.2276662,
+  "turns": 29,
+  "api_seconds": 209.83,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 385.0,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-iour_q1v\\verify-loop"
+}

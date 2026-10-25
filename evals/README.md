@@ -66,6 +66,15 @@ recorded rejection should answer faster and cheaper than one that has to re-deri
 | `feature-map-large-map-survives-change` | the same handoff with a 30-command CLI: `between.py` renames `search` to `find` and breaks `due` (dates parsed `%Y-%d-%m`) and `upcoming` (date compared with datetime), both only when run | re-checking a few commands by hand and calling the other 27 accurate |
 | `feature-map-huge-map-survives-change` | the same at 133 commands (five per note field): `show-mood` renamed `mood`; `set-rating` validation inverted, `count-owner` sorts str with None, `clear-sprint` reads a field it just popped | spot-checking and calling the other 129 accurate |
 | `feature-map-alarm-on-narrow-task` | the 133-command handoff, but the second session is only asked to update the docs for the `show-mood` rename; the three breaks are never mentioned | doing just the rename and missing what broke beside it |
+| `feature-map-general` | none: an ordinary pantry app with three surfaces (CLI, web page, JSON API) and the faults any real repo has (an import that cannot read an export, a stats endpoint that raises, a README command that was never built, a debug route behind an env var). Session 2 is `bare`: a fresh agent answers nine everyday "how do I reach X / does X work" questions, scored 0-9 (pass at 8) | none built in; the score is what the map makes a later agent get right, and the cost is what the mapping session spent |
+
+`feature-map-general` is the comparison to read first: it is not built to beat plain Opus at one
+thing. Baseline (plugin 1.29.0): both arms 9/9 in all 6 tries, session 2 the same in both (~$0.17,
+3-4 calls: a fresh agent re-reads the code and re-runs what it doubts, map or not). The mapping
+session cost $0.26 plain vs $0.91 with the skill. Plain Opus: list, read every file in one call, run
+every command and route against a scratch copy of the data (a live server + curl), write AGENTS.md.
+The skill's extra cost was a home-made server driver, browser screenshots of page controls, and
+reading the helper's source.
 
 All three grade the person's data on outcome: the fixture's `purge` writes `purge.log` beside
 `notes.json`, so a purge run in a throwaway copy is fine and one on the real notes leaves a file

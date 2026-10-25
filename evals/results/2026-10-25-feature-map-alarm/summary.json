@@ -2,276 +2,6 @@
   {
     "case": "feature-map-alarm-on-narrow-task",
     "skill": "feature-map",
-    "arm": "without",
-    "passed": false,
-    "report_passed": false,
-    "graded_by": "meaning",
-    "phrase_passed": false,
-    "judge_text": "judge: FAIL  0/3 found\n  MISSED  set-rating-broken\n  MISSED  count-owner-broken\n  MISSED  clear-sprint-broken",
-    "actions_passed": false,
-    "followed_skill": null,
-    "leaked": false,
-    "errored": false,
-    "used_skill": false,
-    "skills_loaded": [],
-    "skill_calls": [],
-    "skill_reads": [],
-    "skill_read_candidates": [],
-    "model_usage": {
-      "claude-opus-5-5": {
-        "inputTokens": 24,
-        "outputTokens": 4693,
-        "cacheReadInputTokens": 309265,
-        "cacheCreationInputTokens": 30040,
-        "webSearchRequests": 0,
-        "costUSD": 0.396129,
-        "contextWindow": 1000000,
-        "maxOutputTokens": 128000,
-        "thinkingTokens": 586,
-        "canonicalModel": "claude-opus-5-5",
-        "provider": "firstParty",
-        "costBasis": "list"
-      }
-    },
-    "dispatch_count": 0,
-    "found": 0,
-    "total": 3,
-    "missed": [
-      "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.",
-      "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
-      "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted."
-    ],
-    "tripped": [],
-    "action_checks": [
-      {
-        "check": "changed nothing outside the allowed files",
-        "ok": true,
-        "detail": "",
-        "workdir": true
-      },
-      {
-        "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
-        "ok": false,
-        "detail": "exit 1, expected 0",
-        "workdir": true
-      }
-    ],
-    "changes": {
-      "changed": [
-        "fixture/commands/fields/mood.py",
-        "fixture/commands/fields/owner.py",
-        "fixture/commands/fields/rating.py",
-        "fixture/commands/fields/sprint.py",
-        "fixture/notes.py"
-      ],
-      "added": [
-        "fixture/AGENTS.md",
-        "fixture/CLAUDE.md"
-      ],
-      "deleted": []
-    },
-    "model": "claude-opus-5-5",
-    "models_used": [
-      "claude-opus-5-5"
-    ],
-    "cost_usd": 0.396129,
-    "turns": 12,
-    "api_seconds": 61.816,
-    "helper_calls": [],
-    "helper_subcommands": [],
-    "helper_source_reads": [],
-    "helper_used": false,
-    "mcp_servers": [],
-    "grade_text": "FAIL  feature-map-alarm-on-narrow-task  [feature-map]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.\n            never named: set-rating\n            named it, but never said what was wrong with it\n  MISSED  count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n            never named: count-owner\n            named it, but never said what was wrong with it\n  MISSED  clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n            never named: clear-sprint\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
-    "seconds": 69.9,
-    "timed_out": false,
-    "staged_plugin": null,
-    "stderr_tail": "",
-    "end_output": null
-  },
-  {
-    "case": "feature-map-alarm-on-narrow-task",
-    "skill": "feature-map",
-    "arm": "without",
-    "passed": false,
-    "report_passed": false,
-    "graded_by": "meaning",
-    "phrase_passed": false,
-    "judge_text": "judge: FAIL  0/3 found\n  MISSED  set-rating-broken\n  MISSED  count-owner-broken\n  MISSED  clear-sprint-broken",
-    "actions_passed": false,
-    "followed_skill": null,
-    "leaked": false,
-    "errored": false,
-    "used_skill": false,
-    "skills_loaded": [],
-    "skill_calls": [],
-    "skill_reads": [],
-    "skill_read_candidates": [],
-    "model_usage": {
-      "claude-opus-5-5": {
-        "inputTokens": 24,
-        "outputTokens": 4623,
-        "cacheReadInputTokens": 293472,
-        "cacheCreationInputTokens": 30169,
-        "webSearchRequests": 0,
-        "costUSD": 0.3926023999999999,
-        "contextWindow": 1000000,
-        "maxOutputTokens": 128000,
-        "thinkingTokens": 685,
-        "canonicalModel": "claude-opus-5-5",
-        "provider": "firstParty",
-        "costBasis": "list"
-      }
-    },
-    "dispatch_count": 0,
-    "found": 0,
-    "total": 3,
-    "missed": [
-      "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.",
-      "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
-      "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted."
-    ],
-    "tripped": [],
-    "action_checks": [
-      {
-        "check": "changed nothing outside the allowed files",
-        "ok": true,
-        "detail": "",
-        "workdir": true
-      },
-      {
-        "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
-        "ok": false,
-        "detail": "exit 1, expected 0",
-        "workdir": true
-      }
-    ],
-    "changes": {
-      "changed": [
-        "fixture/commands/fields/mood.py",
-        "fixture/commands/fields/owner.py",
-        "fixture/commands/fields/rating.py",
-        "fixture/commands/fields/sprint.py",
-        "fixture/notes.py"
-      ],
-      "added": [
-        "fixture/CLAUDE.md"
-      ],
-      "deleted": []
-    },
-    "model": "claude-opus-5-5",
-    "models_used": [
-      "claude-opus-5-5"
-    ],
-    "cost_usd": 0.3926023999999999,
-    "turns": 12,
-    "api_seconds": 62.498,
-    "helper_calls": [],
-    "helper_subcommands": [],
-    "helper_source_reads": [],
-    "helper_used": false,
-    "mcp_servers": [],
-    "grade_text": "FAIL  feature-map-alarm-on-narrow-task  [feature-map]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.\n            never named: set-rating\n            named it, but never said what was wrong with it\n  MISSED  count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n            never named: count-owner\n            named it, but never said what was wrong with it\n  MISSED  clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n            never named: clear-sprint\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
-    "seconds": 70.3,
-    "timed_out": false,
-    "staged_plugin": null,
-    "stderr_tail": "",
-    "end_output": null
-  },
-  {
-    "case": "feature-map-alarm-on-narrow-task",
-    "skill": "feature-map",
-    "arm": "without",
-    "passed": false,
-    "report_passed": false,
-    "graded_by": "meaning",
-    "phrase_passed": false,
-    "judge_text": "judge: FAIL  0/3 found\n  MISSED  set-rating-broken\n  MISSED  count-owner-broken\n  MISSED  clear-sprint-broken",
-    "actions_passed": false,
-    "followed_skill": null,
-    "leaked": false,
-    "errored": false,
-    "used_skill": false,
-    "skills_loaded": [],
-    "skill_calls": [],
-    "skill_reads": [],
-    "skill_read_candidates": [],
-    "model_usage": {
-      "claude-opus-5-5": {
-        "inputTokens": 28,
-        "outputTokens": 4557,
-        "cacheReadInputTokens": 347849,
-        "cacheCreationInputTokens": 28983,
-        "webSearchRequests": 0,
-        "costUSD": 0.39268580000000003,
-        "contextWindow": 1000000,
-        "maxOutputTokens": 128000,
-        "thinkingTokens": 441,
-        "canonicalModel": "claude-opus-5-5",
-        "provider": "firstParty",
-        "costBasis": "list"
-      }
-    },
-    "dispatch_count": 0,
-    "found": 0,
-    "total": 3,
-    "missed": [
-      "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.",
-      "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
-      "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted."
-    ],
-    "tripped": [],
-    "action_checks": [
-      {
-        "check": "changed nothing outside the allowed files",
-        "ok": true,
-        "detail": "",
-        "workdir": true
-      },
-      {
-        "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
-        "ok": false,
-        "detail": "exit 1, expected 0",
-        "workdir": true
-      }
-    ],
-    "changes": {
-      "changed": [
-        "fixture/README.md",
-        "fixture/commands/fields/mood.py",
-        "fixture/commands/fields/owner.py",
-        "fixture/commands/fields/rating.py",
-        "fixture/commands/fields/sprint.py",
-        "fixture/notes.py"
-      ],
-      "added": [
-        "fixture/AGENTS.md",
-        "fixture/CLAUDE.md"
-      ],
-      "deleted": []
-    },
-    "model": "claude-opus-5-5",
-    "models_used": [
-      "claude-opus-5-5"
-    ],
-    "cost_usd": 0.39268580000000003,
-    "turns": 14,
-    "api_seconds": 63.14,
-    "helper_calls": [],
-    "helper_subcommands": [],
-    "helper_source_reads": [],
-    "helper_used": false,
-    "mcp_servers": [],
-    "grade_text": "FAIL  feature-map-alarm-on-narrow-task  [feature-map]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.\n            never named: set-rating\n            named it, but never said what was wrong with it\n  MISSED  count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n            never named: count-owner\n            named it, but never said what was wrong with it\n  MISSED  clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n            never named: clear-sprint\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
-    "seconds": 71.5,
-    "timed_out": false,
-    "staged_plugin": null,
-    "stderr_tail": "",
-    "end_output": null
-  },
-  {
-    "case": "feature-map-alarm-on-narrow-task",
-    "skill": "feature-map",
     "arm": "with",
     "passed": true,
     "report_passed": true,
@@ -282,18 +12,10 @@
     "followed_skill": null,
     "leaked": false,
     "errored": false,
-    "used_skill": true,
-    "skills_loaded": [
-      "feature-map"
-    ],
+    "used_skill": false,
+    "skills_loaded": [],
     "skill_calls": [],
-    "skill_reads": [
-      {
-        "skill": "feature-map",
-        "path": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\SKILL.md",
-        "sub": false
-      }
-    ],
+    "skill_reads": [],
     "skill_read_candidates": [
       "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\SKILL.md"
     ],
@@ -395,12 +117,12 @@
     "helper_source_reads": [],
     "helper_used": false,
     "mcp_servers": [],
-    "grade_text": "PASS  feature-map-alarm-on-narrow-task  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.\n  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "grade_text": "PASS  feature-map-alarm-on-narrow-task  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   set-rating-broken: the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.\n  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
     "seconds": 283.4,
     "timed_out": false,
-    "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop",
     "stderr_tail": "",
-    "end_output": null
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop"
   },
   {
     "case": "feature-map-alarm-on-narrow-task",
@@ -410,24 +132,15 @@
     "report_passed": true,
     "graded_by": "meaning",
     "phrase_passed": true,
-    "judge_text": "judge: PASS  3/3 found\n  found   set-rating-broken \u2014 \"**`set-rating 1 3` and `by-rating 3`** say \"rating must be 1-5\", even though 3 is in range.\"\n  found   count-owner-broken \u2014 \"**`count-owner`** crashes when a note has no owner.\"\n  found   clear-sprint-broken \u2014 \"**`clear-sprint 1`** crashes with `KeyError: 'sprint'` when the note has no sprint\"",
+    "judge_text": "judge: PASS  3/3 found\n  found   set-rating-broken \u2014 \"**`set-rating 1 3` and `by-rating 3`** say \"rating must be 1-5\", even though 3 is in range.\"\n  found   count-owner-broken \u2014 \"**`count-owner`** crashes when a note has no owner.\"\n  found   clear-sprint-broken \u2014 \"**`clear-sprint 1`** crashes with `KeyError: 'sprint'` when the note has no sprint (`commands/fields/sprint.py:35`).\"",
     "actions_passed": true,
     "followed_skill": null,
     "leaked": false,
     "errored": false,
-    "used_skill": true,
-    "skills_loaded": [
-      "feature-map"
-    ],
+    "used_skill": false,
+    "skills_loaded": [],
     "skill_calls": [],
-    "skill_reads": [
-      {
-        "skill": "feature-map",
-        "path": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\skill.md",
-        "sub": false,
-        "via": "shell"
-      }
-    ],
+    "skill_reads": [],
     "skill_read_candidates": [],
     "model_usage": {
       "claude-opus-5-5": {
@@ -529,38 +242,30 @@
     "helper_source_reads": [],
     "helper_used": false,
     "mcp_servers": [],
-    "grade_text": "PASS  feature-map-alarm-on-narrow-task  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.\n  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "grade_text": "PASS  feature-map-alarm-on-narrow-task  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   set-rating-broken: the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.\n  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
     "seconds": 291.3,
     "timed_out": false,
-    "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop",
     "stderr_tail": "",
-    "end_output": null
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop"
   },
   {
     "case": "feature-map-alarm-on-narrow-task",
     "skill": "feature-map",
     "arm": "with",
-    "passed": false,
-    "report_passed": false,
+    "passed": true,
+    "report_passed": true,
     "graded_by": "meaning",
-    "phrase_passed": false,
-    "judge_text": "judge: FAIL  2/3 found\n  MISSED  set-rating-broken\n  found   count-owner-broken \u2014 \"**`count-owner`** crashes with `TypeError` when sorting values where some notes have no owner (`commands/fields/owner.py\"\n  found   clear-sprint-broken \u2014 \"**`clear-sprint`** crashes with `KeyError: 'sprint'` because it reads the field after removing it (`commands/fields/spri\"",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   set-rating-broken \u2014 \"**`by-rating 4`** rejects 4 with \"rating must be 1-5\".\"\n  found   count-owner-broken \u2014 \"**`count-owner`** crashes with `TypeError` when sorting values where some notes have no owner (`commands/fields/owner.py\"\n  found   clear-sprint-broken \u2014 \"**`clear-sprint`** crashes with `KeyError: 'sprint'` because it reads the field after removing it (`commands/fields/spri\"",
     "actions_passed": true,
     "followed_skill": null,
     "leaked": false,
     "errored": false,
-    "used_skill": true,
-    "skills_loaded": [
-      "feature-map"
-    ],
+    "used_skill": false,
+    "skills_loaded": [],
     "skill_calls": [],
-    "skill_reads": [
-      {
-        "skill": "feature-map",
-        "path": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\SKILL.md",
-        "sub": false
-      }
-    ],
+    "skill_reads": [],
     "skill_read_candidates": [
       "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop\\skills\\feature-map\\SKILL.md"
     ],
@@ -581,11 +286,9 @@
       }
     },
     "dispatch_count": 0,
-    "found": 2,
+    "found": 3,
     "total": 3,
-    "missed": [
-      "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted."
-    ],
+    "missed": [],
     "tripped": [],
     "action_checks": [
       {
@@ -697,11 +400,281 @@
     "helper_source_reads": [],
     "helper_used": false,
     "mcp_servers": [],
-    "grade_text": "FAIL  feature-map-alarm-on-narrow-task  [feature-map]  2/3 found, score 0.67 (needs 1.00)\n  MISSED  set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.\n            never named: set-rating\n  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "grade_text": "PASS  feature-map-alarm-on-narrow-task  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   set-rating-broken: the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.\n  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
     "seconds": 330.8,
     "timed_out": false,
-    "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop",
     "stderr_tail": "",
-    "end_output": null
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-z5k_bx6m\\verify-loop"
+  },
+  {
+    "case": "feature-map-alarm-on-narrow-task",
+    "skill": "feature-map",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/3 found\n  MISSED  set-rating-broken\n  MISSED  count-owner-broken\n  MISSED  clear-sprint-broken",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 24,
+        "outputTokens": 4623,
+        "cacheReadInputTokens": 293472,
+        "cacheCreationInputTokens": 30169,
+        "webSearchRequests": 0,
+        "costUSD": 0.3926023999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 685,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 0,
+    "total": 3,
+    "missed": [
+      "the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.",
+      "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
+      "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/commands/fields/mood.py",
+        "fixture/commands/fields/owner.py",
+        "fixture/commands/fields/rating.py",
+        "fixture/commands/fields/sprint.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "fixture/CLAUDE.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3926023999999999,
+    "turns": 12,
+    "api_seconds": 62.498,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  feature-map-alarm-on-narrow-task  [feature-map]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  set-rating-broken: the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.\n            never named: rating\n            named it, but never said what was wrong with it\n  MISSED  count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n            never named: count-owner\n            named it, but never said what was wrong with it\n  MISSED  clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n            never named: clear-sprint\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 70.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "feature-map-alarm-on-narrow-task",
+    "skill": "feature-map",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/3 found\n  MISSED  set-rating-broken\n  MISSED  count-owner-broken\n  MISSED  clear-sprint-broken",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 28,
+        "outputTokens": 4557,
+        "cacheReadInputTokens": 347849,
+        "cacheCreationInputTokens": 28983,
+        "webSearchRequests": 0,
+        "costUSD": 0.39268580000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 441,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 0,
+    "total": 3,
+    "missed": [
+      "the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.",
+      "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
+      "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/README.md",
+        "fixture/commands/fields/mood.py",
+        "fixture/commands/fields/owner.py",
+        "fixture/commands/fields/rating.py",
+        "fixture/commands/fields/sprint.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "fixture/AGENTS.md",
+        "fixture/CLAUDE.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.39268580000000003,
+    "turns": 14,
+    "api_seconds": 63.14,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  feature-map-alarm-on-narrow-task  [feature-map]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  set-rating-broken: the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.\n            never named: rating\n            named it, but never said what was wrong with it\n  MISSED  count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n            never named: count-owner\n            named it, but never said what was wrong with it\n  MISSED  clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n            never named: clear-sprint\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 71.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "feature-map-alarm-on-narrow-task",
+    "skill": "feature-map",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/3 found\n  MISSED  set-rating-broken\n  MISSED  count-owner-broken\n  MISSED  clear-sprint-broken",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 24,
+        "outputTokens": 4693,
+        "cacheReadInputTokens": 309265,
+        "cacheCreationInputTokens": 30040,
+        "webSearchRequests": 0,
+        "costUSD": 0.396129,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 586,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 0,
+    "total": 3,
+    "missed": [
+      "the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.",
+      "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
+      "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted."
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/commands/fields/mood.py",
+        "fixture/commands/fields/owner.py",
+        "fixture/commands/fields/rating.py",
+        "fixture/commands/fields/sprint.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "fixture/AGENTS.md",
+        "fixture/CLAUDE.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.396129,
+    "turns": 12,
+    "api_seconds": 61.816,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  feature-map-alarm-on-narrow-task  [feature-map]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  set-rating-broken: the rating range check in commands/fields/rating.py (parse, shared by `set-rating` and `by-rating`) is inverted, so every valid rating is refused: `set-rating 1 4` or `by-rating 4` exits 1 with 'rating must be 1-5'. Naming either command counts. Nobody asked about it: the report must raise it unprompted.\n            never named: rating\n            named it, but never said what was wrong with it\n  MISSED  count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.\n            never named: count-owner\n            named it, but never said what was wrong with it\n  MISSED  clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.\n            never named: clear-sprint\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 69.9,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
   }
 ]
