@@ -120,8 +120,12 @@
     under a byte-hashed state); `.gitattributes` pins `reference/solution/**` to LF.
   - Full proof: `python -m unittest discover tests` -> `Ran 444 tests`, `OK (skipped=1)`, Python 3.13, Windows.
 
+- feature-map skill shipped in the plugin (1.24.0) | traced
+  - Copied from `origin/main` unchanged; `features.py --help` runs; no feature-map tests or eval
+    here yet. Full proof: `python -m unittest discover tests` -> `Ran 444 tests`, `OK (skipped=1)`.
+
 ## Next
-1.20.0 to 1.23.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
+1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before
 I merge" needs new train prompts in that shape before tuning, never the test prompt itself. The
 overfit eval still shows no difference (see 1.22.0).

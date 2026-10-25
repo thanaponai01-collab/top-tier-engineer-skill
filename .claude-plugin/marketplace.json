@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "verify-loop",
-      "description": "Verify Loop: one place to verify a change or claim. It writes a check that can fail, loops until the check passes, keeps the proof, and returns a fixed answer (verdict, VERIFY: line, observed rejection, gaps). Users, skills and agents can all call it. Create mode generates a project /verify skill; maintain mode keeps it honest as the app changes. The install runs no hooks.",
+      "description": "Verify Loop: one place to verify a change or claim. It writes a check that can fail, loops until the check passes, keeps the proof, and returns a fixed answer (verdict, VERIFY: line, observed rejection, gaps). Users, skills and agents can all call it. Create mode generates a project /verify skill; maintain mode keeps it honest as the app changes. Also ships feature-map (manual-only): a FEATURES.md of every feature, its entry points and traces, checked against the code and linked to VERIFY.md. The install runs no hooks.",
       "author": {
         "name": "Thanaponai01"
       },

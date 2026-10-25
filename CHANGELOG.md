@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.24.0 - 2026-10-25 - feature-map ships in the plugin
+
+- New skill `plugin/skills/feature-map/`, copied unchanged from top-tier-engineer main (4.66.0):
+  `FEATURES.md` lists each feature, its entry points (route, click, shortcut, cli, menu), a
+  `trace:` call chain and the VERIFY.md section that proves it. `scripts/features.py init` drafts
+  it from the code, `check --strict` fails on stale or broken entries, `impact` lists the features
+  and VERIFY.md sections a change touches.
+- Manual-only (`disable-model-invocation: true`), so it adds nothing to verify-loop's trigger
+  surface. It names `wire-check`, `arch-map` and `recall`, which this plugin does not ship; the
+  skill says it stands without them.
+- Not yet covered here: its eval case `feature-map-dead-command-and-destructive` stays on main, and
+  `tests/` has no feature-map tests.
+
 ## 1.23.0 - 2026-10-25 - A trigger eval, and a description that fires on people's words
 
 - New `evals/trigger.py`: 26 prompts (13 should load verify-loop, 13 should not), each run headless
