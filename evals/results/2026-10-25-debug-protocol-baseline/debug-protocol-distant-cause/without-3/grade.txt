@@ -1,0 +1,11 @@
+PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)
+  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens
+  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it
+  found   proven-both-directions: the cause was proven in both directions, not just observed once
+  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  FAILED  reproduced the failure before changing any code — changed the code first; ran it only afterwards
+  FAILED  left parse.py alone — changed: outside the files this run may change
+  FAILED  left test_parse.py alone — added: outside the files this run may change

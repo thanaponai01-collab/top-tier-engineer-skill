@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   limited — "The live payment gateway isn't covered at all; it's outside this local project, as `VERIFY.md` already notes as a manual"
+  found   rejection-seen — "with the original `app.py` put back, `python -m unittest discover tests -v` fails with `FAILED (failures=2)`."
+
+Phrase grader (grade.py), for comparison:
+PASS  debug-protocol-regression-proof  [debug-protocol]  2/2 found, score 1.00 (needs 1.00)
+  found   limited: The live gateway remains outside coverage.
+  found   rejection-seen: the check was seen failing on the original fee (111 where 110 is expected), run before the fix or with the original code put back, not only passing after it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      Existing coverage limit remains. — 
+  ok      app.py adds the 10-cent fee SPEC.md states — 
+  ok      The native check rejects an independently supplied wrong implementation. — 
+  ok      The tests pass on the finished code. — 

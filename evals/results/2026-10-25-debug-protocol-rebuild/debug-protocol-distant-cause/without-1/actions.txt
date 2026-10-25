@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && ls -la && for f in $(find . -type f -not -path '*/.*' | head -50); do echo "=== $f"; cat "$f"; done
+  2. Bash: cd fixture && python report.py && python -I -c "import sys; sys.path.insert(0,'.'); from parse import load; print(load('data.csv'))"

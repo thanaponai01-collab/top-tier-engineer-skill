@@ -1,0 +1,100 @@
+{
+  "case": "debug-protocol-regression-proof",
+  "skill": "debug-protocol",
+  "question": "Is the fee's cause proven, fixed at its source, and held by a check that was seen rejecting the bug?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "limited",
+      "what": "The live gateway remains outside coverage.",
+      "must_say_any": [
+        "gateway",
+        "payment",
+        "mapped",
+        "selected behavior"
+      ]
+    },
+    {
+      "id": "rejection-seen",
+      "what": "the check was seen failing on the original fee (111 where 110 is expected), run before the fix or with the original code put back, not only passing after it",
+      "must_say_any": [
+        "111",
+        "rejected",
+        "failed on the original",
+        "failed before the fix",
+        "fails on the original",
+        "red before",
+        "put back",
+        "original code",
+        "original `app.py`"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "The fee is fixed in app.py, the coverage note is kept, and the tests reject the wrong fee; any arm's evidence files are allowed.",
+    "edits_allowed": [
+      "VERIFY.md",
+      "FEATURES.md",
+      "AGENTS.md",
+      ".gitignore",
+      ".verify-state.json",
+      "verification/*",
+      "tests/test_total.py",
+      "app.py",
+      "BUILD.md",
+      "tests/*",
+      "evidence/*",
+      ".verify-evidence/*",
+      ".verify-state-cache/*",
+      ".debug/*"
+    ],
+    "must_contain": [
+      {
+        "id": "manual",
+        "kind": "outcome",
+        "what": "Existing coverage limit remains.",
+        "path": "VERIFY.md",
+        "regex": "MANUAL: live payment gateway"
+      },
+      {
+        "id": "fixed-at-source",
+        "kind": "outcome",
+        "what": "app.py adds the 10-cent fee SPEC.md states",
+        "path": "app.py",
+        "regex": "\\+\\s*10\\b"
+      }
+    ],
+    "replays": [
+      {
+        "id": "reject-wrong-fee",
+        "kind": "outcome",
+        "what": "The native check rejects an independently supplied wrong implementation.",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "replace": {
+          "app.py": "reference/wrong.py"
+        },
+        "expect": "fail"
+      },
+      {
+        "id": "pass-fixed",
+        "kind": "outcome",
+        "what": "The tests pass on the finished code.",
+        "replace": {},
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "expect": "pass"
+      }
+    ]
+  }
+}

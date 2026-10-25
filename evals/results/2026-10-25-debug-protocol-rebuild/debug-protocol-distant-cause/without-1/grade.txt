@@ -1,0 +1,18 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  2/3 found
+  found   cause-is-parse-amount — "The problem is in `fixture/parse.py:6`, in `parse_amount`, when the CSV is read."
+  found   why-it-was-not-caught — "The tests pass because `test_totals.py` only tests `total()` with whole numbers (`10`, `20`)."
+  MISSED  proven-both-directions
+  held    blame-where-the-symptom-shows
+
+Phrase grader (grade.py), for comparison:
+PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)
+  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens
+  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it
+  found   proven-both-directions: the cause was proven in both directions, not just observed once
+  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      reproduced the failure before changing any code (directly or through debug.py --repro) — ran it: cd fixture && python report.py && python -I -c "import sys; sys.path.insert(0,'.'); from parse import load; pr
+  ok      changed nothing outside the allowed files — 

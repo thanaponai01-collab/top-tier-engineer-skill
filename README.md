@@ -12,6 +12,9 @@ And `wire-check` (manual-only, `/verify-loop:wire-check`): is the code connected
 system? `wire.py` runs every way in under a call tracer, has a verdict written for every function
 nothing entered, and holds a component you connect to a `FEATURES.md` trace and a VERIFY.md check
 seen red on the broken wiring.
+And `debug-protocol` (manual-only, `/verify-loop:debug-protocol`): the root cause, proven both ways.
+`debug.py` keeps the code as it was reproduced, reruns the trigger with only the suspected lines
+replaced, and accepts a fix only at the cause, held by a check that fails with the cause put back.
 
 ## Install (Claude Code)
 
@@ -61,6 +64,8 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
   `--layers`, `--try-delete ... --run CMD`).
 - `plugin/skills/wire-check/` — the wire-check skill; `scripts/wire.py` (`--snapshot --run CMD`,
   `--gate`, `--target FILE::FUNC`).
+- `plugin/skills/debug-protocol/` — the debug-protocol skill; `scripts/debug.py` (`--repro`,
+  `--prove FILE:LINE --as`, `--gate --regress CMD`).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

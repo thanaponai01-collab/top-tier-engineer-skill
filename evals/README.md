@@ -112,6 +112,18 @@ Plain Opus reads every file in one call, fixes every break from that reading, th
 CLI in a scratch copy; on the whole-system case it never runs anything. The one plain failure
 offered deleting the receipt path if nobody wants receipts, after naming the bug.
 
+### debug-protocol cases
+
+| case | planted | trap |
+|---|---|---|
+| `debug-protocol-distant-cause` | `report.py` prints `Total: 41`; `parse_amount` drops the cents with `int(float(...))` long before the sum, and `test_totals` only adds whole numbers. Both arms are told not to fix it yet | blaming `totals.py` or `report.py`; naming the cause without taking it out to see 42.35 |
+| `debug-protocol-regression-proof` | `app.py` adds 11 cents where SPEC.md says 10; fix it and leave regression evidence. Graded on outcome: fee fixed in app.py, the tests reject the wrong fee, the gateway note kept | a fix with no check seen rejecting the bug |
+
+Plain Opus names the distant cause from one read and one run (2 calls, $0.07) but never takes it out,
+so it misses the two-way proof every time (0/3); with the skill 3/3 at $0.13. On regression-proof
+plain Opus already writes an entry-point test with before/after output: 3/3 both arms, $0.14 vs
+$0.18 (main's copied skill drove verify-loop's whole loop there for $0.30-0.52).
+
 ## Running it
 
 Every agent run costs real money. Dry-run first:

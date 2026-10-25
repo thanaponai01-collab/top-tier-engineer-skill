@@ -1,0 +1,113 @@
+{
+  "case": "debug-protocol-regression-proof",
+  "skill": "debug-protocol",
+  "arm": "without",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2390,
+      "cacheReadInputTokens": 122319,
+      "cacheCreationInputTokens": 9016,
+      "webSearchRequests": 0,
+      "costUSD": 0.1444398,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 226,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Retained state is strict green.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "Checks passed.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "Existing coverage limit remains.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Actual rejection evidence exists.",
+      "ok": false,
+      "detail": ".verify-state.json is not there",
+      "workdir": true
+    },
+    {
+      "check": "The native check rejects an independently supplied wrong implementation.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Native checks pass the unchanged original implementation.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/app.py"
+    ],
+    "added": [
+      "fixture/evidence/after-fix.txt",
+      "fixture/evidence/before-fix.txt",
+      "fixture/tests/test_checkout_entry.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1444398,
+  "turns": 6,
+  "api_seconds": 40.197,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 43.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

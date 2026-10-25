@@ -1,0 +1,87 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "phrases",
+  "phrase_passed": false,
+  "judge_text": "",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 1232,
+      "cacheReadInputTokens": 55138,
+      "cacheCreationInputTokens": 5920,
+      "webSearchRequests": 0,
+      "costUSD": 0.0830516,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 345,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": false,
+      "detail": "changed the code first; ran it only afterwards"
+    },
+    {
+      "check": "left parse.py alone",
+      "ok": false,
+      "workdir": true,
+      "detail": "changed: outside the files this run may change"
+    },
+    {
+      "check": "left test_parse.py alone",
+      "ok": false,
+      "workdir": true,
+      "detail": "added: outside the files this run may change"
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/parse.py"
+    ],
+    "added": [
+      "fixture/test_parse.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.0830516,
+  "turns": 3,
+  "api_seconds": 15.458,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 18.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

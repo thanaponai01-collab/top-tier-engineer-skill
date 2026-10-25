@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.31.0 - 2026-10-25 - debug-protocol: three stages built on what plain Opus already does
+
+- debug-protocol joins the plugin (manual-only, from top-tier-engineer main) with main's two eval
+  cases, then rebuilt from a trace of plain Opus. Plain Opus reads every file, runs the trigger,
+  prints the value between layers and names the right cause in 2 calls. It never takes the cause
+  out to show the failure goes away, and asked for a fix it already writes an entry-point test with
+  before/after output.
+- `scripts/debug.py`: `--repro CMD --wrong TEXT --right TEXT` keeps the code as reproduced in
+  `.debug/before/`; `--prove FILE:LINE --as TEXT --why H` replaces only those lines in a copy of it
+  and reruns the trigger (proven when the wrong text is gone and the right one shows; a replacement
+  that spells the right answer is refused; dead ends are kept in a table); the first try also runs
+  the test suite on the broken code under a call tracer, so "why it was not caught" is a receipt.
+  `--gate [--regress CMD]`: diagnosis leaves every file as it was; a fix must be in the cause's
+  file, show the right text, and come with a check that passes now and fails with the cause's file
+  put back; with a VERIFY.md, a section's `path:` covers that file (the gate prints the lines).
+- SKILL.md is a goal, three stages and the helper, 30 lines from 120.
+- verify-loop: `.debug/` no longer makes the tree stale.
+- Evals, made fair to both arms: `distant-cause` asks both arms "don't fix it yet" (the plain prompt
+  asked nothing and was graded as diagnosis-only); `regression-proof` is graded on outcome (fee fixed
+  in app.py, tests reject the wrong fee, note kept, rejection reported) instead of verify-loop's
+  state file, which plain Opus never writes. The runner no longer pastes copies of existing files
+  (like `.debug/before/`) into the report as notes.
+- Results (3 tries per arm): distant-cause 3/3 with the skill vs 0/3 plain ($0.13 vs $0.07);
+  regression-proof 3/3 vs 3/3 ($0.18 vs $0.14). Main's skill as copied: 3/3 and $0.30-0.52 on
+  regression-proof. Tests: `tests/test_debug.py`, 14; eight disabled guards each caught.
+
 ## 1.30.0 - 2026-10-25 - feature-map: three stages built on what plain Opus already does
 
 - New general eval `feature-map-general`, not built around one trap: an ordinary pantry app with a CLI,

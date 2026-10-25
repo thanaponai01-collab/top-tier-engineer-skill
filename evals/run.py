@@ -360,11 +360,16 @@ def run_end_state(spec, workdir):
         return {"exit": None, "output": f"(end-state command failed: {exc})"}
 
 
-def report_text(parsed, workdir, changes):
-    """What the agent wrote: its final message, plus any notes files it created."""
+def report_text(parsed, workdir, changes, start=None):
+    """What the agent wrote: its final message, plus any notes files it created.
+
+    A copy of a file that was already there (a helper keeping the code as it was) is not a note.
+    """
     parts = [parsed["final_text"]]
+    shas = agent.snapshot(workdir) if changes["added"] else {}
+    kept = {sha for rel, sha in shas.items() if rel not in changes["added"]} | set((start or {}).values())
     for rel in changes["added"]:
-        if rel.lower().endswith(".md"):
+        if rel.lower().endswith(".md") and shas.get(rel) not in kept:
             try:
                 parts.append(f"\n\n<!-- file written by the agent: {rel} -->\n"
                              + grade.read(os.path.join(workdir, rel)))
@@ -516,7 +521,7 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
         if raw["timed_out"]:
             parsed["is_error"] = True
         changes = agent.diff_snapshots(before, agent.snapshot(workdir))
-        report = report_text(parsed, workdir, agent.diff_snapshots(last_start, agent.snapshot(workdir)))
+        report = report_text(parsed, workdir, agent.diff_snapshots(last_start, agent.snapshot(workdir)), last_start)
         end_output = run_end_state(case.get("actions"), workdir)
         checks = check_actions(case.get("actions"), parsed, changes, end_output, arm)
         checks += workdir_checks(case, os.path.join(workdir, "fixture"))

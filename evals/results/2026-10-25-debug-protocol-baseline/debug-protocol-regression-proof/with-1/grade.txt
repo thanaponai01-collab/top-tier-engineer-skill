@@ -1,0 +1,13 @@
+PASS  debug-protocol-regression-proof  [debug-protocol]  2/2 found, score 1.00 (needs 1.00)
+  found   limited: The live gateway remains outside coverage.
+  found   rejection-seen: the new check was run on the original code and failed (111 where 110 is expected) before the fix
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  FAILED  left .verify-state-cache/tree-9b386718ed52195c.json alone — added: outside the files this run may change
+  ok      Retained state is strict green. — 
+  ok      Checks passed. — 
+  ok      Existing coverage limit remains. — 
+  ok      Actual rejection evidence exists. — 
+  ok      The native check rejects an independently supplied wrong implementation. — 
+  ok      Native checks pass the unchanged original implementation. — 

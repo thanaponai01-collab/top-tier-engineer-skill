@@ -1,0 +1,543 @@
+[
+  {
+    "case": "debug-protocol-distant-cause",
+    "skill": "debug-protocol",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   cause-is-parse-amount \u2014 \"`int()` cuts off everything after the decimal point, so each amount loses its cents as soon as the CSV is read:\"\n  found   why-it-was-not-caught \u2014 \"The tests didn't catch this because `test_totals.py` only feeds whole numbers to `total()`.\"\n  MISSED  proven-both-directions\n  held    blame-where-the-symptom-shows",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 638,
+        "cacheReadInputTokens": 55210,
+        "cacheCreationInputTokens": 5277,
+        "webSearchRequests": 0,
+        "costUSD": 0.06604200000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 12,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the cause was proven in both directions, not just observed once"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced the failure before changing any code",
+        "ok": true,
+        "detail": "ran it: cd fixture && python report.py && python -I -c \"import sys; sys.path.insert(0,'.'); from parse import load; pr"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.06604200000000002,
+    "turns": 3,
+    "api_seconds": 11.448,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)\n  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens\n  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it\n  found   proven-both-directions: the cause was proven in both directions, not just observed once\n  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 14.3,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-distant-cause",
+    "skill": "debug-protocol",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   cause-is-parse-amount \u2014 \"`fixture/parse.py:6` cuts off the cents of every amount as it reads the file:\"\n  found   why-it-was-not-caught \u2014 \"The tests didn't catch it** because `test_totals.py` only passes whole numbers straight to `total()`.\"\n  MISSED  proven-both-directions\n  held    blame-where-the-symptom-shows",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 719,
+        "cacheReadInputTokens": 55177,
+        "cacheCreationInputTokens": 5243,
+        "webSearchRequests": 0,
+        "costUSD": 0.06738340000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 32,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the cause was proven in both directions, not just observed once"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced the failure before changing any code",
+        "ok": true,
+        "detail": "ran it: cd fixture && python -I -c \"import sys; sys.path.insert(0,'.'); from parse import load; print(load('data.csv')"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.06738340000000001,
+    "turns": 3,
+    "api_seconds": 12.586,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)\n  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens\n  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it\n  found   proven-both-directions: the cause was proven in both directions, not just observed once\n  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 15.4,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-distant-cause",
+    "skill": "debug-protocol",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   cause-is-parse-amount \u2014 \"`int()` cuts off the decimal part of every amount as it's read in, so the cents are gone before anything is added up.\"\n  found   why-it-was-not-caught \u2014 \"`test_totals.py` only tests `total()`, and only with whole numbers. Nothing tests `parse.py`, and no test uses decimal a\"\n  MISSED  proven-both-directions\n  held    blame-where-the-symptom-shows",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 698,
+        "cacheReadInputTokens": 55197,
+        "cacheCreationInputTokens": 5260,
+        "webSearchRequests": 0,
+        "costUSD": 0.0671034,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 54,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the cause was proven in both directions, not just observed once"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "reproduced the failure before changing any code",
+        "ok": true,
+        "detail": "ran it: cd fixture && python -I -c \"import sys; sys.path.insert(0,'.'); from parse import load; print(load('data.csv')"
+      },
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0671034,
+    "turns": 3,
+    "api_seconds": 14.065,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  debug-protocol-distant-cause  [debug-protocol]  3/3 found, score 1.00 (needs 1.00)\n  found   cause-is-parse-amount: parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens\n  found   why-it-was-not-caught: test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it\n  found   proven-both-directions: the cause was proven in both directions, not just observed once\n  held    blame-where-the-symptom-shows: report.py and totals.py are where the wrong number is seen, not where it is made\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 16.7,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-regression-proof",
+    "skill": "debug-protocol",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   limited \u2014 \"The live payment gateway is outside this local project, so nothing here tests it.\"\n  found   rejection-seen \u2014 \"`evidence/before_fix.txt`: the test run against the old code, with all 3 failing (`111 != 110` and `11 != 10`).\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2238,
+        "cacheReadInputTokens": 99623,
+        "cacheCreationInputTokens": 7424,
+        "webSearchRequests": 0,
+        "costUSD": 0.12411660000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 265,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "app.py adds the 10-cent fee SPEC.md states",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py",
+        "fixture/tests/test_total.py"
+      ],
+      "added": [
+        "fixture/evidence/after_fix.txt",
+        "fixture/evidence/before_fix.txt",
+        "fixture/tests/test_checkout_entry.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.12411660000000001,
+    "turns": 5,
+    "api_seconds": 29.71,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  debug-protocol-regression-proof  [debug-protocol]  2/2 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  found   rejection-seen: the new check was run on the original code and failed (111 where 110 is expected) before the fix\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 33.0,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-regression-proof",
+    "skill": "debug-protocol",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   limited \u2014 \"The live payment gateway isn't covered.\"\n  found   rejection-seen \u2014 \"`evidence/before_fix.txt`: all 3 tests failing on the original code, with exit code 1.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2193,
+        "cacheReadInputTokens": 99818,
+        "cacheCreationInputTokens": 7363,
+        "webSearchRequests": 0,
+        "costUSD": 0.1227676,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 93,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "app.py adds the 10-cent fee SPEC.md states",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py"
+      ],
+      "added": [
+        "fixture/evidence/after_fix.txt",
+        "fixture/evidence/before_fix.txt",
+        "fixture/tests/test_checkout_entry.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1227676,
+    "turns": 5,
+    "api_seconds": 37.71,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  debug-protocol-regression-proof  [debug-protocol]  2/2 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  found   rejection-seen: the new check was run on the original code and failed (111 where 110 is expected) before the fix\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 41.0,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-regression-proof",
+    "skill": "debug-protocol",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   limited \u2014 \"The live payment gateway is outside this project and wasn't tested.\"\n  found   rejection-seen \u2014 \"`rejection-before-fix.log`: the suite run on the unfixed code. It failed (exit 1, 8 failures), including the `checkout.p\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 3104,
+        "cacheReadInputTokens": 150938,
+        "cacheCreationInputTokens": 10010,
+        "webSearchRequests": 0,
+        "costUSD": 0.17240360000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 377,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "app.py adds the 10-cent fee SPEC.md states",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py",
+        "fixture/tests/test_total.py"
+      ],
+      "added": [
+        "fixture/evidence/passing-after-fix.log",
+        "fixture/evidence/rejection-before-fix.log"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.17240360000000002,
+    "turns": 7,
+    "api_seconds": 46.335,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  debug-protocol-regression-proof  [debug-protocol]  2/2 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  found   rejection-seen: the new check was run on the original code and failed (111 where 110 is expected) before the fix\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 49.9,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

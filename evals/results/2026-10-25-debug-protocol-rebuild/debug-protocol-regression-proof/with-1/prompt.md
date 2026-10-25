@@ -1,0 +1,3 @@
+Use debug-protocol. Diagnose the incorrect checkout fee, prove its root cause, then fix it and leave reusable regression evidence. Work in fixture/. Keep expectations grounded in SPEC.md, include a check through the actual checkout entry point, and retain executed rejection and passing evidence. Do not commit, push or deploy. Report coverage limits.
+
+The explicitly requested debug-protocol skill is at <tmp>\tte-plugin-_83dna1p\verify-loop\skills\debug-protocol\SKILL.md. Read and follow that SKILL.md before starting.

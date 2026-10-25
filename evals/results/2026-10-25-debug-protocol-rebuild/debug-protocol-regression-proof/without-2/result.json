@@ -1,0 +1,101 @@
+{
+  "case": "debug-protocol-regression-proof",
+  "skill": "debug-protocol",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   limited \u2014 \"**Live payment gateway:** it isn't part of this local project, so nothing here shows what fee is actually charged.\"\n  found   rejection-seen \u2014 \"The old test failed with `111 != 110`, and running `checkout.py` printed `111`.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 2649,
+      "cacheReadInputTokens": 144389,
+      "cacheCreationInputTokens": 8968,
+      "webSearchRequests": 0,
+      "costUSD": 0.15365779999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 323,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "Existing coverage limit remains.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "app.py adds the 10-cent fee SPEC.md states",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The native check rejects an independently supplied wrong implementation.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/VERIFY.md",
+      "fixture/app.py",
+      "fixture/tests/test_total.py"
+    ],
+    "added": [
+      "fixture/evidence/after-fix.txt",
+      "fixture/evidence/before-fix.txt"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.15365779999999998,
+  "turns": 7,
+  "api_seconds": 35.408,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 38.9,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

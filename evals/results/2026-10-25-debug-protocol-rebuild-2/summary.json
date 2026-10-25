@@ -1,0 +1,353 @@
+[
+  {
+    "case": "debug-protocol-regression-proof",
+    "skill": "debug-protocol",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   limited \u2014 \"The live payment gateway is outside this local project and has no automated check, as the existing VERIFY.md note says.\"\n  found   rejection-seen \u2014 \"With that line, `python checkout.py` printed `111`, run in a throwaway copy of the code as it was.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "debug-protocol"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "debug-protocol",
+        "path": "<tmp>\\tte-plugin-nbxroxba\\verify-loop\\skills\\debug-protocol\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2510,
+        "cacheReadInputTokens": 146409,
+        "cacheCreationInputTokens": 9503,
+        "webSearchRequests": 0,
+        "costUSD": 0.1555618,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 163,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "app.py adds the 10-cent fee SPEC.md states",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py"
+      ],
+      "added": [
+        "fixture/.debug/before/AGENTS.md",
+        "fixture/.debug/before/SPEC.md",
+        "fixture/.debug/before/VERIFY.md",
+        "fixture/.debug/before/app.py",
+        "fixture/.debug/before/checkout.py",
+        "fixture/.debug/before/tests/test_total.py",
+        "fixture/.debug/state.json",
+        "fixture/tests/test_checkout.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1555618,
+    "turns": 7,
+    "api_seconds": 29.075,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  debug-protocol-regression-proof  [debug-protocol]  2/2 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  found   rejection-seen: the check was seen failing on the original fee (111 where 110 is expected), run before the fix or with the original code put back, not only passing after it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 33.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-nbxroxba\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-regression-proof",
+    "skill": "debug-protocol",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   limited \u2014 \"The live payment gateway is outside this project and was not exercised.\"\n  found   rejection-seen \u2014 \"with the 11-cent line put back, `python -m unittest discover tests` fails both tests (`FAILED (failures=2)`, exit 1).\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "debug-protocol"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "debug-protocol",
+        "path": "<tmp>\\tte-plugin-nbxroxba\\verify-loop\\skills\\debug-protocol\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 2758,
+        "cacheReadInputTokens": 195654,
+        "cacheCreationInputTokens": 11414,
+        "webSearchRequests": 0,
+        "costUSD": 0.18567480000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 141,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "app.py adds the 10-cent fee SPEC.md states",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py"
+      ],
+      "added": [
+        "fixture/.debug/before/AGENTS.md",
+        "fixture/.debug/before/SPEC.md",
+        "fixture/.debug/before/VERIFY.md",
+        "fixture/.debug/before/app.py",
+        "fixture/.debug/before/checkout.py",
+        "fixture/.debug/before/tests/test_total.py",
+        "fixture/.debug/state.json",
+        "fixture/tests/test_checkout.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.18567480000000003,
+    "turns": 9,
+    "api_seconds": 40.757,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  debug-protocol-regression-proof  [debug-protocol]  2/2 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  found   rejection-seen: the check was seen failing on the original fee (111 where 110 is expected), run before the fix or with the original code put back, not only passing after it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 46.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-nbxroxba\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "debug-protocol-regression-proof",
+    "skill": "debug-protocol",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   limited \u2014 \"**Live payment gateway:** outside this local project, as VERIFY.md already says.\"\n  found   rejection-seen \u2014 \"With the old `app.py` put back, `python -m unittest discover tests` failed with 2 failures: the new entry-point test and\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "debug-protocol"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "debug-protocol",
+        "path": "<tmp>\\tte-plugin-nbxroxba\\verify-loop\\skills\\debug-protocol\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 2984,
+        "cacheReadInputTokens": 200205,
+        "cacheCreationInputTokens": 12596,
+        "webSearchRequests": 0,
+        "costUSD": 0.200561,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 195,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "Existing coverage limit remains.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "app.py adds the 10-cent fee SPEC.md states",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The native check rejects an independently supplied wrong implementation.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/VERIFY.md",
+        "fixture/app.py"
+      ],
+      "added": [
+        "fixture/.debug/before/AGENTS.md",
+        "fixture/.debug/before/SPEC.md",
+        "fixture/.debug/before/VERIFY.md",
+        "fixture/.debug/before/app.py",
+        "fixture/.debug/before/checkout.py",
+        "fixture/.debug/before/tests/test_total.py",
+        "fixture/.debug/state.json",
+        "fixture/tests/test_checkout_entry.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.200561,
+    "turns": 9,
+    "api_seconds": 49.252,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' <tmp>/tte-plugin-nbxroxba/verify-loop/ski)",
+      "shell(sed -n 300,420p <tmp>/tte-plugin-nbxroxba/verify-loo)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  debug-protocol-regression-proof  [debug-protocol]  2/2 found, score 1.00 (needs 1.00)\n  found   limited: The live gateway remains outside coverage.\n  found   rejection-seen: the check was seen failing on the original fee (111 where 110 is expected), run before the fix or with the original code put back, not only passing after it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' <tmp>/tte-plugin-nbxroxba/verify-loop/ski), shell(sed -n 300,420p C:/Users/\n  an unmet run check fails the case at any score",
+    "seconds": 53.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-nbxroxba\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

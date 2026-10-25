@@ -1,0 +1,77 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  2/3 found\n  found   cause-is-parse-amount \u2014 \"`fixture/parse.py:6` cuts off the cents of every amount as it reads the file:\"\n  found   why-it-was-not-caught \u2014 \"The tests didn't catch it** because `test_totals.py` only passes whole numbers straight to `total()`.\"\n  MISSED  proven-both-directions\n  held    blame-where-the-symptom-shows",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 719,
+      "cacheReadInputTokens": 55177,
+      "cacheCreationInputTokens": 5243,
+      "webSearchRequests": 0,
+      "costUSD": 0.06738340000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 32,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "the cause was proven in both directions, not just observed once"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code",
+      "ok": true,
+      "detail": "ran it: cd fixture && python -I -c \"import sys; sys.path.insert(0,'.'); from parse import load; print(load('data.csv')"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.06738340000000001,
+  "turns": 3,
+  "api_seconds": 12.586,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 15.4,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

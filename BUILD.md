@@ -165,6 +165,15 @@
   - Alarm `evals/results/2026-10-25-fm-alarm-{rebuild,rebuild-b,slim}`: 8/9; the miss left no passing rating receipt.
   - SKILL.md is goal + steps (done when, checked by) + tools; `-slim` batches match the longer doc.
 
+- debug-protocol as three stages (1.31.0) | proven (mechanics) / helps on the two-way proof (eval)
+  - `scripts/debug.py`: reproduce (code kept as reproduced), prove (only the cause replaced, rerun),
+    leave (tree as it was, or a fix at the cause held by a check that fails with it put back).
+    `tests/test_debug.py` 14 tests; 8 disabled guards each caught.
+  - Plain traces `evals/results/2026-10-25-debug-protocol-baseline` and `-plain-2`; rebuild
+    `evals/results/2026-10-25-debug-protocol-rebuild` (+ `-rebuild-2`, skill arm after the VERIFY.md
+    message): distant-cause 3/3 vs plain 0/3 ($0.13 vs $0.07), regression-proof 3/3 both ($0.18 vs $0.14).
+  - Not covered: a hang, a flaky failure, a cause outside one file's lines (data, environment, timing).
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

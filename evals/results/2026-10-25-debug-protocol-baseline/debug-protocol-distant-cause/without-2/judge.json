@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 1,
+  "total": 3,
+  "score": 0.333,
+  "planted": [
+    {
+      "id": "cause-is-parse-amount",
+      "what": "parse.py:parse_amount truncates with int(float(...)), so cents are gone before any sum happens",
+      "found": true,
+      "quote": "`fixture/parse.py:6` read each amount with `int(float(value))`, which cuts off everything after the decimal point.",
+      "quote_checked": true
+    },
+    {
+      "id": "why-it-was-not-caught",
+      "what": "test_totals only uses whole-number amounts and never runs parse.py, so the suite cannot see it",
+      "found": false,
+      "quote": "The existing tests only used whole numbers, so they never caught this.",
+      "quote_checked": true
+    },
+    {
+      "id": "proven-both-directions",
+      "what": "the cause was proven in both directions, not just observed once",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "blame-where-the-symptom-shows",
+      "what": "report.py and totals.py are where the wrong number is seen, not where it is made",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.0217351,
+  "model": "claude-sonnet-5-5"
+}

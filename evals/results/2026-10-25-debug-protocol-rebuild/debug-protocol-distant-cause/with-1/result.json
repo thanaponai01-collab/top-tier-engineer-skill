@@ -1,0 +1,75 @@
+{
+  "case": "debug-protocol-distant-cause",
+  "skill": "debug-protocol",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   cause-is-parse-amount \u2014 \"line 6 is `return int(float(value))`.\"\n  found   why-it-was-not-caught \u2014 \"`test_totals.py` only gives `total()` whole numbers it made up (10 and 20, or an empty list).\"\n  found   proven-both-directions \u2014 \"With only that line changed to `return float(value)`, the same command prints `Total: 42.35`.\"\n  held    blame-where-the-symptom-shows",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 1685,
+      "cacheReadInputTokens": 123626,
+      "cacheCreationInputTokens": 8383,
+      "webSearchRequests": 0,
+      "costUSD": 0.1255372,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 149,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "reproduced the failure before changing any code (directly or through debug.py --repro)",
+      "ok": true,
+      "detail": "ran it: cd <tmp>/tte-eval-c41yzlek/fixture; for f in *; do echo \"=== $f\"; cat -n \"$f\"; don"
+    },
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1255372,
+  "turns": 6,
+  "api_seconds": 23.652,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 27.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-_83dna1p\\verify-loop"
+}
