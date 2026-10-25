@@ -1,0 +1,51 @@
+{
+  "case": "evolve-maintain-distant-break",
+  "skill": "evolve-maintain",
+  "question": "asked to cache Order.total, does the agent keep the features far from the model working: a refund that appends to order.lines directly, and a backup that dumps every attribute with default=vars and restores with Order(**d)?",
+  "pass_score": 0.5,
+  "planted": [
+    {
+      "id": "refund-reads-stale-total",
+      "what": "billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt",
+      "must_name": ["refund"],
+      "must_say_any": [
+        "stale", "invalidat", "out of date", "old total", "wrong total", "lines.append",
+        "bypass", "directly", "mutat", "after the cache", "cached value"
+      ]
+    },
+    {
+      "id": "backup-leaks-cache",
+      "what": "ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key",
+      "must_name": ["restore"],
+      "must_say_any": [
+        "default=vars", "vars", "__dict__", "unexpected keyword", "TypeError", "extra key",
+        "round trip", "round-trip", "leak"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: total is computed once per unchanged order, and dashboard, refund, backup and restore print what they printed before",
+    "edits_allowed": ["*"],
+    "replays": [
+      {
+        "id": "features-still-work",
+        "kind": "outcome",
+        "what": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+        "replace": {"_check_features.py": "reference/check_features.py"},
+        "command": ["python", "_check_features.py"],
+        "expect": "pass",
+        "timeout": 180
+      },
+      {
+        "id": "suite-green",
+        "kind": "outcome",
+        "what": "the project's tests pass on the finished code",
+        "replace": {},
+        "command": ["python", "-m", "unittest", "discover", "tests"],
+        "expect": "pass"
+      }
+    ]
+  },
+  "actions": {}
+}

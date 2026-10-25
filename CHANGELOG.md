@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.34.0 - 2026-10-26 - evolve-maintain: three stages built on what plain Opus already does
+
+- evolve-maintain joins the plugin (manual-only, from top-tier-engineer main) with main's eval case,
+  then rebuilt from a trace of plain Opus. Plain Opus lists the files, reads every one in a single
+  call, names the features that read what it is changing, edits, and sometimes runs the CLI before and
+  after in scratch copies. It finds both distant breaks in the new case unaided. What it does not keep
+  is the before: the comparison runs are thrown away with the scratch copies.
+- `scripts/evolve.py`: before (`E` keeps the tree in `.evolve/before/`; `E --run CMD` records what a
+  command prints and the files it writes, always on the kept tree, so a run added after the edit still
+  records the old behavior; refused when it varies run to run, enters no repo code, or names a path
+  outside the repo), reach (every function, module body or config line that reads a name the change
+  touched, or a removed route string, is entered by a recorded run under a call tracer and an open()
+  audit hook, or has `- READER: out: <why>` in `.evolve/notes.md`; an `out:` that claims a run or test
+  covers it is refused), hold (every run reruns on the changed tree; a different output or written
+  file is fixed or marked `- run N: intended: <why>`). It prints a drafted answer. Runs set
+  `MSYS_NO_PATHCONV` so Git Bash does not rewrite `/v1/export` into a Windows path.
+- SKILL.md is a goal, three stages and the helper. verify-loop, debug-protocol, structure-report and
+  threat-model skip `.evolve/`.
+- New eval case `evolve-maintain-distant-break`: cache `Order.total`. The obvious cache leaves the
+  refund receipt stale (`billing/refunds.py` appends to `order.lines` directly) and breaks restore
+  (`ops/backup.py` dumps with `default=vars`, so the cached value lands in the backup), with the suite
+  green. Graded on outcome.
+- Results: plain 6/6 ($0.14 a try); main's skill as copied 5/6 ($0.25); rebuilt 6/6 ($0.23), then 3/3
+  on hidden-caller after the path fix ($0.19). No quality gain on apps small enough to read in one
+  call. Tests: `tests/test_evolve.py`, 20; 19 disabled guards each caught.
+- verify-loop `watch` takes its baseline before printing `Watching`, and its test changes the file only
+  after that line, with a 120 s timeout. Before, a slow interpreter start (three suites at once) let
+  the change land before the baseline, so the watcher polled forever and the suite hung.
+
 ## 1.33.0 - 2026-10-25 - threat-model: three stages built on what plain Opus already does
 
 - threat-model joins the plugin (manual-only, from top-tier-engineer main) with main's eval case,

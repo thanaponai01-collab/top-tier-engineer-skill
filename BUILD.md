@@ -196,6 +196,24 @@
   - Not covered: an app too big to read in one call (the case the doors count is for), and open attacks
     kept as plain tests leave the suite red until fixed (a later session saw 8-10 failures).
 
+- evolve-maintain as three stages (1.34.0) | proven (mechanics) / ties plain Opus on both cases (eval)
+  - `scripts/evolve.py`: before (`E` keeps the tree in `.evolve/before/`; `E --run CMD` records what a
+    command prints and writes, always on the kept tree, refused if it varies or enters no repo code),
+    reach (every function, module body or config line that reads a name the change touched is entered
+    by a recorded run under a call tracer and an open() audit hook, or has `out:` that does not claim a
+    run), hold (every run reruns on the changed tree; output or written files that differ are fixed or
+    marked `intended:`). `tests/test_evolve.py` 20 tests; 19 disabled guards each caught.
+  - New case `evolve-maintain-distant-break`: cache `Order.total`; the obvious cache leaves a stale
+    refund receipt and breaks backup/restore, suite green. Plus main's `evolve-maintain-hidden-caller`.
+  - Baseline `evals/results/2026-10-26-evolve-baseline`: plain 6/6 ($0.14); main's skill as copied 5/6
+    ($0.25; one try cached in the dashboard instead of `Order`). Rebuild `-evolve-rebuilt`: 6/6 ($0.23);
+    one try read the helper's source after Git Bash rewrote `/v1/export` inside a run. Fixed
+    (`MSYS_NO_PATHCONV`); `-evolve-rebuilt-pathfix` hidden-caller 3/3 ($0.19), no source reads.
+  - Every rebuilt try reached `EVOLVE-GATE: done`. The gate only ever flagged differences the user asked
+    for (v1 now 404s, a deleted v1 test): agents had named the distant breaks from reading, as plain Opus does.
+  - Not covered: an app too big to read in one call, where the reader list and the reruns are what
+    would find the break; callers outside the repo; non-Python readers beyond text lines.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

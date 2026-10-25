@@ -1,0 +1,86 @@
+{
+  "case": "evolve-maintain-hidden-caller",
+  "skill": "evolve-maintain",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"The `finance-ledger-export` job calls `/v1/export` every night at 02:00 and delivers the result to `sftp://finance.examp\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "evolve-maintain"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "evolve-maintain",
+      "path": "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1614,
+      "cacheReadInputTokens": 105452,
+      "cacheCreationInputTokens": 9414,
+      "webSearchRequests": 0,
+      "costUSD": 0.1287224,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 289,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1287224,
+  "turns": 5,
+  "api_seconds": 26.568,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 31.6,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-4qpmch93\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

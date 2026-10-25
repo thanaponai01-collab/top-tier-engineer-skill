@@ -1,0 +1,85 @@
+{
+  "case": "evolve-maintain-distant-break",
+  "skill": "evolve-maintain",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"If the cache were only cleared in `add_line`, the refund receipt and the order's new status would use the old total.\"\n  found   backup-leaks-cache \u2014 \"If the cache were stored on the order itself, it would end up in backup files, and `restore` would then crash when rebui\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 4613,
+      "cacheReadInputTokens": 162520,
+      "cacheCreationInputTokens": 12726,
+      "webSearchRequests": 0,
+      "costUSD": 0.226628,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1855,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the project's tests pass on the finished code",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/orders/model.py",
+      "fixture/tests/test_model.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.226628,
+  "turns": 7,
+  "api_seconds": 67.124,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 74.8,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

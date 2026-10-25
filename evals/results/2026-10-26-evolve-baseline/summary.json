@@ -1,0 +1,1036 @@
+[
+  {
+    "case": "evolve-maintain-distant-break",
+    "skill": "evolve-maintain",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"A cache that only reset in `add_line` would show the old total right after a refund.\"\n  found   backup-leaks-cache \u2014 \"A cache stored as an extra field on the order would get saved into backup files and then break restore.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 2618,
+        "cacheReadInputTokens": 57361,
+        "cacheCreationInputTokens": 9375,
+        "webSearchRequests": 0,
+        "costUSD": 0.1388562,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1039,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the project's tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/orders/model.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1388562,
+    "turns": 3,
+    "api_seconds": 27.327,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-distant-break  [evolve-maintain]  1/2 found, score 0.50 (needs 0.50)\n  found   refund-reads-stale-total: billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt\n  MISSED  backup-leaks-cache: ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 31.6,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-hidden-caller",
+    "skill": "evolve-maintain",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"the nightly job `finance-ledger-export` in `fixture/jobs/nightly.yaml:3` still calls `/v1/export`.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1052,
+        "cacheReadInputTokens": 77081,
+        "cacheCreationInputTokens": 6992,
+        "webSearchRequests": 0,
+        "costUSD": 0.0924242,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 253,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0924242,
+    "turns": 4,
+    "api_seconds": 13.817,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)\n  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 17.4,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-distant-break",
+    "skill": "evolve-maintain",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"A cache that only `add_line` clears would print the old total on the receipt and set the wrong status.\"\n  found   backup-leaks-cache \u2014 \"`restore` would then fail because `Order` doesn't accept a `_total` argument.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 4075,
+        "cacheReadInputTokens": 110056,
+        "cacheCreationInputTokens": 12041,
+        "webSearchRequests": 0,
+        "costUSD": 0.1998792,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1462,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the project's tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/orders/model.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1998792,
+    "turns": 5,
+    "api_seconds": 50.232,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-distant-break  [evolve-maintain]  1/2 found, score 0.50 (needs 0.50)\n  found   refund-reads-stale-total: billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt\n  MISSED  backup-leaks-cache: ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 55.5,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-distant-break",
+    "skill": "evolve-maintain",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"If the cache were only cleared in `add_line`, the refund receipt and the order's new status would use the old total.\"\n  found   backup-leaks-cache \u2014 \"If the cache were stored on the order itself, it would end up in backup files, and `restore` would then crash when rebui\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 4613,
+        "cacheReadInputTokens": 162520,
+        "cacheCreationInputTokens": 12726,
+        "webSearchRequests": 0,
+        "costUSD": 0.226628,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1855,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the project's tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/orders/model.py",
+        "fixture/tests/test_model.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.226628,
+    "turns": 7,
+    "api_seconds": 67.124,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-distant-break  [evolve-maintain]  1/2 found, score 0.50 (needs 0.50)\n  found   refund-reads-stale-total: billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt\n  MISSED  backup-leaks-cache: ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 74.8,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-hidden-caller",
+    "skill": "evolve-maintain",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"`scheduler.py` runs this job at 02:00 through the same router. If I delete the route, the finance ledger export will get\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1073,
+        "cacheReadInputTokens": 77477,
+        "cacheCreationInputTokens": 6463,
+        "webSearchRequests": 0,
+        "costUSD": 0.0886914,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 315,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0886914,
+    "turns": 4,
+    "api_seconds": 18.308,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)\n  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 21.9,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-hidden-caller",
+    "skill": "evolve-maintain",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"`jobs/nightly.yaml` has a `finance-ledger-export` job that hits `/v1/export` every night at 02:00\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1101,
+        "cacheReadInputTokens": 77483,
+        "cacheCreationInputTokens": 6431,
+        "webSearchRequests": 0,
+        "costUSD": 0.0889966,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 266,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0889966,
+    "turns": 4,
+    "api_seconds": 19.773,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)\n  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 23.4,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-distant-break",
+    "skill": "evolve-maintain",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"`shop.py refund` reads the total, then `billing/refunds.py` adds the refund line directly to the list, without going thr\"\n  found   backup-leaks-cache \u2014 \"A cached field on the order (including `functools.cached_property`) would end up in the backup file, and `restore` would\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "evolve-maintain"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "evolve-maintain",
+        "path": "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 6660,
+        "cacheReadInputTokens": 241582,
+        "cacheCreationInputTokens": 18938,
+        "webSearchRequests": 0,
+        "costUSD": 0.3330924,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2245,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the project's tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/orders/model.py",
+        "fixture/tests/test_model.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3330924,
+    "turns": 9,
+    "api_seconds": 77.064,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-distant-break  [evolve-maintain]  1/2 found, score 0.50 (needs 0.50)\n  found   refund-reads-stale-total: billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt\n  MISSED  backup-leaks-cache: ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key\n            named it, but never said what was wrong with it\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 89.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4qpmch93\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-distant-break",
+    "skill": "evolve-maintain",
+    "arm": "with",
+    "passed": false,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"`billing/refunds.py` adds the refund line to `order.lines` directly instead of going through `add_line`, so the cache ne\"\n  found   backup-leaks-cache \u2014 \"`ops/backup.py` saves every attribute of each order, so the cached value got saved too, and `restore` failed with `TypeE\"",
+    "actions_passed": false,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "evolve-maintain"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "evolve-maintain",
+        "path": "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 7294,
+        "cacheReadInputTokens": 301506,
+        "cacheCreationInputTokens": 19192,
+        "webSearchRequests": 0,
+        "costUSD": 0.3598052,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2378,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+        "ok": false,
+        "detail": "exit 1, expected 0",
+        "workdir": true
+      },
+      {
+        "check": "the project's tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/reports/dashboard.py"
+      ],
+      "added": [
+        "fixture/tests/test_dashboard.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3598052,
+    "turns": 12,
+    "api_seconds": 82.743,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-distant-break  [evolve-maintain]  2/2 found, score 1.00 (needs 0.50)\n  found   refund-reads-stale-total: billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt\n  found   backup-leaks-cache: ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 95.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4qpmch93\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-distant-break",
+    "skill": "evolve-maintain",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"A cache that's only cleared in `add_line` would report the wrong total after a refund and set the wrong status.\"\n  found   backup-leaks-cache \u2014 \"A cache stored on the order (e.g. `functools.cached_property`) would land in `backup.json`, and then `restore` would cra\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "evolve-maintain"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "evolve-maintain",
+        "path": "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 8062,
+        "cacheReadInputTokens": 317936,
+        "cacheCreationInputTokens": 21286,
+        "webSearchRequests": 0,
+        "costUSD": 0.39520320000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3009,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the project's tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/orders/model.py",
+        "fixture/tests/test_model.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.39520320000000003,
+    "turns": 11,
+    "api_seconds": 95.427,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-distant-break  [evolve-maintain]  2/2 found, score 1.00 (needs 0.50)\n  found   refund-reads-stale-total: billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt\n  found   backup-leaks-cache: ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 109.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4qpmch93\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-hidden-caller",
+    "skill": "evolve-maintain",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"`jobs/nightly.yaml:2-4` sets up a job called `finance-ledger-export` with `url: /v1/export`, delivered to `sftp://financ\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "evolve-maintain"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "evolve-maintain",
+        "path": "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2181,
+        "cacheReadInputTokens": 105053,
+        "cacheCreationInputTokens": 10790,
+        "webSearchRequests": 0,
+        "costUSD": 0.1509906,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 877,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1509906,
+    "turns": 5,
+    "api_seconds": 27.47,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)\n  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 32.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4qpmch93\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-hidden-caller",
+    "skill": "evolve-maintain",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"`jobs/nightly.yaml:2-4` runs `finance-ledger-export` at 02:00. It calls `url: /v1/export`\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "evolve-maintain"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "evolve-maintain",
+        "path": "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1521,
+        "cacheReadInputTokens": 82861,
+        "cacheCreationInputTokens": 9465,
+        "webSearchRequests": 0,
+        "costUSD": 0.1227442,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 297,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1227442,
+    "turns": 4,
+    "api_seconds": 23.298,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)\n  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 28.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4qpmch93\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "evolve-maintain-hidden-caller",
+    "skill": "evolve-maintain",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   nightly-job-caller \u2014 \"The `finance-ledger-export` job calls `/v1/export` every night at 02:00 and delivers the result to `sftp://finance.examp\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "evolve-maintain"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "evolve-maintain",
+        "path": "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1614,
+        "cacheReadInputTokens": 105452,
+        "cacheCreationInputTokens": 9414,
+        "webSearchRequests": 0,
+        "costUSD": 0.1287224,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 289,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1287224,
+    "turns": 5,
+    "api_seconds": 26.568,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)\n  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 31.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-4qpmch93\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

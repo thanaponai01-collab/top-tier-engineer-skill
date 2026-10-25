@@ -23,6 +23,10 @@ And `threat-model` (manual-only, `/verify-loop:threat-model`): what can an attac
 `threat.py` counts every way in, makes each one attacked or shown to have nothing behind it, keeps
 each attack as a test the suite runs, and accepts a fix only when every open attack passes and fails
 again with the change put back.
+And `evolve-maintain` (manual-only, `/verify-loop:evolve-maintain`): change a running system without
+breaking it. `evolve.py` keeps the tree as it was and records what each command prints and writes on
+it, makes every function or config line that reads what changed get entered by a recorded run (or a
+reason), and reruns every command on the changed tree: any difference is fixed or marked as asked for.
 
 ## Install (Claude Code)
 
@@ -78,6 +82,8 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
   notes in `.structure/notes.md`) over `scripts/structure-report.py` (`--json`, `--baseline FILE`).
 - `plugin/skills/threat-model/` — the threat-model skill; `scripts/threat.py` (doors, `--attack CMD
   --door FILE::FUNC --gets TEXT`, `--gate`; notes in `.threat/doors.md`).
+- `plugin/skills/evolve-maintain/` — the evolve-maintain skill; `scripts/evolve.py` (keeps the tree,
+  `--run CMD`, `--gate`; notes in `.evolve/notes.md`).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

@@ -1,0 +1,17 @@
+[
+  {"id": "A-1001", "customer": "acme", "status": "open", "lines": [
+    {"id": "L1", "sku": "WIDGET", "price_cents": 1250, "qty": 4},
+    {"id": "L2", "sku": "GADGET", "price_cents": 8999, "qty": 1},
+    {"id": "L3", "sku": "CABLE", "price_cents": 399, "qty": 10}]},
+  {"id": "A-1002", "customer": "globex", "status": "open", "lines": [
+    {"id": "L1", "sku": "GADGET", "price_cents": 8999, "qty": 3}]},
+  {"id": "A-1003", "customer": "acme", "status": "open", "lines": [
+    {"id": "L1", "sku": "MOUNT", "price_cents": 2450, "qty": 2},
+    {"id": "L2", "sku": "CABLE", "price_cents": 399, "qty": 6}]},
+  {"id": "A-1004", "customer": "initech", "status": "open", "lines": [
+    {"id": "L1", "sku": "WIDGET", "price_cents": 1250, "qty": 20},
+    {"id": "L2", "sku": "MOUNT", "price_cents": 2450, "qty": 4}]},
+  {"id": "A-1005", "customer": "globex", "status": "open", "lines": [
+    {"id": "L1", "sku": "SCREEN", "price_cents": 15900, "qty": 1},
+    {"id": "L2", "sku": "CABLE", "price_cents": 399, "qty": 2}]}
+]

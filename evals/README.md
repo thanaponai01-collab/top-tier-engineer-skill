@@ -151,6 +151,19 @@ suspicion with a throwaway script, and in the handoff case the bare session re-r
 spots the change. The rebuilt skill also passes 15/15 at $0.40. What differs is what is left: the
 skill's attacks stay in the suite, so its second session found the leak as failing tests.
 
+### evolve-maintain cases
+
+| case | planted | trap |
+|---|---|---|
+| `evolve-maintain-hidden-caller` | (main's case) the deprecated `/v1/export` still has a caller: `jobs/nightly.yaml`'s finance job, a string a code search for imports misses. Graded on outcome: every job still gets a 200 and the finance job its CSV | removing v1 because the web app moved |
+| `evolve-maintain-distant-break` | asked to cache `Order.total`. Two features far from the model break under the obvious cache while the suite stays green: `billing/refunds.py` appends to `order.lines` directly after the total was read (stale receipt), and `ops/backup.py` dumps with `default=vars`, so the cached value lands in the backup and `restore`'s `Order(**d)` raises. Graded on outcome: total summed once, and dashboard, refund, backup and restore print what they did before | a `cached_property` cleared in `add_line`, green tests taken as "nothing else changed" |
+
+Plain Opus passes both (6/6, mean $0.14): it reads the whole app in one call, names both distant
+breaks from that reading, and in one try in three runs the CLI before and after in scratch copies.
+Main's skill as copied: 5/6 (one try moved the cache into the dashboard instead of `Order`). The
+rebuilt skill: 9/9 ($0.19-0.23), every try driving the gate to done; the gate flagged only differences
+the user asked for. Small apps read in one call do not separate the arms.
+
 ## Running it
 
 Every agent run costs real money. Dry-run first:

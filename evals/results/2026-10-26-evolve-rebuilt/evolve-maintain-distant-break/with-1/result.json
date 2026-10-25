@@ -1,0 +1,94 @@
+{
+  "case": "evolve-maintain-distant-break",
+  "skill": "evolve-maintain",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"the refund added its credit line straight onto `order.lines`, which skips the cache reset. Without a fix, the refund's s\"\n  found   backup-leaks-cache \u2014 \"If the cached total were a normal attribute, it would end up in the backup file, and `restore` would then fail on the un\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "evolve-maintain"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "evolve-maintain",
+      "path": "<tmp>\\tte-plugin-ut_h044e\\verify-loop\\skills\\evolve-maintain\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 3801,
+      "cacheReadInputTokens": 166419,
+      "cacheCreationInputTokens": 15364,
+      "webSearchRequests": 0,
+      "costUSD": 0.23227180000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1209,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the project's tests pass on the finished code",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/billing/refunds.py",
+      "fixture/orders/model.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.23227180000000003,
+  "turns": 7,
+  "api_seconds": 50.908,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 65.7,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-ut_h044e\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

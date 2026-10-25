@@ -1,0 +1,94 @@
+{
+  "case": "evolve-maintain-distant-break",
+  "skill": "evolve-maintain",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   refund-reads-stale-total \u2014 \"`shop.py refund` reads the total, then `billing/refunds.py` adds the refund line directly to the list, without going thr\"\n  found   backup-leaks-cache \u2014 \"A cached field on the order (including `functools.cached_property`) would end up in the backup file, and `restore` would\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "evolve-maintain"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "evolve-maintain",
+      "path": "<tmp>\\tte-plugin-4qpmch93\\verify-loop\\skills\\evolve-maintain\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 6660,
+      "cacheReadInputTokens": 241582,
+      "cacheCreationInputTokens": 18938,
+      "webSearchRequests": 0,
+      "costUSD": 0.3330924,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2245,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the project's tests pass on the finished code",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/orders/model.py",
+      "fixture/tests/test_model.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.3330924,
+  "turns": 9,
+  "api_seconds": 77.064,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 89.1,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-4qpmch93\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

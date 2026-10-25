@@ -1,0 +1,12 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   nightly-job-caller — "`jobs/nightly.yaml:2-4` sets up a job called `finance-ledger-export` with `url: /v1/export`, delivered to `sftp://financ"
+
+Phrase grader (grade.py), for comparison:
+PASS  evolve-maintain-hidden-caller  [evolve-maintain]  1/1 found, score 1.00 (needs 1.00)
+  found   nightly-job-caller: jobs/nightly.yaml's finance-ledger-export job still calls /v1/export every night through scheduler.py. It is a caller in a config string, which a code search for imports misses. It must be moved to /v2/export?fmt=csv (or the removal held) before v1 goes.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      every job in jobs/nightly.yaml still dispatches to a 200, and the finance job still receives CSV — 

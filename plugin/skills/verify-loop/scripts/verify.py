@@ -93,7 +93,7 @@ import gates
 RECIPE = "VERIFY.md"
 GENERIC_DIRS = {"tests", "test", "__tests__", "spec", "specs", "e2e", "integration", "unit"}
 SKIP_DIRS = {".git", "node_modules", "venv", ".venv", "__pycache__", "dist", "build", "target",
-             "vendor", ".tox", "fixture", "fixtures", ".wire", ".debug", ".structure", ".threat"}
+             "vendor", ".tox", "fixture", "fixtures", ".wire", ".debug", ".structure", ".threat", ".evolve"}
 TEST_PY = re.compile(r"^(test_.+|.+_test)\.py$")
 TEST_JS = re.compile(r"^.+\.(test|spec)\.(js|jsx|ts|tsx|mjs|cjs)$")
 TEST_GO = re.compile(r"^.+_test\.go$")
@@ -3145,8 +3145,9 @@ def cmd_watch(repo, interval=2.0, max_runs=0):
     if not os.path.isfile(path):
         print(f"no {RECIPE} in {repo}. Run `verify.py init` to draft one.")
         return 2
-    print(f"Watching {repo} for changes (interval: {interval}s)... Press Ctrl+C to stop.")
+    # Baseline first: a change made once "Watching" is printed is always seen.
     last_sig = tree_sig(repo, fast=True)
+    print(f"Watching {repo} for changes (interval: {interval}s)... Press Ctrl+C to stop.", flush=True)
     runs_done = 0
     try:
         while True:

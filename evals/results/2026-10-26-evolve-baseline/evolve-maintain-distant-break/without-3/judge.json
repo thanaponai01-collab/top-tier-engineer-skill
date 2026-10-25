@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "refund-reads-stale-total",
+      "what": "billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt",
+      "found": true,
+      "quote": "If the cache were only cleared in `add_line`, the refund receipt and the order's new status would use the old total.",
+      "quote_checked": true
+    },
+    {
+      "id": "backup-leaks-cache",
+      "what": "ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key",
+      "found": true,
+      "quote": "If the cache were stored on the order itself, it would end up in backup files, and `restore` would then crash when rebuilding orders from them.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0220931,
+  "model": "claude-sonnet-5-5"
+}

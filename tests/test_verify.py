@@ -921,7 +921,6 @@ class ScaleAndEfficiency(unittest.TestCase):
             self.assertIn("Discovered 2 endpoint(s)", out)
 
     def test_watch_detects_change_and_runs(self):
-        import threading, time
         with tempfile.TemporaryDirectory() as tmp:
             import subprocess
             subprocess.run(["git", "init", "-q"], cwd=tmp, check=True)
@@ -931,14 +930,21 @@ class ScaleAndEfficiency(unittest.TestCase):
             subprocess.run(["git", "-c", "user.name=T", "-c", "user.email=t@example.com", "commit", "-qm", "init"],
                            cwd=tmp, check=True)
 
-            def make_change():
-                time.sleep(0.3)
+            # Change the file only once the watcher says it is watching (its baseline is taken by then),
+            # and never wait forever: a watcher that misses the change would poll until killed.
+            p = subprocess.Popen([sys.executable, os.path.join(SCRIPTS["verify.py"], "verify.py"), "watch", tmp,
+                                  "--interval", "0.1", "--max-runs", "1"],
+                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8")
+            try:
+                first = p.stdout.readline()
+                self.assertIn("Watching", first)
                 write(tmp, "app.py", "x = 2\n")
-
-            t = threading.Thread(target=make_change)
-            t.start()
-            code, out, _ = run("verify.py", "watch", tmp, "--interval", "0.1", "--max-runs", "1")
-            t.join()
+                rest, _ = p.communicate(timeout=120)
+            except subprocess.TimeoutExpired:
+                p.kill()
+                rest, _ = p.communicate()
+                self.fail(f"watch never saw the change:\n{first}{rest}")
+            code, out = p.returncode, first + rest
             self.assertEqual(code, 0, out)
             self.assertIn("Change detected", out)
 

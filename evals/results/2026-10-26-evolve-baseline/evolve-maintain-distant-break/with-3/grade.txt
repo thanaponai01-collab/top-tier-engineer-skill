@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   refund-reads-stale-total — "`billing/refunds.py` adds the refund line to `order.lines` directly instead of going through `add_line`, so the cache ne"
+  found   backup-leaks-cache — "`ops/backup.py` saves every attribute of each order, so the cached value got saved too, and `restore` failed with `TypeE"
+
+Phrase grader (grade.py), for comparison:
+PASS  evolve-maintain-distant-break  [evolve-maintain]  2/2 found, score 1.00 (needs 0.50)
+  found   refund-reads-stale-total: billing/refunds.py appends the credit line to order.lines directly (not add_line) after the CLI has already read total, so a cache invalidated only in add_line shows the old total on the receipt
+  found   backup-leaks-cache: ops/backup.py dumps with default=vars, so a cached total (or _total) lands in the backup and restore's Order(**d) raises TypeError on the extra key
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  20 reads of every order cost at most two sums; dashboard unchanged; refund shows the new total and stores it; backup then restore round-trips and a refund after it is right — exit 1, expected 0
+  ok      the project's tests pass on the finished code — 
