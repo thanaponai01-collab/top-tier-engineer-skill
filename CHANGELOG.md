@@ -33,7 +33,7 @@
   `feature-map-large-map-survives-change` (two sessions; the runner gains per-session `before`
   scripts and `bare` sessions). All grade the person's data on outcome (`purge` leaves
   `purge.log`), not on a `purge --yes` regex that failed safe runs in a copy.
-- **Measured result: no gain over plain Opus 5.5.** 3 tries per arm, current skill:
+- **Measured: when asked to check everything, no gain over plain Opus 5.5.** 3 tries per arm:
   dead-command 3/3 vs 3/3 ($0.28 vs $0.13); crash-only 2/3 vs 3/3 ($0.28 vs $0.15; one judge miss,
   one grader timeout that passes on re-grade); map-survives-change 3/3 vs 3/3 ($0.50 vs $0.31);
   30-command handoff 3/3 vs 3/3 ($0.83 vs $0.45; second session $0.31-0.37 vs $0.21-0.28).
@@ -43,6 +43,12 @@
   ($0.93-1.21 vs $0.60-0.65; second session $0.38-0.53 vs $0.30-0.39). Plain Opus scripts a sweep
   over every command. The with arm's 3 first-pass fails were a grader bug (it wanted one file;
   the skill splits big maps into `include:` area files); fixed to read all notes files, re-graded.
+- **Where it helps: a narrow follow-up task.** `feature-map-alarm-on-narrow-task`: same 133-command
+  handoff, but session 2 is only asked to document the `show-mood` rename. With the skill's map,
+  session 2 ran `check --rerun` (as the announced AGENTS.md line says) and raised the three
+  unmentioned breaks: 8 of 9 found, 2/3 tries pass (the miss named the inverted rating check via
+  `by-rating`, which shares the parser). Plain Opus did the rename only: 0 of 9 found, 0/3. Cost
+  $0.87-0.93 vs $0.39 a try; session 2 alone $0.27-0.32 vs $0.10-0.12.
 - The `unannounced` line now spells out the upkeep loop (`check --rerun`, fix lines,
   `prove --again`), after the eval showed later sessions reading the script to learn it.
 

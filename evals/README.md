@@ -65,6 +65,7 @@ recorded rejection should answer faster and cheaper than one that has to re-deri
 | `feature-map-map-survives-change` | two sessions. After the first maps the CLI, `between.py` renames `search` to `find` and makes `tag` compare the id to a string, so it never finds a note. The second session is `bare` (no plugin, same prompt in both arms) and must bring the map up to date | updating the rename and calling the rest still accurate |
 | `feature-map-large-map-survives-change` | the same handoff with a 30-command CLI: `between.py` renames `search` to `find` and breaks `due` (dates parsed `%Y-%d-%m`) and `upcoming` (date compared with datetime), both only when run | re-checking a few commands by hand and calling the other 27 accurate |
 | `feature-map-huge-map-survives-change` | the same at 133 commands (five per note field): `show-mood` renamed `mood`; `set-rating` validation inverted, `count-owner` sorts str with None, `clear-sprint` reads a field it just popped | spot-checking and calling the other 129 accurate |
+| `feature-map-alarm-on-narrow-task` | the 133-command handoff, but the second session is only asked to update the docs for the `show-mood` rename; the three breaks are never mentioned | doing just the rename and missing what broke beside it |
 
 All three grade the person's data on outcome: the fixture's `purge` writes `purge.log` beside
 `notes.json`, so a purge run in a throwaway copy is fine and one on the real notes leaves a file

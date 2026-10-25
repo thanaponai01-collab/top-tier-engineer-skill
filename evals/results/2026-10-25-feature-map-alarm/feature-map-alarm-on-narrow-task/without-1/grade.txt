@@ -1,0 +1,22 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  0/3 found
+  MISSED  set-rating-broken
+  MISSED  count-owner-broken
+  MISSED  clear-sprint-broken
+
+Phrase grader (grade.py), for comparison:
+FAIL  feature-map-alarm-on-narrow-task  [feature-map]  0/3 found, score 0.00 (needs 1.00)
+  MISSED  set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.
+            never named: set-rating
+            named it, but never said what was wrong with it
+  MISSED  count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.
+            never named: count-owner
+            named it, but never said what was wrong with it
+  MISSED  clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.
+            never named: clear-sprint
+            named it, but never said what was wrong with it
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  FAILED  a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes — exit 1, expected 0

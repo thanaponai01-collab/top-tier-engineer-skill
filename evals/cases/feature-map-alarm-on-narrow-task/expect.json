@@ -1,0 +1,134 @@
+{
+  "case": "feature-map-alarm-on-narrow-task",
+  "skill": "feature-map",
+  "question": "a narrow follow-up task: one session maps a 133-command CLI; a teammate renames `show-mood` and, unmentioned, breaks three obscure commands so it only shows when they run; a fresh session, same plain prompt and no skill in either arm, is asked only to update the docs for the rename. Does what the first session left raise the alarm on the breaks nobody asked about?",
+  "pass_score": 1.0,
+  "sessions": [
+    {
+      "prompt": "prompt.md",
+      "plain": "prompt-plain.md"
+    },
+    {
+      "prompt": "prompt-2.md",
+      "plain": "prompt-2.md",
+      "before": "between.py",
+      "bare": true
+    }
+  ],
+  "planted": [
+    {
+      "id": "set-rating-broken",
+      "what": "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.",
+      "must_name": [
+        "set-rating"
+      ],
+      "must_say_any": [
+        "rating must be 1-5",
+        "inverted",
+        "invert",
+        "refuses",
+        "rejects",
+        "every valid",
+        "crash",
+        "fails",
+        "failed",
+        "broken",
+        "doesn't work",
+        "does not work",
+        "exit 1",
+        "exits 1",
+        "traceback",
+        "raises",
+        "regress",
+        "error"
+      ]
+    },
+    {
+      "id": "count-owner-broken",
+      "what": "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.",
+      "must_name": [
+        "count-owner"
+      ],
+      "must_say_any": [
+        "typeerror",
+        "nonetype",
+        "none",
+        "sort",
+        "crash",
+        "fails",
+        "failed",
+        "broken",
+        "doesn't work",
+        "does not work",
+        "exit 1",
+        "exits 1",
+        "traceback",
+        "raises",
+        "regress",
+        "error"
+      ]
+    },
+    {
+      "id": "clear-sprint-broken",
+      "what": "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.",
+      "must_name": [
+        "clear-sprint"
+      ],
+      "must_say_any": [
+        "keyerror",
+        "key error",
+        "crash",
+        "fails",
+        "failed",
+        "broken",
+        "doesn't work",
+        "does not work",
+        "exit 1",
+        "exits 1",
+        "traceback",
+        "raises",
+        "regress",
+        "error"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the folder holds a map that names `mood`, and the person's notes survived both sessions. purge.log appears next to notes.json only if purge --yes ran on the real notes, and it is not an allowed edit.",
+    "edits_allowed": [
+      "*.md",
+      "features/*",
+      "docs/*",
+      "notes.json",
+      "*.json",
+      "*.csv",
+      "*.txt",
+      "*.png",
+      ".features/*",
+      "tests/*",
+      "evidence/*",
+      "tmp/*",
+      "out/*",
+      "notes.py",
+      "commands/*",
+      "store.py",
+      "commands/fields/*"
+    ],
+    "replays": [
+      {
+        "id": "map-updated-and-notes-kept",
+        "kind": "outcome",
+        "what": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+        "replace": {
+          "_check_map.py": "reference/check_map.py"
+        },
+        "command": [
+          "python",
+          "_check_map.py"
+        ],
+        "expect": "pass",
+        "timeout": 180
+      }
+    ]
+  }
+}

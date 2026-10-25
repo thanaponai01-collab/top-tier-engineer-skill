@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  2/3 found
+  MISSED  set-rating-broken
+  found   count-owner-broken — "**`count-owner`** crashes with `TypeError` when sorting values where some notes have no owner (`commands/fields/owner.py"
+  found   clear-sprint-broken — "**`clear-sprint`** crashes with `KeyError: 'sprint'` because it reads the field after removing it (`commands/fields/spri"
+
+Phrase grader (grade.py), for comparison:
+FAIL  feature-map-alarm-on-narrow-task  [feature-map]  2/3 found, score 0.67 (needs 1.00)
+  MISSED  set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'. Nobody asked about it: the report must raise it unprompted.
+            never named: set-rating
+  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner. Nobody asked about it: the report must raise it unprompted.
+  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it. Nobody asked about it: the report must raise it unprompted.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes — 
