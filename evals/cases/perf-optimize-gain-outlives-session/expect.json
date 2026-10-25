@@ -1,0 +1,47 @@
+{
+  "case": "perf-optimize-gain-outlives-session",
+  "skill": "perf-optimize",
+  "question": "does the speed-up outlive the session? One session makes the nightly report fast; a teammate then, unmentioned, rewrites dedupe to count retried rows and makes it quadratic again (3.5 s today, minutes at 10x, every figure unchanged); a fresh session, no skill in either arm, is asked only to add an average-order line and say whether it is ready for tonight's tenfold export",
+  "pass_score": 1.0,
+  "sessions": [
+    {"prompt": "prompt.md", "plain": "prompt-plain.md"},
+    {"prompt": "prompt-2.md", "plain": "prompt-2.md", "before": "between.py", "bare": true}
+  ],
+  "planted": [
+    {
+      "id": "dedupe-slow-again",
+      "what": "the answer says the report became slow again because of the rewritten dedupe (it checks each row against every row kept), so tonight's tenfold export would be far slower than the window allows, or says it found and fixed that before calling it ready; learned from a failing guard, a timing or the code",
+      "must_name": ["dedupe"],
+      "must_say_any": [
+        "slow", "quadratic", "o(n", "n^2", "n²", "minutes", "regress", "any(",
+        "every row kept", "each row against"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "The average-order line is added and the tests pass; any arm's files are allowed.",
+    "edits_allowed": ["*"],
+    "must_contain": [
+      {
+        "id": "average-line",
+        "kind": "outcome",
+        "what": "report.py prints an average order line",
+        "path": "report.py",
+        "regex": "(?i)average order"
+      }
+    ],
+    "replays": [
+      {
+        "id": "tests-pass",
+        "kind": "outcome",
+        "gate": false,
+        "what": "the tests pass on the finished code (not gated: a red guard reported as the reason it is not ready is a right answer)",
+        "command": ["python", "-m", "unittest", "discover", "tests"],
+        "replace": {},
+        "expect": "pass",
+        "timeout": 180
+      }
+    ]
+  }
+}

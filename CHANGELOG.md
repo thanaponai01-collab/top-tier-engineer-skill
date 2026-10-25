@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.35.0 - 2026-10-26 - perf-optimize: three stages built on what plain Opus already does
+
+- perf-optimize joins the plugin (manual-only, from top-tier-engineer main) with main's two eval
+  cases, then rebuilt from a trace of plain Opus. Plain Opus lists the files, reads every one in a
+  single call, times the report, builds a bigger export, profiles, fixes both causes in one edit,
+  diffs the output and runs the tests. It finds every cause here and never changes a figure. What it
+  never leaves is a guard: in 0 of 3 tries did the suite fail with the slow code put back.
+- `scripts/perf.py`: measure (`P --measure CMD --size N` times a workload on the code as it was in a
+  throwaway copy and profiles one run with cProfile; refused without a size, on a failing run, or when
+  the output moves between runs; the tree is kept in `.perf/before/`, so a size added after an edit
+  still times the old code; two sizes give the growth, about n^k, and call counts that grow faster
+  than the input), change (after a change every workload prints the same bytes, its slowest run beats
+  the fastest run of the old code, alternated unless the gain is 3x past the recorded range, and every
+  changed function held 2% of a profile or has a reason in `.perf/notes.md`), guard (`--guard CMD`
+  passes now and fails with each changed file put back alone). It prints a drafted answer.
+- SKILL.md is a goal, three stages and the helper; saved numbers with nothing to run still go by
+  `references/benchmark-validity.md`. verify-loop, debug-protocol, structure-report and threat-model
+  skip `.perf/`.
+- Two new eval cases: `perf-optimize-general` (a nightly report reading its region table again per
+  row and deduping against a list, a layout function whose comment calls it the slow part, and a
+  first-row-wins rule a dict shortcut breaks; graded on outcome: same bytes, 1x under 0.4 s, 10x
+  under 6 s), `perf-optimize-gain-outlives-session` (a teammate makes dedupe quadratic again,
+  unmentioned; a bare second session only adds an average line).
+- Results, 3 tries per arm: plain 12/12 ($0.20 a try); main's skill as copied 4/4 ($0.28); rebuilt
+  12/12. After timing a run over 20 s once and skipping its profile, general $0.24 vs plain $0.16 and
+  the handoff $0.43 vs $0.42 (the first rebuild spent $0.81 and $1.34 timing the old code at 10x).
+  The rebuilt skill left a guard in 6/6 general tries, plain in 0/3. The handoff ties: a plain second
+  session times the run and finds the slowdown unaided. Tests: `tests/test_perf.py`, 16; 14 disabled
+  guards each caught.
+
 ## 1.34.0 - 2026-10-26 - evolve-maintain: three stages built on what plain Opus already does
 
 - evolve-maintain joins the plugin (manual-only, from top-tier-engineer main) with main's eval case,

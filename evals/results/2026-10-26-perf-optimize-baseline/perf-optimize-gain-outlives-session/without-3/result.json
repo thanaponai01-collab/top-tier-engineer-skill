@@ -1,0 +1,97 @@
+{
+  "case": "perf-optimize-gain-outlives-session",
+  "skill": "perf-optimize",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   dedupe-slow-again \u2014 \"`dedupe` in `report.py` compared each row against every row already kept, so its run time grew with the square of the ro\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 40,
+      "outputTokens": 7887,
+      "cacheReadInputTokens": 481745,
+      "cacheCreationInputTokens": 26004,
+      "webSearchRequests": 0,
+      "costUSD": 0.46228100000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1811,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "report.py prints an average order line",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the tests pass on the finished code (not gated: a red guard reported as the reason it is not ready is a right answer)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/regions.py",
+      "fixture/report.py",
+      "fixture/tests/test_report.py"
+    ],
+    "added": [
+      "scratch/after.err",
+      "scratch/after.txt",
+      "scratch/before.err",
+      "scratch/before.txt",
+      "scratch/orders10x.csv",
+      "scratch/r/data/regions.csv",
+      "scratch/r/layout.py",
+      "scratch/r/regions.py",
+      "scratch/r/report.py",
+      "scratch/report.orig.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.46228100000000005,
+  "turns": 20,
+  "api_seconds": 117.886,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 808.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

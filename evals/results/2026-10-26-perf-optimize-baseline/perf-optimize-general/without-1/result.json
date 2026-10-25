@@ -1,0 +1,97 @@
+{
+  "case": "perf-optimize-general",
+  "skill": "perf-optimize",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   regions-reread-per-row \u2014 \"`tax_rate()` and `name()` re-read `regions.csv` for every order.\"\n  found   dedupe-quadratic \u2014 \"ten times the rows meant roughly a hundred times the work.\"\n  found   measured-before-and-after \u2014 \"The report now runs in about 0.4 seconds on a file ten times the size of last night's export. Before the fix, that file \"\n  held    layout-is-the-cost",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1949,
+      "cacheReadInputTokens": 100260,
+      "cacheCreationInputTokens": 10291,
+      "webSearchRequests": 0,
+      "costUSD": 0.14140000000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 488,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "same output byte for byte; 1x under 0.4 s, 10x under 6 s",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the tests pass on the finished code",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "with the original report.py and regions.py put back, the tests fail (a guard was left)",
+      "ok": true,
+      "detail": "advisory, not met: exit 0, expected non-zero",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/regions.py",
+      "fixture/report.py"
+    ],
+    "added": [
+      "work/after.txt",
+      "work/before.txt",
+      "work/big.csv",
+      "work/big_after.txt",
+      "work/big_before.txt"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.14140000000000003,
+  "turns": 5,
+  "api_seconds": 26.979,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 305.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

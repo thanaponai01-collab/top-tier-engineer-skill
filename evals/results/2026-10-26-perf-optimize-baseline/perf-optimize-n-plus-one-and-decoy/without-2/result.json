@@ -1,0 +1,63 @@
+{
+  "case": "perf-optimize-n-plus-one-and-decoy",
+  "skill": "perf-optimize",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   n-plus-one-customer-totals \u2014 \"It makes one query per customer (`report.py:3-9`): it fetches every customer, then runs a separate `SUM` for each one.\"\n  found   unbounded-even-if-fast-today \u2014 \"Those times are the best case, because this is in-memory SQLite and each query costs only microseconds.\"\n  found   fix-single-aggregate-query \u2014 \"**Fix:** use one aggregate query.\"\n  held    recent-orders-is-fine\n  held    not-excused-by-its-own-index",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 2117,
+      "cacheReadInputTokens": 76531,
+      "cacheCreationInputTokens": 6728,
+      "webSearchRequests": 0,
+      "costUSD": 0.11150220000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 210,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.11150220000000002,
+  "turns": 4,
+  "api_seconds": 41.145,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 45.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

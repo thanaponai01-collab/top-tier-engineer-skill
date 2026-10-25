@@ -1,0 +1,1 @@
+The 10x export now runs in 0.73s, down from 359s. Last night's export runs in 0.2s, and its output is byte-identical to the original's. The gate is now checking the 10x output and the guard. I'll wait for it.

@@ -27,6 +27,10 @@ And `evolve-maintain` (manual-only, `/verify-loop:evolve-maintain`): change a ru
 breaking it. `evolve.py` keeps the tree as it was and records what each command prints and writes on
 it, makes every function or config line that reads what changed get entered by a recorded run (or a
 reason), and reruns every command on the changed tree: any difference is fixed or marked as asked for.
+And `perf-optimize` (manual-only, `/verify-loop:perf-optimize`): make it measurably faster. `perf.py`
+times and profiles the work on the code as it was at two sizes, keeps a change only when the output is
+the same bytes, it beats the noise and a profile pointed at what it changed, and accepts it only with
+a guard in the suite that fails when each changed file is put back.
 
 ## Install (Claude Code)
 
@@ -84,6 +88,8 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
   --door FILE::FUNC --gets TEXT`, `--gate`; notes in `.threat/doors.md`).
 - `plugin/skills/evolve-maintain/` — the evolve-maintain skill; `scripts/evolve.py` (keeps the tree,
   `--run CMD`, `--gate`; notes in `.evolve/notes.md`).
+- `plugin/skills/perf-optimize/` — the perf-optimize skill; `scripts/perf.py` (`--measure CMD --size N`,
+  `--gate --guard CMD`; notes in `.perf/notes.md`).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

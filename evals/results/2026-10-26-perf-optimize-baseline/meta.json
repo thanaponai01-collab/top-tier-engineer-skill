@@ -1,0 +1,14 @@
+{
+  "started": "2026-10-26-0207",
+  "repeats": 1,
+  "arms": [
+    "with"
+  ],
+  "version": "1.33.0",
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "out_rel": "evals/results/2026-10-26-perf-optimize-baseline",
+  "user_memory_bytes": 0,
+  "claude_version": "2.1.310 (Claude Code)"
+}

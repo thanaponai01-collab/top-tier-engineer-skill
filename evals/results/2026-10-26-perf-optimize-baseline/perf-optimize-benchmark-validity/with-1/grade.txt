@@ -1,0 +1,19 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   no-op — "no invoices exported, so it's fast because it does nothing"
+  found   errors — "90% of the work fails and the output is wrong."
+  found   unfair — "debug vs release measures the build mode, not the code."
+  found   noise — "Journey gain is noise."
+  found   plan — "pair runs in A-B / B-A order so the order is balanced, and keep the run order in the data."
+
+Phrase grader (grade.py), for comparison:
+FAIL  perf-optimize-benchmark-validity  [perf-optimize]  4/5 found, score 0.80 (needs 1.00)
+  MISSED  no-op: Reject skip: zero useful work and wrong output
+            named it, but never said what was wrong with it
+  found   errors: Reject drop-errors: 900 errors and incomplete/wrong output
+  found   unfair: Reject debug-old versus release candidate: unfair build configuration
+  found   noise: Candidate gain inconclusive: overlapping variation, journey unchanged
+  found   plan: Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

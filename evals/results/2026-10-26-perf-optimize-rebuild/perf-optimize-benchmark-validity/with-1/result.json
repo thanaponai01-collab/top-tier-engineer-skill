@@ -1,0 +1,79 @@
+{
+  "case": "perf-optimize-benchmark-validity",
+  "skill": "perf-optimize",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   no-op \u2014 \"No work was done, so the speed means nothing.\"\n  found   errors \u2014 \"90% of the work failed and the output is wrong.\"\n  found   unfair \u2014 \"It compares a debug build with a release build.\"\n  found   noise \u2014 \"The medians are equal and the ranges overlap completely.\"\n  found   plan \u2014 \"Run baseline and candidate in randomized pairs, about **30 pairs** each for the export and for the open-to-downloaded-fi\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "perf-optimize"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "perf-optimize",
+      "path": "<tmp>\\tte-plugin-1xqty88e\\verify-loop\\skills\\perf-optimize\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-1xqty88e\\verify-loop\\skills\\perf-optimize\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 3202,
+      "cacheReadInputTokens": 79273,
+      "cacheCreationInputTokens": 7752,
+      "webSearchRequests": 0,
+      "costUSD": 0.1419426,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1125,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1419426,
+  "turns": 5,
+  "api_seconds": 39.435,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 43.7,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-1xqty88e\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

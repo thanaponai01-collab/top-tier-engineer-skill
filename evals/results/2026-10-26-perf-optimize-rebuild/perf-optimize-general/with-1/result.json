@@ -1,0 +1,99 @@
+{
+  "case": "perf-optimize-general",
+  "skill": "perf-optimize",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  0/3 found\n  MISSED  regions-reread-per-row\n  MISSED  dedupe-quadratic\n  MISSED  measured-before-and-after\n  held    layout-is-the-cost",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": true,
+  "used_skill": true,
+  "skills_loaded": [
+    "perf-optimize"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "perf-optimize",
+      "path": "<tmp>\\tte-plugin-1xqty88e\\verify-loop\\skills\\perf-optimize\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {},
+  "dispatch_count": 0,
+  "found": 0,
+  "total": 3,
+  "missed": [
+    "regions.tax_rate (via _table) opens and parses data/regions.csv again for every order row; it is the larger share of today's time",
+    "dedupe checks each order_id against a growing list, so its cost grows with the square of the export; it is the part that explodes at 10x",
+    "the report gives a measured time before and after the change on the same export"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "same output byte for byte; 1x under 0.4 s, 10x under 6 s",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the tests pass on the finished code",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "with the original report.py and regions.py put back, the tests fail (a guard was left)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/regions.py",
+      "fixture/report.py",
+      "fixture/tests/test_report.py"
+    ],
+    "added": [
+      "fixture/.perf/before/README.md",
+      "fixture/.perf/before/data/orders.csv",
+      "fixture/.perf/before/data/regions.csv",
+      "fixture/.perf/before/layout.py",
+      "fixture/.perf/before/regions.py",
+      "fixture/.perf/before/report.py",
+      "fixture/.perf/before/tests/test_report.py",
+      "fixture/.perf/state.json",
+      "scratch/orders_10x.csv",
+      "scratch/out_small_before.txt"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [],
+  "cost_usd": null,
+  "turns": null,
+  "api_seconds": null,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 1500.1,
+  "timed_out": true,
+  "staged_plugin": "<tmp>\\tte-plugin-1xqty88e\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

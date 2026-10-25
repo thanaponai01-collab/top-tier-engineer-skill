@@ -1,0 +1,18 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   no-op — "It did no work and the checksum is wrong."
+  found   errors — "90% of the invoices errored and the checksum is wrong."
+  found   unfair — "A debug build against a release build measures the build mode, not a code change."
+  found   noise — "The journey's 5 ms (1.7%) difference is smaller than the 25–35 ms spread inside each variant."
+  found   plan — "Profile separately, outside the timed runs,** to name the limiter and confirm the candidate's change hits something that"
+
+Phrase grader (grade.py), for comparison:
+PASS  perf-optimize-benchmark-validity  [perf-optimize]  5/5 found, score 1.00 (needs 1.00)
+  found   no-op: Reject skip: zero useful work and wrong output
+  found   errors: Reject drop-errors: 900 errors and incomplete/wrong output
+  found   unfair: Reject debug-old versus release candidate: unfair build configuration
+  found   noise: Candidate gain inconclusive: overlapping variation, journey unchanged
+  found   plan: Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

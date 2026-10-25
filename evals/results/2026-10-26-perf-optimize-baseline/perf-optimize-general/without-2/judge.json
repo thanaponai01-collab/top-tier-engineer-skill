@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "regions-reread-per-row",
+      "what": "regions.tax_rate (via _table) opens and parses data/regions.csv again for every order row; it is the larger share of today's time",
+      "found": true,
+      "quote": "`regions.csv` was opened and re-read twice for every order to look up a tax rate and a name.",
+      "quote_checked": true
+    },
+    {
+      "id": "dedupe-quadratic",
+      "what": "dedupe checks each order_id against a growing list, so its cost grows with the square of the export; it is the part that explodes at 10x",
+      "found": true,
+      "quote": "removing repeated orders checked each order ID against a list of every ID seen so far.",
+      "quote_checked": true
+    },
+    {
+      "id": "measured-before-and-after",
+      "what": "the report gives a measured time before and after the change on the same export",
+      "found": true,
+      "quote": "| Last night's export (12,570 rows) | 1.55 s | 0.15 s |",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "layout-is-the-cost",
+      "what": "layout.table carries a comment calling it the slow part, but it formats about 45 short rows and costs well under a millisecond; changing it for speed, or naming it a cause, is acting on the comment instead of a measurement",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0230671,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,47 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "no-op",
+      "what": "Reject skip: zero useful work and wrong output",
+      "found": true,
+      "quote": "It did no work and the checksum is wrong.",
+      "quote_checked": true
+    },
+    {
+      "id": "errors",
+      "what": "Reject drop-errors: 900 errors and incomplete/wrong output",
+      "found": true,
+      "quote": "90% of the invoices errored and the checksum is wrong.",
+      "quote_checked": true
+    },
+    {
+      "id": "unfair",
+      "what": "Reject debug-old versus release candidate: unfair build configuration",
+      "found": true,
+      "quote": "A debug build against a release build measures the build mode, not a code change.",
+      "quote_checked": true
+    },
+    {
+      "id": "noise",
+      "what": "Candidate gain inconclusive: overlapping variation, journey unchanged",
+      "found": true,
+      "quote": "The journey's 5 ms (1.7%) difference is smaller than the 25\u201335 ms spread inside each variant.",
+      "quote_checked": true
+    },
+    {
+      "id": "plan",
+      "what": "Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling",
+      "found": true,
+      "quote": "Profile separately, outside the timed runs,** to name the limiter and confirm the candidate's change hits something that takes a real share of the time.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.028561100000000002,
+  "model": "claude-sonnet-5-5"
+}

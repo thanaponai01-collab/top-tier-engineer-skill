@@ -1,0 +1,97 @@
+{
+  "case": "perf-optimize-general",
+  "skill": "perf-optimize",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   regions-reread-per-row \u2014 \"`regions.csv` was opened and re-read twice for every order to look up a tax rate and a name.\"\n  found   dedupe-quadratic \u2014 \"removing repeated orders checked each order ID against a list of every ID seen so far.\"\n  found   measured-before-and-after \u2014 \"| Last night's export (12,570 rows) | 1.55 s | 0.15 s |\"\n  held    layout-is-the-cost",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 2559,
+      "cacheReadInputTokens": 149959,
+      "cacheCreationInputTokens": 11669,
+      "webSearchRequests": 0,
+      "costUSD": 0.1745798,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 550,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "same output byte for byte; 1x under 0.4 s, 10x under 6 s",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the tests pass on the finished code",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "with the original report.py and regions.py put back, the tests fail (a guard was left)",
+      "ok": true,
+      "detail": "advisory, not met: exit 0, expected non-zero",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/regions.py",
+      "fixture/report.py"
+    ],
+    "added": [
+      "scratch/base_big.txt",
+      "scratch/base_small.txt",
+      "scratch/big.csv",
+      "scratch/new_big.txt",
+      "scratch/new_small.txt"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1745798,
+  "turns": 7,
+  "api_seconds": 39.218,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 386.7,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

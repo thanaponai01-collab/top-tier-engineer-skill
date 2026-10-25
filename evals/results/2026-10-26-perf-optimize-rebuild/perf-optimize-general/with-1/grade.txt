@@ -1,0 +1,26 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  0/3 found
+  MISSED  regions-reread-per-row
+  MISSED  dedupe-quadratic
+  MISSED  measured-before-and-after
+  held    layout-is-the-cost
+
+Phrase grader (grade.py), for comparison:
+FAIL  perf-optimize-general  [perf-optimize]  0/3 found, score 0.00 (needs 1.00)
+  MISSED  regions-reread-per-row: regions.tax_rate (via _table) opens and parses data/regions.csv again for every order row; it is the larger share of today's time
+            never named: regions
+            named it, but never said what was wrong with it
+  MISSED  dedupe-quadratic: dedupe checks each order_id against a growing list, so its cost grows with the square of the export; it is the part that explodes at 10x
+            never named: dedupe
+            named it, but never said what was wrong with it
+  MISSED  measured-before-and-after: the report gives a measured time before and after the change on the same export
+            named it, but never said what was wrong with it
+  held    layout-is-the-cost: layout.table carries a comment calling it the slow part, but it formats about 45 short rows and costs well under a millisecond; changing it for speed, or naming it a cause, is acting on the comment instead of a measurement
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      same output byte for byte; 1x under 0.4 s, 10x under 6 s — 
+  ok      the tests pass on the finished code — 
+  ok      with the original report.py and regions.py put back, the tests fail (a guard was left) — 
+  FAILED  the agent run errored or timed out

@@ -1,0 +1,141 @@
+{
+  "case": "perf-optimize-general",
+  "skill": "perf-optimize",
+  "question": "the nightly report takes about 1.4 s on last night's export and the export is about to grow tenfold; make it fast without changing a figure it prints",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "regions-reread-per-row",
+      "what": "regions.tax_rate (via _table) opens and parses data/regions.csv again for every order row; it is the larger share of today's time",
+      "must_name": [
+        "regions"
+      ],
+      "must_say_any": [
+        "every row",
+        "each row",
+        "per row",
+        "every order",
+        "each order",
+        "per order",
+        "every call",
+        "each call",
+        "re-read",
+        "reread",
+        "rereads",
+        "re-reads",
+        "re-parse",
+        "reparse",
+        "re-opens",
+        "reopens",
+        "opens the file",
+        "cache",
+        "once"
+      ]
+    },
+    {
+      "id": "dedupe-quadratic",
+      "what": "dedupe checks each order_id against a growing list, so its cost grows with the square of the export; it is the part that explodes at 10x",
+      "must_name": [
+        "dedupe"
+      ],
+      "must_say_any": [
+        "list",
+        "quadratic",
+        "o(n",
+        "n^2",
+        "n²",
+        "squared",
+        "linear scan",
+        "set"
+      ]
+    },
+    {
+      "id": "measured-before-and-after",
+      "what": "the report gives a measured time before and after the change on the same export",
+      "must_say_any": [
+        "1.4",
+        "1.3",
+        "1.5",
+        "1.2",
+        "1.6",
+        "before",
+        "baseline",
+        "was "
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "layout-is-the-cost",
+      "what": "layout.table carries a comment calling it the slow part, but it formats about 45 short rows and costs well under a millisecond; changing it for speed, or naming it a cause, is acting on the comment instead of a measurement",
+      "must_not_say_any": [
+        "layout is the slow part",
+        "table is the bottleneck",
+        "layout.table is slow",
+        "sped up the table",
+        "optimized layout",
+        "optimised layout",
+        "table() was slow"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "Graded on outcome: the report prints exactly what it printed before, runs last night's export inside 0.4 s and a tenfold export inside 6 s, and the tests pass. Whether the tests now fail with the original slow code put back is reported but not gated.",
+    "edits_allowed": [
+      "*"
+    ],
+    "replays": [
+      {
+        "id": "same-output-and-fast",
+        "kind": "outcome",
+        "what": "same output byte for byte; 1x under 0.4 s, 10x under 6 s",
+        "command": [
+          "python",
+          "_speed_check.py"
+        ],
+        "replace": {
+          "data/orders.csv": "fixture/data/orders.csv",
+          "data/regions.csv": "fixture/data/regions.csv",
+          "_speed_check.py": "reference/speed_check.py",
+          "_make_data.py": "reference/make_data.py",
+          "_expected.txt": "reference/expected.txt"
+        },
+        "timeout": 120,
+        "expect": "pass"
+      },
+      {
+        "id": "tests-pass",
+        "kind": "outcome",
+        "what": "the tests pass on the finished code",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "replace": {},
+        "expect": "pass"
+      },
+      {
+        "id": "guard-sees-slow-code",
+        "kind": "process",
+        "gate": false,
+        "what": "with the original report.py and regions.py put back, the tests fail (a guard was left)",
+        "command": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "tests"
+        ],
+        "replace": {
+          "report.py": "fixture/report.py",
+          "regions.py": "fixture/regions.py"
+        },
+        "expect": "fail",
+        "timeout": 180
+      }
+    ]
+  }
+}

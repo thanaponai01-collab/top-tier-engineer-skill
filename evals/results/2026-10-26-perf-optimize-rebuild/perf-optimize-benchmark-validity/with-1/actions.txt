@@ -1,0 +1,4 @@
+  1. Read: <tmp>\tte-plugin-1xqty88e\verify-loop\skills\perf-optimize\SKILL.md
+  2. Bash: cd "<tmp>/tte-eval-hhg7qp6r" && ls -la && cat measurements.json
+  3. Bash: cd "<tmp>/tte-eval-hhg7qp6r" && find fixture -type f | head -50 && cat fixture/measurements.json 2>/dev/null; cat "<home>/A…
+  4. Bash: cd "<tmp>/tte-eval-hhg7qp6r" && cat fixture/README.md

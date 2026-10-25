@@ -214,6 +214,23 @@
   - Not covered: an app too big to read in one call, where the reader list and the reruns are what
     would find the break; callers outside the repo; non-Python readers beyond text lines.
 
+- perf-optimize as three stages (1.35.0) | proven (mechanics) / ties plain Opus on all four cases; the gain is the guard (eval)
+  - `scripts/perf.py`: measure (`--measure CMD --size N` times the old code in a throwaway copy and
+    profiles one run; refused without a size, on a failing run or output that moves), change (same
+    bytes, slowest now under fastest before, every changed function 2% of a profile or a reason in
+    `.perf/notes.md`), guard (`--guard CMD` passes now, fails with each changed file put back alone).
+    `tests/test_perf.py` 16 tests; 14 disabled guards each caught.
+  - New cases `perf-optimize-general` (graded on outcome: same bytes, 1x under 0.4 s, 10x under 6 s;
+    guard reported, not gated) and `perf-optimize-gain-outlives-session`. Plus main's
+    `perf-optimize-n-plus-one-and-decoy` and `perf-optimize-benchmark-validity`.
+  - Baseline `evals/results/2026-10-26-perf-optimize-baseline`: plain 12/12 ($0.20), guard 0/3; main's
+    skill as copied 4/4 ($0.28), guard 1/1. Rebuild `-rebuild`: 12/12 ($0.63; general $0.81, handoff
+    $1.34, spent timing the old code at 10x). After timing a run over 20 s once and skipping its
+    profile, `-rebuild-2`: general 3/3 $0.24, handoff 3/3 $0.43 (plain $0.16, $0.42). Guard 6/6.
+  - Not covered: workloads that are not Python (no profile; the gate asks for a reason instead),
+    noisy shared machines (a gain inside the noise is refused, never retried), query plans (asked for
+    in SKILL.md, not checked).
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

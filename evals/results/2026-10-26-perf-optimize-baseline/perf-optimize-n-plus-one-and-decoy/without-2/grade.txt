@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   n-plus-one-customer-totals — "It makes one query per customer (`report.py:3-9`): it fetches every customer, then runs a separate `SUM` for each one."
+  found   unbounded-even-if-fast-today — "Those times are the best case, because this is in-memory SQLite and each query costs only microseconds."
+  found   fix-single-aggregate-query — "**Fix:** use one aggregate query."
+  held    recent-orders-is-fine
+  held    not-excused-by-its-own-index
+
+Phrase grader (grade.py), for comparison:
+FAIL  perf-optimize-n-plus-one-and-decoy  [perf-optimize]  2/3 found, score 0.67 (needs 1.00)
+  found   n-plus-one-customer-totals: customer_totals runs one SELECT SUM(...) per customer inside a Python loop instead of a single aggregate query
+  MISSED  unbounded-even-if-fast-today: this is a finding regardless of today's speed, because query count grows with the customer count
+            named it, but never said what was wrong with it
+  found   fix-single-aggregate-query: the fix is one query with a JOIN/GROUP BY (or equivalent batch fetch) instead of a query per customer
+  held    recent-orders-is-fine: recent_orders sorts with ORDER BY ... LIMIT over an indexed column (idx_orders_created_at); EXPLAIN QUERY PLAN shows an index scan, not a full table sort, so it is not a scaling finding
+  TRIPPED not-excused-by-its-own-index: customer_totals hitting idx_orders_customer_id on each call does not excuse the N+1 pattern; the finding is about the number of round trips, not whether each one is indexed
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+

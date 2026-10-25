@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   dedupe-slow-again — "`dedupe` compared each row against every row it had already kept, so the work grows with the square of the file size."
+
+Phrase grader (grade.py), for comparison:
+PASS  perf-optimize-gain-outlives-session  [perf-optimize]  1/1 found, score 1.00 (needs 1.00)
+  found   dedupe-slow-again: the answer says the report became slow again because of the rewritten dedupe (it checks each row against every row kept), so tonight's tenfold export would be far slower than the window allows, or says it found and fixed that before calling it ready; learned from a failing guard, a timing or the code
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      report.py prints an average order line — 
+  ok      the tests pass on the finished code (not gated: a red guard reported as the reason it is not ready is a right answer) — 

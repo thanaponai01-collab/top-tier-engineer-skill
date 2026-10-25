@@ -164,6 +164,20 @@ Main's skill as copied: 5/6 (one try moved the cache into the dashboard instead 
 rebuilt skill: 9/9 ($0.19-0.23), every try driving the gate to done; the gate flagged only differences
 the user asked for. Small apps read in one call do not separate the arms.
 
+### perf-optimize cases
+
+| case | planted | trap |
+|---|---|---|
+| `perf-optimize-n-plus-one-and-decoy` | (main's case) `customer_totals` runs a query per customer | flagging `recent_orders`, which an index already serves |
+| `perf-optimize-benchmark-validity` | (main's case) saved measurements: a no-op, an error-heavy run, debug vs release, a gain inside the noise | adopting any of them |
+| `perf-optimize-general` | a nightly report that re-reads `regions.csv` for every row and dedupes against a list (1.4 s today, over a minute at 10x). Graded on outcome: same bytes, 1x under 0.4 s, a generated 10x export under 6 s; whether the tests fail with the old code put back is reported, not gated | `layout.table`, whose comment calls it the slow part; a dict dedupe that keeps the last row, not the first |
+| `perf-optimize-gain-outlives-session` | two sessions: the speed-up, then a teammate makes `dedupe` quadratic again to count retries, every figure unchanged; the second, `bare`, session only adds an average line and says if tonight's 10x run is ready | green tests taken as ready |
+
+Plain Opus passes all four (12/12, mean $0.20): it reads everything in one call, times and profiles,
+fixes both causes in one edit and diffs the output; its second session times the run and finds the
+slowdown unaided. It never leaves a guard (0/3). The rebuilt skill passes 12/12 and leaves a guard
+every time (6/6), at $0.24 vs $0.16 on the general case and $0.43 vs $0.42 on the handoff.
+
 ## Running it
 
 Every agent run costs real money. Dry-run first:

@@ -1,0 +1,47 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "no-op",
+      "what": "Reject skip: zero useful work and wrong output",
+      "found": true,
+      "quote": "No work was done, so the speed means nothing.",
+      "quote_checked": true
+    },
+    {
+      "id": "errors",
+      "what": "Reject drop-errors: 900 errors and incomplete/wrong output",
+      "found": true,
+      "quote": "90% of the work failed and the output is wrong.",
+      "quote_checked": true
+    },
+    {
+      "id": "unfair",
+      "what": "Reject debug-old versus release candidate: unfair build configuration",
+      "found": true,
+      "quote": "It compares a debug build with a release build.",
+      "quote_checked": true
+    },
+    {
+      "id": "noise",
+      "what": "Candidate gain inconclusive: overlapping variation, journey unchanged",
+      "found": true,
+      "quote": "The medians are equal and the ranges overlap completely.",
+      "quote_checked": true
+    },
+    {
+      "id": "plan",
+      "what": "Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling",
+      "found": true,
+      "quote": "Run baseline and candidate in randomized pairs, about **30 pairs** each for the export and for the open-to-downloaded-file journey.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0270211,
+  "model": "claude-sonnet-5-5"
+}

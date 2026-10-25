@@ -1,0 +1,4 @@
+  1. Bash: cd fixture && find . -type f | head -50 && wc -l $(find . -type f)
+  2. Bash: cd fixture && for f in *; do echo "=== $f"; cat -n $f; done
+  3. Bash: mkdir -p ../bench_tmp 2>/dev/null; cat > bench.py <<'EOF' import sys, time sys.path.insert(0, "fixture") import db from report import customer_totals, recent_o…
+  4. Bash: rm bench.py; rmdir ../bench_tmp 2>/dev/null; true

@@ -1,0 +1,69 @@
+{
+  "case": "perf-optimize-benchmark-validity",
+  "skill": "perf-optimize",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  5/5 found\n  found   no-op \u2014 \"`completed: 0` and `checksum: 0` against the expected 42000. It did none of the work.\"\n  found   errors \u2014 \"`completed: 100`, `errors: 900`, `checksum: 4200`. It finished 10% of the workload.\"\n  found   unfair \u2014 \"This compares a debug build with a release build, so it changes two things at once.\"\n  found   noise \u2014 \"With n=3 the data can't confirm a 10% improvement and can't rule out a 10% regression either.\"\n  found   plan \u2014 \"**Validity check on every run.** `attempted == completed == 1000`, `errors == 0`, `checksum == 42000`.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 3264,
+      "cacheReadInputTokens": 75190,
+      "cacheCreationInputTokens": 4985,
+      "webSearchRequests": 0,
+      "costUSD": 0.12023,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1005,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.12023,
+  "turns": 4,
+  "api_seconds": 34.702,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 37.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

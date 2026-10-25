@@ -1,0 +1,47 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "no-op",
+      "what": "Reject skip: zero useful work and wrong output",
+      "found": true,
+      "quote": "`completed: 0`, `checksum: 0` against an expected 42000. It finishes no work at all.",
+      "quote_checked": true
+    },
+    {
+      "id": "errors",
+      "what": "Reject drop-errors: 900 errors and incomplete/wrong output",
+      "found": true,
+      "quote": "`completed: 100`, `errors: 900`, `checksum: 4200`. It does 10% of the work.",
+      "quote_checked": true
+    },
+    {
+      "id": "unfair",
+      "what": "Reject debug-old versus release candidate: unfair build configuration",
+      "found": true,
+      "quote": "Compares a release build with a debug build.",
+      "quote_checked": true
+    },
+    {
+      "id": "noise",
+      "what": "Candidate gain inconclusive: overlapping variation, journey unchanged",
+      "found": true,
+      "quote": "The best estimate is no change. The data can't rule out a regression or a gain of up to about 30%.",
+      "quote_checked": true
+    },
+    {
+      "id": "plan",
+      "what": "Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling",
+      "found": true,
+      "quote": "Interleave the two variants in randomized or ABBA order. Never run one whole batch and then the other.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.028877100000000003,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,101 @@
+{
+  "case": "perf-optimize-general",
+  "skill": "perf-optimize",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   regions-reread-per-row \u2014 \"it re-opened and re-parsed `regions.csv` for every order row, 12,040 times.\"\n  found   dedupe-quadratic \u2014 \"(23% of the time, and the part that grows as n\u00b2): it checked each `order_id` against a list of every ID seen so far.\"\n  found   measured-before-and-after \u2014 \"| Last night's export (12,569 rows) | 2.17 s (median of 5) | 0.14 s | identical |\"\n  held    layout-is-the-cost",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "perf-optimize"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "perf-optimize",
+      "path": "<tmp>\\tte-plugin-s628ugmj\\verify-loop\\skills\\perf-optimize\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 3874,
+      "cacheReadInputTokens": 210900,
+      "cacheCreationInputTokens": 13382,
+      "webSearchRequests": 0,
+      "costUSD": 0.226788,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 640,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "same output byte for byte; 1x under 0.4 s, 10x under 6 s",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "the tests pass on the finished code",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "with the original report.py and regions.py put back, the tests fail (a guard was left)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/regions.py",
+      "fixture/report.py",
+      "fixture/tests/test_report.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.226788,
+  "turns": 9,
+  "api_seconds": 49.259,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 501.2,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-s628ugmj\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

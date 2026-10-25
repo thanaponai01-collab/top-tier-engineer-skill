@@ -1,0 +1,1 @@
+The gate alternates timed runs of the old and new code, and each old run at 10× takes about 5.5 minutes, so I'll wait for it to finish.

@@ -1,0 +1,20 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   regions-reread-per-row — "every order re-opened and re-read `data/regions.csv` to look up its tax rate and name, about 24,000 file reads per run."
+  found   dedupe-quadratic — "it checked each order ID against a growing list, so the cost grew with the square of the row count."
+  found   measured-before-and-after — "| Synthetic 10× (125k rows) | **3m 25s** | 0.41s |"
+  held    layout-is-the-cost
+
+Phrase grader (grade.py), for comparison:
+PASS  perf-optimize-general  [perf-optimize]  3/3 found, score 1.00 (needs 1.00)
+  found   regions-reread-per-row: regions.tax_rate (via _table) opens and parses data/regions.csv again for every order row; it is the larger share of today's time
+  found   dedupe-quadratic: dedupe checks each order_id against a growing list, so its cost grows with the square of the export; it is the part that explodes at 10x
+  found   measured-before-and-after: the report gives a measured time before and after the change on the same export
+  held    layout-is-the-cost: layout.table carries a comment calling it the slow part, but it formats about 45 short rows and costs well under a millisecond; changing it for speed, or naming it a cause, is acting on the comment instead of a measurement
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      same output byte for byte; 1x under 0.4 s, 10x under 6 s — 
+  ok      the tests pass on the finished code — 
+  ok      with the original report.py and regions.py put back, the tests fail (a guard was left) — advisory, not met: exit 0, expected non-zero

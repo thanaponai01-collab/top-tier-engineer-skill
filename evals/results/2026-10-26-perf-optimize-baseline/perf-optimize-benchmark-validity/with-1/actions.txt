@@ -1,0 +1,4 @@
+  1. Read: <tmp>\tte-plugin-kfcp0kuu\verify-loop\skills\perf-optimize\SKILL.md
+  2. Bash: ls -la && cat measurements.json
+  3. Bash: find fixture -type f | head -50; cat fixture/measurements.json 2>/dev/null; cat "<tmp>/tte-plugin-kfcp0kuu/verify-loop/skills/perf-…
+  4. Bash: cat fixture/README.md

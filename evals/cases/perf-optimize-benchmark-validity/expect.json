@@ -1,0 +1,57 @@
+{
+  "case": "perf-optimize-benchmark-validity",
+  "skill": "perf-optimize",
+  "question": "are these measured gains valid?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "no-op",
+      "what": "Reject skip: zero useful work and wrong output",
+      "must_say_any": [
+        "zero",
+        "no-op",
+        "0 completed"
+      ]
+    },
+    {
+      "id": "errors",
+      "what": "Reject drop-errors: 900 errors and incomplete/wrong output",
+      "must_say_any": [
+        "900",
+        "error-heavy"
+      ]
+    },
+    {
+      "id": "unfair",
+      "what": "Reject debug-old versus release candidate: unfair build configuration",
+      "must_say_any": [
+        "debug",
+        "release"
+      ]
+    },
+    {
+      "id": "noise",
+      "what": "Candidate gain inconclusive: overlapping variation, journey unchanged",
+      "must_say_any": [
+        "inconclusive",
+        "noise"
+      ]
+    },
+    {
+      "id": "plan",
+      "what": "Plan alternate comparable runs, useful work/correctness/errors, journey, limiter and separate profiling",
+      "must_say_any": [
+        "alternate",
+        "interleave",
+        "alternating"
+      ]
+    }
+  ],
+  "traps": [],
+  "actions": {
+    "read_only": true,
+    "must_read": [
+      "measurements.json"
+    ]
+  }
+}

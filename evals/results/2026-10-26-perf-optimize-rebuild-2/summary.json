@@ -1,0 +1,610 @@
+[
+  {
+    "case": "perf-optimize-general",
+    "skill": "perf-optimize",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   regions-reread-per-row \u2014 \"it re-read `regions.csv` from disk for every order (12,040 reads, 70% of the time)\"\n  found   dedupe-quadratic \u2014 \"it checked each `order_id` against a growing *list* of IDs already seen, so time grew with the square of the row count (\"\n  found   measured-before-and-after \u2014 \"| `data/orders.csv` (12,569 rows) | 2.14 s median (2.05\u20132.23, 5 runs) | 0.15 s (0.14\u20130.17, 5 runs) |\"\n  held    layout-is-the-cost",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "perf-optimize"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "perf-optimize",
+        "path": "<tmp>\\tte-plugin-s628ugmj\\verify-loop\\skills\\perf-optimize\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 4203,
+        "cacheReadInputTokens": 210589,
+        "cacheCreationInputTokens": 13703,
+        "webSearchRequests": 0,
+        "costUSD": 0.23587380000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 933,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same output byte for byte; 1x under 0.4 s, 10x under 6 s",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "with the original report.py and regions.py put back, the tests fail (a guard was left)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/regions.py",
+        "fixture/report.py"
+      ],
+      "added": [
+        "fixture/tests/test_scaling.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.23587380000000002,
+    "turns": 9,
+    "api_seconds": 44.691,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  perf-optimize-general  [perf-optimize]  3/3 found, score 1.00 (needs 1.00)\n  found   regions-reread-per-row: regions.tax_rate (via _table) opens and parses data/regions.csv again for every order row; it is the larger share of today's time\n  found   dedupe-quadratic: dedupe checks each order_id against a growing list, so its cost grows with the square of the export; it is the part that explodes at 10x\n  found   measured-before-and-after: the report gives a measured time before and after the change on the same export\n  held    layout-is-the-cost: layout.table carries a comment calling it the slow part, but it formats about 45 short rows and costs well under a millisecond; changing it for speed, or naming it a cause, is acting on the comment instead of a measurement\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 493.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-s628ugmj\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "perf-optimize-general",
+    "skill": "perf-optimize",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   regions-reread-per-row \u2014 \"it re-opened and re-parsed `regions.csv` for every order row, 12,040 times.\"\n  found   dedupe-quadratic \u2014 \"(23% of the time, and the part that grows as n\u00b2): it checked each `order_id` against a list of every ID seen so far.\"\n  found   measured-before-and-after \u2014 \"| Last night's export (12,569 rows) | 2.17 s (median of 5) | 0.14 s | identical |\"\n  held    layout-is-the-cost",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "perf-optimize"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "perf-optimize",
+        "path": "<tmp>\\tte-plugin-s628ugmj\\verify-loop\\skills\\perf-optimize\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 3874,
+        "cacheReadInputTokens": 210900,
+        "cacheCreationInputTokens": 13382,
+        "webSearchRequests": 0,
+        "costUSD": 0.226788,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 640,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same output byte for byte; 1x under 0.4 s, 10x under 6 s",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "with the original report.py and regions.py put back, the tests fail (a guard was left)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/regions.py",
+        "fixture/report.py",
+        "fixture/tests/test_report.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.226788,
+    "turns": 9,
+    "api_seconds": 49.259,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  perf-optimize-general  [perf-optimize]  3/3 found, score 1.00 (needs 1.00)\n  found   regions-reread-per-row: regions.tax_rate (via _table) opens and parses data/regions.csv again for every order row; it is the larger share of today's time\n  found   dedupe-quadratic: dedupe checks each order_id against a growing list, so its cost grows with the square of the export; it is the part that explodes at 10x\n  found   measured-before-and-after: the report gives a measured time before and after the change on the same export\n  held    layout-is-the-cost: layout.table carries a comment calling it the slow part, but it formats about 45 short rows and costs well under a millisecond; changing it for speed, or naming it a cause, is acting on the comment instead of a measurement\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 501.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-s628ugmj\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "perf-optimize-general",
+    "skill": "perf-optimize",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   regions-reread-per-row \u2014 \"It re-read `data/regions.csv` from disk for every order: 12,040 file reads per run.\"\n  found   dedupe-quadratic \u2014 \"It checked each `order_id` against a list of every order seen so far, so the work grew with the square of the row count.\"\n  found   measured-before-and-after \u2014 \"median 2.148 s (2.126\u20132.213 s, 5 runs)\"\n  held    layout-is-the-cost",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "perf-optimize"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "perf-optimize",
+        "path": "<tmp>\\tte-plugin-s628ugmj\\verify-loop\\skills\\perf-optimize\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 4667,
+        "cacheReadInputTokens": 239218,
+        "cacheCreationInputTokens": 14311,
+        "webSearchRequests": 0,
+        "costUSD": 0.2557516,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1079,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same output byte for byte; 1x under 0.4 s, 10x under 6 s",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the tests pass on the finished code",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "with the original report.py and regions.py put back, the tests fail (a guard was left)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/regions.py",
+        "fixture/report.py",
+        "fixture/tests/test_report.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2557516,
+    "turns": 10,
+    "api_seconds": 54.771,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  perf-optimize-general  [perf-optimize]  3/3 found, score 1.00 (needs 1.00)\n  found   regions-reread-per-row: regions.tax_rate (via _table) opens and parses data/regions.csv again for every order row; it is the larger share of today's time\n  found   dedupe-quadratic: dedupe checks each order_id against a growing list, so its cost grows with the square of the export; it is the part that explodes at 10x\n  found   measured-before-and-after: the report gives a measured time before and after the change on the same export\n  held    layout-is-the-cost: layout.table carries a comment calling it the slow part, but it formats about 45 short rows and costs well under a millisecond; changing it for speed, or naming it a cause, is acting on the comment instead of a measurement\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 506.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-s628ugmj\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "perf-optimize-gain-outlives-session",
+    "skill": "perf-optimize",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   dedupe-slow-again \u2014 \"`dedupe` checked each row against every order it had already kept, so time grew with the square of the row count.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "perf-optimize"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "perf-optimize",
+        "path": "<tmp>\\tte-plugin-s628ugmj\\verify-loop\\skills\\perf-optimize\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 32,
+        "outputTokens": 6811,
+        "cacheReadInputTokens": 366651,
+        "cacheCreationInputTokens": 23714,
+        "webSearchRequests": 0,
+        "costUSD": 0.39939020000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1390,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "report.py prints an average order line",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the tests pass on the finished code (not gated: a red guard reported as the reason it is not ready is a right answer)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/regions.py",
+        "fixture/report.py",
+        "fixture/tests/test_report.py"
+      ],
+      "added": [
+        "fixture/tests/test_scaling.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.39939020000000003,
+    "turns": 16,
+    "api_seconds": 77.733,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  perf-optimize-gain-outlives-session  [perf-optimize]  1/1 found, score 1.00 (needs 1.00)\n  found   dedupe-slow-again: the answer says the report became slow again because of the rewritten dedupe (it checks each row against every row kept), so tonight's tenfold export would be far slower than the window allows, or says it found and fixed that before calling it ready; learned from a failing guard, a timing or the code\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 528.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-s628ugmj\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "perf-optimize-gain-outlives-session",
+    "skill": "perf-optimize",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   dedupe-slow-again \u2014 \"To find duplicates, `dedupe` compared each row against every row kept so far, so the time grew with the square of the ro\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "perf-optimize"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "perf-optimize",
+        "path": "<tmp>\\tte-plugin-s628ugmj\\verify-loop\\skills\\perf-optimize\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 36,
+        "outputTokens": 8022,
+        "cacheReadInputTokens": 439972,
+        "cacheCreationInputTokens": 27994,
+        "webSearchRequests": 0,
+        "costUSD": 0.4725304,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1436,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "report.py prints an average order line",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the tests pass on the finished code (not gated: a red guard reported as the reason it is not ready is a right answer)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/regions.py",
+        "fixture/report.py",
+        "fixture/tests/test_report.py"
+      ],
+      "added": [
+        "fixture/tests/test_scaling.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4725304,
+    "turns": 18,
+    "api_seconds": 96.786,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  perf-optimize-gain-outlives-session  [perf-optimize]  1/1 found, score 1.00 (needs 1.00)\n  found   dedupe-slow-again: the answer says the report became slow again because of the rewritten dedupe (it checks each row against every row kept), so tonight's tenfold export would be far slower than the window allows, or says it found and fixed that before calling it ready; learned from a failing guard, a timing or the code\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 545.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-s628ugmj\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "perf-optimize-gain-outlives-session",
+    "skill": "perf-optimize",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   dedupe-slow-again \u2014 \"The step that drops repeated orders (`report.dedupe`) checked every row against every row kept so far.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "perf-optimize"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "perf-optimize",
+        "path": "<tmp>\\tte-plugin-s628ugmj\\verify-loop\\skills\\perf-optimize\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 32,
+        "outputTokens": 7453,
+        "cacheReadInputTokens": 373525,
+        "cacheCreationInputTokens": 25910,
+        "webSearchRequests": 0,
+        "costUSD": 0.431173,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1660,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "report.py prints an average order line",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "the tests pass on the finished code (not gated: a red guard reported as the reason it is not ready is a right answer)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/regions.py",
+        "fixture/report.py",
+        "fixture/tests/test_report.py"
+      ],
+      "added": [
+        "fixture/tests/test_scaling.py",
+        "scratch/after.txt",
+        "scratch/before.txt",
+        "scratch/big.csv",
+        "scratch/orig/data/regions.csv",
+        "scratch/orig/layout.py",
+        "scratch/orig/regions.py",
+        "scratch/orig/report.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.431173,
+    "turns": 16,
+    "api_seconds": 100.862,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  perf-optimize-gain-outlives-session  [perf-optimize]  1/1 found, score 1.00 (needs 1.00)\n  found   dedupe-slow-again: the answer says the report became slow again because of the rewritten dedupe (it checks each row against every row kept), so tonight's tenfold export would be far slower than the window allows, or says it found and fixed that before calling it ready; learned from a failing guard, a timing or the code\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 553.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-s628ugmj\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

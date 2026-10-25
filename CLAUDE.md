@@ -8,7 +8,8 @@ manual-only `wire-check` skill at `plugin/skills/wire-check/SKILL.md` (uses both
 manual-only `debug-protocol` skill at `plugin/skills/debug-protocol/SKILL.md` (maps its check for verify-loop), and the manual-only `structure-gate` skill at
 `plugin/skills/structure-gate/SKILL.md` (standalone), and the manual-only `threat-model` skill at
 `plugin/skills/threat-model/SKILL.md` (standalone), and the manual-only `evolve-maintain` skill at
-`plugin/skills/evolve-maintain/SKILL.md` (names debug-protocol and latent-audit when present).
+`plugin/skills/evolve-maintain/SKILL.md` (names debug-protocol and latent-audit when present), and the
+manual-only `perf-optimize` skill at `plugin/skills/perf-optimize/SKILL.md` (standalone).
 
 - Mechanics, not advice: every rule is a script or test that can fail, never a tip for the agent.
 
