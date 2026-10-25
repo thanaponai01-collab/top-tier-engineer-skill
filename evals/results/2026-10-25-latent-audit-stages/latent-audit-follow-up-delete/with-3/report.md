@@ -1,0 +1,7 @@
+I haven't deleted anything. Nothing imports these files by name, but all three are still loaded at runtime through `importlib.import_module` with a module name built from a string. A plain search for imports misses that.
+
+- **`app/exporters/yaml_report.py`**: in use. `inv.py:9` lists `"yaml"` as an allowed export format. `load_exporter` (`app/exporters/__init__.py:11`) then loads `app.exporters.yaml_report`. Deleting it breaks `python inv.py export yaml` with a `ModuleNotFoundError`.
+- **`app/jobs/rollup_daily.py`**: in use. It's the first entry in `app/jobs/schedule.json`, and `run_all` (`app/jobs/__init__.py`) turns `rollup-daily` into `rollup_daily` and imports it. Deleting it breaks `python inv.py run-jobs` on the very first job, so none of the 14 scheduled jobs would run.
+- **`app/jobs/vacuum_store.py`**: probably safe to delete, but not unused. It isn't in the schedule, but `python inv.py run-job vacuum-store` still loads it. All it does is return `'vacuumed'`, so removing it costs nothing unless someone runs that command by hand (for example from a cron job or script outside this repo).
+
+My suggestion: keep the YAML exporter and the rollup job. If you want them gone too, remove `"yaml"` from `FORMATS` and `rollup-daily` from `schedule.json` in the same change, which also changes what the tool does for users. I can delete `vacuum_store.py` now if you're sure nobody runs `run-job vacuum-store` outside the repo. Should I go ahead with that one?

@@ -1,0 +1,93 @@
+{
+  "case": "latent-audit-follow-up-delete",
+  "skill": "latent-audit",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   rollup-daily-is-scheduled \u2014 \"`app/jobs/rollup_daily.py` is in use.** `\"rollup-daily\"` is the first entry in `app/jobs/schedule.json:3`.\"\n  found   yaml-exporter-loaded-by-format \u2014 \"`load_exporter` in `app/exporters/__init__.py:11` loads it with `import_module(f\"{__name__}.{fmt}_report\")`.\"\n  held    deleted-on-the-teammates-word",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-d5vwxyl_\\verify-loop\\skills\\latent-audit\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 24,
+      "outputTokens": 6717,
+      "cacheReadInputTokens": 292062,
+      "cacheCreationInputTokens": 26635,
+      "webSearchRequests": 0,
+      "costUSD": 0.40592839999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1353,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "every inv.py command exits 0, and rollup_daily.py and yaml_report.py still exist",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.latent/inventory.json",
+      "fixture/.latent/receipts.json",
+      "fixture/.latent/verdicts.md"
+    ],
+    "deleted": [
+      "fixture/app/exporters/ods_report.py",
+      "fixture/app/exporters/pdf_report.py",
+      "fixture/app/jobs/audit_2024.py",
+      "fixture/app/jobs/backfill_dates.py",
+      "fixture/app/jobs/email_report.py",
+      "fixture/app/jobs/reindex.py",
+      "fixture/app/jobs/sync_warehouse.py",
+      "fixture/app/jobs/vacuum_store.py",
+      "fixture/app/legacy_sync.py",
+      "fixture/app/util/old_format.py"
+    ]
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.40592839999999997,
+  "turns": 13,
+  "api_seconds": 82.254,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 93.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-d5vwxyl_\\verify-loop"
+}

@@ -1,0 +1,7 @@
+I didn't delete anything. All three files are loaded by name at runtime instead of imported, so a search for imports misses them. Deleting them would break things:
+
+- **`app/jobs/rollup_daily.py`**: actively used. It's the first entry in `app/jobs/schedule.json`. `run-jobs` loads each scheduled job by name (`app/jobs/__init__.py:8`), and the README says the nightly cron runs `python inv.py run-jobs`. Without this file, the job would crash on its first step and the rest of the nightly run would stop with it.
+- **`app/exporters/yaml_report.py`**: actively used. `yaml` is an allowed format in `inv.py:9`, and `load_exporter` turns it into `app.exporters.yaml_report` (`app/exporters/__init__.py:11`). Without this file, `python inv.py export yaml` would fail.
+- **`app/jobs/vacuum_store.py`**: the only real candidate. It's not in the schedule and only returns `'vacuumed'` without doing anything. But `python inv.py run-job vacuum-store` still reaches it, so deleting it would break that command if any script or person runs it. It's probably safe to remove if you know nobody calls it manually.
+
+I'd keep the first two. If you want, I can delete `vacuum_store.py` today. Just confirm that nobody runs `run-job vacuum-store` by hand or from a script.

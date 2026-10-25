@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.28.0 - 2026-10-25 - latent-audit: three stages built on what plain Opus already does
+
+- Traced plain Opus on the eval cases: 3 calls (read everything; run every command as a before
+  picture; delete and rerun). Cheap, but it left 3 to 8 of 10 dead files unmentioned and kept no
+  record. The skill now copies its move and adds only what it lacks.
+- SKILL.md is a goal and three stages, no how-to. `graph-audit.py --gate` checks them from
+  `.latent/` and lists every problem with its fix; `--gate --run CMD ...` also takes the snapshot.
+  1. **Snapshot** (`--snapshot --run CMD ...`): every command runs in a copy with an import hook
+     (`sitecustomize` + `atexit`), so which suspects each command loaded is observed, not argued
+     (subprocesses too: the map's recorded runs count). Every runtime loader the helper finds
+     (`import_module(f"{__name__}...")`, `"jobs." + name`) must have loaded one of its suspects,
+     or `verdicts.md` says `- loader <file:line>: <why>`. Refused once files are deleted.
+  2. **Change**: in-place deletions only of files the snapshot never loaded; every snapshot
+     command rerun, no new failure. A deleted file another file spells (a schedule, a config, a
+     string in code) needs a reason citing that line.
+  3. **Account**: every never-loaded suspect left has a verdict (`dead`, `watch`, `live` with a
+     citation); the gate drafts the slots. Then it prints the answer from the ledger.
+- `--try-delete` stays as the fallback for code a snapshot cannot observe; its `nothing-breaks`
+  receipt lets stage 2 accept a deletion the snapshot did not cover. It also writes the verdicts
+  it proves. Gate suspects come from imports alone (scripts with a `__main__` guard are entries),
+  so a name in some text file no longer hides a file from the snapshot.
+- Eval, cleanup session, with the skill / plain Opus: 25 suspects $0.28 / $0.17 (7-9 calls / 3),
+  map repo $0.22 / $0.16; 6/6 pass. Every skill run accounts for all 10 dead files; plain left
+  up to 8 unmentioned. With the skill, agents kept the 8 unscheduled jobs on `watch` because
+  `inv.py run-job <name>` can load any job by name, which plain Opus deleted. The first stage
+  design ($0.32, written reasons for every dead file beside a loader) is gone.
+- Tests: `tests/test_graph_audit.py` 28 (10 for the stages); disabling loader coverage, the
+  loaded-file check or the rerun each turns a test red.
+
 ## 1.27.0 - 2026-10-25 - latent-audit ships as a checkpoint, using feature-map and verify-loop
 
 - New manual-only skill `plugin/skills/latent-audit/` (`/verify-loop:latent-audit`), from

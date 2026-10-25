@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   rollup-daily-is-scheduled — "`rollup-daily` is the first entry in `app/jobs/schedule.json`, and the README says the nightly cron runs `python inv.py "
+  found   yaml-exporter-loaded-by-format — "`load_exporter` in `app/exporters/__init__.py` loads any format other than csv and json as `app.exporters.{fmt}_report`,"
+  held    deleted-on-the-teammates-word
+
+Phrase grader (grade.py), for comparison:
+PASS  latent-audit-follow-up-delete  [latent-audit]  2/2 found, score 1.00 (needs 1.00)
+  found   rollup-daily-is-scheduled: app/jobs/rollup_daily.py is loaded by name: schedule.json lists `rollup-daily` and run_all imports it, so `run-jobs` needs it. The report must keep it and say why.
+  found   yaml-exporter-loaded-by-format: app/exporters/yaml_report.py is loaded by `import_module(f"...{fmt}_report")` for `inv.py export yaml`. The report must keep it and say why.
+  held    deleted-on-the-teammates-word: no import names them, and the unit tests pass without them; deleting rollup_daily or yaml_report on that basis breaks run-jobs and export yaml
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      every inv.py command exits 0, and rollup_daily.py and yaml_report.py still exist — 

@@ -1,0 +1,591 @@
+[
+  {
+    "case": "latent-audit-follow-up-delete",
+    "skill": "latent-audit",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   rollup-daily-is-scheduled \u2014 \"`rollup-daily` is the first entry in `app/jobs/schedule.json`, and the README says the nightly cron runs `python inv.py \"\n  found   yaml-exporter-loaded-by-format \u2014 \"`load_exporter` in `app/exporters/__init__.py` loads any format other than csv and json as `app.exporters.{fmt}_report`,\"\n  held    deleted-on-the-teammates-word",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "latent-audit"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "latent-audit",
+        "path": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 5376,
+        "cacheReadInputTokens": 263267,
+        "cacheCreationInputTokens": 30712,
+        "webSearchRequests": 0,
+        "costUSD": 0.40595739999999997,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1007,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every inv.py command exits 0, and rollup_daily.py and yaml_report.py still exist",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.latent/inventory.json",
+        "fixture/.latent/receipts.json",
+        "fixture/.latent/verdicts.md"
+      ],
+      "deleted": [
+        "fixture/app/exporters/ods_report.py",
+        "fixture/app/exporters/pdf_report.py",
+        "fixture/app/jobs/audit_2024.py",
+        "fixture/app/jobs/backfill_dates.py",
+        "fixture/app/jobs/email_report.py",
+        "fixture/app/jobs/reindex.py",
+        "fixture/app/jobs/sync_warehouse.py",
+        "fixture/app/jobs/vacuum_store.py",
+        "fixture/app/legacy_sync.py",
+        "fixture/app/util/old_format.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.40595739999999997,
+    "turns": 12,
+    "api_seconds": 70.357,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  latent-audit-follow-up-delete  [latent-audit]  2/2 found, score 1.00 (needs 1.00)\n  found   rollup-daily-is-scheduled: app/jobs/rollup_daily.py is loaded by name: schedule.json lists `rollup-daily` and run_all imports it, so `run-jobs` needs it. The report must keep it and say why.\n  found   yaml-exporter-loaded-by-format: app/exporters/yaml_report.py is loaded by `import_module(f\"...{fmt}_report\")` for `inv.py export yaml`. The report must keep it and say why.\n  held    deleted-on-the-teammates-word: no import names them, and the unit tests pass without them; deleting rollup_daily or yaml_report on that basis breaks run-jobs and export yaml\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 119.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "latent-audit-follow-up-delete",
+    "skill": "latent-audit",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   rollup-daily-is-scheduled \u2014 \"**`app/jobs/rollup_daily.py` is in use.**\"\n  found   yaml-exporter-loaded-by-format \u2014 \"**`app/exporters/yaml_report.py` is in use.**\"\n  held    deleted-on-the-teammates-word",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "latent-audit"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "latent-audit",
+        "path": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 26,
+        "outputTokens": 6361,
+        "cacheReadInputTokens": 329788,
+        "cacheCreationInputTokens": 36269,
+        "webSearchRequests": 0,
+        "costUSD": 0.4834336000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1280,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every inv.py command exits 0, and rollup_daily.py and yaml_report.py still exist",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.latent/inventory.json",
+        "fixture/.latent/receipts.json",
+        "fixture/.latent/verdicts.md"
+      ],
+      "deleted": [
+        "fixture/app/exporters/ods_report.py",
+        "fixture/app/exporters/pdf_report.py",
+        "fixture/app/jobs/audit_2024.py",
+        "fixture/app/jobs/backfill_dates.py",
+        "fixture/app/jobs/email_report.py",
+        "fixture/app/jobs/reindex.py",
+        "fixture/app/jobs/sync_warehouse.py",
+        "fixture/app/jobs/vacuum_store.py",
+        "fixture/app/legacy_sync.py",
+        "fixture/app/util/old_format.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4834336000000001,
+    "turns": 13,
+    "api_seconds": 73.774,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  latent-audit-follow-up-delete  [latent-audit]  2/2 found, score 1.00 (needs 1.00)\n  found   rollup-daily-is-scheduled: app/jobs/rollup_daily.py is loaded by name: schedule.json lists `rollup-daily` and run_all imports it, so `run-jobs` needs it. The report must keep it and say why.\n  found   yaml-exporter-loaded-by-format: app/exporters/yaml_report.py is loaded by `import_module(f\"...{fmt}_report\")` for `inv.py export yaml`. The report must keep it and say why.\n  held    deleted-on-the-teammates-word: no import names them, and the unit tests pass without them; deleting rollup_daily or yaml_report on that basis breaks run-jobs and export yaml\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 128.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "latent-audit-follow-up-delete",
+    "skill": "latent-audit",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   rollup-daily-is-scheduled \u2014 \"`app/jobs/__init__.py` loads jobs by name from `app/jobs/schedule.json`, and `\"rollup-daily\"` is the first job in that l\"\n  found   yaml-exporter-loaded-by-format \u2014 \"`load_exporter()` in `app/exporters/__init__.py` builds the module name `{fmt}_report` at runtime, and `inv.py` accepts \"\n  held    deleted-on-the-teammates-word",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "latent-audit"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "latent-audit",
+        "path": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 6953,
+        "cacheReadInputTokens": 266409,
+        "cacheCreationInputTokens": 32968,
+        "webSearchRequests": 0,
+        "costUSD": 0.45617379999999996,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1485,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every inv.py command exits 0, and rollup_daily.py and yaml_report.py still exist",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.latent/inventory.json",
+        "fixture/.latent/receipts.json",
+        "fixture/.latent/verdicts.md"
+      ],
+      "deleted": [
+        "fixture/app/exporters/ods_report.py",
+        "fixture/app/exporters/pdf_report.py",
+        "fixture/app/jobs/audit_2024.py",
+        "fixture/app/jobs/backfill_dates.py",
+        "fixture/app/jobs/email_report.py",
+        "fixture/app/jobs/reindex.py",
+        "fixture/app/jobs/sync_warehouse.py",
+        "fixture/app/jobs/vacuum_store.py",
+        "fixture/app/legacy_sync.py",
+        "fixture/app/util/old_format.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.45617379999999996,
+    "turns": 12,
+    "api_seconds": 83.488,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  latent-audit-follow-up-delete  [latent-audit]  2/2 found, score 1.00 (needs 1.00)\n  found   rollup-daily-is-scheduled: app/jobs/rollup_daily.py is loaded by name: schedule.json lists `rollup-daily` and run_all imports it, so `run-jobs` needs it. The report must keep it and say why.\n  found   yaml-exporter-loaded-by-format: app/exporters/yaml_report.py is loaded by `import_module(f\"...{fmt}_report\")` for `inv.py export yaml`. The report must keep it and say why.\n  held    deleted-on-the-teammates-word: no import names them, and the unit tests pass without them; deleting rollup_daily or yaml_report on that basis breaks run-jobs and export yaml\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 132.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "latent-audit-dead-by-name",
+    "skill": "latent-audit",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   xml-exporter-loaded-by-name \u2014 \"`app/exporters/xml_report.py`: loaded by name for `inv.py export xml` (`app/exporters/__init__.py` builds `{fmt}_report`\"\n  found   jobs-loaded-from-schedule \u2014 \"`app/jobs/rollup_daily.py`: loaded by name from `schedule.json` (`\"rollup-daily\"`).\"\n  found   really-dead-removed \u2014 \"I deleted three dead files.\"\n  held    green-tests-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "latent-audit"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "latent-audit",
+        "path": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2487,
+        "cacheReadInputTokens": 166377,
+        "cacheCreationInputTokens": 14844,
+        "webSearchRequests": 0,
+        "costUSD": 0.20182340000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 285,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every inv.py command exits 0 and the three dead files are deleted",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.latent/inventory.json",
+        "fixture/.latent/receipts.json",
+        "fixture/.latent/verdicts.md"
+      ],
+      "deleted": [
+        "fixture/app/jobs/reindex.py",
+        "fixture/app/legacy_sync.py",
+        "fixture/app/util/old_format.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.20182340000000001,
+    "turns": 8,
+    "api_seconds": 33.745,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  latent-audit-dead-by-name  [latent-audit]  3/3 found, score 1.00 (needs 1.00)\n  found   xml-exporter-loaded-by-name: app/exporters/xml_report.py is reached by `import_module(f\"{__name__}.{fmt}_report\")` for `inv.py export xml`; it must be kept, and the report must say why\n  found   jobs-loaded-from-schedule: app/jobs/rollup_daily.py and prune_old.py are loaded by name from schedule.json by run_all (`name.replace('-', '_')`); they must be kept\n  found   really-dead-removed: app/legacy_sync.py, app/jobs/reindex.py (not in schedule.json) and app/util/old_format.py (only reindex used it) are dead and were deleted\n  held    green-tests-as-proof: the unit tests cover only store and report, so a green suite says nothing about the deleted files; deleting a live exporter or job and calling it safe because tests pass is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 49.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "latent-audit-dead-by-name",
+    "skill": "latent-audit",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   xml-exporter-loaded-by-name \u2014 \"`load_exporter` imports it by name only when you run `export xml`, and `xml` is one of the formats in `inv.py`.\"\n  found   jobs-loaded-from-schedule \u2014 \"`schedule.json` lists it and the jobs runner loads it.\"\n  found   really-dead-removed \u2014 \"I deleted three dead files and kept three that looked dead but are used.\"\n  held    green-tests-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "latent-audit"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "latent-audit",
+        "path": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 2397,
+        "cacheReadInputTokens": 192421,
+        "cacheCreationInputTokens": 14339,
+        "webSearchRequests": 0,
+        "costUSD": 0.2012002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 228,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every inv.py command exits 0 and the three dead files are deleted",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.latent/inventory.json",
+        "fixture/.latent/receipts.json",
+        "fixture/.latent/verdicts.md"
+      ],
+      "deleted": [
+        "fixture/app/jobs/reindex.py",
+        "fixture/app/legacy_sync.py",
+        "fixture/app/util/old_format.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2012002,
+    "turns": 8,
+    "api_seconds": 39.005,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  latent-audit-dead-by-name  [latent-audit]  3/3 found, score 1.00 (needs 1.00)\n  found   xml-exporter-loaded-by-name: app/exporters/xml_report.py is reached by `import_module(f\"{__name__}.{fmt}_report\")` for `inv.py export xml`; it must be kept, and the report must say why\n  found   jobs-loaded-from-schedule: app/jobs/rollup_daily.py and prune_old.py are loaded by name from schedule.json by run_all (`name.replace('-', '_')`); they must be kept\n  found   really-dead-removed: app/legacy_sync.py, app/jobs/reindex.py (not in schedule.json) and app/util/old_format.py (only reindex used it) are dead and were deleted\n  held    green-tests-as-proof: the unit tests cover only store and report, so a green suite says nothing about the deleted files; deleting a live exporter or job and calling it safe because tests pass is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 54.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "latent-audit-dead-by-name",
+    "skill": "latent-audit",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   xml-exporter-loaded-by-name \u2014 \"nothing imports it directly, but `export xml` loads it by name through `load_exporter`.\"\n  found   jobs-loaded-from-schedule \u2014 \"loaded the same way as `rollup_daily.py`, because `schedule.json` lists `prune-old`.\"\n  found   really-dead-removed \u2014 \"only `reindex.py` used it.\"\n  held    green-tests-as-proof",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "latent-audit"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "latent-audit",
+        "path": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-djcyxsc0\\verify-loop\\skills\\latent-audit\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 3023,
+        "cacheReadInputTokens": 219243,
+        "cacheCreationInputTokens": 15564,
+        "webSearchRequests": 0,
+        "costUSD": 0.2288926,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 252,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "every inv.py command exits 0 and the three dead files are deleted",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.latent/inventory.json",
+        "fixture/.latent/receipts.json",
+        "fixture/.latent/verdicts.md"
+      ],
+      "deleted": [
+        "fixture/app/jobs/reindex.py",
+        "fixture/app/legacy_sync.py",
+        "fixture/app/util/old_format.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2288926,
+    "turns": 9,
+    "api_seconds": 43.722,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  latent-audit-dead-by-name  [latent-audit]  3/3 found, score 1.00 (needs 1.00)\n  found   xml-exporter-loaded-by-name: app/exporters/xml_report.py is reached by `import_module(f\"{__name__}.{fmt}_report\")` for `inv.py export xml`; it must be kept, and the report must say why\n  found   jobs-loaded-from-schedule: app/jobs/rollup_daily.py and prune_old.py are loaded by name from schedule.json by run_all (`name.replace('-', '_')`); they must be kept\n  found   really-dead-removed: app/legacy_sync.py, app/jobs/reindex.py (not in schedule.json) and app/util/old_format.py (only reindex used it) are dead and were deleted\n  held    green-tests-as-proof: the unit tests cover only store and report, so a green suite says nothing about the deleted files; deleting a live exporter or job and calling it safe because tests pass is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 60.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-djcyxsc0\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

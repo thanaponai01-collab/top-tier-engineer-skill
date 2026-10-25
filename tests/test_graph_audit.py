@@ -235,3 +235,152 @@ class FeatureMapRoots(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def gate_repo(tmp):
+    """by_name_repo plus old_util.py, imported only by the dead old.py."""
+    by_name_repo(tmp)
+    with open(os.path.join(tmp, "old.py"), "w", encoding="utf-8") as fh:
+        fh.write("from old_util import helper\ndef legacy():\n    return helper()\n")
+    with open(os.path.join(tmp, "old_util.py"), "w", encoding="utf-8") as fh:
+        fh.write("def helper():\n    return 1\n")
+
+
+def write_verdicts(tmp, lines):
+    os.makedirs(os.path.join(tmp, ".latent"), exist_ok=True)
+    with open(os.path.join(tmp, ".latent", "verdicts.md"), "w", encoding="utf-8") as fh:
+        fh.write("# Verdicts\n\n" + "".join(f"- {ln}\n" for ln in lines))
+
+
+class Stages(unittest.TestCase):
+    """The gate holds the cleanup to three outcomes: a snapshot of what really loads, deletions of
+    only what never loaded with nothing broken, and a verdict for every suspect left."""
+
+    def gate(self, tmp, *extra):
+        return run("graph-audit.py", tmp, "--gate", *extra)
+
+    def test_no_snapshot_opens_stage_1_and_shows_the_loaders(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            code, out, _ = self.gate(tmp)
+            self.assertEqual(code, 1, out)
+            self.assertIn("no snapshot", out)
+            self.assertIn("cli.py:5 builds module names at runtime", out)
+
+    def test_the_snapshot_observes_what_loads(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            code, out, err = run("graph-audit.py", tmp, "--snapshot", "--run", "python cli.py")
+            self.assertEqual(code, 0, out + err)
+            self.assertIn("1 of 3 suspects loaded (live), 2 never loaded", out)
+            with open(os.path.join(tmp, ".latent", "snapshot.json"), encoding="utf-8") as fh:
+                snap = json.load(fh)
+            self.assertEqual(snap["loaded"]["jobs/nightly_sum.py"], "run: python cli.py")
+            self.assertNotIn("old.py", snap["loaded"])
+
+    def test_a_snapshot_that_never_runs_a_loader_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            run("graph-audit.py", tmp, "--snapshot", "--run", "python -c print(1)")
+            code, out, _ = self.gate(tmp)
+            self.assertIn("cli.py:5 builds module names at runtime, but no snapshot command made it load", out)
+            self.assertIn("STAGE 1 snapshot: every loader exercised: open", out)
+            write_verdicts(tmp, ["loader cli.py:5: the schedule is empty in this deployment"])
+            code, out, _ = self.gate(tmp)
+            self.assertIn("STAGE 1 snapshot: every loader exercised: holds", out)
+
+    def test_deleting_what_the_snapshot_saw_load_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            run("graph-audit.py", tmp, "--snapshot", "--run", "python cli.py")
+            os.remove(os.path.join(tmp, "jobs", "nightly_sum.py"))
+            code, out, _ = self.gate(tmp)
+            self.assertIn("jobs/nightly_sum.py: deleted, but the snapshot saw it loaded by run: python cli.py", out)
+
+    def test_deleting_something_that_breaks_a_snapshot_command_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            with open(os.path.join(tmp, "check_old.py"), "w", encoding="utf-8") as fh:
+                fh.write("import os, sys\nsys.exit(0 if os.path.exists('old_util.py') else 1)\n")
+            run("graph-audit.py", tmp, "--snapshot", "--run", "python cli.py", "--run", "python check_old.py")
+            os.remove(os.path.join(tmp, "old_util.py"))
+            code, out, _ = self.gate(tmp)
+            self.assertIn("after the deletions, run: python check_old.py fails", out)
+
+    def test_a_snapshot_is_refused_after_deletions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            self.gate(tmp)
+            os.remove(os.path.join(tmp, "old.py"))
+            code, out, _ = run("graph-audit.py", tmp, "--snapshot", "--run", "python cli.py")
+            self.assertEqual(code, 2, out)
+            self.assertIn("SNAPSHOT: refused", out)
+
+    def test_suspects_left_need_a_verdict_and_the_gate_drafts_slots(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            code, out, _ = self.gate(tmp, "--run", "python cli.py")
+            self.assertIn("2 suspect(s) the snapshot never loaded are still here", out)
+            with open(os.path.join(tmp, ".latent", "verdicts.md"), encoding="utf-8") as fh:
+                self.assertIn("- old.py: [[fill:", fh.read())
+            write_verdicts(tmp, ["old.py: dead: the retired sync", "old_util.py: watch: vendored, kept on purpose"])
+            code, out, _ = self.gate(tmp)
+            self.assertEqual(code, 0, out)
+            self.assertIn("LATENT-GATE: done(0 removed, 1 live, 1 dead not removed, 1 watch)", out)
+
+    def test_the_cheap_route_is_snapshot_delete_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            self.gate(tmp, "--run", "python cli.py")
+            os.remove(os.path.join(tmp, "old.py"))
+            os.remove(os.path.join(tmp, "old_util.py"))
+            code, out, err = self.gate(tmp)
+            self.assertEqual(code, 0, out + err)
+            self.assertIn("Removed (2;", out)
+            self.assertIn("- jobs/nightly_sum.py: loaded by run: python cli.py", out)
+
+    def test_a_deleted_file_another_file_names_needs_a_reason(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            with open(os.path.join(tmp, "cron.txt"), "w", encoding="utf-8") as fh:
+                fh.write("0 2 * * * python -c 'import old_util'\n")
+            self.gate(tmp, "--run", "python cli.py")
+            os.remove(os.path.join(tmp, "old.py"))
+            os.remove(os.path.join(tmp, "old_util.py"))
+            code, out, _ = self.gate(tmp)
+            self.assertIn("old_util.py: deleted, but cron.txt:1 spells its name", out)
+            write_verdicts(tmp, ["old_util.py: dead: cron.txt:1 is the 2023 crontab, no longer installed"])
+            code, out, _ = self.gate(tmp)
+            self.assertEqual(code, 0, out)
+
+    def test_deleting_code_that_is_not_a_suspect_is_refused_without_a_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            with open(os.path.join(tmp, "helper.py"), "w", encoding="utf-8") as fh:
+                fh.write("X = 1\n")
+            with open(os.path.join(tmp, "tool.py"), "w", encoding="utf-8") as fh:
+                fh.write("import helper\nif __name__ == '__main__':\n    print(helper.X)\n")
+            self.gate(tmp, "--run", "python cli.py")
+            os.remove(os.path.join(tmp, "helper.py"))
+            code, out, _ = self.gate(tmp)
+            self.assertIn("helper.py: deleted, but it was not a suspect the snapshot covered", out)
+
+
+class TryDeleteVerdicts(unittest.TestCase):
+    def test_try_delete_writes_the_verdicts_it_proves_and_keeps_written_ones(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            write_verdicts(tmp, ["old.py: dead: the warehouse sync, retired in 2025"])
+            code, out, _ = run("graph-audit.py", tmp, "--try-delete", "jobs/nightly_sum.py", "old.py",
+                               "old_util.py", "--run", "python cli.py")
+            self.assertIn("Wrote 2 proven verdict(s)", out)
+            with open(os.path.join(tmp, ".latent", "verdicts.md"), encoding="utf-8") as fh:
+                text = fh.read()
+            self.assertIn("- jobs/nightly_sum.py: live: deleting it breaks run: python cli.py", text)
+            self.assertIn("- old.py: dead: the warehouse sync, retired in 2025", text)
+
+    def test_weak_results_write_no_verdict(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gate_repo(tmp)
+            code, out, _ = run("graph-audit.py", tmp, "--try-delete", "old.py")
+            self.assertNotIn("Wrote", out)

@@ -1,0 +1,92 @@
+{
+  "case": "latent-audit-follow-up-delete",
+  "skill": "latent-audit",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   rollup-daily-is-scheduled \u2014 \"It's the first entry in `app/jobs/schedule.json`.\"\n  found   yaml-exporter-loaded-by-format \u2014 \"`yaml` is an allowed format in `inv.py:9`, and `load_exporter` turns it into `app.exporters.yaml_report` (`app/exporters\"\n  held    deleted-on-the-teammates-word",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "latent-audit"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "latent-audit",
+      "path": "<tmp>\\tte-plugin-fu32afrb\\verify-loop\\skills\\latent-audit\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 26,
+      "outputTokens": 5926,
+      "cacheReadInputTokens": 317750,
+      "cacheCreationInputTokens": 26146,
+      "webSearchRequests": 0,
+      "costUSD": 0.39134199999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1628,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "every inv.py command exits 0, and rollup_daily.py and yaml_report.py still exist",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.latent/inventory.json",
+      "fixture/.latent/snapshot.json",
+      "fixture/.latent/verdicts.md"
+    ],
+    "deleted": [
+      "fixture/app/exporters/ods_report.py",
+      "fixture/app/exporters/pdf_report.py"
+    ]
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.39134199999999997,
+  "turns": 13,
+  "api_seconds": 80.307,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 93.2,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-fu32afrb\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -10,57 +10,30 @@ metadata:
 
 # Latent Audit
 
-**Code nothing appears to reference is not dead. It is suspected dead.** Finding why it might still
-run is your job: reading loaders, schedules and configs. Proving it is the helper's: nothing is
-deleted until a deletion in a throwaway copy breaks nothing that could have noticed. `H` below is
-`python <this skill's base directory>/scripts/graph-audit.py`.
+**Goal:** remove the code nothing reaches, keep everything that is reached, and account for every
+file that looked dead. How you find what reaches it is yours. What counts as done is checked by
+the helper. `H` is `python <this skill's base directory>/scripts/graph-audit.py <repo>`.
 
-## Steps
+Run `H --gate` whenever you like; it says which stage is open and what fixes it, and prints the
+answer once all three hold (`LATENT-GATE: done`).
 
-1. **Measure.** `H <repo> [--layers layers.txt]`. `MAPPED` files are named by the repo's
-   `FEATURES.md` (`feature-map`) and are live. `DEAD MODULE CANDIDATES` and `UNUSED DEFS` are
-   suspects only: imports by a built name (`import_module(f"...{x}")`, `getattr`, registries,
-   schedules, config keys, CLI tables, cron, other services) never show in the graph.
-2. **Find what could reach each suspect.** Search its name and name fragments (`rollup_daily` is
-   `rollup-daily` in a schedule), read every loader, check outside callers. Write one line per
-   suspect: `dead: <why nothing reaches it>` or `live: <what reaches it>`. Largest first, about 15
-   in one run; say how many were left unchecked.
-3. **Checkpoint before any deletion.**
-   `H <repo> --try-delete <files> --run "<command that would reach them>" ...`
-   It runs the map's recorded runs, VERIFY.md's checks (`verify-loop`), the unit tests and each
-   `--run` in a copy, before and after deleting. Name with `--run` every command your step 2 found
-   that could load the code (the job runner, each export format, the app's commands).
+## The stages
 
-   | Verdict | Then |
-   |---|---|
-   | `breaks(...)` | Live. Keep it; the line names what broke |
-   | `nothing-breaks(...)` | Delete it, unless step 2 found evidence of an outside caller (a cron line, a deploy config, another service naming it); a caller you can only imagine is not one |
-   | `weak(tests only)` or `unchecked(...)` | Do not delete: add the `--run` commands it asks for, or list it as *watch* |
+| Stage | Holds when |
+|---|---|
+| **1. Snapshot** | Before anything changes, `H --snapshot --run "<cmd>" ...` ran every command that could load code and recorded what each one imported (the map's recorded runs, VERIFY.md and the unit tests are added for you). Every runtime loader the helper finds (`import_module(f"...")`) loaded at least one of its suspects, or `.latent/verdicts.md` says `- loader <file:line>: <why it loads none>` |
+| **2. Change** | Only files the snapshot never saw loaded are deleted, in place, and every snapshot command still passes. A deleted file whose name another file spells (a schedule, a config) needs `- <file>: dead: <why that line never loads it>` |
+| **3. Account** | Every suspect still here that the snapshot never loaded has a line in `.latent/verdicts.md`: `dead` (report without deleting), `watch` (keep, with why), or `live` (with the `file:line` that loads it) |
 
-4. **Delete small.** One candidate per commit (the code, its dead tests, its dead config) so any
-   mistake reverts in one step. Then, if the repo has a map, `python .features/features.py check
-   --rerun`; if it has VERIFY.md, `verify.py status`. Report only, unless asked to delete.
-5. **Layers, only against a written declaration.** The order comes from the project's architecture
-   docs or the user, as a layers file (top layer first; a module may import the same or lower
-   layers):
+`H --gate --run "<cmd>" ...` takes the snapshot and checks the stages in one call.
 
-   ```
-   interface: app/routes/, app/cli/
-   domain:    app/services/
-   data:      app/models/, app/db/
-   ```
+## Other tools
 
-   No declaration: report "layers unchecked", never "clean", and never invent an order. A breach is
-   a real import at a real line; fixing the code or the declaration is the owner's call.
-6. **Note bugs you pass, don't chase them**: `file:line` and move on.
+- `H` alone: the import graph. Files `FEATURES.md` (`feature-map`) names are `MAPPED` and live.
+- `H --try-delete <file> ... --run "<cmd>"`: for code a snapshot cannot observe (it loads outside
+  Python, or its entry point cannot run here). Deletes in a throwaway copy and reruns everything;
+  a `nothing-breaks` receipt lets stage 2 accept a deletion the snapshot did not cover.
+- `H --layers layers.txt`: imports that point up a declared layer order (top first, e.g.
+  `interface: app/routes/`). No declared order means "layers unchecked", never "clean".
 
-## Report
-
-- **Removed**: each file with its `DELETE-CHECK` line and why nothing reaches it.
-- **Kept, though it looked dead**: each file and what reaches it.
-- **Watch**: suspects without a `nothing-breaks`, and how many were never checked.
-- Layer breaches with the two remedies, then bugs noted along the way.
-
-*Test:* every removed file has a `nothing-breaks` verdict whose checks include every command step 2
-found that could reach it, or the app's own commands when step 2 found none. Code nothing loads is
-dead: "no command ever loaded it" is the finding, not a reason to keep it.
+Report only, unless asked to delete. Commit `.latent/` with the change.

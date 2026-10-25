@@ -103,7 +103,8 @@
       "app/util/old_format.py",
       "*.md",
       ".features/*",
-      "tmp/*"
+      "tmp/*",
+      ".latent/*"
     ],
     "replays": [
       {

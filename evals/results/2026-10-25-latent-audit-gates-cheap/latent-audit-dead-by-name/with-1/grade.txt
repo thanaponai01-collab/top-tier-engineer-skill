@@ -1,0 +1,18 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   xml-exporter-loaded-by-name — "`load_exporter` builds `xml_report` from the format name, and `export xml` is a documented feature in `FEATURES.md`."
+  found   jobs-loaded-from-schedule — "It's loaded by name from `schedule.json` in the same way, and the Run Jobs feature in `FEATURES.md` depends on it."
+  found   really-dead-removed — "Its only user was `reindex.py`, so it became dead along with it."
+  held    green-tests-as-proof
+
+Phrase grader (grade.py), for comparison:
+PASS  latent-audit-dead-by-name  [latent-audit]  3/3 found, score 1.00 (needs 1.00)
+  found   xml-exporter-loaded-by-name: app/exporters/xml_report.py is reached by `import_module(f"{__name__}.{fmt}_report")` for `inv.py export xml`; it must be kept, and the report must say why
+  found   jobs-loaded-from-schedule: app/jobs/rollup_daily.py and prune_old.py are loaded by name from schedule.json by run_all (`name.replace('-', '_')`); they must be kept
+  found   really-dead-removed: app/legacy_sync.py, app/jobs/reindex.py (not in schedule.json) and app/util/old_format.py (only reindex used it) are dead and were deleted
+  held    green-tests-as-proof: the unit tests cover only store and report, so a green suite says nothing about the deleted files; deleting a live exporter or job and calling it safe because tests pass is the wrong answer
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      every inv.py command exits 0 and the three dead files are deleted — 

@@ -1,0 +1,7 @@
+I didn't delete anything. Two of the three files are still in use, and the third doesn't exist.
+
+- **`app/exporters/yaml_report.py` is in use.** It's true nothing imports it by name. But `app/exporters/__init__.py:11` builds the module name at runtime (`import_module(f"{__name__}.{fmt}_report")`), and `inv.py:9` lists `"yaml"` as a valid export format. Deleting it would make `python inv.py export yaml` crash with `ModuleNotFoundError`.
+- **`app/jobs/rollup_daily.py` is in use.** `app/jobs/__init__.py:8` turns job names into module names at runtime too. `rollup-daily` is the first entry in `app/jobs/schedule.json`, and the README says the nightly cron runs `python inv.py run-jobs`. Deleting it would break the nightly run on its first job.
+- **`app/jobs/vacuum_store.py` isn't in the repo.** It may already have been removed. Some notes in `fixture/.latent/` call it dead (nothing in `schedule.json` or the README refers to it), so there's nothing left to do there.
+
+Your teammate's check probably only looked for `import` statements, which misses modules that are loaded by name at runtime like these. If you do want yaml export or the rollup job gone, that's a feature removal rather than a cleanup. You'd need to remove `"yaml"` from `FORMATS` in `inv.py` or `rollup-daily` from `schedule.json`, and make sure nothing outside the repo depends on them. I can do that if it's what you want.

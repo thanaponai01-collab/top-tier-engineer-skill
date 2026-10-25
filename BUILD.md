@@ -142,6 +142,13 @@
   - Evals in `evals/results/2026-10-25-latent-*`: without 3/3 + 3/3; with 3/3 + 3/3 after the
     SKILL.md wording fix (`-with-3` and `-with`), about 1.3x the cost.
 
+- latent-audit as three stages (1.28.0) | proven (mechanics) / costs 1.3-1.6x plain Opus, accounts for every dead file (eval)
+  - Stages from a trace of plain Opus: snapshot with an import hook, in-place delete + rerun,
+    account for the rest. `tests/test_graph_audit.py` 28 tests; 3 mutations each caught.
+  - Eval `evals/results/2026-10-25-latent-audit-stages`: 6/6; cleanup session $0.28 vs $0.17 on 25
+    suspects. Remaining overhead is protocol calls (read SKILL, snapshot, gate rounds, verdict file).
+  - Template for the other skills if it holds up.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before
