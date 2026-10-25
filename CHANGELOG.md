@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.25.0 - 2026-10-25 - feature-map reads verify-loop's receipts
+
+- `features.py check` now links each feature to verify-loop, not just to a VERIFY.md heading:
+  - **unbacked**: a `proven` feature whose linked section has no receipt of its check rejecting a
+    wrong product, or whose check failed in the last run. Read from `verify.py status --json` when
+    verify-loop is installed beside feature-map (it is in this plugin); a standalone copy says
+    receipts were not checked and judges nothing.
+  - **unfenced**: the linked section has no `path:`, or the feature's entry or trace files lie
+    outside it, so `verify.py run --affected` would not rerun its check when they change.
+  - Both are red under `--strict`. Five tests in `tests/test_features.py` build real verify-loop
+    receipts, including a standalone copy with no verify-loop beside it.
+- SKILL.md step 5 asks for a covering `path:` and a receipt from `verify.py advance`.
+
 ## 1.24.1 - 2026-10-25 - feature-map's check goes red on drift it used to call ok
 
 - `features.py check` matched needles as substrings, so five kinds of drift passed. Each now fails,

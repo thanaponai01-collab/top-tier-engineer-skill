@@ -14,6 +14,10 @@ click target, shortcut, CLI command. Three commands:
          count). Then what the map does NOT cover: entry points in the code the map lacks
          (unmapped), features with no trace, no VERIFY.md link (or no VERIFY.md), no status label,
          no description, a pinned status whose files changed (drifted), or `proven` with no pin.
+         Links to verify-loop: a `proven` feature whose VERIFY.md section has no receipt of its
+         check rejecting a wrong product, or failed its last run, is unbacked (read from
+         `verify.py status --json` when verify-loop is installed beside this skill); a feature
+         file outside its section's `path:` is unfenced, since `run --affected` would not rerun it.
 
 An entry point is `kind: `anchor` @ file :: needle`. The check looks for the needle in the file (or
 anywhere in the repo when no file is given) as a whole token, so `pay-btn` is not found in
@@ -47,17 +51,22 @@ Usage:
   python scripts/features.py impact [repo] [--base REF | --files a b]
 
 Exit: check 0 = nothing stale or broken; 1 = something stale or broken (or --strict and something is
-untraced, unmapped, unlinked, unlabeled, undescribed, drifted or unpinned); 2 = no FEATURES.md.
+untraced, unmapped, unlinked, unlabeled, undescribed, drifted, unpinned, unbacked or unfenced);
+2 = no FEATURES.md.
 Summary line:
   FEATURES: <f> features | <e> entry points, <s> stale | <b> broken | <t> untraced | <u> unmapped |
-  <v> unlinked | <l> unlabeled | <d> undescribed | <r> drifted | <p> unpinned
+  <v> unlinked | <l> unlabeled | <d> undescribed | <r> drifted | <p> unpinned | <k> unbacked |
+  <n> unfenced
 """
-import argparse, os, re, subprocess, sys
+import argparse, json, os, re, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _encoding import utf8_streams
 
 MAP, VERIFY = "FEATURES.md", "VERIFY.md"
+# verify-loop's helper, when this skill is installed beside it (the verify-loop plugin ships both).
+VERIFY_PY = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                         "verify-loop", "scripts", "verify.py")
 SKIP_DIRS = {".git", "node_modules", "venv", ".venv", "__pycache__", "dist", "build", "target",
              "vendor", ".tox", ".next", "fixture", "fixtures", "tests", "test", "__tests__"}
 CODE_EXT = {".py", ".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".html",
@@ -393,6 +402,60 @@ def trace_problems(repo, trace):
     return out
 
 
+def verify_paths(vtext):
+    """{section name lower: [path: entries]} from VERIFY.md text, as verify.py reads them."""
+    paths, cur = {}, None
+    for line in vtext.splitlines():
+        h = re.match(r"^##\s+(.+?)\s*$", line)
+        if h:
+            cur = paths.setdefault(h.group(1).lower(), [])
+            continue
+        b = re.match(r"^\s*[-*]\s+paths?:\s*(.*?)\s*$", line, re.I)
+        if b and cur is not None:
+            cur.extend(p.strip().strip("`").removeprefix("./") for p in b.group(1).split(",") if p.strip())
+    return paths
+
+
+def unfenced_reason(f, paths):
+    """None when every file the feature names is inside its VERIFY.md section's `path:`, so
+    `verify.py run --affected` reruns the check when any of them changes; else why not."""
+    if not paths:
+        return f"'{f['verify']}' in {VERIFY} has no path:, so `verify.py run --affected` cannot tie this feature's files to it"
+    inside = lambda rel: any(rel == p.rstrip("/") or rel.startswith(p.rstrip("/") + "/") for p in paths)
+    out = sorted(rel for rel in feature_files(f) if not inside(rel))
+    if out:
+        return (f"{', '.join(out)} outside the path: of '{f['verify']}' in {VERIFY}, so a change there "
+                "does not rerun its check")
+    return None
+
+
+def verify_answer(repo):
+    """verify-loop's recorded answer for repo (`verify.py status --json`), or None when verify-loop
+    is not installed beside this skill or gives no readable answer."""
+    if not os.path.isfile(VERIFY_PY):
+        return None
+    try:
+        r = subprocess.run([sys.executable, VERIFY_PY, "status", repo, "--json"],
+                           capture_output=True, text=True, encoding="utf-8")
+        return json.loads(r.stdout)
+    except (OSError, ValueError):
+        return None
+
+
+def unbacked_reason(section, ans):
+    """None when verify-loop holds a receipt of the section's check rejecting a wrong product and
+    its last run of that check passed; else why `proven` is only a claim."""
+    if ans.get("state") == "tampered":
+        return f"verify-loop's state is tampered ({ans.get('detail', '')})"
+    failing = {k.split("|", 1)[0].lower() for k in ans.get("gaps", {}).get("failing", [])}
+    if section.lower() in failing:
+        return f"a check of '{section}' failed in the last verify-loop run"
+    if section.lower() not in {r.get("feature", "").lower() for r in ans.get("rejections", [])}:
+        return (f"no verify-loop receipt shows '{section}' rejecting a wrong product "
+                "(`verify.py advance` proves it)")
+    return None
+
+
 def cmd_check(repo, strict):
     path = os.path.join(repo, MAP)
     if not os.path.isfile(path):
@@ -405,8 +468,15 @@ def cmd_check(repo, strict):
     vtext = load(repo, VERIFY)
     vnames = {m.lower(): m for m in re.findall(r"(?m)^##\s+(.+?)\s*$", vtext) if m.lower() not in ("blind spots", "run") and not m.lower().startswith("journey:")}
 
+    vpaths = verify_paths(vtext)
+    ans = verify_answer(repo) if vtext and any(f["status"].lower().startswith("proven") for f in features) else None
+    if vtext and ans is None and not os.path.isfile(VERIFY_PY):
+        print("note  receipts not checked: verify-loop is not installed beside feature-map, "
+              "so `proven` is taken on its word")
+
     cache, mapped = {}, set()
     entries = stale = broken = untraced = unlinked = unlabeled = undescribed = drifted = unpinned = 0
+    unbacked = unfenced = 0
     head_changed = {}
     for f in features:
         print(f["name"])
@@ -439,6 +509,15 @@ def cmd_check(repo, strict):
         elif f["verify"].lower() not in vnames:
             unlinked += 1
             print(f"  note  verify: '{f['verify']}' is not a section of {VERIFY}")
+        else:
+            why = unfenced_reason(f, vpaths.get(f["verify"].lower()))
+            if why:
+                unfenced += 1
+                print(f"  note  unfenced: {why}")
+            why = unbacked_reason(f["verify"], ans) if ans and f["status"].lower().startswith("proven") else None
+            if why:
+                unbacked += 1
+                print(f"  note  unbacked: {why}")
         if not f["status"].lower().startswith(LABELS):
             unlabeled += 1
             print("  note  no status label (proven | traced | suspected)")
@@ -473,9 +552,10 @@ def cmd_check(repo, strict):
         unlinked += len(orphans)
 
     print(f"FEATURES: {len(features)} features | {entries} entry points, {stale} stale | "
-          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed | {drifted} drifted | {unpinned} unpinned")
+          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed | {drifted} drifted | {unpinned} unpinned | {unbacked} unbacked | "
+          f"{unfenced} unfenced")
     if stale or broken or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed
-                                       or drifted or unpinned)):
+                                       or drifted or unpinned or unbacked or unfenced)):
         return 1
     return 0
 
@@ -489,7 +569,8 @@ def main():
     c = sub.add_parser("check", help="test every mapped entry point against the code")
     c.add_argument("repo", nargs="?", default=".")
     c.add_argument("--strict", action="store_true",
-                   help="also exit 1 on untraced, unmapped, unlinked, unlabeled, undescribed, drifted or unpinned")
+                   help="also exit 1 on untraced, unmapped, unlinked, unlabeled, undescribed, drifted, unpinned, "
+                        "unbacked or unfenced")
     m = sub.add_parser("impact", help="which features a change touches and which VERIFY.md sections to rerun")
     m.add_argument("repo", nargs="?", default=".")
     m.add_argument("--files", nargs="+", help="changed files (default: git diff against --base, plus untracked)")

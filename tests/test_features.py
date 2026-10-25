@@ -1,7 +1,7 @@
 """feature-map: `features.py check` must go red when the code drifts from the map."""
-import os, subprocess, tempfile, unittest
+import os, shutil, subprocess, sys, tempfile, unittest
 
-from _helpers import run
+from _helpers import run, SCRIPTS
 
 APP = """import svc
 from flask import Flask
@@ -15,7 +15,9 @@ SVC = "def place_order():\n    return 1\n"
 UI = """<button data-testid="pay-btn">Pay</button>
 <script>hotkeys('ctrl+enter', submit)</script>
 """
-VERIFY = "## Checkout\n- test: `python -m pytest -q`\n"
+FLAG = "python -c \"import os,sys; os.path.exists('src/ok.flag') or (print('expected order id'), sys.exit(1))\""
+VERIFY = (f"## Checkout\n- path: src/\n- test: `{FLAG}`\n- fail-signal: expected order id\n"
+          "- fail-proof: removed src/ok.flag, check went red\n")
 MAP = """## Checkout
 - what: Pay for the cart and get an order id.
 - route: `/checkout` @ src/app.py
@@ -44,6 +46,7 @@ class CheckDrift(unittest.TestCase):
         git(self.repo, "add", "-A")
         git(self.repo, "commit", "-qm", "init")
         self.sha = git(self.repo, "rev-parse", "--short", "HEAD")
+        self.prove()
         self.write_map(f"proven @ {self.sha}: drove /checkout, order id shown")
 
     def tearDown(self):
@@ -52,6 +55,15 @@ class CheckDrift(unittest.TestCase):
     def write(self, rel, text):
         with open(os.path.join(self.repo, rel), "w", encoding="utf-8", newline="\n") as fh:
             fh.write(text)
+
+    def prove(self):
+        """verify-loop sees the check go red on the wrong product, then pass on the right one."""
+        flag = os.path.join(self.repo, "src", "ok.flag")
+        if os.path.exists(flag):
+            os.remove(flag)
+        run("verify.py", "run", self.repo)
+        self.write("src/ok.flag", "")
+        run("verify.py", "run", self.repo)
 
     def write_map(self, status):
         self.write("FEATURES.md", MAP.format(status=status))
@@ -69,7 +81,7 @@ class CheckDrift(unittest.TestCase):
         code, out, _ = self.check()
         self.assertEqual(code, 0, out)
         self.assertIn("0 stale | 0 broken | 0 untraced | 0 unmapped | 0 unlinked | 0 unlabeled | "
-                      "0 undescribed | 0 drifted | 0 unpinned", out)
+                      "0 undescribed | 0 drifted | 0 unpinned | 0 unbacked | 0 unfenced", out)
 
     def test_renamed_selector_is_stale(self):
         self.edit("src/ui.html", 'data-testid="pay-btn"', 'data-testid="pay-btn-v2"')
@@ -109,6 +121,50 @@ class CheckDrift(unittest.TestCase):
         code, out, _ = self.check()
         self.assertEqual(code, 1, out)
         self.assertIn("STALE  route  /s @ src/app.py", out)
+
+
+    def test_proven_without_verify_receipt_is_unbacked(self):
+        for name in os.listdir(self.repo):
+            if name.startswith(".verify-state"):
+                os.remove(os.path.join(self.repo, name))
+        code, out, _ = self.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("unbacked: no verify-loop receipt shows 'Checkout' rejecting", out)
+        self.assertIn("1 unbacked", out)
+
+    def test_proven_with_failing_verify_check_is_unbacked(self):
+        os.remove(os.path.join(self.repo, "src", "ok.flag"))
+        run("verify.py", "run", self.repo)
+        code, out, _ = self.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("unbacked: a check of 'Checkout' failed in the last verify-loop run", out)
+
+    def test_feature_file_outside_verify_path_is_unfenced(self):
+        self.edit("VERIFY.md", "- path: src/\n", "- path: src/app.py\n")
+        self.prove()
+        code, out, _ = self.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("unfenced: src/svc.py, src/ui.html outside the path: of 'Checkout'", out)
+        self.assertIn("1 unfenced", out)
+
+    def test_verify_section_without_path_is_unfenced(self):
+        self.edit("VERIFY.md", "- path: src/\n", "")
+        self.prove()
+        code, out, _ = self.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("unfenced: 'Checkout' in VERIFY.md has no path:", out)
+
+    def test_without_verify_loop_receipts_are_not_judged(self):
+        for name in os.listdir(self.repo):
+            if name.startswith(".verify-state"):
+                os.remove(os.path.join(self.repo, name))
+        with tempfile.TemporaryDirectory() as skills:
+            alone = os.path.join(skills, "feature-map", "scripts")
+            shutil.copytree(SCRIPTS["features.py"], alone, ignore=shutil.ignore_patterns("__pycache__"))
+            p = subprocess.run([sys.executable, os.path.join(alone, "features.py"), "check", self.repo,
+                                "--strict"], capture_output=True, text=True, encoding="utf-8")
+        self.assertEqual(p.returncode, 0, p.stdout)
+        self.assertIn("receipts not checked: verify-loop is not installed beside feature-map", p.stdout)
 
 
 if __name__ == "__main__":

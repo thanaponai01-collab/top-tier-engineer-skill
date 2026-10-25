@@ -45,7 +45,8 @@ given. Each bullet is `key: value`:
 - **verify:** the VERIFY.md section that proves it (`verify-loop`). No section, no proof it works.
 - **status:** an evidence label, then how you know it. Pin it to the commit you ran it at
   (`proven @ <short sha>`): `check` then flags it as drifted once a file of that feature changes,
-  and flags `proven` with no pin as unpinned.
+  and flags `proven` with no pin as unpinned. With `verify-loop` installed beside this skill,
+  `proven` also needs its receipt: the linked section's check seen rejecting a wrong product.
 - Also worth a line when true: **needs** (login, a flag, a role, seeded data) and **effect** (what
   changes: a row, a file, a request).
 
@@ -72,14 +73,16 @@ end · **suspected** = neither.*
    person says to run it, and a yes covers that one entry point.
    An entry point that exists but does nothing is a finding to report, not a line to keep.
 5. **Link each feature to VERIFY.md** (`verify-loop`): name its section, or add one. A feature with
-   no check is listed as a gap, not hidden.
+   no check is listed as a gap, not hidden. Give the section a `path:` that covers every entry and
+   trace file of the feature, so `verify.py run --affected` reruns it when any of them changes. A
+   feature marked `proven` gets its receipt from `verify.py advance` until that says `done`.
 6. **Check the map.** `python <base>/scripts/features.py check --strict` must exit 0.
 
 A large app (about 15 features or more) is mapped in batches, most-reached first. `--strict` cannot
 pass until every entry point is mapped, so at the end of a batch run `check` without it, and report
 the unmapped count as what is left instead of calling the map done.
 
-*Test:* `check --strict` prints `0 stale | 0 broken | 0 untraced | 0 unmapped | 0 unlinked | 0 unlabeled | 0 undescribed | 0 drifted | 0 unpinned`.
+*Test:* `check --strict` prints `0 stale | 0 broken | 0 untraced | 0 unmapped | 0 unlinked | 0 unlabeled | 0 undescribed | 0 drifted | 0 unpinned | 0 unbacked | 0 unfenced`.
 
 ## What `check` says
 
@@ -96,6 +99,12 @@ the unmapped count as what is left instead of calling the map done.
 - **Drifted**: a status pinned `@ commit` whose feature has files changed since (or a commit git cannot
   resolve). Re-run the entry points, then re-pin; never re-pin without re-running.
 - **Unpinned**: a `proven` status with no `@ commit`, so drift cannot be seen.
+- **Unbacked**: a `proven` feature whose VERIFY.md section has no `verify-loop` receipt of its check
+  rejecting a wrong product, or whose check failed in the last `verify.py` run. Run
+  `verify.py advance` until `done`; never relabel to `traced` to hide a failing check. Without
+  `verify-loop` beside this skill, `check` says receipts were not checked and judges no feature.
+- **Unfenced**: the linked VERIFY.md section has no `path:`, or names files of the feature outside
+  it, so a change there would not rerun its check under `--affected`. Widen the `path:`.
 - `--strict` fails on every group after BROKEN too; without it only STALE and BROKEN fail. Use
   `--strict` for "done".
 
@@ -129,5 +138,5 @@ run `check`. It is the drift alarm.
   verbatim. `check` and `impact` read through the includes. A session working on billing reads the
   index and `features/billing.md`, nothing else.
 
-Mapping every feature to its checks is `verify-loop`. This skill stands without it: without it, the
-file above is the whole job.
+Mapping every feature to its checks is `verify-loop`; this map is the feature inventory its strict
+green does not prove. This skill stands without it: without it, the file above is the whole job.
