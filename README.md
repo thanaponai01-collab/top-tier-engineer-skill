@@ -8,6 +8,10 @@ feature, its entry points and call traces, checked against the code by `features
 linked to VERIFY.md sections. And `latent-audit` (manual-only, `/verify-loop:latent-audit`): dead code
 and layer breaches, where a file is deleted only after `graph-audit.py --try-delete` deletes it in a
 throwaway copy and the map's recorded runs, VERIFY.md's checks and the commands you name still pass.
+And `wire-check` (manual-only, `/verify-loop:wire-check`): is the code connected to the running
+system? `wire.py` runs every way in under a call tracer, has a verdict written for every function
+nothing entered, and holds a component you connect to a `FEATURES.md` trace and a VERIFY.md check
+seen red on the broken wiring.
 
 ## Install (Claude Code)
 
@@ -55,6 +59,8 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
 - `plugin/skills/verify-loop/scripts/` — stdlib-only Python helpers (`verify.py` is the entry point).
 - `plugin/skills/latent-audit/` — the latent-audit skill; `scripts/graph-audit.py` (import graph,
   `--layers`, `--try-delete ... --run CMD`).
+- `plugin/skills/wire-check/` — the wire-check skill; `scripts/wire.py` (`--snapshot --run CMD`,
+  `--gate`, `--target FILE::FUNC`).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

@@ -1,0 +1,3 @@
+  1. Bash: cd fixture && find . -type f -not -path '*/.git/*' | head -200 && wc -l $(find . -type f -not -path '*/.git/*' -name '*.*' | head -100) | tail -1
+  2. Bash: cd fixture && for f in $(find . -type f -not -path '*/.git/*' | sort); do echo "=== $f"; cat "$f"; echo; done
+  3. Bash: cd fixture && grep -rn "weekly\|receipt\|outbox\|compact\|coupons\|reports\|purge\|export-" --include=* . | grep -v "^./\(reports\|store/outbox\|jobs/compact\)"

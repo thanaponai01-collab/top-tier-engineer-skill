@@ -1,0 +1,91 @@
+{
+  "case": "wire-check-alert-never-fires",
+  "skill": "wire-check",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"Handlers only subscribe to the bus when their module is imported, and `app/handlers/__init__.py` only imported `audit_lo\"\n  found   wrong-event-name \u2014 \"The handler listened for `\"stock_changed\"`, but `inventory.change` publishes `\"stock.changed\"` (dot, not underscore).\"\n  found   wrong-payload-key \u2014 \"You saw no error at all because `bus.publish` deliberately swallows every handler exception (\"a broken side effect must \"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "wire-check"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "wire-check",
+      "path": "<tmp>\\tte-plugin-kn0xusfi\\verify-loop\\skills\\wire-check\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 4254,
+      "cacheReadInputTokens": 188644,
+      "cacheCreationInputTokens": 13623,
+      "webSearchRequests": 0,
+      "costUSD": 0.23185680000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 399,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/README.md",
+      "fixture/app/handlers/__init__.py",
+      "fixture/app/handlers/low_stock.py"
+    ],
+    "added": [
+      "fixture/tests/test_handlers.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.23185680000000003,
+  "turns": 8,
+  "api_seconds": 48.683,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 55.6,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-kn0xusfi\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

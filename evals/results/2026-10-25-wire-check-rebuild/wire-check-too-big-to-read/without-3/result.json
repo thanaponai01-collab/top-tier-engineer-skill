@@ -1,0 +1,70 @@
+{
+  "case": "wire-check-too-big-to-read",
+  "skill": "wire-check",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  6/6 found\n  found   rebalance-never-registered \u2014 \"Fully written, but it has no `@command`.\"\n  found   legacy-asn-dead-helper \u2014 \"`inbound_receive._parse_legacy_asn`\"\n  found   digest-effect-lost \u2014 \"`daily_digest` calls `build_digest()` and throws the result away.\"\n  found   crossdock-flag-off \u2014 \"It's wired in but turned off: `settings.CROSSDOCK_ENABLED = False`\"\n  found   bin-emptied-wrong-event \u2014 \"`bins_pick._state()` returns `\"empty\"`, so the event sent is `bin.empty`, but the handler listens for `bin.emptied`.\"\n  found   purge-audit-not-scheduled \u2014 \"Not listed in `schedule.json`, so cron never runs it.\"\n  held    low-alert-called-dead\n  held    by-name-called-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 4037,
+      "cacheReadInputTokens": 170864,
+      "cacheCreationInputTokens": 16747,
+      "webSearchRequests": 0,
+      "costUSD": 0.24894480000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 506,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 6,
+  "total": 6,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.24894480000000002,
+  "turns": 8,
+  "api_seconds": 44.654,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 147.4,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,8 @@
+[project]
+name = "depot"
+version = "2.3.0"
+requires-python = ">=3.9"
+
+[project.scripts]
+depot = "depot.cli:main"
+depot-admin = "depot.admin:main"

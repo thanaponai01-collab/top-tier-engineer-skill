@@ -15,6 +15,7 @@ SCRIPTS = {
     "compliance.py": os.path.join(ROOT, "plugin", "skills", "verify-loop", "scripts"),
     "features.py": os.path.join(ROOT, "plugin", "skills", "feature-map", "scripts"),
     "graph-audit.py": os.path.join(ROOT, "plugin", "skills", "latent-audit", "scripts"),
+    "wire.py": os.path.join(ROOT, "plugin", "skills", "wire-check", "scripts"),
 }
 
 

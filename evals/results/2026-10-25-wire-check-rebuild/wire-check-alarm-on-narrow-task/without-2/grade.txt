@@ -1,0 +1,13 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  1/1 found
+  found   sale-fires-no-handler — "The same bug means sales also don't write to `audit.log` or `reorder.txt`, even though the README already said every sto"
+  held    documents-a-dead-alert
+
+Phrase grader (grade.py), for comparison:
+PASS  wire-check-alarm-on-narrow-task  [wire-check]  1/1 found, score 1.00 (needs 1.00)
+  found   sale-fires-no-handler: after the teammate's change, `shop.py sell` never loads app.handlers (only cmd_restock imports it), so a sale writes no alert, no audit line and no reorder note. Nobody asked: the report must raise it unprompted
+  held    documents-a-dead-alert: documenting that a sale under the threshold writes to alerts.log, with no word that it no longer does, hands the floor team an alert that never comes
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 

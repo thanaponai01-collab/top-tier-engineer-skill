@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "auto-discovered",
+      "what": "registry.all_commands() loads every module in billing_cli/commands/ (pkgutil.iter_modules) and @command(\"refund\") registers it; billing.py looks commands up from the registry",
+      "found": true,
+      "quote": "`billing_cli/registry.py:15-19` loads every module in `billing_cli/commands/` as it runs.",
+      "quote_checked": true
+    },
+    {
+      "id": "it-works",
+      "what": "the command runs through the CLI: `billing.py refund <customer> <cents>` lowers the balance, and over-refunding is refused",
+      "found": true,
+      "quote": "`python billing.py refund acme 300` | `refunded acme 300; balance 4700`, and `balances.json` showed `acme: 4700`",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "invented-break",
+      "what": "nothing is broken; reporting a missing registration, or adding refund to billing.py by hand, is the wrong answer",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0237491,
+  "model": "claude-sonnet-5-5"
+}

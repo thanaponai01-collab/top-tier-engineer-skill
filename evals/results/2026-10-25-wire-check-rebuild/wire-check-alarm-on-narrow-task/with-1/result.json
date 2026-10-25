@@ -1,0 +1,140 @@
+{
+  "case": "wire-check-alarm-on-narrow-task",
+  "skill": "wire-check",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  1/1 found\n  found   sale-fires-no-handler \u2014 \"The same problem means sales also skip the audit trail (`audit.log`) and the restock reminder (`reorder.txt`).\"\n  held    documents-a-dead-alert",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "wire-check"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "wire-check",
+      "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 52,
+      "outputTokens": 11953,
+      "cacheReadInputTokens": 875035,
+      "cacheCreationInputTokens": 49381,
+      "webSearchRequests": 0,
+      "costUSD": 0.809323,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2648,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 1,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/README.md",
+      "fixture/app/handlers/__init__.py",
+      "fixture/app/handlers/low_stock.py",
+      "fixture/shop.py"
+    ],
+    "added": [
+      "fixture/.features/features.py",
+      "fixture/.features/inventory.json",
+      "fixture/.features/low-stock-alert.json",
+      "fixture/.verify-state-cache/tree-971d0f0dd4be5dfe.json",
+      "fixture/.verify-state.json",
+      "fixture/.wire/before.json",
+      "fixture/.wire/snapshot.json",
+      "fixture/.wire/targets.json",
+      "fixture/.wire/verdicts.md",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md",
+      "fixture/VERIFY.md",
+      "fixture/tests/test_low_stock.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.809323,
+  "turns": 26,
+  "api_seconds": 150.337,
+  "helper_calls": [
+    "advance",
+    "advance",
+    "?",
+    "challenge",
+    "challenge",
+    "challenge",
+    "challenge",
+    "?",
+    "advance",
+    "?",
+    "challenge",
+    "?",
+    "challenge",
+    "challenge",
+    "challenge",
+    "advance",
+    "?",
+    "advance",
+    "?",
+    "advance"
+  ],
+  "helper_subcommands": [
+    "advance",
+    "advance",
+    "?",
+    "challenge",
+    "challenge",
+    "challenge",
+    "challenge",
+    "?",
+    "advance",
+    "?",
+    "challenge",
+    "?",
+    "challenge",
+    "challenge",
+    "challenge",
+    "advance",
+    "?",
+    "advance",
+    "?",
+    "advance"
+  ],
+  "helper_source_reads": [],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 177.5,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

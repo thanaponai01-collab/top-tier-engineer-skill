@@ -1,0 +1,79 @@
+{
+  "case": "wire-check-alert-never-fires",
+  "skill": "wire-check",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"`app/handlers/__init__.py` imported only `audit_log` and `reorder`.\"\n  found   wrong-event-name \u2014 \"It subscribed to `\"stock_changed\"` (underscore), but `inventory.change()` publishes `\"stock.changed\"` (dot).\"\n  found   wrong-payload-key \u2014 \"`bus.publish()` catches every exception from a handler and silently drops it\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1684,
+      "cacheReadInputTokens": 101494,
+      "cacheCreationInputTokens": 8045,
+      "webSearchRequests": 0,
+      "costUSD": 0.11837879999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 185,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/app/handlers/__init__.py",
+      "fixture/app/handlers/low_stock.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.11837879999999999,
+  "turns": 5,
+  "api_seconds": 20.828,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 25.0,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

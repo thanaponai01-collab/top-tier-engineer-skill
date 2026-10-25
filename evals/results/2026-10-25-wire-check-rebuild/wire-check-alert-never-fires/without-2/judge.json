@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "never-loaded",
+      "what": "app/handlers/__init__.py loads only audit_log and reorder, so low_stock's @subscribe never runs and nothing is registered",
+      "found": true,
+      "quote": "`app/handlers/__init__.py` only imported `audit_log` and `reorder`. So `low_stock.py` never ran.",
+      "quote_checked": true
+    },
+    {
+      "id": "wrong-event-name",
+      "what": "the handler subscribes to \"stock_changed\" but inventory publishes \"stock.changed\"",
+      "found": true,
+      "quote": "It subscribed to `\"stock_changed\"` (underscore), but `inventory.change()` sends `\"stock.changed\"` (dot).",
+      "quote_checked": true
+    },
+    {
+      "id": "wrong-payload-key",
+      "what": "inventory publishes qty=..., the handler takes `quantity`; the TypeError is swallowed by the bus's except-pass, so it fails silently",
+      "found": true,
+      "quote": "`bus.publish()` catches and discards every exception a handler raises, so that a broken side effect can't fail a sale.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0230331,
+  "model": "claude-sonnet-5-5"
+}

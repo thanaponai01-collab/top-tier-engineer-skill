@@ -1,0 +1,73 @@
+{
+  "case": "wire-check-what-nothing-reaches",
+  "skill": "wire-check",
+  "question": "whole-system: five unreached pieces, each broken at a different link (never registered, not scheduled, return value dropped, feature flag off, enabled only per deployment), beside decoys served by a second console script and a by-name job schedule. Does the agent classify each one and not call the served ones orphans?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "weekly-never-registered",
+      "what": "reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)",
+      "must_name": ["weekly"],
+      "must_say_any": ["never", "orphan", "unreferenced", "not registered", "no caller", "unused", "not wired", "no entry"]
+    },
+    {
+      "id": "compact-outbox-not-scheduled",
+      "what": "jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it",
+      "must_name": ["compact_outbox"],
+      "must_say_any": ["schedule", "not scheduled", "not listed", "never runs", "no cron"]
+    },
+    {
+      "id": "receipt-effect-lost",
+      "what": "checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight",
+      "must_name": ["receipt"],
+      "must_say_any": ["discard", "dropped", "ignored", "thrown away", "never enqueued", "never sent", "return value", "result", "bug"]
+    },
+    {
+      "id": "coupons-flag-off",
+      "what": "pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion",
+      "must_name": ["coupon"],
+      "must_say_any": ["COUPONS_ENABLED", "flag", "disabled", "false", "switched off", "turned off"]
+    },
+    {
+      "id": "plugins-unknown",
+      "what": "integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned",
+      "must_name": ["LEDGER_PLUGINS"],
+      "must_say_any": ["unknown", "environment", "env var", "deployment", "can't tell", "cannot tell", "depends on", "runtime", "config"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "admin-false-orphan",
+      "what": "admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed",
+      "must_not_say_any": [
+        "admin_tools is dead", "admin_tools are dead", "admin_tools is unused", "admin_tools are unused",
+        "reset.py is dead", "reset.py is unused", "reindex.py is dead", "reindex.py is unused",
+        "admin_tools is orphaned", "admin_tools are orphaned", "delete admin_tools"
+      ],
+      "must_say_any": ["ledger-admin", "admin.py", "admin:main"]
+    },
+    {
+      "id": "receipt-as-dead-weight",
+      "what": "the receipt path is a lost effect; recommending deleting it as unused code misses the bug",
+      "must_not_say_any": [
+        "delete notify", "delete receipt", "remove notify", "remove receipt", "receipt.py is dead",
+        "notify is dead", "drop the receipt module", "delete store/outbox", "delete outbox", "outbox.py is dead"
+      ]
+    },
+    {
+      "id": "plugins-as-dead",
+      "what": "the integrations load by environment; calling them dead and deleting them is the wrong answer",
+      "must_not_say_any": [
+        "delete integrations", "remove integrations", "integrations are dead", "integrations is dead",
+        "slack_hook is dead", "sheets_sync is dead", "delete slack_hook", "delete sheets_sync"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "report only: no code changed in either arm",
+    "edits_allowed": [
+      "*.md", "data/*", "tmp/*", "*.csv", ".verify*", ".features/*", "*.egg-info/*", "build/*",
+      "scratch/*", ".wire*"
+    ]
+  }
+}

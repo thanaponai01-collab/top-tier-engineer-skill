@@ -1,0 +1,69 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "weekly-never-registered",
+      "what": "reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)",
+      "found": true,
+      "quote": "Nothing imports it: no CLI command, admin command, or scheduled job.",
+      "quote_checked": true
+    },
+    {
+      "id": "compact-outbox-not-scheduled",
+      "what": "jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it",
+      "found": true,
+      "quote": "`schedule.json` doesn't list it, and that file is the only thing the job runner reads.",
+      "quote_checked": true
+    },
+    {
+      "id": "receipt-effect-lost",
+      "what": "checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight",
+      "found": true,
+      "quote": "`commands/checkout.py:14` calls `receipt.build(order)` and throws the result away.",
+      "quote_checked": true
+    },
+    {
+      "id": "coupons-flag-off",
+      "what": "pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion",
+      "found": true,
+      "quote": "That flag is hard-coded `False` at `settings.py:4` with \"pricing review pending, see #212\".",
+      "quote_checked": true
+    },
+    {
+      "id": "plugins-unknown",
+      "what": "integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned",
+      "found": true,
+      "quote": "Whether any real deployment sets `LEDGER_PLUGINS` isn't visible from the repo.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "admin-false-orphan",
+      "what": "admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "receipt-as-dead-weight",
+      "what": "the receipt path is a lost effect; recommending deleting it as unused code misses the bug",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "plugins-as-dead",
+      "what": "the integrations load by environment; calling them dead and deleting them is the wrong answer",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0317131,
+  "model": "claude-sonnet-5-5"
+}

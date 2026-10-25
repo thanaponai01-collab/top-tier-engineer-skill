@@ -1,0 +1,25 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  6/6 found
+  found   rebalance-never-registered — "Fully written, but it has no `@command`."
+  found   legacy-asn-dead-helper — "`inbound_receive._parse_legacy_asn`"
+  found   digest-effect-lost — "`daily_digest` calls `build_digest()` and throws the result away."
+  found   crossdock-flag-off — "It's wired in but turned off: `settings.CROSSDOCK_ENABLED = False`"
+  found   bin-emptied-wrong-event — "`bins_pick._state()` returns `"empty"`, so the event sent is `bin.empty`, but the handler listens for `bin.emptied`."
+  found   purge-audit-not-scheduled — "Not listed in `schedule.json`, so cron never runs it."
+  held    low-alert-called-dead
+  held    by-name-called-dead
+
+Phrase grader (grade.py), for comparison:
+PASS  wire-check-too-big-to-read  [wire-check]  6/6 found, score 1.00 (needs 1.00)
+  found   rebalance-never-registered: depot/commands/bins_rebalance.py has a complete run() with no @command decorator, so the registry never lists it
+  found   legacy-asn-dead-helper: depot/commands/inbound_receive.py::_parse_legacy_asn: inbound-receive is live, but nothing calls this helper
+  found   digest-effect-lost: the daily_digest job calls notify.build_digest(rows) and drops the result; send_digest / outbox.enqueue never run, so no digest is ever sent: a live bug
+  found   crossdock-flag-off: depot/crossdock.py runs only when settings.CROSSDOCK_ENABLED, which is False: a decision for the owner
+  found   bin-emptied-wrong-event: on_bin_emptied subscribes to bin.emptied, but bins-pick publishes bin.empty (f"bin.{state}"), so it never runs
+  found   purge-audit-not-scheduled: depot/jobs/purge_audit.py is not in schedule.json, so the nightly runner never runs it
+  held    low-alert-called-dead: on_bin_low is reached: bins-pick publishes f"bin.{state}" with state low; calling it unreached means the f-string publish was not followed
+  held    by-name-called-dead: the exporters are loaded by name and the commands by pkgutil; calling them unreferenced or dead misses the loaders
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 

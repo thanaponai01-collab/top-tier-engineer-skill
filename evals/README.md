@@ -83,6 +83,26 @@ carry to a later session: a recorded run that `check --rerun` repeats after the 
 Plain Opus passes both (3/3 each): it reads the loaders unaided. They are kept to show the skill
 costs little and does not hurt, not that it helps.
 
+### wire-check cases
+
+One per mode of the skill: a component repaired, a whole system mapped, and a healthy control.
+
+| case | planted | trap |
+|---|---|---|
+| `wire-check-alert-never-fires` | a new event handler broken three times in a row: module never imported, wrong event name, wrong payload key whose TypeError the bus swallows. Graded on outcome: a real `shop.py sell` writes exactly one alert | fixing the first break and calling it done |
+| `wire-check-what-nothing-reaches` | five unreached pieces, each broken at a different link (never registered, not scheduled, return value dropped, flag off, enabled per deployment) | calling the second console script's tools or the env-loaded plugins orphans; deleting the receipt path as dead weight |
+| `wire-check-refund-already-wired` | nothing: `refund` registers itself through `pkgutil` auto-discovery, so `billing.py` never names it | inventing a missing registration, or adding one by hand |
+
+| `wire-check-too-big-to-read` | the same five kinds in a 390-file CLI with 364 commands found by `pkgutil`; three are single functions inside live files | calling the f-string-published handler or the by-name exporters unreached |
+| `wire-check-alarm-on-narrow-task` | two sessions: a repair, then a teammate moves `import app.handlers` into `restock` only; the second, `bare`, session is asked only to document the alert | documenting an alert a sale no longer fires |
+
+Baseline (2026-10-25, plugin 1.28.0, Opus): plain 8/9, with the skill 9/9, $0.12 vs $0.18 a try.
+Rebuild (plugin 1.29.0, all five cases): 15/15 both arms, $0.17 vs $0.44 a try. Plain Opus passed
+the big case with its own AST script, and the narrow one by running a sale before writing docs.
+Plain Opus reads every file in one call, fixes every break from that reading, then runs the real
+CLI in a scratch copy; on the whole-system case it never runs anything. The one plain failure
+offered deleting the receipt path if nobody wants receipts, after naming the bug.
+
 ## Running it
 
 Every agent run costs real money. Dry-run first:

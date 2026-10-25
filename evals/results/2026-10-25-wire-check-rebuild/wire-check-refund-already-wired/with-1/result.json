@@ -1,0 +1,81 @@
+{
+  "case": "wire-check-refund-already-wired",
+  "skill": "wire-check",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   auto-discovered \u2014 \"That function (`billing_cli/registry.py:15-19`) imports every module in `billing_cli/commands/` by a name it builds at r\"\n  found   it-works \u2014 \"| `python billing.py refund globex 999999` | 1 | refused: \"cannot refund 999999: globex has only 1200 on account\" |\"\n  held    invented-break",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "wire-check"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "wire-check",
+      "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1385,
+      "cacheReadInputTokens": 79032,
+      "cacheCreationInputTokens": 8353,
+      "webSearchRequests": 0,
+      "costUSD": 0.1103624,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 78,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.wire/snapshot.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1103624,
+  "turns": 4,
+  "api_seconds": 17.974,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 21.7,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

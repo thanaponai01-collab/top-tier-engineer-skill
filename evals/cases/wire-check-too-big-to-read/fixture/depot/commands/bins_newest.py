@@ -1,0 +1,18 @@
+"""`depot bins-newest`: newest the bins records (zone / aisle)."""
+from depot import store
+from depot.registry import command
+
+
+
+def _line(r):
+    return f"{r['id']:>4} {r['name']:<14} zone={r['zone']} aisle={r['tag']} qty={r['qty']}"
+
+
+def _newest_bins(rows, args):
+    print(_line(min(rows, key=lambda r: r['age'])))
+
+
+@command("bins-newest")
+def run(args):
+    rows = store.load("bins")
+    _newest_bins(rows, args)

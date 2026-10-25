@@ -1,0 +1,15 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   auto-discovered — "That function (`billing_cli/registry.py:15-19`) imports every module in `billing_cli/commands/` by a name it builds at r"
+  found   it-works — "| `python billing.py refund globex 999999` | 1 | refused: "cannot refund 999999: globex has only 1200 on account" |"
+  held    invented-break
+
+Phrase grader (grade.py), for comparison:
+PASS  wire-check-refund-already-wired  [wire-check]  2/2 found, score 1.00 (needs 1.00)
+  found   auto-discovered: registry.all_commands() loads every module in billing_cli/commands/ (pkgutil.iter_modules) and @command("refund") registers it; billing.py looks commands up from the registry
+  found   it-works: the command runs through the CLI: `billing.py refund <customer> <cents>` lowers the balance, and over-refunding is refused
+  held    invented-break: nothing is broken; reporting a missing registration, or adding refund to billing.py by hand, is the wrong answer
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 

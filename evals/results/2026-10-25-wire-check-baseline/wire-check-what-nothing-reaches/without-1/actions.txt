@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && find . -type f -not -path './.git/*' | head -200 && wc -l $(find . -type f -not -path './.git/*' -name '*.*') | tail -1
+  2. Bash: cd fixture && for f in $(find . -type f -not -path './.git/*' | sort); do echo "=== $f"; cat "$f"; done

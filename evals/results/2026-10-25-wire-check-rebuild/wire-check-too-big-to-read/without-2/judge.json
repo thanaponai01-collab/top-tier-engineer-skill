@@ -1,0 +1,69 @@
+{
+  "ok": true,
+  "found": 6,
+  "total": 6,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "rebalance-never-registered",
+      "what": "depot/commands/bins_rebalance.py has a complete run() with no @command decorator, so the registry never lists it",
+      "found": true,
+      "quote": "It has no `@command` decorator, so it never registers and doesn't appear in `depot help`.",
+      "quote_checked": true
+    },
+    {
+      "id": "legacy-asn-dead-helper",
+      "what": "depot/commands/inbound_receive.py::_parse_legacy_asn: inbound-receive is live, but nothing calls this helper",
+      "found": true,
+      "quote": "Nothing calls it.",
+      "quote_checked": true
+    },
+    {
+      "id": "digest-effect-lost",
+      "what": "the daily_digest job calls notify.build_digest(rows) and drops the result; send_digest / outbox.enqueue never run, so no digest is ever sent: a live bug",
+      "found": true,
+      "quote": "`jobs/daily_digest.py` calls `build_digest(rows)` and throws the result away.",
+      "quote_checked": true
+    },
+    {
+      "id": "crossdock-flag-off",
+      "what": "depot/crossdock.py runs only when settings.CROSSDOCK_ENABLED, which is False: a decision for the owner",
+      "found": true,
+      "quote": "It's only imported from `orders-ship` behind `settings.CROSSDOCK_ENABLED = False`, which is commented as \"waiting on the ops review\".",
+      "quote_checked": true
+    },
+    {
+      "id": "bin-emptied-wrong-event",
+      "what": "on_bin_emptied subscribes to bin.emptied, but bins-pick publishes bin.empty (f\"bin.{state}\"), so it never runs",
+      "found": true,
+      "quote": "The handler subscribes to `bin.emptied`.",
+      "quote_checked": true
+    },
+    {
+      "id": "purge-audit-not-scheduled",
+      "what": "depot/jobs/purge_audit.py is not in schedule.json, so the nightly runner never runs it",
+      "found": true,
+      "quote": "It isn't in `schedule.json`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "low-alert-called-dead",
+      "what": "on_bin_low is reached: bins-pick publishes f\"bin.{state}\" with state low; calling it unreached means the f-string publish was not followed",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "by-name-called-dead",
+      "what": "the exporters are loaded by name and the commands by pkgutil; calling them unreferenced or dead misses the loaders",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0299371,
+  "model": "claude-sonnet-5-5"
+}

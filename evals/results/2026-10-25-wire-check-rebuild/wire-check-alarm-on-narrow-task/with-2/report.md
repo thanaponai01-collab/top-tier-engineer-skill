@@ -1,0 +1,7 @@
+I updated `README.md` with a short "Low-stock alert" section, but **the alert doesn't work yet**, so the README currently describes something the floor team won't see.
+
+**The new section says:** the alert is a timestamped line like `LOW STOCK sprocket: 4 left`, written to `alerts.log` in whatever directory `shop.py` is run from. It fires once, when stock drops below 5 (`LOW_STOCK_THRESHOLD` in `app/config.py`), for example going from 7 to 4. It fires again only after the shelf is restocked to 5 or more and then drops back below.
+
+**The problem:** in `shop.py:19`, the handlers (`import app.handlers`) only get loaded inside `cmd_restock`. So when you `sell`, nothing is listening for the stock change. A restock can't trigger the alert either, because it only fires when stock goes down. I ran `shop.py sell sprocket 3` (7 → 4) in a scratch directory: it printed `sold 3 sprocket, 4 left`, but no `alerts.log` was created. The project's own check fails the same way: `test_sale_under_threshold_alerts` reports "no low-stock alert in alerts.log". The same issue also means sales never write to `audit.log` or `reorder.txt`.
+
+**The fix** is one line: move that import to the top of `shop.py` (or into `main`) so every command loads the handlers. You only asked for README changes, so I haven't touched the code. Want me to make the fix and rerun the tests?

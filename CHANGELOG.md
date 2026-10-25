@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.29.0 - 2026-10-25 - wire-check: three stages built on what plain Opus already does
+
+- wire-check joins the plugin (manual-only, from top-tier-engineer main), then rebuilt from a trace of
+  plain Opus on three general cases (baseline: plain 8/9, skill as copied 9/9). Plain Opus already
+  walks the five links: reads everything, fixes every break from that reading, runs the real CLI in a
+  scratch copy, suggests logging swallowed errors. It never runs anything on a whole-system question
+  and leaves nothing for the next session. The skill keeps its moves and adds only those two.
+- SKILL.md is a goal and three stages, checked by `scripts/wire.py --gate`:
+  1. **Snapshot** (`--snapshot --run CMD ...`): each command runs in a throwaway copy under a call
+     tracer (`sitecustomize` + `sys.setprofile`, subprocesses too), recording which functions were
+     entered, not which files loaded. A handler called with the wrong arguments is not entered.
+     Every declared way in (console scripts, `-m` packages, `__main__` files) must be started or
+     excused. A snapshot after a code change keeps the first as `before.json`.
+  2. **Account**: every function no command entered gets a verdict in `.wire/verdicts.md`
+     (not-registered, not-routed, never-invoked, effect-lost, unknown, served); all but two cite a
+     `file:line` that exists. The gate drafts the slots.
+  3. **Keep** (`--target FILE::FUNC`, only for what you connected): entered now, a proven
+     `FEATURES.md` trace into its file (feature-map), and a VERIFY.md section over that file with a
+     rejection receipt and no failure (verify-loop).
+- verify-loop: `.wire/` no longer makes the tree stale.
+- Tests: `tests/test_wire.py` 10; disabling the citation check, entry coverage, the rejection
+  requirement, function-level tracing, staleness or the before picture each turns a test red.
+- Eval, 5 cases x 2 arms x 3 tries on Opus (`evals/results/2026-10-25-wire-check-rebuild`): both
+  arms 15/15. Skill $0.44 a try vs plain $0.17 (2.6x); repairs with the keep stage cost about 4x.
+  The two cases built to beat plain Opus did not: on a 390-file CLI it wrote its own AST dead-code
+  script, and asked only for docs after a teammate broke the wiring, it ran a real sale first.
+  Every skill run reached `WIRE-GATE: done`, and the tracer found 180 unused helpers the case
+  generator had left by mistake.
+
 ## 1.28.0 - 2026-10-25 - latent-audit: three stages built on what plain Opus already does
 
 - Traced plain Opus on the eval cases: 3 calls (read everything; run every command as a before

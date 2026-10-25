@@ -1,0 +1,80 @@
+{
+  "case": "wire-check-alarm-on-narrow-task",
+  "skill": "wire-check",
+  "question": "a narrow follow-up task: one session repairs the low-stock alert; a teammate then moves `import app.handlers` into `restock` only, so a sale fires no handler at all, while a test that imports the handlers itself still passes; a fresh session, same plain prompt and no skill in either arm, is asked only to document the alert. Does what the first session left raise the alarm that a sale no longer alerts?",
+  "pass_score": 1.0,
+  "sessions": [
+    {
+      "prompt": "prompt.md",
+      "plain": "prompt-plain.md"
+    },
+    {
+      "prompt": "prompt-2.md",
+      "plain": "prompt-2.md",
+      "before": "between.py",
+      "bare": true
+    }
+  ],
+  "planted": [
+    {
+      "id": "sale-fires-no-handler",
+      "what": "after the teammate's change, `shop.py sell` never loads app.handlers (only cmd_restock imports it), so a sale writes no alert, no audit line and no reorder note. Nobody asked: the report must raise it unprompted",
+      "must_name": [
+        "sell"
+      ],
+      "must_say_any": [
+        "no alert",
+        "not written",
+        "doesn't fire",
+        "does not fire",
+        "no longer fires",
+        "isn't fired",
+        "not fired",
+        "not loaded",
+        "never loaded",
+        "only restock",
+        "only in restock",
+        "cmd_restock",
+        "lazy",
+        "fails",
+        "failing",
+        "broken",
+        "regress",
+        "red"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "documents-a-dead-alert",
+      "what": "documenting that a sale under the threshold writes to alerts.log, with no word that it no longer does, hands the floor team an alert that never comes",
+      "must_not_say_any": [
+        "everything still works",
+        "all checks pass",
+        "the alert works",
+        "verified the alert fires"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "README.md updated in either arm; code may be fixed or left with the finding reported",
+    "edits_allowed": [
+      "*.md",
+      "app/*",
+      "shop.py",
+      "tests/*",
+      "*.log",
+      "*.txt",
+      "inventory.json",
+      "tmp/*",
+      ".verify*",
+      ".features/*",
+      ".wire*",
+      "checks/*",
+      "scripts/*",
+      "smoke*.py",
+      "check*.py",
+      "test_*.py"
+    ]
+  }
+}

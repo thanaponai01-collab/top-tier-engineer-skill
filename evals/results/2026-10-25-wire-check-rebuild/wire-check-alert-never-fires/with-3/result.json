@@ -1,0 +1,143 @@
+{
+  "case": "wire-check-alert-never-fires",
+  "skill": "wire-check",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"`app/handlers/__init__.py` imported only `audit_log` and `reorder`.\"\n  found   wrong-event-name \u2014 \"It was subscribed to `\"stock_changed\"`, but `app/inventory.py` sends `\"stock.changed\"`.\"\n  found   wrong-payload-key \u2014 \"The bus in `app/bus.py:17` silently ignores handler errors, so this third bug would also have produced nothing, with no \"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "wire-check"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "wire-check",
+      "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 34,
+      "outputTokens": 8345,
+      "cacheReadInputTokens": 577737,
+      "cacheCreationInputTokens": 32569,
+      "webSearchRequests": 0,
+      "costUSD": 0.5431353999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1572,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/app/handlers/__init__.py",
+      "fixture/app/handlers/low_stock.py"
+    ],
+    "added": [
+      "fixture/.features/features.py",
+      "fixture/.features/low-stock-alert.json",
+      "fixture/.features/stock-changes.json",
+      "fixture/.verify-state-cache/results.json",
+      "fixture/.verify-state-cache/tree-6373b180bbdd6046.json",
+      "fixture/.verify-state.json",
+      "fixture/.wire/before.json",
+      "fixture/.wire/snapshot.json",
+      "fixture/.wire/targets.json",
+      "fixture/.wire/verdicts.md",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md",
+      "fixture/VERIFY.md",
+      "fixture/tests/test_low_stock.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.5431353999999999,
+  "turns": 17,
+  "api_seconds": 112.468,
+  "helper_calls": [
+    "?",
+    "advance",
+    "?",
+    "challenge",
+    "challenge",
+    "?",
+    "challenge",
+    "advance",
+    "?",
+    "run",
+    "?",
+    "challenge",
+    "advance",
+    "?",
+    "challenge",
+    "baseline",
+    "advance",
+    "?",
+    "advance"
+  ],
+  "helper_subcommands": [
+    "?",
+    "advance",
+    "?",
+    "challenge",
+    "challenge",
+    "?",
+    "challenge",
+    "advance",
+    "?",
+    "run",
+    "?",
+    "challenge",
+    "advance",
+    "?",
+    "challenge",
+    "baseline",
+    "advance",
+    "?",
+    "advance"
+  ],
+  "helper_source_reads": [],
+  "helper_used": true,
+  "mcp_servers": [],
+  "seconds": 130.5,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

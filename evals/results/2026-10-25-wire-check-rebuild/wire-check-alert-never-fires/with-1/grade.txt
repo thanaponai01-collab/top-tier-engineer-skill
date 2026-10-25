@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   never-loaded — "`app/handlers/__init__.py` imported only `audit_log` and `reorder`."
+  found   wrong-event-name — "It subscribed to `"stock_changed"`, but `inventory.change` publishes `"stock.changed"`"
+  found   wrong-payload-key — "`bus.publish` silently swallows exceptions from handlers"
+
+Phrase grader (grade.py), for comparison:
+PASS  wire-check-alert-never-fires  [wire-check]  3/3 found, score 1.00 (needs 1.00)
+  found   never-loaded: app/handlers/__init__.py loads only audit_log and reorder, so low_stock's @subscribe never runs and nothing is registered
+  found   wrong-event-name: the handler subscribes to "stock_changed" but inventory publishes "stock.changed"
+  found   wrong-payload-key: inventory publishes qty=..., the handler takes `quantity`; the TypeError is swallowed by the bus's except-pass, so it fails silently
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire — 

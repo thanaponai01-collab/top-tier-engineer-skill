@@ -1,0 +1,25 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   weekly-never-registered — "No command, job or import uses it, even though its docstring says it's for the Monday meeting."
+  found   compact-outbox-not-scheduled — "It isn't in `schedule.json`."
+  found   receipt-effect-lost — "`commands/checkout.py:14` calls `receipt.build(order)` and throws the result away."
+  found   coupons-flag-off — "It's only reached when `settings.COUPONS_ENABLED` is true, and that's hardcoded to `False`"
+  found   plugins-unknown — "They only load if a deployment's `LEDGER_PLUGINS` lists them, so check the deployment configs or environments."
+  held    admin-false-orphan
+  held    receipt-as-dead-weight
+  held    plugins-as-dead
+
+Phrase grader (grade.py), for comparison:
+PASS  wire-check-what-nothing-reaches  [wire-check]  5/5 found, score 1.00 (needs 1.00)
+  found   weekly-never-registered: reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)
+  found   compact-outbox-not-scheduled: jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it
+  found   receipt-effect-lost: checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight
+  found   coupons-flag-off: pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion
+  found   plugins-unknown: integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned
+  held    admin-false-orphan: admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed
+  held    receipt-as-dead-weight: the receipt path is a lost effect; recommending deleting it as unused code misses the bug
+  held    plugins-as-dead: the integrations load by environment; calling them dead and deleting them is the wrong answer
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 

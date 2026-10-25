@@ -1,0 +1,5 @@
+I added a short "Low-stock alert" section to `README.md`. It says the alert goes to `alerts.log` and fires once when a shelf drops below 5 (`LOW_STOCK_THRESHOLD`). It won't fire again until the shelf is restocked to 5 or more.
+
+**The alert doesn't work yet, so the README describes behaviour the floor team won't see.** In `shop.py:19`, the handlers are only loaded inside `cmd_restock`. `sell`, which is the only command that lowers stock, never loads them. So no alert is ever written. I tested this on a copy of the data: selling `widget` from 12 down to 4 produced no `alerts.log`. The same bug means sales also skip the audit log and the reorder reminder; only restocks get logged.
+
+The fix is one line: move `import app.handlers` to the top of `shop.py` so every command loads it. I haven't changed any code. Should I make that fix, or hold the README change until someone else does?

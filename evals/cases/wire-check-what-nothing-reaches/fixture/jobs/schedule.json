@@ -1,0 +1,4 @@
+[
+  {"job": "nightly_backup", "cron": "0 2 * * *"},
+  {"job": "purge_exports", "cron": "30 3 * * 0"}
+]

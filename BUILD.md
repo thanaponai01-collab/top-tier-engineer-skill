@@ -149,6 +149,13 @@
     suspects. Remaining overhead is protocol calls (read SKILL, snapshot, gate rounds, verdict file).
   - Template for the other skills if it holds up.
 
+- wire-check as three stages (1.29.0) | proven (mechanics) / no gain over plain Opus, 2.6x cost (eval)
+  - `scripts/wire.py`: call-trace snapshot, function-level account, keep stage tied to feature-map
+    and verify-loop receipts. `tests/test_wire.py` 10 tests; 6 mutations each caught.
+  - Baseline `evals/results/2026-10-25-wire-check-baseline`: plain 8/9, copied skill 9/9.
+  - Rebuild `evals/results/2026-10-25-wire-check-rebuild`: 15/15 both arms, $0.44 vs $0.17 a try;
+    the too-big and narrow-follow-up cases did not separate the arms.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

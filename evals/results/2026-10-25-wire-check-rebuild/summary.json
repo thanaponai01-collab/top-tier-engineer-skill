@@ -1,0 +1,2707 @@
+[
+  {
+    "case": "wire-check-alert-never-fires",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"`app/handlers/__init__.py` only imported `audit_log` and `reorder`. So `low_stock.py` never ran.\"\n  found   wrong-event-name \u2014 \"It subscribed to `\"stock_changed\"` (underscore), but `inventory.change()` sends `\"stock.changed\"` (dot).\"\n  found   wrong-payload-key \u2014 \"`bus.publish()` catches and discards every exception a handler raises, so that a broken side effect can't fail a sale.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1442,
+        "cacheReadInputTokens": 57622,
+        "cacheCreationInputTokens": 7348,
+        "webSearchRequests": 0,
+        "costUSD": 0.0991724,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 176,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0991724,
+    "turns": 3,
+    "api_seconds": 18.98,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alert-never-fires  [wire-check]  3/3 found, score 1.00 (needs 1.00)\n  found   never-loaded: app/handlers/__init__.py loads only audit_log and reorder, so low_stock's @subscribe never runs and nothing is registered\n  found   wrong-event-name: the handler subscribes to \"stock_changed\" but inventory publishes \"stock.changed\"\n  found   wrong-payload-key: inventory publishes qty=..., the handler takes `quantity`; the TypeError is swallowed by the bus's except-pass, so it fails silently\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 22.8,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alert-never-fires",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"`app/handlers/__init__.py` imported only `audit_log` and `reorder`.\"\n  found   wrong-event-name \u2014 \"It subscribed to `\"stock_changed\"` (underscore), but `inventory.change()` publishes `\"stock.changed\"` (dot).\"\n  found   wrong-payload-key \u2014 \"`bus.publish()` catches every exception from a handler and silently drops it\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1684,
+        "cacheReadInputTokens": 101494,
+        "cacheCreationInputTokens": 8045,
+        "webSearchRequests": 0,
+        "costUSD": 0.11837879999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 185,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.11837879999999999,
+    "turns": 5,
+    "api_seconds": 20.828,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alert-never-fires  [wire-check]  3/3 found, score 1.00 (needs 1.00)\n  found   never-loaded: app/handlers/__init__.py loads only audit_log and reorder, so low_stock's @subscribe never runs and nothing is registered\n  found   wrong-event-name: the handler subscribes to \"stock_changed\" but inventory publishes \"stock.changed\"\n  found   wrong-payload-key: inventory publishes qty=..., the handler takes `quantity`; the TypeError is swallowed by the bus's except-pass, so it fails silently\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 25.0,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alert-never-fires",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"`app/handlers/__init__.py` imported `audit_log` and `reorder` but not `low_stock`, so the alert never registered.\"\n  found   wrong-event-name \u2014 \"The handler subscribed to `\"stock_changed\"` (underscore), but `inventory.change()` sends `\"stock.changed\"` (dot).\"\n  found   wrong-payload-key \u2014 \"`publish()` catches every error from a handler and silently ignores it (`except Exception: pass`), so a sale never fails\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2406,
+        "cacheReadInputTokens": 126524,
+        "cacheCreationInputTokens": 9107,
+        "webSearchRequests": 0,
+        "costUSD": 0.14632879999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 254,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py",
+        "fixture/tests/test_inventory.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.14632879999999998,
+    "turns": 6,
+    "api_seconds": 29.099,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alert-never-fires  [wire-check]  3/3 found, score 1.00 (needs 1.00)\n  found   never-loaded: app/handlers/__init__.py loads only audit_log and reorder, so low_stock's @subscribe never runs and nothing is registered\n  found   wrong-event-name: the handler subscribes to \"stock_changed\" but inventory publishes \"stock.changed\"\n  found   wrong-payload-key: inventory publishes qty=..., the handler takes `quantity`; the TypeError is swallowed by the bus's except-pass, so it fails silently\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 33.4,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-what-nothing-reaches",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   weekly-never-registered \u2014 \"Nothing imports it, and it has no script or CLI command.\"\n  found   compact-outbox-not-scheduled \u2014 \"It isn't listed in `schedule.json`, and the outbox it cleans is never written to anyway.\"\n  found   receipt-effect-lost \u2014 \"`checkout.py:15` calls `receipt.build(order)` and throws the result away.\"\n  found   coupons-flag-off \u2014 \"Only reachable when `settings.COUPONS_ENABLED` is true, and that's hardcoded `False`\"\n  found   plugins-unknown \u2014 \"The repo can't tell you whether it's ever on.\"\n  held    admin-false-orphan\n  held    receipt-as-dead-weight\n  held    plugins-as-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 2556,
+        "cacheReadInputTokens": 55479,
+        "cacheCreationInputTokens": 7472,
+        "webSearchRequests": 0,
+        "costUSD": 0.12201580000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 739,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.12201580000000001,
+    "turns": 3,
+    "api_seconds": 31.737,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-what-nothing-reaches  [wire-check]  5/5 found, score 1.00 (needs 1.00)\n  found   weekly-never-registered: reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)\n  found   compact-outbox-not-scheduled: jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it\n  found   receipt-effect-lost: checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight\n  found   coupons-flag-off: pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion\n  found   plugins-unknown: integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned\n  held    admin-false-orphan: admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed\n  held    receipt-as-dead-weight: the receipt path is a lost effect; recommending deleting it as unused code misses the bug\n  held    plugins-as-dead: the integrations load by environment; calling them dead and deleting them is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 35.0,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-what-nothing-reaches",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  5/5 found\n  found   weekly-never-registered \u2014 \"No command, admin tool or job calls it, even though its docstring says it's \"for the Monday meeting.\"\"\n  found   compact-outbox-not-scheduled \u2014 \"`jobs/compact_outbox.py`: not in `schedule.json`, so the runner never runs it.\"\n  found   receipt-effect-lost \u2014 \"`checkout.py:15` calls `receipt.build(order)` and throws away the result.\"\n  found   coupons-flag-off \u2014 \"`settings.COUPONS_ENABLED = False` is hard-coded (not read from an env var)\"\n  found   plugins-unknown \u2014 \"I can't see any deployment config from the repo, so I don't count them as dead.\"\n  held    admin-false-orphan\n  held    receipt-as-dead-weight\n  held    plugins-as-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 2516,
+        "cacheReadInputTokens": 55485,
+        "cacheCreationInputTokens": 7478,
+        "webSearchRequests": 0,
+        "costUSD": 0.121265,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 867,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.121265,
+    "turns": 3,
+    "api_seconds": 31.786,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  wire-check-what-nothing-reaches  [wire-check]  5/5 found, score 1.00 (needs 1.00)\n  found   weekly-never-registered: reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)\n  found   compact-outbox-not-scheduled: jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it\n  found   receipt-effect-lost: checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight\n  found   coupons-flag-off: pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion\n  found   plugins-unknown: integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned\n  held    admin-false-orphan: admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed\n  TRIPPED receipt-as-dead-weight: the receipt path is a lost effect; recommending deleting it as unused code misses the bug\n            claimed: remove notify\n  held    plugins-as-dead: the integrations load by environment; calling them dead and deleting them is the wrong answer\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 35.0,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-what-nothing-reaches",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   weekly-never-registered \u2014 \"Nothing imports it: no command, no job, no script.\"\n  found   compact-outbox-not-scheduled \u2014 \"`compact_outbox` isn't in `schedule.json`, so the job runner never runs it either.\"\n  found   receipt-effect-lost \u2014 \"`commands/checkout.py:14` calls `receipt.build(order)` and throws away the result.\"\n  found   coupons-flag-off \u2014 \"The code is reachable but switched off.\"\n  found   plugins-unknown \u2014 \"You can't tell from the repo whether the two integrations are used.\"\n  held    admin-false-orphan\n  held    receipt-as-dead-weight\n  held    plugins-as-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2700,
+        "cacheReadInputTokens": 78918,
+        "cacheCreationInputTokens": 8606,
+        "webSearchRequests": 0,
+        "costUSD": 0.1386636,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 596,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1386636,
+    "turns": 4,
+    "api_seconds": 32.102,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-what-nothing-reaches  [wire-check]  5/5 found, score 1.00 (needs 1.00)\n  found   weekly-never-registered: reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)\n  found   compact-outbox-not-scheduled: jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it\n  found   receipt-effect-lost: checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight\n  found   coupons-flag-off: pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion\n  found   plugins-unknown: integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned\n  held    admin-false-orphan: admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed\n  held    receipt-as-dead-weight: the receipt path is a lost effect; recommending deleting it as unused code misses the bug\n  held    plugins-as-dead: the integrations load by environment; calling them dead and deleting them is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 35.7,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alert-never-fires",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"`app/handlers/__init__.py` imported only `audit_log` and `reorder`.\"\n  found   wrong-event-name \u2014 \"It was subscribed to `\"stock_changed\"`, but `app/inventory.py` sends `\"stock.changed\"`.\"\n  found   wrong-payload-key \u2014 \"The bus in `app/bus.py:17` silently ignores handler errors, so this third bug would also have produced nothing, with no \"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 34,
+        "outputTokens": 8345,
+        "cacheReadInputTokens": 577737,
+        "cacheCreationInputTokens": 32569,
+        "webSearchRequests": 0,
+        "costUSD": 0.5431353999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1572,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py"
+      ],
+      "added": [
+        "fixture/.features/features.py",
+        "fixture/.features/low-stock-alert.json",
+        "fixture/.features/stock-changes.json",
+        "fixture/.verify-state-cache/results.json",
+        "fixture/.verify-state-cache/tree-6373b180bbdd6046.json",
+        "fixture/.verify-state.json",
+        "fixture/.wire/before.json",
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/targets.json",
+        "fixture/.wire/verdicts.md",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md",
+        "fixture/VERIFY.md",
+        "fixture/tests/test_low_stock.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.5431353999999999,
+    "turns": 17,
+    "api_seconds": 112.468,
+    "helper_calls": [
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "run",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "baseline",
+      "advance",
+      "?",
+      "advance"
+    ],
+    "helper_subcommands": [
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "run",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "baseline",
+      "advance",
+      "?",
+      "advance"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alert-never-fires  [wire-check]  3/3 found, score 1.00 (needs 1.00)\n  found   never-loaded: app/handlers/__init__.py loads only audit_log and reorder, so low_stock's @subscribe never runs and nothing is registered\n  found   wrong-event-name: the handler subscribes to \"stock_changed\" but inventory publishes \"stock.changed\"\n  found   wrong-payload-key: inventory publishes qty=..., the handler takes `quantity`; the TypeError is swallowed by the bus's except-pass, so it fails silently\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 130.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alert-never-fires",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"`app/handlers/__init__.py` imported only `audit_log` and `reorder`.\"\n  found   wrong-event-name \u2014 \"It subscribed to `\"stock_changed\"`, but `inventory.change` publishes `\"stock.changed\"`\"\n  found   wrong-payload-key \u2014 \"`bus.publish` silently swallows exceptions from handlers\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 38,
+        "outputTokens": 8375,
+        "cacheReadInputTokens": 665894,
+        "cacheCreationInputTokens": 34206,
+        "webSearchRequests": 0,
+        "costUSD": 0.5744787999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1196,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py"
+      ],
+      "added": [
+        "fixture/.features/features.py",
+        "fixture/.features/low-stock-alert.json",
+        "fixture/.features/sell-and-stock-count.json",
+        "fixture/.verify-state-cache/results.json",
+        "fixture/.verify-state-cache/tree-80d9f57588bde9d2.json",
+        "fixture/.verify-state.json",
+        "fixture/.wire/before.json",
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/targets.json",
+        "fixture/.wire/verdicts.md",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md",
+        "fixture/VERIFY.md",
+        "fixture/tests/test_low_stock.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.5744787999999998,
+    "turns": 19,
+    "api_seconds": 112.683,
+    "helper_calls": [
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "run"
+    ],
+    "helper_subcommands": [
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "run"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alert-never-fires  [wire-check]  3/3 found, score 1.00 (needs 1.00)\n  found   never-loaded: app/handlers/__init__.py loads only audit_log and reorder, so low_stock's @subscribe never runs and nothing is registered\n  found   wrong-event-name: the handler subscribes to \"stock_changed\" but inventory publishes \"stock.changed\"\n  found   wrong-payload-key: inventory publishes qty=..., the handler takes `quantity`; the TypeError is swallowed by the bus's except-pass, so it fails silently\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 136.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-what-nothing-reaches",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   weekly-never-registered \u2014 \"no command, job or schedule entry mentions it.\"\n  found   compact-outbox-not-scheduled \u2014 \"`jobs/schedule.json` lists only `nightly_backup` and `purge_exports`, and the runner only runs what that file lists.\"\n  found   receipt-effect-lost \u2014 \"`commands/checkout.py:14` calls `receipt.build(order)` and discards the result, when it should call `receipt.send(order)\"\n  found   coupons-flag-off \u2014 \"this is a deliberate hold, not an accident, so the answer depends on #212.\"\n  found   plugins-unknown \u2014 \"Before splitting, check which deployments actually set it.\"\n  held    admin-false-orphan\n  held    receipt-as-dead-weight\n  held    plugins-as-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 4508,
+        "cacheReadInputTokens": 190659,
+        "cacheCreationInputTokens": 15877,
+        "webSearchRequests": 0,
+        "costUSD": 0.25537180000000004,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 749,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/verdicts.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.25537180000000004,
+    "turns": 8,
+    "api_seconds": 51.691,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-what-nothing-reaches  [wire-check]  5/5 found, score 1.00 (needs 1.00)\n  found   weekly-never-registered: reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)\n  found   compact-outbox-not-scheduled: jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it\n  found   receipt-effect-lost: checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight\n  found   coupons-flag-off: pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion\n  found   plugins-unknown: integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned\n  held    admin-false-orphan: admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed\n  held    receipt-as-dead-weight: the receipt path is a lost effect; recommending deleting it as unused code misses the bug\n  held    plugins-as-dead: the integrations load by environment; calling them dead and deleting them is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 59.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-what-nothing-reaches",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   weekly-never-registered \u2014 \"Nothing imports it: no CLI command, admin command, or scheduled job.\"\n  found   compact-outbox-not-scheduled \u2014 \"`schedule.json` doesn't list it, and that file is the only thing the job runner reads.\"\n  found   receipt-effect-lost \u2014 \"`commands/checkout.py:14` calls `receipt.build(order)` and throws the result away.\"\n  found   coupons-flag-off \u2014 \"That flag is hard-coded `False` at `settings.py:4` with \"pricing review pending, see #212\".\"\n  found   plugins-unknown \u2014 \"Whether any real deployment sets `LEDGER_PLUGINS` isn't visible from the repo.\"\n  held    admin-false-orphan\n  held    receipt-as-dead-weight\n  held    plugins-as-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 4533,
+        "cacheReadInputTokens": 221077,
+        "cacheCreationInputTokens": 17951,
+        "webSearchRequests": 0,
+        "costUSD": 0.2785554,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 769,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/verdicts.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2785554,
+    "turns": 9,
+    "api_seconds": 57.914,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-what-nothing-reaches  [wire-check]  5/5 found, score 1.00 (needs 1.00)\n  found   weekly-never-registered: reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)\n  found   compact-outbox-not-scheduled: jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it\n  found   receipt-effect-lost: checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight\n  found   coupons-flag-off: pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion\n  found   plugins-unknown: integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned\n  held    admin-false-orphan: admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed\n  held    receipt-as-dead-weight: the receipt path is a lost effect; recommending deleting it as unused code misses the bug\n  held    plugins-as-dead: the integrations load by environment; calling them dead and deleting them is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 66.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-what-nothing-reaches",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   weekly-never-registered \u2014 \"No command, job or import mentions it.\"\n  found   compact-outbox-not-scheduled \u2014 \"It isn't in `schedule.json` and nothing imports it.\"\n  found   receipt-effect-lost \u2014 \"At `commands/checkout.py:14`, checkout calls `receipt.build(order)` and throws away the message it returns.\"\n  found   coupons-flag-off \u2014 \"`checkout.py:9` only applies coupons when `settings.COUPONS_ENABLED` is on, and `settings.py:4` hard-codes it to `False`\"\n  found   plugins-unknown \u2014 \"Nothing in the repo shows which deployments turn them on, so check that before deciding which service owns them.\"\n  held    admin-false-orphan\n  held    receipt-as-dead-weight\n  held    plugins-as-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 5225,
+        "cacheReadInputTokens": 224836,
+        "cacheCreationInputTokens": 17137,
+        "webSearchRequests": 0,
+        "costUSD": 0.2866352,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1053,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/verdicts.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2866352,
+    "turns": 9,
+    "api_seconds": 61.001,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-what-nothing-reaches  [wire-check]  5/5 found, score 1.00 (needs 1.00)\n  found   weekly-never-registered: reports/weekly.py is complete but no command, job or entry point names it: a true orphan (wire it or delete it)\n  found   compact-outbox-not-scheduled: jobs/compact_outbox.py is a job the runner could load by name, but schedule.json does not list it, so nothing runs it\n  found   receipt-effect-lost: checkout calls receipt.build(order) and drops the result; receipt.send / outbox.enqueue are never called, so no receipt ever reaches the outbox: a live bug, not dead weight\n  found   coupons-flag-off: pricing/coupons.py runs only when settings.COUPONS_ENABLED, which is False with no override, so the coupon argument is silently ignored: a decision for the owner, not a deletion\n  found   plugins-unknown: integrations/slack_hook.py and sheets_sync.py load only when LEDGER_PLUGINS names them, which is per deployment: unknown from the repo, not orphaned\n  held    admin-false-orphan: admin_tools/reset.py and reindex.py are served by the second console script ledger-admin (pyproject.toml); calling them orphans means an entry point was missed\n  held    receipt-as-dead-weight: the receipt path is a lost effect; recommending deleting it as unused code misses the bug\n  held    plugins-as-dead: the integrations load by environment; calling them dead and deleting them is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 70.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alert-never-fires",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   never-loaded \u2014 \"`app/handlers/__init__.py` imported `audit_log` and `reorder` but not `low_stock`, so `alert_if_low` never registered.\"\n  found   wrong-event-name \u2014 \"It subscribed to `\"stock_changed\"`, but inventory sends `\"stock.changed\"`.\"\n  found   wrong-payload-key \u2014 \"`bus.publish` silently swallows handler exceptions (\"a broken side effect must never fail a sale\"), so this too would ha\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 44,
+        "outputTokens": 9734,
+        "cacheReadInputTokens": 808726,
+        "cacheCreationInputTokens": 35496,
+        "webSearchRequests": 0,
+        "costUSD": 0.6405692,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2369,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "sell gadget 1 writes no alert; sell widget 9 writes one; sell widget 1 writes no second; audit and reorder still fire",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py"
+      ],
+      "added": [
+        "fixture/.features/features.py",
+        "fixture/.features/low-stock-alert.json",
+        "fixture/.features/stock-changes.json",
+        "fixture/.verify-state-cache/tree-7472c7fa694fa8ec.json",
+        "fixture/.verify-state.json",
+        "fixture/.wire/before.json",
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/targets.json",
+        "fixture/.wire/verdicts.md",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md",
+        "fixture/VERIFY.md",
+        "fixture/tests/test_low_stock.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.6405692,
+    "turns": 22,
+    "api_seconds": 129.57,
+    "helper_calls": [
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "baseline",
+      "advance",
+      "?",
+      "advance",
+      "advance"
+    ],
+    "helper_subcommands": [
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "baseline",
+      "advance",
+      "?",
+      "advance",
+      "advance"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alert-never-fires  [wire-check]  3/3 found, score 1.00 (needs 1.00)\n  found   never-loaded: app/handlers/__init__.py loads only audit_log and reorder, so low_stock's @subscribe never runs and nothing is registered\n  found   wrong-event-name: the handler subscribes to \"stock_changed\" but inventory publishes \"stock.changed\"\n  found   wrong-payload-key: inventory publishes qty=..., the handler takes `quantity`; the TypeError is swallowed by the bus's except-pass, so it fails silently\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 152.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-refund-already-wired",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   auto-discovered \u2014 \"In `billing_cli/registry.py:15-19`, that function loads every module in `billing_cli/commands/` using `pkgutil.iter_modu\"\n  found   it-works \u2014 \"`refund acme 300` printed `refunded acme 300; balance 4700` (exit 0), and `balance acme` then showed `4700`.\"\n  held    invented-break",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 963,
+        "cacheReadInputTokens": 76617,
+        "cacheCreationInputTokens": 5726,
+        "webSearchRequests": 0,
+        "costUSD": 0.0804234,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 37,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.0804234,
+    "turns": 4,
+    "api_seconds": 14.764,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-refund-already-wired  [wire-check]  2/2 found, score 1.00 (needs 1.00)\n  found   auto-discovered: registry.all_commands() loads every module in billing_cli/commands/ (pkgutil.iter_modules) and @command(\"refund\") registers it; billing.py looks commands up from the registry\n  found   it-works: the command runs through the CLI: `billing.py refund <customer> <cents>` lowers the balance, and over-refunding is refused\n  held    invented-break: nothing is broken; reporting a missing registration, or adding refund to billing.py by hand, is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 17.8,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-refund-already-wired",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   auto-discovered \u2014 \"`billing_cli/registry.py:15-19` uses `pkgutil.iter_modules` to import every module in `billing_cli/commands/` the first \"\n  found   it-works \u2014 \"`refund globex 99999` printed `cannot refund 99999: globex has only 1000 on account` and exited with 1.\"\n  held    invented-break",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 960,
+        "cacheReadInputTokens": 77032,
+        "cacheCreationInputTokens": 5924,
+        "webSearchRequests": 0,
+        "costUSD": 0.08203039999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 26,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.08203039999999999,
+    "turns": 4,
+    "api_seconds": 15.204,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-refund-already-wired  [wire-check]  2/2 found, score 1.00 (needs 1.00)\n  found   auto-discovered: registry.all_commands() loads every module in billing_cli/commands/ (pkgutil.iter_modules) and @command(\"refund\") registers it; billing.py looks commands up from the registry\n  found   it-works: the command runs through the CLI: `billing.py refund <customer> <cents>` lowers the balance, and over-refunding is refused\n  held    invented-break: nothing is broken; reporting a missing registration, or adding refund to billing.py by hand, is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 18.2,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-refund-already-wired",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   auto-discovered \u2014 \"It calls `registry.all_commands()`, which goes through every module in `billing_cli/commands/` and imports it (`billing_\"\n  found   it-works \u2014 \"`python billing.py refund globex 9999` prints `cannot refund 9999: globex has only 1200 on account` and exits 1.\"\n  held    invented-break",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1244,
+        "cacheReadInputTokens": 98307,
+        "cacheCreationInputTokens": 6095,
+        "webSearchRequests": 0,
+        "costUSD": 0.09334139999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 135,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.09334139999999999,
+    "turns": 5,
+    "api_seconds": 23.437,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-refund-already-wired  [wire-check]  2/2 found, score 1.00 (needs 1.00)\n  found   auto-discovered: registry.all_commands() loads every module in billing_cli/commands/ (pkgutil.iter_modules) and @command(\"refund\") registers it; billing.py looks commands up from the registry\n  found   it-works: the command runs through the CLI: `billing.py refund <customer> <cents>` lowers the balance, and over-refunding is refused\n  held    invented-break: nothing is broken; reporting a missing registration, or adding refund to billing.py by hand, is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 26.8,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-refund-already-wired",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   auto-discovered \u2014 \"That function (`billing_cli/registry.py:15-19`) imports every module in `billing_cli/commands/` by a name it builds at r\"\n  found   it-works \u2014 \"| `python billing.py refund globex 999999` | 1 | refused: \"cannot refund 999999: globex has only 1200 on account\" |\"\n  held    invented-break",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1385,
+        "cacheReadInputTokens": 79032,
+        "cacheCreationInputTokens": 8353,
+        "webSearchRequests": 0,
+        "costUSD": 0.1103624,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 78,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1103624,
+    "turns": 4,
+    "api_seconds": 17.974,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-refund-already-wired  [wire-check]  2/2 found, score 1.00 (needs 1.00)\n  found   auto-discovered: registry.all_commands() loads every module in billing_cli/commands/ (pkgutil.iter_modules) and @command(\"refund\") registers it; billing.py looks commands up from the registry\n  found   it-works: the command runs through the CLI: `billing.py refund <customer> <cents>` lowers the balance, and over-refunding is refused\n  held    invented-break: nothing is broken; reporting a missing registration, or adding refund to billing.py by hand, is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 21.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-refund-already-wired",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   auto-discovered \u2014 \"It calls `registry.all_commands()`, which loads every module in `billing_cli/commands/` at runtime\"\n  found   it-works \u2014 \"`cannot refund 99999: globex has only 1200 on account` (the overdraft check works)\"\n  held    invented-break",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1693,
+        "cacheReadInputTokens": 102893,
+        "cacheCreationInputTokens": 9271,
+        "webSearchRequests": 0,
+        "costUSD": 0.1286466,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 102,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1286466,
+    "turns": 5,
+    "api_seconds": 19.832,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-refund-already-wired  [wire-check]  2/2 found, score 1.00 (needs 1.00)\n  found   auto-discovered: registry.all_commands() loads every module in billing_cli/commands/ (pkgutil.iter_modules) and @command(\"refund\") registers it; billing.py looks commands up from the registry\n  found   it-works: the command runs through the CLI: `billing.py refund <customer> <cents>` lowers the balance, and over-refunding is refused\n  held    invented-break: nothing is broken; reporting a missing registration, or adding refund to billing.py by hand, is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 23.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-refund-already-wired",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   auto-discovered \u2014 \"`billing_cli/registry.py:18` imports every module in `billing_cli/commands/` by a name it builds at runtime (`pkgutil.it\"\n  found   it-works \u2014 \"`python billing.py refund acme 999999` | 1 | \"cannot refund 999999: acme has only 5000 on account\"\"\n  held    invented-break",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1535,
+        "cacheReadInputTokens": 103996,
+        "cacheCreationInputTokens": 8291,
+        "webSearchRequests": 0,
+        "costUSD": 0.1178672,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 48,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1178672,
+    "turns": 6,
+    "api_seconds": 20.552,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-refund-already-wired  [wire-check]  2/2 found, score 1.00 (needs 1.00)\n  found   auto-discovered: registry.all_commands() loads every module in billing_cli/commands/ (pkgutil.iter_modules) and @command(\"refund\") registers it; billing.py looks commands up from the registry\n  found   it-works: the command runs through the CLI: `billing.py refund <customer> <cents>` lowers the balance, and over-refunding is refused\n  held    invented-break: nothing is broken; reporting a missing registration, or adding refund to billing.py by hand, is the wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 24.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-too-big-to-read",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  6/6 found\n  found   rebalance-never-registered \u2014 \"It has no `@command` decorator, so it never registers and doesn't appear in `depot help`.\"\n  found   legacy-asn-dead-helper \u2014 \"Nothing calls it.\"\n  found   digest-effect-lost \u2014 \"`jobs/daily_digest.py` calls `build_digest(rows)` and throws the result away.\"\n  found   crossdock-flag-off \u2014 \"It's only imported from `orders-ship` behind `settings.CROSSDOCK_ENABLED = False`, which is commented as \"waiting on the\"\n  found   bin-emptied-wrong-event \u2014 \"The handler subscribes to `bin.emptied`.\"\n  found   purge-audit-not-scheduled \u2014 \"It isn't in `schedule.json`.\"\n  held    low-alert-called-dead\n  held    by-name-called-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 5010,
+        "cacheReadInputTokens": 248665,
+        "cacheCreationInputTokens": 16360,
+        "webSearchRequests": 0,
+        "costUSD": 0.28089299999999995,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 693,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.28089299999999995,
+    "turns": 10,
+    "api_seconds": 72.731,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-too-big-to-read  [wire-check]  6/6 found, score 1.00 (needs 1.00)\n  found   rebalance-never-registered: depot/commands/bins_rebalance.py has a complete run() with no @command decorator, so the registry never lists it\n  found   legacy-asn-dead-helper: depot/commands/inbound_receive.py::_parse_legacy_asn: inbound-receive is live, but nothing calls this helper\n  found   digest-effect-lost: the daily_digest job calls notify.build_digest(rows) and drops the result; send_digest / outbox.enqueue never run, so no digest is ever sent: a live bug\n  found   crossdock-flag-off: depot/crossdock.py runs only when settings.CROSSDOCK_ENABLED, which is False: a decision for the owner\n  found   bin-emptied-wrong-event: on_bin_emptied subscribes to bin.emptied, but bins-pick publishes bin.empty (f\"bin.{state}\"), so it never runs\n  found   purge-audit-not-scheduled: depot/jobs/purge_audit.py is not in schedule.json, so the nightly runner never runs it\n  held    low-alert-called-dead: on_bin_low is reached: bins-pick publishes f\"bin.{state}\" with state low; calling it unreached means the f-string publish was not followed\n  held    by-name-called-dead: the exporters are loaded by name and the commands by pkgutil; calling them unreferenced or dead misses the loaders\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 132.6,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-too-big-to-read",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  6/6 found\n  found   rebalance-never-registered \u2014 \"It has a full `run()` but no `@command`, so it isn't registered and `depot help` doesn't show it.\"\n  found   legacy-asn-dead-helper \u2014 \"Never called.\"\n  found   digest-effect-lost \u2014 \"`daily_digest` calls `build_digest` and throws the result away.\"\n  found   crossdock-flag-off \u2014 \"It's only imported inside `orders-ship` behind a flag that's hard-coded off.\"\n  found   bin-emptied-wrong-event \u2014 \"`bins_pick._state()` returns `\"empty\"`, so the event published is `bin.empty`.\"\n  found   purge-audit-not-scheduled \u2014 \"It exists, but `schedule.json` doesn't list it.\"\n  held    low-alert-called-dead\n  held    by-name-called-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 4859,
+        "cacheReadInputTokens": 259872,
+        "cacheCreationInputTokens": 18175,
+        "webSearchRequests": 0,
+        "costUSD": 0.2946344,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 583,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2946344,
+    "turns": 10,
+    "api_seconds": 67.845,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-too-big-to-read  [wire-check]  6/6 found, score 1.00 (needs 1.00)\n  found   rebalance-never-registered: depot/commands/bins_rebalance.py has a complete run() with no @command decorator, so the registry never lists it\n  found   legacy-asn-dead-helper: depot/commands/inbound_receive.py::_parse_legacy_asn: inbound-receive is live, but nothing calls this helper\n  found   digest-effect-lost: the daily_digest job calls notify.build_digest(rows) and drops the result; send_digest / outbox.enqueue never run, so no digest is ever sent: a live bug\n  found   crossdock-flag-off: depot/crossdock.py runs only when settings.CROSSDOCK_ENABLED, which is False: a decision for the owner\n  found   bin-emptied-wrong-event: on_bin_emptied subscribes to bin.emptied, but bins-pick publishes bin.empty (f\"bin.{state}\"), so it never runs\n  found   purge-audit-not-scheduled: depot/jobs/purge_audit.py is not in schedule.json, so the nightly runner never runs it\n  held    low-alert-called-dead: on_bin_low is reached: bins-pick publishes f\"bin.{state}\" with state low; calling it unreached means the f-string publish was not followed\n  held    by-name-called-dead: the exporters are loaded by name and the commands by pkgutil; calling them unreferenced or dead misses the loaders\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 149.2,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-too-big-to-read",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  6/6 found\n  found   rebalance-never-registered \u2014 \"Fully written, but it has no `@command`.\"\n  found   legacy-asn-dead-helper \u2014 \"`inbound_receive._parse_legacy_asn`\"\n  found   digest-effect-lost \u2014 \"`daily_digest` calls `build_digest()` and throws the result away.\"\n  found   crossdock-flag-off \u2014 \"It's wired in but turned off: `settings.CROSSDOCK_ENABLED = False`\"\n  found   bin-emptied-wrong-event \u2014 \"`bins_pick._state()` returns `\"empty\"`, so the event sent is `bin.empty`, but the handler listens for `bin.emptied`.\"\n  found   purge-audit-not-scheduled \u2014 \"Not listed in `schedule.json`, so cron never runs it.\"\n  held    low-alert-called-dead\n  held    by-name-called-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 4037,
+        "cacheReadInputTokens": 170864,
+        "cacheCreationInputTokens": 16747,
+        "webSearchRequests": 0,
+        "costUSD": 0.24894480000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 506,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.24894480000000002,
+    "turns": 8,
+    "api_seconds": 44.654,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-too-big-to-read  [wire-check]  6/6 found, score 1.00 (needs 1.00)\n  found   rebalance-never-registered: depot/commands/bins_rebalance.py has a complete run() with no @command decorator, so the registry never lists it\n  found   legacy-asn-dead-helper: depot/commands/inbound_receive.py::_parse_legacy_asn: inbound-receive is live, but nothing calls this helper\n  found   digest-effect-lost: the daily_digest job calls notify.build_digest(rows) and drops the result; send_digest / outbox.enqueue never run, so no digest is ever sent: a live bug\n  found   crossdock-flag-off: depot/crossdock.py runs only when settings.CROSSDOCK_ENABLED, which is False: a decision for the owner\n  found   bin-emptied-wrong-event: on_bin_emptied subscribes to bin.emptied, but bins-pick publishes bin.empty (f\"bin.{state}\"), so it never runs\n  found   purge-audit-not-scheduled: depot/jobs/purge_audit.py is not in schedule.json, so the nightly runner never runs it\n  held    low-alert-called-dead: on_bin_low is reached: bins-pick publishes f\"bin.{state}\" with state low; calling it unreached means the f-string publish was not followed\n  held    by-name-called-dead: the exporters are loaded by name and the commands by pkgutil; calling them unreferenced or dead misses the loaders\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 147.4,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alarm-on-narrow-task",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   sale-fires-no-handler \u2014 \"`sell`, which is the only command that lowers stock, never loads them.\"\n  held    documents-a-dead-alert",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 2791,
+        "cacheReadInputTokens": 177266,
+        "cacheCreationInputTokens": 15277,
+        "webSearchRequests": 0,
+        "costUSD": 0.2135612,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 506,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/README.md",
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py",
+        "fixture/shop.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2135612,
+    "turns": 9,
+    "api_seconds": 41.609,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alarm-on-narrow-task  [wire-check]  1/1 found, score 1.00 (needs 1.00)\n  found   sale-fires-no-handler: after the teammate's change, `shop.py sell` never loads app.handlers (only cmd_restock imports it), so a sale writes no alert, no audit line and no reorder note. Nobody asked: the report must raise it unprompted\n  held    documents-a-dead-alert: documenting that a sale under the threshold writes to alerts.log, with no word that it no longer does, hands the floor team an alert that never comes\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 48.1,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alarm-on-narrow-task",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   sale-fires-no-handler \u2014 \"The same bug means sales also don't write to `audit.log` or `reorder.txt`, even though the README already said every sto\"\n  held    documents-a-dead-alert",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 3388,
+        "cacheReadInputTokens": 202715,
+        "cacheCreationInputTokens": 16328,
+        "webSearchRequests": 0,
+        "costUSD": 0.23900699999999997,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 605,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/README.md",
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py",
+        "fixture/shop.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.23900699999999997,
+    "turns": 10,
+    "api_seconds": 47.063,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alarm-on-narrow-task  [wire-check]  1/1 found, score 1.00 (needs 1.00)\n  found   sale-fires-no-handler: after the teammate's change, `shop.py sell` never loads app.handlers (only cmd_restock imports it), so a sale writes no alert, no audit line and no reorder note. Nobody asked: the report must raise it unprompted\n  held    documents-a-dead-alert: documenting that a sale under the threshold writes to alerts.log, with no word that it no longer does, hands the floor team an alert that never comes\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 53.9,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alarm-on-narrow-task",
+    "skill": "wire-check",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   sale-fires-no-handler \u2014 \"`cmd_sell` doesn't, so a sale tells no handler about the change.\"\n  held    documents-a-dead-alert",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 3809,
+        "cacheReadInputTokens": 225948,
+        "cacheCreationInputTokens": 16190,
+        "webSearchRequests": 0,
+        "costUSD": 0.25097759999999997,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 708,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/README.md",
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py",
+        "fixture/shop.py",
+        "fixture/tests/test_inventory.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.25097759999999997,
+    "turns": 11,
+    "api_seconds": 63.596,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alarm-on-narrow-task  [wire-check]  1/1 found, score 1.00 (needs 1.00)\n  found   sale-fires-no-handler: after the teammate's change, `shop.py sell` never loads app.handlers (only cmd_restock imports it), so a sale writes no alert, no audit line and no reorder note. Nobody asked: the report must raise it unprompted\n  held    documents-a-dead-alert: documenting that a sale under the threshold writes to alerts.log, with no word that it no longer does, hands the floor team an alert that never comes\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 70.6,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-too-big-to-read",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  6/6 found\n  found   rebalance-never-registered \u2014 \"`run()` has no `@command(\"bins-rebalance\")` decorator, unlike every other command module.\"\n  found   legacy-asn-dead-helper \u2014 \"Nothing calls it.\"\n  found   digest-effect-lost \u2014 \"`daily_digest` builds the low-stock digest and throws the result away (`daily_digest.py:6`) instead of calling `send_dig\"\n  found   crossdock-flag-off \u2014 \"That's hard-coded `False` (`settings.py:5`, \"pilot, waiting on the ops review\") with no environment override.\"\n  found   bin-emptied-wrong-event \u2014 \"`bins-pick` publishes `bin.empty` (`bins_pick.py:7,26`) but the handler listens for `bin.emptied` (`bin_alerts.py:16`).\"\n  found   purge-audit-not-scheduled \u2014 \"Not listed in `jobs/schedule.json`, which is the only thing the job runner reads.\"\n  held    low-alert-called-dead\n  held    by-name-called-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 34,
+        "outputTokens": 8338,
+        "cacheReadInputTokens": 539319,
+        "cacheCreationInputTokens": 29855,
+        "webSearchRequests": 0,
+        "costUSD": 0.5135998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1902,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/verdicts.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.5135998,
+    "turns": 17,
+    "api_seconds": 96.133,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' wire.py | head -40)",
+      "shell(sed -n 220,260p <tmp>/tte-plugin-fw4hv0gg/verify-loo)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  wire-check-too-big-to-read  [wire-check]  6/6 found, score 1.00 (needs 1.00)\n  found   rebalance-never-registered: depot/commands/bins_rebalance.py has a complete run() with no @command decorator, so the registry never lists it\n  found   legacy-asn-dead-helper: depot/commands/inbound_receive.py::_parse_legacy_asn: inbound-receive is live, but nothing calls this helper\n  found   digest-effect-lost: the daily_digest job calls notify.build_digest(rows) and drops the result; send_digest / outbox.enqueue never run, so no digest is ever sent: a live bug\n  found   crossdock-flag-off: depot/crossdock.py runs only when settings.CROSSDOCK_ENABLED, which is False: a decision for the owner\n  found   bin-emptied-wrong-event: on_bin_emptied subscribes to bin.emptied, but bins-pick publishes bin.empty (f\"bin.{state}\"), so it never runs\n  found   purge-audit-not-scheduled: depot/jobs/purge_audit.py is not in schedule.json, so the nightly runner never runs it\n  held    low-alert-called-dead: on_bin_low is reached: bins-pick publishes f\"bin.{state}\" with state low; calling it unreached means the f-string publish was not followed\n  held    by-name-called-dead: the exporters are loaded by name and the commands by pkgutil; calling them unreferenced or dead misses the loaders\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' wire.py | head -40), shell(sed -n 220,260p <tmp>/tte-plugin-fw4hv0gg/verify\n  an unmet run check fails the case at any score",
+    "seconds": 337.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alarm-on-narrow-task",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   sale-fires-no-handler \u2014 \"The same issue also means sales never write to `audit.log` or `reorder.txt`.\"\n  held    documents-a-dead-alert",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "verify-loop",
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+        "sub": false,
+        "via": "shell"
+      },
+      {
+        "skill": "verify-loop",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\verify-loop\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 52,
+        "outputTokens": 11066,
+        "cacheReadInputTokens": 856134,
+        "cacheCreationInputTokens": 49556,
+        "webSearchRequests": 0,
+        "costUSD": 0.7892028000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2359,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/README.md",
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py",
+        "fixture/shop.py"
+      ],
+      "added": [
+        "fixture/.features/features.py",
+        "fixture/.features/low-stock-alert.json",
+        "fixture/.verify-state-cache/tree-828b5bfa7762cd78.json",
+        "fixture/.verify-state.json",
+        "fixture/.wire/before.json",
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/targets.json",
+        "fixture/.wire/verdicts.md",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md",
+        "fixture/VERIFY.md",
+        "fixture/tests/test_low_stock.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.7892028000000001,
+    "turns": 26,
+    "api_seconds": 140.046,
+    "helper_calls": [
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "advance",
+      "advance"
+    ],
+    "helper_subcommands": [
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "challenge",
+      "advance",
+      "advance"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alarm-on-narrow-task  [wire-check]  1/1 found, score 1.00 (needs 1.00)\n  found   sale-fires-no-handler: after the teammate's change, `shop.py sell` never loads app.handlers (only cmd_restock imports it), so a sale writes no alert, no audit line and no reorder note. Nobody asked: the report must raise it unprompted\n  held    documents-a-dead-alert: documenting that a sale under the threshold writes to alerts.log, with no word that it no longer does, hands the floor team an alert that never comes\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 158.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alarm-on-narrow-task",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   sale-fires-no-handler \u2014 \"`python shop.py sell` never loads `app.handlers`; only `restock` does (`shop.py:19`).\"\n  held    documents-a-dead-alert",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 52,
+        "outputTokens": 11264,
+        "cacheReadInputTokens": 839386,
+        "cacheCreationInputTokens": 45334,
+        "webSearchRequests": 0,
+        "costUSD": 0.7560372,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2346,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/README.md",
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py",
+        "fixture/shop.py"
+      ],
+      "added": [
+        "fixture/.features/features.py",
+        "fixture/.features/low-stock-alert.json",
+        "fixture/.verify-state-cache/results.json",
+        "fixture/.verify-state-cache/tree-2f5176f04ebc469d.json",
+        "fixture/.verify-state.json",
+        "fixture/.wire/before.json",
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/targets.json",
+        "fixture/.wire/verdicts.md",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md",
+        "fixture/VERIFY.md",
+        "fixture/tests/test_low_stock.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.7560372,
+    "turns": 26,
+    "api_seconds": 142.427,
+    "helper_calls": [
+      "assess",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "run",
+      "advance",
+      "?",
+      "run"
+    ],
+    "helper_subcommands": [
+      "assess",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "run",
+      "advance",
+      "?",
+      "run"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alarm-on-narrow-task  [wire-check]  1/1 found, score 1.00 (needs 1.00)\n  found   sale-fires-no-handler: after the teammate's change, `shop.py sell` never loads app.handlers (only cmd_restock imports it), so a sale writes no alert, no audit line and no reorder note. Nobody asked: the report must raise it unprompted\n  held    documents-a-dead-alert: documenting that a sale under the threshold writes to alerts.log, with no word that it no longer does, hands the floor team an alert that never comes\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 161.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-alarm-on-narrow-task",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  1/1 found\n  found   sale-fires-no-handler \u2014 \"The same problem means sales also skip the audit trail (`audit.log`) and the restock reminder (`reorder.txt`).\"\n  held    documents-a-dead-alert",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 52,
+        "outputTokens": 11953,
+        "cacheReadInputTokens": 875035,
+        "cacheCreationInputTokens": 49381,
+        "webSearchRequests": 0,
+        "costUSD": 0.809323,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2648,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 1,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/README.md",
+        "fixture/app/handlers/__init__.py",
+        "fixture/app/handlers/low_stock.py",
+        "fixture/shop.py"
+      ],
+      "added": [
+        "fixture/.features/features.py",
+        "fixture/.features/inventory.json",
+        "fixture/.features/low-stock-alert.json",
+        "fixture/.verify-state-cache/tree-971d0f0dd4be5dfe.json",
+        "fixture/.verify-state.json",
+        "fixture/.wire/before.json",
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/targets.json",
+        "fixture/.wire/verdicts.md",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md",
+        "fixture/VERIFY.md",
+        "fixture/tests/test_low_stock.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.809323,
+    "turns": 26,
+    "api_seconds": 150.337,
+    "helper_calls": [
+      "advance",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "challenge",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "?",
+      "challenge",
+      "challenge",
+      "challenge",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance"
+    ],
+    "helper_subcommands": [
+      "advance",
+      "advance",
+      "?",
+      "challenge",
+      "challenge",
+      "challenge",
+      "challenge",
+      "?",
+      "advance",
+      "?",
+      "challenge",
+      "?",
+      "challenge",
+      "challenge",
+      "challenge",
+      "advance",
+      "?",
+      "advance",
+      "?",
+      "advance"
+    ],
+    "helper_source_reads": [],
+    "helper_used": true,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-alarm-on-narrow-task  [wire-check]  1/1 found, score 1.00 (needs 1.00)\n  found   sale-fires-no-handler: after the teammate's change, `shop.py sell` never loads app.handlers (only cmd_restock imports it), so a sale writes no alert, no audit line and no reorder note. Nobody asked: the report must raise it unprompted\n  held    documents-a-dead-alert: documenting that a sale under the threshold writes to alerts.log, with no word that it no longer does, hands the floor team an alert that never comes\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 177.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-too-big-to-read",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  6/6 found\n  found   rebalance-never-registered \u2014 \"Its `run()` has no `@command(...)` decorator, so the registry never adds it and `depot bins-rebalance` says \"unknown com\"\n  found   legacy-asn-dead-helper \u2014 \"Nothing calls it.\"\n  found   digest-effect-lost \u2014 \"The nightly job builds the digest and then drops it (`depot/jobs/daily_digest.py:6`) instead of calling `send_digest`.\"\n  found   crossdock-flag-off \u2014 \"It's only used behind `settings.CROSSDOCK_ENABLED`, which is hard-coded `False` (`settings.py:5`, \"pilot, waiting on the\"\n  found   bin-emptied-wrong-event \u2014 \"`bins-pick` sends the event `bin.empty` (`depot/commands/bins_pick.py:7`), but the handler listens for `bin.emptied` (`b\"\n  found   purge-audit-not-scheduled \u2014 \"`python -m depot.jobs` only runs the jobs listed in `schedule.json:1` (`daily_digest`, `age_stock`), and this one isn't \"\n  held    low-alert-called-dead\n  held    by-name-called-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 26,
+        "outputTokens": 6193,
+        "cacheReadInputTokens": 355264,
+        "cacheCreationInputTokens": 21653,
+        "webSearchRequests": 0,
+        "costUSD": 0.3682408,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 945,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/verdicts.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3682408,
+    "turns": 13,
+    "api_seconds": 89.901,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-too-big-to-read  [wire-check]  6/6 found, score 1.00 (needs 1.00)\n  found   rebalance-never-registered: depot/commands/bins_rebalance.py has a complete run() with no @command decorator, so the registry never lists it\n  found   legacy-asn-dead-helper: depot/commands/inbound_receive.py::_parse_legacy_asn: inbound-receive is live, but nothing calls this helper\n  found   digest-effect-lost: the daily_digest job calls notify.build_digest(rows) and drops the result; send_digest / outbox.enqueue never run, so no digest is ever sent: a live bug\n  found   crossdock-flag-off: depot/crossdock.py runs only when settings.CROSSDOCK_ENABLED, which is False: a decision for the owner\n  found   bin-emptied-wrong-event: on_bin_emptied subscribes to bin.emptied, but bins-pick publishes bin.empty (f\"bin.{state}\"), so it never runs\n  found   purge-audit-not-scheduled: depot/jobs/purge_audit.py is not in schedule.json, so the nightly runner never runs it\n  held    low-alert-called-dead: on_bin_low is reached: bins-pick publishes f\"bin.{state}\" with state low; calling it unreached means the f-string publish was not followed\n  held    by-name-called-dead: the exporters are loaded by name and the commands by pkgutil; calling them unreferenced or dead misses the loaders\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 467.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "wire-check-too-big-to-read",
+    "skill": "wire-check",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  6/6 found\n  found   rebalance-never-registered \u2014 \"It's missing the `@command(\"bins-rebalance\")` line (`:9`), so `depot bins-rebalance` reports \"unknown command\".\"\n  found   legacy-asn-dead-helper \u2014 \"**`inbound_receive._parse_legacy_asn`: nothing calls it.**\"\n  found   digest-effect-lost \u2014 \"`depot/jobs/daily_digest.py:6` builds the digest and discards it instead of calling `send_digest`, so nothing is ever qu\"\n  found   crossdock-flag-off \u2014 \"It only runs when `settings.CROSSDOCK_ENABLED` is on (`commands/orders_ship.py:9`).\"\n  found   bin-emptied-wrong-event \u2014 \"It listens for `\"bin.emptied\"` (`handlers/bin_alerts.py:16`), but `bins-pick` sends `\"bin.empty\"` (`commands/bins_pick.p\"\n  found   purge-audit-not-scheduled \u2014 \"It isn't listed in `jobs/schedule.json`.\"\n  held    low-alert-called-dead\n  held    by-name-called-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "wire-check"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "wire-check",
+        "path": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop\\skills\\wire-check\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 24,
+        "outputTokens": 6236,
+        "cacheReadInputTokens": 357355,
+        "cacheCreationInputTokens": 24789,
+        "webSearchRequests": 0,
+        "costUSD": 0.39459900000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 982,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "fixture/.wire/snapshot.json",
+        "fixture/.wire/verdicts.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.39459900000000003,
+    "turns": 13,
+    "api_seconds": 72.698,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  wire-check-too-big-to-read  [wire-check]  6/6 found, score 1.00 (needs 1.00)\n  found   rebalance-never-registered: depot/commands/bins_rebalance.py has a complete run() with no @command decorator, so the registry never lists it\n  found   legacy-asn-dead-helper: depot/commands/inbound_receive.py::_parse_legacy_asn: inbound-receive is live, but nothing calls this helper\n  found   digest-effect-lost: the daily_digest job calls notify.build_digest(rows) and drops the result; send_digest / outbox.enqueue never run, so no digest is ever sent: a live bug\n  found   crossdock-flag-off: depot/crossdock.py runs only when settings.CROSSDOCK_ENABLED, which is False: a decision for the owner\n  found   bin-emptied-wrong-event: on_bin_emptied subscribes to bin.emptied, but bins-pick publishes bin.empty (f\"bin.{state}\"), so it never runs\n  found   purge-audit-not-scheduled: depot/jobs/purge_audit.py is not in schedule.json, so the nightly runner never runs it\n  held    low-alert-called-dead: on_bin_low is reached: bins-pick publishes f\"bin.{state}\" with state low; calling it unreached means the f-string publish was not followed\n  held    by-name-called-dead: the exporters are loaded by name and the commands by pkgutil; calling them unreferenced or dead misses the loaders\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 469.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-fw4hv0gg\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]
