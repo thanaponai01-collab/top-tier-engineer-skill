@@ -1,0 +1,4 @@
+  1. Bash: cd fixture && find . -type f -not -path './.git/*' | head -50 && cat *.md 2>/dev/null | head -50
+  2. Bash: cd fixture && for f in notes.py store.py commands/*.py; do echo "=== $f"; cat $f; done; echo; wc -c notes.json
+  3. Bash: T=$(mktemp -d); cp -r fixture/. $T/; cd $T; python notes.py --help; python notes.py list; python notes.py search a; echo "--- sync"; python notes.py sync; echo…
+  4. Write: <tmp>\tte-eval-h7rg9w0b\fixture\CLAUDE.md

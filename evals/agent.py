@@ -435,6 +435,9 @@ def redact(text):
     evidence is committed to the repo."""
     for form, tag in LOCAL_PATHS:
         text = re.sub(re.escape(form), lambda _: tag, text, flags=re.I)
+    # Claude's per-project folder names flatten a path into a slug: C--Users-<name>-AppData-...
+    user = os.path.basename(os.path.expanduser("~"))
+    text = re.sub(rf"(?i)\bUsers-{re.escape(user)}-", "Users-<user>-", text)
     return GIT_NAME.sub(r"\1<name>", EMAIL.sub("<email>", text))
 
 

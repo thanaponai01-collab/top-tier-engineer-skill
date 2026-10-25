@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Groceries",
+    "body": "milk, eggs",
+    "tags": [
+      "home"
+    ],
+    "archived": false,
+    "pinned": true,
+    "starred": false,
+    "due": "2026-11-02",
+    "created": "2026-09-01"
+  },
+  {
+    "id": 2,
+    "title": "Standup",
+    "body": "demo the export",
+    "tags": [
+      "work"
+    ],
+    "archived": true,
+    "pinned": false,
+    "starred": true,
+    "due": null,
+    "created": "2026-09-14"
+  },
+  {
+    "id": 3,
+    "title": "Books",
+    "body": "Dune, Piranesi",
+    "tags": [
+      "home",
+      "reading"
+    ],
+    "archived": false,
+    "pinned": false,
+    "starred": true,
+    "due": "2026-12-20",
+    "created": "2026-10-03"
+  }
+]

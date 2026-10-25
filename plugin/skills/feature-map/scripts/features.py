@@ -7,13 +7,20 @@ click target, shortcut, CLI command. Three commands:
   init   Draft FEATURES.md from the entry points found in the code, one feature per group.
          A draft: the agent names each feature, writes what it does, and labels it. Never
          overwrites an existing FEATURES.md.
+  prove  Run a feature's entry point (the command after --) and keep the receipt in
+         .features/<feature>.json: the command, its exit code, the tail of its output, and a hash
+         of every file the feature names. For what no command can drive, --file records a
+         screenshot or saved response by hash, with --note saying what it shows.
   impact Which features a change touches, and the VERIFY.md sections to rerun. Files come from
          `--files a b`, else `git diff` against HEAD (`--base REF`) plus untracked files.
   check  Test the map against the code. STALE: a mapped entry point or trace step the code no
          longer has. BROKEN: a trace step not called from the step before it (comments do not
-         count). Then what the map does NOT cover: entry points in the code the map lacks
-         (unmapped), features with no trace, no VERIFY.md link (or no VERIFY.md), no status label,
-         no description, a pinned status whose files changed (drifted), or `proven` with no pin.
+         count), or a first step neither in nor called from an entry point's file. Then what the
+         map does NOT cover: entry points in the code the map lacks (unmapped; `## Not features`
+         lists the ones that are not a feature, each with its reason), features with no trace, no
+         VERIFY.md link (or no VERIFY.md), no status label, no description. `proven` needs a
+         passing receipt for every entry point (else unproven), and is drifted once a file the
+         feature names no longer matches the receipt's hash.
          Links to verify-loop: a `proven` feature whose VERIFY.md section has no receipt of its
          check rejecting a wrong product, or failed its last run, is unbacked (read from
          `verify.py status --json` when verify-loop is installed beside this skill); a feature
@@ -38,42 +45,58 @@ FEATURES.md format:
   - code: src/checkout/
   - trace: `checkout` @ src/app.py > `place_order` @ src/svc.py > `orders` @ src/schema.sql
   - verify: Checkout
-  - status: proven @ 3f2a1bc: drove /checkout in a browser, order id shown
+  - status: proven: drove /checkout in a browser, order id shown
 
-`@ commit` on the status pins what the claim was true of; `check` reports it as drifted once a
-file of that feature has changed since (unknown commits count as drifted).
+  ## Not features
+  - cli: `debug-dump` @ cli.py: developer dump, hidden from --help
 
-kinds: route (or api), click, shortcut, cli, menu. status: proven | traced | suspected, then how.
+kinds: route (or api), click, shortcut, cli, menu. status: proven | failing | traced | suspected, then how.
 
 Usage:
   python scripts/features.py init   [repo]
-  python scripts/features.py check  [repo] [--strict]
+  python scripts/features.py prove  [--repo R] --feature NAME [--entry 'kind: anchor'] [--copy] -- <command>
+  python scripts/features.py prove  [--repo R] --feature NAME --entry 'kind: anchor' --file F --note TEXT
+  python scripts/features.py check  [repo] [--strict] [--rerun]
   python scripts/features.py impact [repo] [--base REF | --files a b]
 
 Exit: check 0 = nothing stale or broken; 1 = something stale or broken (or --strict and something is
-untraced, unmapped, unlinked, unlabeled, undescribed, drifted, unpinned, unbacked or unfenced);
-2 = no FEATURES.md.
+untraced, unmapped, unlinked, unlabeled, undescribed, drifted, unproven, unbacked, unfenced or unannounced;
+--rerun and a recorded run that passed fails now);
+2 = no FEATURES.md. prove 0 = recorded and the run passed; 1 = recorded, the run failed; 2 = usage.
 Summary line:
   FEATURES: <f> features | <e> entry points, <s> stale | <b> broken | <t> untraced | <u> unmapped |
-  <v> unlinked | <l> unlabeled | <d> undescribed | <r> drifted | <p> unpinned | <k> unbacked |
-  <n> unfenced
+  <v> unlinked | <l> unlabeled | <d> undescribed | <r> drifted | <p> unproven | <k> unbacked |
+  <n> unfenced | <a> unannounced | <i> not features [| <g> regressed, with --rerun]
 """
-import argparse, json, os, re, subprocess, sys
+import argparse, hashlib, json, os, re, shutil, subprocess, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _encoding import utf8_streams
+try:
+    from _encoding import utf8_streams
+except ImportError:  # the single-file copy vendored into a repo's .features/
+    def utf8_streams():
+        for stream in (sys.stdout, sys.stderr):
+            try:
+                stream.reconfigure(encoding="utf-8")
+            except (AttributeError, ValueError, OSError):
+                pass
 
 MAP, VERIFY = "FEATURES.md", "VERIFY.md"
 # verify-loop's helper, when this skill is installed beside it (the verify-loop plugin ships both).
 VERIFY_PY = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                          "verify-loop", "scripts", "verify.py")
 SKIP_DIRS = {".git", "node_modules", "venv", ".venv", "__pycache__", "dist", "build", "target",
-             "vendor", ".tox", ".next", "fixture", "fixtures", "tests", "test", "__tests__"}
+             "vendor", ".tox", ".next", "fixture", "fixtures", "tests", "test", "__tests__", ".features"}
 CODE_EXT = {".py", ".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".html",
             ".go", ".rs", ".rb", ".php", ".java", ".kt", ".cs"}
 MAX_BYTES = 1_000_000
 ENTRY_KINDS = {"route", "api", "click", "shortcut", "cli", "menu"}
-LABELS = ("proven", "traced", "suspected")
+LABELS = ("proven", "failing", "traced", "suspected")
+AGENT_FILES = ("AGENTS.md", "CLAUDE.md")  # loaded by agents at session start: where the map is announced
+ANNOUNCE = ("Read FEATURES.md before driving or changing this app. After any change: "
+            "`python .features/features.py check --rerun` lists what moved or stopped working since it was proven; "
+            "fix those map lines (rename, or status `failing: <error>`), then "
+            "`python .features/features.py prove --again` re-records every run. No need to read the script.")
 MODS = {"ctrl": "mod", "control": "mod", "cmd": "mod", "command": "mod", "meta": "mod",
         "cmdorctrl": "mod", "commandorcontrol": "mod", "mod": "mod", "super": "mod",
         "option": "alt", "alt": "alt", "shift": "shift"}
@@ -159,26 +182,42 @@ def load(repo, rel, seen=None):
     return "\n".join(out)
 
 
+ENTRY = re.compile(r"^`([^`]+)`(?:\s*@\s*([^\s:]+)(?::(?!:))?)?(?:\s*::\s*(\S+))?\s*(.*)$")
+NOT_FEATURES, NOT_BUILT = "not features", "not built"
+
+
 def parse(text):
-    """[{name, what, entries: [(kind, anchor, file, needle)], verify, status}]"""
+    """[{name, what, entries: [(kind, anchor, file, needle)], verify, status, trace, reasons}].
+    `## Not features` holds entry points the code declares that are not a feature (a debug command,
+    a test-only selector), each with the reason after it; `## Not built` is prose and is skipped."""
     features, cur = [], None
     for line in text.splitlines():
         h = re.match(r"^##\s+(.+?)\s*$", line)
         if h:
-            cur = {"name": h.group(1), "what": "", "entries": [], "verify": "", "status": "", "trace": ""}
-            features.append(cur)
+            cur = {"name": h.group(1), "what": "", "entries": [], "verify": "", "status": "", "trace": "",
+                   "reasons": []}
+            if h.group(1).lower() != NOT_BUILT:
+                features.append(cur)
             continue
         b = re.match(r"^\s*[-*]\s+([A-Za-z][\w-]*):\s*(.*?)\s*$", line)
         if not (b and cur):
             continue
         key, val = b.group(1).lower(), b.group(2)
         if key in ENTRY_KINDS:
-            m = re.match(r"^`([^`]+)`(?:\s*@\s*(\S+))?(?:\s*::\s*(\S+))?", val)
+            m = ENTRY.match(val)
             if m:
                 cur["entries"].append((key, m.group(1), m.group(2) or "", m.group(3) or ""))
+                cur["reasons"].append(re.sub(r"^[\s:;,\-–—]+", "", m.group(4)))
         elif key in ("what", "verify", "status", "trace"):
             cur[key] = val if key == "trace" else val.strip("`")
     return features
+
+
+def split_ignored(features):
+    """(real features, the `## Not features` section or None)."""
+    real = [f for f in features if f["name"].lower() != NOT_FEATURES]
+    ignored = next((f for f in features if f["name"].lower() == NOT_FEATURES), None)
+    return real, ignored
 
 
 def is_todo(s):
@@ -244,10 +283,16 @@ def cmd_init(repo):
         groups.setdefault(group_of(kind, anchor, rel), []).append((kind, anchor, rel))
     out = [
         "# FEATURES", "",
-        "What the system has and how each feature is reached. `features.py check` tests every entry",
-        "point against the code. This is a draft found from the code: regroup by real feature, write",
-        "what each does, add the entry points a scan cannot see, link each to VERIFY.md, label it,",
-        "and replace every TODO.", "",
+        "What the system has and how each feature is reached. The commands that keep it true need",
+        "no skill installed; their `--help` says the rest, so the script never needs reading:",
+        f"- `python {PROOFS}/features.py check --rerun`: every entry point against the code, and every",
+        f"  recorded run ({PROOFS}/<feature>.json) run again, naming what moved or stopped working.",
+        f"- `python {PROOFS}/features.py prove --feature \"<name>\" [--copy] -- <command>`: run an entry",
+        "  point and record it (`--copy` runs it in a throwaway copy, for anything that writes data).",
+        "- status: `proven` (a passing run is recorded), `failing` (a failing run is recorded), `traced`",
+        "  (read start to end, not run) or `suspected`, then how you know.", "",
+        "This draft was found from the code: regroup by real feature, write what each does, add the",
+        "entry points a scan cannot see, label each, and replace every TODO.", "",
     ]
     for name in sorted(groups):
         out.append(f"## {name}")
@@ -260,6 +305,7 @@ def cmd_init(repo):
         out.append("")
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(out))
+    vendor(repo)
     n = sum(len(v) for v in groups.values())
     print(f"wrote {path}: {len(groups)} group(s), {n} entry point(s) found in code." +
           ("" if n else " None found; add a '## <feature>' section per feature by hand."))
@@ -295,11 +341,8 @@ def feature_files(f):
     return files
 
 
-STATUS_COMMIT = re.compile(r"^\w+\s*@\s*([0-9a-fA-F]{4,40})")
-
-
 def cmd_impact(repo, files, base):
-    features = parse(load(repo, MAP))
+    features, _ = split_ignored(parse(load(repo, MAP)))
     if not features:
         print(f"no {MAP} with features in {repo}; run `features.py init`.")
         return 2
@@ -327,6 +370,218 @@ def cmd_impact(repo, files, base):
     return 0
 
 
+# ---- prove: a receipt of running an entry point --------------------------------------------
+
+PROOFS = ".features"
+TAIL = 20
+
+
+def slug(name):
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "feature"
+
+
+def file_sha(path):
+    """sha256 of a file with line endings normalized, so a checkout's CRLF is not a change."""
+    try:
+        with open(path, "rb") as fh:
+            return hashlib.sha256(fh.read().replace(b"\r\n", b"\n")).hexdigest()
+    except OSError:
+        return None
+
+
+def entry_label(kind, anchor):
+    return f"{'route' if kind == 'api' else kind}: {anchor}"
+
+
+def load_proof(repo, name):
+    try:
+        with open(os.path.join(repo, PROOFS, slug(name) + ".json"), encoding="utf-8") as fh:
+            data = json.load(fh)
+        return data if isinstance(data.get("runs"), list) else {"runs": []}
+    except (OSError, ValueError, AttributeError):
+        return {"runs": []}
+
+
+def live_runs(repo, f):
+    """The feature's receipts, each narrowed to entry points the map still has; a run for a
+    renamed or removed entry point is history, not proof, and is neither checked nor re-run."""
+    have = {entry_label(k, a) for k, a, _r, _n in f["entries"]}
+    out = []
+    for r in load_proof(repo, f["name"])["runs"]:
+        keep = [e for e in r.get("entries", []) if e in have]
+        if keep:
+            out.append({**r, "entries": keep})
+    return out
+
+
+def named_in(kind, anchor, needle, text):
+    """Whether a command line or note names the entry point (its needle as a whole token)."""
+    n = needle or default_needle(kind, anchor)
+    if kind == "shortcut" and not needle:
+        return norm_combo(anchor) in {norm_combo(t) for t in re.findall(r"[\w+-]+", text)}
+    return has_token(text, n) if n != "/" else "/" in text
+
+
+def vendor(repo):
+    """Copy this checker into the repo's .features/, so a later session or CI can run
+    `python .features/features.py check --rerun` without the skill installed."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    dest = os.path.join(repo, PROOFS)
+    if os.path.normcase(os.path.normpath(here)) == os.path.normcase(os.path.normpath(dest)):
+        return
+    os.makedirs(dest, exist_ok=True)
+    src, copy = os.path.abspath(__file__), os.path.join(dest, "features.py")
+    if file_sha(src) != file_sha(copy):
+        shutil.copyfile(src, copy)
+
+
+def execute(repo, command, timeout, in_copy):
+    """(exit code, output) of command run in repo, or in a throwaway copy of it when in_copy, so
+    an entry point that writes never touches the real data. Local paths become <repo>."""
+    tmp = tempfile.mkdtemp(prefix="features-prove-") if in_copy else None
+    where = os.path.join(tmp, "repo") if tmp else repo
+    try:
+        if tmp:
+            shutil.copytree(repo, where, ignore=shutil.ignore_patterns(".git", PROOFS, "__pycache__"))
+        try:
+            p = subprocess.run(command, cwd=where, capture_output=True, text=True, encoding="utf-8",
+                               errors="replace", timeout=timeout)
+            code, out = p.returncode, (p.stdout or "") + (p.stderr or "")
+        except subprocess.TimeoutExpired as e:
+            code, out = "timeout", str(e)
+        except OSError as e:
+            code, out = "not run", str(e)
+    finally:
+        if tmp:
+            shutil.rmtree(tmp, ignore_errors=True)
+    for root in (where, repo):
+        for form in {root, root.replace("\\", "/"), root.replace("/", "\\")}:
+            out = out.replace(form, "<repo>")  # receipts are committed: no local paths
+    return code, out
+
+
+def cmd_prove(repo, name, command, shot, wanted, note, timeout, in_copy=False):
+    features, _ = split_ignored(parse(load(repo, MAP)))
+    f = next((x for x in features if x["name"].lower() == (name or "").lower()), None)
+    if not f:
+        print(f"no feature '{name}' in {MAP}. Features: " + ", ".join(x["name"] for x in features))
+        return 2
+    labels = {entry_label(k, a): (k, a, r, n) for k, a, r, n in f["entries"]}
+    if wanted:
+        unknown = [w for w in wanted if w not in labels]
+        if unknown:
+            print(f"not an entry point of '{f['name']}': {', '.join(unknown)}. Its entry points: "
+                  + "; ".join(labels))
+            return 2
+        covers = list(wanted)
+    elif command:
+        line = " ".join(command)
+        covers = [lab for lab, (k, a, _r, n) in labels.items() if named_in(k, a, n, line)]
+        if not covers:
+            print(f"the command names none of the entry points of '{f['name']}' ({'; '.join(labels)}). "
+                  "A command proves an entry point when it contains its word (cli: the subcommand, route: "
+                  "the path); otherwise name it with --entry \"kind: anchor\" as written in the map.")
+            return 2
+    else:
+        print("prove what? Pass the command to run after --, or --file with --entry and --note.")
+        return 2
+
+    run = {"entries": covers, "at": time.strftime("%Y-%m-%dT%H:%M:%S"), "note": note or ""}
+    if shot:
+        full = os.path.abspath(os.path.join(repo, shot))
+        if not note or not os.path.isfile(full) or not full.startswith(os.path.abspath(repo) + os.sep):
+            print("--file needs a file inside the repo (a screenshot, a saved response) and a --note "
+                  "saying what it shows.")
+            return 2
+        run.update(kind="file", file=os.path.relpath(full, repo).replace("\\", "/"), file_sha=file_sha(full))
+        code = 0
+    else:
+        code, out = execute(repo, command, timeout, in_copy)
+        lines = out.rstrip().splitlines()
+        run.update(kind="run", command=" ".join(command), argv=command, in_copy=in_copy, exit=code,
+                   output_tail=lines[-TAIL:],
+                   output_sha=hashlib.sha256(out.encode("utf-8")).hexdigest(), output_lines=len(lines))
+    run["files"] = {rel: file_sha(os.path.join(repo, rel)) for rel in sorted(feature_files(f))}
+
+    proof = load_proof(repo, f["name"])
+    kept = []
+    for old in proof["runs"]:
+        # an entry point the map no longer has (renamed, removed) takes its old receipt with it
+        old["entries"] = [e for e in old.get("entries", []) if e not in covers and e in labels]
+        if old["entries"]:
+            kept.append(old)
+    proof = {"feature": f["name"], "runs": kept + [run]}
+    vendor(repo)
+    dest = os.path.join(repo, PROOFS, slug(f["name"]) + ".json")
+    with open(dest, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(proof, fh, indent=2)
+        fh.write("\n")
+    rel = os.path.relpath(dest, repo).replace("\\", "/")
+    if code != 0:
+        print(f"recorded in {rel}: {'; '.join(covers)} FAILED (exit {code}). Not proof: report it as a "
+              "finding, and do not label the feature proven.")
+        for line in run.get("output_tail", [])[-5:]:
+            print(f"  | {line}")
+        return 1
+    print(f"recorded in {rel}: {'; '.join(covers)} " + ("ran, exit 0" if run["kind"] == "run" else f"shown in {run['file']}"))
+    left = [lab for lab in labels if not any(lab in r["entries"] for r in proof["runs"])]
+    if left:
+        print("  not yet proven: " + "; ".join(left))
+    return 0
+
+
+def cmd_again(repo, name, timeout):
+    """Re-run every recorded command (of one feature, or all) and record the result in place of
+    the old receipt: a passing run is re-pinned to the code as it is now, a failing one is kept as
+    failing. Screenshots cannot be re-taken here; they are listed for a person or agent to redo."""
+    features, _ = split_ignored(parse(load(repo, MAP)))
+    if name:
+        features = [f for f in features if f["name"].lower() == name.lower()]
+        if not features:
+            print(f"no feature '{name}' in {MAP}")
+            return 2
+    worst = 0
+    for f in features:
+        for r in live_runs(repo, f):
+            if r.get("kind") == "run" and r.get("argv"):
+                code = cmd_prove(repo, f["name"], r["argv"], None, r.get("entries"), r.get("note"),
+                                 timeout, r.get("in_copy", False))
+                worst = max(worst, code)
+            elif r.get("kind") == "file":
+                print(f"{f['name']}: {'; '.join(r.get('entries', []))} was shown in {r.get('file')}; "
+                      "drive it again and record a new --file")
+    return worst
+
+
+def proof_problems(repo, f):
+    """(unproven reasons, drifted reasons) for a feature labelled proven: every entry point needs a
+    receipt from `prove` whose run passed, and every file the feature names must be unchanged
+    since that receipt."""
+    runs = live_runs(repo, f)
+    me = f"python {os.path.abspath(__file__)} prove --repo {repo} --feature \"{f['name']}\""
+    unproven, drifted = [], []
+    if not runs:
+        unproven.append(f"proven, but no receipt in {PROOFS}/{slug(f['name'])}.json")
+    for k, a, _r, _n in f["entries"]:
+        lab = entry_label(k, a)
+        if not any(lab in r.get("entries", []) for r in runs):
+            how = (f"--entry \"{lab}\" -- <the command that drives it>" if k in ("cli", "route", "api")
+                   else f"--entry \"{lab}\" --file <screenshot in the repo> --note \"<what it shows>\"")
+            unproven.append(f"{lab} has no receipt; to prove it: {me} {how}")
+    for r in runs:
+        what = "; ".join(r.get("entries", []))
+        if r.get("kind") == "file":
+            if file_sha(os.path.join(repo, r.get("file", ""))) != r.get("file_sha"):
+                unproven.append(f"{what}: {r.get('file')} is missing or not the file that was recorded")
+        elif r.get("exit") != 0:
+            unproven.append(f"{what}: its run exited {r.get('exit')}")
+        moved = sorted(rel for rel in feature_files(f)
+                       if rel not in r.get("files", {}) or file_sha(os.path.join(repo, rel)) != r["files"][rel])
+        if moved:
+            drifted.append(f"{', '.join(moved)} changed since {what} was proven ({r.get('at', '?')})")
+    return unproven, sorted(set(drifted))
+
+
 # ---- check --------------------------------------------------------------------------------
 
 QUOTED = re.compile(r"['\"`]([^'\"`\n]{1,40})['\"`]")
@@ -344,6 +599,11 @@ def found(kind, anchor, needle, text):
     if kind == "shortcut" and not needle:
         combo = norm_combo(anchor)
         return any(norm_combo(q) == combo for q in QUOTED.findall(text))
+    if kind == "cli" and not needle:
+        # a subcommand is declared as a name in quotes ("search", 'search <q>') or by a function
+        # a decorator names it after; the word as a module or variable (`search.run`) is not one.
+        n = re.escape(default_needle(kind, anchor))
+        return re.search(rf"['\"`]{n}(?:\s[^'\"`\n]*)?['\"`]|\bdef\s+{n}\s*\(", text) is not None
     return has_token(text, needle or default_needle(kind, anchor))
 
 
@@ -374,11 +634,14 @@ def uses(text, needle):
     return len(re.findall(rf"(?<![\w$]){re.escape(needle)}(?![\w$])", COMMENT.sub(" ", text)))
 
 
-def trace_problems(repo, trace):
+def trace_problems(repo, trace, entry_files=()):
     """[(tag, message)]: STALE when a step is not in its file, BROKEN when a step is not
-    referenced from the step before it (the path is no longer a real call chain)."""
+    referenced from the step before it (the path is no longer a real call chain), or when the
+    first step is neither in an entry point's file nor called from one (the path starts somewhere
+    the user cannot reach)."""
     out, prev_rel, prev_text = [], None, ""
-    for raw in trace.split(" > "):
+    entry_files = [r for r in entry_files if os.path.isfile(os.path.join(repo, r))]
+    for i, raw in enumerate(trace.split(" > ")):
         m = STEP.match(raw.strip())
         if not m:
             out.append(("STALE", f"unreadable step: {raw.strip()[:40]}"))
@@ -398,6 +661,10 @@ def trace_problems(repo, trace):
             need = 2 if rel == prev_rel and defined else 1
             if uses(prev_text, needle) < need:
                 out.append(("BROKEN", f"{sym} is not called from {prev_rel}"))
+        elif i == 0 and entry_files and rel not in entry_files and not any(
+                uses(read(os.path.join(repo, e)), needle) for e in entry_files):
+            out.append(("BROKEN", f"{sym}, the first step, is not reached from the entry point file "
+                                  f"({', '.join(sorted(set(entry_files)))})"))
         prev_rel, prev_text = rel, text
     return out
 
@@ -456,12 +723,12 @@ def unbacked_reason(section, ans):
     return None
 
 
-def cmd_check(repo, strict):
+def cmd_check(repo, strict, rerun=False):
     path = os.path.join(repo, MAP)
     if not os.path.isfile(path):
         print(f"no {MAP} in {repo}. Run `features.py init` to draft one.")
         return 2
-    features = parse(load(repo, MAP))
+    features, ignored = split_ignored(parse(load(repo, MAP)))
     if not features:
         print(f"{MAP} has no '## <feature>' sections; nothing to check.")
         return 2
@@ -475,9 +742,8 @@ def cmd_check(repo, strict):
               "so `proven` is taken on its word")
 
     cache, mapped = {}, set()
-    entries = stale = broken = untraced = unlinked = unlabeled = undescribed = drifted = unpinned = 0
-    unbacked = unfenced = 0
-    head_changed = {}
+    entries = stale = broken = untraced = unlinked = unlabeled = undescribed = drifted = unproven = 0
+    unbacked = unfenced = regressed = 0
     for f in features:
         print(f["name"])
         for kind, anchor, rel, needle in f["entries"]:
@@ -493,14 +759,16 @@ def cmd_check(repo, strict):
             untraced += 1
             print("  note  untraced: no 'trace:' path from entry point to effect")
         else:
-            for tag, msg in trace_problems(repo, f["trace"]):
+            for tag, msg in trace_problems(repo, f["trace"], [r for _k, _a, r, _n in f["entries"] if r]):
                 stale += tag == "STALE"
                 broken += tag == "BROKEN"
                 print(f"  {tag:<5}  trace  {msg}")
         if is_todo(f["what"]):
             undescribed += 1
             print("  note  undescribed: no 'what:' line")
-        if is_todo(f["verify"]):
+        if is_todo(f["verify"]) and not vtext:
+            pass  # no VERIFY.md: the project does not use verify-loop, and the receipts are the proof
+        elif is_todo(f["verify"]):
             unlinked += 1
             print("  note  no verify link to a VERIFY.md section")
         elif not vtext:
@@ -520,29 +788,57 @@ def cmd_check(repo, strict):
                 print(f"  note  unbacked: {why}")
         if not f["status"].lower().startswith(LABELS):
             unlabeled += 1
-            print("  note  no status label (proven | traced | suspected)")
-        cm = STATUS_COMMIT.match(f["status"])
-        if f["status"].lower().startswith("proven") and not cm:
-            unpinned += 1
-            print("  note  unpinned: proven, but not pinned to the commit it ran at (proven @ <sha>)")
-        if cm:
-            ref = cm.group(1)
-            if ref not in head_changed:
-                head_changed[ref] = changed_files(repo, ref)
-            moved = head_changed[ref]
-            if moved is None:
-                drifted += 1
-                print(f"  note  drifted: status pinned to {ref}, which git cannot resolve")
-            elif feature_files(f) & moved:
-                drifted += 1
-                print(f"  note  drifted: {', '.join(sorted(feature_files(f) & moved))} changed since {ref}")
+            print("  note  no status label (proven | failing | traced | suspected)")
+        if f["status"].lower().startswith("failing") and not any(
+                r.get("kind") == "run" and r.get("exit") != 0 for r in live_runs(repo, f)):
+            unproven += 1
+            print("  note  unproven: failing, but no failed run is recorded; record it with `prove`")
+        if f["status"].lower().startswith("proven"):
+            why_not, moved = proof_problems(repo, f)
+            unproven += bool(why_not)
+            drifted += bool(moved)
+            for msg in why_not:
+                print(f"  note  unproven: {msg}")
+            for msg in moved:
+                print(f"  note  drifted: {msg}; re-run `features.py prove`, never relabel without running")
+        if rerun:
+            for r in live_runs(repo, f):
+                if r.get("kind") != "run" or not r.get("argv"):
+                    continue
+                code, out = execute(repo, r["argv"], 120, r.get("in_copy"))
+                what = "; ".join(r.get("entries", []))
+                last = (out.strip().splitlines() or [""])[-1][:120]
+                if r.get("exit") == 0 and code != 0:
+                    regressed += 1
+                    print(f"  FAILS  {what}: `{r['command']}` passed when proven, exits {code} now ({last})")
+                elif r.get("exit") != 0 and code == 0:
+                    print(f"  note   {what}: `{r['command']}` failed when recorded, passes now; prove it again")
+                else:
+                    print(f"  rerun  {what}: exit {code}, as recorded")
+
+    skipped = 0
+    if ignored:
+        print("Not features")
+        for (kind, anchor, rel, needle), reason in zip(ignored["entries"], ignored["reasons"]):
+            why = stale_reason(repo, kind, anchor, rel, needle, cache)
+            stale += bool(why)
+            where = f" @ {rel}" if rel else ""
+            if why:
+                print(f"  STALE  {kind}  {anchor}{where}  ({why})")
+            elif len(reason.split()) < 2:
+                print(f"  note  {kind}  {anchor}{where}: no reason given, so it still counts as unmapped")
+            else:
+                skipped += 1
+                mapped.add(identity(kind, anchor, needle or default_needle(kind, anchor)))
+                print(f"  ok     {kind}  {anchor}{where}  ({reason})")
 
     unmapped = []
     for kind, anchor, rel in discover(repo):
         if identity(kind, anchor, default_needle(kind, anchor)) not in mapped:
             unmapped.append((kind, anchor, rel))
     if unmapped:
-        print("Unmapped entry points (in the code, not in the map):")
+        print("Unmapped entry points (in the code, not in the map; map each, or list it under "
+              "'## Not features' with the reason):")
         for kind, anchor, rel in unmapped:
             print(f"  {kind}  {anchor}  @ {rel}")
     linked = {f["verify"].lower() for f in features}
@@ -550,12 +846,31 @@ def cmd_check(repo, strict):
     if orphans:
         print(f"In {VERIFY} but linked from no feature here: " + ", ".join(orphans))
         unlinked += len(orphans)
+    ran = {"here": [], "in a throwaway copy": [], "failing": [], "shown in a file": []}
+    unrun = []
+    for f in features:
+        runs = live_runs(repo, f)
+        for k, a, _r, _n in f["entries"]:
+            r = next((r for r in runs if entry_label(k, a) in r.get("entries", [])), None)
+            where = (None if r is None else "shown in a file" if r.get("kind") == "file"
+                     else "failing" if r.get("exit") != 0 else "in a throwaway copy" if r.get("in_copy") else "here")
+            (ran[where] if where else unrun).append(f"{a}")
+    print("Proof: " + "; ".join(f"ran {w}: {', '.join(v)}" if w not in ("failing", "shown in a file")
+                                else f"{w}: {', '.join(v)}" for w, v in ran.items() if v)
+          + (f"; never run: {', '.join(unrun)}" if unrun else ""))
+    unannounced = int(not any(MAP in t and "features.py check" in t
+                              for t in (read(os.path.join(repo, n)) for n in AGENT_FILES)))
+    if unannounced:
+        print(f"Unannounced: no {' or '.join(AGENT_FILES)} at the repo root points at {MAP} and its check, so the "
+              f"next agent will not find the map. Add this line to one of them (create AGENTS.md if neither exists):\n"
+              f"  {ANNOUNCE}")
 
     print(f"FEATURES: {len(features)} features | {entries} entry points, {stale} stale | "
-          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed | {drifted} drifted | {unpinned} unpinned | {unbacked} unbacked | "
-          f"{unfenced} unfenced")
-    if stale or broken or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed
-                                       or drifted or unpinned or unbacked or unfenced)):
+          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed | {drifted} drifted | {unproven} unproven | {unbacked} unbacked | "
+          f"{unfenced} unfenced | {unannounced} unannounced | {skipped} not features"
+          + (f" | {regressed} regressed" if rerun else ""))
+    if stale or broken or regressed or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed
+                                       or drifted or unproven or unbacked or unfenced or unannounced)):
         return 1
     return 0
 
@@ -571,17 +886,38 @@ def main():
     c.add_argument("--strict", action="store_true",
                    help="also exit 1 on untraced, unmapped, unlinked, unlabeled, undescribed, drifted, unpinned, "
                         "unbacked or unfenced")
+    c.add_argument("--rerun", action="store_true",
+                   help="re-run every recorded proof command; exit 1 if one that passed fails now")
     m = sub.add_parser("impact", help="which features a change touches and which VERIFY.md sections to rerun")
     m.add_argument("repo", nargs="?", default=".")
     m.add_argument("--files", nargs="+", help="changed files (default: git diff against --base, plus untracked)")
     m.add_argument("--base", default="HEAD", help="git ref to diff against (default HEAD)")
+    p = sub.add_parser("prove", help="run a feature's entry point (or record a screenshot) as its receipt")
+    p.add_argument("--repo", default=".")
+    p.add_argument("--feature", help="the feature's ## name in FEATURES.md (required, except with --again)")
+    p.add_argument("--again", action="store_true",
+                   help="re-run every recorded command (all features, or --feature) and re-record each")
+    p.add_argument("--entry", action="append", help="'kind: anchor' this proves (default: those the command names)")
+    p.add_argument("--file", help="a screenshot or saved response inside the repo, for what no command can drive")
+    p.add_argument("--note", help="what the run or file shows (required with --file)")
+    p.add_argument("--timeout", type=int, default=120)
+    p.add_argument("--copy", action="store_true",
+                   help="run in a throwaway copy of the repo, for an entry point that writes data")
+    p.add_argument("command", nargs=argparse.REMAINDER, help="-- then the command that drives the entry point")
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
     if a.cmd == "init":
         sys.exit(cmd_init(repo))
+    if a.cmd == "prove":
+        if a.again:
+            sys.exit(cmd_again(repo, a.feature, a.timeout))
+        if not a.feature:
+            ap.error("prove needs --feature (or --again)")
+        cmd = a.command[1:] if a.command[:1] == ["--"] else a.command
+        sys.exit(cmd_prove(repo, a.feature, cmd, a.file, a.entry, a.note, a.timeout, a.copy))
     if a.cmd == "impact":
         sys.exit(cmd_impact(repo, a.files, a.base))
-    sys.exit(cmd_check(repo, a.strict))
+    sys.exit(cmd_check(repo, a.strict, a.rerun))
 
 
 if __name__ == "__main__":

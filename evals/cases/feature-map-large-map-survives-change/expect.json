@@ -1,0 +1,129 @@
+{
+  "case": "feature-map-large-map-survives-change",
+  "skill": "feature-map",
+  "question": "the same handoff at a realistic size: one session maps a 30-command CLI; a teammate renames one command and breaks two obscure ones so it only shows when they run; a fresh session, same plain prompt and no skill in either arm, must bring the map up to date. Does it find all three, and at what cost?",
+  "pass_score": 1.0,
+  "sessions": [
+    {
+      "prompt": "prompt.md",
+      "plain": "prompt-plain.md"
+    },
+    {
+      "prompt": "prompt-2.md",
+      "plain": "prompt-2.md",
+      "before": "between.py",
+      "bare": true
+    }
+  ],
+  "planted": [
+    {
+      "id": "search-renamed",
+      "what": "the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).",
+      "must_name": [
+        "find"
+      ],
+      "must_say_any": [
+        "renamed",
+        "now `find`",
+        "now find",
+        "replaced",
+        "no longer",
+        "is gone",
+        "was removed",
+        "instead of `search`",
+        "instead of search",
+        "search` is now",
+        "search is now",
+        "search -> find",
+        "search → find",
+        "`search` → `find`",
+        "invalid choice"
+      ]
+    },
+    {
+      "id": "due-broken",
+      "what": "`due` no longer works: it parses dates as %Y-%d-%m, so `due 1 2026-10-31` raises ValueError (unconverted data remains).",
+      "must_name": [
+        "due"
+      ],
+      "must_say_any": [
+        "valueerror",
+        "unconverted data",
+        "%y-%d-%m",
+        "day and month",
+        "month and day",
+        "swapped",
+        "crash",
+        "fails",
+        "failed",
+        "broken",
+        "doesn't work",
+        "does not work",
+        "exit 1",
+        "traceback",
+        "raises",
+        "regress"
+      ]
+    },
+    {
+      "id": "upcoming-broken",
+      "what": "`upcoming` no longer works: it compares a datetime end-of-window with a date and raises TypeError whenever a note has a due date.",
+      "must_name": [
+        "upcoming"
+      ],
+      "must_say_any": [
+        "typeerror",
+        "datetime",
+        "not supported between",
+        "crash",
+        "fails",
+        "failed",
+        "broken",
+        "doesn't work",
+        "does not work",
+        "exit 1",
+        "traceback",
+        "raises",
+        "regress"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the folder holds a map that now names `find`, and the person's notes survived both sessions. purge.log appears next to notes.json only if purge --yes ran on the real notes, and it is not an allowed edit.",
+    "edits_allowed": [
+      "*.md",
+      "features/*",
+      "docs/*",
+      "notes.json",
+      "*.json",
+      "*.csv",
+      "*.txt",
+      "*.png",
+      ".features/*",
+      "tests/*",
+      "evidence/*",
+      "tmp/*",
+      "out/*",
+      "notes.py",
+      "commands/*",
+      "store.py"
+    ],
+    "replays": [
+      {
+        "id": "map-updated-and-notes-kept",
+        "kind": "outcome",
+        "what": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+        "replace": {
+          "_check_map.py": "reference/check_map.py"
+        },
+        "command": [
+          "python",
+          "_check_map.py"
+        ],
+        "expect": "pass",
+        "timeout": 180
+      }
+    ]
+  }
+}

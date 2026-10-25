@@ -1,0 +1,84 @@
+{
+  "case": "feature-map-huge-map-survives-change",
+  "skill": "feature-map",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   show-mood-renamed \u2014 \"**`show-mood` was renamed to `mood`.**\"\n  found   set-rating-broken \u2014 \"`set-rating` refuses every value from 1 to 5 with \"rating must be 1-5\", but accepts 0, 9 or any other whole number.\"\n  found   count-owner-broken \u2014 \"It fails with a `TypeError` whenever some notes have an owner and others don't, and note #1 has none.\"\n  found   clear-sprint-broken \u2014 \"It saves that change and then fails with `KeyError: 'sprint'` (`sprint.py:35`)\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 32,
+      "outputTokens": 8912,
+      "cacheReadInputTokens": 462546,
+      "cacheCreationInputTokens": 47594,
+      "webSearchRequests": 0,
+      "costUSD": 0.6516292,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1792,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/README.md",
+      "fixture/commands/fields/owner.py",
+      "fixture/commands/fields/rating.py",
+      "fixture/commands/fields/sprint.py",
+      "fixture/notes.py"
+    ],
+    "added": [
+      "fixture/CLAUDE.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.6516292,
+  "turns": 16,
+  "api_seconds": 100.545,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 116.0,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "show-mood-renamed",
+      "what": "`show-mood` is gone; the same command is now `mood` (`python notes.py mood ID`).",
+      "found": true,
+      "quote": "**`show-mood` was renamed to `mood ID`.**",
+      "quote_checked": true
+    },
+    {
+      "id": "set-rating-broken",
+      "what": "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'.",
+      "found": true,
+      "quote": "`set-rating 1 4` (or any value from 1 to 5) is rejected with \"rating must be 1-5\", while 0, 9 and other out-of-range values are saved.",
+      "quote_checked": true
+    },
+    {
+      "id": "count-owner-broken",
+      "what": "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner.",
+      "found": true,
+      "quote": "**`count-owner` crashes** with a `TypeError` whenever any note has no owner.",
+      "quote_checked": true
+    },
+    {
+      "id": "clear-sprint-broken",
+      "what": "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it.",
+      "found": true,
+      "quote": "Instead of emptying `sprint`, it deletes the field, copies the old value into a new `history` list on the note, saves, and *then* crashes with a traceback.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0245091,
+  "model": "claude-sonnet-5-5"
+}

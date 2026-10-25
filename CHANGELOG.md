@@ -1,5 +1,51 @@
 # Changelog
 
+## 1.26.0 - 2026-10-25 - feature-map proves what it maps, and tells the next agent
+
+- **Receipts behind `proven`.** `features.py prove --feature X -- <command>` runs an entry point and
+  keeps `.features/<feature>.json`: the command, exit code, output tail (local paths become
+  `<repo>`), and a hash of every file the feature names. `--copy` runs it in a throwaway copy, so
+  an entry point that writes never touches real data; `--file` + `--note` records a screenshot by
+  hash. `proven` needs a passing receipt for every entry point (new `unproven` count, replacing
+  `unpinned`); drift is a changed file hash, so it works without git and cannot be re-pinned
+  without a run. New label `failing` needs a failed run on record. `prove --again` re-runs and
+  re-records every receipt; a receipt for an entry point the map no longer has is pruned.
+- **`check --rerun`** re-runs every recorded command and fails (`regressed`) when one that passed
+  fails now: the drift alarm for behaviour, not just declarations.
+- **The map carries its own alarm.** `init`/`prove` vendor a single-file copy of the checker into
+  `.features/features.py`, so a later session or CI runs `check --rerun` with no skill installed.
+  New `unannounced` count (red under `--strict`): no `AGENTS.md`/`CLAUDE.md` line points at
+  `FEATURES.md` and its check; `check` prints the line to add. `init`'s header lists the commands.
+- **`## Not features`**: an entry point the scan finds that is not a feature (debug command,
+  test-only selector) is listed with its reason; without a reason it stays unmapped, and it goes
+  STALE like any line when the code drops it. `## Not built` is no longer counted as a feature.
+- **Trace start is checked**: a first trace step neither in nor called from an entry point's file is
+  BROKEN.
+- **CLI anchors** must appear as a quoted command name or a `def name(`: a renamed subcommand whose
+  module keeps the old name (`search.run`) is now STALE.
+- **verify-loop is optional**: a feature needs a VERIFY.md link only once the repo has a VERIFY.md.
+  The eval showed the old rule dragged every map into writing checks and running `advance` /
+  `challenge` (17-20 turns, $0.58-0.70 a try); after it, 6-10 turns and $0.24-0.31.
+- `check` prints the exact `prove` line for each unproven entry point and a closing `Proof:` line
+  (what ran here, in a copy, failing, never run), so agents stop reading the script to learn it.
+- Evals: `feature-map-dead-command-and-destructive` brought from main; new
+  `feature-map-crash-only-when-run`, `feature-map-map-survives-change` and
+  `feature-map-large-map-survives-change` (two sessions; the runner gains per-session `before`
+  scripts and `bare` sessions). All grade the person's data on outcome (`purge` leaves
+  `purge.log`), not on a `purge --yes` regex that failed safe runs in a copy.
+- **Measured result: no gain over plain Opus 5.5.** 3 tries per arm, current skill:
+  dead-command 3/3 vs 3/3 ($0.28 vs $0.13); crash-only 2/3 vs 3/3 ($0.28 vs $0.15; one judge miss,
+  one grader timeout that passes on re-grade); map-survives-change 3/3 vs 3/3 ($0.50 vs $0.31);
+  30-command handoff 3/3 vs 3/3 ($0.83 vs $0.45; second session $0.31-0.37 vs $0.21-0.28).
+  Plain Opus writes its own AGENTS.md/CLAUDE.md and re-runs every command in a sandbox, so it
+  finds runtime breaks unaided; the skill's receipts are upkeep it does not need at these sizes.
+  133-command handoff (`feature-map-huge-map-survives-change`, 4 planted changes): 3/3 vs 3/3
+  ($0.93-1.21 vs $0.60-0.65; second session $0.38-0.53 vs $0.30-0.39). Plain Opus scripts a sweep
+  over every command. The with arm's 3 first-pass fails were a grader bug (it wanted one file;
+  the skill splits big maps into `include:` area files); fixed to read all notes files, re-graded.
+- The `unannounced` line now spells out the upkeep loop (`check --rerun`, fix lines,
+  `prove --again`), after the eval showed later sessions reading the script to learn it.
+
 ## 1.25.0 - 2026-10-25 - feature-map reads verify-loop's receipts
 
 - `features.py check` now links each feature to verify-loop, not just to a VERIFY.md heading:

@@ -1,0 +1,18 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  4/4 found
+  found   show-mood-renamed — "**`show-mood` was renamed to `mood ID`.**"
+  found   set-rating-broken — "The range check is backwards: 1–5 is refused with "rating must be 1-5", and values like 0 or 7 are accepted and saved."
+  found   count-owner-broken — "so it throws a `TypeError` when any note has no owner."
+  found   clear-sprint-broken — "saves, and then fails with a `KeyError`."
+
+Phrase grader (grade.py), for comparison:
+PASS  feature-map-huge-map-survives-change  [feature-map]  4/4 found, score 1.00 (needs 1.00)
+  found   show-mood-renamed: `show-mood` is gone; the same command is now `mood` (`python notes.py mood ID`).
+  found   set-rating-broken: `set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'.
+  found   count-owner-broken: `count-owner` raises TypeError (str vs None in its sort) because a note has no owner.
+  found   clear-sprint-broken: `clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes — 

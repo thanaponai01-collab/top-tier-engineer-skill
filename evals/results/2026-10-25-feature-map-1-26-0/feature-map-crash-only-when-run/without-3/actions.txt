@@ -1,0 +1,5 @@
+  1. Bash: cd fixture && find . -type f | grep -v node_modules | head -100 && cat *.md 2>/dev/null | head -50
+  2. Bash: cd fixture && for f in notes.py store.py commands/*.py; do echo "=== $f"; cat "$f"; done; echo; head -c 600 notes.json
+  3. Bash: T=$(mktemp -d); cp -r fixture/* "$T/"; cd "$T"; python notes.py --help; echo "--- export"; python notes.py export out.csv; echo "rc=$?"; cat out.csv 2>/dev/nul…
+  4. Write: <tmp>\tte-eval-ke6nw_rv\fixture\CLAUDE.md
+  5. Bash: cd fixture && printf 'See CLAUDE.md for the agent guide to this CLI: commands, data-safety rules, known bugs.\n' > AGENTS.md && ls

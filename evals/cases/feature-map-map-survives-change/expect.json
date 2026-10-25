@@ -1,0 +1,106 @@
+{
+  "case": "feature-map-map-survives-change",
+  "skill": "feature-map",
+  "question": "one session leaves a map of the CLI; a teammate then renames a command and breaks another so it only shows when run; a fresh session, with the same plain prompt and no skill in either arm, must bring the map up to date. Does what the first session left let the second find both, including the break that reads as correct?",
+  "pass_score": 1.0,
+  "sessions": [
+    {
+      "prompt": "prompt.md",
+      "plain": "prompt-plain.md"
+    },
+    {
+      "prompt": "prompt-2.md",
+      "plain": "prompt-2.md",
+      "before": "between.py",
+      "bare": true
+    }
+  ],
+  "planted": [
+    {
+      "id": "search-renamed",
+      "what": "the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).",
+      "must_name": [
+        "find"
+      ],
+      "must_say_any": [
+        "renamed",
+        "now `find`",
+        "now find",
+        "replaced",
+        "no longer",
+        "is gone",
+        "was removed",
+        "instead of `search`",
+        "instead of search",
+        "search` is now",
+        "search is now",
+        "search -> find",
+        "search → find",
+        "`search` → `find`",
+        "invalid choice"
+      ]
+    },
+    {
+      "id": "tag-broken",
+      "what": "the second session reports that `tag` no longer works: it compares the note's int id to `str(args.id)`, so `tag 1 x` prints `no note #1` and exits 1 for every note. Reading tag.py it looks fine; it shows when run.",
+      "must_name": [
+        "tag"
+      ],
+      "must_say_any": [
+        "no note #",
+        "no note",
+        "never finds",
+        "never matches",
+        "doesn't work",
+        "does not work",
+        "broken",
+        "fails",
+        "failed",
+        "exits 1",
+        "exit 1",
+        "str(",
+        "string",
+        "int ",
+        "regress"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the folder holds a map that now names `find`, and the person's notes survived both sessions. purge.log appears next to notes.json only if purge --yes ran on the real notes, and it is not an allowed edit.",
+    "edits_allowed": [
+      "*.md",
+      "features/*",
+      "docs/*",
+      "notes.json",
+      "*.json",
+      "*.csv",
+      "*.txt",
+      "*.png",
+      ".features/*",
+      "tests/*",
+      "evidence/*",
+      "tmp/*",
+      "out/*",
+      "notes.py",
+      "commands/*",
+      "store.py"
+    ],
+    "replays": [
+      {
+        "id": "map-updated-and-notes-kept",
+        "kind": "outcome",
+        "what": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+        "replace": {
+          "_check_map.py": "reference/check_map.py"
+        },
+        "command": [
+          "python",
+          "_check_map.py"
+        ],
+        "expect": "pass",
+        "timeout": 180
+      }
+    ]
+  }
+}

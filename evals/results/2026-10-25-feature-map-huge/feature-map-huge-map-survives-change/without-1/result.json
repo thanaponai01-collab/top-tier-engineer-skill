@@ -1,0 +1,84 @@
+{
+  "case": "feature-map-huge-map-survives-change",
+  "skill": "feature-map",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   show-mood-renamed \u2014 \"**`show-mood` was renamed to `mood ID`.**\"\n  found   set-rating-broken \u2014 \"`set-rating 1 4` (or any value from 1 to 5) is rejected with \"rating must be 1-5\", while 0, 9 and other out-of-range val\"\n  found   count-owner-broken \u2014 \"**`count-owner` crashes** with a `TypeError` whenever any note has no owner.\"\n  found   clear-sprint-broken \u2014 \"Instead of emptying `sprint`, it deletes the field, copies the old value into a new `history` list on the note, saves, a\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 32,
+      "outputTokens": 8230,
+      "cacheReadInputTokens": 454119,
+      "cacheCreationInputTokens": 42670,
+      "webSearchRequests": 0,
+      "costUSD": 0.5969118,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1461,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/README.md",
+      "fixture/commands/fields/owner.py",
+      "fixture/commands/fields/rating.py",
+      "fixture/commands/fields/sprint.py",
+      "fixture/notes.py"
+    ],
+    "added": [
+      "fixture/CLAUDE.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.5969118,
+  "turns": 17,
+  "api_seconds": 105.331,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 120.7,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

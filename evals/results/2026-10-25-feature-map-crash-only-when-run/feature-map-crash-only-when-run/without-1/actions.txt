@@ -1,0 +1,5 @@
+  1. Bash: cd fixture && find . -type f -not -path './.git/*' | head -100 && cat README* CLAUDE.md AGENTS.md 2>/dev/null
+  2. Bash: cd fixture && for f in notes.py store.py commands/*.py; do echo "=== $f"; cat "$f"; done; echo; head -c 600 notes.json
+  3. Bash: cd fixture && python --version; python notes.py --help; python notes.py list; python notes.py search dune; T=$(mktemp -d); python notes.py export "$T/out.csv";…
+  4. Write: <tmp>\tte-eval-goxufwn7\fixture\AGENTS.md
+  5. Write: <tmp>\tte-eval-goxufwn7\fixture\CLAUDE.md

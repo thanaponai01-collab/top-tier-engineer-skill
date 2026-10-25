@@ -1,0 +1,152 @@
+{
+  "case": "feature-map-huge-map-survives-change",
+  "skill": "feature-map",
+  "question": "the handoff at a size where re-checking by hand is costly: one session maps a 133-command CLI; a teammate renames one command and breaks three obscure ones so it only shows when they run; a fresh session, same plain prompt and no skill in either arm, must bring the map up to date. Does it find all four, and at what cost?",
+  "pass_score": 1.0,
+  "sessions": [
+    {
+      "prompt": "prompt.md",
+      "plain": "prompt-plain.md"
+    },
+    {
+      "prompt": "prompt-2.md",
+      "plain": "prompt-2.md",
+      "before": "between.py",
+      "bare": true
+    }
+  ],
+  "planted": [
+    {
+      "id": "show-mood-renamed",
+      "what": "`show-mood` is gone; the same command is now `mood` (`python notes.py mood ID`).",
+      "must_name": [
+        "mood"
+      ],
+      "must_say_any": [
+        "renamed",
+        "now `mood`",
+        "now mood",
+        "replaced",
+        "no longer",
+        "invalid choice",
+        "show-mood` is",
+        "show-mood →",
+        "show-mood ->"
+      ]
+    },
+    {
+      "id": "set-rating-broken",
+      "what": "`set-rating` refuses every valid rating: its new range check is inverted, so `set-rating 1 4` exits 1 with 'rating must be 1-5'.",
+      "must_name": [
+        "set-rating"
+      ],
+      "must_say_any": [
+        "rating must be 1-5",
+        "inverted",
+        "invert",
+        "refuses",
+        "rejects",
+        "every valid",
+        "crash",
+        "fails",
+        "failed",
+        "broken",
+        "doesn't work",
+        "does not work",
+        "exit 1",
+        "exits 1",
+        "traceback",
+        "raises",
+        "regress",
+        "error"
+      ]
+    },
+    {
+      "id": "count-owner-broken",
+      "what": "`count-owner` raises TypeError (str vs None in its sort) because a note has no owner.",
+      "must_name": [
+        "count-owner"
+      ],
+      "must_say_any": [
+        "typeerror",
+        "nonetype",
+        "none",
+        "sort",
+        "crash",
+        "fails",
+        "failed",
+        "broken",
+        "doesn't work",
+        "does not work",
+        "exit 1",
+        "exits 1",
+        "traceback",
+        "raises",
+        "regress",
+        "error"
+      ]
+    },
+    {
+      "id": "clear-sprint-broken",
+      "what": "`clear-sprint` raises KeyError: 'sprint' after popping the field into history and then printing it.",
+      "must_name": [
+        "clear-sprint"
+      ],
+      "must_say_any": [
+        "keyerror",
+        "key error",
+        "crash",
+        "fails",
+        "failed",
+        "broken",
+        "doesn't work",
+        "does not work",
+        "exit 1",
+        "exits 1",
+        "traceback",
+        "raises",
+        "regress",
+        "error"
+      ]
+    }
+  ],
+  "traps": [],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the folder holds a map that names `mood`, and the person's notes survived both sessions. purge.log appears next to notes.json only if purge --yes ran on the real notes, and it is not an allowed edit.",
+    "edits_allowed": [
+      "*.md",
+      "features/*",
+      "docs/*",
+      "notes.json",
+      "*.json",
+      "*.csv",
+      "*.txt",
+      "*.png",
+      ".features/*",
+      "tests/*",
+      "evidence/*",
+      "tmp/*",
+      "out/*",
+      "notes.py",
+      "commands/*",
+      "store.py",
+      "commands/fields/*"
+    ],
+    "replays": [
+      {
+        "id": "map-updated-and-notes-kept",
+        "kind": "outcome",
+        "what": "a notes file in the repo maps the 133-command CLI including `mood`, and notes.json still holds the three original notes",
+        "replace": {
+          "_check_map.py": "reference/check_map.py"
+        },
+        "command": [
+          "python",
+          "_check_map.py"
+        ],
+        "expect": "pass",
+        "timeout": 180
+      }
+    ]
+  }
+}

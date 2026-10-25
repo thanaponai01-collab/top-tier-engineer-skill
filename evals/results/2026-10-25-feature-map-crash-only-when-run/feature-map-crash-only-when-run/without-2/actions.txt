@@ -1,0 +1,5 @@
+  1. Bash: cd fixture && find . -type f -not -path './.git/*' | head -100 && cat README* CLAUDE.md AGENTS.md 2>/dev/null
+  2. Bash: cd fixture && for f in notes.py store.py commands/*.py; do echo "=== $f"; cat "$f"; done; echo "=== notes.json"; head -c 800 notes.json
+  3. Bash: cd fixture && python notes.py --help; python notes.py export "$TEMP/x.csv"; echo "exit=$?"; cat "$TEMP/x.csv" 2>/dev/null; python notes.py list; python notes.p…
+  4. Write: <tmp>\tte-eval-i7ikefp2\fixture\AGENTS.md
+  5. Bash: cd fixture && printf '@AGENTS.md\n' > CLAUDE.md && rm -f "$TEMP/x.csv" && python -c "import json;print(len(json.load(open('notes.json'))))"

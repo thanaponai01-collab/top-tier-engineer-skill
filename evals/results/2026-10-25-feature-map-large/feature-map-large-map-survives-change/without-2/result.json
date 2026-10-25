@@ -1,0 +1,83 @@
+{
+  "case": "feature-map-large-map-survives-change",
+  "skill": "feature-map",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   search-renamed \u2014 \"**`search` is now `find`.**\"\n  found   due-broken \u2014 \"Any date with a day over 12, like `2026-11-20`, crashes with a ValueError.\"\n  found   upcoming-broken \u2014 \"**`upcoming` is broken.**\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 24,
+      "outputTokens": 6464,
+      "cacheReadInputTokens": 286369,
+      "cacheCreationInputTokens": 29746,
+      "webSearchRequests": 0,
+      "costUSD": 0.42461780000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 926,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/commands/due.py",
+      "fixture/commands/upcoming.py",
+      "fixture/notes.py"
+    ],
+    "added": [
+      "fixture/AGENTS.md",
+      "fixture/CLAUDE.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.42461780000000005,
+  "turns": 12,
+  "api_seconds": 80.789,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 101.6,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+  "end_output": null
+}

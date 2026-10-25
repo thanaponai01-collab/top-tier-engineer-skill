@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "search-renamed",
+      "what": "the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).",
+      "found": true,
+      "quote": "**`search` is now called `find`.**",
+      "quote_checked": true
+    },
+    {
+      "id": "due-broken",
+      "what": "`due` no longer works: it parses dates as %Y-%d-%m, so `due 1 2026-10-31` raises ValueError (unconverted data remains).",
+      "found": true,
+      "quote": "`due 1 2026-11-30` crashes.",
+      "quote_checked": true
+    },
+    {
+      "id": "upcoming-broken",
+      "what": "`upcoming` no longer works: it compares a datetime end-of-window with a date and raises TypeError whenever a note has a due date.",
+      "found": true,
+      "quote": "It crashes with a TypeError as soon as any note has a due date, which your real notes do.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.022485099999999997,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "search-renamed",
+      "what": "the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).",
+      "found": true,
+      "quote": "**`search` was renamed to `find`.** `python notes.py find QUERY` works the same as before",
+      "quote_checked": true
+    },
+    {
+      "id": "tag-broken",
+      "what": "the second session reports that `tag` no longer works: it compares the note's int id to `str(args.id)`, so `tag 1 x` prints `no note #1` and exits 1 for every note. Reading tag.py it looks fine; it shows when run.",
+      "found": true,
+      "quote": "It always prints `no note #ID` and exits 1, even for notes that exist, such as `tag 1 urgent`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [],
+  "passed": true,
+  "cost_usd": 0.0222111,
+  "model": "claude-sonnet-5-5"
+}

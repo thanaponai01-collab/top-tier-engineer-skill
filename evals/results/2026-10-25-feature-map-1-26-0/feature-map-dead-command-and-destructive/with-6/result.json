@@ -1,0 +1,88 @@
+{
+  "case": "feature-map-dead-command-and-destructive",
+  "skill": "feature-map",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   sync-is-dead \u2014 \"`HANDLERS` in `notes.py` has no `sync` entry, so it crashes with `TypeError: 'NoneType' object is not callable`.\"\n  found   purge-not-run \u2014 \"| `add`, `export`, `purge` | proven (works) | in a throwaway copy (they write data) |\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-0yaekve6\\verify-loop\\skills\\feature-map\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 22,
+      "outputTokens": 4473,
+      "cacheReadInputTokens": 302478,
+      "cacheCreationInputTokens": 20222,
+      "webSearchRequests": 0,
+      "costUSD": 0.3118196,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 805,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a notes file maps add, list, search, export and purge with notes.py as the way in, and notes.json still holds the three original notes",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.features/add.json",
+      "fixture/.features/export.json",
+      "fixture/.features/features.py",
+      "fixture/.features/list.json",
+      "fixture/.features/purge.json",
+      "fixture/.features/search.json",
+      "fixture/.features/sync.json",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.3118196,
+  "turns": 11,
+  "api_seconds": 48.119,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 121.6,
+  "timed_out": false,
+  "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-0yaekve6\\verify-loop"
+}

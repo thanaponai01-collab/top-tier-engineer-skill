@@ -1,0 +1,14 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   search-renamed — "**`search` was renamed to `find`.**"
+  found   tag-broken — "`tag 1 urgent` now prints `no note #1` and exits 1, even though note #1 exists."
+
+Phrase grader (grade.py), for comparison:
+PASS  feature-map-map-survives-change  [feature-map]  2/2 found, score 1.00 (needs 1.00)
+  found   search-renamed: the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).
+  found   tag-broken: the second session reports that `tag` no longer works: it compares the note's int id to `str(args.id)`, so `tag 1 x` prints `no note #1` and exits 1 for every note. Reading tag.py it looks fine; it shows when run.
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes — 

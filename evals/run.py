@@ -484,15 +484,24 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
         prepare_fixture(case["dir"], os.path.join(workdir, "fixture"))
         before = agent.snapshot(workdir)
         prompts = prompts_for(case, arm)
+        specs = case.get("sessions") or [{}]
         if arm == "with":
-            prompts = [explicit_manual_skill(p, case, plugin_dir) for p in prompts]
+            prompts = [p if s.get("bare") else explicit_manual_skill(p, case, plugin_dir)
+                       for p, s in zip(prompts, specs)]
         say(f"start  {tag}")
         raw = {"lines": [], "stderr": "", "timed_out": False, "seconds": 0.0}
-        for prompt in prompts:
+        for prompt, spec in zip(prompts, specs):
             # Only the last session's report is graded: what it concluded from the folder
             # the earlier sessions left, not what they said about themselves.
+            if spec.get("before"):
+                # The world moves between sessions (a teammate's commit): same change for both arms.
+                subprocess.run([sys.executable, os.path.join(case["dir"], spec["before"]),
+                                os.path.join(workdir, "fixture")], check=True, capture_output=True, text=True)
             last_start = agent.snapshot(workdir)
-            one = agent.run_agent(prompt, workdir, plugin_dir if arm == "with" else None,
+            # A `bare` session gets no plugin in either arm, so it differs only by what the
+            # earlier sessions left in the folder.
+            staged = plugin_dir if arm == "with" and not spec.get("bare") else None
+            one = agent.run_agent(prompt, workdir, staged,
                                   # A case about routing pins its coordinator; it outranks --model.
                                   model=case.get("agent_model") or args.model,
                                   timeout=args.timeout, budget_usd=args.budget_usd)
@@ -523,7 +532,7 @@ def one_run(case, arm, i, out_dir, plugin_dir, args):
         with open(os.path.join(run_dir, "actions.txt"), "w", encoding="utf-8") as fh:
             fh.write(agent.redact(agent.action_log(parsed)) + "\n")
         with open(os.path.join(run_dir, "prompt.md"), "w", encoding="utf-8") as fh:
-            fh.write(prompt + "\n")
+            fh.write(agent.redact(prompt) + "\n")  # the skill pointer names a local path
 
         result = score_run(case, arm, parsed, report, checks, changes, verdict)
         result.update({"seconds": raw["seconds"], "timed_out": raw["timed_out"],

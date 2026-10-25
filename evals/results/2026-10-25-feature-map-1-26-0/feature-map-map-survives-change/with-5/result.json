@@ -1,0 +1,90 @@
+{
+  "case": "feature-map-map-survives-change",
+  "skill": "feature-map",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   search-renamed \u2014 \"**`search` was renamed to `find`.**\"\n  found   tag-broken \u2014 \"`tag 1 urgent` now prints `no note #1` and exits 1, even though note #1 exists.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 36,
+      "outputTokens": 6982,
+      "cacheReadInputTokens": 465084,
+      "cacheCreationInputTokens": 33421,
+      "webSearchRequests": 0,
+      "costUSD": 0.5001688,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1119,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/commands/tag.py",
+      "fixture/notes.py"
+    ],
+    "added": [
+      "backup/notes.json.bak",
+      "fixture/.features/add.json",
+      "fixture/.features/export.json",
+      "fixture/.features/features.py",
+      "fixture/.features/list.json",
+      "fixture/.features/purge.json",
+      "fixture/.features/search.json",
+      "fixture/.features/tag.json",
+      "fixture/AGENTS.md",
+      "fixture/FEATURES.md"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.5001688,
+  "turns": 18,
+  "api_seconds": 98.063,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 160.3,
+  "timed_out": false,
+  "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-0yaekve6\\verify-loop"
+}

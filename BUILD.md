@@ -124,6 +124,15 @@
   - Copied from `origin/main` unchanged; `features.py --help` runs; no feature-map tests or eval
     here yet. Full proof: `python -m unittest discover tests` -> `Ran 444 tests`, `OK (skipped=1)`.
 
+- feature-map mechanics and evals (1.26.0) | proven (mechanics) / no gain (eval)
+  - `features.py` gains `prove` (receipts, `--copy`, `--file`, `--again`), `check --rerun`, a
+    vendored `.features/features.py`, `## Not features`, trace-start check, quoted CLI anchors,
+    `failing` label, `unannounced`; verify-loop link only when VERIFY.md exists.
+  - Full proof: `python -m unittest discover tests` -> `Ran 487 tests`, `OK (skipped=1)`; feature-map 43.
+  - Eval, 3 tries per arm on 5 cases (up to a 133-command CLI): plain Opus 5.5 matches the skill on every case and costs
+    about half; results in `evals/results/2026-10-25-feature-map-*`. Renamed-receipt pruning
+    landed after the last batch and is unmeasured.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before
@@ -132,4 +141,7 @@ overfit eval still shows no difference (see 1.22.0).
 - Pay for an eval subset (`fake-check-and-decoy`, `green-with-unverified`, `teammate-loosened-check`)
   to measure turns and cost against the 1.18 numbers in `work/verify-loop-design.md`.
 - Then add `max_turns`/`max_cost` and a helper-source-read failure to `grade.py` from that data.
+- feature-map: no case yet where the skill beats plain Opus. Next lever to test is a repo too big
+  to re-run by hand in one session (hundreds of entry points, slow commands), or a web app where
+  re-driving the UI is costly; until then the skill's value is unmeasured, not shown.
 - Release remains separate.

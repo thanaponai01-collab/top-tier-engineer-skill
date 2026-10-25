@@ -1,0 +1,592 @@
+[
+  {
+    "case": "feature-map-large-map-survives-change",
+    "skill": "feature-map",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-renamed \u2014 \"**`search` is now `find`.**\"\n  found   due-broken \u2014 \"Any date with a day over 12, like `2026-11-20`, crashes with a ValueError.\"\n  found   upcoming-broken \u2014 \"**`upcoming` is broken.**\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 24,
+        "outputTokens": 6464,
+        "cacheReadInputTokens": 286369,
+        "cacheCreationInputTokens": 29746,
+        "webSearchRequests": 0,
+        "costUSD": 0.42461780000000005,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 926,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/commands/due.py",
+        "fixture/commands/upcoming.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "fixture/AGENTS.md",
+        "fixture/CLAUDE.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.42461780000000005,
+    "turns": 12,
+    "api_seconds": 80.789,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-large-map-survives-change  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   search-renamed: the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).\n  found   due-broken: `due` no longer works: it parses dates as %Y-%d-%m, so `due 1 2026-10-31` raises ValueError (unconverted data remains).\n  found   upcoming-broken: `upcoming` no longer works: it compares a datetime end-of-window with a date and raises TypeError whenever a note has a due date.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 101.6,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-large-map-survives-change",
+    "skill": "feature-map",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-renamed \u2014 \"**`search` was renamed to `find`.**\"\n  found   due-broken \u2014 \"**`due` is broken: it swaps the day and month.**\"\n  found   upcoming-broken \u2014 \"It crashes with a TypeError whenever any note has a due date, and two of your three notes do, so it fails on your data e\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 28,
+        "outputTokens": 7270,
+        "cacheReadInputTokens": 354651,
+        "cacheCreationInputTokens": 33115,
+        "webSearchRequests": 0,
+        "costUSD": 0.4813622000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1245,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/README.md",
+        "fixture/commands/due.py",
+        "fixture/commands/upcoming.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "fixture/CLAUDE.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4813622000000001,
+    "turns": 15,
+    "api_seconds": 90.507,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-large-map-survives-change  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   search-renamed: the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).\n  found   due-broken: `due` no longer works: it parses dates as %Y-%d-%m, so `due 1 2026-10-31` raises ValueError (unconverted data remains).\n  found   upcoming-broken: `upcoming` no longer works: it compares a datetime end-of-window with a date and raises TypeError whenever a note has a due date.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 219.8,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-large-map-survives-change",
+    "skill": "feature-map",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-renamed \u2014 \"**`search` is now called `find`.**\"\n  found   due-broken \u2014 \"`due 1 2026-11-30` crashes.\"\n  found   upcoming-broken \u2014 \"It crashes with a TypeError as soon as any note has a due date, which your real notes do.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 7112,
+        "cacheReadInputTokens": 238603,
+        "cacheCreationInputTokens": 32965,
+        "webSearchRequests": 0,
+        "costUSD": 0.4537606,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1353,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/commands/due.py",
+        "fixture/commands/upcoming.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "fixture/CLAUDE.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4537606,
+    "turns": 10,
+    "api_seconds": 87.441,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-large-map-survives-change  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   search-renamed: the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).\n  found   due-broken: `due` no longer works: it parses dates as %Y-%d-%m, so `due 1 2026-10-31` raises ValueError (unconverted data remains).\n  found   upcoming-broken: `upcoming` no longer works: it compares a datetime end-of-window with a date and raises TypeError whenever a note has a due date.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 162.8,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-large-map-survives-change",
+    "skill": "feature-map",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-renamed \u2014 \"**`search` was renamed to `find`.**\"\n  found   due-broken \u2014 \"`commands/due.py` now reads the date as `%Y-%d-%m` (year-day-month), but its help text still says YYYY-MM-DD.\"\n  found   upcoming-broken \u2014 \"In `commands/upcoming.py`, the end of the date range is now a datetime, but each note's due date is a plain date, and Py\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "feature-map"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "feature-map",
+        "path": "<tmp>\\tte-plugin-0bgik4n_\\verify-loop\\skills\\feature-map\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-0bgik4n_\\verify-loop\\skills\\feature-map\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 42,
+        "outputTokens": 11364,
+        "cacheReadInputTokens": 677447,
+        "cacheCreationInputTokens": 55138,
+        "webSearchRequests": 0,
+        "costUSD": 0.8040414,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2865,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/commands/due.py",
+        "fixture/commands/upcoming.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "backup/features_old/add-a-note.json",
+        "backup/features_old/archive.json",
+        "backup/features_old/csv-export-and-import.json",
+        "backup/features_old/due-dates.json",
+        "backup/features_old/edit-a-note.json",
+        "backup/features_old/features.py",
+        "backup/features_old/list-notes.json",
+        "backup/features_old/pin.json",
+        "backup/features_old/purge.json",
+        "backup/features_old/search.json",
+        "backup/features_old/show-a-note.json",
+        "backup/features_old/star.json",
+        "backup/features_old/summaries.json",
+        "backup/features_old/tags.json",
+        "backup/notes.json",
+        "fixture/.features/add-a-note.json",
+        "fixture/.features/archive.json",
+        "fixture/.features/csv-export-and-import.json",
+        "fixture/.features/due-dates.json",
+        "fixture/.features/edit-a-note.json",
+        "fixture/.features/features.py",
+        "fixture/.features/list-notes.json",
+        "fixture/.features/pin.json",
+        "fixture/.features/purge.json",
+        "fixture/.features/search.json",
+        "fixture/.features/show-a-note.json",
+        "fixture/.features/star.json",
+        "fixture/.features/summaries.json",
+        "fixture/.features/tags.json",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.8040414,
+    "turns": 22,
+    "api_seconds": 136.803,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-large-map-survives-change  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   search-renamed: the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).\n  found   due-broken: `due` no longer works: it parses dates as %Y-%d-%m, so `due 1 2026-10-31` raises ValueError (unconverted data remains).\n  found   upcoming-broken: `upcoming` no longer works: it compares a datetime end-of-window with a date and raises TypeError whenever a note has a due date.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 306.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-0bgik4n_\\verify-loop",
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-large-map-survives-change",
+    "skill": "feature-map",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-renamed \u2014 \"**`search` was renamed to `find`.**\"\n  found   due-broken \u2014 \"The format string in `commands/due.py` was changed to `%Y-%d-%m`, so `due 1 2026-12-01` stores `2026-01-12`, and any day\"\n  found   upcoming-broken \u2014 \"It crashes with a `TypeError` whenever any note has a due date.\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "feature-map"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "feature-map",
+        "path": "<tmp>\\tte-plugin-0bgik4n_\\verify-loop\\skills\\feature-map\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-0bgik4n_\\verify-loop\\skills\\feature-map\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 54,
+        "outputTokens": 11537,
+        "cacheReadInputTokens": 869657,
+        "cacheCreationInputTokens": 55070,
+        "webSearchRequests": 0,
+        "costUSD": 0.8454474000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2479,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/commands/due.py",
+        "fixture/commands/upcoming.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "fixture/.features/add-a-note.json",
+        "fixture/.features/archive.json",
+        "fixture/.features/due-dates.json",
+        "fixture/.features/edit-a-note.json",
+        "fixture/.features/export-and-import.json",
+        "fixture/.features/features.py",
+        "fixture/.features/list-notes.json",
+        "fixture/.features/pin.json",
+        "fixture/.features/purge.json",
+        "fixture/.features/rename-a-note.json",
+        "fixture/.features/search.json",
+        "fixture/.features/show-a-note.json",
+        "fixture/.features/star.json",
+        "fixture/.features/stats.json",
+        "fixture/.features/tags.json",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.8454474000000001,
+    "turns": 27,
+    "api_seconds": 158.185,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-large-map-survives-change  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   search-renamed: the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).\n  found   due-broken: `due` no longer works: it parses dates as %Y-%d-%m, so `due 1 2026-10-31` raises ValueError (unconverted data remains).\n  found   upcoming-broken: `upcoming` no longer works: it compares a datetime end-of-window with a date and raises TypeError whenever a note has a due date.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 216.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-0bgik4n_\\verify-loop",
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  },
+  {
+    "case": "feature-map-large-map-survives-change",
+    "skill": "feature-map",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   search-renamed \u2014 \"**`search` was renamed to `find`.**\"\n  found   due-broken \u2014 \"`commands/due.py` parses with `%Y-%d-%m`, but the help text still says YYYY-MM-DD.\"\n  found   upcoming-broken \u2014 \"`upcoming --days 60` crashes with a `TypeError` (`commands/upcoming.py:6` compares a date with a datetime).\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "feature-map"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "feature-map",
+        "path": "<tmp>\\tte-plugin-0bgik4n_\\verify-loop\\skills\\feature-map\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 50,
+        "outputTokens": 13108,
+        "cacheReadInputTokens": 772100,
+        "cacheCreationInputTokens": 53576,
+        "webSearchRequests": 0,
+        "costUSD": 0.845388,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2262,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "a notes file in the repo maps `find` as the way to search, and notes.json still holds the three original notes",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/commands/due.py",
+        "fixture/commands/upcoming.py",
+        "fixture/notes.py"
+      ],
+      "added": [
+        "backup/notes.json.orig",
+        "fixture/.features/add-a-note.json",
+        "fixture/.features/archive.json",
+        "fixture/.features/csv-export-and-import.json",
+        "fixture/.features/due-dates.json",
+        "fixture/.features/edit-a-note.json",
+        "fixture/.features/features.py",
+        "fixture/.features/pin.json",
+        "fixture/.features/purge.json",
+        "fixture/.features/read-notes.json",
+        "fixture/.features/reports.json",
+        "fixture/.features/search.json",
+        "fixture/.features/star.json",
+        "fixture/.features/tags.json",
+        "fixture/AGENTS.md",
+        "fixture/FEATURES.md"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.845388,
+    "turns": 25,
+    "api_seconds": 160.139,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  feature-map-large-map-survives-change  [feature-map]  3/3 found, score 1.00 (needs 1.00)\n  found   search-renamed: the second session reports that `search` is gone and the same full-text search is now `find` (`python notes.py find QUERY`).\n  found   due-broken: `due` no longer works: it parses dates as %Y-%d-%m, so `due 1 2026-10-31` raises ValueError (unconverted data remains).\n  found   upcoming-broken: `upcoming` no longer works: it compares a datetime end-of-window with a date and raises TypeError whenever a note has a due date.\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 310.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-0bgik4n_\\verify-loop",
+    "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+    "end_output": null
+  }
+]
