@@ -2,19 +2,23 @@
 """features.py — the feature map behind feature-map.
 
 FEATURES.md at the repo root says what the system has and how each feature is reached: route,
-click target, shortcut, CLI command. Two commands:
+click target, shortcut, CLI command. Three commands:
 
   init   Draft FEATURES.md from the entry points found in the code, one feature per group.
          A draft: the agent names each feature, writes what it does, and labels it. Never
          overwrites an existing FEATURES.md.
   impact Which features a change touches, and the VERIFY.md sections to rerun. Files come from
          `--files a b`, else `git diff` against HEAD (`--base REF`) plus untracked files.
-  check  Test the map against the code. STALE: a mapped entry point the code no longer has.
-         Then what the map does NOT cover: entry points in the code the map lacks (unmapped),
-         features with no VERIFY.md link, no status label, or no description.
+  check  Test the map against the code. STALE: a mapped entry point or trace step the code no
+         longer has. BROKEN: a trace step not called from the step before it (comments do not
+         count). Then what the map does NOT cover: entry points in the code the map lacks
+         (unmapped), features with no trace, no VERIFY.md link (or no VERIFY.md), no status label,
+         no description, a pinned status whose files changed (drifted), or `proven` with no pin.
 
 An entry point is `kind: `anchor` @ file :: needle`. The check looks for the needle in the file (or
-anywhere in the repo when no file is given). The needle defaults from the anchor by kind; write
+anywhere in the repo when no file is given) as a whole token, so `pay-btn` is not found in
+`pay-btn-v2`. The needle defaults from the anchor by kind; a shortcut with no needle must appear as
+the same combo in a quoted string (`Ctrl+Enter` = 'mod+enter', not 'ctrl+shift+enter'). Write
 `:: needle` when the default does not fit. A big map is an index: `include: features/<area>.md`
 lines, each read in place (paths from the repo root; VERIFY.md includes are followed the same way).
 Stdlib only.
@@ -38,12 +42,15 @@ file of that feature has changed since (unknown commits count as drifted).
 kinds: route (or api), click, shortcut, cli, menu. status: proven | traced | suspected, then how.
 
 Usage:
-  python scripts/features.py init  [repo]
-  python scripts/features.py check [repo] [--strict]
+  python scripts/features.py init   [repo]
+  python scripts/features.py check  [repo] [--strict]
+  python scripts/features.py impact [repo] [--base REF | --files a b]
 
-Exit: check 0 = nothing stale or broken; 1 = something stale or broken (or --strict and something is untraced, unmapped,
-unlinked, unlabeled or undescribed); 2 = no FEATURES.md. Summary line:
-  FEATURES: <f> features | <e> entry points, <s> stale | <b> broken | <t> untraced | <u> unmapped | <v> unlinked | <l> unlabeled | <d> undescribed
+Exit: check 0 = nothing stale or broken; 1 = something stale or broken (or --strict and something is
+untraced, unmapped, unlinked, unlabeled, undescribed, drifted or unpinned); 2 = no FEATURES.md.
+Summary line:
+  FEATURES: <f> features | <e> entry points, <s> stale | <b> broken | <t> untraced | <u> unmapped |
+  <v> unlinked | <l> unlabeled | <d> undescribed | <r> drifted | <p> unpinned
 """
 import argparse, os, re, subprocess, sys
 
@@ -313,29 +320,49 @@ def cmd_impact(repo, files, base):
 
 # ---- check --------------------------------------------------------------------------------
 
+QUOTED = re.compile(r"['\"`]([^'\"`\n]{1,40})['\"`]")
+
+
+def has_token(text, needle):
+    """needle in text as a whole token: `pay-btn` is not in `pay-btn-v2`, `place_order` not in
+    `place_orders`."""
+    return re.search(rf"(?<![\w$-]){re.escape(needle)}(?![\w$-])", text) is not None
+
+
+def found(kind, anchor, needle, text):
+    """Whether text still declares the entry point. A shortcut without its own `:: needle` must
+    appear as the same combo, so `Ctrl+Enter` is not satisfied by `ctrl+shift+enter`."""
+    if kind == "shortcut" and not needle:
+        combo = norm_combo(anchor)
+        return any(norm_combo(q) == combo for q in QUOTED.findall(text))
+    return has_token(text, needle or default_needle(kind, anchor))
+
+
 def stale_reason(repo, kind, anchor, rel, needle, cache):
     """None when the entry point still exists, else why not."""
-    needle = needle or default_needle(kind, anchor)
-    fold = kind == "shortcut"
+    shown = needle or (anchor if kind == "shortcut" else default_needle(kind, anchor))
     if rel:
         p = os.path.join(repo, rel)
         if not os.path.isfile(p):
             return f"{rel} does not exist"
-        if kind in ("route", "api") and needle.strip("/") and needle.strip("/") in rel:
-            return None
-        if needle == "/":
-            return None
-        text = read(p)
-        hit = needle.lower() in text.lower() if fold else needle in text
-        return None if hit else f"'{needle}' not found in {rel}"
+        if kind in ("route", "api") and not needle:
+            route = default_needle(kind, anchor).strip("/")
+            if not route or f"/{route}/" in f"/{rel}":
+                return None
+        return None if found(kind, anchor, needle, read(p)) else f"'{shown}' not found in {rel}"
     for r, p in code_files(repo):
-        text = cache.setdefault(r, read(p))
-        if (needle.lower() in text.lower()) if fold else (needle in text):
+        if found(kind, anchor, needle, cache.setdefault(r, read(p))):
             return None
-    return f"'{needle}' not found anywhere in the code"
+    return f"'{shown}' not found anywhere in the code"
 
 
 STEP = re.compile(r"^`([^`]+)`(?:\s*@\s*(\S+))?(?:\s*::\s*(\S+))?")
+COMMENT = re.compile(r"/\*.*?\*/|<!--.*?-->|(?:^|\s)(?:#|//)[^\n]*", re.S | re.M)
+
+
+def uses(text, needle):
+    """How often code (comments stripped) names needle as a whole token."""
+    return len(re.findall(rf"(?<![\w$]){re.escape(needle)}(?![\w$])", COMMENT.sub(" ", text)))
 
 
 def trace_problems(repo, trace):
@@ -360,7 +387,7 @@ def trace_problems(repo, trace):
         if prev_rel is not None:
             defined = re.search(rf"\b(?:def|function|func|fn|class|const|let|var)\s+{re.escape(needle)}\b", text)
             need = 2 if rel == prev_rel and defined else 1
-            if prev_text.count(needle) < need:
+            if uses(prev_text, needle) < need:
                 out.append(("BROKEN", f"{sym} is not called from {prev_rel}"))
         prev_rel, prev_text = rel, text
     return out
@@ -379,7 +406,7 @@ def cmd_check(repo, strict):
     vnames = {m.lower(): m for m in re.findall(r"(?m)^##\s+(.+?)\s*$", vtext) if m.lower() not in ("blind spots", "run") and not m.lower().startswith("journey:")}
 
     cache, mapped = {}, set()
-    entries = stale = broken = untraced = unlinked = unlabeled = undescribed = drifted = 0
+    entries = stale = broken = untraced = unlinked = unlabeled = undescribed = drifted = unpinned = 0
     head_changed = {}
     for f in features:
         print(f["name"])
@@ -406,13 +433,19 @@ def cmd_check(repo, strict):
         if is_todo(f["verify"]):
             unlinked += 1
             print("  note  no verify link to a VERIFY.md section")
-        elif vtext and f["verify"].lower() not in vnames:
+        elif not vtext:
+            unlinked += 1
+            print(f"  note  verify: '{f['verify']}' links to no {VERIFY}: there is no {VERIFY} in the repo")
+        elif f["verify"].lower() not in vnames:
             unlinked += 1
             print(f"  note  verify: '{f['verify']}' is not a section of {VERIFY}")
         if not f["status"].lower().startswith(LABELS):
             unlabeled += 1
             print("  note  no status label (proven | traced | suspected)")
         cm = STATUS_COMMIT.match(f["status"])
+        if f["status"].lower().startswith("proven") and not cm:
+            unpinned += 1
+            print("  note  unpinned: proven, but not pinned to the commit it ran at (proven @ <sha>)")
         if cm:
             ref = cm.group(1)
             if ref not in head_changed:
@@ -440,8 +473,9 @@ def cmd_check(repo, strict):
         unlinked += len(orphans)
 
     print(f"FEATURES: {len(features)} features | {entries} entry points, {stale} stale | "
-          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed | {drifted} drifted")
-    if stale or broken or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed or drifted)):
+          f"{broken} broken | {untraced} untraced | {len(unmapped)} unmapped | {unlinked} unlinked | {unlabeled} unlabeled | {undescribed} undescribed | {drifted} drifted | {unpinned} unpinned")
+    if stale or broken or (strict and (untraced or unmapped or unlinked or unlabeled or undescribed
+                                       or drifted or unpinned)):
         return 1
     return 0
 
@@ -455,7 +489,7 @@ def main():
     c = sub.add_parser("check", help="test every mapped entry point against the code")
     c.add_argument("repo", nargs="?", default=".")
     c.add_argument("--strict", action="store_true",
-                   help="also exit 1 on unmapped entry points, unlinked, unlabeled or undescribed features, and drifted status pins")
+                   help="also exit 1 on untraced, unmapped, unlinked, unlabeled, undescribed, drifted or unpinned")
     m = sub.add_parser("impact", help="which features a change touches and which VERIFY.md sections to rerun")
     m.add_argument("repo", nargs="?", default=".")
     m.add_argument("--files", nargs="+", help="changed files (default: git diff against --base, plus untracked)")

@@ -13,6 +13,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPTS = {
     "verify.py": os.path.join(ROOT, "plugin", "skills", "verify-loop", "scripts"),
     "compliance.py": os.path.join(ROOT, "plugin", "skills", "verify-loop", "scripts"),
+    "features.py": os.path.join(ROOT, "plugin", "skills", "feature-map", "scripts"),
 }
 
 

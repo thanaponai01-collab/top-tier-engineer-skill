@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.24.1 - 2026-10-25 - feature-map's check goes red on drift it used to call ok
+
+- `features.py check` matched needles as substrings, so five kinds of drift passed. Each now fails,
+  with a test in `tests/test_features.py` (the first feature-map tests here):
+  - a renamed selector (`pay-btn` to `pay-btn-v2`) is STALE: needles match as whole tokens;
+  - a changed shortcut (`Ctrl+Enter` to `ctrl+shift+enter`) is STALE: the whole combo must appear
+    in a quoted string, not just its last key;
+  - a trace call left only in a comment is BROKEN: comments are stripped before counting calls;
+  - a `verify:` link with no VERIFY.md in the repo counts as unlinked;
+  - `proven` with no `@ <sha>` is a new `unpinned` count, red under `--strict`.
+- A route no longer passes because its path is a substring of the file name (`/s` in `src/`).
+- SKILL.md and the script docstring describe the new matching and counts; SKILL.md no longer names
+  `wire-check`, `arch-map` or `recall`, which this plugin does not ship.
+
 ## 1.24.0 - 2026-10-25 - feature-map ships in the plugin
 
 - New skill `plugin/skills/feature-map/`, copied unchanged from top-tier-engineer main (4.66.0):
