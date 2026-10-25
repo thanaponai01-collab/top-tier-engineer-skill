@@ -1,0 +1,79 @@
+{
+  "case": "structure-gate-general",
+  "skill": "structure-gate",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   pricing-hotspot \u2014 \"`invoicing/pricing.py:4` `compute_price` | 64 lines, complexity 32, nesting 6\"\n  found   import-cycle \u2014 \"Import cycle: `models` \u2194 `store`\"\n  found   copied-export-block \u2014 \"The 5 field calculations are copied line for line.\"\n  found   in-places \u2014 \"**It's tangled in places, and the worst spot is exactly where your new discount will go.**\"\n  held    all-spaghetti",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "structure-gate"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "structure-gate",
+      "path": "<tmp>\\tte-plugin-d66w3qgq\\verify-loop\\skills\\structure-gate\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-d66w3qgq\\verify-loop\\skills\\structure-gate\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 3087,
+      "cacheReadInputTokens": 186468,
+      "cacheCreationInputTokens": 13935,
+      "webSearchRequests": 0,
+      "costUSD": 0.2105776,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 229,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2105776,
+  "turns": 8,
+  "api_seconds": 47.387,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 51.3,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-d66w3qgq\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

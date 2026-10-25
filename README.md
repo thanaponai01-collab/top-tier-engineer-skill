@@ -15,6 +15,10 @@ seen red on the broken wiring.
 And `debug-protocol` (manual-only, `/verify-loop:debug-protocol`): the root cause, proven both ways.
 `debug.py` keeps the code as it was reproduced, reruns the trigger with only the suspected lines
 replaced, and accepts a fix only at the cause, held by a check that fails with the cause put back.
+And `structure-gate` (manual-only, `/verify-loop:structure-gate`): is it spaghetti, measured?
+`structure.py --gate` reports the share of code a parser actually entered before any finding, makes
+every region no parser entered get a counted reading or UNKNOWN, and refuses a clean verdict over
+code no linter or test can reach.
 
 ## Install (Claude Code)
 
@@ -66,6 +70,8 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
   `--gate`, `--target FILE::FUNC`).
 - `plugin/skills/debug-protocol/` — the debug-protocol skill; `scripts/debug.py` (`--repro`,
   `--prove FILE:LINE --as`, `--gate --regress CMD`).
+- `plugin/skills/structure-gate/` — the structure-gate skill; `scripts/structure.py` (`--gate PATHS`,
+  notes in `.structure/notes.md`) over `scripts/structure-report.py` (`--json`, `--baseline FILE`).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

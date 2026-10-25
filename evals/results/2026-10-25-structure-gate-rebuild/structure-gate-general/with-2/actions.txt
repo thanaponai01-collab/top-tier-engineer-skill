@@ -1,0 +1,6 @@
+  1. Read: <tmp>\tte-plugin-d66w3qgq\verify-loop\skills\structure-gate\SKILL.md
+  2. Bash: find . -type f | head -100 && wc -l $(find fixture -type f)
+  3. Bash: for f in $(find fixture -type f); do echo "=== $f"; cat -n $f; done; echo; python <tmp>/tte-plugin-d66w3qgq/verify-loop/skills/stru…
+  4. Bash: cat -n .structure/notes.md; python <tmp>/tte-plugin-d66w3qgq/verify-loop/skills/structure-gate/scripts/structure.py fixture
+  5. Bash: python - <<'EOF' p='.structure/notes.md' s=open(p,encoding='utf-8').read() fills=[ "cost: every discount rule (3 line kinds with 7 line-level discount branches…
+  6. Bash: rm -rf .structure && ls -a

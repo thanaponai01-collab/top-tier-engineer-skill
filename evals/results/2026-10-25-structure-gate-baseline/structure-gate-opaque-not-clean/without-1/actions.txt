@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && find . -type f | head -100 && wc -l $(find . -type f) | tail -5
+  2. Bash: cd fixture && cat -n handlers.py dashboard.py

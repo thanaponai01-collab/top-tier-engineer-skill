@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.32.0 - 2026-10-25 - structure-gate: three stages built on what plain Opus already does
+
+- structure-gate joins the plugin (manual-only, from top-tier-engineer main) with its scripts
+  (`structure-report.py`, `structure_opacity.py`), their 43 tests and main's eval case, then rebuilt
+  from a trace of plain Opus. Plain Opus lists the files, reads every one in a single call and, on a
+  real app, runs the tests and probes the code. It finds the long function, the cycle and the copied
+  block. It never says how much of the code any tool or test can reach: it reads JavaScript held in a
+  Python string and judges it like the rest.
+- `scripts/structure.py --gate <paths>`: measure (the share a parser entered, every region it never
+  entered, by `file:line`), account (a filled line in `.structure/notes.md` for each region,
+  `read: <counted>` or `unknown: <why>`, and for each finding, `cost:` or `none:`; the gate appends the
+  slots; a note on something not measured now fails), answer (`- verdict: yes | in places | no`;
+  `no` is refused over unknown code, standing findings, or code in a string or a file that does not
+  parse). It prints a drafted answer that opens with the measured share.
+- `structure-report.py`: finds `from pkg import mod` import cycles (it missed the general case's
+  cycle), runs under `python -I` (an agent hit `ModuleNotFoundError`), and skips other skills' state
+  folders (`.debug/before/` is a copy of the code).
+- SKILL.md is a goal, three stages and the helper, 35 lines from 86. verify-loop: `.structure/` no
+  longer makes the tree stale.
+- New general eval `structure-gate-general`: an ordinary invoicing app with one tangled function,
+  an import cycle, a copied block and small modules. Main's case is unchanged: both prompts ask the
+  same thing, grading reads only the report, and the notes are `.md` (allowed by `read_only`).
+- Results (3 tries per arm): opaque-not-clean 3/3 with the skill vs 0/3 plain ($0.17 vs $0.09); general
+  3/3 vs 2/3 ($0.21 vs $0.17; the plain miss is a judge call on a report that called `compute_price`
+  easy to test). Main's skill as copied: 3/3 at $0.16-0.19 on opaque-not-clean. Tests:
+  `tests/test_structure.py`, 21; 23 disabled guards each caught.
+
 ## 1.31.0 - 2026-10-25 - debug-protocol: three stages built on what plain Opus already does
 
 - debug-protocol joins the plugin (manual-only, from top-tier-engineer main) with main's two eval

@@ -5,7 +5,8 @@ This repo is the `verify-loop` Claude Code plugin: the main skill at
 `plugin/skills/feature-map/SKILL.md` (copied from top-tier-engineer main; standalone) and the
 manual-only `latent-audit` skill at `plugin/skills/latent-audit/SKILL.md` (uses both when present), and the
 manual-only `wire-check` skill at `plugin/skills/wire-check/SKILL.md` (uses both when present), and the
-manual-only `debug-protocol` skill at `plugin/skills/debug-protocol/SKILL.md` (maps its check for verify-loop).
+manual-only `debug-protocol` skill at `plugin/skills/debug-protocol/SKILL.md` (maps its check for verify-loop), and the manual-only `structure-gate` skill at
+`plugin/skills/structure-gate/SKILL.md` (standalone).
 
 - Mechanics, not advice: every rule is a script or test that can fail, never a tip for the agent.
 

@@ -1,0 +1,648 @@
+[
+  {
+    "case": "structure-gate-general",
+    "skill": "structure-gate",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   pricing-hotspot \u2014 \"**1. `pricing.py:4-67`: one 60-line function does four jobs.**\"\n  found   import-cycle \u2014 \"`models.py` and `store.py` import each other.\"\n  found   copied-export-block \u2014 \"`export_csv.py` and `export_json.py` repeat the same field-formatting loop.\"\n  found   in-places \u2014 \"It's mixed. The project is small (about 200 lines) and most of it is fine.\"\n  held    all-spaghetti",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 3024,
+        "cacheReadInputTokens": 102849,
+        "cacheCreationInputTokens": 9827,
+        "webSearchRequests": 0,
+        "costUSD": 0.15970579999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 632,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.15970579999999998,
+    "turns": 5,
+    "api_seconds": 46.712,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  structure-gate-general  [structure-gate]  3/4 found, score 0.75 (needs 1.00)\n  found   pricing-hotspot: pricing.py:compute_price is the tangle: one 64-line function with about 31 branch points nested six deep, where every discount rule lives; a new discount type goes into it\n  found   import-cycle: models.py and store.py import each other (store.get falls back to models.blank_order), so neither can be understood or loaded alone\n  found   copied-export-block: export_csv.rows_for and export_json.records_for repeat the same six-line normalisation of an invoice; a change to one drifts from the other\n  MISSED  in-places: the honest overall answer is 'in places': the tangle is concentrated in compute_price (plus the cycle and the copy); the other modules are small and readable\n            named it, but never said what was wrong with it\n  held    all-spaghetti: calling the whole codebase a mess when the tangle is one function\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 49.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "structure-gate-general",
+    "skill": "structure-gate",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  4/4 found\n  found   pricing-hotspot \u2014 \"**`compute_price` in `invoicing/pricing.py` is a single 67-line function covered by a single test.**\"\n  found   import-cycle \u2014 \"`store` and `models` import each other.\"\n  found   copied-export-block \u2014 \"`export_csv.py` and `export_json.py` contain the same invoice-formatting code twice.\"\n  found   in-places \u2014 \"It's not a mess overall. It's about 200 lines and most files are fine. The trouble is concentrated in one place, and tha\"\n  held    all-spaghetti",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2767,
+        "cacheReadInputTokens": 78078,
+        "cacheCreationInputTokens": 9243,
+        "webSearchRequests": 0,
+        "costUSD": 0.1449316,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 594,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1449316,
+    "turns": 4,
+    "api_seconds": 33.701,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  structure-gate-general  [structure-gate]  4/4 found, score 1.00 (needs 1.00)\n  found   pricing-hotspot: pricing.py:compute_price is the tangle: one 64-line function with about 31 branch points nested six deep, where every discount rule lives; a new discount type goes into it\n  found   import-cycle: models.py and store.py import each other (store.get falls back to models.blank_order), so neither can be understood or loaded alone\n  found   copied-export-block: export_csv.rows_for and export_json.records_for repeat the same six-line normalisation of an invoice; a change to one drifts from the other\n  found   in-places: the honest overall answer is 'in places': the tangle is concentrated in compute_price (plus the cycle and the copy); the other modules are small and readable\n  held    all-spaghetti: calling the whole codebase a mess when the tangle is one function\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 36.5,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "structure-gate-general",
+    "skill": "structure-gate",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   pricing-hotspot \u2014 \"**1. All pricing rules live in one function, `pricing.py:4-67`.**\"\n  found   import-cycle \u2014 \"`store` and `models` import each other.\"\n  found   copied-export-block \u2014 \"the two exporters copy the same formatting code, so you'd change both.\"\n  found   in-places \u2014 \"I'd call it a manageable mess: one function holds all the tangle, and it's surrounded by a few silent bugs a new discoun\"\n  held    all-spaghetti",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 3360,
+        "cacheReadInputTokens": 103204,
+        "cacheCreationInputTokens": 9950,
+        "webSearchRequests": 0,
+        "costUSD": 0.16748079999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1188,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.16748079999999999,
+    "turns": 5,
+    "api_seconds": 50.435,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  structure-gate-general  [structure-gate]  3/4 found, score 0.75 (needs 1.00)\n  found   pricing-hotspot: pricing.py:compute_price is the tangle: one 64-line function with about 31 branch points nested six deep, where every discount rule lives; a new discount type goes into it\n  found   import-cycle: models.py and store.py import each other (store.get falls back to models.blank_order), so neither can be understood or loaded alone\n  MISSED  copied-export-block: export_csv.rows_for and export_json.records_for repeat the same six-line normalisation of an invoice; a change to one drifts from the other\n            named it, but never said what was wrong with it\n  found   in-places: the honest overall answer is 'in places': the tangle is concentrated in compute_price (plus the cycle and the copy); the other modules are small and readable\n  held    all-spaghetti: calling the whole codebase a mess when the tangle is one function\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 53.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "structure-gate-opaque-not-clean",
+    "skill": "structure-gate",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   opaque-region-named \u2014 \"The other 230 lines are JavaScript inside the `DASHBOARD_JS` string in `fixture/dashboard.py`.\"\n  found   how-much-was-measured \u2014 \"**How much was measured:** 5% of the code (12 of 242 lines).\"\n  found   unknown-not-clean \u2014 \"Those lines are **UNKNOWN to the tool, not clean.**\"\n  held    small-functions-read-as-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-quw66jd8\\verify-loop\\skills\\structure-gate\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2145,
+        "cacheReadInputTokens": 105044,
+        "cacheCreationInputTokens": 11385,
+        "webSearchRequests": 0,
+        "costUSD": 0.15502880000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 266,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.15502880000000002,
+    "turns": 5,
+    "api_seconds": 30.935,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  structure-gate-opaque-not-clean  [structure-gate]  3/3 found, score 1.00 (needs 1.00)\n  found   opaque-region-named: dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter\n  found   how-much-was-measured: the fraction actually measured is reported before any finding \u2014 about 5% of the code lines\n  found   unknown-not-clean: the unmeasured part is reported as unknown, not folded into a clean verdict\n  held    small-functions-read-as-clean: the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 34.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-quw66jd8\\verify-loop"
+  },
+  {
+    "case": "structure-gate-opaque-not-clean",
+    "skill": "structure-gate",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   opaque-region-named \u2014 \"The other 230 lines are JavaScript inside the `DASHBOARD_JS` string in `fixture/dashboard.py`.\"\n  found   how-much-was-measured \u2014 \"**How much was measured: 5%.**\"\n  found   unknown-not-clean \u2014 \"The tool can't analyse code that sits inside a string, so it reports those lines as UNKNOWN, not clean.\"\n  held    small-functions-read-as-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-quw66jd8\\verify-loop\\skills\\structure-gate\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 2407,
+        "cacheReadInputTokens": 110796,
+        "cacheCreationInputTokens": 15207,
+        "webSearchRequests": 0,
+        "costUSD": 0.1919952,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 325,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1919952,
+    "turns": 6,
+    "api_seconds": 35.076,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  structure-gate-opaque-not-clean  [structure-gate]  3/3 found, score 1.00 (needs 1.00)\n  found   opaque-region-named: dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter\n  found   how-much-was-measured: the fraction actually measured is reported before any finding \u2014 about 5% of the code lines\n  found   unknown-not-clean: the unmeasured part is reported as unknown, not folded into a clean verdict\n  held    small-functions-read-as-clean: the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 38.6,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-quw66jd8\\verify-loop"
+  },
+  {
+    "case": "structure-gate-opaque-not-clean",
+    "skill": "structure-gate",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   opaque-region-named \u2014 \"`dashboard.py` hides a 230-line JavaScript function inside a string\"\n  found   how-much-was-measured \u2014 \"the tool could only look inside **5%** of the code (12 of 242 lines)\"\n  found   unknown-not-clean \u2014 \"No parser, linter or test reaches it, so the tool's automatic scores say nothing about it. That isn't the same as clean.\"\n  held    small-functions-read-as-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-quw66jd8\\verify-loop\\skills\\structure-gate\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2633,
+        "cacheReadInputTokens": 126800,
+        "cacheCreationInputTokens": 9675,
+        "webSearchRequests": 0,
+        "costUSD": 0.15546800000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 312,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.15546800000000002,
+    "turns": 6,
+    "api_seconds": 32.08,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  structure-gate-opaque-not-clean  [structure-gate]  2/3 found, score 0.67 (needs 1.00)\n  found   opaque-region-named: dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter\n  found   how-much-was-measured: the fraction actually measured is reported before any finding \u2014 about 5% of the code lines\n  MISSED  unknown-not-clean: the unmeasured part is reported as unknown, not folded into a clean verdict\n            named it, but never said what was wrong with it\n  held    small-functions-read-as-clean: the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 35.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-quw66jd8\\verify-loop"
+  },
+  {
+    "case": "structure-gate-opaque-not-clean",
+    "skill": "structure-gate",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  1/3 found\n  found   opaque-region-named \u2014 \"That string holds a ~230-line JavaScript `renderDashboard(state)`, built from 25 nearly identical blocks (`fixture/dashb\"\n  MISSED  how-much-was-measured\n  MISSED  unknown-not-clean\n  held    small-functions-read-as-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 903,
+        "cacheReadInputTokens": 54487,
+        "cacheCreationInputTokens": 8623,
+        "webSearchRequests": 0,
+        "costUSD": 0.09796540000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 128,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 3,
+    "missed": [
+      "the fraction actually measured is reported before any finding \u2014 about 5% of the code lines",
+      "the unmeasured part is reported as unknown, not folded into a clean verdict"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.09796540000000001,
+    "turns": 3,
+    "api_seconds": 11.708,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  structure-gate-opaque-not-clean  [structure-gate]  1/3 found, score 0.33 (needs 1.00)\n  MISSED  opaque-region-named: dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter\n            named it, but never said what was wrong with it\n  found   how-much-was-measured: the fraction actually measured is reported before any finding \u2014 about 5% of the code lines\n  MISSED  unknown-not-clean: the unmeasured part is reported as unknown, not folded into a clean verdict\n            named it, but never said what was wrong with it\n  TRIPPED small-functions-read-as-clean: the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 14.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "structure-gate-opaque-not-clean",
+    "skill": "structure-gate",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/3 found\n  MISSED  opaque-region-named\n  MISSED  how-much-was-measured\n  MISSED  unknown-not-clean\n  held    small-functions-read-as-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1027,
+        "cacheReadInputTokens": 54539,
+        "cacheCreationInputTokens": 8705,
+        "webSearchRequests": 0,
+        "costUSD": 0.1011118,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 222,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 0,
+    "total": 3,
+    "missed": [
+      "dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter",
+      "the fraction actually measured is reported before any finding \u2014 about 5% of the code lines",
+      "the unmeasured part is reported as unknown, not folded into a clean verdict"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1011118,
+    "turns": 3,
+    "api_seconds": 17.99,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  structure-gate-opaque-not-clean  [structure-gate]  0/3 found, score 0.00 (needs 1.00)\n  MISSED  opaque-region-named: dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter\n            named it, but never said what was wrong with it\n  MISSED  how-much-was-measured: the fraction actually measured is reported before any finding \u2014 about 5% of the code lines\n            named it, but never said what was wrong with it\n  MISSED  unknown-not-clean: the unmeasured part is reported as unknown, not folded into a clean verdict\n            named it, but never said what was wrong with it\n  TRIPPED small-functions-read-as-clean: the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 20.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "structure-gate-opaque-not-clean",
+    "skill": "structure-gate",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  1/3 found\n  found   opaque-region-named \u2014 \"**The JS lives in a Python string.** No linting, no syntax highlighting, no tests.\"\n  MISSED  how-much-was-measured\n  MISSED  unknown-not-clean\n  held    small-functions-read-as-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 833,
+        "cacheReadInputTokens": 54525,
+        "cacheCreationInputTokens": 8689,
+        "webSearchRequests": 0,
+        "costUSD": 0.09710099999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 59,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 3,
+    "missed": [
+      "the fraction actually measured is reported before any finding \u2014 about 5% of the code lines",
+      "the unmeasured part is reported as unknown, not folded into a clean verdict"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.09710099999999999,
+    "turns": 3,
+    "api_seconds": 13.344,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  structure-gate-opaque-not-clean  [structure-gate]  2/3 found, score 0.67 (needs 1.00)\n  MISSED  opaque-region-named: dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter\n            named it, but never said what was wrong with it\n  found   how-much-was-measured: the fraction actually measured is reported before any finding \u2014 about 5% of the code lines\n  found   unknown-not-clean: the unmeasured part is reported as unknown, not folded into a clean verdict\n  held    small-functions-read-as-clean: the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 16.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  }
+]

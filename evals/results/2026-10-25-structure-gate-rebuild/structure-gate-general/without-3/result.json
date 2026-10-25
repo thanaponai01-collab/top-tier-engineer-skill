@@ -1,0 +1,71 @@
+{
+  "case": "structure-gate-general",
+  "skill": "structure-gate",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  3/4 found\n  MISSED  pricing-hotspot\n  found   import-cycle \u2014 \"**Circular import:** `store` and `models` import each other.\"\n  found   copied-export-block \u2014 \"`export_csv.rows_for` and `export_json.records_for` repeat the same field formatting line for line.\"\n  found   in-places \u2014 \"The code is small (about 210 lines), so it isn't a mess. But the discount logic is tangled in the specific way that make\"\n  held    all-spaghetti",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 3351,
+      "cacheReadInputTokens": 103918,
+      "cacheCreationInputTokens": 9542,
+      "webSearchRequests": 0,
+      "costUSD": 0.1641796,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1036,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 4,
+  "missed": [
+    "pricing.py:compute_price is the tangle: one 64-line function with about 31 branch points nested six deep, where every discount rule lives; a new discount type goes into it"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1641796,
+  "turns": 5,
+  "api_seconds": 39.028,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 42.0,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -17,6 +17,8 @@ SCRIPTS = {
     "graph-audit.py": os.path.join(ROOT, "plugin", "skills", "latent-audit", "scripts"),
     "wire.py": os.path.join(ROOT, "plugin", "skills", "wire-check", "scripts"),
     "debug.py": os.path.join(ROOT, "plugin", "skills", "debug-protocol", "scripts"),
+    "structure-report.py": os.path.join(ROOT, "plugin", "skills", "structure-gate", "scripts"),
+    "structure.py": os.path.join(ROOT, "plugin", "skills", "structure-gate", "scripts"),
 }
 
 

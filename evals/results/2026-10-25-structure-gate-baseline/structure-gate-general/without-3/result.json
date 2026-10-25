@@ -1,0 +1,69 @@
+{
+  "case": "structure-gate-general",
+  "skill": "structure-gate",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  4/4 found\n  found   pricing-hotspot \u2014 \"**1. All pricing rules live in one function, `pricing.py:4-67`.**\"\n  found   import-cycle \u2014 \"`store` and `models` import each other.\"\n  found   copied-export-block \u2014 \"the two exporters copy the same formatting code, so you'd change both.\"\n  found   in-places \u2014 \"I'd call it a manageable mess: one function holds all the tangle, and it's surrounded by a few silent bugs a new discoun\"\n  held    all-spaghetti",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 3360,
+      "cacheReadInputTokens": 103204,
+      "cacheCreationInputTokens": 9950,
+      "webSearchRequests": 0,
+      "costUSD": 0.16748079999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1188,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.16748079999999999,
+  "turns": 5,
+  "api_seconds": 50.435,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 53.2,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

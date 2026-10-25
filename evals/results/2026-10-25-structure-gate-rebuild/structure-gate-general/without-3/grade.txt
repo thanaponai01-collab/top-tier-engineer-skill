@@ -1,0 +1,19 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  3/4 found
+  MISSED  pricing-hotspot
+  found   import-cycle — "**Circular import:** `store` and `models` import each other."
+  found   copied-export-block — "`export_csv.rows_for` and `export_json.records_for` repeat the same field formatting line for line."
+  found   in-places — "The code is small (about 210 lines), so it isn't a mess. But the discount logic is tangled in the specific way that make"
+  held    all-spaghetti
+
+Phrase grader (grade.py), for comparison:
+FAIL  structure-gate-general  [structure-gate]  3/4 found, score 0.75 (needs 1.00)
+  found   pricing-hotspot: pricing.py:compute_price is the tangle: one 64-line function with about 31 branch points nested six deep, where every discount rule lives; a new discount type goes into it
+  found   import-cycle: models.py and store.py import each other (store.get falls back to models.blank_order), so neither can be understood or loaded alone
+  found   copied-export-block: export_csv.rows_for and export_json.records_for repeat the same six-line normalisation of an invoice; a change to one drifts from the other
+  MISSED  in-places: the honest overall answer is 'in places': the tangle is concentrated in compute_price (plus the cycle and the copy); the other modules are small and readable
+            named it, but never said what was wrong with it
+  held    all-spaghetti: calling the whole codebase a mess when the tangle is one function
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

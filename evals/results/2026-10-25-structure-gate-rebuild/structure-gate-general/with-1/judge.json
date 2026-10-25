@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "pricing-hotspot",
+      "what": "pricing.py:compute_price is the tangle: one 64-line function with about 31 branch points nested six deep, where every discount rule lives; a new discount type goes into it",
+      "found": true,
+      "quote": "`invoicing/pricing.py:4` `compute_price` | 64 lines, complexity 32, nesting 6",
+      "quote_checked": true
+    },
+    {
+      "id": "import-cycle",
+      "what": "models.py and store.py import each other (store.get falls back to models.blank_order), so neither can be understood or loaded alone",
+      "found": true,
+      "quote": "Import cycle: `models` \u2194 `store`",
+      "quote_checked": true
+    },
+    {
+      "id": "copied-export-block",
+      "what": "export_csv.rows_for and export_json.records_for repeat the same six-line normalisation of an invoice; a change to one drifts from the other",
+      "found": true,
+      "quote": "The 5 field calculations are copied line for line.",
+      "quote_checked": true
+    },
+    {
+      "id": "in-places",
+      "what": "the honest overall answer is 'in places': the tangle is concentrated in compute_price (plus the cycle and the copy); the other modules are small and readable",
+      "found": true,
+      "quote": "**It's tangled in places, and the worst spot is exactly where your new discount will go.**",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "all-spaghetti",
+      "what": "calling the whole codebase a mess when the tangle is one function",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.025727100000000003,
+  "model": "claude-sonnet-5-5"
+}

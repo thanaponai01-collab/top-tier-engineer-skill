@@ -112,6 +112,18 @@ Plain Opus reads every file in one call, fixes every break from that reading, th
 CLI in a scratch copy; on the whole-system case it never runs anything. The one plain failure
 offered deleting the receipt path if nobody wants receipts, after naming the bug.
 
+### structure-gate cases
+
+| case | planted | trap |
+|---|---|---|
+| `structure-gate-opaque-not-clean` | `dashboard.py` holds 230 lines of JavaScript in a string literal next to three one-line functions: 5% of the code is parsed, and the answer says so before any finding | calling it clean (or "a couple of small functions") on the strength of the 5% |
+| `structure-gate-general` | an ordinary invoicing app: `compute_price` is 64 lines with about 31 branches nested 6 deep, `models` and `store` import each other, the two exporters repeat one block; the rest is small, so the answer is "in places" | calling the whole codebase spaghetti |
+
+Plain Opus lists the files and reads every one in a single call (on the app it also runs the tests
+and probes the code). It finds the 25 pasted blocks in the string and every tangle in the app. It never
+says how much of the code a tool or test can reach, so it fails the opaque case every time (0/3, $0.09);
+with the skill 3/3 at $0.17. General: 3/3 with the skill vs 2/3 plain ($0.21 vs $0.17).
+
 ### debug-protocol cases
 
 | case | planted | trap |

@@ -1,0 +1,71 @@
+{
+  "case": "structure-gate-opaque-not-clean",
+  "skill": "structure-gate",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   opaque-region-named \u2014 \"The other 230 lines are JavaScript inside the `DASHBOARD_JS` string in `fixture/dashboard.py`.\"\n  found   how-much-was-measured \u2014 \"**How much was measured: 5%.**\"\n  found   unknown-not-clean \u2014 \"The tool can't analyse code that sits inside a string, so it reports those lines as UNKNOWN, not clean.\"\n  held    small-functions-read-as-clean",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-quw66jd8\\verify-loop\\skills\\structure-gate\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 2407,
+      "cacheReadInputTokens": 110796,
+      "cacheCreationInputTokens": 15207,
+      "webSearchRequests": 0,
+      "costUSD": 0.1919952,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 325,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1919952,
+  "turns": 6,
+  "api_seconds": 35.076,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 38.6,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-quw66jd8\\verify-loop"
+}

@@ -174,6 +174,15 @@
     message): distant-cause 3/3 vs plain 0/3 ($0.13 vs $0.07), regression-proof 3/3 both ($0.18 vs $0.14).
   - Not covered: a hang, a flaky failure, a cause outside one file's lines (data, environment, timing).
 
+- structure-gate as three stages (1.32.0) | proven (mechanics) / helps on code no tool can reach, ties on an ordinary app (eval)
+  - `scripts/structure.py --gate`: measure (share a parser entered), account (a counted reading or
+    UNKNOWN per unentered region, a cost per finding, in `.structure/notes.md`), answer (verdict the
+    measurement allows). `tests/test_structure.py` 21 tests; 23 disabled guards each caught.
+  - Baseline `evals/results/2026-10-25-structure-gate-baseline`: plain 0/3 opaque, 3/3 general; copied skill 3/3 opaque.
+  - Rebuild `evals/results/2026-10-25-structure-gate-rebuild`: opaque 3/3 vs 0/3 ($0.17 vs $0.09),
+    general 3/3 vs 2/3 ($0.21 vs $0.17). Plain Opus finds every tangle by reading; what it lacks is the denominator.
+  - Not covered: a repo too big to read, non-Python depth (JS gets length and copies only), the baseline ratchet in CI.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   opaque-region-named — "`dashboard.py` hides a 230-line JavaScript function inside a string"
+  found   how-much-was-measured — "the tool could only look inside **5%** of the code (12 of 242 lines)"
+  found   unknown-not-clean — "No parser, linter or test reaches it, so the tool's automatic scores say nothing about it. That isn't the same as clean."
+  held    small-functions-read-as-clean
+
+Phrase grader (grade.py), for comparison:
+FAIL  structure-gate-opaque-not-clean  [structure-gate]  2/3 found, score 0.67 (needs 1.00)
+  found   opaque-region-named: dashboard.py holds 230 lines of JavaScript inside a string literal that no parser, linter or test can enter
+  found   how-much-was-measured: the fraction actually measured is reported before any finding — about 5% of the code lines
+  MISSED  unknown-not-clean: the unmeasured part is reported as unknown, not folded into a clean verdict
+            named it, but never said what was wrong with it
+  held    small-functions-read-as-clean: the entered 5% is genuinely simple; calling the codebase clean on that basis is the wrong answer
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

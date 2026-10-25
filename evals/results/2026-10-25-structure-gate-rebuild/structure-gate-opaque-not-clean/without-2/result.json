@@ -1,0 +1,72 @@
+{
+  "case": "structure-gate-opaque-not-clean",
+  "skill": "structure-gate",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  1/3 found\n  found   opaque-region-named \u2014 \"That constant is a roughly 230-line JavaScript string with one function, `renderDashboard(state)`, made of 25 copy-paste\"\n  MISSED  how-much-was-measured\n  MISSED  unknown-not-clean\n  held    small-functions-read-as-clean",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 1011,
+      "cacheReadInputTokens": 54985,
+      "cacheCreationInputTokens": 8125,
+      "webSearchRequests": 0,
+      "costUSD": 0.09624100000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 159,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 3,
+  "missed": [
+    "the fraction actually measured is reported before any finding \u2014 about 5% of the code lines",
+    "the unmeasured part is reported as unknown, not folded into a clean verdict"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.09624100000000001,
+  "turns": 3,
+  "api_seconds": 15.502,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 17.9,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,79 @@
+{
+  "case": "structure-gate-opaque-not-clean",
+  "skill": "structure-gate",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   opaque-region-named \u2014 \"The other 230 lines are JavaScript inside a Python string starting at `fixture/dashboard.py:4`.\"\n  found   how-much-was-measured \u2014 \"242 lines of code, but a parser only read 5% of them (12 lines).\"\n  found   unknown-not-clean \u2014 \"I read that part by hand, so what I say about it is my reading, not a measurement.\"\n  held    small-functions-read-as-clean",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "structure-gate"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "structure-gate",
+      "path": "<tmp>\\tte-plugin-d66w3qgq\\verify-loop\\skills\\structure-gate\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-d66w3qgq\\verify-loop\\skills\\structure-gate\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 1825,
+      "cacheReadInputTokens": 131633,
+      "cacheCreationInputTokens": 12770,
+      "webSearchRequests": 0,
+      "costUSD": 0.1650346,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 217,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1650346,
+  "turns": 6,
+  "api_seconds": 21.369,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 24.6,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-d66w3qgq\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

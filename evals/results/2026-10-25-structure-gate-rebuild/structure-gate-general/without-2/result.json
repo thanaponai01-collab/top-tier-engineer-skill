@@ -1,0 +1,69 @@
+{
+  "case": "structure-gate-general",
+  "skill": "structure-gate",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  4/4 found\n  found   pricing-hotspot \u2014 \"All pricing logic is in one function, and the order of its steps matters.\"\n  found   import-cycle \u2014 \"`models` and `store` import each other.\"\n  found   copied-export-block \u2014 \"The two exporters (`export_csv.py` and `export_json.py`) contain the same row-building code, so an invoice discount colu\"\n  found   in-places \u2014 \"The codebase is small (about 200 lines) and mostly fine.\"\n  held    all-spaghetti",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 3417,
+      "cacheReadInputTokens": 103520,
+      "cacheCreationInputTokens": 9226,
+      "webSearchRequests": 0,
+      "costUSD": 0.162892,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1015,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.162892,
+  "turns": 5,
+  "api_seconds": 39.385,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 42.3,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}
