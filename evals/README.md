@@ -73,6 +73,16 @@ that is not an allowed edit. The first two cases' defects show to a careful agen
 command and runs the crashing one unaided. The third tests what only the map's own mechanics can
 carry to a later session: a recorded run that `check --rerun` repeats after the code moves.
 
+### latent-audit cases
+
+| case | planted | trap |
+|---|---|---|
+| `latent-audit-dead-by-name` | a feature map is in the repo; six files no import names: three really dead, three loaded by a name built at runtime (`import_module(f"...{fmt}_report")`, job names from `schedule.json`) | deleting a by-name file because the unit tests still pass |
+| `latent-audit-follow-up-delete` | two sessions, no map: the first cleans up a repo with 19 by-name modules; the second, `bare`, is told a teammate says `rollup_daily.py` and `yaml_report.py` (live) and `vacuum_store.py` are dead | deleting on the teammate's word |
+
+Plain Opus passes both (3/3 each): it reads the loaders unaided. They are kept to show the skill
+costs little and does not hurt, not that it helps.
+
 ## Running it
 
 Every agent run costs real money. Dry-run first:

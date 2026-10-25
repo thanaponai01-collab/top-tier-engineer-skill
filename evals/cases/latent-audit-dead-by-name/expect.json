@@ -1,0 +1,125 @@
+{
+  "case": "latent-audit-dead-by-name",
+  "skill": "latent-audit",
+  "question": "a cleanup with a feature map in the repo: six files no import names, three really dead and three loaded by a name built at runtime; the unit tests pass either way. Does the agent delete only the dead three?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "xml-exporter-loaded-by-name",
+      "what": "app/exporters/xml_report.py is reached by `import_module(f\"{__name__}.{fmt}_report\")` for `inv.py export xml`; it must be kept, and the report must say why",
+      "must_name": [
+        "xml"
+      ],
+      "must_say_any": [
+        "import_module",
+        "by name",
+        "dynamic",
+        "f-string",
+        "{fmt}",
+        "export xml",
+        "_report",
+        "format"
+      ]
+    },
+    {
+      "id": "jobs-loaded-from-schedule",
+      "what": "app/jobs/rollup_daily.py and prune_old.py are loaded by name from schedule.json by run_all (`name.replace('-', '_')`); they must be kept",
+      "must_name": [
+        "schedule.json"
+      ],
+      "must_say_any": [
+        "rollup",
+        "prune",
+        "by name",
+        "dynamic",
+        "import_module",
+        "run_all",
+        "run-jobs"
+      ]
+    },
+    {
+      "id": "really-dead-removed",
+      "what": "app/legacy_sync.py, app/jobs/reindex.py (not in schedule.json) and app/util/old_format.py (only reindex used it) are dead and were deleted",
+      "must_name": [
+        "legacy_sync",
+        "reindex",
+        "old_format"
+      ],
+      "must_say_any": [
+        "nothing imports",
+        "not imported",
+        "no importer",
+        "only reindex",
+        "only used by",
+        "was the only",
+        "not in schedule",
+        "isn't in schedule",
+        "not listed",
+        "isn't listed",
+        "never runs",
+        "never ran",
+        "never loaded",
+        "unused",
+        "unreferenced",
+        "nothing references",
+        "nothing uses",
+        "no caller"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-tests-as-proof",
+      "what": "the unit tests cover only store and report, so a green suite says nothing about the deleted files; deleting a live exporter or job and calling it safe because tests pass is the wrong answer",
+      "must_not_say_any": [
+        "deleted xml_report",
+        "removed xml_report",
+        "xml_report.py is dead",
+        "xml_report is dead",
+        "deleted rollup_daily",
+        "removed rollup_daily",
+        "rollup_daily is dead",
+        "deleted prune_old",
+        "removed prune_old",
+        "prune_old is dead",
+        "deleted all six"
+      ],
+      "must_say_any": [
+        "import_module",
+        "by name",
+        "dynamic",
+        "schedule.json",
+        "kept",
+        "keep",
+        "not dead"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the three dead files are gone, nothing else in the code changed, and every command still runs",
+    "edits_allowed": [
+      "app/legacy_sync.py",
+      "app/jobs/reindex.py",
+      "app/util/old_format.py",
+      "*.md",
+      ".features/*",
+      "tmp/*"
+    ],
+    "replays": [
+      {
+        "id": "dead-gone-live-kept",
+        "kind": "outcome",
+        "what": "every inv.py command exits 0 and the three dead files are deleted",
+        "replace": {
+          "_check_live.py": "reference/check_live.py"
+        },
+        "command": [
+          "python",
+          "_check_live.py"
+        ],
+        "expect": "pass",
+        "timeout": 120
+      }
+    ]
+  }
+}

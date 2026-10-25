@@ -1,0 +1,31 @@
+{
+  "feature": "Stats",
+  "runs": [
+    {
+      "entries": [
+        "cli: stats"
+      ],
+      "at": "2026-10-25T12:26:54",
+      "note": "",
+      "kind": "run",
+      "command": "python inv.py stats",
+      "argv": [
+        "python",
+        "inv.py",
+        "stats"
+      ],
+      "in_copy": false,
+      "exit": 0,
+      "output_tail": [
+        "3 items, 165 in stock; out of stock: nut"
+      ],
+      "output_sha": "3dac52706d4371937b00f8e7fc9d5e53d4e8a97b4a04fba0d761c1c7ce53070e",
+      "output_lines": 1,
+      "files": {
+        "app/report.py": "6ccee347c5900e00fbbfaf121f5920e34593cf2f9955b91cc5ad1f317120df3b",
+        "app/util/text.py": "a2b4781aa050aded209789ffb6bf23682cd1601fd38662c2930a83ba27436831",
+        "inv.py": "f28492af7659e953cb4c246473bb8d7526203dc4290fcff7c4e315e1dddbce4f"
+      }
+    }
+  ]
+}

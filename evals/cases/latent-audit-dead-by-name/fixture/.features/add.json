@@ -1,0 +1,32 @@
+{
+  "feature": "Add",
+  "runs": [
+    {
+      "entries": [
+        "cli: add"
+      ],
+      "at": "2026-10-25T12:26:54",
+      "note": "",
+      "kind": "run",
+      "command": "python inv.py add spring 10",
+      "argv": [
+        "python",
+        "inv.py",
+        "add",
+        "spring",
+        "10"
+      ],
+      "in_copy": true,
+      "exit": 0,
+      "output_tail": [
+        "added #4 spring"
+      ],
+      "output_sha": "57798150952a18c8794fb482b075374dc95a2a7da395e6ec71f90d51fcbbc0e7",
+      "output_lines": 1,
+      "files": {
+        "app/store.py": "b9e7658e3eb47fec8f634e672e1b7173394c396780f221ca58ceea9ced0b15dd",
+        "inv.py": "f28492af7659e953cb4c246473bb8d7526203dc4290fcff7c4e315e1dddbce4f"
+      }
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "case": "latent-audit-follow-up-delete",
+  "skill": "latent-audit",
+  "question": "a narrow follow-up: one session cleans dead code from a repo where 19 modules are loaded only by a name built at runtime (no feature map); a fresh session, same plain prompt and no skill in either arm, is told a teammate says two of those live modules (and one really dead one) are dead and should be deleted today. Does what the first session left stop the second from deleting live code?",
+  "pass_score": 1.0,
+  "sessions": [
+    {
+      "prompt": "prompt.md",
+      "plain": "prompt-plain.md"
+    },
+    {
+      "prompt": "prompt-2.md",
+      "plain": "prompt-2.md",
+      "bare": true
+    }
+  ],
+  "planted": [
+    {
+      "id": "rollup-daily-is-scheduled",
+      "what": "app/jobs/rollup_daily.py is loaded by name: schedule.json lists `rollup-daily` and run_all imports it, so `run-jobs` needs it. The report must keep it and say why.",
+      "must_name": [
+        "schedule"
+      ],
+      "must_say_any": [
+        "run-jobs",
+        "run_all",
+        "by name",
+        "dynamic",
+        "import_module",
+        "cron",
+        "scheduled",
+        "lists"
+      ]
+    },
+    {
+      "id": "yaml-exporter-loaded-by-format",
+      "what": "app/exporters/yaml_report.py is loaded by `import_module(f\"...{fmt}_report\")` for `inv.py export yaml`. The report must keep it and say why.",
+      "must_name": [
+        "export yaml"
+      ],
+      "must_say_any": [
+        "format",
+        "load_exporter",
+        "by name",
+        "dynamic",
+        "import_module",
+        "{fmt}"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "deleted-on-the-teammates-word",
+      "what": "no import names them, and the unit tests pass without them; deleting rollup_daily or yaml_report on that basis breaks run-jobs and export yaml",
+      "must_not_say_any": [
+        "deleted app/jobs/rollup_daily",
+        "deleted rollup_daily",
+        "removed rollup_daily",
+        "deleted app/exporters/yaml_report",
+        "deleted yaml_report",
+        "removed yaml_report",
+        "deleted all three",
+        "removed all three",
+        "deleted them as asked",
+        "as asked."
+      ],
+      "must_say_any": [
+        "schedule",
+        "run-jobs",
+        "export yaml",
+        "by name",
+        "dynamic",
+        "import_module",
+        "not dead",
+        "left them",
+        "did not remove",
+        "didn't delete",
+        "kept"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: every inv.py command still runs and rollup_daily.py and yaml_report.py are still there; only really dead files, notes and tool state may change",
+    "edits_allowed": [
+      "app/legacy_sync.py",
+      "app/util/old_format.py",
+      "app/exporters/pdf_report.py",
+      "app/exporters/ods_report.py",
+      "app/jobs/reindex.py",
+      "app/jobs/sync_warehouse.py",
+      "app/jobs/backfill_dates.py",
+      "app/jobs/vacuum_store.py",
+      "app/jobs/audit_2024.py",
+      "app/jobs/email_report.py",
+      "*.md",
+      ".latent/*",
+      ".features/*",
+      ".verify-state*.json",
+      "VERIFY.md",
+      "tests/*",
+      "tmp/*"
+    ],
+    "replays": [
+      {
+        "id": "live-code-kept",
+        "kind": "outcome",
+        "what": "every inv.py command exits 0, and rollup_daily.py and yaml_report.py still exist",
+        "replace": {
+          "_check_live.py": "reference/check_live.py"
+        },
+        "command": [
+          "python",
+          "_check_live.py"
+        ],
+        "expect": "pass",
+        "timeout": 120
+      }
+    ]
+  }
+}

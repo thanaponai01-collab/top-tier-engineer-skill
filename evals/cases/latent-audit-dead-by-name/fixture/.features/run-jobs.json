@@ -1,0 +1,32 @@
+{
+  "feature": "Run Jobs",
+  "runs": [
+    {
+      "entries": [
+        "cli: run-jobs"
+      ],
+      "at": "2026-10-25T12:26:55",
+      "note": "",
+      "kind": "run",
+      "command": "python inv.py run-jobs",
+      "argv": [
+        "python",
+        "inv.py",
+        "run-jobs"
+      ],
+      "in_copy": false,
+      "exit": 0,
+      "output_tail": [
+        "rollup-daily: 165 units across 3 lines",
+        "prune-old: would prune 1: nut"
+      ],
+      "output_sha": "3b9d94854dc7399587e6dc8d46d82f4a64f231199abffa53a3fee0442bd06586",
+      "output_lines": 2,
+      "files": {
+        "app/jobs/__init__.py": "6a0307393774f1e058a9d548cd37bad2783a0784d6213c4dcac2bf1d823b5eb4",
+        "app/jobs/prune_old.py": "b1a6975db4ff4d42d984b4c465587eec11aff98e371e8147543044aad2056192",
+        "inv.py": "f28492af7659e953cb4c246473bb8d7526203dc4290fcff7c4e315e1dddbce4f"
+      }
+    }
+  ]
+}

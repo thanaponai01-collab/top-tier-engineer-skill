@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.27.0 - 2026-10-25 - latent-audit ships as a checkpoint, using feature-map and verify-loop
+
+- New manual-only skill `plugin/skills/latent-audit/` (`/verify-loop:latent-audit`), from
+  top-tier-engineer main, rewritten as a checkpoint: the agent finds what could reach each suspect
+  (loaders, schedules, configs); the helper proves a deletion before it happens.
+- `graph-audit.py --try-delete FILE ... [--run CMD ...]` deletes the files in a throwaway copy and
+  runs, before and after: the map's recorded runs (`.features/features.py check --rerun`),
+  VERIFY.md's checks (`verify.py run`), the unit tests, and each `--run` command. Verdicts:
+  `breaks(...)` (live; with several files, each is retried alone and named LIVE or ok),
+  `nothing-breaks(...)`, `weak(tests only)` (unit tests notice only what they call) and
+  `unchecked(...)`. An already-red check still counts when the deletion adds a new failure line.
+- Files the repo's `FEATURES.md` names are `MAPPED` and never dead candidates; mapped files no
+  import names are flagged "kept, though it looks dead". The old script listed a job loaded by name
+  from `schedule.json` as dead.
+- Eval (`latent-audit-dead-by-name`, `latent-audit-follow-up-delete`): plain Opus already passes
+  both (6/6, $0.15 and $0.27 a try). With the skill: 3/3 and 3/3, every run through `--try-delete`
+  once, at $0.20 and $0.34 a try. It is a checkpoint you call on purpose, not a measured gain. The
+  first with-skill batch failed one try: SKILL.md's closing test asked for "a command that would
+  have loaded it", which really dead code never has, so the agent parked it; reworded.
+
 ## 1.26.0 - 2026-10-25 - feature-map proves what it maps, and tells the next agent
 
 - **Receipts behind `proven`.** `features.py prove --feature X -- <command>` runs an entry point and

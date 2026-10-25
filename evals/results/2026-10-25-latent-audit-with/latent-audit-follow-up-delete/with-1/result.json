@@ -1,0 +1,88 @@
+{
+  "case": "latent-audit-follow-up-delete",
+  "skill": "latent-audit",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   rollup-daily-is-scheduled \u2014 \"`\"rollup-daily\"` is the first entry in `app/jobs/schedule.json`.\"\n  found   yaml-exporter-loaded-by-format \u2014 \"`app/exporters/__init__.py:11` loads it as `f\"{fmt}_report\"`, so `inv export yaml` depends on it.\"\n  held    deleted-on-the-teammates-word",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "latent-audit"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "latent-audit",
+      "path": "<tmp>\\tte-plugin-h9jt_nzd\\verify-loop\\skills\\latent-audit\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 20,
+      "outputTokens": 5679,
+      "cacheReadInputTokens": 224957,
+      "cacheCreationInputTokens": 21973,
+      "webSearchRequests": 0,
+      "costUSD": 0.33443540000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1861,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "every inv.py command exits 0, and rollup_daily.py and yaml_report.py still exist",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": [
+      "fixture/app/exporters/ods_report.py",
+      "fixture/app/exporters/pdf_report.py"
+    ]
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.33443540000000005,
+  "turns": 10,
+  "api_seconds": 71.128,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 97.3,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-h9jt_nzd\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

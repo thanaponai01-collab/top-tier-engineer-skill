@@ -1,0 +1,35 @@
+{
+  "feature": "Export",
+  "runs": [
+    {
+      "entries": [
+        "cli: export"
+      ],
+      "at": "2026-10-25T12:26:54",
+      "note": "",
+      "kind": "run",
+      "command": "python inv.py export csv",
+      "argv": [
+        "python",
+        "inv.py",
+        "export",
+        "csv"
+      ],
+      "in_copy": false,
+      "exit": 0,
+      "output_tail": [
+        "id,name,qty,added",
+        "1,bolt,120,2026-01-04",
+        "2,nut,0,2025-03-10",
+        "3,washer,45,2026-09-30"
+      ],
+      "output_sha": "2a30f3f1834401574f0f448d4b50afcdeb6471eb2054d7507afd35434ed110d8",
+      "output_lines": 4,
+      "files": {
+        "app/exporters/__init__.py": "e4b642311950334fc869c9c4231cebc376303844ff3f270d1dedd33f6da85cf5",
+        "app/exporters/xml_report.py": "83d583ba1838ce5b432b2b2a973707fce48bcc0241f93d216af1fae84841da81",
+        "inv.py": "f28492af7659e953cb4c246473bb8d7526203dc4290fcff7c4e315e1dddbce4f"
+      }
+    }
+  ]
+}

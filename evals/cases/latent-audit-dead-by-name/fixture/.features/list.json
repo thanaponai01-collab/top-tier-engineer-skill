@@ -1,0 +1,32 @@
+{
+  "feature": "List",
+  "runs": [
+    {
+      "entries": [
+        "cli: list"
+      ],
+      "at": "2026-10-25T12:26:54",
+      "note": "",
+      "kind": "run",
+      "command": "python inv.py list",
+      "argv": [
+        "python",
+        "inv.py",
+        "list"
+      ],
+      "in_copy": false,
+      "exit": 0,
+      "output_tail": [
+        "#1 bolt x120",
+        "#2 nut x0",
+        "#3 washer x45"
+      ],
+      "output_sha": "b399db10b07572233ee77da68cc71c49a59548a3423fe0220a0e9d59f5689a5d",
+      "output_lines": 3,
+      "files": {
+        "app/store.py": "b9e7658e3eb47fec8f634e672e1b7173394c396780f221ca58ceea9ced0b15dd",
+        "inv.py": "f28492af7659e953cb4c246473bb8d7526203dc4290fcff7c4e315e1dddbce4f"
+      }
+    }
+  ]
+}

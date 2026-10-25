@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 3,
+  "score": 0.667,
+  "planted": [
+    {
+      "id": "xml-exporter-loaded-by-name",
+      "what": "app/exporters/xml_report.py is reached by `import_module(f\"{__name__}.{fmt}_report\")` for `inv.py export xml`; it must be kept, and the report must say why",
+      "found": true,
+      "quote": "`xml_report` is loaded by name (`import_module(f\"...{fmt}_report\")`) when you run `export xml`.",
+      "quote_checked": true
+    },
+    {
+      "id": "jobs-loaded-from-schedule",
+      "what": "app/jobs/rollup_daily.py and prune_old.py are loaded by name from schedule.json by run_all (`name.replace('-', '_')`); they must be kept",
+      "found": true,
+      "quote": "`schedule.json` lists it as `rollup-daily` and `run_all` turns that into `rollup_daily`.",
+      "quote_checked": true
+    },
+    {
+      "id": "really-dead-removed",
+      "what": "app/legacy_sync.py, app/jobs/reindex.py (not in schedule.json) and app/util/old_format.py (only reindex used it) are dead and were deleted",
+      "found": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "traps": [
+    {
+      "id": "green-tests-as-proof",
+      "what": "the unit tests cover only store and report, so a green suite says nothing about the deleted files; deleting a live exporter or job and calling it safe because tests pass is the wrong answer",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.0248331,
+  "model": "claude-sonnet-5-5"
+}

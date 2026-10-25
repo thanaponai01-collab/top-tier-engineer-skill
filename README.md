@@ -5,7 +5,9 @@ A Claude Code plugin cut from
 is `verify-loop`: write a check that can fail, then loop until it passes, with retained proof. It
 also ships `feature-map` (manual-only, `/verify-loop:feature-map`): a `FEATURES.md` of every
 feature, its entry points and call traces, checked against the code by `features.py check` and
-linked to VERIFY.md sections.
+linked to VERIFY.md sections. And `latent-audit` (manual-only, `/verify-loop:latent-audit`): dead code
+and layer breaches, where a file is deleted only after `graph-audit.py --try-delete` deletes it in a
+throwaway copy and the map's recorded runs, VERIFY.md's checks and the commands you name still pass.
 
 ## Install (Claude Code)
 
@@ -51,6 +53,8 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
 - `plugin/skills/verify-loop/SKILL.md` — the skill; `references/` holds its modes (change, challenge,
   CI, project recipe, create, maintain, compliance, answer, triage).
 - `plugin/skills/verify-loop/scripts/` — stdlib-only Python helpers (`verify.py` is the entry point).
+- `plugin/skills/latent-audit/` — the latent-audit skill; `scripts/graph-audit.py` (import graph,
+  `--layers`, `--try-delete ... --run CMD`).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

@@ -1,0 +1,86 @@
+{
+  "case": "latent-audit-dead-by-name",
+  "skill": "latent-audit",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   xml-exporter-loaded-by-name \u2014 \"`load_exporter` imports `<fmt>_report` for any format other than csv and json, so `inv.py export xml` uses this file.\"\n  found   jobs-loaded-from-schedule \u2014 \"`run_all` loads these from the names in `schedule.json` (`rollup-daily` \u2192 `rollup_daily`).\"\n  found   really-dead-removed \u2014 \"I deleted three dead files.\"\n  held    green-tests-as-proof",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 1409,
+      "cacheReadInputTokens": 130316,
+      "cacheCreationInputTokens": 12226,
+      "webSearchRequests": 0,
+      "costUSD": 0.1520992,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 193,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "every inv.py command exits 0 and the three dead files are deleted",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/.features/add.json",
+      "fixture/.features/export.json",
+      "fixture/.features/list.json",
+      "fixture/.features/run-jobs.json",
+      "fixture/.features/stats.json"
+    ],
+    "added": [],
+    "deleted": [
+      "fixture/app/jobs/reindex.py",
+      "fixture/app/legacy_sync.py",
+      "fixture/app/util/old_format.py"
+    ]
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1520992,
+  "turns": 6,
+  "api_seconds": 19.218,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 25.5,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

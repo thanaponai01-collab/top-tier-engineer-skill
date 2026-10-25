@@ -1,0 +1,18 @@
+{
+  "jobs": [
+    "rollup-daily",
+    "prune-old",
+    "low-stock",
+    "out-of-stock",
+    "top-items",
+    "count-lines",
+    "total-units",
+    "newest",
+    "oldest",
+    "name-check",
+    "dup-names",
+    "id-gaps",
+    "zero-age",
+    "weekly-digest"
+  ]
+}

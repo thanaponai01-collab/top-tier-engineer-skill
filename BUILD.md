@@ -136,6 +136,12 @@
     rename raised 8 of 9 unmentioned runtime breaks with the map's `check --rerun`, plain Opus 0 of
     9 (2/3 vs 0/3 pass), at about 2.3x the cost. Results in `evals/results/2026-10-25-feature-map-alarm`.
 
+- latent-audit as a checkpoint (1.27.0) | proven (mechanics) / no gain over plain Opus (eval)
+  - `tests/test_graph_audit.py`: the 6 tests from main plus 10 for `--try-delete` verdicts and map
+    roots (a by-name job is LIVE; tests-only is `weak`; the map's recorded runs catch a live deletion).
+  - Evals in `evals/results/2026-10-25-latent-*`: without 3/3 + 3/3; with 3/3 + 3/3 after the
+    SKILL.md wording fix (`-with-3` and `-with`), about 1.3x the cost.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before
