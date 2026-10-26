@@ -1,0 +1,28 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  2/5 found
+  MISSED  criteria-first
+  MISSED  structurally-distinct-options
+  MISSED  simplest-viable-option
+  found   selection-tied-to-criteria — "20 refunds a day with no response-time target doesn't need background processing."
+  found   one-way-contract — "These affect data recovery and are expensive to change once rows exist."
+  held    claims-unavailable-diversity
+  held    unbounded-arena
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-competing-candidates  [arch-design]  2/5 found, score 0.40 (needs 1.00)
+  MISSED  criteria-first: sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost
+            named it, but never said what was wrong with it
+  found   structurally-distinct-options: shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape
+  MISSED  simplest-viable-option: includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative
+            named it, but never said what was wrong with it
+  MISSED  selection-tied-to-criteria: recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste
+            named it, but never said what was wrong with it
+  found   one-way-contract: flags stored idempotency or external refund status/response semantics as costly to change
+  TRIPPED claims-unavailable-diversity: claims independent model review despite a single-model host with no dispatch capability
+            never marked it uncertain either
+  TRIPPED unbounded-arena: launches an open-ended candidate contest or adds unnecessary systems without a bound
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

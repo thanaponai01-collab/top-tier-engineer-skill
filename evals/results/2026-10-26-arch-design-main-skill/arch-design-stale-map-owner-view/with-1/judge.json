@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "map-is-stale",
+      "what": "docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date",
+      "found": true,
+      "quote": "`docs/architecture.md` (lines 14\u201315) says the receipt email is handed to a background helper, so \"the customer never waits for email.\" The code doesn't do that.",
+      "quote_checked": true
+    },
+    {
+      "id": "charge-then-email-chain",
+      "what": "checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain",
+      "found": true,
+      "quote": "Checkout waits for the email server after the card has already been charged.",
+      "quote_checked": true
+    },
+    {
+      "id": "reuse-existing-queue",
+      "what": "the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure",
+      "found": true,
+      "quote": "The shop already has this to-do list, and refunds already use it, so nothing new is needed.",
+      "quote_checked": true
+    },
+    {
+      "id": "before-after-picture",
+      "what": "the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose",
+      "found": true,
+      "quote": "I opened a page with pictures of all this:",
+      "quote_checked": true
+    },
+    {
+      "id": "owner-decides-next",
+      "what": "the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done",
+      "found": true,
+      "quote": "And which fix would you like to explore first?",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "queue-is-not-dead",
+      "what": "the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0288891,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,85 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"Order status asks tracking for an arrival time (`orders/status.py:9`), tracking sends the email (`shipping/tracking.py:1\"\n  found   pricing-does-network-io \u2014 \"That calls `_fetch_margin` at `pricing/quote.py:19`, which makes a network call with a 2 s timeout (`pricing/quote.py:12\"\n  found   pass-through-order-service \u2014 \"`services/order_service.py:4-5` only forwards to `orders/place.py:9`, so a new order option means editing 3 files where \"\n  found   move-has-a-proof-line \u2014 \"The signatures that change are at `orders/lines.py:6`, `orders/place.py:9`, `services/order_service.py:4` and `api/route\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-xyuh7tpb\\verify-loop\\skills\\arch-design\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 30,
+      "outputTokens": 19483,
+      "cacheReadInputTokens": 532587,
+      "cacheCreationInputTokens": 39068,
+      "webSearchRequests": 0,
+      "costUSD": 0.8088413999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3740,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "did not read or grep helper scripts",
+      "ok": false,
+      "detail": "inspected scripts: shell(grep -n '' <tmp>/tte-plugin-xyuh7tpb/verify-loop/ski)"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.8088413999999999,
+  "turns": 16,
+  "api_seconds": 185.379,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [
+    "shell(grep -n '' <tmp>/tte-plugin-xyuh7tpb/verify-loop/ski)"
+  ],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 207.2,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-xyuh7tpb\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

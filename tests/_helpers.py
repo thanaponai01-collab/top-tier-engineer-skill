@@ -21,6 +21,9 @@ SCRIPTS = {
     "structure.py": os.path.join(ROOT, "plugin", "skills", "structure-gate", "scripts"),
     "threat.py": os.path.join(ROOT, "plugin", "skills", "threat-model", "scripts"),
     "evolve.py": os.path.join(ROOT, "plugin", "skills", "evolve-maintain", "scripts"),
+    "dep-map.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
+    "change-map.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
+    "arch-design.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
     "perf.py": os.path.join(ROOT, "plugin", "skills", "perf-optimize", "scripts"),
     "release.py": os.path.join(ROOT, "plugin", "skills", "safe-release", "scripts"),
 }

@@ -1,0 +1,5 @@
+**Smallest step:** In `web/account_form.py`, change the visible label on the `display_name` field from `Name` to `Display name`. Leave the field name, validation, API, persistence and layout as they are. If a test or snapshot checks the label text, update that expected string in the same change. Nothing else should change.
+
+**Open structural design choices:** None. The requirements already settle every structural question: the form has one owner, the label goes on the existing field, and no new component, module, dependency, data or public contract is needed. Adding anything beyond the string change, such as a labels constant, i18n plumbing or a shared label component, would go beyond the approved scope.
+
+**Workspace note:** This workspace only contains `fixture/requirements.md`. `web/account_form.py` isn't here, so I couldn't confirm exactly how the label is written (a literal string, a `label=` argument, or a template). Point me at the real repo and I'll make the one-line edit.

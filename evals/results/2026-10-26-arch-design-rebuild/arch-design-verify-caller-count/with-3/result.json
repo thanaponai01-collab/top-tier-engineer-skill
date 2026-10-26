@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"The only problem is a base class that has just one implementation.\"\n  found   second-caller-hides-behind-an-alias \u2014 \"A search by name would miss part of this, because `jobs/reprice.py` imports the registry function under a different name\"\n  held    undercounts-to-one-caller",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-upn1cj_1\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-upn1cj_1\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 3527,
+      "cacheReadInputTokens": 151874,
+      "cacheCreationInputTokens": 11679,
+      "webSearchRequests": 0,
+      "costUSD": 0.19440280000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 352,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.19440280000000001,
+  "turns": 9,
+  "api_seconds": 37.723,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 46.8,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-upn1cj_1\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

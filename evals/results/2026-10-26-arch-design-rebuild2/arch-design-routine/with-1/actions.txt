@@ -1,0 +1,6 @@
+  1. Read: <tmp>\tte-plugin-f1mwulr5\verify-loop\skills\arch-design\SKILL.md
+  2. Bash: find . -type f | head -100
+  3. Bash: cat fixture/requirements.md; python <tmp>/tte-plugin-f1mwulr5/verify-loop/skills/arch-design/scripts/arch.py fixture
+  4. Bash: cat <tmp>/arch-design/a746052772b4/move.md; ls -R <tmp>/tte-eval-98n_plko/fixture
+  5. Bash: cat > <tmp>/arch-design/a746052772b4/move.md <<'EOF' # ARCH MOVE - verdict: clean - audience: engineer - map: none ## Finding: The …
+  6. Bash: cd <tmp>/arch-design/a746052772b4 && sed -i 's#- where: fixture/requirements.md:3#- where: requirements.md:3#; s#named in fixture/r…

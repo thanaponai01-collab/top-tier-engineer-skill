@@ -1,0 +1,7 @@
+  1. Read: <tmp>\tte-plugin-upn1cj_1\verify-loop\skills\arch-design\SKILL.md
+  2. Bash: find . -type f | head -50
+  3. Bash: cat fixture/requirements.md; python <tmp>/tte-plugin-upn1cj_1/verify-loop/skills/arch-design/scripts/arch.py fixture
+  4. Bash: cat <tmp>/arch-design/37821bf7b007/move.md; ls <tmp>/tte-plugin-upn1cj_1/verify-loop/skills/arch-design…
+  5. Write: <tmp>\arch-design\37821bf7b007\move.md
+  6. Bash: python <tmp>/tte-plugin-upn1cj_1/verify-loop/skills/arch-design/scripts/arch.py fixture --gate
+  7. Bash: cd <tmp>/arch-design/37821bf7b007 && sed -i 's#- where: fixture/requirements.md:3#- where: requirements.md:3#; s#^- changes: web/ac…

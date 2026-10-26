@@ -1,0 +1,78 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"There's an extra layer kept \"in case a second carrier is needed\" that gives no protection and adds a file to read on eve\"\n  found   second-caller-hides-behind-an-alias \u2014 \"`jobs/reprice.py:2,6` imports it under a different name (`get_calculator as pick_calc`) and also looks it up by `\"flat\"`\"\n  held    undercounts-to-one-caller",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 4002,
+      "cacheReadInputTokens": 126574,
+      "cacheCreationInputTokens": 10356,
+      "webSearchRequests": 0,
+      "costUSD": 0.1882508,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 527,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1882508,
+  "turns": 6,
+  "api_seconds": 47.595,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 54.3,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

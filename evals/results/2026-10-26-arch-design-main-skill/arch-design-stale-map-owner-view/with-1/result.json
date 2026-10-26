@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-stale-map-owner-view",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   map-is-stale \u2014 \"`docs/architecture.md` (lines 14\u201315) says the receipt email is handed to a background helper, so \"the customer never wai\"\n  found   charge-then-email-chain \u2014 \"Checkout waits for the email server after the card has already been charged.\"\n  found   reuse-existing-queue \u2014 \"The shop already has this to-do list, and refunds already use it, so nothing new is needed.\"\n  found   before-after-picture \u2014 \"I opened a page with pictures of all this:\"\n  found   owner-decides-next \u2014 \"And which fix would you like to explore first?\"\n  held    queue-is-not-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 13518,
+      "cacheReadInputTokens": 180724,
+      "cacheCreationInputTokens": 23388,
+      "webSearchRequests": 0,
+      "costUSD": 0.4936648,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1314,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4936648,
+  "turns": 9,
+  "api_seconds": 126.814,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 134.1,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,62 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "criteria-first",
+      "what": "sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost",
+      "found": true,
+      "quote": "## Decision criteria (set before the options)",
+      "quote_checked": true
+    },
+    {
+      "id": "structurally-distinct-options",
+      "what": "shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape",
+      "found": true,
+      "quote": "| | **A. Refund record, synchronous (recommended)** | **B. Queue, worker and status endpoint** |",
+      "quote_checked": true
+    },
+    {
+      "id": "simplest-viable-option",
+      "what": "includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative",
+      "found": true,
+      "quote": "At 20 refunds a day with no response-time target, a queue or worker would add parts without making anything cheaper.",
+      "quote_checked": true
+    },
+    {
+      "id": "selection-tied-to-criteria",
+      "what": "recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste",
+      "found": true,
+      "quote": "B satisfies no must-have that A misses. It only helps with a latency or volume need that doesn't exist yet.",
+      "quote_checked": true
+    },
+    {
+      "id": "one-way-contract",
+      "what": "flags stored idempotency or external refund status/response semantics as costly to change",
+      "found": true,
+      "quote": "**One-way:** the refund table's shape and the key rule, because they are stored data and recovery depends on them.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "claims-unavailable-diversity",
+      "what": "claims independent model review despite a single-model host with no dispatch capability",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "unbounded-arena",
+      "what": "launches an open-ended candidate contest or adds unnecessary systems without a bound",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0316631,
+  "model": "claude-sonnet-5-5"
+}

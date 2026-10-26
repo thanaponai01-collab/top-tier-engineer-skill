@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 5,
+  "score": 0.8,
+  "planted": [
+    {
+      "id": "map-is-stale",
+      "what": "docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date",
+      "found": true,
+      "quote": "Your shop's written plan doesn't match what it actually does",
+      "quote_checked": true
+    },
+    {
+      "id": "charge-then-email-chain",
+      "what": "checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain",
+      "found": true,
+      "quote": "**Checkout waits for the email server before it shows the customer the thank-you page.** That's why checkout sometimes takes ages, and why some customers were charged but saw an error page.",
+      "quote_checked": true
+    },
+    {
+      "id": "reuse-existing-queue",
+      "what": "the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure",
+      "found": true,
+      "quote": "This reuses `shop/jobs/queue.py:7`, which refunds already use.",
+      "quote_checked": true
+    },
+    {
+      "id": "before-after-picture",
+      "what": "the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose",
+      "found": false,
+      "quote": "```mermaid",
+      "quote_checked": false
+    },
+    {
+      "id": "owner-decides-next",
+      "what": "the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done",
+      "found": true,
+      "quote": "**Should I go ahead with the background-receipt change?**",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "queue-is-not-dead",
+      "what": "the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": false,
+  "cost_usd": 0.028335100000000002,
+  "model": "claude-sonnet-5-5"
+}

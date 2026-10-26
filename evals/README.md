@@ -195,6 +195,24 @@ copy, compares old and new code there and checks the live file is untouched, the
 Main's skill as copied: 8/9 ($0.38; one leftover file outside the allowed edits). The rebuilt skill:
 9/9 ($0.44), every try ending `RELEASE-GATE: done` (once as a rehearsed `hold`).
 
+### arch-design cases
+
+Main's seven cases, copied as they are. Each grades the report (`actions.read_only` where it applies).
+
+| case | planted | trap |
+|---|---|---|
+| `arch-design-competing-candidates` | design an operator refund: criteria before options, a simplest viable design and a structurally different one, the stored key as a one-way contract | claiming worker or model diversity that did not happen; an unbounded design arena |
+| `arch-design-graph-shape` | a 3-module import cycle, pricing that calls the network per order line, a pass-through order service; the top move with a proof | treating the payment gateway seam or the widely imported `core/util.py` as the problem |
+| `arch-design-no-new-store` | CSV export with history: reuse `app/db.py`, one function not a plugin seam, name what a new datastore would cost | a new datastore for the history |
+| `arch-design-one-owner` | three date formatters for one job, a provider interface with one implementation; the top move with a proof | merging billing's ISO date, which changes for another reason |
+| `arch-design-routine` | a settled label change stays one direct step | design ceremony or a new boundary |
+| `arch-design-stale-map-owner-view` | for an owner who can't read code: a stale map, checkout waits on email after the charge, reuse the queue refunds use, before/after pictures, ask what next | calling the queue dead or adding Celery/Redis |
+| `arch-design-verify-caller-count` | a one-implementation seam whose second caller hides behind `import ... as pick_calc` | counting one caller |
+
+Plain Opus 6/21 ($0.10): it finds the problems but leaves out the move, its proof, the rejected
+option and the closing question. Main's skill 18/21 ($0.27). Gated rebuilds 13-14/21 and main plus a
+gate 12/21 ($0.42), so main's prose ships unchanged.
+
 ## Running it
 
 Every agent run costs real money. Dry-run first:

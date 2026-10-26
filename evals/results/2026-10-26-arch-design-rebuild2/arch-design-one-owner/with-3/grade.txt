@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   three-date-formatters-one-job — "The customer-facing date format (`%d/%m/%Y`) is written out three times:"
+  found   provider-interface-one-implementation — "`providers/base.py` defines `Provider`, `providers/smtp.py` is its only implementation, and `providers/registry.py:6` re"
+  found   move-has-a-proof-line — "**Where it's called:** `api/serializers.py:6`, `jobs/export.py:6`, `web/views.py:6`."
+  held    billing-looks-alike-but-changes-for-another-reason
+
+Phrase grader (grade.py), for comparison:
+PASS  arch-design-one-owner  [arch-design]  3/3 found, score 1.00 (needs 1.00)
+  found   three-date-formatters-one-job: web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format
+  found   provider-interface-one-implementation: providers/base.py is an abstraction with exactly one implementation and no second caller paying for it
+  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not
+  held    billing-looks-alike-but-changes-for-another-reason: billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

@@ -1,0 +1,81 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  4/4 found\n  found   three-module-import-cycle \u2014 \"`orders/status.py:1` imports `shipping.tracking`.\"\n  found   pricing-does-network-io \u2014 \"The price-decision code can't run without the network, so it can't be tested\"\n  found   pass-through-order-service \u2014 \"`services/order_service.py:4-5` only forwards to `place_order` (deletion test: nothing is lost).\"\n  found   move-has-a-proof-line \u2014 \"**Proof:** `python -I /tmp/archprobe/probe.py <fixture>` should report **0\u20131 network calls and ~0 s** with the fixed sou\"\n  held    payment-gateway-is-a-real-seam\n  TRIPPED core-util-is-a-stable-hub-not-the-problem \u2014 \"Any rename in `util` touches all of them. Cleaning this up is cheap.\"",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 5636,
+      "cacheReadInputTokens": 156648,
+      "cacheCreationInputTokens": 18742,
+      "webSearchRequests": 0,
+      "costUSD": 0.2940336,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 937,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [
+    "core/util.py is imported by 16 modules but imports nothing itself: a stable leaf. High fan-in alone is not a defect, and splitting or rewriting it is the wrong first move"
+  ],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2940336,
+  "turns": 7,
+  "api_seconds": 62.761,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 80.1,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

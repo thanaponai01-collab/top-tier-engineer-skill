@@ -1,0 +1,1 @@
+The product owner has already decided the behavior and scope in `fixture/requirements.md`. No code has been written yet. Recommend the smallest implementation step and whether any structural design choice is still open.

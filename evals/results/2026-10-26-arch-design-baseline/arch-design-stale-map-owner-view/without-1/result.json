@@ -1,0 +1,69 @@
+{
+  "case": "arch-design-stale-map-owner-view",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   map-is-stale \u2014 \"**The code doesn't do that.** Checkout sends the receipt email itself, right there in step 4 (`shop/checkout.py:12`).\"\n  found   charge-then-email-chain \u2014 \"it explains both things in your note: checkout being slow, and customers being charged but seeing an error page.\"\n  found   reuse-existing-queue \u2014 \"Send the email the same way refunds already do.\"\n  found   before-after-picture \u2014 \"## How checkout works today\"\n  found   owner-decides-next \u2014 \"I haven't changed anything yet. If you want, I can make these fixes and give you a short summary of what changed that yo\"\n  held    queue-is-not-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 2007,
+      "cacheReadInputTokens": 54685,
+      "cacheCreationInputTokens": 6865,
+      "webSearchRequests": 0,
+      "costUSD": 0.106021,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 392,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.106021,
+  "turns": 3,
+  "api_seconds": 29.328,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 33.1,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

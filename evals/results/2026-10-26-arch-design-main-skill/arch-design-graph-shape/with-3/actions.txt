@@ -1,0 +1,5 @@
+  1. Read: <tmp>\tte-plugin-ieuvi7e6\verify-loop\skills\arch-design\SKILL.md
+  2. Bash: find fixture -type f | head -100 && find fixture -type f | wc -l
+  3. Bash: ls -la . fixture; for f in $(find fixture -type f -name '*.py' | sort); do echo "=== $f"; cat -n "$f"; done
+  4. Bash: mkdir -p /tmp/ad-scratch && cd /tmp/ad-scratch && cat > probe.py <<'EOF' import sys, time, socket, urllib.request sys.path.insert(0, sys.argv[1]) calls = [] re…
+  5. Bash: grep -rnE "subject_for|order_service|customer_service|register\(|mark_delivered|\blabel\(|code\b" --include=*.py . | grep -v "^./pricing/discounts"

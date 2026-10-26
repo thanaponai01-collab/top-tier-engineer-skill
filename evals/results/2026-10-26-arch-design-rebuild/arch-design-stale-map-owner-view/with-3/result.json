@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-stale-map-owner-view",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   map-is-stale \u2014 \"Your design notes don't match the shop\"\n  found   charge-then-email-chain \u2014 \"If all 3 tries fail, the customer gets an error page, but their card has already been charged.\"\n  found   reuse-existing-queue \u2014 \"the background helper already exists because refunds use it.\"\n  found   before-after-picture \u2014 \"I opened a page with pictures in your browser:\"\n  found   owner-decides-next \u2014 \"Should I make the background-receipt change, or look into one of the smaller problems first?\"\n  held    queue-is-not-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-upn1cj_1\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-upn1cj_1\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 22,
+      "outputTokens": 10034,
+      "cacheReadInputTokens": 295953,
+      "cacheCreationInputTokens": 21192,
+      "webSearchRequests": 0,
+      "costUSD": 0.42949460000000006,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1673,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.42949460000000006,
+  "turns": 12,
+  "api_seconds": 93.261,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 110.2,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-upn1cj_1\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

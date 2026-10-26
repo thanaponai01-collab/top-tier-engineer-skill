@@ -1,0 +1,16 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   gonna-need-seam-one-implementation — "The only finding is this one leftover class, kept "in case a second carrier is ever needed" (`base.py:3`)."
+  found   second-caller-hides-behind-an-alias — "`jobs/reprice.py:2,6` imports `get_calculator` under another name (`pick_calc`), then calls `pick_calc("flat")`."
+  held    undercounts-to-one-caller
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-verify-caller-count  [arch-design]  0/2 found, score 0.00 (needs 1.00)
+  MISSED  gonna-need-seam-one-implementation: shipping/base.py is an interface with exactly one implementation, FlatRateCalculator, and no second carrier is asked for by any requirement here
+            named it, but never said what was wrong with it
+  MISSED  second-caller-hides-behind-an-alias: jobs/reprice.py reaches the same seam through `from shipping.registry import get_calculator as pick_calc`, so a plain text search for `get_calculator(` finds checkout/cart.py and misses this one
+            named it, but never said what was wrong with it
+  held    undercounts-to-one-caller: a report that greps only the literal text `get_calculator(` finds checkout/cart.py, calls it the only caller, and clears the seam to inline directly — breaking jobs/reprice.py, which calls the same function under its aliased name
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

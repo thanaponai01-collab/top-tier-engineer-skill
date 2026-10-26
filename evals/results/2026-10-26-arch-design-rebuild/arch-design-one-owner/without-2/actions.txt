@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && find . -type f | head -100 && wc -l $(find . -type f -name "*.*" | head -50)
+  2. Bash: cd fixture && for f in $(find . -type f); do echo "=== $f"; cat -n "$f"; done

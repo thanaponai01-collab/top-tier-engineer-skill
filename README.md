@@ -36,6 +36,10 @@ a proven way back. `release.py` rehearses the change and its way back on copies 
 runs today's code on the migrated data (the deploy window, a code-only revert), compares the data
 after the way back row for row, and accepts a call only with every loss named and the live data
 untouched.
+And `arch-design` (manual-only, `/verify-loop:arch-design`): could the architecture be better? It
+shows where the structure costs you, counted, as before/after pictures with the call chain behind
+each problem, writes the top move out with its steps, proof and door, names the store or seam it is
+not adding, and stops to ask which move to explore. It is main's prose skill, not a gated one.
 
 ## Install (Claude Code)
 
@@ -97,6 +101,9 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
   `--gate --guard CMD`; notes in `.perf/notes.md`).
 - `plugin/skills/safe-release/` — the safe-release skill; `scripts/release.py` (`--rehearse --forward
   CMD --back CMD --probe CMD`, `--gate`; plan in `.release/plan.md`).
+- `plugin/skills/arch-design/` — the arch-design skill; `scripts/dep-map.py` and `scripts/change-map.py`
+  (import graph and change history for repos too big to read), `scripts/arch-design.py check` (the
+  optional `docs/arch-design.md` handoff file).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

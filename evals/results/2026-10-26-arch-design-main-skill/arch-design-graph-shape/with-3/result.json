@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"The chain is `orders/status.py:1,9` \u2192 `shipping/tracking.py:1,10` \u2192 `notifications/email.py:1,15` \u2192 `orders.status.label\"\n  found   pricing-does-network-io \u2014 \"you can't run the order flow on a train.\"\n  found   pass-through-order-service \u2014 \"`services/order_service.py` is 2 lines that pass the call straight through.\"\n  found   move-has-a-proof-line \u2014 \"**Proof:** rerun the probe script against the changed code.\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 7460,
+      "cacheReadInputTokens": 123594,
+      "cacheCreationInputTokens": 20477,
+      "webSearchRequests": 0,
+      "costUSD": 0.33777480000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2251,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.33777480000000004,
+  "turns": 6,
+  "api_seconds": 79.909,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 102.7,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

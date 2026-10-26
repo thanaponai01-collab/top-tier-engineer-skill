@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && find . -type f -not -path '*/node_modules/*' | head -100 && echo && wc -l $(find . -type f -not -path '*/node_modules/*' | head -60)
+  2. Bash: cd fixture && for f in $(find . -type f); do echo "=== $f"; cat -n $f; done

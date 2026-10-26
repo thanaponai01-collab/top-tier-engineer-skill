@@ -1,0 +1,6 @@
+  1. Read: <tmp>\tte-plugin-41y5dh11\verify-loop\skills\arch-design\SKILL.md
+  2. Bash: find fixture -type f | head -100 && wc -l $(find fixture -type f -not -path '*/node_modules/*') | tail -1
+  3. Bash: cd <tmp>/tte-eval-v0xrm6h4/fixture && for f in $(find . -type f); do echo "=== $f"; cat -n $f; done; echo; cat <home>/AppDa…
+  4. Bash: mkdir -p /tmp/archprobe && cd /tmp/archprobe && cat > probe.py <<'EOF' import sys, time, smtplib sys.path.insert(0, sys.argv[1]) from shop import web, inventor…
+  5. Write: <tmp>\architecture-review-20261026.html
+  6. Bash: cd <tmp> && start "" architecture-review-20261026.html; ls <tmp>/tte-eval-v0xrm6h4/fixture

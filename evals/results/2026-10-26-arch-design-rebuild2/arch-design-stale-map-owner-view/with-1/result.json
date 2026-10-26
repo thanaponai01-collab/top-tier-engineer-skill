@@ -1,0 +1,81 @@
+{
+  "case": "arch-design-stale-map-owner-view",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  4/5 found\n  found   map-is-stale \u2014 \"**1. Your shop's description doesn't match what the shop does.**\"\n  found   charge-then-email-chain \u2014 \"If all three tries fail, the customer gets an **error page even though their card was already charged**.\"\n  found   reuse-existing-queue \u2014 \"The fix is to have checkout drop the receipt on that same list and show the thank-you page straight away:\"\n  MISSED  before-after-picture\n  found   owner-decides-next \u2014 \"**Next step:** should we go ahead with moving receipts onto the background list?\"\n  held    queue-is-not-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 5089,
+      "cacheReadInputTokens": 160602,
+      "cacheCreationInputTokens": 14308,
+      "webSearchRequests": 0,
+      "costUSD": 0.24842039999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 978,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 5,
+  "missed": [
+    "the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.24842039999999999,
+  "turns": 8,
+  "api_seconds": 50.193,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 59.1,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

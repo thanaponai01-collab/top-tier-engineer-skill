@@ -1,0 +1,6 @@
+from typing import Protocol
+
+
+class PaymentGateway(Protocol):
+    def charge(self, customer_id: str, cents: int) -> str: ...
+    def refund(self, charge_id: str, cents: int) -> str: ...

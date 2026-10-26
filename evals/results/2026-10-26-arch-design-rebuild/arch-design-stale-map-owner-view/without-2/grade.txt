@@ -1,0 +1,24 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: FAIL  4/5 found
+  found   map-is-stale — "Your design document says the shop works one way, but the code works another way."
+  found   charge-then-email-chain — "By step 4 the money is taken and the order is saved. When the email fails, the shop gives up on everything that comes af"
+  found   reuse-existing-queue — "Your refunds already work this way. Only checkout was done differently."
+  found   before-after-picture — "Customer's checkout (fast)            Background helper (no rush)"
+  MISSED  owner-decides-next
+  held    queue-is-not-dead
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-stale-map-owner-view  [arch-design]  2/5 found, score 0.40 (needs 1.00)
+  MISSED  map-is-stale: docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date
+            never named: architecture.md
+            named it, but never said what was wrong with it
+  found   charge-then-email-chain: checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain
+  MISSED  reuse-existing-queue: the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure
+            never named: queue
+  found   before-after-picture: the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose
+  MISSED  owner-decides-next: the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done
+            named it, but never said what was wrong with it
+  held    queue-is-not-dead: the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

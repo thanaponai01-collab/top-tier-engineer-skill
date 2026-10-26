@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"The customer-facing date format (`%d/%m/%Y`) is written out three times:\"\n  found   provider-interface-one-implementation \u2014 \"`providers/base.py` defines `Provider`, `providers/smtp.py` is its only implementation, and `providers/registry.py:6` re\"\n  found   move-has-a-proof-line \u2014 \"**Where it's called:** `api/serializers.py:6`, `jobs/export.py:6`, `web/views.py:6`.\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 4215,
+      "cacheReadInputTokens": 128189,
+      "cacheCreationInputTokens": 11363,
+      "webSearchRequests": 0,
+      "costUSD": 0.2008898,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 781,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2008898,
+  "turns": 7,
+  "api_seconds": 42.16,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 48.9,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

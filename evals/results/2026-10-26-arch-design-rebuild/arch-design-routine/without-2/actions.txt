@@ -1,0 +1,1 @@
+  1. Bash: cd "<tmp>/tte-eval-v_omhwbo" && find . -type f | head -50 && cat fixture/requirements.md

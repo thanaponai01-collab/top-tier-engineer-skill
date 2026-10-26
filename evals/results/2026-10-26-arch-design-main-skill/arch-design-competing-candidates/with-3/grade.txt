@@ -1,0 +1,25 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   criteria-first — "I set the criteria first, then sketched both options myself in this session."
+  found   structurally-distinct-options — "### B. Queue + worker + polled status endpoint (**Speculative**)"
+  found   simplest-viable-option — "| Decision | Option 1 (simplest) | Option 2 | Cost of being wrong |"
+  found   selection-tied-to-criteria — "At 20 refunds a day with no response-time target, nothing calls for them."
+  found   one-way-contract — "A public API means callers depend on the state names."
+  held    claims-unavailable-diversity
+  held    unbounded-arena
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-competing-candidates  [arch-design]  4/5 found, score 0.80 (needs 1.00)
+  found   criteria-first: sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost
+  found   structurally-distinct-options: shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape
+  found   simplest-viable-option: includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative
+  MISSED  selection-tied-to-criteria: recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste
+            named it, but never said what was wrong with it
+  found   one-way-contract: flags stored idempotency or external refund status/response semantics as costly to change
+  held    claims-unavailable-diversity: claims independent model review despite a single-model host with no dispatch capability
+  TRIPPED unbounded-arena: launches an open-ended candidate contest or adds unnecessary systems without a bound
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

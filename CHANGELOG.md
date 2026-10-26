@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.37.0 - 2026-10-26 - arch-design: main's skill as is, because it beats every gated rebuild
+
+- arch-design joins the plugin (manual-only) exactly as on top-tier-engineer main, with main's seven
+  eval cases and main's tests for `arch-design.py`, `dep-map.py` and `change-map.py`.
+- Traced plain Opus first: it lists the files, reads every one in a single call, sometimes runs one
+  probe, and answers. It finds every planted problem; what it leaves out is the part a reader acts on:
+  the top move written out with its callers and a proof command, the option it turned down and what
+  that would cost, criteria before options, and a closing question to the owner.
+- Results, 3 tries a case (21 tries each): plain Opus 6/21 at $0.10 a try; main's skill 18/21 at
+  $0.27. Two rebuilds were tried and dropped: a three-stage helper (`arch.py`: snapshot, a move file
+  whose proof runs in a throwaway copy and whose callers are found through aliases and string lookups,
+  repo unchanged) in place of the prose, 14/21 then 13/21; main's prose plus that helper as a final
+  check, 12/21 at $0.42 (agents read the helper's source, and owner pictures were dropped).
+- This is the one skill here kept as advice rather than mechanics: its gain over plain Opus is the
+  judgment rules (one format is one function, one implementer is a guess, a hub that imports nothing
+  is stable, name the store you are not adding, pictures in the answer), and a gate cost both.
+
 ## 1.36.0 - 2026-10-26 - safe-release: three stages built on what plain Opus already does
 
 - safe-release joins the plugin (manual-only, from top-tier-engineer main; main had no eval case for

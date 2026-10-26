@@ -1,0 +1,71 @@
+{
+  "case": "arch-design-stale-map-owner-view",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  4/5 found\n  found   map-is-stale \u2014 \"Your design document says the shop works one way, but the code works another way.\"\n  found   charge-then-email-chain \u2014 \"By step 4 the money is taken and the order is saved. When the email fails, the shop gives up on everything that comes af\"\n  found   reuse-existing-queue \u2014 \"Your refunds already work this way. Only checkout was done differently.\"\n  found   before-after-picture \u2014 \"Customer's checkout (fast)            Background helper (no rush)\"\n  MISSED  owner-decides-next\n  held    queue-is-not-dead",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 1814,
+      "cacheReadInputTokens": 55439,
+      "cacheCreationInputTokens": 6566,
+      "webSearchRequests": 0,
+      "costUSD": 0.0999198,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 389,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 5,
+  "missed": [
+    "the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.0999198,
+  "turns": 3,
+  "api_seconds": 25.706,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 31.5,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

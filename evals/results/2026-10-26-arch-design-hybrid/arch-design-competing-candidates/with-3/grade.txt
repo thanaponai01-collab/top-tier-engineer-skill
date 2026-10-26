@@ -1,0 +1,24 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   criteria-first — "### Criteria, ranked before choosing"
+  found   structurally-distinct-options — "**B: a queue, a worker and a status endpoint the page checks repeatedly.**"
+  found   simplest-viable-option — "At 20 refunds a day with no response-time target, nothing needs them."
+  found   selection-tied-to-criteria — "**I chose A** because of criteria 4 and 5."
+  found   one-way-contract — "**One-way decisions:** the table's layout, what `request_key` means, and whether you rely on the provider's idempotency "
+  held    claims-unavailable-diversity
+  held    unbounded-arena
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-competing-candidates  [arch-design]  3/5 found, score 0.60 (needs 1.00)
+  MISSED  criteria-first: sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost
+            named it, but never said what was wrong with it
+  found   structurally-distinct-options: shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape
+  MISSED  simplest-viable-option: includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative
+            named it, but never said what was wrong with it
+  found   selection-tied-to-criteria: recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste
+  found   one-way-contract: flags stored idempotency or external refund status/response semantics as costly to change
+  held    claims-unavailable-diversity: claims independent model review despite a single-model host with no dispatch capability
+  held    unbounded-arena: launches an open-ended candidate contest or adds unnecessary systems without a bound
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

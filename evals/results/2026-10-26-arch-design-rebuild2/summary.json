@@ -1,0 +1,1693 @@
+[
+  {
+    "case": "arch-design-no-new-store",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   existing-db-is-the-one-owner \u2014 \"**Reuses:** `app/db.py:11`, which is already how both model modules talk to the database.\"\n  MISSED  no-plugin-for-one-format\n  found   cost-of-a-new-store-named \u2014 \"Choosing a separate store wrongly would mean a migration to merge it back, plus a second store to secure.\"\n  held    new-datastore-for-history",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 5124,
+        "cacheReadInputTokens": 127565,
+        "cacheCreationInputTokens": 12809,
+        "webSearchRequests": 0,
+        "costUSD": 0.230513,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 750,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.230513,
+    "turns": 7,
+    "api_seconds": 51.201,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  arch-design-no-new-store  [arch-design]  3/3 found, score 1.00 (needs 1.00)\n  found   existing-db-is-the-one-owner: app/db.py is already the single place reports/models.py and users/models.py persist through; export history belongs there, not in new storage\n  found   no-plugin-for-one-format: only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for\n  found   cost-of-a-new-store-named: the report names what a separate new datastore would cost if it turned out wrong \u2014 a migration, a second thing to secure and back up \u2014 as the reason for reusing the existing database\n  held    new-datastore-for-history: standing up a separate datastore for export history instead of a table in the database the app already has\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 59.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-competing-candidates",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  5/5 found\n  found   criteria-first \u2014 \"| Criterion (ranked) | A: refund row + synchronous call | B: queue + worker + status endpoint |\"\n  found   structurally-distinct-options \u2014 \"| Criterion (ranked) | A: refund row + synchronous call | B: queue + worker + status endpoint |\"\n  found   simplest-viable-option \u2014 \"**Choose A, because of criterion 3.**\"\n  found   selection-tied-to-criteria \u2014 \"At 20 refunds a day with no response-time target, it would just be one more thing to run, secure and monitor.\"\n  found   one-way-contract \u2014 \"It would also publish a refund-status contract that callers would depend on, which `:15` warns about.\"\n  held    claims-unavailable-diversity\n  held    unbounded-arena",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 4598,
+        "cacheReadInputTokens": 152329,
+        "cacheCreationInputTokens": 13886,
+        "webSearchRequests": 0,
+        "costUSD": 0.2335698,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 561,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2335698,
+    "turns": 9,
+    "api_seconds": 58.474,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-competing-candidates  [arch-design]  4/5 found, score 0.80 (needs 1.00)\n  MISSED  criteria-first: sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost\n            named it, but never said what was wrong with it\n  found   structurally-distinct-options: shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape\n  found   simplest-viable-option: includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative\n  found   selection-tied-to-criteria: recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste\n  found   one-way-contract: flags stored idempotency or external refund status/response semantics as costly to change\n  TRIPPED claims-unavailable-diversity: claims independent model review despite a single-model host with no dispatch capability\n            never marked it uncertain either\n  TRIPPED unbounded-arena: launches an open-ended candidate contest or adds unnecessary systems without a bound\n            never marked it uncertain either\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 66.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-competing-candidates",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  5/5 found\n  found   criteria-first \u2014 \"**Options compared**, against these criteria in priority order:\"\n  found   structurally-distinct-options \u2014 \"**Option B:** the page puts a job on a new queue, a worker calls the provider, and the page keeps checking a new public \"\n  found   simplest-viable-option \u2014 \"A adds nothing else.\"\n  found   selection-tied-to-criteria \u2014 \"B adds a queue, a worker and a public status contract, which is a lot to run for 20 refunds a day (criterion 3).\"\n  found   one-way-contract \u2014 \"**Choices that are hard to undo:** the stored refund table and idempotency key.\"\n  held    claims-unavailable-diversity\n  held    unbounded-arena",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 4982,
+        "cacheReadInputTokens": 151342,
+        "cacheCreationInputTokens": 12722,
+        "webSearchRequests": 0,
+        "costUSD": 0.2317404,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 458,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2317404,
+    "turns": 7,
+    "api_seconds": 60.968,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-competing-candidates  [arch-design]  3/5 found, score 0.60 (needs 1.00)\n  MISSED  criteria-first: sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost\n            named it, but never said what was wrong with it\n  found   structurally-distinct-options: shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape\n  MISSED  simplest-viable-option: includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative\n            named it, but never said what was wrong with it\n  found   selection-tied-to-criteria: recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste\n  found   one-way-contract: flags stored idempotency or external refund status/response semantics as costly to change\n  held    claims-unavailable-diversity: claims independent model review despite a single-model host with no dispatch capability\n  held    unbounded-arena: launches an open-ended candidate contest or adds unnecessary systems without a bound\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 68.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-competing-candidates",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  4/5 found\n  found   criteria-first \u2014 \"So I compared two options against these criteria, in order:\"\n  MISSED  structurally-distinct-options\n  found   simplest-viable-option \u2014 \"Keep it synchronous.\"\n  found   selection-tied-to-criteria \u2014 \"The synchronous option wins on criterion 3, and its table already satisfies criterion 4.\"\n  found   one-way-contract \u2014 \"The table, the stored idempotency key and the status values become stored data and a contract that the page and webhook \"\n  held    claims-unavailable-diversity\n  held    unbounded-arena",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 5736,
+        "cacheReadInputTokens": 205163,
+        "cacheCreationInputTokens": 14037,
+        "webSearchRequests": 0,
+        "costUSD": 0.26812060000000004,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 604,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.26812060000000004,
+    "turns": 9,
+    "api_seconds": 77.767,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-competing-candidates  [arch-design]  3/5 found, score 0.60 (needs 1.00)\n  MISSED  criteria-first: sets decision criteria before evaluating designs, including duplicate-refund safety, operator status, latency/retry behavior, and operating cost\n            named it, but never said what was wrong with it\n  found   structurally-distinct-options: shows distinct synchronous existing-service and durable asynchronous queue/outbox designs, rather than renaming one shape\n  MISSED  simplest-viable-option: includes and labels the simplest design that satisfies the launch requirements, with a real tradeoff against the alternative\n            named it, but never said what was wrong with it\n  found   selection-tied-to-criteria: recommends a base using stated requirements/assumptions and explains the decisive tradeoff rather than selecting by taste\n  found   one-way-contract: flags stored idempotency or external refund status/response semantics as costly to change\n  TRIPPED claims-unavailable-diversity: claims independent model review despite a single-model host with no dispatch capability\n            never marked it uncertain either\n  held    unbounded-arena: launches an open-ended candidate contest or adds unnecessary systems without a bound\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 85.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-graph-shape",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"**There is a three-file import cycle:** orders \u2192 shipping \u2192 notifications \u2192 orders\"\n  found   pricing-does-network-io \u2014 \"**Pricing calls a remote rates server once for every order line**\"\n  found   pass-through-order-service \u2014 \"`services/order_service.py:4` just forwards the call.\"\n  found   move-has-a-proof-line \u2014 \"**Code that has to change:** `orders/lines.py:1`, `:6`, `orders/place.py:1`, `:10`, `services/order_service.py:5`, `api/\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 7902,
+        "cacheReadInputTokens": 275130,
+        "cacheCreationInputTokens": 22923,
+        "webSearchRequests": 0,
+        "costUSD": 0.39653000000000005,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2022,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.39653000000000005,
+    "turns": 10,
+    "api_seconds": 92.68,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-graph-shape  [arch-design]  3/4 found, score 0.75 (needs 1.00)\n  found   three-module-import-cycle: orders/status.py imports shipping/tracking.py, which imports notifications/email.py, which imports orders/status.py: a three-module cycle with no lazy import to give it away\n  found   pricing-does-network-io: pricing/quote.py fetches a rate over HTTP from inside a price calculation, so the order flow cannot run or be tested offline\n  found   pass-through-order-service: services/order_service.py forwards one call to orders.place and adds nothing; it has one caller\n  MISSED  move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not change\n            named it, but never said what was wrong with it\n  held    payment-gateway-is-a-real-seam: payments/gateway.py has two adapters (live and an in-memory fake): a real seam that earns its place. Calling it speculative and inlining it is the wrong move\n  held    core-util-is-a-stable-hub-not-the-problem: core/util.py is imported by 16 modules but imports nothing itself: a stable leaf. High fan-in alone is not a defect, and splitting or rewriting it is the wrong first move\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 106.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-graph-shape",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  4/4 found\n  found   three-module-import-cycle \u2014 \"The chain is `notifications/email.py:1` \u2192 `orders/status.py:1` \u2192 `shipping/tracking.py:1`, and `shipping/tracking.py:11`\"\n  found   pricing-does-network-io \u2014 \"There's no way to pass a margin in, so you can't run the flow offline without patching `urllib`.\"\n  found   pass-through-order-service \u2014 \"**4. `services/order_service.py:4` only passes calls through to `orders.place`.**\"\n  found   move-has-a-proof-line \u2014 \"**Proof command** (run from the repo root before and after each step).\"\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 8163,
+        "cacheReadInputTokens": 245917,
+        "cacheCreationInputTokens": 21328,
+        "webSearchRequests": 0,
+        "costUSD": 0.3831394,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2511,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3831394,
+    "turns": 10,
+    "api_seconds": 90.807,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  arch-design-graph-shape  [arch-design]  4/4 found, score 1.00 (needs 1.00)\n  found   three-module-import-cycle: orders/status.py imports shipping/tracking.py, which imports notifications/email.py, which imports orders/status.py: a three-module cycle with no lazy import to give it away\n  found   pricing-does-network-io: pricing/quote.py fetches a rate over HTTP from inside a price calculation, so the order flow cannot run or be tested offline\n  found   pass-through-order-service: services/order_service.py forwards one call to orders.place and adds nothing; it has one caller\n  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not change\n  held    payment-gateway-is-a-real-seam: payments/gateway.py has two adapters (live and an in-memory fake): a real seam that earns its place. Calling it speculative and inlining it is the wrong move\n  held    core-util-is-a-stable-hub-not-the-problem: core/util.py is imported by 16 modules but imports nothing itself: a stable leaf. High fan-in alone is not a defect, and splitting or rewriting it is the wrong first move\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 111.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-graph-shape",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  4/4 found\n  found   three-module-import-cycle \u2014 \"**Import cycle: `orders.status` \u2192 `shipping.tracking` \u2192 `notifications.email` \u2192 `orders.status`** (I ran it).\"\n  found   pricing-does-network-io \u2014 \"`pricing/quote.py:19` calls `_fetch_margin()` for each line, which hits `https://rates.example.internal` with a 2 s time\"\n  found   pass-through-order-service \u2014 \"**`services/order_service.py:4` only passes calls through.**\"\n  found   move-has-a-proof-line \u2014 \"**Proof:** this command passes today in a throwaway copy and runs 27 repo files.\"\n  held    payment-gateway-is-a-real-seam\n  TRIPPED core-util-is-a-stable-hub-not-the-problem \u2014 \"**`core/util.py` is a grab-bag** (read, not run).\"",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 9182,
+        "cacheReadInputTokens": 212876,
+        "cacheCreationInputTokens": 22464,
+        "webSearchRequests": 0,
+        "costUSD": 0.40599120000000005,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2620,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [
+      "core/util.py is imported by 16 modules but imports nothing itself: a stable leaf. High fan-in alone is not a defect, and splitting or rewriting it is the wrong first move"
+    ],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.40599120000000005,
+    "turns": 9,
+    "api_seconds": 98.27,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-graph-shape  [arch-design]  2/4 found, score 0.50 (needs 1.00)\n  MISSED  three-module-import-cycle: orders/status.py imports shipping/tracking.py, which imports notifications/email.py, which imports orders/status.py: a three-module cycle with no lazy import to give it away\n            never named: status.py, tracking.py\n  found   pricing-does-network-io: pricing/quote.py fetches a rate over HTTP from inside a price calculation, so the order flow cannot run or be tested offline\n  MISSED  pass-through-order-service: services/order_service.py forwards one call to orders.place and adds nothing; it has one caller\n            named it, but never said what was wrong with it\n  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not change\n  held    payment-gateway-is-a-real-seam: payments/gateway.py has two adapters (live and an in-memory fake): a real seam that earns its place. Calling it speculative and inlining it is the wrong move\n  held    core-util-is-a-stable-hub-not-the-problem: core/util.py is imported by 16 modules but imports nothing itself: a stable leaf. High fan-in alone is not a defect, and splitting or rewriting it is the wrong first move\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 122.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-no-new-store",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   existing-db-is-the-one-owner \u2014 \"store the export history as one new table in the existing SQLite database\"\n  found   no-plugin-for-one-format \u2014 \"With only CSV, it's an abstraction with one use, and every change would touch two extra files until a second format exis\"\n  MISSED  cost-of-a-new-store-named\n  held    new-datastore-for-history",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 5545,
+        "cacheReadInputTokens": 127460,
+        "cacheCreationInputTokens": 11977,
+        "webSearchRequests": 0,
+        "costUSD": 0.23225600000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 894,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "the report names what a separate new datastore would cost if it turned out wrong \u2014 a migration, a second thing to secure and back up \u2014 as the reason for reusing the existing database"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.23225600000000002,
+    "turns": 6,
+    "api_seconds": 63.604,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  arch-design-no-new-store  [arch-design]  3/3 found, score 1.00 (needs 1.00)\n  found   existing-db-is-the-one-owner: app/db.py is already the single place reports/models.py and users/models.py persist through; export history belongs there, not in new storage\n  found   no-plugin-for-one-format: only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for\n  found   cost-of-a-new-store-named: the report names what a separate new datastore would cost if it turned out wrong \u2014 a migration, a second thing to secure and back up \u2014 as the reason for reusing the existing database\n  held    new-datastore-for-history: standing up a separate datastore for export history instead of a table in the database the app already has\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 70.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-one-owner",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"`web/views.py:1`, `api/serializers.py:1` and `jobs/export.py:1` each have their own copy of the same day/month/year form\"\n  found   provider-interface-one-implementation \u2014 \"The message-sending code is built for many providers but has one.\"\n  found   move-has-a-proof-line \u2014 \"**Check that behaviour holds:** this command passes today and should pass after each step.\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 5239,
+        "cacheReadInputTokens": 127875,
+        "cacheCreationInputTokens": 13359,
+        "webSearchRequests": 0,
+        "costUSD": 0.23727499999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1643,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.23727499999999999,
+    "turns": 7,
+    "api_seconds": 61.597,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-one-owner  [arch-design]  2/3 found, score 0.67 (needs 1.00)\n  found   three-date-formatters-one-job: web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format\n  MISSED  provider-interface-one-implementation: providers/base.py is an abstraction with exactly one implementation and no second caller paying for it\n            named it, but never said what was wrong with it\n  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not\n  TRIPPED billing-looks-alike-but-changes-for-another-reason: billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move\n            claimed: four date formatters\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 68.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-no-new-store",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   existing-db-is-the-one-owner \u2014 \"Export history goes in the same SQLite database rather than a second store, such as a log file, Redis or a separate expo\"\n  MISSED  no-plugin-for-one-format\n  found   cost-of-a-new-store-named \u2014 \"A second store would mean another connection path, another thing to back up and secure, and a migration later to merge i\"\n  held    new-datastore-for-history",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 7022,
+        "cacheReadInputTokens": 211768,
+        "cacheCreationInputTokens": 15050,
+        "webSearchRequests": 0,
+        "costUSD": 0.3032656,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1225,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3032656,
+    "turns": 10,
+    "api_seconds": 69.874,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  arch-design-no-new-store  [arch-design]  3/3 found, score 1.00 (needs 1.00)\n  found   existing-db-is-the-one-owner: app/db.py is already the single place reports/models.py and users/models.py persist through; export history belongs there, not in new storage\n  found   no-plugin-for-one-format: only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for\n  found   cost-of-a-new-store-named: the report names what a separate new datastore would cost if it turned out wrong \u2014 a migration, a second thing to secure and back up \u2014 as the reason for reusing the existing database\n  held    new-datastore-for-history: standing up a separate datastore for export history instead of a table in the database the app already has\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 78.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-one-owner",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"The customer-facing date format (`%d/%m/%Y`) is written out three times:\"\n  found   provider-interface-one-implementation \u2014 \"`providers/base.py` defines `Provider`, `providers/smtp.py` is its only implementation, and `providers/registry.py:6` re\"\n  found   move-has-a-proof-line \u2014 \"**Where it's called:** `api/serializers.py:6`, `jobs/export.py:6`, `web/views.py:6`.\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 4215,
+        "cacheReadInputTokens": 128189,
+        "cacheCreationInputTokens": 11363,
+        "webSearchRequests": 0,
+        "costUSD": 0.2008898,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 781,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2008898,
+    "turns": 7,
+    "api_seconds": 42.16,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  arch-design-one-owner  [arch-design]  3/3 found, score 1.00 (needs 1.00)\n  found   three-date-formatters-one-job: web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format\n  found   provider-interface-one-implementation: providers/base.py is an abstraction with exactly one implementation and no second caller paying for it\n  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not\n  held    billing-looks-alike-but-changes-for-another-reason: billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 48.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-one-owner",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  2/3 found\n  found   three-date-formatters-one-job \u2014 \"Three files print dates as `31/01/2026`, each in its own function with its own name:\"\n  MISSED  provider-interface-one-implementation\n  found   move-has-a-proof-line \u2014 \"**Proof:** run this from the `fixture/` folder. It passes on today's code; run it again after each step:\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 5879,
+        "cacheReadInputTokens": 157320,
+        "cacheCreationInputTokens": 13710,
+        "webSearchRequests": 0,
+        "costUSD": 0.25878,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2026,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "providers/base.py is an abstraction with exactly one implementation and no second caller paying for it"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.25878,
+    "turns": 8,
+    "api_seconds": 62.012,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-one-owner  [arch-design]  3/3 found, score 1.00 (needs 1.00)\n  found   three-date-formatters-one-job: web/views.py, api/serializers.py and jobs/export.py each hold their own copy of the same display-date format\n  found   provider-interface-one-implementation: providers/base.py is an abstraction with exactly one implementation and no second caller paying for it\n  found   move-has-a-proof-line: the top move is written out with the callers it changes and the check that behaviour did not\n  TRIPPED billing-looks-alike-but-changes-for-another-reason: billing/invoice.py formats dates for a tax filing spec; merging it into the display owner is the wrong move\n            claimed: four date formatters\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 68.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-routine",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   small-change-stays-with-owner \u2014 \"**Move:** in `web/account_form.py`, change the visible label on the existing `display_name` field from `Name` to `Displa\"\n  found   explicitly-no-open-structural-choice \u2014 \"Undoing it is a one-line revert, so there's no fork to decide.\"\n  held    no-unneeded-arena\n  held    no-new-boundary",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2601,
+        "cacheReadInputTokens": 124729,
+        "cacheCreationInputTokens": 9678,
+        "webSearchRequests": 0,
+        "costUSD": 0.15443780000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 372,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.15443780000000001,
+    "turns": 7,
+    "api_seconds": 47.509,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-routine  [arch-design]  1/2 found, score 0.50 (needs 1.00)\n  found   small-change-stays-with-owner: keeps the one-file label edit in the existing account form and preserves the decided scope\n  MISSED  explicitly-no-open-structural-choice: states that the settled copy change has no consequential open design fork and can proceed directly\n            named it, but never said what was wrong with it\n  TRIPPED no-unneeded-arena: does not demand independent candidate sketches, parallel workers, a rubric/matrix or a synthesis round for the settled one-file change\n            never marked it uncertain either\n  held    no-new-boundary: does not propose new modules, abstractions, storage or dependencies for a copy-only change\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 53.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-routine",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   small-change-stays-with-owner \u2014 \"The smallest step is a one-line edit in the form's existing owner, `web/account_form.py`\"\n  found   explicitly-no-open-structural-choice \u2014 \"It doesn't touch stored data, the API or auth, so it needs no extended design comparison.\"\n  held    no-unneeded-arena\n  held    no-new-boundary",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2836,
+        "cacheReadInputTokens": 126033,
+        "cacheCreationInputTokens": 10698,
+        "webSearchRequests": 0,
+        "costUSD": 0.16755859999999997,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 410,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.16755859999999997,
+    "turns": 8,
+    "api_seconds": 37.627,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-routine  [arch-design]  1/2 found, score 0.50 (needs 1.00)\n  found   small-change-stays-with-owner: keeps the one-file label edit in the existing account form and preserves the decided scope\n  MISSED  explicitly-no-open-structural-choice: states that the settled copy change has no consequential open design fork and can proceed directly\n            named it, but never said what was wrong with it\n  TRIPPED no-unneeded-arena: does not demand independent candidate sketches, parallel workers, a rubric/matrix or a synthesis round for the settled one-file change\n            never marked it uncertain either\n  held    no-new-boundary: does not propose new modules, abstractions, storage or dependencies for a copy-only change\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 43.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-routine",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   small-change-stays-with-owner \u2014 \"In `web/account_form.py`, change the visible label for the `display_name` field from `Name` to `Display name`.\"\n  found   explicitly-no-open-structural-choice \u2014 \"It needs one direct edit in one place: no new module, no fork, and it's easy to undo.\"\n  held    no-unneeded-arena\n  held    no-new-boundary",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2735,
+        "cacheReadInputTokens": 126044,
+        "cacheCreationInputTokens": 10622,
+        "webSearchRequests": 0,
+        "costUSD": 0.16493280000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 383,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.16493280000000002,
+    "turns": 8,
+    "api_seconds": 35.071,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-routine  [arch-design]  1/2 found, score 0.50 (needs 1.00)\n  found   small-change-stays-with-owner: keeps the one-file label edit in the existing account form and preserves the decided scope\n  MISSED  explicitly-no-open-structural-choice: states that the settled copy change has no consequential open design fork and can proceed directly\n            named it, but never said what was wrong with it\n  TRIPPED no-unneeded-arena: does not demand independent candidate sketches, parallel workers, a rubric/matrix or a synthesis round for the settled one-file change\n            never marked it uncertain either\n  held    no-new-boundary: does not propose new modules, abstractions, storage or dependencies for a copy-only change\n  a tripped trap fails the case at any score: it is a confident wrong answer\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 40.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-stale-map-owner-view",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  4/5 found\n  found   map-is-stale \u2014 \"**1. Your shop's description doesn't match what the shop does.**\"\n  found   charge-then-email-chain \u2014 \"If all three tries fail, the customer gets an **error page even though their card was already charged**.\"\n  found   reuse-existing-queue \u2014 \"The fix is to have checkout drop the receipt on that same list and show the thank-you page straight away:\"\n  MISSED  before-after-picture\n  found   owner-decides-next \u2014 \"**Next step:** should we go ahead with moving receipts onto the background list?\"\n  held    queue-is-not-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 5089,
+        "cacheReadInputTokens": 160602,
+        "cacheCreationInputTokens": 14308,
+        "webSearchRequests": 0,
+        "costUSD": 0.24842039999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 978,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.24842039999999999,
+    "turns": 8,
+    "api_seconds": 50.193,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-stale-map-owner-view  [arch-design]  4/5 found, score 0.80 (needs 1.00)\n  found   map-is-stale: docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date\n  found   charge-then-email-chain: checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain\n  found   reuse-existing-queue: the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure\n  found   before-after-picture: the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose\n  MISSED  owner-decides-next: the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done\n            named it, but never said what was wrong with it\n  held    queue-is-not-dead: the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 59.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-verify-caller-count",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"Its one extra piece is a base class kept \"in case a second carrier is ever needed,\" and it has a single implementation.\"\n  found   second-caller-hides-behind-an-alias \u2014 \"`jobs/reprice.py:2` imports it under another name, `get_calculator as pick_calc`. A search for `get_calculator(` misses \"\n  held    undercounts-to-one-caller",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 3619,
+        "cacheReadInputTokens": 151095,
+        "cacheCreationInputTokens": 11558,
+        "webSearchRequests": 0,
+        "costUSD": 0.195119,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 435,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.195119,
+    "turns": 8,
+    "api_seconds": 45.545,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  arch-design-verify-caller-count  [arch-design]  2/2 found, score 1.00 (needs 1.00)\n  found   gonna-need-seam-one-implementation: shipping/base.py is an interface with exactly one implementation, FlatRateCalculator, and no second carrier is asked for by any requirement here\n  found   second-caller-hides-behind-an-alias: jobs/reprice.py reaches the same seam through `from shipping.registry import get_calculator as pick_calc`, so a plain text search for `get_calculator(` finds checkout/cart.py and misses this one\n  held    undercounts-to-one-caller: a report that greps only the literal text `get_calculator(` finds checkout/cart.py, calls it the only caller, and clears the seam to inline directly \u2014 breaking jobs/reprice.py, which calls the same function under its aliased name\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 52.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-verify-caller-count",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"There's an extra layer kept \"in case a second carrier is needed\" that gives no protection and adds a file to read on eve\"\n  found   second-caller-hides-behind-an-alias \u2014 \"`jobs/reprice.py:2,6` imports it under a different name (`get_calculator as pick_calc`) and also looks it up by `\"flat\"`\"\n  held    undercounts-to-one-caller",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 4002,
+        "cacheReadInputTokens": 126574,
+        "cacheCreationInputTokens": 10356,
+        "webSearchRequests": 0,
+        "costUSD": 0.1882508,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 527,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1882508,
+    "turns": 6,
+    "api_seconds": 47.595,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-verify-caller-count  [arch-design]  1/2 found, score 0.50 (needs 1.00)\n  MISSED  gonna-need-seam-one-implementation: shipping/base.py is an interface with exactly one implementation, FlatRateCalculator, and no second carrier is asked for by any requirement here\n            named it, but never said what was wrong with it\n  found   second-caller-hides-behind-an-alias: jobs/reprice.py reaches the same seam through `from shipping.registry import get_calculator as pick_calc`, so a plain text search for `get_calculator(` finds checkout/cart.py and misses this one\n  held    undercounts-to-one-caller: a report that greps only the literal text `get_calculator(` finds checkout/cart.py, calls it the only caller, and clears the seam to inline directly \u2014 breaking jobs/reprice.py, which calls the same function under its aliased name\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 54.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-verify-caller-count",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"`FlatRateCalculator` inherits from it\"\n  found   second-caller-hides-behind-an-alias \u2014 \"the nightly reprice job (`jobs/reprice.py:2`, where it's imported under the alias `pick_calc`)\"\n  held    undercounts-to-one-caller",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 4366,
+        "cacheReadInputTokens": 207637,
+        "cacheCreationInputTokens": 14680,
+        "webSearchRequests": 0,
+        "costUSD": 0.2463594,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 581,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2463594,
+    "turns": 10,
+    "api_seconds": 56.89,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-verify-caller-count  [arch-design]  1/2 found, score 0.50 (needs 1.00)\n  MISSED  gonna-need-seam-one-implementation: shipping/base.py is an interface with exactly one implementation, FlatRateCalculator, and no second carrier is asked for by any requirement here\n            named it, but never said what was wrong with it\n  found   second-caller-hides-behind-an-alias: jobs/reprice.py reaches the same seam through `from shipping.registry import get_calculator as pick_calc`, so a plain text search for `get_calculator(` finds checkout/cart.py and misses this one\n  held    undercounts-to-one-caller: a report that greps only the literal text `get_calculator(` finds checkout/cart.py, calls it the only caller, and clears the seam to inline directly \u2014 breaking jobs/reprice.py, which calls the same function under its aliased name\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 65.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-stale-map-owner-view",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  5/5 found\n  found   map-is-stale \u2014 \"The code doesn't do that.\"\n  found   charge-then-email-chain \u2014 \"If all three tries fail, the customer sees an **error page**, but by then their card has already been charged and their \"\n  found   reuse-existing-queue \u2014 \"Put receipts on the same to-do list refunds already use, which is what your document says should happen.\"\n  found   before-after-picture \u2014 \"**After the fix:**\"\n  found   owner-decides-next \u2014 \"**Want me to go ahead with the receipt fix, and the \"failed emails go missing\" fix along with it?**\"\n  held    queue-is-not-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 7747,
+        "cacheReadInputTokens": 252851,
+        "cacheCreationInputTokens": 18597,
+        "webSearchRequests": 0,
+        "costUSD": 0.3543662,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 708,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3543662,
+    "turns": 10,
+    "api_seconds": 82.66,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  arch-design-stale-map-owner-view  [arch-design]  3/5 found, score 0.60 (needs 1.00)\n  MISSED  map-is-stale: docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date\n            never named: architecture.md\n  found   charge-then-email-chain: checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain\n  MISSED  reuse-existing-queue: the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure\n            never named: queue\n  found   before-after-picture: the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose\n  found   owner-decides-next: the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done\n  held    queue-is-not-dead: the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 95.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "arch-design-stale-map-owner-view",
+    "skill": "arch-design",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  4/5 found\n  found   map-is-stale \u2014 \"Your shop's written plan doesn't match what it actually does\"\n  found   charge-then-email-chain \u2014 \"**Checkout waits for the email server before it shows the customer the thank-you page.** That's why checkout sometimes t\"\n  found   reuse-existing-queue \u2014 \"This reuses `shop/jobs/queue.py:7`, which refunds already use.\"\n  MISSED  before-after-picture\n  found   owner-decides-next \u2014 \"**Should I go ahead with the background-receipt change?**\"\n  held    queue-is-not-dead",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "arch-design"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "arch-design",
+        "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 10327,
+        "cacheReadInputTokens": 268157,
+        "cacheCreationInputTokens": 21969,
+        "webSearchRequests": 0,
+        "costUSD": 0.4360034,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1720,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 5,
+    "missed": [
+      "the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4360034,
+    "turns": 11,
+    "api_seconds": 107.977,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  arch-design-stale-map-owner-view  [arch-design]  5/5 found, score 1.00 (needs 1.00)\n  found   map-is-stale: docs/architecture.md says checkout puts the receipt on the job queue and the customer never waits for email; the code does not: checkout.py calls emailer.send_receipt directly. The report says the map is wrong or out of date\n  found   charge-then-email-chain: checkout charges the card and saves the order, then waits on the email server (30 s timeout, 3 tries, 5 s sleeps); a slow mail server makes checkout slow and a failed one shows an error page after the money was already taken: the owner's two complaints come from one chain\n  found   reuse-existing-queue: the better shape reuses the job queue refunds already use (shop/jobs/queue.py + worker.py): put the receipt there; no new piece of infrastructure\n  found   before-after-picture: the owner is shown today's flow and the better flow as pictures (diagrams or a visual report), side by side or one after the other, not only prose\n  found   owner-decides-next: the report ends by asking the owner which change to look at or approve next, instead of changing code or declaring a plan done\n  held    queue-is-not-dead: the job queue and worker look unused by checkout, but refunds use them; calling them dead or proposing a new queue system is wrong\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 121.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

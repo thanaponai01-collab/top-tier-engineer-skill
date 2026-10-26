@@ -1,0 +1,81 @@
+{
+  "case": "arch-design-no-new-store",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  2/3 found\n  found   existing-db-is-the-one-owner \u2014 \"**Reuses:** `app/db.py:11`, which is already how both model modules talk to the database.\"\n  MISSED  no-plugin-for-one-format\n  found   cost-of-a-new-store-named \u2014 \"Choosing a separate store wrongly would mean a migration to merge it back, plus a second store to secure.\"\n  held    new-datastore-for-history",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 5124,
+      "cacheReadInputTokens": 127565,
+      "cacheCreationInputTokens": 12809,
+      "webSearchRequests": 0,
+      "costUSD": 0.230513,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 750,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 3,
+  "missed": [
+    "only CSV is asked for, so the design is one function against stdlib csv, not an exporter interface, registry or plugin seam built for formats nobody has asked for"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.230513,
+  "turns": 7,
+  "api_seconds": 51.201,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 59.4,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

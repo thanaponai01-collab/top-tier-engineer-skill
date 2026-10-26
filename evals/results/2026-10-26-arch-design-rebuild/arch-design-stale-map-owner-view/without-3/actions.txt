@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && find . -type f | head -100 && wc -l $(find . -type f -name "*.*" | grep -v node_modules) | tail -1
+  2. Bash: cd fixture && for f in README.md docs/architecture.md $(find shop -name "*.py"); do echo "=== $f"; cat -n $f; done

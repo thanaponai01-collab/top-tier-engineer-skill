@@ -1,0 +1,71 @@
+{
+  "case": "arch-design-graph-shape",
+  "skill": "arch-design",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: FAIL  3/4 found\n  found   three-module-import-cycle \u2014 \"## 2. Import cycle: orders \u2192 shipping \u2192 notifications \u2192 orders\"\n  found   pricing-does-network-io \u2014 \"`pricing/quote.py:10-20`: `unit_price()` calls `_fetch_margin()`, which does an HTTP request to `rates.example.internal`\"\n  found   pass-through-order-service \u2014 \"`order_service.place` is a one-line pass-through (`services/order_service.py:4-5`)\"\n  MISSED  move-has-a-proof-line\n  held    payment-gateway-is-a-real-seam\n  held    core-util-is-a-stable-hub-not-the-problem",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 4165,
+      "cacheReadInputTokens": 83373,
+      "cacheCreationInputTokens": 13155,
+      "webSearchRequests": 0,
+      "costUSD": 0.2052466,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1328,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 4,
+  "missed": [
+    "the top move is written out with the callers it changes and the check that behaviour did not change"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2052466,
+  "turns": 4,
+  "api_seconds": 51.224,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 61.4,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

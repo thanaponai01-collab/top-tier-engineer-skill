@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-one-owner",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   three-date-formatters-one-job \u2014 \"`api/serializers.py:1`, `web/views.py:1` and `jobs/export.py:1` each format dates as `%d/%m/%Y`.\"\n  found   provider-interface-one-implementation \u2014 \"`providers/base.py`, `registry.py` and `smtp.py` are three files around a single SMTP sender.\"\n  found   move-has-a-proof-line \u2014 \"Then switch the callers one at a time (`serializers.py:6`, `views.py:6`, `export.py:6`) and leave `invoice_date` alone.\"\n  held    billing-looks-alike-but-changes-for-another-reason",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-xyuh7tpb\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-xyuh7tpb\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 5615,
+      "cacheReadInputTokens": 169488,
+      "cacheCreationInputTokens": 16106,
+      "webSearchRequests": 0,
+      "costUSD": 0.27510160000000006,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 488,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.27510160000000006,
+  "turns": 9,
+  "api_seconds": 54.876,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 60.7,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-xyuh7tpb\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

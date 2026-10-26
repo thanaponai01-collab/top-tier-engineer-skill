@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-routine",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   small-change-stays-with-owner \u2014 \"**Move:** in `web/account_form.py`, change the visible label on the existing `display_name` field from `Name` to `Displa\"\n  found   explicitly-no-open-structural-choice \u2014 \"Undoing it is a one-line revert, so there's no fork to decide.\"\n  held    no-unneeded-arena\n  held    no-new-boundary",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-f1mwulr5\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2601,
+      "cacheReadInputTokens": 124729,
+      "cacheCreationInputTokens": 9678,
+      "webSearchRequests": 0,
+      "costUSD": 0.15443780000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 372,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.15443780000000001,
+  "turns": 7,
+  "api_seconds": 47.509,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 53.3,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-f1mwulr5\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

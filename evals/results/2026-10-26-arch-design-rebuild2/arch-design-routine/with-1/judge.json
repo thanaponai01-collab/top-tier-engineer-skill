@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "small-change-stays-with-owner",
+      "what": "keeps the one-file label edit in the existing account form and preserves the decided scope",
+      "found": true,
+      "quote": "**Move:** in `web/account_form.py`, change the visible label on the existing `display_name` field from `Name` to `Display name`.",
+      "quote_checked": true
+    },
+    {
+      "id": "explicitly-no-open-structural-choice",
+      "what": "states that the settled copy change has no consequential open design fork and can proceed directly",
+      "found": true,
+      "quote": "Undoing it is a one-line revert, so there's no fork to decide.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "no-unneeded-arena",
+      "what": "does not demand independent candidate sketches, parallel workers, a rubric/matrix or a synthesis round for the settled one-file change",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "no-new-boundary",
+      "what": "does not propose new modules, abstractions, storage or dependencies for a copy-only change",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0234071,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,86 @@
+{
+  "case": "arch-design-verify-caller-count",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": false,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   gonna-need-seam-one-implementation \u2014 \"it has an interface kept \"in case a second carrier is ever needed\" (`base.py:3`) that only one class implements.\"\n  found   second-caller-hides-behind-an-alias \u2014 \"`jobs/reprice.py:2,6` imports the same function under another name, `pick_calc`, then calls `pick_calc(\"flat\")`.\"\n  held    undercounts-to-one-caller",
+  "actions_passed": false,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-xyuh7tpb\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-xyuh7tpb\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 20,
+      "outputTokens": 6080,
+      "cacheReadInputTokens": 261681,
+      "cacheCreationInputTokens": 17284,
+      "webSearchRequests": 0,
+      "costUSD": 0.3122882,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1287,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    },
+    {
+      "check": "did not read or grep helper scripts",
+      "ok": false,
+      "detail": "inspected scripts: shell(grep -n '' <tmp>/tte-plugin-xyuh7tpb/verify-loop/ski)"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.3122882,
+  "turns": 11,
+  "api_seconds": 64.49,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [
+    "shell(grep -n '' <tmp>/tte-plugin-xyuh7tpb/verify-loop/ski)"
+  ],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 71.7,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-xyuh7tpb\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

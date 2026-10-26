@@ -1,0 +1,2 @@
+  1. Bash: cd fixture && find . -type f -not -path '*/node_modules/*' | head -100 && cat package.json 2>/dev/null
+  2. Bash: cd fixture && for f in $(find . -type f); do echo "=== $f"; cat "$f"; done

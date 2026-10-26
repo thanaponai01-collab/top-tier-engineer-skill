@@ -252,6 +252,17 @@ overfit eval still shows no difference (see 1.22.0).
   - Not covered: a schema too big to reason about in one read, non-SQLite stores (compared as bytes
     only), the other helpers' skip lists do not name `.release/`.
 
+- arch-design as main's prose skill (1.37.0) | measured (eval) / main's skill beats plain Opus and every gated rebuild
+  - Plain Opus `evals/results/2026-10-26-arch-design-rebuild` (without): 6/21 ($0.10). Main's skill
+    `-main-skill`: 18/21 ($0.27). Gated rebuild `-rebuild` 14/21, with a `not-adding:` field `-rebuild2`
+    13/21 ($0.26). Main's prose plus the gate `-hybrid`: 12/21 ($0.42). First look `-baseline` (1 try).
+  - Plain Opus finds every planted problem by reading; it fails on the write-up (no move with callers
+    and proof, no rejected option and its cost, no criteria first, no closing question). Main's prose
+    supplies those and the judgment rules plain Opus does not apply on its own. The rebuild helper
+    (`arch.py`, 34 tests, 36 guards each caught) is not in the repo; it lowered scores either way.
+  - The one exception to "mechanics, not advice". Not covered: a repo too big to read, and the
+    competing-candidates case has only `requirements.md` (the code it names is absent).
+
 - Pay for an eval subset (`fake-check-and-decoy`, `green-with-unverified`, `teammate-loosened-check`)
   to measure turns and cost against the 1.18 numbers in `work/verify-loop-design.md`.
 - Then add `max_turns`/`max_cost` and a helper-source-read failure to `grade.py` from that data.

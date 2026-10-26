@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-competing-candidates",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   criteria-first \u2014 \"Criteria, most important first:\"\n  found   structurally-distinct-options \u2014 \"**B: background processing.** Save the row, put a job on a queue, have a new worker call the provider, and have the page\"\n  found   simplest-viable-option \u2014 \"A adds no queue, worker or public endpoint (criterion 3).\"\n  found   selection-tied-to-criteria \u2014 \"**Why A:** both options meet criteria 1 and 2 through the same unique-key row.\"\n  found   one-way-contract \u2014 \"This is a one-way door: the table, the stored key, and the refund status operators see all become data and a contract th\"\n  held    claims-unavailable-diversity\n  held    unbounded-arena",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-upn1cj_1\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-upn1cj_1\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 4810,
+      "cacheReadInputTokens": 178421,
+      "cacheCreationInputTokens": 13155,
+      "webSearchRequests": 0,
+      "costUSD": 0.23718820000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 440,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.23718820000000002,
+  "turns": 9,
+  "api_seconds": 65.696,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 77.6,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-upn1cj_1\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

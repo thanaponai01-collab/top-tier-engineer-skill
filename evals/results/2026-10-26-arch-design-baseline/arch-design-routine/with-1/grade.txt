@@ -1,0 +1,17 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   small-change-stays-with-owner — "It's a one-line label edit in the one module that owns the form."
+  found   explicitly-no-open-structural-choice — "This is a settled copy change, so the skill's "settled small changes stay direct" rule applies."
+  held    no-unneeded-arena
+  held    no-new-boundary
+
+Phrase grader (grade.py), for comparison:
+FAIL  arch-design-routine  [arch-design]  1/2 found, score 0.50 (needs 1.00)
+  found   small-change-stays-with-owner: keeps the one-file label edit in the existing account form and preserves the decided scope
+  MISSED  explicitly-no-open-structural-choice: states that the settled copy change has no consequential open design fork and can proceed directly
+            named it, but never said what was wrong with it
+  held    no-unneeded-arena: does not demand independent candidate sketches, parallel workers, a rubric/matrix or a synthesis round for the settled one-file change
+  held    no-new-boundary: does not propose new modules, abstractions, storage or dependencies for a copy-only change
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      left the code untouched (a report-only task) — no code file changed

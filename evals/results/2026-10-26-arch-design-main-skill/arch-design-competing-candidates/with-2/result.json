@@ -1,0 +1,79 @@
+{
+  "case": "arch-design-competing-candidates",
+  "skill": "arch-design",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  5/5 found\n  found   criteria-first \u2014 \"## Decision criteria (set before the options)\"\n  found   structurally-distinct-options \u2014 \"| | **A. Refund record, synchronous (recommended)** | **B. Queue, worker and status endpoint** |\"\n  found   simplest-viable-option \u2014 \"At 20 refunds a day with no response-time target, a queue or worker would add parts without making anything cheaper.\"\n  found   selection-tied-to-criteria \u2014 \"B satisfies no must-have that A misses. It only helps with a latency or volume need that doesn't exist yet.\"\n  found   one-way-contract \u2014 \"**One-way:** the refund table's shape and the key rule, because they are stored data and recovery depends on them.\"\n  held    claims-unavailable-diversity\n  held    unbounded-arena",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "arch-design"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "arch-design",
+      "path": "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop\\skills\\arch-design\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop\\skills\\arch-design\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 5804,
+      "cacheReadInputTokens": 110788,
+      "cacheCreationInputTokens": 13676,
+      "webSearchRequests": 0,
+      "costUSD": 0.2476856,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 839,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2476856,
+  "turns": 6,
+  "api_seconds": 63.441,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 70.1,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-ieuvi7e6\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}
