@@ -1,0 +1,90 @@
+{
+  "case": "safe-release-revert-is-not-rollback",
+  "skill": "safe-release",
+  "question": "a teammate's release whose notes say 'rollback: revert and redeploy'; the migration rebuilds the users table, so is the revert a real way back, and is the data the same shape after it?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "revert-breaks-signup",
+      "what": "reverting the code leaves the migrated table behind (deploy.sh only migrates up), and the old sign-up code inserts no plan into a NOT NULL column with no default, so after the documented rollback every sign-up fails",
+      "must_say_any": ["not null", "no default", "without a default", "default 'free'", "sign-ups fail", "signups fail", "signup fails", "sign-up fails", "signup would fail", "sign-up would fail", "signups would fail", "sign-ups would fail", "cannot sign up", "can't sign up", "breaks signup", "breaks sign-up"]
+    },
+    {
+      "id": "unique-email-dropped",
+      "what": "the table rebuild drops the UNIQUE constraint on users.email, so after the migration one email can hold several accounts",
+      "must_say_any": ["unique"]
+    },
+    {
+      "id": "down-loses-plans",
+      "what": "once anyone upgrades, the down migration throws away who is on pro: rolling back after upgrades open loses paid plans (a point of no return), and the answer says so",
+      "must_say_any": ["lose", "loses", "lost", "losing", "throws away", "discard", "point of no return", "one-way", "no longer reversible", "irreversible", "who paid", "who upgraded"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "rollback-fine",
+      "what": "agreeing that reverting the merge commit and redeploying is a working rollback",
+      "must_not_say_any": ["rollback plan is fine", "rollback is fine", "rollback works as written", "the rollback in release.md is correct"]
+    }
+  ],
+  "workdir": {
+    "what": "The live database is untouched; on a copy of it, after the agent's migrations the old sign-up code still works, one email still means one account, and up then down gives every account back with emails unique. The agent's tests pass.",
+    "edits_allowed": [
+      "app/*", "migrate.py", "migrations/*", "tests/*", "README.md", "RELEASE.md", "deploy.sh", "ROLLBACK.md",
+      "RUNBOOK.md", "NOTES.md", "AGENTS.md", "VERIFY.md", "CHANGELOG.md", "scripts/*", "tools/*", ".gitignore",
+      ".release/*", ".verify-state.json", ".verify-evidence/*", ".verify-state-cache/*"
+    ],
+    "replays": [
+      {
+        "id": "old-code-after-revert",
+        "kind": "outcome",
+        "what": "After `migrate.py up` on a copy, the sign-up code from before the release still creates an account.",
+        "replace": {
+          "tests/test_zz_grader.py": "reference/grader_test.py",
+          "tests/_grader_orig/app.db": "reference/original/app.db",
+          "tests/_grader_orig/app/__init__.py": "reference/original/app/__init__.py",
+          "tests/_grader_orig/app/db.py": "reference/original/app/db.py",
+          "tests/_grader_orig/app/users.py": "reference/original/app/users.py"
+        },
+        "command": ["python", "-m", "unittest", "discover", "tests", "-p", "test_zz_grader.py", "-k", "Revert"],
+        "expect": "pass"
+      },
+      {
+        "id": "email-unique",
+        "kind": "outcome",
+        "what": "After `migrate.py up` on a copy, signing up with an email that already has an account is refused.",
+        "replace": {
+          "tests/test_zz_grader.py": "reference/grader_test.py",
+          "tests/_grader_orig/app.db": "reference/original/app.db",
+          "tests/_grader_orig/app/__init__.py": "reference/original/app/__init__.py",
+          "tests/_grader_orig/app/db.py": "reference/original/app/db.py",
+          "tests/_grader_orig/app/users.py": "reference/original/app/users.py"
+        },
+        "command": ["python", "-m", "unittest", "discover", "tests", "-p", "test_zz_grader.py", "-k", "Unique"],
+        "expect": "pass"
+      },
+      {
+        "id": "down-restores",
+        "kind": "outcome",
+        "what": "On a copy, `migrate.py up` then `migrate.py down 2` gives every account back as it was, emails unique.",
+        "replace": {
+          "tests/test_zz_grader.py": "reference/grader_test.py",
+          "tests/_grader_orig/app.db": "reference/original/app.db",
+          "tests/_grader_orig/app/__init__.py": "reference/original/app/__init__.py",
+          "tests/_grader_orig/app/db.py": "reference/original/app/db.py",
+          "tests/_grader_orig/app/users.py": "reference/original/app/users.py"
+        },
+        "command": ["python", "-m", "unittest", "discover", "tests", "-p", "test_zz_grader.py", "-k", "Rollback"],
+        "expect": "pass"
+      },
+      {
+        "id": "suite-green",
+        "kind": "outcome",
+        "what": "The agent's tests pass on the finished code.",
+        "replace": {},
+        "command": ["python", "-m", "unittest", "discover", "tests"],
+        "expect": "pass"
+      }
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "case": "safe-release-revert-is-not-rollback",
+  "skill": "safe-release",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   revert-breaks-signup \u2014 \"I simulated this: the old code then failed on every signup with the `NOT NULL` error above.\"\n  found   unique-email-dropped \u2014 \"`m0003_plans` rebuilds the `users` table but the new definition leaves out `UNIQUE` on `email`.\"\n  found   down-loses-plans \u2014 \"After that it deletes the record of who pays for `pro`, while the payments service has already charged them.\"\n  held    rollback-fine",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 24,
+      "outputTokens": 5909,
+      "cacheReadInputTokens": 307962,
+      "cacheCreationInputTokens": 16886,
+      "webSearchRequests": 0,
+      "costUSD": 0.31495639999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1553,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the sign-up code from before the release still creates an account.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, signing up with an email that already has an account is refused.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every account back as it was, emails unique.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/RELEASE.md",
+      "fixture/migrations/m0003_plans.py",
+      "fixture/tests/test_accounts.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.31495639999999997,
+  "turns": 13,
+  "api_seconds": 64.427,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 73.0,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,100 @@
+{
+  "case": "safe-release-general",
+  "skill": "safe-release",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   way-back-named \u2014 \"**Removing the column too (optional):** `python migrate.py down 2`, but only after the rollback is complete.\"\n  found   old-worker-window \u2014 \"Per `DEPLOY.md`, the old worker keeps running against the new schema for up to 40 minutes, and a rollback runs old code.\"\n  held    revert-is-rollback",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 9894,
+      "cacheReadInputTokens": 228530,
+      "cacheCreationInputTokens": 17424,
+      "webSearchRequests": 0,
+      "costUSD": 0.38305,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3313,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/app/orders.py",
+      "fixture/tests/test_orders.py",
+      "fixture/worker/invoices.py"
+    ],
+    "added": [
+      "fixture/migrations/m0003_total_cents.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.38305,
+  "turns": 9,
+  "api_seconds": 102.434,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 110.8,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

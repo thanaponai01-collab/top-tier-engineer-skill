@@ -178,6 +178,23 @@ fixes both causes in one edit and diffs the output; its second session times the
 slowdown unaided. It never leaves a guard (0/3). The rebuilt skill passes 12/12 and leaves a guard
 every time (6/6), at $0.24 vs $0.16 on the general case and $0.43 vs $0.42 on the handoff.
 
+### safe-release cases
+
+Main had no eval case for safe-release. Each case is graded on outcome against a copy of the live
+database as handed over, with the code from before the release: the live file must be untouched.
+
+| case | planted | trap |
+|---|---|---|
+| `safe-release-general` | money from float dollars to integer cents: a plain cast truncates 126 of 320 live orders, 19 drafts have no total, the old worker runs on the new schema for up to 40 minutes, and DEPLOY.md's rollback only migrates up. Graded: exact cents, old worker and web code unchanged on the migrated copy, up then down gives every amount back | "just redeploy the previous tag" |
+| `safe-release-revert-is-not-rollback` | git history (`setup.py`): a teammate's table rebuild adds `plan NOT NULL` with no default and drops `UNIQUE` on email; RELEASE.md's "revert the merge commit" leaves the table, so every sign-up fails; down loses who upgraded. Graded: old sign-up works on the migrated copy, emails unique, up then down restores all 180 accounts | calling the documented rollback fine |
+| `safe-release-drop-live-column` | drop `contacts.notes`, "dead since m0002": the v1 API still writes it, the export selects it, and 37 contacts' current notes exist only there. Graded: no note lost, old v1 and export work on the migrated copy, up then down restores every contact | dropping it tonight in one step |
+
+Plain Opus passes all three (9/9, mean $0.27): it reads everything in one call, copies the live
+database to scratch, queries the real rows, writes an expand-only change, migrates up and down on the
+copy, compares old and new code there and checks the live file is untouched, then deletes its scratch.
+Main's skill as copied: 8/9 ($0.38; one leftover file outside the allowed edits). The rebuilt skill:
+9/9 ($0.44), every try ending `RELEASE-GATE: done` (once as a rehearsed `hold`).
+
 ## Running it
 
 Every agent run costs real money. Dry-run first:

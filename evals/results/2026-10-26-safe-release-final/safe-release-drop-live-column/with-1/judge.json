@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "notes-only-in-old-column",
+      "what": "37 contacts have a note in contacts.notes that is not in contact_notes (written after the m0002 copy), so dropping the column loses them; the answer says notes would be lost and how many or which",
+      "found": true,
+      "quote": "**37 notes would be lost.** 145 contacts have a value in `contacts.notes`, and 37 of those have no copy in `contact_notes`.",
+      "quote_checked": true
+    },
+    {
+      "id": "v1-still-writes",
+      "what": "the v1 API (iOS app 3.x) still reads and writes contacts.notes, so the column is not dead; the old code also serves requests on the new schema until the services restart",
+      "found": true,
+      "quote": "`api/v1.py` still reads and writes `contacts.notes`, and the iOS 3.x app (about 8% of requests) uses it.",
+      "quote_checked": true
+    },
+    {
+      "id": "export-reads",
+      "what": "the weekly CSV export selects the notes column by name",
+      "found": true,
+      "quote": "`exports/csv_export.py` asks for `id,name,email,notes`, so crm-export-cron fails with the same error.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "drop-is-safe",
+      "what": "saying the column can be dropped tonight as asked, in one step",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0245791,
+  "model": "claude-sonnet-5-5"
+}

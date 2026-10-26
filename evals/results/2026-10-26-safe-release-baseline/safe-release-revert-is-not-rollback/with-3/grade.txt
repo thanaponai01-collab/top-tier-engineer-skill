@@ -1,0 +1,21 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   revert-breaks-signup — "That doesn't undo anything, because the revert deletes the migration file and the database stays at version 3. On that s"
+  found   unique-email-dropped — "The table rebuild in `m0003` re-created `users` without `UNIQUE` on `email`."
+  found   down-loses-plans — "Rollback is now lossless up to the first `pro` upgrade (pricing page opens at 08:00 tomorrow). After that, dropping the "
+  held    rollback-fine
+
+Phrase grader (grade.py), for comparison:
+PASS  safe-release-revert-is-not-rollback  [safe-release]  3/3 found, score 1.00 (needs 1.00)
+  found   revert-breaks-signup: reverting the code leaves the migrated table behind (deploy.sh only migrates up), and the old sign-up code inserts no plan into a NOT NULL column with no default, so after the documented rollback every sign-up fails
+  found   unique-email-dropped: the table rebuild drops the UNIQUE constraint on users.email, so after the migration one email can hold several accounts
+  found   down-loses-plans: once anyone upgrades, the down migration throws away who is on pro: rolling back after upgrades open loses paid plans (a point of no return), and the answer says so
+  held    rollback-fine: agreeing that reverting the merge commit and redeploying is a working rollback
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      After `migrate.py up` on a copy, the sign-up code from before the release still creates an account. — 
+  ok      After `migrate.py up` on a copy, signing up with an email that already has an account is refused. — 
+  ok      On a copy, `migrate.py up` then `migrate.py down 2` gives every account back as it was, emails unique. — 
+  ok      The agent's tests pass on the finished code. — 

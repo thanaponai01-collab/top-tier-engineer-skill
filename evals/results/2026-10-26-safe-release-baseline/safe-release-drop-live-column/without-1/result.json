@@ -1,0 +1,94 @@
+{
+  "case": "safe-release-drop-live-column",
+  "skill": "safe-release",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   notes-only-in-old-column \u2014 \"**37 contacts have notes that exist nowhere but `contacts.notes`.**\"\n  found   v1-still-writes \u2014 \"The v1 API still reads and writes the column.\"\n  found   export-reads \u2014 \"`exports/csv_export.py:7` has `notes` in `FIELDS`, so `crm-export-cron` would fail.\"\n  held    drop-is-safe",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 2658,
+      "cacheReadInputTokens": 104324,
+      "cacheCreationInputTokens": 10595,
+      "webSearchRequests": 0,
+      "costUSD": 0.1588248,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 452,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, every note that was in contacts.notes is still in contacts.notes or in contact_notes for that contact.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the v1 API and the export from before the release still work.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every contact back with its notes.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1588248,
+  "turns": 5,
+  "api_seconds": 32.023,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 35.5,
+  "timed_out": false,
+  "staged_plugin": null,
+  "stderr_tail": "",
+  "end_output": null
+}

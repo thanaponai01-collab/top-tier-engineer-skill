@@ -1,0 +1,7 @@
+Use `safe-release` on `fixture/`.
+
+Dana's PR for paid plans is in the tree (RELEASE.md describes it) and goes out with tonight's deploy.
+Review it for release: is it safe to ship, and is the rollback in RELEASE.md right? Fix whatever has
+to change before it ships. `data/app.db` is the live database. Don't commit.
+
+The explicitly requested safe-release skill is at <tmp>\tte-plugin-wpi1bv96\verify-loop\skills\safe-release\SKILL.md. Read and follow that SKILL.md before starting.

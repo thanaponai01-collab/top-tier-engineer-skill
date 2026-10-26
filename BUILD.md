@@ -236,6 +236,22 @@
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before
 I merge" needs new train prompts in that shape before tuning, never the test prompt itself. The
 overfit eval still shows no difference (see 1.22.0).
+
+- safe-release as three stages (1.36.0) | proven (mechanics) / ties plain Opus on all three cases at about 1.6x cost (eval)
+  - `scripts/release.py`: `--rehearse` on throwaway copies of the repo and its live data: probes on
+    today's code (git HEAD, `--old`, or the tree at the first call), forward and forward again, probes
+    on the changed code and on today's code over the migrated data, back compared row for row, probes
+    after back. `--gate`: forward, back, call (`.release/plan.md`; the live data as at the first call);
+    `CALL: hold` over a current rehearsal finishes with its blockers. `tests/test_release.py` 27 tests;
+    23 disabled guards each caught.
+  - Plain `evals/results/2026-10-26-safe-release-baseline` (without): 9/9 ($0.27). Main's skill as copied
+    (same folder, with): 8/9 ($0.38). Rebuild `-rebuild`: 8/9 (a leftover draft file; two tries held
+    correctly but could not close the gate, which led to the hold finish). Final helper `-final`: 9/9 ($0.44).
+  - Plain Opus already rehearses on a copy of the live data and checks the live file; what it never
+    leaves is the rehearsal. The skill leaves `.release/` (state and plan), deleted or committed by the agent.
+  - Not covered: a schema too big to reason about in one read, non-SQLite stores (compared as bytes
+    only), the other helpers' skip lists do not name `.release/`.
+
 - Pay for an eval subset (`fake-check-and-decoy`, `green-with-unverified`, `teammate-loosened-check`)
   to measure turns and cost against the 1.18 numbers in `work/verify-loop-design.md`.
 - Then add `max_turns`/`max_cost` and a helper-source-read failure to `grade.py` from that data.

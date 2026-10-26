@@ -31,6 +31,11 @@ And `perf-optimize` (manual-only, `/verify-loop:perf-optimize`): make it measura
 times and profiles the work on the code as it was at two sizes, keeps a change only when the output is
 the same bytes, it beats the noise and a profile pointed at what it changed, and accepts it only with
 a guard in the suite that fails when each changed file is put back.
+And `safe-release` (manual-only, `/verify-loop:safe-release`): deploy, or change stored data, with
+a proven way back. `release.py` rehearses the change and its way back on copies of the live data,
+runs today's code on the migrated data (the deploy window, a code-only revert), compares the data
+after the way back row for row, and accepts a call only with every loss named and the live data
+untouched.
 
 ## Install (Claude Code)
 
@@ -90,6 +95,8 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
   `--run CMD`, `--gate`; notes in `.evolve/notes.md`).
 - `plugin/skills/perf-optimize/` — the perf-optimize skill; `scripts/perf.py` (`--measure CMD --size N`,
   `--gate --guard CMD`; notes in `.perf/notes.md`).
+- `plugin/skills/safe-release/` — the safe-release skill; `scripts/release.py` (`--rehearse --forward
+  CMD --back CMD --probe CMD`, `--gate`; plan in `.release/plan.md`).
 - `plugin/skills/feature-map/` — the feature-map skill; `scripts/features.py` (`init`, `check`,
   `impact`) drafts and checks `FEATURES.md`.
 - `examples/verify-ci/` — a small project verified fresh in CI (`.github/workflows/verify.yml`).

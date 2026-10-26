@@ -1,0 +1,124 @@
+{
+  "case": "safe-release-revert-is-not-rollback",
+  "skill": "safe-release",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   revert-breaks-signup \u2014 \"That doesn't undo anything, because the revert deletes the migration file and the database stays at version 3. On that s\"\n  found   unique-email-dropped \u2014 \"The table rebuild in `m0003` re-created `users` without `UNIQUE` on `email`.\"\n  found   down-loses-plans \u2014 \"Rollback is now lossless up to the first `pro` upgrade (pricing page opens at 08:00 tomorrow). After that, dropping the \"\n  held    rollback-fine",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "safe-release"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "safe-release",
+      "path": "<tmp>\\tte-plugin-nt3msqia\\verify-loop\\skills\\safe-release\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 22,
+      "outputTokens": 10154,
+      "cacheReadInputTokens": 323174,
+      "cacheCreationInputTokens": 23271,
+      "webSearchRequests": 0,
+      "costUSD": 0.45397080000000006,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2681,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the sign-up code from before the release still creates an account.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, signing up with an email that already has an account is refused.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every account back as it was, emails unique.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/RELEASE.md",
+      "fixture/app/users.py",
+      "fixture/migrations/m0003_plans.py",
+      "fixture/tests/test_accounts.py"
+    ],
+    "added": [
+      "scratch/clone/.gitignore",
+      "scratch/clone/README.md",
+      "scratch/clone/app/__init__.py",
+      "scratch/clone/app/db.py",
+      "scratch/clone/app/users.py",
+      "scratch/clone/deploy.sh",
+      "scratch/clone/migrate.py",
+      "scratch/clone/migrations/__init__.py",
+      "scratch/clone/migrations/m0001_users.py",
+      "scratch/clone/migrations/m0002_last_login.py",
+      "scratch/clone/tests/test_accounts.py",
+      "scratch/d.db",
+      "scratch/live-copy.db",
+      "scratch/m.db",
+      "scratch/r.db"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.45397080000000006,
+  "turns": 13,
+  "api_seconds": 97.034,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 106.5,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-nt3msqia\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -9,7 +9,8 @@ manual-only `debug-protocol` skill at `plugin/skills/debug-protocol/SKILL.md` (m
 `plugin/skills/structure-gate/SKILL.md` (standalone), and the manual-only `threat-model` skill at
 `plugin/skills/threat-model/SKILL.md` (standalone), and the manual-only `evolve-maintain` skill at
 `plugin/skills/evolve-maintain/SKILL.md` (names debug-protocol and latent-audit when present), and the
-manual-only `perf-optimize` skill at `plugin/skills/perf-optimize/SKILL.md` (standalone).
+manual-only `perf-optimize` skill at `plugin/skills/perf-optimize/SKILL.md` (standalone), and the
+manual-only `safe-release` skill at `plugin/skills/safe-release/SKILL.md` (standalone).
 
 - Mechanics, not advice: every rule is a script or test that can fail, never a tip for the agent.
 

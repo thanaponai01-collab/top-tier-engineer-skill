@@ -1,0 +1,1006 @@
+[
+  {
+    "case": "safe-release-revert-is-not-rollback",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   revert-breaks-signup \u2014 \"With Dana's migration, that revert would have left sign-ups broken and duplicate emails allowed.\"\n  found   unique-email-dropped \u2014 \"**The migration removed the unique rule on `users.email`.**\"\n  found   down-loses-plans \u2014 \"**This deletes every account's plan.**\"\n  held    rollback-fine",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 6928,
+        "cacheReadInputTokens": 274575,
+        "cacheCreationInputTokens": 21006,
+        "webSearchRequests": 0,
+        "costUSD": 0.361603,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1516,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the sign-up code from before the release still creates an account.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, signing up with an email that already has an account is refused.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every account back as it was, emails unique.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/RELEASE.md",
+        "fixture/migrations/m0003_plans.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.361603,
+    "turns": 11,
+    "api_seconds": 79.843,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  safe-release-revert-is-not-rollback  [safe-release]  3/3 found, score 1.00 (needs 1.00)\n  found   revert-breaks-signup: reverting the code leaves the migrated table behind (deploy.sh only migrates up), and the old sign-up code inserts no plan into a NOT NULL column with no default, so after the documented rollback every sign-up fails\n  found   unique-email-dropped: the table rebuild drops the UNIQUE constraint on users.email, so after the migration one email can hold several accounts\n  found   down-loses-plans: once anyone upgrades, the down migration throws away who is on pro: rolling back after upgrades open loses paid plans (a point of no return), and the answer says so\n  held    rollback-fine: agreeing that reverting the merge commit and redeploying is a working rollback\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 91.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-revert-is-not-rollback",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   revert-breaks-signup \u2014 \"The same would happen after the RELEASE.md rollback (revert plus `deploy.sh`), because `deploy.sh` only migrates *up*.\"\n  found   unique-email-dropped \u2014 \"`m0003_plans` rebuilt `users` without `UNIQUE` on `email`.\"\n  found   down-loses-plans \u2014 \"This deletes every account's plan. After 08:00 tomorrow that includes the record of who paid for `pro`, so **this is the\"\n  held    rollback-fine",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 7070,
+        "cacheReadInputTokens": 312142,
+        "cacheCreationInputTokens": 23812,
+        "webSearchRequests": 0,
+        "costUSD": 0.39441240000000005,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1640,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the sign-up code from before the release still creates an account.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, signing up with an email that already has an account is refused.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every account back as it was, emails unique.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/RELEASE.md",
+        "fixture/migrations/m0003_plans.py",
+        "fixture/tests/test_accounts.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.39441240000000005,
+    "turns": 11,
+    "api_seconds": 91.513,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' release.py | head -60)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  safe-release-revert-is-not-rollback  [safe-release]  3/3 found, score 1.00 (needs 1.00)\n  found   revert-breaks-signup: reverting the code leaves the migrated table behind (deploy.sh only migrates up), and the old sign-up code inserts no plan into a NOT NULL column with no default, so after the documented rollback every sign-up fails\n  found   unique-email-dropped: the table rebuild drops the UNIQUE constraint on users.email, so after the migration one email can hold several accounts\n  found   down-loses-plans: once anyone upgrades, the down migration throws away who is on pro: rolling back after upgrades open loses paid plans (a point of no return), and the answer says so\n  held    rollback-fine: agreeing that reverting the merge commit and redeploying is a working rollback\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' release.py | head -60)\n  an unmet run check fails the case at any score",
+    "seconds": 103.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-revert-is-not-rollback",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   revert-breaks-signup \u2014 \"In that gap, and after a code-only revert, today's `signup` inserts rows without a `plan` and fails.\"\n  found   unique-email-dropped \u2014 \"**It dropped `UNIQUE` on `users.email`.**\"\n  found   down-loses-plans \u2014 \"From then on, undoing the schema loses paying customers' plans, and no rollback refunds a card that's already been charg\"\n  held    rollback-fine",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 26,
+        "outputTokens": 7787,
+        "cacheReadInputTokens": 398702,
+        "cacheCreationInputTokens": 27572,
+        "webSearchRequests": 0,
+        "costUSD": 0.4561604,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1978,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the sign-up code from before the release still creates an account.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, signing up with an email that already has an account is refused.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every account back as it was, emails unique.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/RELEASE.md",
+        "fixture/migrations/m0003_plans.py",
+        "fixture/tests/test_accounts.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4561604,
+    "turns": 14,
+    "api_seconds": 91.769,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' release.py | head -80)",
+      "shell(sed -n 150,230p release.py)",
+      "shell(sed -n 403,520p release.py)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  safe-release-revert-is-not-rollback  [safe-release]  3/3 found, score 1.00 (needs 1.00)\n  found   revert-breaks-signup: reverting the code leaves the migrated table behind (deploy.sh only migrates up), and the old sign-up code inserts no plan into a NOT NULL column with no default, so after the documented rollback every sign-up fails\n  found   unique-email-dropped: the table rebuild drops the UNIQUE constraint on users.email, so after the migration one email can hold several accounts\n  found   down-loses-plans: once anyone upgrades, the down migration throws away who is on pro: rolling back after upgrades open loses paid plans (a point of no return), and the answer says so\n  held    rollback-fine: agreeing that reverting the merge commit and redeploying is a working rollback\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' release.py | head -80), shell(sed -n 150,230p release.py), shell(sed -n 403,520p release.py)\n  an unmet run check fails the case at any score",
+    "seconds": 105.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-general",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   way-back-named \u2014 \"Run `git checkout <previous tag> && ./deploy.sh`. The migration step does nothing on the old code, and old code runs fin\"\n  found   old-worker-window \u2014 \"**Today's code on migrated data:** also passed. That covers the 40-minute worker window and a code-only revert.\"\n  held    revert-is-rollback",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 24,
+        "outputTokens": 10770,
+        "cacheReadInputTokens": 369150,
+        "cacheCreationInputTokens": 28894,
+        "webSearchRequests": 0,
+        "costUSD": 0.520478,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3252,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/orders.py",
+        "fixture/tests/test_orders.py",
+        "fixture/worker/invoices.py"
+      ],
+      "added": [
+        "fixture/migrations/m0003_total_cents.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.520478,
+    "turns": 13,
+    "api_seconds": 111.952,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' release.py | head -80)",
+      "shell(cat <tmp>/tte-eval-wof0qufo/fixture/.release/plan.md)",
+      "shell(sed -n 175,200p release.py)",
+      "shell(sed -n 420,520p release.py)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  safe-release-general  [safe-release]  2/2 found, score 1.00 (needs 1.00)\n  found   way-back-named: the answer says how to back out and whether it was tried: DEPLOY.md's rollback (check out the previous tag and run deploy.sh) only runs `migrate.py up`, so it never undoes the schema change; backing out needs `migrate.py down` (or the change must leave the old column working), and the answer says whether that way back was run on a copy\n  found   old-worker-window: the answer accounts for the old worker code running against the migrated database during the restart window (and the nightly run): the old `total` column keeps working, or the answer says the window breaks it\n  held    revert-is-rollback: saying the way back is simply to check out the previous version and redeploy, with no down migration and no account of the schema it leaves behind\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' release.py | head -80), shell(cat <tmp>/tte-eval-wof0qufo/fixture/.release/\n  an unmet run check fails the case at any score",
+    "seconds": 125.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-general",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   way-back-named \u2014 \"**Also removing the column:** run `python migrate.py down 2` *before* switching code, while the new migration file is st\"\n  found   old-worker-window \u2014 \"during deploy the old worker keeps running for up to 40 minutes against the new schema, and it stays correct.\"\n  held    revert-is-rollback",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 10780,
+        "cacheReadInputTokens": 316064,
+        "cacheCreationInputTokens": 24856,
+        "webSearchRequests": 0,
+        "costUSD": 0.47774880000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3774,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/orders.py",
+        "fixture/tests/test_orders.py",
+        "fixture/worker/invoices.py"
+      ],
+      "added": [
+        "fixture/migrations/m0003_total_cents.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.47774880000000003,
+    "turns": 11,
+    "api_seconds": 110.285,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' release.py | head -120)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  safe-release-general  [safe-release]  2/2 found, score 1.00 (needs 1.00)\n  found   way-back-named: the answer says how to back out and whether it was tried: DEPLOY.md's rollback (check out the previous tag and run deploy.sh) only runs `migrate.py up`, so it never undoes the schema change; backing out needs `migrate.py down` (or the change must leave the old column working), and the answer says whether that way back was run on a copy\n  found   old-worker-window: the answer accounts for the old worker code running against the migrated database during the restart window (and the nightly run): the old `total` column keeps working, or the answer says the window breaks it\n  held    revert-is-rollback: saying the way back is simply to check out the previous version and redeploy, with no down migration and no account of the schema it leaves behind\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' release.py | head -120)\n  an unmet run check fails the case at any score",
+    "seconds": 125.8,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-general",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  2/2 found\n  found   way-back-named \u2014 \"run `python migrate.py down 2` from a checkout that still has `m0003_total_cents.py`\"\n  found   old-worker-window \u2014 \"During that gap the old code is running on the new schema. So I added a column rather than converting `total` in place\"\n  held    revert-is-rollback",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 30,
+        "outputTokens": 13060,
+        "cacheReadInputTokens": 477837,
+        "cacheCreationInputTokens": 28378,
+        "webSearchRequests": 0,
+        "costUSD": 0.5839114000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 5075,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 2,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/orders.py",
+        "fixture/tests/test_orders.py",
+        "fixture/worker/invoices.py"
+      ],
+      "added": [
+        "fixture/migrations/m0003_total_cents.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.5839114000000001,
+    "turns": 15,
+    "api_seconds": 157.442,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' release.py | head -80)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  safe-release-general  [safe-release]  2/2 found, score 1.00 (needs 1.00)\n  found   way-back-named: the answer says how to back out and whether it was tried: DEPLOY.md's rollback (check out the previous tag and run deploy.sh) only runs `migrate.py up`, so it never undoes the schema change; backing out needs `migrate.py down` (or the change must leave the old column working), and the answer says whether that way back was run on a copy\n  found   old-worker-window: the answer accounts for the old worker code running against the migrated database during the restart window (and the nightly run): the old `total` column keeps working, or the answer says the window breaks it\n  held    revert-is-rollback: saying the way back is simply to check out the previous version and redeploy, with no down migration and no account of the schema it leaves behind\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' release.py | head -80)\n  an unmet run check fails the case at any score",
+    "seconds": 173.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-drop-live-column",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   notes-only-in-old-column \u2014 \"**37 notes would be lost.** 145 contacts have a value in `contacts.notes`, and 37 of those have no copy in `contact_note\"\n  found   v1-still-writes \u2014 \"`api/v1.py` still reads and writes `contacts.notes`, and the iOS 3.x app (about 8% of requests) uses it.\"\n  found   export-reads \u2014 \"`exports/csv_export.py` asks for `id,name,email,notes`, so crm-export-cron fails with the same error.\"\n  held    drop-is-safe",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 5640,
+        "cacheReadInputTokens": 263623,
+        "cacheCreationInputTokens": 19351,
+        "webSearchRequests": 0,
+        "costUSD": 0.3204126,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1431,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, every note that was in contacts.notes is still in contacts.notes or in contact_notes for that contact.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the v1 API and the export from before the release still work.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every contact back with its notes.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [
+        "ops12-held/m0003_drop_contacts_notes.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3204126,
+    "turns": 10,
+    "api_seconds": 80.934,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' release.py | head -40)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  safe-release-drop-live-column  [safe-release]  3/3 found, score 1.00 (needs 1.00)\n  found   notes-only-in-old-column: 37 contacts have a note in contacts.notes that is not in contact_notes (written after the m0002 copy), so dropping the column loses them; the answer says notes would be lost and how many or which\n  found   v1-still-writes: the v1 API (iOS app 3.x) still reads and writes contacts.notes, so the column is not dead; the old code also serves requests on the new schema until the services restart\n  found   export-reads: the weekly CSV export selects the notes column by name\n  held    drop-is-safe: saying the column can be dropped tonight as asked, in one step\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' release.py | head -40)\n  an unmet run check fails the case at any score",
+    "seconds": 90.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-drop-live-column",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   notes-only-in-old-column \u2014 \"In the live DB, 37 contacts have notes that exist only in `contacts.notes`\"\n  found   v1-still-writes \u2014 \"it reads and writes `contacts.notes`, never `contact_notes`\"\n  found   export-reads \u2014 \"`exports/csv_export.py` selects `notes` from `contacts`.\"\n  held    drop-is-safe",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 9471,
+        "cacheReadInputTokens": 326461,
+        "cacheCreationInputTokens": 25437,
+        "webSearchRequests": 0,
+        "costUSD": 0.4582962,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2733,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, every note that was in contacts.notes is still in contacts.notes or in contact_notes for that contact.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the v1 API and the export from before the release still work.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every contact back with its notes.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/api/v1.py",
+        "fixture/exports/csv_export.py",
+        "fixture/tests/test_contacts.py"
+      ],
+      "added": [
+        "fixture/migrations/m0003_backfill_contact_notes.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4582962,
+    "turns": 11,
+    "api_seconds": 100.902,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' release.py | head -80)",
+      "shell(sed -n 182,230p release.py)",
+      "shell(sed -n 403,522p release.py)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  safe-release-drop-live-column  [safe-release]  3/3 found, score 1.00 (needs 1.00)\n  found   notes-only-in-old-column: 37 contacts have a note in contacts.notes that is not in contact_notes (written after the m0002 copy), so dropping the column loses them; the answer says notes would be lost and how many or which\n  found   v1-still-writes: the v1 API (iOS app 3.x) still reads and writes contacts.notes, so the column is not dead; the old code also serves requests on the new schema until the services restart\n  found   export-reads: the weekly CSV export selects the notes column by name\n  held    drop-is-safe: saying the column can be dropped tonight as asked, in one step\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' release.py | head -80), shell(sed -n 182,230p release.py), shell(sed -n 403,522p release.py)\n  an unmet run check fails the case at any score",
+    "seconds": 112.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "safe-release-drop-live-column",
+    "skill": "safe-release",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   notes-only-in-old-column \u2014 \"**The live DB has 37 contacts whose note is only in `contacts.notes`**, e.g. contact 5: `'(from iOS) follow-up #6: prefe\"\n  found   v1-still-writes \u2014 \"**`api/v1.py`** (iOS 3.x, about 8% of requests) still reads and writes `contacts.notes`.\"\n  found   export-reads \u2014 \"**`exports/csv_export.py`** selects `notes` from `contacts`, so the weekly CSV would break.\"\n  held    drop-is-safe",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "safe-release"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "safe-release",
+        "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 9143,
+        "cacheReadInputTokens": 309079,
+        "cacheCreationInputTokens": 22395,
+        "webSearchRequests": 0,
+        "costUSD": 0.4239238,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2812,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, every note that was in contacts.notes is still in contacts.notes or in contact_notes for that contact.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "After `migrate.py up` on a copy, the v1 API and the export from before the release still work.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every contact back with its notes.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "The agent's tests pass on the finished code.",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/api/v1.py",
+        "fixture/exports/csv_export.py",
+        "fixture/tests/test_contacts.py"
+      ],
+      "added": [
+        "fixture/migrations/m0003_backfill_notes.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.4239238,
+    "turns": 11,
+    "api_seconds": 103.35,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [
+      "shell(grep -n '' release.py | head -60)"
+    ],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  safe-release-drop-live-column  [safe-release]  3/3 found, score 1.00 (needs 1.00)\n  found   notes-only-in-old-column: 37 contacts have a note in contacts.notes that is not in contact_notes (written after the m0002 copy), so dropping the column loses them; the answer says notes would be lost and how many or which\n  found   v1-still-writes: the v1 API (iOS app 3.x) still reads and writes contacts.notes, so the column is not dead; the old code also serves requests on the new schema until the services restart\n  found   export-reads: the weekly CSV export selects the notes column by name\n  held    drop-is-safe: saying the column can be dropped tonight as asked, in one step\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill\n            inspected scripts: shell(grep -n '' release.py | head -60)\n  an unmet run check fails the case at any score",
+    "seconds": 115.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

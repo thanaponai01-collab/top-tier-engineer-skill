@@ -1,0 +1,111 @@
+{
+  "case": "safe-release-revert-is-not-rollback",
+  "skill": "safe-release",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   revert-breaks-signup \u2014 \"In that gap, and after a code-only revert, today's `signup` inserts rows without a `plan` and fails.\"\n  found   unique-email-dropped \u2014 \"**It dropped `UNIQUE` on `users.email`.**\"\n  found   down-loses-plans \u2014 \"From then on, undoing the schema loses paying customers' plans, and no rollback refunds a card that's already been charg\"\n  held    rollback-fine",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "safe-release"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "safe-release",
+      "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 26,
+      "outputTokens": 7787,
+      "cacheReadInputTokens": 398702,
+      "cacheCreationInputTokens": 27572,
+      "webSearchRequests": 0,
+      "costUSD": 0.4561604,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1978,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the sign-up code from before the release still creates an account.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, signing up with an email that already has an account is refused.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every account back as it was, emails unique.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/RELEASE.md",
+      "fixture/migrations/m0003_plans.py",
+      "fixture/tests/test_accounts.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4561604,
+  "turns": 14,
+  "api_seconds": 91.769,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [
+    "shell(grep -n '' release.py | head -80)",
+    "shell(sed -n 150,230p release.py)",
+    "shell(sed -n 403,520p release.py)"
+  ],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 105.6,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

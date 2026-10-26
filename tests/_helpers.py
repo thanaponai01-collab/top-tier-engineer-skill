@@ -22,6 +22,7 @@ SCRIPTS = {
     "threat.py": os.path.join(ROOT, "plugin", "skills", "threat-model", "scripts"),
     "evolve.py": os.path.join(ROOT, "plugin", "skills", "evolve-maintain", "scripts"),
     "perf.py": os.path.join(ROOT, "plugin", "skills", "perf-optimize", "scripts"),
+    "release.py": os.path.join(ROOT, "plugin", "skills", "safe-release", "scripts"),
 }
 
 

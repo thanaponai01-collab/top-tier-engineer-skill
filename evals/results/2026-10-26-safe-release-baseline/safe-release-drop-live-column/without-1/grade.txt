@@ -1,0 +1,22 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  3/3 found
+  found   notes-only-in-old-column — "**37 contacts have notes that exist nowhere but `contacts.notes`.**"
+  found   v1-still-writes — "The v1 API still reads and writes the column."
+  found   export-reads — "`exports/csv_export.py:7` has `notes` in `FIELDS`, so `crm-export-cron` would fail."
+  held    drop-is-safe
+
+Phrase grader (grade.py), for comparison:
+PASS  safe-release-drop-live-column  [safe-release]  3/3 found, score 1.00 (needs 1.00)
+  found   notes-only-in-old-column: 37 contacts have a note in contacts.notes that is not in contact_notes (written after the m0002 copy), so dropping the column loses them; the answer says notes would be lost and how many or which
+  found   v1-still-writes: the v1 API (iOS app 3.x) still reads and writes contacts.notes, so the column is not dead; the old code also serves requests on the new schema until the services restart
+  found   export-reads: the weekly CSV export selects the notes column by name
+  held    drop-is-safe: saying the column can be dropped tonight as asked, in one step
+            named to reject it, not counted: safe to drop
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      After `migrate.py up` on a copy, every note that was in contacts.notes is still in contacts.notes or in contact_notes for that contact. — 
+  ok      After `migrate.py up` on a copy, the v1 API and the export from before the release still work. — 
+  ok      On a copy, `migrate.py up` then `migrate.py down 2` gives every contact back with its notes. — 
+  ok      The agent's tests pass on the finished code. — 

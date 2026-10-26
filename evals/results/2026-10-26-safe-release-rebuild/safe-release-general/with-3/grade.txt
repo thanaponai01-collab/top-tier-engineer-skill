@@ -1,0 +1,21 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  2/2 found
+  found   way-back-named — "Stop `shop-web` and `shop-worker`, run `python migrate.py down 2`, then do step 1."
+  found   old-worker-window — "your deploy restarts the worker last, and the old worker can run on the new schema for up to 40 minutes."
+  held    revert-is-rollback
+
+Phrase grader (grade.py), for comparison:
+FAIL  safe-release-general  [safe-release]  2/2 found, score 1.00 (needs 1.00)
+  found   way-back-named: the answer says how to back out and whether it was tried: DEPLOY.md's rollback (check out the previous tag and run deploy.sh) only runs `migrate.py up`, so it never undoes the schema change; backing out needs `migrate.py down` (or the change must leave the old column working), and the answer says whether that way back was run on a copy
+  found   old-worker-window: the answer accounts for the old worker code running against the migrated database during the restart window (and the nightly run): the old `total` column keeps working, or the answer says the window breaks it
+  held    revert-is-rollback: saying the way back is simply to check out the previous version and redeploy, with no down migration and no account of the schema it leaves behind
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  UNMET   no-helper-source-read: never read or grepped scripts/ inside the skill
+            inspected scripts: shell(grep -n '' release.py | head -80)
+  an unmet run check fails the case at any score
+
+  ok      changed nothing outside the allowed files — 
+  ok      On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty. — 
+  ok      After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order. — 
+  ok      On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match. — 
+  ok      The agent's tests pass on the finished code. — 

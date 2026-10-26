@@ -1,0 +1,131 @@
+{
+  "case": "safe-release-general",
+  "skill": "safe-release",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   way-back-named \u2014 \"Run `python migrate.py down 2` while the new code is still checked out, then `git checkout <previous tag> && ./deploy.sh\"\n  found   old-worker-window \u2014 \"That covers the few seconds while `shop-web` restarts, the old worker's batch of up to 40 minutes, and any time after a \"\n  held    revert-is-rollback",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "safe-release"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "safe-release",
+      "path": "<tmp>\\tte-plugin-nt3msqia\\verify-loop\\skills\\safe-release\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 22,
+      "outputTokens": 13254,
+      "cacheReadInputTokens": 319192,
+      "cacheCreationInputTokens": 24637,
+      "webSearchRequests": 0,
+      "costUSD": 0.5261024000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3878,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/app/orders.py",
+      "fixture/tests/test_orders.py",
+      "fixture/worker/invoices.py"
+    ],
+    "added": [
+      "fixture/migrations/m0003_total_cents.py",
+      "scratch/afterB.txt",
+      "scratch/before.txt",
+      "scratch/bug.db",
+      "scratch/fixture-orig/DEPLOY.md",
+      "scratch/fixture-orig/README.md",
+      "scratch/fixture-orig/app/__init__.py",
+      "scratch/fixture-orig/app/db.py",
+      "scratch/fixture-orig/app/orders.py",
+      "scratch/fixture-orig/deploy.sh",
+      "scratch/fixture-orig/migrate.py",
+      "scratch/fixture-orig/migrations/__init__.py",
+      "scratch/fixture-orig/migrations/m0001_init.py",
+      "scratch/fixture-orig/migrations/m0002_status.py",
+      "scratch/fixture-orig/tests/test_orders.py",
+      "scratch/fixture-orig/worker/__init__.py",
+      "scratch/fixture-orig/worker/invoices.py",
+      "scratch/live-copy.db",
+      "scratch/oldtry.db",
+      "scratch/rbA.db",
+      "scratch/rbB.db",
+      "scratch/rbC.db",
+      "scratch/rehearsal.db"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.5261024000000001,
+  "turns": 11,
+  "api_seconds": 127.344,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 144.4,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-nt3msqia\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

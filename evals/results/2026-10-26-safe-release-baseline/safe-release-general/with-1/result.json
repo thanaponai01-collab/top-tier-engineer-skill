@@ -1,0 +1,125 @@
+{
+  "case": "safe-release-general",
+  "skill": "safe-release",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  2/2 found\n  found   way-back-named \u2014 \"If you also want the schema back at version 2, run `python migrate.py down 2` after the old worker has restarted. I also\"\n  found   old-worker-window \u2014 \"Two triggers fill `total_cents` whenever old code writes only `total`, which covers the worker finishing its batch for u\"\n  held    revert-is-rollback",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "safe-release"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "safe-release",
+      "path": "<tmp>\\tte-plugin-nt3msqia\\verify-loop\\skills\\safe-release\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 28,
+      "outputTokens": 10922,
+      "cacheReadInputTokens": 409133,
+      "cacheCreationInputTokens": 23020,
+      "webSearchRequests": 0,
+      "costUSD": 0.48453860000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2917,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/app/orders.py",
+      "fixture/tests/test_orders.py",
+      "fixture/worker/invoices.py"
+    ],
+    "added": [
+      "fixture/migrations/m0003_total_cents.py",
+      "work/old-code/DEPLOY.md",
+      "work/old-code/README.md",
+      "work/old-code/app/__init__.py",
+      "work/old-code/app/db.py",
+      "work/old-code/app/orders.py",
+      "work/old-code/deploy.sh",
+      "work/old-code/migrate.py",
+      "work/old-code/migrations/__init__.py",
+      "work/old-code/migrations/m0001_init.py",
+      "work/old-code/migrations/m0002_status.py",
+      "work/old-code/tests/test_orders.py",
+      "work/old-code/worker/__init__.py",
+      "work/old-code/worker/invoices.py",
+      "work/rehearsal.db",
+      "work/rehearse.py",
+      "work/shop-copy.db"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.48453860000000004,
+  "turns": 14,
+  "api_seconds": 115.273,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 131.3,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-nt3msqia\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

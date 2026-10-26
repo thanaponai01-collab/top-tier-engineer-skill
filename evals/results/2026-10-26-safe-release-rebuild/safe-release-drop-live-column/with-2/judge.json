@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "notes-only-in-old-column",
+      "what": "37 contacts have a note in contacts.notes that is not in contact_notes (written after the m0002 copy), so dropping the column loses them; the answer says notes would be lost and how many or which",
+      "found": true,
+      "quote": "dropping it would permanently lose 37 customer notes",
+      "quote_checked": true
+    },
+    {
+      "id": "v1-still-writes",
+      "what": "the v1 API (iOS app 3.x) still reads and writes contacts.notes, so the column is not dead; the old code also serves requests on the new schema until the services restart",
+      "found": true,
+      "quote": "still reads and writes `contacts.notes` on every GET and PUT.",
+      "quote_checked": true
+    },
+    {
+      "id": "export-reads",
+      "what": "the weekly CSV export selects the notes column by name",
+      "found": true,
+      "quote": "the weekly sales CSV, selects `notes` from `contacts`.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "drop-is-safe",
+      "what": "saying the column can be dropped tonight as asked, in one step",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0251931,
+  "model": "claude-sonnet-5-5"
+}

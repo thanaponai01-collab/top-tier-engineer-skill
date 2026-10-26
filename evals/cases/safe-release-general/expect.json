@@ -1,0 +1,91 @@
+{
+  "case": "safe-release-general",
+  "skill": "safe-release",
+  "question": "an ordinary release with a schema change: money from float dollars to integer cents, shipped by a deploy that runs the migration, restarts the web app, then lets the old worker run on the new schema for up to 40 minutes; is it safe, and is the way back real?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "way-back-named",
+      "what": "the answer says how to back out and whether it was tried: DEPLOY.md's rollback (check out the previous tag and run deploy.sh) only runs `migrate.py up`, so it never undoes the schema change; backing out needs `migrate.py down` (or the change must leave the old column working), and the answer says whether that way back was run on a copy",
+      "must_say_any": ["migrate.py down", "down migration", "down 2", "down()", "never runs down", "doesn't run down", "does not run down", "only runs up", "only migrates up"]
+    },
+    {
+      "id": "old-worker-window",
+      "what": "the answer accounts for the old worker code running against the migrated database during the restart window (and the nightly run): the old `total` column keeps working, or the answer says the window breaks it",
+      "must_say_any": ["worker", "invoice"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "revert-is-rollback",
+      "what": "saying the way back is simply to check out the previous version and redeploy, with no down migration and no account of the schema it leaves behind",
+      "must_not_say_any": ["just redeploy the previous", "simply redeploy the previous", "rollback is just git checkout", "revert the commit and redeploy"]
+    }
+  ],
+  "workdir": {
+    "what": "The live database is untouched; on a copy of it the agent's migration gives every order its exact amount in cents, the old web and worker code keep working on the migrated data, and up then down gives back the schema and amounts the old code needs. The agent's own tests pass.",
+    "edits_allowed": [
+      "app/*", "worker/*", "migrate.py", "migrations/*", "tests/*", "README.md", "DEPLOY.md", "deploy.sh",
+      "RELEASE.md", "ROLLBACK.md", "RUNBOOK.md", "CHANGELOG.md", "NOTES.md", "AGENTS.md", "VERIFY.md", "scripts/*",
+      "tools/*", ".gitignore", ".release/*", ".verify-state.json", ".verify-evidence/*", ".verify-state-cache/*"
+    ],
+    "replays": [
+      {
+        "id": "cents-exact",
+        "kind": "outcome",
+        "what": "On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty.",
+        "replace": {
+          "tests/test_zz_grader.py": "reference/grader_test.py",
+          "tests/_grader_orig/shop.db": "reference/original/shop.db",
+          "tests/_grader_orig/app/__init__.py": "reference/original/app/__init__.py",
+          "tests/_grader_orig/app/db.py": "reference/original/app/db.py",
+          "tests/_grader_orig/app/orders.py": "reference/original/app/orders.py",
+          "tests/_grader_orig/worker/__init__.py": "reference/original/worker/__init__.py",
+          "tests/_grader_orig/worker/invoices.py": "reference/original/worker/invoices.py"
+        },
+        "command": ["python", "-m", "unittest", "discover", "tests", "-p", "test_zz_grader.py", "-k", "Cents"],
+        "expect": "pass"
+      },
+      {
+        "id": "old-code-during-window",
+        "kind": "outcome",
+        "what": "After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order.",
+        "replace": {
+          "tests/test_zz_grader.py": "reference/grader_test.py",
+          "tests/_grader_orig/shop.db": "reference/original/shop.db",
+          "tests/_grader_orig/app/__init__.py": "reference/original/app/__init__.py",
+          "tests/_grader_orig/app/db.py": "reference/original/app/db.py",
+          "tests/_grader_orig/app/orders.py": "reference/original/app/orders.py",
+          "tests/_grader_orig/worker/__init__.py": "reference/original/worker/__init__.py",
+          "tests/_grader_orig/worker/invoices.py": "reference/original/worker/invoices.py"
+        },
+        "command": ["python", "-m", "unittest", "discover", "tests", "-p", "test_zz_grader.py", "-k", "Window"],
+        "expect": "pass"
+      },
+      {
+        "id": "down-restores",
+        "kind": "outcome",
+        "what": "On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match.",
+        "replace": {
+          "tests/test_zz_grader.py": "reference/grader_test.py",
+          "tests/_grader_orig/shop.db": "reference/original/shop.db",
+          "tests/_grader_orig/app/__init__.py": "reference/original/app/__init__.py",
+          "tests/_grader_orig/app/db.py": "reference/original/app/db.py",
+          "tests/_grader_orig/app/orders.py": "reference/original/app/orders.py",
+          "tests/_grader_orig/worker/__init__.py": "reference/original/worker/__init__.py",
+          "tests/_grader_orig/worker/invoices.py": "reference/original/worker/invoices.py"
+        },
+        "command": ["python", "-m", "unittest", "discover", "tests", "-p", "test_zz_grader.py", "-k", "Rollback"],
+        "expect": "pass"
+      },
+      {
+        "id": "suite-green",
+        "kind": "outcome",
+        "what": "The agent's tests pass on the finished code.",
+        "replace": {},
+        "command": ["python", "-m", "unittest", "discover", "tests"],
+        "expect": "pass"
+      }
+    ]
+  }
+}

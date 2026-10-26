@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "found": 3,
+  "total": 3,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "revert-breaks-signup",
+      "what": "reverting the code leaves the migrated table behind (deploy.sh only migrates up), and the old sign-up code inserts no plan into a NOT NULL column with no default, so after the documented rollback every sign-up fails",
+      "found": true,
+      "quote": "\"Revert the merge and run `./deploy.sh`\" leaves migration 3 applied, because `deploy.sh` only runs `migrate up`.",
+      "quote_checked": true
+    },
+    {
+      "id": "unique-email-dropped",
+      "what": "the table rebuild drops the UNIQUE constraint on users.email, so after the migration one email can hold several accounts",
+      "found": true,
+      "quote": "`m0003_plans` rebuilds the `users` table and left `UNIQUE` off `email`.",
+      "quote_checked": true
+    },
+    {
+      "id": "down-loses-plans",
+      "what": "once anyone upgrades, the down migration throws away who is on pro: rolling back after upgrades open loses paid plans (a point of no return), and the answer says so",
+      "found": true,
+      "quote": "Running `migrate.py down` stops being lossless once someone upgrades to `pro` at 08:00 tomorrow, because it would erase who has paid.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "rollback-fine",
+      "what": "agreeing that reverting the merge commit and redeploying is a working rollback",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0266331,
+  "model": "claude-sonnet-5-5"
+}

@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.36.0 - 2026-10-26 - safe-release: three stages built on what plain Opus already does
+
+- safe-release joins the plugin (manual-only, from top-tier-engineer main; main had no eval case for
+  it), then rebuilt from a trace of plain Opus. Plain Opus lists the files and reads every one in a
+  single call, copies the live database to a scratch folder, queries the real rows (float artifacts,
+  empty totals, notes written after an old copy), writes an expand-only change, migrates up and down
+  on the copy, compares old and new code there, checks the live file is byte-identical, and deletes
+  its scratch. It found every planted problem here; nothing of its rehearsal is left behind.
+- `scripts/release.py`: `--rehearse --forward CMD --back CMD --probe CMD` runs on throwaway copies of
+  the repo and its live data (every SQLite file outside tests, or `--data`): the probes on today's
+  code (git `HEAD`, `--old REF|DIR`, or the tree at the first call) as a baseline; forward, and
+  forward again; the probes on the changed code and on today's code over the migrated data (the
+  deploy window and a code-only revert); back after forward, compared row for row with the baseline,
+  and the probes on today's code after it. It prints the rows that changed, constraints a forward
+  step drops and new NOT NULL columns with no default, and strips any variable aimed into the real
+  repo. `--gate`: forward (current rehearsal, forward passes and is rerun-safe, a probe writes, each
+  dropped constraint kept or named with `- DROPS`), back (today's code passes on the migrated data
+  or `WINDOW:` says how it never runs there; back runs and restores the data or each loss is named
+  with `- LOSES`), call (`.release/plan.md` fills CALL ship/stage/hold, ROLLBACK naming the rehearsed
+  back step, NO-RETURN, WATCH, one `- CARRIES` line per changed production file; the live data as it
+  was at the first call). A `hold` over a current rehearsal is a finished answer: the open stages are
+  its listed blockers.
+- SKILL.md is a goal, three stages and the helper.
+- Three new eval cases, each graded on outcome against a copy of the live data with the code from
+  before the release: `safe-release-general` (dollars to cents with 126 rows a cast truncates, an old
+  worker running on the new schema for 40 minutes, a documented rollback that only migrates up),
+  `safe-release-revert-is-not-rollback` (git history; a teammate's table rebuild adds NOT NULL with
+  no default and drops UNIQUE on email; "revert the merge commit" breaks every sign-up),
+  `safe-release-drop-live-column` (drop a "dead" column the v1 API still writes and the export reads;
+  37 contacts' current notes exist only there).
+- Results, 3 tries per arm: plain 9/9, mean $0.27 a try; main's skill as copied 8/9, $0.38 (one
+  leftover file outside the allowed edits); rebuilt skill, final helper, 9/9, $0.44, every try ending
+  `RELEASE-GATE: done`. No quality gain on small apps read in one call; the skill costs about 1.6x.
+  Tests: `tests/test_release.py`, 27; 23 disabled guards each caught.
+- Not done: the other helpers' skip lists do not name `.release/` yet (its `before/` copy exists only
+  without git).
+
 ## 1.35.0 - 2026-10-26 - perf-optimize: three stages built on what plain Opus already does
 
 - perf-optimize joins the plugin (manual-only, from top-tier-engineer main) with main's two eval

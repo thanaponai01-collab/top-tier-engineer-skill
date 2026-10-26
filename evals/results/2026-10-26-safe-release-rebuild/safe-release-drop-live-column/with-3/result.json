@@ -1,0 +1,128 @@
+{
+  "case": "safe-release-drop-live-column",
+  "skill": "safe-release",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  3/3 found\n  found   notes-only-in-old-column \u2014 \"**37 contacts have notes that exist only in `contacts.notes`.**\"\n  found   v1-still-writes \u2014 \"`api/v1.py` reads and writes it on every GET and PUT (that's the iOS 3.x app, about 8% of requests).\"\n  found   export-reads \u2014 \"`exports/csv_export.py` (the weekly sales CSV) reads it too.\"\n  held    drop-is-safe",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "safe-release"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "safe-release",
+      "path": "<tmp>\\tte-plugin-wpi1bv96\\verify-loop\\skills\\safe-release\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-wpi1bv96\\verify-loop\\skills\\safe-release\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 20,
+      "outputTokens": 8256,
+      "cacheReadInputTokens": 284396,
+      "cacheCreationInputTokens": 23654,
+      "webSearchRequests": 0,
+      "costUSD": 0.4113112,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3301,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, every note that was in contacts.notes is still in contacts.notes or in contact_notes for that contact.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the v1 API and the export from before the release still work.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives every contact back with its notes.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [
+      "fixture/.release/before/README.md",
+      "fixture/.release/before/api/__init__.py",
+      "fixture/.release/before/api/v1.py",
+      "fixture/.release/before/app/__init__.py",
+      "fixture/.release/before/app/contacts.py",
+      "fixture/.release/before/app/db.py",
+      "fixture/.release/before/deploy.sh",
+      "fixture/.release/before/exports/__init__.py",
+      "fixture/.release/before/exports/csv_export.py",
+      "fixture/.release/before/migrate.py",
+      "fixture/.release/before/migrations/__init__.py",
+      "fixture/.release/before/migrations/m0001_contacts.py",
+      "fixture/.release/before/migrations/m0002_contact_notes.py",
+      "fixture/.release/before/tests/test_contacts.py",
+      "fixture/.release/candidate/m0003_drop_contacts_notes.py",
+      "fixture/.release/plan.md",
+      "fixture/.release/probes/export.py",
+      "fixture/.release/probes/v1.py",
+      "fixture/.release/probes/web.py",
+      "fixture/.release/state.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4113112,
+  "turns": 11,
+  "api_seconds": 94.358,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [
+    "shell(grep -n '' <tmp>/tte-plugin-wpi1bv96/verify-loop/ski)",
+    "shell(sed -n 403,525p <tmp>/tte-plugin-wpi1bv96/verify-loo)"
+  ],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 101.5,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-wpi1bv96\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

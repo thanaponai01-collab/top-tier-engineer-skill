@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "found": 2,
+  "total": 2,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "way-back-named",
+      "what": "the answer says how to back out and whether it was tried: DEPLOY.md's rollback (check out the previous tag and run deploy.sh) only runs `migrate.py up`, so it never undoes the schema change; backing out needs `migrate.py down` (or the change must leave the old column working), and the answer says whether that way back was run on a copy",
+      "found": true,
+      "quote": "run `python migrate.py down 2` from a checkout that still has `m0003_total_cents.py`",
+      "quote_checked": true
+    },
+    {
+      "id": "old-worker-window",
+      "what": "the answer accounts for the old worker code running against the migrated database during the restart window (and the nightly run): the old `total` column keeps working, or the answer says the window breaks it",
+      "found": true,
+      "quote": "During that gap the old code is running on the new schema. So I added a column rather than converting `total` in place",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "revert-is-rollback",
+      "what": "saying the way back is simply to check out the previous version and redeploy, with no down migration and no account of the schema it leaves behind",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.024799099999999998,
+  "model": "claude-sonnet-5-5"
+}

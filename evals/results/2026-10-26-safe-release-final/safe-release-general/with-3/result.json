@@ -1,0 +1,111 @@
+{
+  "case": "safe-release-general",
+  "skill": "safe-release",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": false,
+  "judge_text": "judge: PASS  2/2 found\n  found   way-back-named \u2014 \"**Also removing the column:** run `python migrate.py down 2` *before* switching code, while the new migration file is st\"\n  found   old-worker-window \u2014 \"during deploy the old worker keeps running for up to 40 minutes against the new schema, and it stays correct.\"\n  held    revert-is-rollback",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "safe-release"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "safe-release",
+      "path": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop\\skills\\safe-release\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 22,
+      "outputTokens": 10780,
+      "cacheReadInputTokens": 316064,
+      "cacheCreationInputTokens": 24856,
+      "webSearchRequests": 0,
+      "costUSD": 0.47774880000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3774,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 2,
+  "total": 2,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy of the live data, `migrate.py up` gives every order its amount in exact cents (no truncated 4.35 -> 434), drafts with no total stay empty.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "After `migrate.py up` on a copy, the old worker gives the same invoices as before and the old web code can still take an order.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "On a copy, `migrate.py up` then `migrate.py down 2` gives back the original schema and every amount, and the old worker's invoices match.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "The agent's tests pass on the finished code.",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/app/orders.py",
+      "fixture/tests/test_orders.py",
+      "fixture/worker/invoices.py"
+    ],
+    "added": [
+      "fixture/migrations/m0003_total_cents.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.47774880000000003,
+  "turns": 11,
+  "api_seconds": 110.285,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [
+    "shell(grep -n '' release.py | head -120)"
+  ],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 125.8,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-ixf5f9cy\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}
