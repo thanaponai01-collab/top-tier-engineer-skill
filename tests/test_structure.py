@@ -5,7 +5,7 @@ structure.py - the three stages behind structure-gate.
 Each test plants the thing a stage exists to catch, so disabling that part of the gate turns it red.
 Run them all with `python -m unittest discover tests`.
 """
-import os, subprocess, sys, tempfile, unittest
+import os, re, subprocess, sys, tempfile, unittest
 
 from _helpers import SCRIPTS
 
@@ -81,11 +81,16 @@ class Measure(unittest.TestCase):
     def test_runs_under_python_isolated_mode(self):
         """`python -I` drops the script's folder from sys.path; an agent ran it that way and the
         old report died on its own import."""
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as plain:
             make(tmp, OPAQUE)
+            make(plain, OPAQUE)
             code, out = gate(tmp, "app", isolated=True)
             self.assertNotIn("ModuleNotFoundError", out)
-            self.assertIn("5", out)
+            share = re.search(r"(\d+(?:\.\d+)?)% entered by a parser", out)
+            self.assertIsNotNone(share, out)
+            # the same share a normal run measures, not just a number somewhere in the output
+            self.assertIn(f"{share.group(1)}% entered by a parser", gate(plain, "app")[1])
+            self.assertLess(float(share.group(1)), 50)
             self.assertIn("STAGE 1 measure: the share a parser entered is known: holds", out)
 
     def test_the_bare_report_runs_under_python_isolated_mode_too(self):
