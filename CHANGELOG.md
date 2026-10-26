@@ -51,8 +51,8 @@
   leftover file outside the allowed edits); rebuilt skill, final helper, 9/9, $0.44, every try ending
   `RELEASE-GATE: done`. No quality gain on small apps read in one call; the skill costs about 1.6x.
   Tests: `tests/test_release.py`, 27; 23 disabled guards each caught.
-- Not done: the other helpers' skip lists do not name `.release/` yet (its `before/` copy exists only
-  without git).
+- verify-loop, debug-protocol, structure-report, threat-model, evolve-maintain and perf-optimize skip
+  `.release/` (its `before/` copy exists only without git); release.py skips `.evolve/` and `.perf/`.
 
 ## 1.35.0 - 2026-10-26 - perf-optimize: three stages built on what plain Opus already does
 

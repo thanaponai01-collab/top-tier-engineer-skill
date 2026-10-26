@@ -250,7 +250,7 @@ overfit eval still shows no difference (see 1.22.0).
   - Plain Opus already rehearses on a copy of the live data and checks the live file; what it never
     leaves is the rehearsal. The skill leaves `.release/` (state and plan), deleted or committed by the agent.
   - Not covered: a schema too big to reason about in one read, non-SQLite stores (compared as bytes
-    only), the other helpers' skip lists do not name `.release/`.
+    only).
 
 - arch-design as main's prose skill (1.37.0) | measured (eval) / main's skill beats plain Opus and every gated rebuild
   - Plain Opus `evals/results/2026-10-26-arch-design-rebuild` (without): 6/21 ($0.10). Main's skill

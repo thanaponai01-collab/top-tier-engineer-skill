@@ -123,7 +123,8 @@ SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "venv", "dist",
              "build", ".mypy_cache", ".pytest_cache", "vendor", "target",
              ".next", "coverage", "site-packages",
              # other skills' state: .debug/before is a copy of the code, not more code
-             ".structure", ".debug", ".wire", ".latent", ".features", ".verify-state-cache", ".threat", ".evolve", ".perf"}
+             ".structure", ".debug", ".wire", ".latent", ".features", ".verify-state-cache", ".threat", ".evolve", ".perf",
+             ".release"}
 
 # AST node types that add a branch (cyclomatic) — kept explicit for transparency.
 BRANCH_NODES = (ast.If, ast.For, ast.AsyncFor, ast.While, ast.ExceptHandler,

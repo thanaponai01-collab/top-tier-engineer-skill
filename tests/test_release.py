@@ -323,5 +323,15 @@ class Rehearsal(unittest.TestCase):
         self.assertEqual(live_sha(self.tmp), before)
 
 
+class OtherHelpersSkipTheState(unittest.TestCase):
+    """Without git, .release/before/ is a copy of the code: a helper that scans it sees every file twice."""
+
+    def test_every_helper_that_skips_state_folders_names_release(self):
+        from _helpers import SCRIPTS
+        for tool in ("debug.py", "structure-report.py", "verify.py", "threat.py", "evolve.py", "perf.py"):
+            with open(os.path.join(SCRIPTS[tool], tool), encoding="utf-8") as fh:
+                self.assertIn('".release"', fh.read(), f"{tool} does not skip .release/")
+
+
 if __name__ == "__main__":
     unittest.main()
