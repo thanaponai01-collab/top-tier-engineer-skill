@@ -23,11 +23,15 @@ def spec_check(*paths):
 
 
 def filled_template():
+    """The template with every slot filled by 'x': no wording of the term itself anywhere."""
     with open(TEMPLATE, encoding="utf-8") as f:
         text = f.read()
     text = re.sub(r"\[\[fill:[^\]]*\]\]", "x", text)
-    return (text.replace("- Acceptance: x", "- Acceptance: tests/test_spec.py passes")
-                .replace("- Verification: x", "- Verification: `python -m unittest`"))
+    for marker, prose in [("acceptance", "tests/test_spec.py passes"),
+                          ("evidence", "`python -m unittest`"),
+                          ("verification", "`python -m unittest`")]:
+        text = text.replace("<!-- %s -->x" % marker, "<!-- %s -->%s" % (marker, prose))
+    return text
 
 
 class Spec(unittest.TestCase):
@@ -57,29 +61,60 @@ class Spec(unittest.TestCase):
         code, out = self.check_text(filled_template())
         self.assertEqual(code, 0, out)
 
+    def test_any_wording_passes_when_each_term_is_marked(self):
+        text = filled_template()
+        for phrase in ["end state is", "done when", "in scope", "must", "evidence is",
+                       "accepted when", "verified by"]:
+            self.assertNotIn(phrase, re.sub(r"<!--.*?-->", "", text, flags=re.S).lower())
+        self.assertEqual(self.check_text(text)[0], 0)
+
     def test_each_gap_is_refused_and_all_are_listed_at_once(self):
         good = filled_template()
-        broken = (good.replace("## 4. Freedom", "## 4. Latitude")
-                      .replace("- Invariants: x", "- Invariants:")
-                      .replace("| x | x | x | x |", "| x | x | x |  |")
-                      .replace("`python -m unittest`", "run the tests")
-                      .replace("tests/test_spec.py", "tests/test_nowhere.py"))
+        for old in ["## Freedom", "<!-- invariants -->x", "<!-- evidence -->`python -m unittest`",
+                    "<!-- verification -->`python -m unittest`", "tests/test_spec.py",
+                    "<!-- escalation -->x"]:
+            self.assertIn(old, good)
+        broken = (good.replace("## Freedom", "## Latitude")
+                      .replace("<!-- invariants -->x", "x")
+                      .replace("<!-- evidence -->`python -m unittest`", "<!-- evidence -->it ran")
+                      .replace("<!-- verification -->`python -m unittest`",
+                               "<!-- verification -->the tests")
+                      .replace("tests/test_spec.py", "tests/test_nowhere.py")
+                      .replace("<!-- escalation -->x", "<!-- escalate -->x"))
         code, out = self.check_text(broken)
         self.assertEqual(code, 1)
-        for needle in ["missing section: ## 4. Freedom",
-                       "Guardrails: empty field 'Invariants'",
-                       "Gates: row 'x' leaves a cell empty",
-                       "Verification names no `command`",
+        for needle in ["missing part: ## Freedom",
+                       "Guardrails: nothing covers the invariants (put <!-- invariants -->",
+                       "Guardrails: unknown marker <!-- escalate -->",
+                       "Gates: evidence 'it ran",
+                       "Output: verification names no `command`",
                        "tests/test_nowhere.py does not exist"]:
             self.assertIn(needle, out)
 
-    def test_sections_out_of_order_are_refused(self):
+    def test_a_stage_missing_a_marker_and_an_empty_term_are_refused(self):
         good = filled_template()
-        head, rest = good.split("## 1. Intent", 1)
-        intent, after = rest.split("## 2. Context", 1)
-        code, out = self.check_text(head + "## 2. Context" + after + "\n## 1. Intent" + intent)
+        text = good.replace("<!-- postcondition -->x", "").replace("<!-- purpose -->x",
+                                                                   "<!-- purpose -->")
+        code, out = self.check_text(text)
         self.assertEqual(code, 1)
-        self.assertIn("sections out of order", out)
+        self.assertIn("Gates: each stage needs all three markers", out)
+        self.assertIn("Intent: <!-- purpose --> has no prose after it", out)
+
+    def test_parts_out_of_order_are_refused(self):
+        good = filled_template()
+        head, rest = good.split("## Intent", 1)
+        intent, after = rest.split("## Context", 1)
+        code, out = self.check_text(head + "## Context" + after + "\n## Intent" + intent)
+        self.assertEqual(code, 1)
+        self.assertIn("parts out of order", out)
+
+    def test_unmarked_prose_is_refused(self):
+        prose = "\n".join(["# t", "## Intent", "The end state is x.", "## Context", "x",
+                            "## Guardrails", "x", "## Freedom", "x", "## Gates", "x",
+                            "## Output", "x"])
+        code, out = self.check_text(prose)
+        self.assertEqual(code, 1)
+        self.assertIn("Intent: nothing covers the end state (put <!-- end state --> before", out)
 
 
 if __name__ == "__main__":

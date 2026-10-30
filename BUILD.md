@@ -255,15 +255,18 @@
   - `git diff --check` passed. Not yet measured in a paid eval run.
 
 - Spec before build | proven
-  - `work/SPEC_TEMPLATE.md`: six sections (intent, context, guardrails, freedom, gates, output);
-    terms in `work/SPEC_TERMS.md`. BRIEF.md rewritten into it, same content.
-  - `tools/spec_check.py` refuses, all at once: a missing or out-of-order section, a missing or
-    empty field, an unfilled `[[fill: ...]]` slot, a gate row with an empty cell, a Verification
-    with no `command`, a named `tests/*.py` that does not exist.
-  - `tests/test_spec.py` (5 tests): BRIEF.md passes; the template is refused until filled; every
+  - `work/SPEC_TEMPLATE.md`: six parts (intent, context, guardrails, freedom, gates, output) in
+    plain prose, any wording; a hidden HTML-comment marker (`<!-- end state -->`) in front of the
+    prose names each term. Terms in `work/SPEC_TERMS.md`. BRIEF.md rewritten into it, same content.
+  - `tools/spec_check.py` reads the markers, not the words, and refuses, all at once: a missing or
+    out-of-order part, a term with no marker or no prose after it, an unknown marker, a stage
+    without all three markers, evidence with no `command` or file, verification with no `command`,
+    an unfilled `[[fill: ...]]` slot, a named `tests/*.py` that does not exist.
+  - `tests/test_spec.py` (8 tests): any wording passes when each term is marked, unmarked prose is
+    refused; BRIEF.md passes; the template is refused until filled; every
     skill not in the 11 that predate the template needs a passing `work/briefs/<skill>.md`
     (a probe skill folder without one failed the test).
-  - Full proof: `python -m unittest discover tests` → `Ran 728 tests`, `OK (skipped=1)`, Windows.
+  - Full proof: `python -m unittest discover tests` → `Ran 731 tests`, `OK (skipped=1)`, Windows.
 
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
