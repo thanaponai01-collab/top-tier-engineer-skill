@@ -41,7 +41,7 @@ FILL = "[[fill"
 # Folders that hold tools' state or caches, never the product: not scanned, copied or compared.
 NOT_PRODUCT = {".git", "__pycache__", "node_modules", ".venv", "venv", STATE, ".verify-state",
                ".verify-state-cache", ".wire", ".features", ".release", ".evolve", ".perf", ".latent",
-               ".debug", ".structure", ".threat", ".blast", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
+               ".debug", ".structure", ".threat", ".blast", ".formal", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
 NOT_PRODUCT_FILES = {".verify-state.json"}
 LEVELS = {1: "architecture", 2: "types", 3: "a lint or CI check", 4: "a test",
           5: "docs only: nothing fails when an agent skips it"}

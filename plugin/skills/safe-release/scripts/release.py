@@ -39,7 +39,7 @@ PLAN = f"{STATE}/plan.md"
 FILL = "[[fill"
 NOT_PRODUCT = {".git", "__pycache__", "node_modules", ".venv", "venv", STATE, ".debug", ".wire", ".latent",
                ".features", ".structure", ".threat", ".verify-state-cache", ".pytest_cache", ".mypy_cache",
-               ".ruff_cache", ".evolve", ".perf", ".blast", ".mistakes"}
+               ".ruff_cache", ".evolve", ".perf", ".blast", ".mistakes", ".formal"}
 NOT_PRODUCT_FILES = {".verify-state.json"}
 SQLITE_MAGIC = b"SQLite format 3\x00"
 BASH = shutil.which("bash")

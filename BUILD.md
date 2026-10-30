@@ -297,6 +297,29 @@
     1-4 class (its check already fails on it). Open for the user: whether a repeat should block
     safe-release's gate.
 
+- formal-check as five stages (1.40.0) | proven (mechanics) / not yet measured (eval)
+  - Built from `work/briefs/formal-check.md` (`python tools/spec_check.py` → `SPEC OK`), adapted
+    from pstack's `create-formal-verification-skill` and `maintain-formal-verification-skill`.
+    `scripts/formal.py`: `--scan` lists candidates, `--gate` checks record, map, run, break and
+    sync and drafts `.formal/answer.md`, `--drift` lists commits to covered code since the sync
+    (renames followed), `--answer-check FILE` refuses an outcome the gate did not record.
+  - `tests/test_formal.py` (20): the verifier is a stdlib harness that steps the real `Counter`
+    through every interleaving. Checked by hand first: it passes with the lock (2 and 3 threads)
+    and prints `counterexample: threads stepped [0, 1, 0, 1] -> value 1, want 2` without it.
+  - Rejection before implementation: 20 of 20 failed (19 failures, 1 error): 18 on exit 2 from a
+    missing `formal.py`, 1 on a missing SKILL.md, 1 on no helper skipping `.formal/`; retained
+    output: `%TEMP%/formal-before.txt`. `tests/_helpers.py` gains the `formal.py` entry.
+  - Focused proof: `python -m unittest discover -s tests -p test_formal.py` → `Ran 20 tests`, `OK`.
+  - Full proof: `python -m unittest discover tests` → `Ran 778 tests`, `OK (skipped=1)`, Windows.
+  - Guards: 23 disabled one at a time, 23 caught. Rename-following was missed at first (the rename
+    commit alone still touches the old path); the rename test now also edits the renamed file.
+  - `.formal/` added to the skip lists of the twelve other helpers; formal.py skips theirs.
+  - Not covered: parsing any model language (mapping is by literal element text and cited lines,
+    so a model can be mapped and still wrong in between), a break that needs more than one edit,
+    a real TLA+/Kani run (the tests use a stdlib enumerator). Open for the user: a generated
+    project-local skill vs `.formal/` plus CI, and whether `stale` should block verify-loop or
+    safe-release.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

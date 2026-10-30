@@ -14,6 +14,30 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.40.0 - 2026-10-30 - formal-check: a property for every case, kept true to the code
+
+- formal-check joins the plugin (manual-only), built from `work/briefs/formal-check.md` and
+  adapted from pstack's prose `create-formal-verification-skill` and
+  `maintain-formal-verification-skill`: their quality list and upkeep outcomes become stages and
+  records the helper checks, not steps the agent promises.
+- `scripts/formal.py`: `--scan` lists candidate targets (concurrency, retries, state, parsers,
+  unsafe code) with `file:line` in `.formal/candidates.md`. The verifier stays the repo's
+  dependency; to the helper a check is a command that exits 0 when the property holds.
+- `--gate [NAME]` checks five stages and lists every gap at once: record (every field, the target
+  and model files exist), map (each model element is in the model and points at a line that exists
+  in a covered file; every covered path is mapped), run (passes on a copy of the working tree within
+  `--budget`, default 600 s; a failure needs two or more cited `step:` lines and becomes `bug`; a
+  missing tool is `blocked`; in CI when there is CI), break (one edit to a covered file, never the
+  model, makes the command fail), sync (property, bounds and assumptions locked on the first green
+  run, changed only with a `changed:` line whose evidence exists; every commit to covered code
+  since the sync commit classified in `.formal/<name>.drift.md`).
+- `--drift [NAME]` lists the commits since each sync commit that touched covered code, following
+  renames, and drafts the drift file. Only the gate moves the sync commit.
+- `--answer-check FILE` refuses an outcome the gate did not record, a check it never saw, a
+  recorded check left out, and unfilled slots.
+- Only `.formal/` is written; commands run in throwaway copies. `.formal/` is skipped by the twelve
+  other helpers.
+
 ## 1.39.0 - 2026-10-30 - mistake-proof: a repeated mistake made impossible
 
 - mistake-proof joins the plugin (manual-only), built from `work/briefs/mistake-proof.md` and

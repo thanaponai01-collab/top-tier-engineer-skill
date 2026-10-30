@@ -28,6 +28,7 @@ SCRIPTS = {
     "release.py": os.path.join(ROOT, "plugin", "skills", "safe-release", "scripts"),
     "blast.py": os.path.join(ROOT, "plugin", "skills", "blast-radius", "scripts"),
     "mistake.py": os.path.join(ROOT, "plugin", "skills", "mistake-proof", "scripts"),
+    "formal.py": os.path.join(ROOT, "plugin", "skills", "formal-check", "scripts"),
 }
 
 

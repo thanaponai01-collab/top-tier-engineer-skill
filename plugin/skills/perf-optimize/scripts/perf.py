@@ -35,7 +35,7 @@ NOTES = f"{STATE}/notes.md"
 FILL = "[[fill"
 NOT_PRODUCT = {".git", "__pycache__", "node_modules", ".venv", "venv", STATE, ".debug", ".wire", ".latent",
                ".features", ".structure", ".threat", ".verify-state-cache", ".pytest_cache", ".mypy_cache",
-               ".ruff_cache", ".evolve", ".release", ".blast", ".mistakes"}
+               ".ruff_cache", ".evolve", ".release", ".blast", ".mistakes", ".formal"}
 NOT_PRODUCT_FILES = {".verify-state.json"}
 BASH = shutil.which("bash")
 NO_TESTS = re.compile(r"^Ran 0 tests\b|\bno tests ran\b", re.MULTILINE | re.IGNORECASE)

@@ -34,7 +34,7 @@ FILL = "[[fill"
 # Folders that hold tools' state or caches, never the product: not scanned, copied or compared.
 NOT_PRODUCT = {".git", "__pycache__", "node_modules", ".venv", "venv", STATE, ".debug", ".wire", ".latent",
                ".features", ".structure", ".threat", ".verify-state-cache", ".pytest_cache", ".mypy_cache",
-               ".ruff_cache", ".perf", ".release", ".blast", ".mistakes"}
+               ".ruff_cache", ".perf", ".release", ".blast", ".mistakes", ".formal"}
 NOT_PRODUCT_FILES = {".verify-state.json"}
 # Text a program reads at run time: a name in one of these is a reader. Prose is listed, not gated.
 CONFIG = {".yaml", ".yml", ".json", ".toml", ".ini", ".cfg", ".conf", ".env", ".sh", ".bash", ".ps1",

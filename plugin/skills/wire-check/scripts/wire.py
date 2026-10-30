@@ -32,7 +32,7 @@ BEFORE = f"{STATE}/before.json"
 TARGETS = f"{STATE}/targets.json"
 VERDICTS = f"{STATE}/verdicts.md"
 SKIP_DIRS = {".git", "__pycache__", "node_modules", ".venv", "venv", "env", "build", "dist",
-             STATE, ".features", ".verify-state", ".pytest_cache", ".mypy_cache", ".blast", ".mistakes"}
+             STATE, ".features", ".verify-state", ".pytest_cache", ".mypy_cache", ".blast", ".mistakes", ".formal"}
 COPY_IGNORE = shutil.ignore_patterns(".git", "__pycache__", "node_modules", ".venv", "venv", "*.pyc", STATE)
 BASH = shutil.which("bash")
 CLASSES = ("served", "not-registered", "not-routed", "never-invoked", "effect-lost", "unknown")
