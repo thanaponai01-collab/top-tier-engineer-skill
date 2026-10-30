@@ -14,6 +14,25 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.39.0 - 2026-10-30 - mistake-proof: a repeated mistake made impossible
+
+- mistake-proof joins the plugin (manual-only), built from `work/briefs/mistake-proof.md` and
+  adapted from pstack's prose `correct` skill: its fix order (architecture, types, lint, test, docs
+  last) and its rule table become stages and a table the helper checks, not steps the agent promises.
+- `scripts/mistake.py`: `--mine [--since REF]` lists candidates (reverts, later commits that bring a
+  reverted change back, fixes that name an earlier commit, workaround comments) in
+  `.mistakes/candidates.md`; `--add TEXT` records an operator correction, dated, as `added:N`.
+- `--gate` checks four stages and lists every gap at once: classes (two pieces of evidence that
+  exist), level (a `why not K` for every stronger level), proof (the check exits non-zero on the
+  mistake commit with its files copied on, zero on a copy of the working tree, and appears in the CI
+  config when there is one), rules (a row per class in the agent file's `mistake-rules` table whose
+  enforcer exists; a level-5 rule with evidence newer than its row is a repeat; every `mistake-ok:`
+  exception has a reason, a date to come and `approved=`).
+- `--answer-check FILE` refuses a class the gate did not clear, a status other than the recorded one
+  (a level-5 class called enforced), a cleared class left out, and unfilled slots.
+- Only `.mistakes/` is written; checks run on `git archive` and copy trees. `.mistakes/` is skipped
+  by the eleven other helpers.
+
 ## 1.38.0 - 2026-10-30 - blast-radius: what a change breaks outside its diff
 
 - blast-radius joins the plugin (manual-only), built from `work/briefs/blast-radius.md` and adapted

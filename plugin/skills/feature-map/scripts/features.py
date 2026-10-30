@@ -89,7 +89,7 @@ MAP, VERIFY = "FEATURES.md", "VERIFY.md"
 VERIFY_PY = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                          "verify-loop", "scripts", "verify.py")
 SKIP_DIRS = {".git", "node_modules", "venv", ".venv", "__pycache__", "dist", "build", "target",
-             "vendor", ".tox", ".next", "fixture", "fixtures", "tests", "test", "__tests__", ".features", ".blast"}
+             "vendor", ".tox", ".next", "fixture", "fixtures", "tests", "test", "__tests__", ".features", ".blast", ".mistakes"}
 CODE_EXT = {".py", ".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".html",
             ".go", ".rs", ".rb", ".php", ".java", ".kt", ".cs"}
 MAX_BYTES = 1_000_000

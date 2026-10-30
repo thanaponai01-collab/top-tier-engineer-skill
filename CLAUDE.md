@@ -13,7 +13,8 @@ manual-only `perf-optimize` skill at `plugin/skills/perf-optimize/SKILL.md` (sta
 manual-only `safe-release` skill at `plugin/skills/safe-release/SKILL.md` (standalone), and the
 manual-only `arch-design` skill at `plugin/skills/arch-design/SKILL.md` (standalone; main's prose
 kept on purpose, the one exception to the rule below, see BUILD.md 1.37.0), and the manual-only
-`blast-radius` skill at `plugin/skills/blast-radius/SKILL.md` (standalone).
+`blast-radius` skill at `plugin/skills/blast-radius/SKILL.md` (standalone), and the manual-only
+`mistake-proof` skill at `plugin/skills/mistake-proof/SKILL.md` (points at evolve-maintain when present).
 
 - Mechanics, not advice: every rule is a script or test that can fail, never a tip for the agent.
 

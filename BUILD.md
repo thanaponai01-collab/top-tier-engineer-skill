@@ -281,6 +281,22 @@
   - Not covered: symbol resolution beyond Python, consumers outside the repo (an `unknown` verdict
     only), a multi-line break. Open for the user: whether `breaks` should block safe-release's gate.
 
+- mistake-proof as four stages (1.39.0) | proven (mechanics) / not yet measured (eval)
+  - Built from `work/briefs/mistake-proof.md`, adapted from pstack's `correct`.
+    `scripts/mistake.py`: `--mine` lists candidates from history, `--add` records a correction,
+    `--gate` checks classes, level, proof and rules and drafts `.mistakes/answer.md`,
+    `--answer-check FILE` refuses a status or class the gate did not record.
+  - Rejection before implementation: `tests/test_mistake.py` (15) → 15 of 15 failed (14 failures,
+    1 error) with `mistake.py` and SKILL.md missing; retained output: `%TEMP%/mistake-before.txt`.
+  - Focused proof: `python -m unittest discover -s tests -p test_mistake.py` → `Ran 15 tests`, `OK`.
+  - Full proof: `python -m unittest discover tests` → `Ran 758 tests`, `OK (skipped=1)`, Windows.
+  - Dogfood: `--mine` on a clone of this repo found 3 fix-names-earlier candidates, 0 reverts.
+  - `.mistakes/` added to the skip lists of the eleven other helpers; mistake.py skips theirs.
+  - Not covered: chat history and PR review comments (only the local clone and `--add`), a check
+    that needs a build step on the past commit beyond copying `check-files`, a repeat for a level
+    1-4 class (its check already fails on it). Open for the user: whether a repeat should block
+    safe-release's gate.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

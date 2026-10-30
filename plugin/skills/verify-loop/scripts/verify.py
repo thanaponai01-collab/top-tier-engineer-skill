@@ -94,7 +94,7 @@ RECIPE = "VERIFY.md"
 GENERIC_DIRS = {"tests", "test", "__tests__", "spec", "specs", "e2e", "integration", "unit"}
 SKIP_DIRS = {".git", "node_modules", "venv", ".venv", "__pycache__", "dist", "build", "target",
              "vendor", ".tox", "fixture", "fixtures", ".wire", ".debug", ".structure", ".threat", ".evolve", ".perf",
-             ".release", ".blast"}
+             ".release", ".blast", ".mistakes"}
 TEST_PY = re.compile(r"^(test_.+|.+_test)\.py$")
 TEST_JS = re.compile(r"^.+\.(test|spec)\.(js|jsx|ts|tsx|mjs|cjs)$")
 TEST_GO = re.compile(r"^.+_test\.go$")

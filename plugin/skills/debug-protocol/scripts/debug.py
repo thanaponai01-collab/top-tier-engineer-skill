@@ -36,7 +36,7 @@ LEDGER = f"{STATE}/state.json"
 # Folders that hold tools' state or caches, never the product: not copied, not compared.
 NOT_PRODUCT = {".git", "__pycache__", "node_modules", ".venv", "venv", STATE, ".wire", ".latent",
                ".features", ".verify-state-cache", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".threat", ".evolve", ".perf",
-               ".release", ".blast"}
+               ".release", ".blast", ".mistakes"}
 NOT_PRODUCT_FILES = {".verify-state.json"}
 BASH = shutil.which("bash")
 BUDGET = 5
