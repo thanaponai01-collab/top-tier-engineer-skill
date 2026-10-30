@@ -254,6 +254,17 @@
     after rebasing onto 1.37.0.
   - `git diff --check` passed. Not yet measured in a paid eval run.
 
+- Spec before build | proven
+  - `work/SPEC_TEMPLATE.md`: six sections (intent, context, guardrails, freedom, gates, output);
+    terms in `work/SPEC_TERMS.md`. BRIEF.md rewritten into it, same content.
+  - `tools/spec_check.py` refuses, all at once: a missing or out-of-order section, a missing or
+    empty field, an unfilled `[[fill: ...]]` slot, a gate row with an empty cell, a Verification
+    with no `command`, a named `tests/*.py` that does not exist.
+  - `tests/test_spec.py` (5 tests): BRIEF.md passes; the template is refused until filled; every
+    skill not in the 11 that predate the template needs a passing `work/briefs/<skill>.md`
+    (a probe skill folder without one failed the test).
+  - Full proof: `python -m unittest discover tests` → `Ran 728 tests`, `OK (skipped=1)`, Windows.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

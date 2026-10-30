@@ -26,6 +26,9 @@ kept on purpose, the one exception to the rule below, see BUILD.md 1.37.0).
 
 - intent: BRIEF.md
 - work: BUILD.md
+- Before building something new, copy `work/SPEC_TEMPLATE.md` to BRIEF.md (a new skill: to
+  `work/briefs/<skill>.md`) and fill it: intent, context, guardrails, freedom, gates, output.
+  `python tools/spec_check.py <file>` and `tests/test_spec.py` refuse a gap; terms in `work/SPEC_TERMS.md`.
 - Read these for automatic progression work; its command contract is in
   `plugin/skills/verify-loop/references/helpers.md`.
 - Authorized updates refresh affected intent, evidence and Next; read-only reviews report gaps.
