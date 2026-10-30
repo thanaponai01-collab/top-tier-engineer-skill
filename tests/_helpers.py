@@ -26,6 +26,7 @@ SCRIPTS = {
     "arch-design.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
     "perf.py": os.path.join(ROOT, "plugin", "skills", "perf-optimize", "scripts"),
     "release.py": os.path.join(ROOT, "plugin", "skills", "safe-release", "scripts"),
+    "blast.py": os.path.join(ROOT, "plugin", "skills", "blast-radius", "scripts"),
 }
 
 

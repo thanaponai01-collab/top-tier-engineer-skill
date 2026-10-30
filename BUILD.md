@@ -268,6 +268,19 @@
     (a probe skill folder without one failed the test).
   - Full proof: `python -m unittest discover tests` → `Ran 731 tests`, `OK (skipped=1)`, Windows.
 
+- blast-radius as three stages (1.38.0) | proven (mechanics) / not yet measured (eval)
+  - Built from `work/briefs/blast-radius.md` (`python tools/spec_check.py` → `SPEC OK`).
+    `scripts/blast.py`: `--base REF` lists every consumer outside the diff (Python by AST, every
+    other tracked text file by literal name), `--gate` checks list, account and fact and drafts
+    `.blast/answer.md`, `--answer-check FILE` refuses a level, verdict or `safe` the helper did not see.
+  - Rejection before implementation: `tests/test_blast.py` (12) → 12 of 12 failed (8 errors, 4
+    failures) with `blast.py` and SKILL.md missing; retained output: `%TEMP%/blast-before.txt`.
+  - Focused proof: `python -m unittest discover -s tests -p test_blast.py` → `Ran 12 tests`, `OK`.
+  - Full proof: `python -m unittest discover tests` → `Ran 743 tests`, `OK (skipped=1)`, Windows.
+  - `.blast/` added to the skip lists of the ten other helpers; blast.py skips theirs.
+  - Not covered: symbol resolution beyond Python, consumers outside the repo (an `unknown` verdict
+    only), a multi-line break. Open for the user: whether `breaks` should block safe-release's gate.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before

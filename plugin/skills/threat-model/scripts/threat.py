@@ -36,7 +36,7 @@ FILL = "[[fill"
 # Folders that hold tools' state or caches, never the product: not scanned, copied or compared.
 NOT_PRODUCT = {".git", "__pycache__", "node_modules", ".venv", "venv", STATE, ".debug", ".wire", ".latent",
                ".features", ".structure", ".verify-state-cache", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".evolve", ".perf",
-               ".release"}
+               ".release", ".blast"}
 NOT_PRODUCT_FILES = {".verify-state.json"}
 OTHER_CODE = {".js", ".mjs", ".ts", ".tsx", ".jsx", ".rb", ".go", ".php", ".java", ".kt", ".cs", ".rs"}
 BASH = shutil.which("bash")

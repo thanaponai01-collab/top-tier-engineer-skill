@@ -14,6 +14,29 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.38.0 - 2026-10-30 - blast-radius: what a change breaks outside its diff
+
+- blast-radius joins the plugin (manual-only), built from `work/briefs/blast-radius.md` and adapted
+  from pstack's prose `blast-radius` skill: its 1-to-5 sureness ladder becomes a level the helper
+  records, not one the agent claims.
+- `scripts/blast.py`: `--base REF` lists what the diff changed (Python functions whose signature,
+  body or existence changed, by AST; words the diff no longer writes as often, such as a dict key,
+  JSON field, column, env var or flag) and every consumer outside the diff: Python references by AST,
+  string, attribute and import uses of a changed word in Python, every other tracked text file by
+  literal name. `--gate`: list (current with the code), account (each consumer has
+  `- <file:line>: breaks|cleared|unknown: <why>` in `.blast/verdicts.md`; `breaks` and `cleared` cite
+  a line that exists), fact (`.blast/fact.md`'s proof passes on a throwaway copy of the change and
+  fails on one with its one-line break applied; not needed when a consumer breaks). It drafts
+  `.blast/answer.md` with the level it saw (4 ran it, 5 `--app` showed it in the running app; below 4
+  `unproven`). `--answer-check FILE` refuses `safe` below level 4 or over a consumer that breaks, a
+  level or verdict other than the recorded one, and unfilled slots. Every refusal lists all gaps.
+  The product tree is never written; only `.blast/` changes.
+- `.blast/` is skipped by verify-loop, feature-map, latent-audit, wire-check, debug-protocol,
+  structure-report, threat-model, evolve-maintain, perf-optimize and safe-release; blast.py skips
+  their state folders.
+- Tests: `tests/test_blast.py`, 12. Not yet measured in a paid eval run. Open: whether a `breaks`
+  finding should block safe-release's gate is the user's call; this slice only reports.
+
 ## 1.37.0 - 2026-10-26 - arch-design: main's skill as is, because it beats every gated rebuild
 
 - arch-design joins the plugin (manual-only) exactly as on top-tier-engineer main, with main's seven

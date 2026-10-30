@@ -82,7 +82,7 @@ TEXT_EXT = {".py", ".pyi", ".txt", ".md", ".yml", ".yaml", ".toml", ".cfg",
             ".xml", ".env", ".service"}
 TEXT_NAMES = {"dockerfile", "makefile", "procfile"}
 SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "venv", "dist", ".latent",
-             "build", ".tox", ".mypy_cache", ".pytest_cache"}
+             "build", ".tox", ".mypy_cache", ".pytest_cache", ".blast"}
 
 # Modules assumed reachable even with zero in-edges (framework/tooling entry):
 ENTRY_BASENAMES = {"main", "app", "application", "cli", "manage", "wsgi",
