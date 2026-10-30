@@ -34,3 +34,4 @@ SKILL.md body ≤ 5,000 chars with no dead command, link, anchor or verdict name
 - Turn and cost budgets per eval case (`max_turns`, `max_cost`) and failing a try that reads the
   helper's source: needs fresh paid eval runs to set the numbers.
 - An orientation header in `assess`/`advance` output for handoffs (`work/verify-loop-design.md` §4).
+  Done after this slice: see BUILD.md, "Orientation comes first".

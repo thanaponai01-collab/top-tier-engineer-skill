@@ -246,6 +246,57 @@ class AdvanceOutputIsReadable(unittest.TestCase):
             self.assertIn("ANSWER DRAFT", out)
 
 
+class OrientationComesFirst(unittest.TestCase):
+    """A second session spent its first turns on `ls` and `cat` to learn what the first one left.
+    The first lines of `assess` and `advance` say it: features, files, receipts, frozen, changed."""
+
+    def test_advance_opens_with_what_is_recorded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            code, out, _ = run("verify.py", "advance", tmp)
+            self.assertTrue(out.startswith("ORIENT: no recorded run"), out)
+            self.assertIn("ORIENT  Total: calc.py | no fail-proof receipt", out)
+
+    def test_a_handoff_is_told_the_proof_still_holds(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            prove(tmp)
+            code, out, _ = run("verify.py", "advance", tmp)
+            first = out.splitlines()[0]
+            self.assertIn("recorded state green", first)
+            self.assertIn("frozen: VERIFY.md, test_calc.py", first)
+            self.assertIn("no re-run needed", first)
+            self.assertIn("ORIENT  Total: calc.py | fail-proof receipt for the current checks", out)
+
+    def test_a_handoff_is_told_what_changed_since_the_baseline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            prove(tmp)
+            write(tmp, "calc.py", GOOD + "# touched\n")
+            o = json.loads(run("verify.py", "advance", tmp, "--json")[1])["orientation"]
+            self.assertEqual(o["state"], "stale", o)
+            self.assertEqual(o["changed_since_baseline"], ["calc.py"], o)
+            out = run("verify.py", "advance", tmp)[1]
+            self.assertIn("ORIENT  changed since baseline: calc.py", out)
+
+    def test_assess_reads_what_the_repo_recorded_and_leaves_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            prove(tmp)
+            before = listing(tmp)
+            code, out, _ = run("verify.py", "assess", tmp)
+            self.assertEqual(listing(tmp), before)
+            first = out.splitlines()[0]
+            self.assertIn("recorded state green", first)
+            self.assertIn("frozen: VERIFY.md, test_calc.py", first)
+
+    def test_the_answer_contract_does_not_grow(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project(tmp)
+            prove(tmp)
+            self.assertNotIn("orientation", json.loads(run("verify.py", "status", tmp, "--json")[1]))
+
+
 class SkillDocIsCheap(unittest.TestCase):
     """SKILL.md is paid for on every trigger. It routes; the output teaches."""
 

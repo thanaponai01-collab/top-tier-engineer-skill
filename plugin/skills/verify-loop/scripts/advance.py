@@ -48,7 +48,7 @@ def choose(v, repo, items, refresh=False):
 
 
 def cmd_advance(v, repo, max_steps=3, timeout=120, jobs=1, refresh=False, as_json=False):
-    result = {'stop': None, 'steps': [], 'tasks': [], 'report': None, 'exit': 3}
+    result = {'stop': None, 'orientation': None, 'steps': [], 'tasks': [], 'report': None, 'exit': 3}
 
     def finish(stop, tasks=(), error=None, code=None):
         result['stop'] = stop
@@ -66,6 +66,8 @@ def cmd_advance(v, repo, max_steps=3, timeout=120, jobs=1, refresh=False, as_jso
         if as_json:
             print(json.dumps(result, indent=2))
         else:
+            if result['orientation']:
+                v.print_orientation(result['orientation'])
             print(f"ADVANCE: {stop}")
             for step in result['steps']:
                 print(f"  {step['action']}: exit {step['exit']}")
@@ -93,6 +95,7 @@ def cmd_advance(v, repo, max_steps=3, timeout=120, jobs=1, refresh=False, as_jso
         features, _ = v.parse(v.read(repo, v.RECIPE), repo=repo)
         if not features:
             return finish('invalid', error=f'{v.RECIPE} has no features', code=2)
+        result['orientation'] = v.orientation(repo)  # what was recorded before any step ran
         os.makedirs(v.state_home(repo), exist_ok=True)
         # Separate from the short state-save lock. Never steal a long-running executor's lock.
         # A crashed executor leaves this file for explicit removal after checking its process.

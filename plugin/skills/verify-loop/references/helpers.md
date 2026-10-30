@@ -21,12 +21,20 @@ Use parallel checks only when their resources are isolated. Each automatic run b
 cache. Unchanged completed or decision-bound work runs no checks; use `--refresh` after environment,
 package, service or other external inputs change. File signatures cannot observe those changes.
 
-The single JSON object contains `stop`, `steps` (action, exit, input fingerprint and output: the
+The single JSON object contains `stop`, `orientation` (see below), `steps` (action, exit, input fingerprint and output: the
 last two lines of a passing action, the final 16 KB of a failing one), `tasks` (feature, action,
 detail, paths and next instruction), `report` (the canonical caller answer) and `exit`. Plain output
 prints the last 20 lines of each failing action and ends with the `ANSWER DRAFT`, so an agent needs
 no `--json` and no second command to see why a step failed. The last executed batch is also retained as `last_advance`
 in this agent's existing state. No state schema migration or second task queue is required.
+
+Plain output opens with `ORIENT` lines, read from the state as it was before any step ran: the
+recorded verdict and the frozen files (`; the recorded proof holds, no re-run needed` when it is
+green and current), one line per feature with its `path:` files and whether it has a fail-proof
+receipt for the current checks, and `changed since baseline:` with every file whose content differs
+from when `baseline` last ran. A session that inherits the repo reads these instead of opening files.
+`orientation` in `--json` holds the same: `state`, `detail`, `frozen`, `features` (`name`, `paths`,
+`receipt`) and `changed_since_baseline` (`null` before the first baseline that records it).
 
 | Stop | Meaning | Exit |
 |---|---|---|
@@ -168,7 +176,9 @@ changing any of those, or for a check that depends on them, run with `--no-cache
 python <skill-base>/scripts/verify.py assess . [--max 8] [--timeout 120] [--jobs 1]
 ```
 
-A fresh whole run (recording which files each check executes), then `challenge --auto` on every
+First the `ORIENT` lines (see `advance`) for what the repo itself recorded, so a handoff learns
+what the last session left even though assess keeps its own state elsewhere. Then a fresh whole run
+(recording which files each check executes), then `challenge --auto` on every
 feature whose checks all passed: its `path:` files, or with no `path:` the non-test files its
 checks imported (up to three), at most `--max` mutations each. Then `report` and its
 `ANSWER DRAFT`. Every survived or uncovered mutation becomes `GAP survived a wrong result`, which

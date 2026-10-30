@@ -231,6 +231,29 @@
     noisy shared machines (a gain inside the noise is refused, never retried), query plans (asked for
     in SKILL.md, not checked).
 
+- Compound evals and runner gates | proven | commit: Add deep compound evals and enforce runner budget and source read gates
+  - `compound-assess` and `compound-advance` cases; `grade.py`/`run.py` fail a try over `max_turns`
+    or `max_cost`, and `agent.py` fails a try that reads the skill's `scripts/`.
+  - Budgets are set on the two compound cases only.
+
+- Eval: assess says what it saw | measured | commit: Eval: assess says what it saw (4 cases, $3.50)
+  - With the skill: compound-assess 2/3, compound-advance 2/3, fake-check-and-decoy 2/3 (bare 3/3),
+    green-with-unverified 3/3 (17 → 8 turns). Mean $0.20 and 8 turns per try against bare $0.09 and 5.
+  - The decoy miss is a judge false negative (the phrase grader found it); the compound-advance miss
+    never named `fee.py` as unmapped. Evidence: `evals/results/2026-10-22-assess-says-what-it-saw/`.
+
+- Orientation comes first | proven
+  - `assess` and `advance` open with `ORIENT` lines: recorded verdict, frozen files, each feature's
+    `path:` files and fail-proof receipt, `changed since baseline:`; a green current state says
+    `the recorded proof holds, no re-run needed`. `advance --json` adds `orientation`;
+    `status --json` is unchanged. `assess` reads the repo's own state for it, not its scratch state.
+  - `baseline` records `baseline_files` (per-file content hash, shared key) to diff against.
+  - Rejection before implementation: `tests/test_agent_path.py` `OrientationComesFirst` → 4 of 5
+    failed (the fifth guards the unchanged answer contract); retained output: `%TEMP%/orient-before.txt`.
+  - Full proof: `python -m unittest discover tests` → `Ran 723 tests`, `OK (skipped=1)` (Python 3.11.9),
+    after rebasing onto 1.37.0.
+  - `git diff --check` passed. Not yet measured in a paid eval run.
+
 ## Next
 1.20.0 to 1.24.0 are committed on `verify-loop-only`; GitHub main still ships top-tier-engineer
 4.66.0, so installs get none of verify-loop. The held-out trigger miss "double-check the fix before
@@ -263,9 +286,11 @@ overfit eval still shows no difference (see 1.22.0).
   - The one exception to "mechanics, not advice". Not covered: a repo too big to read, and the
     competing-candidates case has only `requirements.md` (the code it names is absent).
 
-- Pay for an eval subset (`fake-check-and-decoy`, `green-with-unverified`, `teammate-loosened-check`)
-  to measure turns and cost against the 1.18 numbers in `work/verify-loop-design.md`.
-- Then add `max_turns`/`max_cost` and a helper-source-read failure to `grade.py` from that data.
+- Pay for `proof-survives-handoff` and `teammate-loosened-check` (with/without, 3 tries) to see whether
+  `ORIENT` cuts the opening `ls`/`cat` turns (1.18: 23 turns on handoff; target ≤ 10).
+- Set `max_turns`/`max_cost` on the other verify-loop cases from the 1.18 and 2026-10-22 data
+  (design §6: bare mean ×1.5 where bare passes, ×3 where the skill is needed).
+- `fake-check-and-decoy` still reads "skill hurts" (2/3 vs 3/3); decide judge fix or skill fix.
 - feature-map: it wins only when a later task is narrow (the alarm catches what nobody asked about);
   asked to verify everything, plain Opus ties it at about half the cost. Cut session-1 proving cost next.
 - Release remains separate.

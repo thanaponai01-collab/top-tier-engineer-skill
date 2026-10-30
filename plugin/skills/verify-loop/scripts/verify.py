@@ -1596,7 +1596,7 @@ def seal_of(state):
 # it. With VERIFY_AGENT=<name>, loop memory (last run, rounds, scope, doctor) lives in
 # .verify-state.<name>.json; the baseline, re-baselines and rejection receipts stay in STATE for
 # every agent, so a new name neither escapes a freeze nor has to re-prove a check.
-SHARED_KEYS = ("baseline", "baseline_lines", "rebaselines", "failures", "frozen_by", "verified_by", "swarm",
+SHARED_KEYS = ("baseline", "baseline_lines", "baseline_files", "rebaselines", "failures", "frozen_by", "verified_by", "swarm",
                "loosened_reviewed", "receipt_trees")
 AGENT_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
 LOCK = ".verify-state.lock"
@@ -2360,6 +2360,7 @@ def cmd_baseline(repo, reviewed_by=None, reason=None):
     state["frozen_by"] = {c: frozen_by[c] if c in before and frozen_by.get(c) else agent_name()
                           for c in lines["checks"]}
     state["baseline"], state["baseline_lines"] = hashes, lines
+    state["baseline_files"] = file_sigs(repo)  # what a later session diffs to see what changed since
     save_state(repo, state)
     print(f"baseline recorded: {len(state['baseline'])} check file(s). From here an edit to any of "
           "them fails the run until a person reviews it and re-baselines.")
@@ -2376,11 +2377,11 @@ def rebaseline_text(r):
     return f"{'; '.join(r['changed'])} (reviewed by {r['by']}: {r['reason']})"
 
 
-def status_verdict(repo):
+def status_verdict(repo, state=None):
     """(state, detail, exit). Single decision path for text and --json output."""
     if not os.path.isfile(os.path.join(repo, RECIPE)):
         return "none", "no VERIFY.md; this repo does not use verify-loop", 0
-    state = load_state(repo)
+    state = load_state(repo) if state is None else state
     if state.get("forged"):
         return "tampered", f"{STATE} was edited outside verify.py; delete it and verify again", 1
     if not state.get("result"):
@@ -2513,10 +2514,54 @@ def current_surveys(repo, signature):
             for f, s in sorted(surveys.items()) if s.get("signature") == signature and s.get("tree") == tree}
 
 
+def orientation(repo, state=None):
+    """What a session arriving at this repo needs before its first command: the recorded verdict,
+    each feature's files and fail-proof receipt, what is frozen and what changed since it was frozen."""
+    state = load_state(repo) if state is None else state
+    name, detail, _ = status_verdict(repo, state)
+    features, _ = parse(read(repo, RECIPE), repo=repo)
+    try:
+        signature = sha(json.dumps(check_hashes(repo), sort_keys=True))
+    except (OSError, ValueError):
+        signature = None
+    proven = {k.split("|", 1)[0] for k, r in current_receipts(state, signature).items()
+              if isinstance(r, dict) and r.get("signature") == signature} if signature else set()
+    files, changed = state.get("baseline_files"), None
+    if isinstance(files, dict):
+        now = file_sigs(repo)
+        changed = sorted(k for k in set(files) | set(now) if files.get(k) != now.get(k))
+    # The baseline also freezes VERIFY.md's own sections (`VERIFY.md checks`, ...); name the files.
+    frozen = sorted({k.split(" ", 1)[0] if k.startswith(RECIPE + " ") else k for k in state.get("baseline") or {}})
+    return {"state": name, "detail": detail, "frozen": frozen,
+            "features": [{"name": f["name"], "paths": f["paths"], "receipt": f["name"] in proven}
+                         for f in features],
+            "changed_since_baseline": changed}
+
+
+def print_orientation(o):
+    n = o["frozen"]
+    frozen = f"frozen: {', '.join(n[:4])}" + (" ..." if len(n) > 4 else "") if n else "not frozen"
+    head = "no recorded run" if o["state"] == "never-run" else \
+        f"recorded state {o['state']}" + (f" ({o['detail']})" if o["detail"] else "")
+    holds = "; the recorded proof holds, no re-run needed" if o["state"] == "green" else ""
+    print(f"ORIENT: {head} | {frozen}{holds}")
+    for f in o["features"]:
+        receipt = "fail-proof receipt for the current checks" if f["receipt"] else "no fail-proof receipt"
+        print(f"ORIENT  {f['name']}: {', '.join(f['paths']) or 'no path:'} | {receipt}")
+    changed = o["changed_since_baseline"]
+    if changed:
+        print(f"ORIENT  changed since baseline: {', '.join(changed[:8])}" + (" ..." if len(changed) > 8 else ""))
+
+
+def in_assess_dir():
+    """True when state lives in the default --assess temp folder, not where the repo keeps it."""
+    root = os.environ.get("VERIFY_STATE_DIR", "").strip()
+    return bool(root) and os.path.abspath(root) == os.path.abspath(assess_dir())
+
+
 def follow_up(repo, cmd):
     """A command an agent can paste as it is: this helper's real path, on the same state."""
-    root = os.environ.get("VERIFY_STATE_DIR", "").strip()
-    where = " --assess" if root and os.path.abspath(root) == os.path.abspath(assess_dir()) else state_flag()
+    where = " --assess" if in_assess_dir() else state_flag()
     return f'python "{os.path.abspath(__file__)}" {cmd} "{repo}"{where}'
 
 
@@ -2612,6 +2657,8 @@ def cmd_assess(repo, timeout=120, limit=8, jobs=1):
               f"file>`, `- test: `<command>``, `- fail-signal: <words the failure prints>` (VERIFY_FORMAT.md). "
               "Say in your answer that you added it, then run assess again.")
         return 2
+    # What the repo itself recorded, before this call's scratch run: the state a handoff left.
+    print_orientation(orientation(repo, read_state_file(os.path.join(repo, STATE)) if in_assess_dir() else None))
     code = cmd_run(repo, None, timeout, strict=False, jobs=jobs, use_cache=False, record_coverage=True)
     if code == 2:
         return 2

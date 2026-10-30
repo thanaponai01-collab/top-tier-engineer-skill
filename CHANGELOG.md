@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+### Orientation comes first
+
+Every handoff run spent its first two or three turns on `ls` and `cat` to learn what the last
+session left.
+
+- `assess` and `advance` open with `ORIENT` lines: the recorded verdict, the frozen files, each
+  feature's `path:` files and fail-proof receipt, and the files changed since the baseline. A green,
+  current state says `the recorded proof holds, no re-run needed`. `advance --json` carries the same
+  as `orientation`; the `status`/`report --json` answer is unchanged.
+- `assess` reads the repo's own recorded state for these lines, not its scratch state.
+- `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
+
 ## 1.37.0 - 2026-10-26 - arch-design: main's skill as is, because it beats every gated rebuild
 
 - arch-design joins the plugin (manual-only) exactly as on top-tier-engineer main, with main's seven
