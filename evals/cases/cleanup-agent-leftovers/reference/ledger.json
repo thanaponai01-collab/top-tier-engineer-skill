@@ -1,0 +1,8 @@
+[
+  {"date": "2026-01-03", "category": "Food", "amount": 4520},
+  {"date": "2026-01-09", "category": "Rent", "amount": 120000},
+  {"date": "2026-01-15", "category": "Food", "amount": -1064},
+  {"date": "2026-02-02", "category": "Food", "amount": 3310},
+  {"date": "2026-02-10", "category": "Transport", "amount": 2250},
+  {"date": "2026-02-28", "category": "Rent", "amount": 120000}
+]

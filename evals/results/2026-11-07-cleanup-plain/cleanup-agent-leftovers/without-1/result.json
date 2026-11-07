@@ -1,0 +1,95 @@
+{
+  "case": "cleanup-agent-leftovers",
+  "skill": "cleanup",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  5/5 found\n  found   swallowed-import-error \u2014 \"It catches every error, so the `abc` row disappears with no warning.\"\n  found   ofx-stub \u2014 \"**OFX export doesn't work.** `export ofx` just prints `<OFX></OFX>`.\"\n  found   january-hard-coded \u2014 \"`report.monthly_total` has `if month == \"2026-01\": return 123456`, a hard-coded answer that makes the January test pass.\"\n  found   used-by-name-kept \u2014 \"nothing imports it, but `config.json` names it and `budget.py migrate` loads it by that name.\"\n  found   backfill-kept \u2014 \"the README tells you to run it when upgrading an old ledger.\"\n  held    deleted-a-used-file",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 20,
+      "outputTokens": 5357,
+      "cacheReadInputTokens": 250158,
+      "cacheCreationInputTokens": 17176,
+      "webSearchRequests": 0,
+      "costUSD": 0.2946596000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1614,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 17176,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/app/export.py",
+      "fixture/app/importer.py",
+      "fixture/app/report.py",
+      "fixture/app/store.py"
+    ],
+    "added": [],
+    "deleted": [
+      "fixture/IMPLEMENTATION_SUMMARY.md",
+      "fixture/app/report_old.py",
+      "fixture/app/settings.py",
+      "fixture/debug_output.txt",
+      "fixture/test_fix.py"
+    ]
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2946596000000001,
+  "turns": 10,
+  "api_seconds": 61.854,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 70.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

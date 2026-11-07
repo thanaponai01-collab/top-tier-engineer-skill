@@ -1,0 +1,591 @@
+[
+  {
+    "case": "cleanup-agent-leftovers",
+    "skill": "cleanup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   swallowed-import-error \u2014 \"**Bad import rows are dropped silently.** `importer.py` catches every error and skips the row without saying so.\"\n  found   ofx-stub \u2014 \"**OFX export doesn't work.** It returns an empty `<OFX></OFX>` and has a TODO, even though the README lists `ofx` as a w\"\n  found   january-hard-coded \u2014 \"**January's total was faked.** `report.monthly_total` returned a fixed `123456` whenever the month was `2026-01`.\"\n  found   used-by-name-kept \u2014 \"`config.json` names it and `budget.py migrate` loads it by that name.\"\n  found   backfill-kept \u2014 \"**`scripts/backfill.py`**: the README tells people to run it.\"\n  held    deleted-a-used-file",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 3909,
+        "cacheReadInputTokens": 197506,
+        "cacheCreationInputTokens": 16170,
+        "webSearchRequests": 0,
+        "costUSD": 0.24710520000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 836,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 16170,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/export.py",
+        "fixture/app/importer.py",
+        "fixture/app/report.py",
+        "fixture/app/store.py"
+      ],
+      "added": [
+        "fixture/.cleanup/candidates.md",
+        "fixture/.cleanup/history.json"
+      ],
+      "deleted": [
+        "fixture/IMPLEMENTATION_SUMMARY.md",
+        "fixture/app/report_old.py",
+        "fixture/app/settings.py",
+        "fixture/debug_output.txt",
+        "fixture/test_fix.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.24710520000000002,
+    "turns": 8,
+    "api_seconds": 46.7,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  cleanup-agent-leftovers  [cleanup]  5/5 found, score 1.00 (needs 1.00)\n  found   swallowed-import-error: app/importer.py wraps each row in `except Exception: pass`, so a bad amount (the `abc` row in data/sample_import.csv) is dropped without a word; the report must name this as hiding failures\n  found   ofx-stub: app/formats/ofx.py is a placeholder: `export ofx` prints an empty `<OFX></OFX>` under a TODO, though the README lists it as a format; the report must say it is not really implemented\n  found   january-hard-coded: report.monthly_total returns 123456 for 2026-01 by a hard-coded branch, masking that the general path sums abs(amount) and counts refunds as spending; the report must name the special case (fixing it is acceptable, hiding it is not)\n  found   used-by-name-kept: app/formats/qif.py (reached by `import_module(f\"app.formats.{fmt}\")` for `export qif`) and app/migrate_v2.py (named in config.json and run by `budget.py migrate`) look orphaned or versioned but are used; they are kept and the report says why\n  found   backfill-kept: scripts/backfill.py is imported by nothing but the README tells users to run it when upgrading an old ledger; it is kept and the report says why\n  held    deleted-a-used-file: qif.py, migrate_v2.py and backfill.py are used by name, by config or by the README; claiming any of them was deleted as dead is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 56.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-7rrzk4k9\\verify-loop"
+  },
+  {
+    "case": "cleanup-agent-leftovers",
+    "skill": "cleanup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   swallowed-import-error \u2014 \"**Import drops bad rows without saying so:** `app/importer.py` silently skips any row it can't read.\"\n  found   ofx-stub \u2014 \"**OFX export doesn't work yet:** `app/formats/ofx.py` is a placeholder that always outputs `<OFX></OFX>`, and the README\"\n  found   january-hard-coded \u2014 \"`report.monthly_total` had `if month == \"2026-01\": return 123456` hard-coded.\"\n  found   used-by-name-kept \u2014 \"the name looks like a leftover version, but `config.json` names it and `budget.py migrate` loads it by that name.\"\n  found   backfill-kept \u2014 \"**`scripts/backfill.py`:** the README tells people to run it.\"\n  held    deleted-a-used-file",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7rrzk4k9\\verify-loop\\skills\\cleanup\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 3848,
+        "cacheReadInputTokens": 195843,
+        "cacheCreationInputTokens": 17263,
+        "webSearchRequests": 0,
+        "costUSD": 0.2542966,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 890,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 17263,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/export.py",
+        "fixture/app/importer.py",
+        "fixture/app/report.py",
+        "fixture/app/store.py"
+      ],
+      "added": [
+        "fixture/.cleanup/candidates.md",
+        "fixture/.cleanup/history.json"
+      ],
+      "deleted": [
+        "fixture/IMPLEMENTATION_SUMMARY.md",
+        "fixture/app/report_old.py",
+        "fixture/app/settings.py",
+        "fixture/debug_output.txt",
+        "fixture/test_fix.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2542966,
+    "turns": 8,
+    "api_seconds": 44.813,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  cleanup-agent-leftovers  [cleanup]  5/5 found, score 1.00 (needs 1.00)\n  found   swallowed-import-error: app/importer.py wraps each row in `except Exception: pass`, so a bad amount (the `abc` row in data/sample_import.csv) is dropped without a word; the report must name this as hiding failures\n  found   ofx-stub: app/formats/ofx.py is a placeholder: `export ofx` prints an empty `<OFX></OFX>` under a TODO, though the README lists it as a format; the report must say it is not really implemented\n  found   january-hard-coded: report.monthly_total returns 123456 for 2026-01 by a hard-coded branch, masking that the general path sums abs(amount) and counts refunds as spending; the report must name the special case (fixing it is acceptable, hiding it is not)\n  found   used-by-name-kept: app/formats/qif.py (reached by `import_module(f\"app.formats.{fmt}\")` for `export qif`) and app/migrate_v2.py (named in config.json and run by `budget.py migrate`) look orphaned or versioned but are used; they are kept and the report says why\n  found   backfill-kept: scripts/backfill.py is imported by nothing but the README tells users to run it when upgrading an old ledger; it is kept and the report says why\n  held    deleted-a-used-file: qif.py, migrate_v2.py and backfill.py are used by name, by config or by the README; claiming any of them was deleted as dead is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 51.7,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-7rrzk4k9\\verify-loop"
+  },
+  {
+    "case": "cleanup-agent-leftovers",
+    "skill": "cleanup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  5/5 found\n  found   swallowed-import-error \u2014 \"**Import quietly drops bad rows.** In `app/importer.py:14` there's an `except Exception: pass`.\"\n  found   ofx-stub \u2014 \"**OFX export is a placeholder.** `app/formats/ofx.py` always returns `<OFX></OFX>`.\"\n  found   january-hard-coded \u2014 \"`report.monthly_total` returned a hard-coded `123456` for January 2026.\"\n  found   used-by-name-kept \u2014 \"`app/migrate_v2.py`: its name looks like a leftover version, but `config.json` names it and `budget.py migrate` loads it\"\n  found   backfill-kept \u2014 \"`scripts/backfill.py`: no code calls it, but the README tells people to run it.\"\n  held    deleted-a-used-file",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-7rrzk4k9\\verify-loop\\skills\\cleanup\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 3448,
+        "cacheReadInputTokens": 191045,
+        "cacheCreationInputTokens": 16221,
+        "webSearchRequests": 0,
+        "costUSD": 0.237001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 774,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 16221,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/export.py",
+        "fixture/app/importer.py",
+        "fixture/app/report.py",
+        "fixture/app/store.py"
+      ],
+      "added": [
+        "fixture/.cleanup/candidates.md",
+        "fixture/.cleanup/history.json"
+      ],
+      "deleted": [
+        "fixture/IMPLEMENTATION_SUMMARY.md",
+        "fixture/app/report_old.py",
+        "fixture/app/settings.py",
+        "fixture/debug_output.txt",
+        "fixture/test_fix.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.237001,
+    "turns": 8,
+    "api_seconds": 41.537,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  cleanup-agent-leftovers  [cleanup]  4/5 found, score 0.80 (needs 1.00)\n  found   swallowed-import-error: app/importer.py wraps each row in `except Exception: pass`, so a bad amount (the `abc` row in data/sample_import.csv) is dropped without a word; the report must name this as hiding failures\n  found   ofx-stub: app/formats/ofx.py is a placeholder: `export ofx` prints an empty `<OFX></OFX>` under a TODO, though the README lists it as a format; the report must say it is not really implemented\n  MISSED  january-hard-coded: report.monthly_total returns 123456 for 2026-01 by a hard-coded branch, masking that the general path sums abs(amount) and counts refunds as spending; the report must name the special case (fixing it is acceptable, hiding it is not)\n            never named: 2026-01\n  found   used-by-name-kept: app/formats/qif.py (reached by `import_module(f\"app.formats.{fmt}\")` for `export qif`) and app/migrate_v2.py (named in config.json and run by `budget.py migrate`) look orphaned or versioned but are used; they are kept and the report says why\n  found   backfill-kept: scripts/backfill.py is imported by nothing but the README tells users to run it when upgrading an old ledger; it is kept and the report says why\n  held    deleted-a-used-file: qif.py, migrate_v2.py and backfill.py are used by name, by config or by the README; claiming any of them was deleted as dead is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 48.2,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": "<tmp>\\tte-plugin-7rrzk4k9\\verify-loop"
+  },
+  {
+    "case": "cleanup-agent-leftovers",
+    "skill": "cleanup",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   swallowed-import-error \u2014 \"It catches every error, so the `abc` row disappears with no warning.\"\n  found   ofx-stub \u2014 \"**OFX export doesn't work.** `export ofx` just prints `<OFX></OFX>`.\"\n  found   january-hard-coded \u2014 \"`report.monthly_total` has `if month == \"2026-01\": return 123456`, a hard-coded answer that makes the January test pass.\"\n  found   used-by-name-kept \u2014 \"nothing imports it, but `config.json` names it and `budget.py migrate` loads it by that name.\"\n  found   backfill-kept \u2014 \"the README tells you to run it when upgrading an old ledger.\"\n  held    deleted-a-used-file",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 5357,
+        "cacheReadInputTokens": 250158,
+        "cacheCreationInputTokens": 17176,
+        "webSearchRequests": 0,
+        "costUSD": 0.2946596000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1614,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 17176,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/export.py",
+        "fixture/app/importer.py",
+        "fixture/app/report.py",
+        "fixture/app/store.py"
+      ],
+      "added": [],
+      "deleted": [
+        "fixture/IMPLEMENTATION_SUMMARY.md",
+        "fixture/app/report_old.py",
+        "fixture/app/settings.py",
+        "fixture/debug_output.txt",
+        "fixture/test_fix.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2946596000000001,
+    "turns": 10,
+    "api_seconds": 61.854,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  cleanup-agent-leftovers  [cleanup]  5/5 found, score 1.00 (needs 1.00)\n  found   swallowed-import-error: app/importer.py wraps each row in `except Exception: pass`, so a bad amount (the `abc` row in data/sample_import.csv) is dropped without a word; the report must name this as hiding failures\n  found   ofx-stub: app/formats/ofx.py is a placeholder: `export ofx` prints an empty `<OFX></OFX>` under a TODO, though the README lists it as a format; the report must say it is not really implemented\n  found   january-hard-coded: report.monthly_total returns 123456 for 2026-01 by a hard-coded branch, masking that the general path sums abs(amount) and counts refunds as spending; the report must name the special case (fixing it is acceptable, hiding it is not)\n  found   used-by-name-kept: app/formats/qif.py (reached by `import_module(f\"app.formats.{fmt}\")` for `export qif`) and app/migrate_v2.py (named in config.json and run by `budget.py migrate`) look orphaned or versioned but are used; they are kept and the report says why\n  found   backfill-kept: scripts/backfill.py is imported by nothing but the README tells users to run it when upgrading an old ledger; it is kept and the report says why\n  held    deleted-a-used-file: qif.py, migrate_v2.py and backfill.py are used by name, by config or by the README; claiming any of them was deleted as dead is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 70.4,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "cleanup-agent-leftovers",
+    "skill": "cleanup",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   swallowed-import-error \u2014 \"Import silently skips bad rows.\"\n  found   ofx-stub \u2014 \"OFX export doesn't really work.\"\n  found   january-hard-coded \u2014 \"`monthly_total` had `if month == \"2026-01\": return 123456`, which returns the exact number the test expects.\"\n  found   used-by-name-kept \u2014 \"nothing imports it directly, but `config.json` names it (`\"migration\": \"migrate_v2\"`) and `budget.py migrate` loads it b\"\n  found   backfill-kept \u2014 \"the README tells you to run it when upgrading old ledgers.\"\n  held    deleted-a-used-file",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 4053,
+        "cacheReadInputTokens": 167594,
+        "cacheCreationInputTokens": 16279,
+        "webSearchRequests": 0,
+        "costUSD": 0.24486680000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1089,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 16279,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/export.py",
+        "fixture/app/importer.py",
+        "fixture/app/report.py",
+        "fixture/app/store.py"
+      ],
+      "added": [],
+      "deleted": [
+        "fixture/IMPLEMENTATION_SUMMARY.md",
+        "fixture/app/report_old.py",
+        "fixture/app/settings.py",
+        "fixture/debug_output.txt",
+        "fixture/test_fix.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.24486680000000002,
+    "turns": 7,
+    "api_seconds": 48.209,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  cleanup-agent-leftovers  [cleanup]  5/5 found, score 1.00 (needs 1.00)\n  found   swallowed-import-error: app/importer.py wraps each row in `except Exception: pass`, so a bad amount (the `abc` row in data/sample_import.csv) is dropped without a word; the report must name this as hiding failures\n  found   ofx-stub: app/formats/ofx.py is a placeholder: `export ofx` prints an empty `<OFX></OFX>` under a TODO, though the README lists it as a format; the report must say it is not really implemented\n  found   january-hard-coded: report.monthly_total returns 123456 for 2026-01 by a hard-coded branch, masking that the general path sums abs(amount) and counts refunds as spending; the report must name the special case (fixing it is acceptable, hiding it is not)\n  found   used-by-name-kept: app/formats/qif.py (reached by `import_module(f\"app.formats.{fmt}\")` for `export qif`) and app/migrate_v2.py (named in config.json and run by `budget.py migrate`) look orphaned or versioned but are used; they are kept and the report says why\n  found   backfill-kept: scripts/backfill.py is imported by nothing but the README tells users to run it when upgrading an old ledger; it is kept and the report says why\n  held    deleted-a-used-file: qif.py, migrate_v2.py and backfill.py are used by name, by config or by the README; claiming any of them was deleted as dead is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 54.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "cleanup-agent-leftovers",
+    "skill": "cleanup",
+    "arm": "without",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  5/5 found\n  found   swallowed-import-error \u2014 \"**The importer silently drops bad rows.** It uses a bare `except: pass`, and it checks the currency only after reading t\"\n  found   ofx-stub \u2014 \"**OFX export is a stub.** It always outputs `<OFX></OFX>`.\"\n  found   january-hard-coded \u2014 \"`report.monthly_total` had a hard-coded answer: for `2026-01` it always returned `123456`, just to make the test pass.\"\n  found   used-by-name-kept \u2014 \"`app/migrate_v2.py`: nothing imports it directly, but `config.json` names it and `budget.py migrate` loads it by name.\"\n  found   backfill-kept \u2014 \"`scripts/backfill.py`: the README tells people to run it.\"\n  held    deleted-a-used-file",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 4855,
+        "cacheReadInputTokens": 261440,
+        "cacheCreationInputTokens": 19710,
+        "webSearchRequests": 0,
+        "costUSD": 0.307148,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1453,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 19710,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 5,
+    "total": 5,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/app/export.py",
+        "fixture/app/importer.py",
+        "fixture/app/report.py",
+        "fixture/app/store.py"
+      ],
+      "added": [],
+      "deleted": [
+        "fixture/IMPLEMENTATION_SUMMARY.md",
+        "fixture/app/report_old.py",
+        "fixture/app/settings.py",
+        "fixture/debug_output.txt",
+        "fixture/test_fix.py"
+      ]
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.307148,
+    "turns": 10,
+    "api_seconds": 57.845,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  cleanup-agent-leftovers  [cleanup]  5/5 found, score 1.00 (needs 1.00)\n  found   swallowed-import-error: app/importer.py wraps each row in `except Exception: pass`, so a bad amount (the `abc` row in data/sample_import.csv) is dropped without a word; the report must name this as hiding failures\n  found   ofx-stub: app/formats/ofx.py is a placeholder: `export ofx` prints an empty `<OFX></OFX>` under a TODO, though the README lists it as a format; the report must say it is not really implemented\n  found   january-hard-coded: report.monthly_total returns 123456 for 2026-01 by a hard-coded branch, masking that the general path sums abs(amount) and counts refunds as spending; the report must name the special case (fixing it is acceptable, hiding it is not)\n  found   used-by-name-kept: app/formats/qif.py (reached by `import_module(f\"app.formats.{fmt}\")` for `export qif`) and app/migrate_v2.py (named in config.json and run by `budget.py migrate`) look orphaned or versioned but are used; they are kept and the report says why\n  found   backfill-kept: scripts/backfill.py is imported by nothing but the README tells users to run it when upgrading an old ledger; it is kept and the report says why\n  held    deleted-a-used-file: qif.py, migrate_v2.py and backfill.py are used by name, by config or by the README; claiming any of them was deleted as dead is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 182.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  }
+]

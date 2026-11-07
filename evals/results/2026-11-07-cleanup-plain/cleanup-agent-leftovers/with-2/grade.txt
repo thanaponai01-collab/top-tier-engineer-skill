@@ -1,0 +1,23 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   swallowed-import-error — "**Import drops bad rows without saying so:** `app/importer.py` silently skips any row it can't read."
+  found   ofx-stub — "**OFX export doesn't work yet:** `app/formats/ofx.py` is a placeholder that always outputs `<OFX></OFX>`, and the README"
+  found   january-hard-coded — "`report.monthly_total` had `if month == "2026-01": return 123456` hard-coded."
+  found   used-by-name-kept — "the name looks like a leftover version, but `config.json` names it and `budget.py migrate` loads it by that name."
+  found   backfill-kept — "**`scripts/backfill.py`:** the README tells people to run it."
+  held    deleted-a-used-file
+
+Phrase grader (grade.py), for comparison:
+PASS  cleanup-agent-leftovers  [cleanup]  5/5 found, score 1.00 (needs 1.00)
+  found   swallowed-import-error: app/importer.py wraps each row in `except Exception: pass`, so a bad amount (the `abc` row in data/sample_import.csv) is dropped without a word; the report must name this as hiding failures
+  found   ofx-stub: app/formats/ofx.py is a placeholder: `export ofx` prints an empty `<OFX></OFX>` under a TODO, though the README lists it as a format; the report must say it is not really implemented
+  found   january-hard-coded: report.monthly_total returns 123456 for 2026-01 by a hard-coded branch, masking that the general path sums abs(amount) and counts refunds as spending; the report must name the special case (fixing it is acceptable, hiding it is not)
+  found   used-by-name-kept: app/formats/qif.py (reached by `import_module(f"app.formats.{fmt}")` for `export qif`) and app/migrate_v2.py (named in config.json and run by `budget.py migrate`) look orphaned or versioned but are used; they are kept and the report says why
+  found   backfill-kept: scripts/backfill.py is imported by nothing but the README tells users to run it when upgrading an old ledger; it is kept and the report says why
+  held    deleted-a-used-file: qif.py, migrate_v2.py and backfill.py are used by name, by config or by the README; claiming any of them was deleted as dead is the confident wrong answer
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept — 
+  ok      at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which) — 

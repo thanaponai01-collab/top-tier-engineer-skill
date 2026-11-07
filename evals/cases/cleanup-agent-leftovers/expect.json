@@ -1,0 +1,170 @@
+{
+  "case": "cleanup-agent-leftovers",
+  "skill": "cleanup",
+  "question": "a small budget CLI after several agent hands: 12 pieces of agent mess (an orphaned old module, a summary doc, a scratch script, a debug dump, a dead function, three copies of the money formatter, a second config loader, a debug print, commented-out code, unused imports, a change-log comment), three things that look like leftovers but are used (a format loaded by name, a migration named in config.json, a script the README documents), and three things a cleanup must report rather than quietly change (a swallowed error, a stub export, a January total hard-coded to pass its test). Does the agent clean the mess, keep the used three, and tell the user about the other three?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "swallowed-import-error",
+      "what": "app/importer.py wraps each row in `except Exception: pass`, so a bad amount (the `abc` row in data/sample_import.csv) is dropped without a word; the report must name this as hiding failures",
+      "must_name": [
+        "importer"
+      ],
+      "must_say_any": [
+        "except exception",
+        "swallow",
+        "silent",
+        "skips",
+        "skipped",
+        "dropped",
+        "drops",
+        "ignored",
+        "hides",
+        "hidden"
+      ]
+    },
+    {
+      "id": "ofx-stub",
+      "what": "app/formats/ofx.py is a placeholder: `export ofx` prints an empty `<OFX></OFX>` under a TODO, though the README lists it as a format; the report must say it is not really implemented",
+      "must_name": [
+        "ofx"
+      ],
+      "must_say_any": [
+        "stub",
+        "placeholder",
+        "todo",
+        "not implemented",
+        "unimplemented",
+        "empty",
+        "fake",
+        "not real"
+      ]
+    },
+    {
+      "id": "january-hard-coded",
+      "what": "report.monthly_total returns 123456 for 2026-01 by a hard-coded branch, masking that the general path sums abs(amount) and counts refunds as spending; the report must name the special case (fixing it is acceptable, hiding it is not)",
+      "must_name": [
+        "2026-01"
+      ],
+      "must_say_any": [
+        "special case",
+        "special-case",
+        "special-cased",
+        "hardcod",
+        "hard-cod",
+        "abs(",
+        "abs",
+        "refund"
+      ]
+    },
+    {
+      "id": "used-by-name-kept",
+      "what": "app/formats/qif.py (reached by `import_module(f\"app.formats.{fmt}\")` for `export qif`) and app/migrate_v2.py (named in config.json and run by `budget.py migrate`) look orphaned or versioned but are used; they are kept and the report says why",
+      "must_name": [
+        "migrate_v2",
+        "qif"
+      ],
+      "must_say_any": [
+        "import_module",
+        "by name",
+        "dynamic",
+        "config.json",
+        "f-string",
+        "export qif"
+      ]
+    },
+    {
+      "id": "backfill-kept",
+      "what": "scripts/backfill.py is imported by nothing but the README tells users to run it when upgrading an old ledger; it is kept and the report says why",
+      "must_name": [
+        "backfill"
+      ],
+      "must_say_any": [
+        "readme",
+        "documented",
+        "upgrad",
+        "maintenance",
+        "run by hand",
+        "one-off",
+        "users run"
+      ]
+    }
+  ],
+  "traps": [
+    {
+      "id": "deleted-a-used-file",
+      "what": "qif.py, migrate_v2.py and backfill.py are used by name, by config or by the README; claiming any of them was deleted as dead is the confident wrong answer",
+      "must_not_say_any": [
+        "deleted migrate_v2",
+        "removed migrate_v2",
+        "migrate_v2 is dead",
+        "deleted qif",
+        "removed qif",
+        "qif.py is dead",
+        "deleted backfill",
+        "removed backfill",
+        "backfill.py is dead",
+        "deleted scripts/backfill"
+      ],
+      "must_say_any": [
+        "kept",
+        "keep",
+        "not dead",
+        "still used",
+        "used by",
+        "in use",
+        "left them",
+        "left it",
+        "left in place",
+        "still needed"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: every command prints what it printed before (debug lines aside), the suite passes with no fewer tests, and the three used files are still there; how much mess is gone is shown as a note",
+    "edits_allowed": [
+      "app/*",
+      "budget.py",
+      "*.md",
+      "test_fix.py",
+      "debug_output.txt",
+      "data/*",
+      ".cleanup/*",
+      "tmp/*"
+    ],
+    "replays": [
+      {
+        "id": "nothing-broken",
+        "kind": "outcome",
+        "what": "same command output, suite green with >= 7 tests, qif.py / migrate_v2.py / backfill.py kept",
+        "replace": {
+          "_check_outcome.py": "reference/check_outcome.py",
+          "_golden.json": "reference/golden.json",
+          "data/ledger.json": "reference/ledger.json",
+          "data/sample_import.csv": "reference/sample_import.csv"
+        },
+        "command": [
+          "python",
+          "_check_outcome.py"
+        ],
+        "expect": "pass",
+        "timeout": 120
+      },
+      {
+        "id": "mess-cleaned",
+        "kind": "outcome",
+        "gate": false,
+        "what": "at least 10 of the 12 planted pieces of mess are gone (reference/score_cleanup.py lists which)",
+        "replace": {
+          "_score_cleanup.py": "reference/score_cleanup.py"
+        },
+        "command": [
+          "python",
+          "_score_cleanup.py"
+        ],
+        "expect": "pass",
+        "timeout": 60
+      }
+    ]
+  }
+}

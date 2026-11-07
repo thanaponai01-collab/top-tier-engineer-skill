@@ -14,6 +14,22 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.42.0 - 2026-11-07 - cleanup: clear what agents leave behind, without explaining it each time
+
+- New manual-only skill `cleanup`. The user wanted one word to get a cleanup, not a better cleanup
+  than plain Opus: on the new case `cleanup-agent-leftovers` (12 planted messes, 3 decoys loaded by
+  name, by config or by the README, and a swallowed error, a stub and a hard-coded January total)
+  plain Opus passed 3/3, removed 12/12 and kept every decoy at $0.28 a try
+  (`evals/results/2026-11-07-cleanup-plain/REPORT.md`). So the skill is lean on purpose.
+- `scripts/cleanup.py`: lists candidates by `file:line` (Python by AST, other files by name and
+  text); `--run CMD` records the files and the tests first and refuses a command that ran no tests;
+  `--done` refuses while a test that passed fails, fewer tests run, or a deleted file's name is still
+  in a text file, then saves `.cleanup/history.json`. The next run lists what is new and what came
+  back. Hooks and linters were left out: the user cannot maintain them.
+- Fixing a swallowed error, stub or hard-coded answer is allowed only when the answer names it as a
+  change in behavior; plain Opus did exactly that in 2 of 3 tries.
+- `tests/test_cleanup.py` (15 tests); each rule, broken in the helper, turns one red.
+
 ## 1.41.0 - 2026-11-07 - untangle: draft, built on what plain Opus skipped on a real repo
 
 - New manual-only skill `untangle`, drafted from two traces of plain Opus (the prompt: untangle it so
