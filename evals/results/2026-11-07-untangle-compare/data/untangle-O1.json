@@ -1,0 +1,31 @@
+{
+ "report": "I untangled the spot where the history shows changes costing the most: how the Transform/Align tab is wired into the CutDeck panel. The untangle helper's three checks all pass. **One thing first: I found a real bug and left it unfixed**, because fixing it changes behavior.\n\n## The bug (already there, still there)\n`transcribe/cues/split.py:177` returns `[]` when there is no text, even when it was asked for two results (cues and words). `transcribe/engines/faster_whisper.py:771` then crashes trying to split that into two. In practice, a decode that produces no words, such as silent audio, crashes Engine A. The dp path has the same problem at `split.py:415` and `:419`. `tests/test_faster_whisper.py::test_transcribe_threads_speech_spans` already fails because of it.\n\n## What I changed and why\nThe commit history shows two repeated costs:\n\n1. **Every new Transform/Align button had to be wired in three files.** You wrote the handler in `features/align.js`, made the panel call it in `core/alignPanel.js`, then copied it into a 12-line list in `main.js` (commits a662187, 23442e6). a662187 was the fix for a handler someone wrote but never copied, which left the Text 1/2/All switcher dead in Premiere.\n   - Now `features/align.js` keeps all its handlers in one `intents` object, and `main.js` just calls `alignPanel.bind(align.intents)`. A new handler touches two files instead of three.\n   - The feature still exposes each handler (and `poll`) by its old name, so other code that uses them didn't change.\n   - The old list had an `onReset` entry pointing at nothing, which the panel never calls. It's gone.\n2. **The rule \"only check Premiere while the Transform or Align tab is showing\" was written out twice in `main.js`**, once for tab switches and once at startup, and ec9f99b had to edit both. It's now one `followTab(name)` function that both use.\n\nIn `tests/cutdeck_align_panel.test.cjs`, I rewrote the two tests that matched the old wiring as text so they check the new layout. The \"every intent is handled\" test now builds the align feature and confirms it has a working handler for every intent the panel calls, which is stronger than matching text. When I renamed `onSelectTextLayer` as a test, it failed with \"the align feature never handles onSelectTextLayer\".\n\n## What I left alone, and why\n- **`faster_whisper.py`** (the file fixed most often): each fix changed a different part of how decoding recovers, with no repeated edit across files. Moving that code also risks the gated transcription accuracy scores, which the local tests don't fully cover.\n- **`store.py`**: it changes a lot because each feature adds its own database functions there, which is the intended design (all SQL in one file).\n- **`adjustmentLayer.js` and `nativeCut.js`**: their fixes stay inside each file and are about how Premiere behaves, which only a live run can check.\n- **`spike18_split_probe`**: an old experiment that nothing uses and nobody has touched since August.\n- **`panel.js` with `main.js`**: the main panel's handlers come from five different features, so `main.js` is the right place to put them together.\n- **`align.js` with `edit.js`, and `alignPanel.js` with `align.js`**: one file calls the other, so changing both together is expected.\n\nAll of these reasons are recorded in `.untangle/notes.md`.\n\n## How I know nothing broke\n- **Node tests:** 731 passed before and 731 after, none failing.\n- **Python tests:** 1151 ran before and after. The same 10 failed both times, none new:\n  - 8 in `test_text_box` because `uharfbuzz` isn't installed. It's listed in `requirements.txt` but missing from this environment.\n  - `test_cue_knobs_reach_the_splitter` is out of date: its stand-in for `split_cues` takes the old arguments, from before commit 307671f changed the call.\n  - `test_transcribe_threads_speech_spans` is the bug above.\n- **Adobe API check:** `node tools/adobe/check-api.mjs` passes. The change is plain JavaScript wiring and calls no Adobe API.\n- **One small difference:** on startup with the Transform or Align tab open, that panel now draws twice instead of once. An existing test shows a second draw with the same state changes nothing.\n- **Not checked:** I didn't run anything live in Premiere.\n\nNothing is committed. The three changed files and `.untangle/` are in the working tree; commit `.untangle/` with the change or delete it.",
+ "diffstat": " 5 files changed, 151 insertions(+), 41 deletions(-)\n",
+ "diff_files": "A\t.untangle/notes.md\nA\t.untangle/state.json\nM\ttests/cutdeck_align_panel.test.cjs\nM\tuxp/cutdeck/features/align.js\nM\tuxp/cutdeck/main.js\n",
+ "suite": {
+  "py": [
+   "10 failed, 1141 passed, 4 skipped, 8 deselected, 26 warnings, 16 subtests passed in 158.51s (0:02:38)"
+  ],
+  "py_failed": [
+   "tests/test_cues_policy_config.py::test_cue_knobs_reach_the_splitter",
+   "tests/test_faster_whisper.py::test_transcribe_threads_speech_spans",
+   "tests/test_text_box.py::test_a_font_without_a_cap_height_gives_a_reason",
+   "tests/test_text_box.py::test_box_is_one_em_centred_on_half_the_cap_height_and_as_wide_as_the_kerned_advance",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change0-aligned]",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change1-line]",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change2-tracking]",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change3-bold]",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change4-font]",
+   "tests/test_text_box.py::test_finds_the_clip_by_track_and_start_and_reads_each_text_layer"
+  ],
+  "node": [
+   "\u2139 tests 731",
+   "\u2139 pass 731",
+   "\u2139 fail 0"
+  ],
+  "node_fail": [],
+  "n_py_test_files": 112,
+  "n_cjs": 56
+ },
+ "seconds": 794.3
+}

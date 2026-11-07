@@ -1,0 +1,165 @@
+RESULT [('success', 4.587249699999997, 77), ('success', 4.587249699999997, 27)]
+calls 126 [(('main', 'Bash'), 98), (('sub', 'Bash'), 23), (('main', 'Agent'), 2), (('sub', 'TaskStop'), 1), (('main', 'Write'), 1), (('main', 'Edit'), 1)]
+phases {'1-before-edit:calls': 87, '1-before-edit:ctx': 1050866, '1-before-edit:out': 322, '2-editing:calls': 6, '2-editing:ctx': 644055, '2-editing:out': 84, '3-after-edit:calls': 33, '3-after-edit:ctx': 920477, '3-after-edit:out': 116}
+
+GIT HISTORY / HELPER CMDS: 5
+   git log --since=2026-08-01 --name-only --format=%x00 -- '*.py' '*.js' | grep -v '^tests/\|^$' | tr -d '\0' | grep . | sort | uniq -c | sort -rn | head -25
+   git log -n 300 --name-only --format= -- '*.py' '*.js' | grep -av '^tests/' | grep -a . | sort | uniq -c | sort -rn | head -25
+   ls uxp/; git grep -ln "spike18" -- ':!reference' | head; git log -1 --format="%ad %s" -- uxp/spike18_split_probe
+   mkdir -p /tmp/old/timeline && git show HEAD:uxp/cutdeck/timeline/alProject.js > /tmp/old/timeline/alProject.js && git show HEAD:uxp/cutdeck/timeline/cmProject.js > /tmp/old/timeline/cmProject.js && cp uxp/cutdeck/timelin
+   python -m pytest -q -p no:cacheprovider tests/test_package_boundaries.py 2>&1 | tail -1; git stash -q; git show stash@{0}:tests/test_package_boundaries.py >/dev/null 2>&1; cp tests/test_package_boundaries.py /tmp/ 2>/dev
+
+TEST CMDS: 15
+   (python -m pytest -q -x -p no:cacheprovider > /tmp/py_base.txt 2>&1; echo "exit $?" >> /tmp/py_base.txt) ; (node --test tests/*.cjs > /tmp/node_base.txt 2>&1; echo "exit $?" >> /tmp/node_base.txt); ta
+   grep -E "^ℹ (tests|pass|fail)" /tmp/node_base.txt; grep -B30 "short test summary" /tmp/py_base.txt | head -40; python -m pytest -q -p no:cacheprovider > /tmp/py_base.txt 2>&1; tail -8 /tmp/py_base.txt
+   sed -i 's/| `sequence_mixdown.py` | thin `ingest()` → `build_cut_spans()` wrapper over a live sequence'"'"'s own audio mixdown; superseded (issue #17\/#20) by the since-retired `live_clip.py`; kept in
+   sed -i 's/^from cutdeck import helper$/from cutdeck import driver_commands, helper/' tests/test_cutdeck_helper_v2.py; python -m pytest -q -p no:cacheprovider tests/test_cutdeck_helper_v2.py 2>&1 | tai
+   node --test tests/*.cjs 2>&1 | grep -E "^ℹ (tests|pass|fail)|^not ok|✖" | head
+   cd uxp/cutdeck/core && python - <<'EOF' ⏎ import pathlib,re ⏎ for f,g in [('panel.js','CutDeckPanel'),('alignPanel.js','CutDeckAlignPanel'),('progressText.js','CutDeckProgressText'),('rpc.js','CutDeck
+   python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('tests/cutdeck_progress_text.test.cjs'); s=p.read_text(encoding='utf-8') ⏎ i=s.index('test("CEP script tag exposes'); j=s.index('});\n',i)+4 ⏎ s=s[:i
+   python - <<'EOF' ⏎ import pathlib,re ⏎ p=pathlib.Path('uxp/cutdeck/timelineRange.js'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace('const { TICKS_PER_SECOND, toTicks } = require("./host/ticks.js");\
+   git diff -U0 uxp/cutdeck/timeline/nativeSync.js uxp/cutdeck/transform/edit.js uxp/cutdeck/transform/frameBounds.js uxp/cutdeck/timeline/frameHold.js uxp/cutdeck/transform/params.js | grep "^[-+][^-+]"
+   python -m pytest -q -p no:cacheprovider > /tmp/py_after.txt 2>&1; tail -2 /tmp/py_after.txt; grep FAILED /tmp/py_after.txt | sort > /tmp/py_after_failed.txt; diff /tmp/py_base_failed.txt /tmp/py_after
+   git stash -q && python -m pytest -q -p no:cacheprovider tests/test_text_box.py 2>&1 | grep -E "^E " | sort | uniq -c > /tmp/tb_before.txt; git stash pop -q && python -m pytest -q -p no:cacheprovider t
+   python -m pytest -q -p no:cacheprovider tests/test_package_boundaries.py 2>&1 | tail -1; git stash -q; git show stash@{0}:tests/test_package_boundaries.py >/dev/null 2>&1; cp tests/test_package_bounda
+   python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('tools/replay_segmentation.py'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace('from transcribe.eval.metrics import _match_points, boundary_f1_error\
+   node tools/adobe/check-api.mjs 2>&1 | tail -2; node --test tests/*.cjs 2>&1 | grep -E "^ℹ (pass|fail)"; python -m pyflakes --version >/dev/null 2>&1 && python -m pyflakes $(git diff --name-only HEAD -
+   git grep -n "helper import.*PPRO_TICKS\|helper\.PPRO_TICKS" ; sed -i 's/^from cutdeck.sequence_timing import PPRO_TICKS_PER_SECOND, SequenceRefusal$/from cutdeck.sequence_timing import SequenceRefusal
+
+READS: 0 distinct 0
+
+EDITS/WRITES: 2
+   1x tests/test_package_boundaries.py
+   1x docs/architecture.md
+
+SUBAGENTS: 2
+   Survey tangles in CutDeck code :: Read-only survey, thoroughness "medium". Repo root: <scratch>\cmp\runs\C1\repo  Scope: `uxp/cutdeck/**/*.js` (a Premiere UXP panel, CommonJS `require`) and `cutdeck/*.py` (Python helper). Ignore `referenc
+   Survey Python tangles :: Read-only survey, thoroughness "medium". Repo root: <scratch>\cmp\runs\C1\repo  Scope: Python in `transcribe/`, `cutdeck/`, `clubfriday/`, `tools/*.py`. Ignore `reference/`, `docs/`, `tests/` (but DO grep
+
+TIMELINE
+   0 main Bash     ctx=      0 cat "<scratch>/plugins/caldo/skills/untangle-codebase/SKILL.md"; ls "<home>/AppData/Local/Temp/c
+   1 main Bash     ctx=      0 git ls-files | sed 's|/[^/]*$||' | sort | uniq -c | sort -rn | head -40; git ls-files | wc -l; git ls-files '*.py' '*.js' '*.cjs' '*.mjs' | xargs wc -l | sort -rn | head -40
+   2 main Bash     ctx=      0 (python -m pytest -q -x -p no:cacheprovider > /tmp/py_base.txt 2>&1; echo "exit $?" >> /tmp/py_base.txt) ; (node --test tests/*.cjs > /tmp/node_base.txt 2>&1; echo "exit $?" >> /tmp/node_base.txt); ta
+   3 main Bash     ctx=  31649 grep -E "^ℹ (tests|pass|fail)" /tmp/node_base.txt; grep -B30 "short test summary" /tmp/py_base.txt | head -40; python -m pytest -q -p no:cacheprovider > /tmp/py_base.txt 2>&1; tail -8 /tmp/py_base.txt
+   4 main Bash     ctx=      0 grep FAILED /tmp/py_base.txt | sort > /tmp/py_base_failed.txt; cat /tmp/py_base_failed.txt | head -4; grep -A3 "test_finds_the_clip_by_track" /tmp/py_base.txt | grep -E "Error|assert" | head -5
+   5 main Bash     ctx=      0 cat > /tmp/deps.py <<'EOF' ⏎ import ast,pathlib,collections ⏎ root=pathlib.Path('.') ⏎ mods={} ⏎ for p in list(root.glob('transcribe/**/*.py'))+list(root.glob('cutdeck/**/*.py'))+list(root.glob('clubf
+   6 main Bash     ctx=      0 grep -rn "cutdeck.words/|from cutdeck/|import cutdeck" transcribe/ | grep -v "^Binary"; echo ---; grep -n "metrics" transcribe/db/store.py | head; echo ---; cat cutdeck/xml_bridge.py cutdeck/xml_recut
+   7 main Bash     ctx=      0 grep -rn "cutdeck/.words/|cutdeck import words/|from /.words/|from /. import.*words" --include=*.py --include=*.md --include=*.cjs . | grep -v "^./reference" | grep -v "^./docs/research" | awk -F: '{p
+   8 main Bash     ctx=      0 sed -n 280,310p transcribe/db/store.py; sed -n 805,825p transcribe/db/store.py; grep -rn "EvalRun(/|insert_eval_run/|metrics_version" --include=*.py transcribe cutdeck tools clubfriday | grep -v "db/s
+   9 main Bash     ctx=  43753 sed -n 325,365p transcribe/eval/harness.py; grep -rn "create_eval_run/|EvalRun(" --include=*.py tests | head -20; grep -n "METRICS_VERSION/|def last_passing/|metrics_version" transcribe/db/store.py tr
+  10 main Bash     ctx=      0 grep -rn "7891" --include=*.py --include=*.js --include=*.cjs --include=*.json . | grep -v "^./reference/|^./tests/|^./docs" ; echo ---; ls uxp/cutdeck uxp/cutdeck/*; 
+  11 main Bash     ctx=      0 git ls-files uxp/cutdeck | xargs wc -l | sort -rn | head -50; grep -rn "7891" uxp/cutdeck | head
+  12 main Agent    ctx=      0 Survey tangles in CutDeck code :: Read-only survey, thoroughness "medium". Repo root: <scratch>/cmp/runs
+  13 sub  Bash     ctx=  13579 cd "<scratch>/cmp/runs/C1/repo"; find uxp/cutdeck cutdeck -name "*.js" -not -path "*/node_modules/*" -o 
+  14 main Bash     ctx=      0 sed -n 105,135p transcribe/cues/split.py; echo ----; sed -n 1,30p transcribe/thai/atoms.py; echo ---; cat transcribe/thai/__init__.py; sed -n 40,50p transcribe/subtitles/layout.py; sed -n 130,150p tra
+  15 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rnoE "require/(['/"][^'/"]+['/"]/)" uxp/cutdeck --include=*.js | 
+  16 main Bash     ctx=      0 grep -rln "cutdeck/words/|cutdeck/.words" --exclude-dir=reference --exclude-dir=node_modules --exclude-dir=.git . 
+  17 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo/uxp/cutdeck"; for f in $(find . -name "*.js" -not -path "*/node_modules/*
+  18 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo/uxp/cutdeck"; cat features/sync.js features/controller.js | head -100; gr
+  19 main Bash     ctx=      0 set -e ⏎ git mv cutdeck/words.py transcribe/thai/words.py ⏎ files=$(git grep -l "cutdeck/.words/|cutdeck/words/.py" -- '*.py') ⏎ echo "$files" ⏎ sed -i 's/cutdeck/.words/transcribe.thai.words/g; s#cut
+  20 main Bash     ctx=      0 python - <<'EOF' ⏎ import re,pathlib ⏎ p=pathlib.Path('transcribe/thai/words.py'); s=p.read_text(encoding='utf-8') ⏎ old='''    _, timed = timed_tokens(pieces) ⏎     return [Word(t, s, e, conf) for t,
+  21 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rn "cropBox" --include=*.js --include=*.py --include=*.html --inc
+  22 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('transcribe/thai/words.py'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace('"""transcribe/thai/words.py — Phase 1: the word timeline (HANDOFF_CUTDECK
+  23 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; for f in $(find uxp/cutdeck -name "*.js" -not -path "*/node_modules/*" 
+  24 main Bash     ctx=  59561 sed -n 36,48p SYSTEM_SPEC.md; grep -n "^#/|thai" SYSTEM_SPEC.md | sed -n 1,80p | grep -n "thai/|Thai/|cutdeck" 
+  25 main Bash     ctx=  60489 python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('SYSTEM_SPEC.md'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace("    └── thai/                  # Thai language atoms and lint rules","    └── thai/
+  26 main Bash     ctx=      0 git grep -n "sequence_mixdown" -- '*.py' '*.cmd' '*.bat' '*.js' | grep -v "^tests/test_cutdeck_sequence_mixdown/|^cutdeck/sequence_mixdown"; echo ---; git grep -n "xml_bridge/|xml_recut" -- ':!referen
+  27 main Bash     ctx=      0 sed -i 's/| `sequence_mixdown.py` | thin `ingest()` → `build_cut_spans()` wrapper over a live sequence'"'"'s own audio mixdown; superseded (issue #17//#20) by the since-retired `live_clip.py`; kept in
+  28 main Bash     ctx=      0 sed -i 's/`rough_cut.py` uses it for the no-ASR path/`rough_cut.analyze` builds its plan with it/' SYSTEM_SPEC.md; git grep -n "vad_min_silence_ms=/|vad_threshold=/|denoise=raw_config/|denoise=config/
+  29 main Bash     ctx=  67404 sed -n 415,445p transcribe/pipeline/ingest.py; sed -n 118,140p cutdeck/rough_cut.py; sed -n 35,60p transcribe/pipeline/run.py; git grep -n "ingest_kwargs_from_config/|ingest(" -- '*.py' ':!tests' | he
+  30 main Bash     ctx=      0 git log --since=2026-08-01 --name-only --format=%x00 -- '*.py' '*.js' | grep -v '^tests//|^$' | tr -d '/0' | grep . | sort | uniq -c | sort -rn | head -25
+  31 main Bash     ctx=  70527 git log -n 300 --name-only --format= -- '*.py' '*.js' | grep -av '^tests/' | grep -a . | sort | uniq -c | sort -rn | head -25
+  32 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rnE "^(const|function|async function) (TICKS|ticksPer|[A-Z_]{5,})
+  33 main Bash     ctx=      0 ls uxp/; git grep -ln "spike18" -- ':!reference' | head; git log -1 --format="%ad %s" -- uxp/spike18_split_probe
+  34 main Bash     ctx=  71869 grep -n "spike18" features/reference.md MAINT_LOG.md | head -5
+  35 sub  Bash     ctx=  24183 cd "<scratch>/cmp/runs/C1/repo/uxp/cutdeck"; sed -n 15,45p timeline/alProject.js; sed -n 8,35p timeline/
+  36 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rn "254016000000" uxp/cutdeck cutdeck --include=*.js --include=*.
+  37 main Bash     ctx=      0 sed -n 225,250p transcribe/engines/faster_whisper.py; echo ----; sed -n 95,115p transcribe/engines/qwen3_asr.py
+  38 sub  Bash     ctx=  30017 cd "<scratch>/cmp/runs/C1/repo"; sed -n 1,40p uxp/cutdeck/timelineRange.js | grep -n "TICKS/|ticks" ; gr
+  39 main Bash     ctx=      0 sed -i 's#helper (cutdeck/xml_bridge.py, ws://127.0.0.1:7891#helper (cutdeck/helper.py, ws://127.0.0.1:7891#' .claude/hooks/uxp_api_gate.py && sed -n 25,29p .claude/hooks/uxp_api_gate.py; sed -n 295,3
+  40 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; sed -n 26,90p uxp/cutdeck/timelineRange.js | grep -nE "^(function|const
+  41 main Bash     ctx=      0 sed -i 's/xmlBridgePath/helperPath/g; s/xmlBridgeSource/helperSource/g; s#VERSION constant not found in cutdeck/xml_bridge.py#VERSION constant not found in cutdeck/helper.py#; s/, xml_bridge.py has "/
+  42 sub  Bash     ctx=  33075 cd "<scratch>/cmp/runs/C1/repo"; grep -rn "cutdeck-xml-2" uxp/cutdeck cutdeck --include=*.js --include=*
+  43 main Bash     ctx=      0 grep -n "^def /|^class /|^[A-Z_]* = /|^from/|^import" cutdeck/helper.py cutdeck/ai_backend.py cutdeck/premiere_cli.py cutdeck/live_check.py | head -90
+  44 main Bash     ctx=      0 git grep -n "MAX_MARKERS" | grep -v "^reference"; grep -n "ROOT/b" cutdeck/ai_backend.py | head -5; grep -n "ROOT/b" cutdeck/helper.py | head
+  45 main Bash     ctx=  78894 sed -i 's/^from cutdeck.driver_commands import COMMANDS, MAX_MARKERS  # noqa: F401 (MAX_MARKERS: tests)$/from cutdeck.driver_commands import COMMANDS/' cutdeck/helper.py; sed -n 27p cutdeck/helper.py;
+  46 main Bash     ctx=      0 sed -i 's/^from cutdeck import helper$/from cutdeck import driver_commands, helper/' tests/test_cutdeck_helper_v2.py; python -m pytest -q -p no:cacheprovider tests/test_cutdeck_helper_v2.py 2>&1 | tai
+  47 main Bash     ctx=      0 cd uxp/cutdeck; sed -n 1,45p timeline/alProject.js; echo =====; sed -n 1,35p timeline/cmProject.js; grep -n "module.exports" -A8 timeline/alProject.js timeline/cmProject.js
+  48 main Bash     ctx=  85970 cd uxp/cutdeck; sed -n 45,130p timeline/alProject.js; echo =====; sed -n 35,81p timeline/cmProject.js; grep -rn "cmProject/|alProject" --include=*.js --include=*.cjs . ../../tests ../../tools 2>/dev/n
+  49 main Bash     ctx=      0 cd uxp/cutdeck/timeline && python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('alProject.js'); s=p.read_text(encoding='utf-8') ⏎ start=s.index('const isSide = (n)') ⏎ end=s.index('function utf8Bytes(t
+  50 main Bash     ctx=      0 node --test tests/*.cjs 2>&1 | grep -E "^ℹ (tests|pass|fail)|^not ok|✖" | head
+  51 main Bash     ctx=      0 mkdir -p /tmp/old/timeline && git show HEAD:uxp/cutdeck/timeline/alProject.js > /tmp/old/timeline/alProject.js && git show HEAD:uxp/cutdeck/timeline/cmProject.js > /tmp/old/timeline/cmProject.js && cp
+  52 main Bash     ctx=  97469 node /tmp/cmp.cjs "$(cygpath -w /tmp/old/timeline)" 2>&1 | head -3; sed -i 's#const a=run("/tmp/old/timeline"),b=run(process.argv/[2/]);#const a=run(process.argv[3]),b=run(process.argv[2]);#' /tmp/cmp
+  53 main Bash     ctx=      0 cd uxp/cutdeck; sed -n 145,190p timeline/frameHold.js; echo ====; sed -n 15,55p transform/frameBounds.js; grep -n "waitForFile/|fileSize/|sleep(" timeline/frameHold.js transform/frameBounds.js
+  54 main Bash     ctx=      0 grep -n "TICKS_PER_SECOND/|^from/|^import" cutdeck/text_box.py; git grep -n "text_box.TICKS_PER_SECOND/|text_box import.*TICKS"; grep -rn "254016000000" --include=*.py cutdeck transcribe clubfriday to
+  55 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('cutdeck/text_box.py'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace("from cutdeck.prproj_reader import read_project/n","from cutdeck.prproj_reader 
+  56 main Bash     ctx=      0 sed -n 575,591p uxp/cutdeck/core/panel.js; sed -n 220,235p uxp/cutdeck/core/rpc.js; sed -n 30,46p tests/cutdeck_progress_text.test.cjs
+  57 main Bash     ctx=      0 ls panel 2>&1 | head; git ls-files | grep -i "cep/|CSXS" | head; grep -rln "<script" uxp/cutdeck/index.html; grep -n "<script" uxp/cutdeck/index.html
+  58 main Bash     ctx= 103500 grep -n "script/|CutDeck" cep/textprobe/index.html | head
+  59 main Bash     ctx=      0 cd uxp/cutdeck/core; for f in panel.js alignPanel.js progressText.js rpc.js; do echo "== $f"; grep -n "global/b/|^(function/|^})(" $f; done
+  60 main Bash     ctx=      0 cd uxp/cutdeck/core && python - <<'EOF' ⏎ import pathlib,re ⏎ for f,g in [('panel.js','CutDeckPanel'),('alignPanel.js','CutDeckAlignPanel'),('progressText.js','CutDeckProgressText'),('rpc.js','CutDeck
+  61 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('tests/cutdeck_progress_text.test.cjs'); s=p.read_text(encoding='utf-8') ⏎ i=s.index('test("CEP script tag exposes'); j=s.index('});/n',i)+4 ⏎ s=s[:i
+  62 main Bash     ctx=      0 grep -n "CEP/|script tag/|window/./(CutDeck/)/|UMD" uxp/cutdeck/core/*.js | head
+  63 main Bash     ctx=      0 sed -n 20,35p uxp/cutdeck/timelineRange.js; grep -n "module.exports" -A10 uxp/cutdeck/timelineRange.js; grep -rn "timelineRange" uxp tests --include=*.js --include=*.cjs | grep require; grep -n "TICKS
+  64 main Bash     ctx=      0 grep -n "/bticks(/|TICKS_PER_SECOND" uxp/cutdeck/timelineRange.js; grep -c "/bticks(" tests/cutdeck_assembly.test.cjs tests/cutdeck_gate_issue57.test.cjs; grep -n "ticks" uxp/cutdeck/host/ticks.js | g
+  65 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib,re ⏎ p=pathlib.Path('uxp/cutdeck/timelineRange.js'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace('const { TICKS_PER_SECOND, toTicks } = require("./host/ticks.js");/
+  66 main Bash     ctx=      0 cat > /tmp/exp.sh <<'EOF' ⏎ check(){ f=$1; shift; for n in "$@"; do c=$(grep -rlw "$n" uxp tests tools/adobe/*.mjs scripts cutdeck 2>/dev/null | grep -v node_modules | grep -v "^$f$" | wc -l); echo "$
+  67 main Bash     ctx=      0 grep -rn "cmProject/./|cm/./(gzip/|utf8/|crc/|MAX/)" tests/cutdeck_adj_matte_hold.test.cjs uxp/cutdeck/timeline/alLibrary.js | grep -o "cmProject/.[A-Za-z]*/|cm/.[A-Za-z]*" | sort | uniq -c
+  68 main Bash     ctx= 114240 cat > /tmp/unexport.py <<'EOF' ⏎ import re,sys,pathlib ⏎ plan={ ⏎ 'uxp/cutdeck/timeline/frameHold.js':['getOrCreateFrameHoldBin','locateAndOrganizeImportedHoldItem','getHoldExportFolder','FRAME_HOLD_B
+  69 main Bash     ctx=      0 sed -i 's/^const { buildSeedProject, gzipStored, utf8Bytes, crc32, MAX_SIDE } = require(".//alProject.js");/const { buildSeedProject, gzipStored, utf8Bytes } = require(".//alProject.js");/' uxp/cutdec
+  70 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('uxp/cutdeck/transform/params.js'); s=p.read_text(encoding='utf-8') ⏎ old='''let projectItemSourceSizeCache = new WeakMap(); ⏎  ⏎ function clearSourc
+  71 main Bash     ctx=      0 python - <<'EOF' ⏎ import re,pathlib ⏎ for f in ['uxp/cutdeck/timeline/frameHold.js','uxp/cutdeck/transform/params.js','uxp/cutdeck/timeline/adjustmentLayer.js','uxp/cutdeck/timeline/nativeSync.js','u
+  72 main Bash     ctx=      0 git diff -U0 uxp/cutdeck/timeline/nativeSync.js uxp/cutdeck/transform/edit.js uxp/cutdeck/transform/frameBounds.js uxp/cutdeck/timeline/frameHold.js uxp/cutdeck/transform/params.js | grep "^[-+][^-+]"
+  73 main Agent    ctx=      0 Survey Python tangles :: Read-only survey, thoroughness "medium". Repo root: <scratch>/cmp/runs/C1/repo 
+  74 main Bash     ctx=      0 python -m pytest -q -p no:cacheprovider > /tmp/py_after.txt 2>&1; tail -2 /tmp/py_after.txt; grep FAILED /tmp/py_after.txt | sort > /tmp/py_after_failed.txt; diff /tmp/py_base_failed.txt /tmp/py_after
+  75 sub  Bash     ctx=  13684 cd "<scratch>/cmp/runs/C1/repo"; git ls-files | grep -E '/.py$' | grep -vE '^(reference|docs|tests)/' | 
+  76 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rnE '(cfg|conf|config|settings|params)/w*(/.get/(|/[)"[a-z_]+"' -
+  77 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rnE '^(def|class) /w+|^[A-Z_][A-Z0-9_]* *[:=]' --include=*.py tra
+  78 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rn 'noqa' --include=*.py transcribe cutdeck clubfriday tools | he
+  79 sub  Bash     ctx=  21244 cd "<scratch>/cmp/runs/C1/repo"; sed -n 15,30p cutdeck/contracts.py; grep -rn 'contracts import.*Timebas
+  80 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rnE '254016000000|254016' --include=*.py transcribe cutdeck clubf
+  81 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -rnw 'get_latest_job_for_media/|update_correction_span' . --includ
+  82 sub  TaskStop ctx=      0 {"task_id": "blk83ggji"}
+  83 sub  Bash     ctx=  29759 cd "<scratch>/cmp/runs/C1/repo"; python -I - <<'EOF' ⏎ import re,subprocess,collections ⏎ files=subproce
+  84 main Bash     ctx=      0 git stash -q && python -m pytest -q -p no:cacheprovider tests/test_text_box.py 2>&1 | grep -E "^E " | sort | uniq -c > /tmp/tb_before.txt; git stash pop -q && python -m pytest -q -p no:cacheprovider t
+  85 main Bash     ctx=      0 python /tmp/deps.py | awk '$1 ~ /^transcribe/ && / cutdeck/'; echo "(none above = transcribe never imports cutdeck)"; git grep -n "import cutdeck/|from cutdeck" -- 'transcribe/*.py'
+  86 main Bash     ctx=      0 grep -ln "ast.parse/|ImportFrom" tests/*.py | head; 
+  87 main Write    ctx= 127032 tests/test_package_boundaries.py
+  88 main Bash     ctx= 127651 python -m pytest -q -p no:cacheprovider tests/test_package_boundaries.py 2>&1 | tail -1; git stash -q; git show stash@{0}:tests/test_package_boundaries.py >/dev/null 2>&1; cp tests/test_package_bounda
+  89 main Bash     ctx=      0 grep -n "words/|boundar" docs/architecture.md | head; grep -n "words.py" FEATURES.md VERIFY.md BUILD.md features/*.md 2>/dev/null | head
+  90 main Bash     ctx= 129160 grep -n "transcribe/b/|cutdeck" docs/architecture.md | head -20; wc -l docs/architecture.md
+  91 main Bash     ctx= 129774 sed -n 34,49p docs/architecture.md
+  92 main Edit     ctx= 130438 docs/architecture.md
+  93 main Bash     ctx=      0 grep -n "^#/|^- test" VERIFY.md | head -30
+  94 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; sed -n 30,37p cutdeck/contracts.py; grep -rn 'SAFE_MODELS' tools | head
+  95 main Bash     ctx=      0 sed -i '37s# tests/test_system_spec_sync.py -q# tests/test_system_spec_sync.py tests/test_package_boundaries.py -q#' VERIFY.md && sed -n 37p VERIFY.md | grep -o "test_package_boundaries.py"
+  96 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; for n in word_error_rate list_engines list_eval_runs _THAI_RE LABEL_FIL
+  97 main Bash     ctx=      0 echo waiting
+  98 main Bash     ctx=      0 grep -n "^## MAINT" MAINT_LOG.md | tail -3; awk '/^## MAINT/{c++} c==1' MAINT_LOG.md | head -25
+  99 sub  Bash     ctx=      0 cd "<scratch>/cmp/runs/C1/repo"; grep -n 'denoise' cutdeck/rough_cut.py transcribe/pipeline/run.py | hea
+ 100 main Bash     ctx=      0 sed -n 12,25p transcribe/contracts.py; grep -n "0E00/|0e00/|0E7F/|0e7f/|_THAI_RE/b/|_THAI_LO/|_THAI_HI/|_THAI_CHAR" transcribe/eval/metrics.py transcribe/flywheel/biasindex.py transcribe/flywheel/inje
+ 101 main Bash     ctx=      0 sed -n 28,40p transcribe/pipeline/normalize.py; sed -n 28,40p transcribe/flywheel/biasindex.py; sed -n 225,240p transcribe/eval/metrics.py; sed -n 20,45p transcribe/flywheel/inject.py
+ 102 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ def edit(f, pairs): ⏎     p=pathlib.Path(f); s=p.read_text(encoding='utf-8') ⏎     for a,b in pairs: ⏎         assert s.count(a)==1,(f,a); s=s.replace(a,b) ⏎     p.
+ 103 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib,re ⏎ p=pathlib.Path('transcribe/eval/metrics.py'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace('_THAI_CHAR = re.compile(r"[฀-๿]")/n','',1) ⏎ s=s.replace('if _THAI_C
+ 104 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ def edit(f,a,b): ⏎     p=pathlib.Path(f); s=p.read_text(encoding='utf-8'); assert s.count(a)==1,(f,a); p.write_text(s.replace(a,b),encoding='utf-8') ⏎ edit('transcr
+ 105 main Bash     ctx= 145021 sed -n 195,210p transcribe/eval/metrics.py
+ 106 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('transcribe/eval/metrics.py'); s=p.read_text(encoding='utf-8') ⏎ a='''# kept as a public name for callers/tests that want plain word edit distance ⏎ 
+ 107 main Bash     ctx=      0 sed -n 44,56p cutdeck/rules.py; grep -n '"filler"/|"silence"/|"repeat"' cutdeck/rules.py
+ 108 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib,re ⏎ p=pathlib.Path('cutdeck/contracts.py'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace('LABEL_FILLER = "filler"/n','LABEL_FILLER = "filler"/nLABEL_REPEAT = "repea
+ 109 main Bash     ctx=      0 git grep -n '== "filler"/|== "repeat"/|in ("filler"/|"filler", "repeat"/|kind == "silence"' -- '*.py' '*.js' | grep -v "^tests/" | head
+ 110 main Bash     ctx=      0 for n in get_latest_job_for_media update_correction_span list_engines _AUDIO_EXTS SAFE_MODELS; do echo "$n: $(git grep -lw $n -- ':!reference' | tr '/n' ' ')"; done
+ 111 main Bash     ctx= 149538 grep -n "def get_latest_job_for_media" -A14 transcribe/db/store.py; grep -n "def update_correction_span" -A16 transcribe/db/store.py; sed -n 70,78p transcribe/engines/registry.py; grep -n "_AUDIO_EXTS
+ 112 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib,re ⏎ def cut(f,start,endmark): ⏎     p=pathlib.Path(f); s=p.read_text(encoding='utf-8'); i=s.index(start); j=s.index(endmark,i) ⏎     p.write_text(s[:i]+s[j:],encodin
+ 113 main Bash     ctx=      0 git grep -n "_AV_CONTAINERS" ; sed -n 108,116p tools/whisper_patch.py
+ 114 main Bash     ctx= 152922 sed -i 's//b_AV_CONTAINERS/b/AV_CONTAINERS/g' transcribe/pipeline/ingest.py transcribe/eval/harness.py && git grep -n "AV_CONTAINERS" | head
+ 115 main Bash     ctx=      0 grep -n "boundary_tol_ms/|cue_max_close_gap_ms" transcribe/eval/harness.py transcribe/pipeline/refine.py tools/replay_segmentation.py transcribe/eval/metrics.py | head
+ 116 main Bash     ctx= 154264 sed -n 112,125p transcribe/eval/harness.py; sed -n 198,208p transcribe/eval/harness.py; sed -n 30,40p tools/replay_segmentation.py; sed -n 72,82p tools/replay_segmentation.py; grep -n "TOL_MS/|config 
+ 117 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ def edit(f,pairs): ⏎     p=pathlib.Path(f); s=p.read_text(encoding='utf-8') ⏎     for a,b in pairs: ⏎         assert s.count(a)>=1,(f,a); s=s.replace(a,b) ⏎     p.w
+ 118 main Bash     ctx=      0 grep -nw "metrics/|boundary_tol_ms" transcribe/eval/harness.py | grep -v '"' | head; 
+ 119 main Bash     ctx= 157701 sed -i 's/^from transcribe.eval.metrics import CI_METRICS, EvalMetrics, bootstrap_ci, compute_metrics, paired_bootstrap_ci$/from transcribe.eval.metrics import (CI_METRICS, EvalMetrics, bootstrap_ci, 
+ 120 main Bash     ctx=      0 python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path('tools/replay_segmentation.py'); s=p.read_text(encoding='utf-8') ⏎ s=s.replace('from transcribe.eval.metrics import _match_points, boundary_f1_error/
+ 121 main Bash     ctx=      0 node tools/adobe/check-api.mjs 2>&1 | tail -2; node --test tests/*.cjs 2>&1 | grep -E "^ℹ (pass|fail)"; python -m pyflakes --version >/dev/null 2>&1 && python -m pyflakes $(git diff --name-only HEAD -
+ 122 main Bash     ctx=      0 (ruff --version || python -m ruff --version) 2>&1 | head -1; files="$(git diff --name-only HEAD -- '*.py') transcribe/thai/words.py tests/test_package_boundaries.py"; (ruff check --select F401,F811,F8
+ 123 main Bash     ctx= 161031 cat > /tmp/unused.py <<'EOF' ⏎ import ast,sys ⏎ for f in sys.argv[1:]: ⏎     src=open(f,encoding='utf-8').read(); t=ast.parse(src) ⏎     names={} ⏎     for n in t.body: ⏎         if isinstance(n,(ast.
+ 124 main Bash     ctx=      0 git grep -n "helper import.*PPRO_TICKS/|helper/.PPRO_TICKS" ; sed -i 's/^from cutdeck.sequence_timing import PPRO_TICKS_PER_SECOND, SequenceRefusal$/from cutdeck.sequence_timing import SequenceRefusal
+ 125 main Bash     ctx=      0 git add -A -n . | grep -v "__pycache__" | head -3; git diff HEAD --shortstat; git status --short | grep -v "^ M" 

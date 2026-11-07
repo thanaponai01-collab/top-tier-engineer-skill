@@ -29,6 +29,7 @@ SCRIPTS = {
     "blast.py": os.path.join(ROOT, "plugin", "skills", "blast-radius", "scripts"),
     "mistake.py": os.path.join(ROOT, "plugin", "skills", "mistake-proof", "scripts"),
     "formal.py": os.path.join(ROOT, "plugin", "skills", "formal-check", "scripts"),
+    "untangle.py": os.path.join(ROOT, "plugin", "skills", "untangle", "scripts"),
 }
 
 

@@ -14,6 +14,60 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.41.0 - 2026-11-07 - untangle: draft, built on what plain Opus skipped on a real repo
+
+- New manual-only skill `untangle`, drafted from two traces of plain Opus (the prompt: untangle it so
+  the next agent spends less to change it, breaks less, and finds causes faster; same behavior).
+- Toy shop (10 files): plain Opus used the history, saved golden output and unified the pricing. Next
+  changes tied before and after (6/6 vs 12/12 at ~$0.15), since it reads the whole repo in one call.
+  The gain was that a bad tax-rate deploy now failed the tests.
+- A real repo (Transcriber_v2, rewound to 2026-10-26 with later commits cut; three real later fixes
+  replayed and graded by their own tests): both untangles were safe (suite unchanged) and made the
+  same static moves (import direction, copied helpers). Neither read the git history. The files the
+  later fixes landed in (nativeCut.js, sync_plan.py) were untouched, and the fixes cost the same or
+  more after (orig 5/6 $0.67, untangled 4/6 $0.93 and 6/6 $0.80). One run misread a real bug as a
+  stale test.
+- `scripts/untangle.py`: ranks hotspots (commits + 2x fix commits) and pairs that change together
+  from `git log`. `--gate --run CMD` records the tests on the committed tree (refused on a changed
+  tree) and holds three stages:
+  1. every hotspot and pair is target or skip, and every test red at the baseline is env, stale
+     or bug, a bug with its file:line;
+  2. every changed code file is a target or serves one, and each move's guard passes now and
+     fails in a worktree of the committed tree;
+  3. the same commands rerun with nothing green gone red and no command running fewer tests.
+- `tests/test_untangle.py`: 12 tests. Breaking the guard, newly-red, target and dirty-baseline
+  checks each turns one red.
+- No eval case yet: whether the skill beats plain Opus on the replayed-fix probes is unmeasured.
+- Compared with plain Opus and caldoai's `untangle-codebase` on the same rewound repo (report:
+  `evals/results/2026-11-07-untangle-compare/REPORT.md`, $28.79). Probes were noise in every arm
+  (11/12 ours, 10/12 caldoai, 10/12 plain).
+  - Ours was the cheapest untangle ($1.11 to $1.74, 3 files against caldoai's $3.05 to $4.59 and
+    38 to 58 files).
+  - Ours was the only arm to classify the red tests right, naming the D4 bug at `split.py:177` in
+    2 of 2 runs.
+  - But it skipped `nativeCut.js` and `faster_whisper.py` as "local to one file", and those two
+    files took 7 of the 12 later commits.
+- Changes from that report:
+  - **Fix-heavy hotspots.** A file where a third or more of the commits are fixes is `FIX-HEAVY`. Its
+    skip needs a guard the gate runs, naming a test file that mentions the module.
+  - **Empty baselines.** A baseline command that ran no tests, or failed without a count, is refused,
+    and nothing is recorded.
+  - **Bug markers.** A `bug` red needs a `untangle: known bug:` comment within 3 lines of its
+    `file:line`. A file changed only by that comment needs no target.
+  - **Pairs.** A targeted pair takes one move for both files. A move whose files did not change is
+    refused.
+  - **Grouped reds.** Reds in one file that fail with one message share a slot (8 `uharfbuzz` lines
+    become 1).
+  - **Recency.** Files untouched in the last 100 commits are not ranked (`--recent`).
+  - **Caching.** Guard and suite results are cached by a hash of the changed tree, so rerunning the
+    gate after editing only the notes reruns nothing.
+- Not taken: the package import-direction check (report item 6). No probe got faster from that move.
+  Import graphs are latent-audit's and structure-gate's job.
+- `evals/agent.py`: a session that emits several result events (it resumed after a background task)
+  repeats its running totals in each, so only its last one counts now. Sessions still add up. Plain
+  U1 now reads $1.97, not $2.95. Earlier results from runs with background tasks overstate cost.
+- `tests/test_untangle.py`: 18 tests. Breaking each of the 10 new rules turns at least one red.
+
 ## 1.40.0 - 2026-10-30 - formal-check: a property for every case, kept true to the code
 
 - formal-check joins the plugin (manual-only), built from `work/briefs/formal-check.md` and

@@ -1,0 +1,480 @@
+{
+ "C1": {
+  "true_cost": 4.587249699999997,
+  "results": 2,
+  "turns": 104,
+  "subtypes": [
+   "success",
+   "success"
+  ],
+  "harness_cost": 9.174499399999995
+ },
+ "C1-D1": {
+  "true_cost": 1.0757214,
+  "results": 1,
+  "turns": 26,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.0757214,
+  "grade2_rc": 1
+ },
+ "C1-D1-b": {
+  "true_cost": 0.7680587999999999,
+  "results": 1,
+  "turns": 17,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.7680587999999999,
+  "grade2_rc": 1
+ },
+ "C1-D3": {
+  "true_cost": 0.5122454,
+  "results": 1,
+  "turns": 11,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.5122454,
+  "grade2_rc": 0
+ },
+ "C1-D3-b": {
+  "true_cost": 0.7033342,
+  "results": 1,
+  "turns": 17,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.7033342,
+  "grade2_rc": 0
+ },
+ "C1-D4": {
+  "true_cost": 0.6590130000000001,
+  "results": 1,
+  "turns": 23,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6590130000000001,
+  "grade2_rc": 0
+ },
+ "C1-D4-b": {
+  "true_cost": 0.9297293999999999,
+  "results": 1,
+  "turns": 31,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.9297293999999999,
+  "grade2_rc": 0
+ },
+ "C2": {
+  "true_cost": 3.0513965,
+  "results": 3,
+  "turns": 68,
+  "subtypes": [
+   "success",
+   "success",
+   "success"
+  ],
+  "harness_cost": 8.8263767
+ },
+ "C2-D1": {
+  "true_cost": 0.6607148,
+  "results": 1,
+  "turns": 19,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6607148,
+  "grade2_rc": 0
+ },
+ "C2-D1-b": {
+  "true_cost": 0.71947,
+  "results": 1,
+  "turns": 18,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.71947,
+  "grade2_rc": 0
+ },
+ "C2-D3": {
+  "true_cost": 0.5651038,
+  "results": 1,
+  "turns": 14,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.5651038,
+  "grade2_rc": 0
+ },
+ "C2-D3-b": {
+  "true_cost": 0.5365086,
+  "results": 1,
+  "turns": 13,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.5365086,
+  "grade2_rc": 0
+ },
+ "C2-D4": {
+  "true_cost": 0.633759,
+  "results": 1,
+  "turns": 23,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.633759,
+  "grade2_rc": 0
+ },
+ "C2-D4-b": {
+  "true_cost": 1.0223072,
+  "results": 1,
+  "turns": 34,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.0223072,
+  "grade2_rc": 0
+ },
+ "O1": {
+  "true_cost": 1.7352404000000003,
+  "results": 1,
+  "turns": 53,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.7352404000000003
+ },
+ "O1-D1": {
+  "true_cost": 1.0883816,
+  "results": 1,
+  "turns": 26,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.0883816,
+  "grade2_rc": 0
+ },
+ "O1-D1-b": {
+  "true_cost": 0.8221922,
+  "results": 1,
+  "turns": 26,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.8221922,
+  "grade2_rc": 0
+ },
+ "O1-D3": {
+  "true_cost": 0.6587517999999999,
+  "results": 1,
+  "turns": 16,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6587517999999999,
+  "grade2_rc": 0
+ },
+ "O1-D3-b": {
+  "true_cost": 0.6672785999999999,
+  "results": 1,
+  "turns": 15,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6672785999999999,
+  "grade2_rc": 0
+ },
+ "O1-D4": {
+  "true_cost": 0.7217674,
+  "results": 1,
+  "turns": 28,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.7217674,
+  "grade2_rc": 0
+ },
+ "O1-D4-b": {
+  "true_cost": 0.6752950000000001,
+  "results": 1,
+  "turns": 25,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6752950000000001,
+  "grade2_rc": 0
+ },
+ "O2": {
+  "true_cost": 1.1145733999999998,
+  "results": 1,
+  "turns": 29,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.1145733999999998
+ },
+ "O2-D1": {
+  "true_cost": 0.8150375999999999,
+  "results": 1,
+  "turns": 20,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.8150375999999999,
+  "grade2_rc": 0
+ },
+ "O2-D1-b": {
+  "true_cost": 1.0542362,
+  "results": 1,
+  "turns": 20,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.0542362,
+  "grade2_rc": 1
+ },
+ "O2-D3": {
+  "true_cost": 0.7145986,
+  "results": 1,
+  "turns": 16,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.7145986,
+  "grade2_rc": 0
+ },
+ "O2-D3-b": {
+  "true_cost": 0.4734552000000001,
+  "results": 1,
+  "turns": 13,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.4734552000000001,
+  "grade2_rc": 0
+ },
+ "O2-D4": {
+  "true_cost": 0.6740259999999998,
+  "results": 1,
+  "turns": 26,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6740259999999998,
+  "grade2_rc": 0
+ },
+ "O2-D4-b": {
+  "true_cost": 1.1499721999999999,
+  "results": 1,
+  "turns": 38,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.1499721999999999,
+  "grade2_rc": 0
+ },
+ "plain/U1": {
+  "true_cost": 1.9659147999999997,
+  "results": 2,
+  "turns": 57,
+  "subtypes": [
+   "success",
+   "success"
+  ],
+  "harness_cost": 2.9485447999999996
+ },
+ "plain/U1-D1-a": {
+  "true_cost": 1.0014004,
+  "results": 1,
+  "turns": 21,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.0014004,
+  "grade2_rc": 1
+ },
+ "plain/U1-D1-b": {
+  "true_cost": 0.832396,
+  "results": 1,
+  "turns": 27,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.832396,
+  "grade2_rc": 0
+ },
+ "plain/U1-D3-a": {
+  "true_cost": 0.9220493999999999,
+  "results": 1,
+  "turns": 18,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.9220493999999999,
+  "grade2_rc": 0
+ },
+ "plain/U1-D3-b": {
+  "true_cost": 1.1699746,
+  "results": 1,
+  "turns": 29,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.1699746,
+  "grade2_rc": 1
+ },
+ "plain/U1-D4-a": {
+  "true_cost": 0.7343788000000001,
+  "results": 1,
+  "turns": 25,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.7343788000000001,
+  "grade2_rc": 0
+ },
+ "plain/U1-D4-b": {
+  "true_cost": 0.952592,
+  "results": 1,
+  "turns": 30,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.952592,
+  "grade2_rc": 0
+ },
+ "plain/U2": {
+  "true_cost": 1.5440980000000004,
+  "results": 1,
+  "turns": 45,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 1.5440980000000004
+ },
+ "plain/U2-D1-a": {
+  "true_cost": 0.8861825999999999,
+  "results": 1,
+  "turns": 23,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.8861825999999999,
+  "grade2_rc": 0
+ },
+ "plain/U2-D1-b": {
+  "true_cost": 0.6720708000000001,
+  "results": 1,
+  "turns": 18,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6720708000000001,
+  "grade2_rc": 0
+ },
+ "plain/U2-D3-a": {
+  "true_cost": 0.9672312000000001,
+  "results": 1,
+  "turns": 21,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.9672312000000001,
+  "grade2_rc": 0
+ },
+ "plain/U2-D3-b": {
+  "true_cost": 0.9196013999999999,
+  "results": 1,
+  "turns": 21,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.9196013999999999,
+  "grade2_rc": 0
+ },
+ "plain/U2-D4-a": {
+  "true_cost": 0.6574676,
+  "results": 1,
+  "turns": 24,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6574676,
+  "grade2_rc": 0
+ },
+ "plain/U2-D4-b": {
+  "true_cost": 0.6716508000000001,
+  "results": 1,
+  "turns": 25,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6716508000000001,
+  "grade2_rc": 0
+ },
+ "plain/orig-D1-a": {
+  "true_cost": 0.7440318,
+  "results": 1,
+  "turns": 20,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.7440318,
+  "grade2_rc": 0
+ },
+ "plain/orig-D1-b": {
+  "true_cost": 0.8541392000000001,
+  "results": 1,
+  "turns": 18,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.8541392000000001,
+  "grade2_rc": 1
+ },
+ "plain/orig-D3-a": {
+  "true_cost": 0.5580584,
+  "results": 1,
+  "turns": 13,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.5580584,
+  "grade2_rc": 0
+ },
+ "plain/orig-D3-b": {
+  "true_cost": 0.5292496,
+  "results": 1,
+  "turns": 12,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.5292496,
+  "grade2_rc": 0
+ },
+ "plain/orig-D4-a": {
+  "true_cost": 0.7510971999999998,
+  "results": 1,
+  "turns": 27,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.7510971999999998,
+  "grade2_rc": 0
+ },
+ "plain/orig-D4-b": {
+  "true_cost": 0.6066714000000001,
+  "results": 1,
+  "turns": 22,
+  "subtypes": [
+   "success"
+  ],
+  "harness_cost": 0.6066714000000001,
+  "grade2_rc": 0
+ }
+}

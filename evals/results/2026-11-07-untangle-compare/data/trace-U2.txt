@@ -1,0 +1,23 @@
+RESULT [('success', 1.5440980000000004, 45)]
+calls 44 [(('main', 'Bash'), 41), (('main', 'Read'), 2), (('main', 'Write'), 1)]
+phases {'1-before-edit:calls': 27, '1-before-edit:ctx': 334422, '1-before-edit:out': 128, '2-editing:calls': 1, '2-editing:ctx': 0, '2-editing:out': 0, '3-after-edit:calls': 16, '3-after-edit:ctx': 438019, '3-after-edit:out': 85}
+
+GIT HISTORY / HELPER CMDS: 2
+   cd "$PWD"; git log --oneline | wc -l; git ls-files | grep -v '^reference/' | awk -F/ '{print $1"/"$2}' | sort | uniq -c | sort -rn | head -40; echo; git ls-files '*.py' '*.js' '*.cjs' '*.mjs' | grep -v '^reference/' | xa
+   sed -n 740,813p transcribe/engines/faster_whisper.py; grep -n "def split_cues" -A12 transcribe/cues/split.py; git log --oneline -3 -L '/return_words/,+1:transcribe/engines/faster_whisper.py' | head -5
+
+TEST CMDS: 6
+   (python -m pytest -q -x -p no:cacheprovider 2>&1 | tail -15) > /tmp/py_base.txt; (node --test tests/*.cjs 2>&1 | tail -15) > /tmp/node_base.txt; cat /tmp/py_base.txt /tmp/node_base.txt
+   timeout 900 python -m pytest -q -p no:cacheprovider 2>&1 | tail -15
+   python -m pytest -q -p no:cacheprovider tests/test_text_box.py tests/test_cues_policy_config.py::test_cue_knobs_reach_the_splitter tests/test_faster_whisper.py::test_transcribe_threads_speech_spans 2>
+   python -m pytest -q -p no:cacheprovider tests/test_package_boundaries.py 2>&1 | tail -3 ⏎ echo "--- mutation: restore old import in atoms.py"; cp transcribe/thai/atoms.py /tmp/atoms.bak; sed -i 's/fro
+   python - <<'EOF' ⏎ import pathlib ⏎ p=pathlib.Path("tests/test_cues_policy_config.py"); s=p.read_text(encoding="utf-8") ⏎ old='''    def fake_split(words, policy): ⏎         seen["policy"] = policy ⏎ 
+   timeout 900 python -m pytest -q -p no:cacheprovider 2>&1 | tail -12; node --test tests/*.cjs 2>&1 | grep -E "^ℹ (tests|pass|fail)"
+
+READS: 2 distinct 1
+   2x SYSTEM_SPEC.md
+
+EDITS/WRITES: 1
+   1x tests/test_package_boundaries.py
+
+SUBAGENTS: 0

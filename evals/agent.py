@@ -323,6 +323,12 @@ def parse_stream(lines, plugin_dir=None):
         if t["name"] in SHELL_TOOLS:
             helper += helper_calls(t["input"].get("command", ""))
     result = results[-1] if results else {}
+    # One session can emit several result events (it resumes after a background task ends); each
+    # repeats the session's running totals, so only its last one counts. Sessions still add up.
+    last = {}
+    for i, r in enumerate(results):
+        last[r.get("session_id") or f"#{i}"] = r
+    results = list(last.values())
     usage = {}
     for r in results:
         for model, fields in (r.get("modelUsage") or {}).items():

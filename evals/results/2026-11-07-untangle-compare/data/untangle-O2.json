@@ -1,0 +1,31 @@
+{
+ "report": "I made one structural change and left everything else alone. The program behaves the same: the same 1151 Python and 731 Node tests run before and after, with the same 10 failing before and after. It's committed on a new branch, `untangle/align-intents` (commit `89b8b87`), not on `master`.\n\n## First: a real bug I found but did not fix\n`transcribe/cues/split.py:177` (and the same line in `_split_dp` at `:415`) returns `[]` when there are no timed words, even when the caller asks for `return_words=True`. `faster_whisper.py:771` expects two values back, so a decode that produces no words (for example, silent audio) crashes with `ValueError`. This is why `tests/test_faster_whisper.py::test_transcribe_threads_speech_spans` already fails. Fixing it would change what the program does, so I left it for you. The fix is to return `[], []` in that case.\n\n## What I changed, and why\nThe history pointed to one repeated cost. Every time a button or action was added to the Transform/Align tabs, someone had to add a matching line to `uxp/cutdeck/main.js`. That happened in six commits, and one of them (a662187) was a fix for the time it was forgotten: the Text 1 / Text 2 / All switcher did nothing in Premiere.\n\n- **`uxp/cutdeck/features/align.js`** now builds the panel's list of actions (`intents`) itself. The existing names (`align.onSetField`, `align.poll` and so on) still work, so nothing else had to change.\n- **`uxp/cutdeck/main.js`** now hands that whole list to the panel with `alignPanel.bind(align.intents)`, replacing the 12-line copy. One line in the old copy, `onReset: align.onReset`, pointed to a handler that doesn't exist and that the panel never calls, so removing it changes nothing.\n- **`tests/cutdeck_align_panel.test.cjs`**: the old test only searched the text of `main.js`. The new one creates the align feature and checks that every action the panel uses is actually provided. I confirmed it fails on the old code and passes on the new.\n\nAfter this, adding an align action touches two files instead of three, and a missing one fails a test instead of silently doing nothing in Premiere.\n\n## What I left alone\nThese files change and get fixed often, but the fixes were changes to how they behave, not a tangle:\n- **`faster_whisper.py`**: the fixes tune decoding for this one model. The shared parts were already moved out, and moving more would break how the tests drive it.\n- **`store.py`**: the project rules make it the only place for raw SQL, so fixes land there on purpose.\n- **`adjustmentLayer.js`, `nativeCut.js`**: the fixes are Premiere placement and edge cases, each in the one place that handles them.\n- **`core/panel.js` with `main.js`**: the main panel's actions come from five different features plus some tab-routing logic, so `main.js` is the right place to put them together.\n- **Two pairs that naturally change together**: the align panel and its feature, and the align feature and `transform/edit.js`.\n- **`uxp/spike18_split_probe/`**: a throwaway experiment that nothing in the product loads.\n\n## How I know nothing broke\nI ran both test suites on the original commit and again after the change (`python -m pytest tests` and `node --test tests/*.cjs`). The same tests ran and the same ones passed; the untangle skill's three stages all passed. The 10 tests that were already failing still fail:\n- **7 in `test_text_box.py`**: the `uharfbuzz` package isn't installed here, though `requirements.txt` lists it.\n- **1 outdated test**: `test_cue_knobs_reach_the_splitter` uses a fake that wasn't updated when commit 307671f added `return_words`.\n- **2 more:** the bug above, plus one other Python test the skill counts as already red; I didn't look into that one.\n\nNone of this was checked in Premiere itself. `.untangle/notes.md` is committed with the change and records the reason behind each choice.",
+ "diffstat": " 5 files changed, 133 insertions(+), 28 deletions(-)\n",
+ "diff_files": "A\t.untangle/notes.md\nA\t.untangle/state.json\nM\ttests/cutdeck_align_panel.test.cjs\nM\tuxp/cutdeck/features/align.js\nM\tuxp/cutdeck/main.js\n",
+ "suite": {
+  "py": [
+   "10 failed, 1141 passed, 4 skipped, 8 deselected, 26 warnings, 16 subtests passed in 173.12s (0:02:53)"
+  ],
+  "py_failed": [
+   "tests/test_cues_policy_config.py::test_cue_knobs_reach_the_splitter",
+   "tests/test_faster_whisper.py::test_transcribe_threads_speech_spans",
+   "tests/test_text_box.py::test_a_font_without_a_cap_height_gives_a_reason",
+   "tests/test_text_box.py::test_box_is_one_em_centred_on_half_the_cap_height_and_as_wide_as_the_kerned_advance",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change0-aligned]",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change1-line]",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change2-tracking]",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change3-bold]",
+   "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change4-font]",
+   "tests/test_text_box.py::test_finds_the_clip_by_track_and_start_and_reads_each_text_layer"
+  ],
+  "node": [
+   "\u2139 tests 731",
+   "\u2139 pass 731",
+   "\u2139 fail 0"
+  ],
+  "node_fail": [],
+  "n_py_test_files": 112,
+  "n_cjs": 56
+ },
+ "seconds": 642.6
+}

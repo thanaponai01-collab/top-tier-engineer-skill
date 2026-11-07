@@ -1,0 +1,7 @@
+This codebase has gotten tangled. Untangle it.
+
+The point is the next change: whoever touches this code next, most likely an AI agent, should spend less effort finding what to change, break less without noticing, and find the root cause of a bug faster. Keep what the program does exactly the same: same commands, same output.
+
+When you are done, tell me what you changed and why, what you chose to leave alone, and how you know nothing broke.
+
+Use the untangle-codebase skill. The explicitly requested untangle-codebase skill is at <scratch>\plugins\caldo\skills\untangle-codebase\SKILL.md. Read and follow that SKILL.md before starting. You are running unattended: nobody will answer questions, so make any choice the skill leaves to the user yourself.

@@ -1,0 +1,25 @@
+{
+ "py": [
+  "10 failed, 1141 passed, 4 skipped, 8 deselected, 26 warnings, 16 subtests passed in 148.41s (0:02:28)"
+ ],
+ "py_failed": [
+  "tests/test_cues_policy_config.py::test_cue_knobs_reach_the_splitter",
+  "tests/test_faster_whisper.py::test_transcribe_threads_speech_spans",
+  "tests/test_text_box.py::test_a_font_without_a_cap_height_gives_a_reason",
+  "tests/test_text_box.py::test_box_is_one_em_centred_on_half_the_cap_height_and_as_wide_as_the_kerned_advance",
+  "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change0-aligned]",
+  "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change1-line]",
+  "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change2-tracking]",
+  "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change3-bold]",
+  "tests/test_text_box.py::test_cases_the_rule_was_not_proven_for_give_a_reason_not_a_box[change4-font]",
+  "tests/test_text_box.py::test_finds_the_clip_by_track_and_start_and_reads_each_text_layer"
+ ],
+ "node": [
+  "\u2139 tests 731",
+  "\u2139 pass 731",
+  "\u2139 fail 0"
+ ],
+ "node_fail": [],
+ "n_py_test_files": 112,
+ "n_cjs": 56
+}
