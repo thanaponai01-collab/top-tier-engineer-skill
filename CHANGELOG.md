@@ -14,6 +14,23 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.44.0 - 2026-11-08 - untangle: skip guards must catch past fixes undone
+
+The Sonnet replay-probe eval (`evals/results/2026-11-07-untangle-sonnet-probes/`) found two gaps in
+the 1.41.0 gate.
+
+- A `FIX-HEAVY` hotspot's skip guard now has to go red with each of the file's last 5 fixes undone,
+  for every fix that still reverts cleanly. The check runs in a worktree, so the working tree is
+  never touched. Before, naming the test file that was already there met the rule. Both 1.41.0 runs
+  skipped `nativeCut.js` that way, the file with 5 of the 12 later commits. A fix with nothing to
+  pin takes `| unguarded: <sha>: <why>`, and the reason is required. Rerun on a 1.41.0 tree, the
+  gate challenges 5 of its skips, each naming the fix it missed.
+- Red tests whose failure messages the runner cut short share a slot again. The gate runs tests with
+  `COLUMNS=2000`, because pytest cut its summary lines to 80 columns when piped and dropped the
+  message. A message still cut short groups by its beginning. On Transcriber, 10 red tests now fill
+  3 slots instead of 10.
+- 3 new tests in `tests/test_untangle.py`; 5 of 5 deliberate breaks caught.
+
 ## 1.43.0 - 2026-11-07 - checkup: one structure report, ranked by where changes land
 
 - New manual-only skill `checkup`. The user wanted one thing to run on any codebase that says how
