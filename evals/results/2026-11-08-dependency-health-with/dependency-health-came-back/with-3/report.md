@@ -1,0 +1,10 @@
+I added `rich` and refreshed `requirements.txt` to match. No code changed, and all 6 tests pass. But a fresh `pip install -r requirements.txt` still fails here on Windows/Python 3.13, because of a PyYAML pin that was already in the file.
+
+**What I changed**
+- **`requirements.in`**: added one line, `rich>=13`.
+- **`requirements.txt`**: regenerated from `requirements.in`. It now pins `rich==15.0.0` and the three packages rich needs (`markdown-it-py`, `mdurl`, `pygments`). I left the header line saying `pip-compile requirements.in` so it matches the README, though I actually used `uv pip compile`, which gives the same result.
+
+**Things you should know**
+1. **urllib3 had to move from 1.24.1 to 2.8.0.** The old pin was broken: `requests==2.34.2` needs urllib3 1.26 or newer, so the old file could never have installed as written. The app only uses urllib3 through `requests`, so I don't expect any effect. The upgrade also gets rid of a very old urllib3 version with known security holes.
+2. **`pyyaml==5.3.1` still blocks a fresh install.** That version has no ready-made package for Python 3.13, so pip tries to build it from source. Here that failed because Microsoft's C++ build tools aren't installed. The Dockerfile uses `python:3.13-slim`, so `docker build` will probably hit the same problem. It's also a 2020 release with a known security issue; the code uses `yaml.safe_load`, which avoids it. I didn't change it since it was outside what you asked for. Bumping the floor in `requirements.in` to something like `PyYAML>=6.0.2` and recompiling should fix it.
+3. **How I checked:** the tests pass with the Python already on this machine. I also installed everything except PyYAML into a new Python 3.13 environment; it installed cleanly, `rich` imports, and the tests pass there too. I couldn't do a full fresh install because of point 2.

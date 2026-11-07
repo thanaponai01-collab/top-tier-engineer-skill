@@ -1,0 +1,104 @@
+{
+  "case": "dependency-health-came-back",
+  "skill": "dependency-health",
+  "arm": "with",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  1/2 found\n  MISSED  urllib3-came-back\n  found   pyyaml-came-back \u2014 \"It's also a 2020 release with a known security issue; the code uses `yaml.safe_load`, which avoids it.\"\n  held    called-the-lock-clean",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "dependency-health"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "dependency-health",
+      "path": "<tmp>\\tte-plugin-60tglma6\\verify-loop\\skills\\dependency-health\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 40,
+      "outputTokens": 7938,
+      "cacheReadInputTokens": 497198,
+      "cacheCreationInputTokens": 26426,
+      "webSearchRequests": 0,
+      "costUSD": 0.46976759999999995,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2312,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 26426,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 1,
+  "total": 2,
+  "missed": [
+    "after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "suite green with 6 tests; rich asked for and pinned; lockfile matches the manifest; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "urllib3 >= 1.26.18 and pyyaml >= 5.4 after session 2 (reference/score_came_back.py)",
+      "ok": true,
+      "detail": "advisory, not met: exit 1, expected 0",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/Dockerfile",
+      "fixture/requirements.in",
+      "fixture/requirements.txt",
+      "fixture/tripbook/render.py"
+    ],
+    "added": [
+      "fixture/.deps/findings.md",
+      "fixture/.deps/history.json",
+      "fixture/.deps/last.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.46976759999999995,
+  "turns": 20,
+  "api_seconds": 97.7,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 135.1,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-60tglma6\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

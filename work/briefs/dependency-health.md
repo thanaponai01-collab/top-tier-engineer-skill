@@ -31,7 +31,10 @@ or dropped), the skill is registered like its siblings, and the full suite passe
   Protection that needs upkeep turns into noise and bypasses. A record of each run replaces it.
 - Past ports show plain Opus often ties. Gains came where a script caught what the agent skipped,
   so every rule here is a check the helper runs, not a step to follow. Build the eval case before
-  the skill and keep it only if plain Opus fails part of it.
+  the skill.
+- The user wants to invoke it, not ask or type the request each time; it is fine that plain Opus
+  already does the work when asked in full (the same reason cleanup exists). So a tie at close to
+  plain cost is enough to keep it.
 - Helpers are stdlib-only Python. Real audit tools (`pip-audit`, `npm audit`, `npm outdated`,
   `cargo audit`, `govulncheck`) may or may not be installed, and the network may be off. The
   helper uses what is there and says plainly what it could not check; it never reports "no holes"
@@ -102,11 +105,13 @@ skill arm fixes or accepts the first four and keeps the decoy.
 <!-- verification -->`python -m unittest discover tests`
 
 ## Eval evidence (2026-11-08, before any build)
-Plain Opus, no skill, 3 tries per case (both cases parked in `evals/parked/`). `dependency-health-owed-upgrades`: the finished repo
+Plain Opus, no skill, 3 tries per case. `dependency-health-owed-upgrades`: the finished repo
 passed every outcome check 3/3 (indirect urllib3 hole, PyYAML, missing click pin, unused
 simplejson, Jinja2 migrated, tzdata and gunicorn kept); the judge passed 1/3 only because two
 reports did not say why gunicorn stays ($0.24 a try). `dependency-health-came-back`: after a
 merge put the two holed pins back, a fresh agent asked only to add `rich` fixed both pins 3/3,
 because recompiling against session 1's tightened requirements.in forced them; the phrase grader
 passed 3/3, the judge 0/3 because the reports called it lock drift rather than holes coming back
-($0.46 a try). Neither case shows a gap a skill would close, so the skill is not built.
+($0.46 a try). Neither case shows a gap a skill would close. The skill was then built anyway
+(1.45.0), lean like cleanup, because the user wants to invoke it rather than explain the request
+each time; the cases moved back to `evals/cases/` to show it ties.

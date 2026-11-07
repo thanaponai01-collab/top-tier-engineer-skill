@@ -1,0 +1,102 @@
+{
+  "case": "dependency-health-owed-upgrades",
+  "skill": "dependency-health",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  6/6 found\n  found   indirect-urllib3-hole \u2014 \"urllib3 1.24.1 \u2192 2.8.0 (a major version, with several holes)\"\n  found   eol-python-base \u2014 \"Python 3.7 stopped getting security fixes in 2023.\"\n  found   lockfile-drift-click \u2014 \"**click was missing from `requirements.txt`.**\"\n  found   unused-simplejson \u2014 \"nothing imports it.\"\n  found   jinja2-pin-has-a-reason \u2014 \"I changed the code to `@pass_context`, the replacement, rather than keep the pin, and updated the comment in `requiremen\"\n  found   used-without-import-kept \u2014 \"nothing imports it, but the Dockerfile runs it as the web server.\"\n  held    removed-a-used-package",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "dependency-health"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "dependency-health",
+      "path": "<tmp>\\tte-plugin-60tglma6\\verify-loop\\skills\\dependency-health\\skill.md",
+      "sub": false,
+      "via": "shell"
+    }
+  ],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 3653,
+      "cacheReadInputTokens": 222242,
+      "cacheCreationInputTokens": 15757,
+      "webSearchRequests": 0,
+      "costUSD": 0.2436364,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 871,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 15757,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 6,
+  "total": 6,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "suite green with 6 tests; lockfile matches the manifest; urllib3 >= 1.26.18, pyyaml >= 5.4; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "at least 2 of: simplejson removed, Docker base on Python >= 3.10, Jinja2 3.x with the code migrated (reference/score_owed.py)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/Dockerfile",
+      "fixture/requirements.in",
+      "fixture/requirements.txt",
+      "fixture/tripbook/render.py"
+    ],
+    "added": [
+      "fixture/.deps/findings.md",
+      "fixture/.deps/history.json",
+      "fixture/.deps/last.json"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2436364,
+  "turns": 9,
+  "api_seconds": 47.844,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 58.4,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-60tglma6\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,14 @@
+{
+  "started": "2026-11-08-0205",
+  "repeats": 3,
+  "arms": [
+    "with"
+  ],
+  "version": "1.45.0",
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "out_rel": "evals/results/2026-11-08-dependency-health-with",
+  "user_memory_bytes": 0,
+  "claude_version": "2.1.319 (Claude Code)"
+}

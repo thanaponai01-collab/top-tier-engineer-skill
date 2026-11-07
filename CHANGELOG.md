@@ -14,6 +14,31 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.45.0 - 2026-11-08 - dependency-health: what the dependencies owe, with a record
+
+New manual-only skill, lean like cleanup: the user wants one word to get a dependency check, not
+to explain it each time.
+
+- `scripts/deps.py` writes `.deps/findings.md`, worst first: known holes (OSV.dev, or
+  `--advisories FILE`), direct and pulled in by others with what pulls them in; end-of-life
+  Python and Node runtimes (Dockerfile, `.python-version`, `requires-python`, `.nvmrc`); lockfiles
+  out of step with their manifest (a package missing, or a pin the manifest does not allow);
+  packages nothing imports, kept apart from ones used without an import (tzdata for zoneinfo, a
+  server the Dockerfile runs, a tool a package script runs); exact pins with no reason. An
+  ecosystem whose holes could not be checked, or that the helper cannot read, is listed under
+  "Not checked", never reported healthy.
+- `--accept ID --reason --until` records a finding left on purpose; no reason, a past date or an
+  id that is not a current finding is refused. `--done` refuses while a high finding is neither
+  fixed nor accepted, a test that passed fails, fewer tests run, or a manifest changed without its
+  lockfile, then saves `.deps/history.json`; the next run lists what is new and which acceptances
+  are due again.
+- `tests/test_deps.py`: 33 tests; each of 31 rules, disabled in the helper, turns one red.
+- Eval (Opus, 3 tries each). `dependency-health-owed-upgrades`: plain 1/3 ($0.24), with the skill
+  3/3 ($0.28); every try in both arms left the repo fixed, the plain misses were reports that did
+  not say why gunicorn stays. `dependency-health-came-back` (a merge puts two holed pins back, a
+  bare second session adds one package): 0/3 both arms on the judge, though every try in both
+  arms fixed or named both pins; the judge wants them called holes that came back.
+
 ## 1.44.0 - 2026-11-08 - untangle: skip guards must catch past fixes undone
 
 The Sonnet replay-probe eval (`evals/results/2026-11-07-untangle-sonnet-probes/`) found two gaps in

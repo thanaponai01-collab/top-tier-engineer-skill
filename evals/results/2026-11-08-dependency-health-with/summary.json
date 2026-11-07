@@ -1,0 +1,628 @@
+[
+  {
+    "case": "dependency-health-owed-upgrades",
+    "skill": "dependency-health",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  6/6 found\n  found   indirect-urllib3-hole \u2014 \"urllib3 1.24.1 \u2192 2.8.0 (a major version, with several holes)\"\n  found   eol-python-base \u2014 \"Python 3.7 stopped getting security fixes in 2023.\"\n  found   lockfile-drift-click \u2014 \"**click was missing from `requirements.txt`.**\"\n  found   unused-simplejson \u2014 \"nothing imports it.\"\n  found   jinja2-pin-has-a-reason \u2014 \"I changed the code to `@pass_context`, the replacement, rather than keep the pin, and updated the comment in `requiremen\"\n  found   used-without-import-kept \u2014 \"nothing imports it, but the Dockerfile runs it as the web server.\"\n  held    removed-a-used-package",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "dependency-health"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "dependency-health",
+        "path": "<tmp>\\tte-plugin-60tglma6\\verify-loop\\skills\\dependency-health\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 3653,
+        "cacheReadInputTokens": 222242,
+        "cacheCreationInputTokens": 15757,
+        "webSearchRequests": 0,
+        "costUSD": 0.2436364,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 871,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 15757,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; lockfile matches the manifest; urllib3 >= 1.26.18, pyyaml >= 5.4; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 2 of: simplejson removed, Docker base on Python >= 3.10, Jinja2 3.x with the code migrated (reference/score_owed.py)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [
+        "fixture/.deps/findings.md",
+        "fixture/.deps/history.json",
+        "fixture/.deps/last.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2436364,
+    "turns": 9,
+    "api_seconds": 47.844,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  dependency-health-owed-upgrades  [dependency-health]  6/6 found, score 1.00 (needs 1.00)\n  found   indirect-urllib3-hole: requirements.txt pins urllib3==1.24.1 `# via requests`; requirements.in never names it, so a look at direct dependencies alone misses it. It has several published advisories; the report must name it as a security problem\n  found   eol-python-base: the Dockerfile builds on python:3.7-slim and the lockfile was compiled for 3.7; Python 3.7 is end of life (June 2023), so the report must say so\n  found   lockfile-drift-click: requirements.in asks for click>=8.1 and the CLI imports it, but requirements.txt has no click pin, so `pip install -r requirements.txt` gives an app that cannot start; the report must name the missing pin\n  found   unused-simplejson: simplejson is declared and pinned but no file imports it (rates.py uses the standard json module); the report must say it is unused\n  found   jinja2-pin-has-a-reason: Jinja2 2.11.3 carries known holes but requirements.in says it is pinned because render.py uses @contextfilter, removed in Jinja2 3.1; the report must name that and either migrate the code (pass_context) or leave it as a decision for the user, not bump blindly\n  found   used-without-import-kept: tzdata is never imported but zoneinfo needs it for Asia/Bangkok on Windows and slim images; gunicorn is never imported but the Dockerfile CMD runs it; both are kept and the report says why\n  held    removed-a-used-package: tzdata and gunicorn are imported by no Python file but are used; calling either unused or removing it is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 58.4,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-60tglma6\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "dependency-health-owed-upgrades",
+    "skill": "dependency-health",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  6/6 found\n  found   indirect-urllib3-hole \u2014 \"Packages requests pulls in: urllib3 1.24.1 \u2192 2.8.0, idna 3.7 \u2192 3.20, certifi 2024.7.4 \u2192 2026.10.23\"\n  found   eol-python-base \u2014 \"Python 3.7 stopped getting security fixes in 2023.\"\n  found   lockfile-drift-click \u2014 \"It was listed in `requirements.in` but not in `requirements.txt`, so the CLI wouldn't install from the lock.\"\n  found   unused-simplejson \u2014 \"Nothing uses it: `rates.py` uses Python's built-in `json`.\"\n  found   jinja2-pin-has-a-reason \u2014 \"I changed `tripbook/render.py` to use `@pass_context`, its replacement.\"\n  found   used-without-import-kept \u2014 \"**tzdata:** `zoneinfo` needs it for time zone data on Windows and on slim Docker images.\"\n  held    removed-a-used-package",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "dependency-health"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "dependency-health",
+        "path": "<tmp>\\tte-plugin-60tglma6\\verify-loop\\skills\\dependency-health\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 4696,
+        "cacheReadInputTokens": 297337,
+        "cacheCreationInputTokens": 21728,
+        "webSearchRequests": 0,
+        "costUSD": 0.3272994,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1350,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 21728,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; lockfile matches the manifest; urllib3 >= 1.26.18, pyyaml >= 5.4; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 2 of: simplejson removed, Docker base on Python >= 3.10, Jinja2 3.x with the code migrated (reference/score_owed.py)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [
+        "fixture/.deps/findings.md",
+        "fixture/.deps/history.json",
+        "fixture/.deps/last.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.3272994,
+    "turns": 12,
+    "api_seconds": 62.439,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  dependency-health-owed-upgrades  [dependency-health]  6/6 found, score 1.00 (needs 1.00)\n  found   indirect-urllib3-hole: requirements.txt pins urllib3==1.24.1 `# via requests`; requirements.in never names it, so a look at direct dependencies alone misses it. It has several published advisories; the report must name it as a security problem\n  found   eol-python-base: the Dockerfile builds on python:3.7-slim and the lockfile was compiled for 3.7; Python 3.7 is end of life (June 2023), so the report must say so\n  found   lockfile-drift-click: requirements.in asks for click>=8.1 and the CLI imports it, but requirements.txt has no click pin, so `pip install -r requirements.txt` gives an app that cannot start; the report must name the missing pin\n  found   unused-simplejson: simplejson is declared and pinned but no file imports it (rates.py uses the standard json module); the report must say it is unused\n  found   jinja2-pin-has-a-reason: Jinja2 2.11.3 carries known holes but requirements.in says it is pinned because render.py uses @contextfilter, removed in Jinja2 3.1; the report must name that and either migrate the code (pass_context) or leave it as a decision for the user, not bump blindly\n  found   used-without-import-kept: tzdata is never imported but zoneinfo needs it for Asia/Bangkok on Windows and slim images; gunicorn is never imported but the Dockerfile CMD runs it; both are kept and the report says why\n  held    removed-a-used-package: tzdata and gunicorn are imported by no Python file but are used; calling either unused or removing it is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 76.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-60tglma6\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "dependency-health-owed-upgrades",
+    "skill": "dependency-health",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  6/6 found\n  found   indirect-urllib3-hole \u2014 \"**Security holes in the libraries `requests` uses:** urllib3 1.24.1 \u2192 2.8.0 (four holes)\"\n  found   eol-python-base \u2014 \"Python 3.7 has had no security fixes since mid-2023.\"\n  found   lockfile-drift-click \u2014 \"**click was missing from `requirements.txt`.**\"\n  found   unused-simplejson \u2014 \"Nothing uses it; `rates.py` uses Python's built-in `json`.\"\n  found   jinja2-pin-has-a-reason \u2014 \"It was pinned on purpose, because `render.py` used `@contextfilter`, which Jinja2 3.1 removed.\"\n  found   used-without-import-kept \u2014 \"no code imports it either, but `zoneinfo` needs it for time zone data on Windows and in slim Docker images.\"\n  held    removed-a-used-package",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "dependency-health"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "dependency-health",
+        "path": "<tmp>\\tte-plugin-60tglma6\\verify-loop\\skills\\dependency-health\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 4485,
+        "cacheReadInputTokens": 234335,
+        "cacheCreationInputTokens": 17901,
+        "webSearchRequests": 0,
+        "costUSD": 0.27984699999999996,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1329,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 17901,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 6,
+    "total": 6,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; lockfile matches the manifest; urllib3 >= 1.26.18, pyyaml >= 5.4; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "at least 2 of: simplejson removed, Docker base on Python >= 3.10, Jinja2 3.x with the code migrated (reference/score_owed.py)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [
+        "fixture/.deps/findings.md",
+        "fixture/.deps/history.json",
+        "fixture/.deps/last.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.27984699999999996,
+    "turns": 9,
+    "api_seconds": 55.398,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  dependency-health-owed-upgrades  [dependency-health]  6/6 found, score 1.00 (needs 1.00)\n  found   indirect-urllib3-hole: requirements.txt pins urllib3==1.24.1 `# via requests`; requirements.in never names it, so a look at direct dependencies alone misses it. It has several published advisories; the report must name it as a security problem\n  found   eol-python-base: the Dockerfile builds on python:3.7-slim and the lockfile was compiled for 3.7; Python 3.7 is end of life (June 2023), so the report must say so\n  found   lockfile-drift-click: requirements.in asks for click>=8.1 and the CLI imports it, but requirements.txt has no click pin, so `pip install -r requirements.txt` gives an app that cannot start; the report must name the missing pin\n  found   unused-simplejson: simplejson is declared and pinned but no file imports it (rates.py uses the standard json module); the report must say it is unused\n  found   jinja2-pin-has-a-reason: Jinja2 2.11.3 carries known holes but requirements.in says it is pinned because render.py uses @contextfilter, removed in Jinja2 3.1; the report must name that and either migrate the code (pass_context) or leave it as a decision for the user, not bump blindly\n  found   used-without-import-kept: tzdata is never imported but zoneinfo needs it for Asia/Bangkok on Windows and slim images; gunicorn is never imported but the Dockerfile CMD runs it; both are kept and the report says why\n  held    removed-a-used-package: tzdata and gunicorn are imported by no Python file but are used; calling either unused or removing it is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 83.6,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-60tglma6\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "dependency-health-came-back",
+    "skill": "dependency-health",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  0/2 found\n  MISSED  urllib3-came-back\n  MISSED  pyyaml-came-back\n  held    called-the-lock-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "dependency-health"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "dependency-health",
+        "path": "<tmp>\\tte-plugin-60tglma6\\verify-loop\\skills\\dependency-health\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 42,
+        "outputTokens": 8349,
+        "cacheReadInputTokens": 524687,
+        "cacheCreationInputTokens": 30188,
+        "webSearchRequests": 0,
+        "costUSD": 0.5135894,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2581,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 30188,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 0,
+    "total": 2,
+    "missed": [
+      "after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not",
+      "the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; rich asked for and pinned; lockfile matches the manifest; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "urllib3 >= 1.26.18 and pyyaml >= 5.4 after session 2 (reference/score_came_back.py)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [
+        "fixture/.deps/findings.md",
+        "fixture/.deps/history.json",
+        "fixture/.deps/last.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.5135894,
+    "turns": 21,
+    "api_seconds": 111.119,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  dependency-health-came-back  [dependency-health]  2/2 found, score 1.00 (needs 1.00)\n  found   urllib3-came-back: after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not\n  found   pyyaml-came-back: the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not\n  held    called-the-lock-clean: the lockfile carries two holed pins after the merge; telling the user the dependencies are fine is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 134.5,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-60tglma6\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "dependency-health-came-back",
+    "skill": "dependency-health",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  0/2 found\n  MISSED  urllib3-came-back\n  MISSED  pyyaml-came-back\n  held    called-the-lock-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "dependency-health"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "dependency-health",
+        "path": "<tmp>\\tte-plugin-60tglma6\\verify-loop\\skills\\dependency-health\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 34,
+        "outputTokens": 6483,
+        "cacheReadInputTokens": 409617,
+        "cacheCreationInputTokens": 26052,
+        "webSearchRequests": 0,
+        "costUSD": 0.42013540000000005,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1611,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 26052,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 0,
+    "total": 2,
+    "missed": [
+      "after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not",
+      "the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; rich asked for and pinned; lockfile matches the manifest; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "urllib3 >= 1.26.18 and pyyaml >= 5.4 after session 2 (reference/score_came_back.py)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [
+        "fixture/.deps/findings.md",
+        "fixture/.deps/history.json",
+        "fixture/.deps/last.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.42013540000000005,
+    "turns": 17,
+    "api_seconds": 82.339,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  dependency-health-came-back  [dependency-health]  1/2 found, score 0.50 (needs 1.00)\n  MISSED  urllib3-came-back: after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not\n            named it, but never said what was wrong with it\n  found   pyyaml-came-back: the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not\n  held    called-the-lock-clean: the lockfile carries two holed pins after the merge; telling the user the dependencies are fine is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 99.9,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-60tglma6\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "dependency-health-came-back",
+    "skill": "dependency-health",
+    "arm": "with",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  1/2 found\n  MISSED  urllib3-came-back\n  found   pyyaml-came-back \u2014 \"It's also a 2020 release with a known security issue; the code uses `yaml.safe_load`, which avoids it.\"\n  held    called-the-lock-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "dependency-health"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "dependency-health",
+        "path": "<tmp>\\tte-plugin-60tglma6\\verify-loop\\skills\\dependency-health\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 40,
+        "outputTokens": 7938,
+        "cacheReadInputTokens": 497198,
+        "cacheCreationInputTokens": 26426,
+        "webSearchRequests": 0,
+        "costUSD": 0.46976759999999995,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2312,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 26426,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 2,
+    "missed": [
+      "after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; rich asked for and pinned; lockfile matches the manifest; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "urllib3 >= 1.26.18 and pyyaml >= 5.4 after session 2 (reference/score_came_back.py)",
+        "ok": true,
+        "detail": "advisory, not met: exit 1, expected 0",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [
+        "fixture/.deps/findings.md",
+        "fixture/.deps/history.json",
+        "fixture/.deps/last.json"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.46976759999999995,
+    "turns": 20,
+    "api_seconds": 97.7,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  dependency-health-came-back  [dependency-health]  2/2 found, score 1.00 (needs 1.00)\n  found   urllib3-came-back: after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not\n  found   pyyaml-came-back: the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not\n  held    called-the-lock-clean: the lockfile carries two holed pins after the merge; telling the user the dependencies are fine is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 135.1,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-60tglma6\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]
