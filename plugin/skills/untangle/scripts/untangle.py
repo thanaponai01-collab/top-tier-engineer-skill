@@ -33,9 +33,12 @@ MARKER = "untangle: known bug"
 # ---------------------------------------------------------------- git and files
 
 def sh(args, cwd, timeout=600, shell=False):
+    # A wide terminal: pytest cuts each summary line to the terminal width (80 when piped), which
+    # drops the failure message that groups reds into one slot.
+    env = dict(os.environ, COLUMNS="2000")
     try:
         r = subprocess.run(args, cwd=cwd, capture_output=True, text=True, encoding="utf-8",
-                           errors="replace", timeout=timeout, shell=shell)
+                           errors="replace", timeout=timeout, shell=shell, env=env)
         return r.returncode, r.stdout + r.stderr
     except subprocess.TimeoutExpired:
         return 124, f"timed out after {timeout}s"
@@ -222,12 +225,29 @@ def ran_nothing(repo, r):
     return None
 
 
+def same_message(a, b):
+    """The common text of two failure messages, when one is the other cut short ('...'), else None.
+    A cut that leaves under 20 characters says too little to group on."""
+    a, b = a.rstrip(". "), b.rstrip(". ")
+    short, long_ = sorted((a, b), key=len)
+    return short if len(short) >= 20 and long_.startswith(short) else (a if a == b and a else None)
+
+
 def red_keys(r):
-    """Slot keys for one run's reds: reds in one file that fail with the same message share one."""
+    """Slot keys for one run's reds: reds in one file that fail with the same message share one,
+    also when the runner cut some of the messages short."""
     groups = defaultdict(list)
-    for t in r["red"]:
-        msg = r.get("msgs", {}).get(t)
-        groups[(t.split("::")[0], msg) if msg else (t, None)].append(t)
+    for t in sorted(r["red"], key=lambda t: len(r.get("msgs", {}).get(t) or "")):
+        msg = (r.get("msgs", {}).get(t) or "").strip()
+        if not msg.rstrip(". "):
+            groups[(t, None)].append(t)
+            continue
+        where = t.split("::")[0]
+        hit = next(((w, m) for (w, m) in groups if w == where and m and same_message(m, msg)), None)
+        if hit:
+            groups[hit].append(t)
+        else:
+            groups[(where, msg.rstrip(". ") if msg.endswith("...") else msg)].append(t)
     keys = {}
     for (where, msg), ids in groups.items():
         key = f"{r['cmd']} :: {where}::* ({msg})" if msg and len(ids) > 1 else f"{r['cmd']} :: {ids[0]}"
@@ -346,6 +366,63 @@ def guard_red_on_base(repo, base, cmd, timeout):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+LAST_FIXES = 5
+
+
+def recent_fixes(repo, base, path, window):
+    """The last LAST_FIXES fix commits that touched `path`, newest first, as of `base`."""
+    _, out = git(repo, "log", "--no-merges", f"-n{window}", "--format=%h\t%s", base, "--", path)
+    shas = [l.split("\t")[0] for l in out.splitlines() if "\t" in l and FIX.search(l.split("\t", 1)[1])]
+    return shas[:LAST_FIXES]
+
+
+def guard_with_fix_undone(repo, base, path, sha, cmd, timeout):
+    """Run the guard on the current tree with one past fix to `path` reverted, in a worktree of
+    `base` with every changed file copied in, so the person's tree is never touched.
+    Returns 'red', 'green', or 'n/a' when that fix no longer reverts cleanly."""
+    _, patch = git(repo, "diff", f"{sha}^", sha, "--", path)
+    if not patch.strip():
+        return "n/a"
+    tmp = tempfile.mkdtemp(prefix="untangle-revert-")
+    wt = os.path.join(tmp, "wt")
+    rc, _ = git(repo, "worktree", "add", "--detach", wt, base)
+    if rc != 0:
+        shutil.rmtree(tmp, ignore_errors=True)
+        return "n/a"
+    try:
+        for p in changed_since(repo, base):
+            src, dst = os.path.join(repo, p), os.path.join(wt, p)
+            if os.path.isfile(src):
+                os.makedirs(os.path.dirname(dst) or wt, exist_ok=True)
+                shutil.copy2(src, dst)
+            elif os.path.exists(dst):
+                os.remove(dst)
+        pfile = os.path.join(tmp, "fix.diff")
+        with open(pfile, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(patch if patch.endswith("\n") else patch + "\n")
+        if git(wt, "apply", "-R", pfile)[0] != 0:
+            return "n/a"
+        rc, _ = sh(cmd, wt, timeout=timeout, shell=True)
+        return "green" if rc == 0 else "red"
+    finally:
+        git(repo, "worktree", "remove", "--force", wt)
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def skip_guard_misses(repo, st, key, unit, gcmd, excused, args):
+    """Past fixes to a skipped fix-heavy file whose undoing the guard does not notice. A skip says
+    the repeated fixes are already pinned; this checks that claim fix by fix."""
+    misses = []
+    for sha in recent_fixes(repo, st["base"], unit, args.window):
+        if any(e.startswith(sha) or sha.startswith(e) for e in excused):
+            continue
+        res = cached(st, key, f"revert:{sha}:{unit}:{gcmd}",
+                     lambda: guard_with_fix_undone(repo, st["base"], unit, sha, gcmd, args.timeout))
+        if res == "green":
+            misses.append(sha)
+    return misses
+
+
 # ---------------------------------------------------------------- the gate
 
 def cached(st, key, what, fn):
@@ -451,18 +528,28 @@ def gate(repo, args):
             units[unit] = unit.split(" + ")
         elif kind == "hotspot" and fix_heavy(*info.get(unit, [0, 0])):
             churn, fixes = info[unit]
-            g = re.search(r"\|\s*guard:\s*(.+)$", v)
-            if not g:
+            parts = [p.strip() for p in v.split("|")]
+            gcmd = next((p.split(":", 1)[1].strip() for p in parts if p.startswith("guard:")), "")
+            excused = [p.split(":", 2)[1].strip() for p in parts
+                       if p.startswith("unguarded:") and len(p.split(":", 2)) == 3 and p.split(":", 2)[2].strip()]
+            if not gcmd:
                 problems.append((1, f"hotspot {unit}: {fixes} of its {churn} commits are fixes; a skip "
                                     f"needs `| guard: <cmd>` whose tests cover them, or make it a target"))
                 continue
             stem = os.path.splitext(os.path.basename(unit))[0]
-            if not names_file(repo, g.group(1), stem):
+            if not names_file(repo, gcmd, stem):
                 problems.append((1, f"hotspot {unit}: the skip's guard names no test file that mentions {stem}"))
                 continue
-            bad = check_guard(repo, st, key, g.group(1).strip(), args.timeout, need_red_on_base=False)
+            bad = check_guard(repo, st, key, gcmd, args.timeout, need_red_on_base=False)
             if bad:
                 problems.append((1, f"hotspot {unit}: the skip's guard {bad}"))
+                continue
+            misses = skip_guard_misses(repo, st, key, unit, gcmd, excused, args)
+            if misses:
+                problems.append((1, f"hotspot {unit}: the skip's guard still passes with fix "
+                                    f"{', '.join(misses)} undone, so it does not pin the repeated fixes. "
+                                    f"Add a test that catches it, make the file a target, or add "
+                                    f"`| unguarded: <sha>: <why it needs no test>`"))
     red_lines = lines_for(text, "red", reds)
     bug_files = set()
     for r in reds:

@@ -192,6 +192,28 @@ class Untangle(unittest.TestCase):
         code, out = gate(self.root)
         self.assertNotIn("hotspot app/pricing.py", out)
 
+    def test_a_skip_guard_must_notice_each_past_fix_undone(self):
+        make(self.root)
+        gate(self.root)
+        # Mentions pricing and passes, but undoing the last discount fix leaves it green.
+        write(self.root, "tests/test_names.py", "import unittest\nfrom app import pricing\n\n\n"
+                                                "class N(unittest.TestCase):\n"
+                                                "    def test_has_total(self):\n        self.assertTrue(callable(pricing.total))\n")
+        weak = "skip: local | guard: python -m unittest tests/test_names.py"
+        fill(self.root, **{**SCOPE, "hotspot app/pricing.py": weak})
+        code, out = gate(self.root)
+        self.assertIn("hotspot app/pricing.py: the skip's guard still passes with fix", out)
+        sha = git(self.root, "log", "-n1", "--format=%h", "--", "app/pricing.py").stdout.strip()
+        self.assertIn(sha, out)
+        fill(self.root, **{"hotspot app/pricing.py": weak + f" | unguarded: {sha}: a rate change, no logic"})
+        code, out = gate(self.root)
+        self.assertNotIn("hotspot app/pricing.py", out)
+        fill(self.root, **{"hotspot app/pricing.py": weak + f" | unguarded: {sha}:"})
+        code, out = gate(self.root)
+        self.assertIn("still passes with fix", out, "an excuse needs a reason")
+        self.assertEqual(git(self.root, "status", "--porcelain", "--", "app").stdout.strip(), "",
+                         "the revert ran in a worktree, not in the person's tree")
+
     def test_a_red_test_at_the_baseline_must_be_classified_and_a_bug_marked_in_the_code(self):
         make(self.root, red_test=True)
         gate(self.root)
@@ -223,6 +245,29 @@ class Untangle(unittest.TestCase):
         reds = [l for l in notes(self.root).splitlines() if l.startswith("- red ")]
         self.assertEqual(len(reds), 2, reds)
         self.assertTrue(any("t/test_box.py::* (ModuleNotFoundError: no uharfbuzz)" in l for l in reds), reds)
+
+    def test_reds_whose_messages_the_runner_cut_short_still_share_a_slot(self):
+        make(self.root)
+        fake = ('python -c "'
+                "print('FAILED t/test_box.py::a[1] - ModuleNotFoundError: No module named uharfbuzz');"
+                "print('FAILED t/test_box.py::a_longer_name[2] - ModuleNotFoundError: No module na...');"
+                "print('FAILED t/test_box.py::b - AssertionError: 1 != 2');"
+                "print('FAILED t/test_box.py::c - ...');"
+                "print('2 passed, 4 failed in 1s');raise SystemExit(1)\"")
+        gate(self.root, cmd=fake)
+        reds = [l for l in notes(self.root).splitlines() if l.startswith("- red ")]
+        self.assertEqual(len(reds), 3, reds)
+        self.assertTrue(any("t/test_box.py::* (ModuleNotFoundError: No module na)" in l for l in reds), reds)
+
+    def test_the_gate_runs_tests_wide_so_pytest_keeps_the_message(self):
+        make(self.root)
+        fake = ('python -c "import os;c=os.environ.get(\'COLUMNS\');'
+                "print('FAILED t/test_w.py::a - width', c);print('FAILED t/test_w.py::b - width', c);"
+                "print('0 passed, 2 failed in 1s');raise SystemExit(1)\"")
+        gate(self.root, cmd=fake)
+        reds = [l for l in notes(self.root).splitlines() if l.startswith("- red ")]
+        self.assertEqual(len(reds), 1, reds)
+        self.assertIn("(width 2000)", reds[0])
 
     # ---- stage 2
 
