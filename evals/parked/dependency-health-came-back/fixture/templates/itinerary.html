@@ -1,0 +1,4 @@
+<h1>{{ name }}</h1>
+<ol>
+{% for leg in legs %}  <li>{{ leg.from }} to {{ leg.to }}: {{ leg.depart_dt | local_time }}</li>
+{% endfor %}</ol>

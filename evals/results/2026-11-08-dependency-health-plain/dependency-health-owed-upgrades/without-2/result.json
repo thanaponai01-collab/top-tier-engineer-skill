@@ -1,0 +1,89 @@
+{
+  "case": "dependency-health-owed-upgrades",
+  "skill": "dependency-health",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "phrases",
+  "phrase_passed": true,
+  "judge_text": "",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 4172,
+      "cacheReadInputTokens": 166785,
+      "cacheCreationInputTokens": 16871,
+      "webSearchRequests": 0,
+      "costUSD": 0.251821,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1543,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 16871,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 6,
+  "total": 6,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "suite green with 6 tests; lockfile matches the manifest; urllib3 >= 1.26.18, pyyaml >= 5.4; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "at least 2 of: simplejson removed, Docker base on Python >= 3.10, Jinja2 3.x with the code migrated (reference/score_owed.py)",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/Dockerfile",
+      "fixture/requirements.in",
+      "fixture/requirements.txt",
+      "fixture/tripbook/render.py"
+    ],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.251821,
+  "turns": 7,
+  "api_seconds": 51.227,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 64.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

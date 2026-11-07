@@ -1,0 +1,5 @@
+name: Bangkok in March
+home_tz: Asia/Bangkok
+legs:
+  - {from: LHR, to: BKK, depart: "2026-03-01T09:30+00:00", arrive: "2026-03-02T04:00+07:00", cost: 640}
+  - {from: BKK, to: CNX, depart: "2026-03-05T08:00+07:00", arrive: "2026-03-05T09:15+07:00", cost: 1800, currency: THB}

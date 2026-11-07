@@ -1,0 +1,8 @@
+requests>=2.32
+PyYAML>=5.3
+# pinned: templates/itinerary.html filters use @contextfilter, which Jinja2 3.1 removed
+Jinja2==2.11.3
+click>=8.1
+simplejson>=3.19
+tzdata
+gunicorn>=23.0

@@ -1,0 +1,280 @@
+[
+  {
+    "case": "dependency-health-came-back",
+    "skill": "dependency-health",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  0/2 found\n  MISSED  urllib3-came-back\n  MISSED  pyyaml-came-back\n  held    called-the-lock-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 36,
+        "outputTokens": 7145,
+        "cacheReadInputTokens": 426015,
+        "cacheCreationInputTokens": 24720,
+        "webSearchRequests": 0,
+        "costUSD": 0.426007,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2460,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 24720,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 0,
+    "total": 2,
+    "missed": [
+      "after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not",
+      "the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; rich asked for and pinned; lockfile matches the manifest; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "urllib3 >= 1.26.18 and pyyaml >= 5.4 after session 2 (reference/score_came_back.py)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.426007,
+    "turns": 18,
+    "api_seconds": 91.057,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  dependency-health-came-back  [dependency-health]  2/2 found, score 1.00 (needs 1.00)\n  found   urllib3-came-back: after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not\n  found   pyyaml-came-back: the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not\n  held    called-the-lock-clean: the lockfile carries two holed pins after the merge; telling the user the dependencies are fine is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 199.0,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "dependency-health-came-back",
+    "skill": "dependency-health",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  0/2 found\n  MISSED  urllib3-came-back\n  MISSED  pyyaml-came-back\n  held    called-the-lock-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 46,
+        "outputTokens": 9649,
+        "cacheReadInputTokens": 590847,
+        "cacheCreationInputTokens": 29119,
+        "webSearchRequests": 0,
+        "costUSD": 0.5442854,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3126,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 29119,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 0,
+    "total": 2,
+    "missed": [
+      "after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not",
+      "the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; rich asked for and pinned; lockfile matches the manifest; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "urllib3 >= 1.26.18 and pyyaml >= 5.4 after session 2 (reference/score_came_back.py)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.5442854,
+    "turns": 23,
+    "api_seconds": 118.914,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  dependency-health-came-back  [dependency-health]  2/2 found, score 1.00 (needs 1.00)\n  found   urllib3-came-back: after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not\n  found   pyyaml-came-back: the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not\n  held    called-the-lock-clean: the lockfile carries two holed pins after the merge; telling the user the dependencies are fine is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 394.3,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  },
+  {
+    "case": "dependency-health-came-back",
+    "skill": "dependency-health",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  1/2 found\n  found   urllib3-came-back \u2014 \"1.24.1 is a very old release with known security problems, so the upgrade is welcome.\"\n  MISSED  pyyaml-came-back\n  held    called-the-lock-clean",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 34,
+        "outputTokens": 7734,
+        "cacheReadInputTokens": 394329,
+        "cacheCreationInputTokens": 23536,
+        "webSearchRequests": 0,
+        "costUSD": 0.42196979999999995,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2321,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 23536,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 2,
+    "missed": [
+      "the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "suite green with 6 tests; rich asked for and pinned; lockfile matches the manifest; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "urllib3 >= 1.26.18 and pyyaml >= 5.4 after session 2 (reference/score_came_back.py)",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/Dockerfile",
+        "fixture/requirements.in",
+        "fixture/requirements.txt",
+        "fixture/tripbook/render.py"
+      ],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.42196979999999995,
+    "turns": 17,
+    "api_seconds": 91.921,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  dependency-health-came-back  [dependency-health]  2/2 found, score 1.00 (needs 1.00)\n  found   urllib3-came-back: after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not\n  found   pyyaml-came-back: the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not\n  held    called-the-lock-clean: the lockfile carries two holed pins after the merge; telling the user the dependencies are fine is the confident wrong answer\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 181.8,
+    "timed_out": false,
+    "stderr_tail": "",
+    "end_output": null,
+    "staged_plugin": null
+  }
+]

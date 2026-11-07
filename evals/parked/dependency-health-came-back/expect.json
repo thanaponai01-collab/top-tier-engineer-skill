@@ -1,0 +1,76 @@
+{
+  "case": "dependency-health-came-back",
+  "skill": "dependency-health",
+  "question": "two sessions on the trip-itinerary app. Session 1 is the full dependency check (the same app and ask as dependency-health-owed-upgrades). Then a teammate's merge puts urllib3 1.24.1 (pulled in by requests, known holes) and PyYAML 5.3.1 (known hole) back into requirements.txt; requirements.in is untouched. Session 2 is bare (no plugin in either arm) and is asked only to add one package to the dependencies. Does what session 1 left behind make the second agent notice the two holed pins that came back, instead of compiling the new package in around them?",
+  "pass_score": 1.0,
+  "sessions": [
+    {"prompt": "prompt.md", "plain": "prompt-plain.md"},
+    {"prompt": "prompt-2.md", "plain": "prompt-2.md", "before": "between.py", "bare": true}
+  ],
+  "planted": [
+    {
+      "id": "urllib3-came-back",
+      "what": "after the teammate's merge requirements.txt pins urllib3==1.24.1 again (via requests); the final report must name it as a security problem, fixed or not",
+      "must_name": ["urllib3"],
+      "must_say_any": ["cve", "vulnerab", "security", "advisor", "exploit", "ghsa", "known hole", "holes"]
+    },
+    {
+      "id": "pyyaml-came-back",
+      "what": "the merge also put PyYAML back to 5.3.1 (CVE-2020-14343); the final report must name it as a problem, fixed or not",
+      "must_name": ["pyyaml"],
+      "must_say_any": ["5.3.1", "cve", "vulnerab", "security", "advisor", "exploit", "ghsa", "known hole", "holes", "downgrad", "went back", "back to", "reverted", "regress"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "called-the-lock-clean",
+      "what": "the lockfile carries two holed pins after the merge; telling the user the dependencies are fine is the confident wrong answer",
+      "must_not_say_any": [
+        "no known vulnerabilities", "no security issues", "no security problems",
+        "dependencies are healthy", "dependencies are fine", "all in good shape",
+        "everything is up to date", "all dependencies are up to date", "nothing else to worry about"
+      ]
+    }
+  ],
+  "workdir": {
+    "what": "outcome, judged the same for both arms, on the folder after session 2: the suite passes with all 6 tests, rich is asked for and pinned, every declared package is pinned at a version its specifier allows, tzdata and gunicorn are kept, no Jinja2 3.x over contextfilter; whether the two holed pins were also fixed is a note",
+    "edits_allowed": [
+      "requirements*.in",
+      "requirements*.txt",
+      "constraints*.txt",
+      "Dockerfile",
+      "pyproject.toml",
+      ".python-version",
+      "*.md",
+      "tripbook/*",
+      "templates/*",
+      "tests/*",
+      ".deps/*",
+      "tmp/*"
+    ],
+    "replays": [
+      {
+        "id": "added-nothing-broken",
+        "kind": "outcome",
+        "what": "suite green with 6 tests; rich asked for and pinned; lockfile matches the manifest; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter",
+        "replace": {
+          "_check_outcome.py": "reference/check_outcome.py",
+          "tests/test_itinerary.py": "reference/test_itinerary.py"
+        },
+        "command": ["python", "_check_outcome.py"],
+        "expect": "pass",
+        "timeout": 120
+      },
+      {
+        "id": "came-back-fixed",
+        "kind": "outcome",
+        "gate": false,
+        "what": "urllib3 >= 1.26.18 and pyyaml >= 5.4 after session 2 (reference/score_came_back.py)",
+        "replace": {"_score_came_back.py": "reference/score_came_back.py"},
+        "command": ["python", "_score_came_back.py"],
+        "expect": "pass",
+        "timeout": 60
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+PASS  dependency-health-owed-upgrades  [dependency-health]  6/6 found, score 1.00 (needs 1.00)
+  found   indirect-urllib3-hole: requirements.txt pins urllib3==1.24.1 `# via requests`; requirements.in never names it, so a look at direct dependencies alone misses it. It has several published advisories; the report must name it as a security problem
+  found   eol-python-base: the Dockerfile builds on python:3.7-slim and the lockfile was compiled for 3.7; Python 3.7 is end of life (June 2023), so the report must say so
+  found   lockfile-drift-click: requirements.in asks for click>=8.1 and the CLI imports it, but requirements.txt has no click pin, so `pip install -r requirements.txt` gives an app that cannot start; the report must name the missing pin
+  found   unused-simplejson: simplejson is declared and pinned but no file imports it (rates.py uses the standard json module); the report must say it is unused
+  found   jinja2-pin-has-a-reason: Jinja2 2.11.3 carries known holes but requirements.in says it is pinned because render.py uses @contextfilter, removed in Jinja2 3.1; the report must name that and either migrate the code (pass_context) or leave it as a decision for the user, not bump blindly
+  found   used-without-import-kept: tzdata is never imported but zoneinfo needs it for Asia/Bangkok on Windows and slim images; gunicorn is never imported but the Dockerfile CMD runs it; both are kept and the report says why
+  held    removed-a-used-package: tzdata and gunicorn are imported by no Python file but are used; calling either unused or removing it is the confident wrong answer
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      suite green with 6 tests; lockfile matches the manifest; urllib3 >= 1.26.18, pyyaml >= 5.4; tzdata and gunicorn kept; no Jinja2 3.x over contextfilter — 
+  ok      at least 2 of: simplejson removed, Docker base on Python >= 3.10, Jinja2 3.x with the code migrated (reference/score_owed.py) — 
