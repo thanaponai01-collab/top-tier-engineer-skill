@@ -652,6 +652,658 @@
   }
  },
  {
+  "run": "N1-D1-1",
+  "arm": "N1",
+  "probe": "D1",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 61.7,
+  "timed_out": false,
+  "cost": 0.2251,
+  "tokens": 435651,
+  "calls": 13,
+  "files_read": 4,
+  "first_fix_touch": 1,
+  "changed": [
+   "uxp/cutdeck/timeline/nativeCut.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1141,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-D1-2",
+  "arm": "N1",
+  "probe": "D1",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 67.0,
+  "timed_out": false,
+  "cost": 0.2004,
+  "tokens": 315273,
+  "calls": 12,
+  "files_read": 3,
+  "first_fix_touch": 1,
+  "changed": [
+   "uxp/cutdeck/timeline/nativeCut.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1141,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-D3-1",
+  "arm": "N1",
+  "probe": "D3",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 212.9,
+  "timed_out": false,
+  "cost": 0.3576,
+  "tokens": 757356,
+  "calls": 18,
+  "files_read": 4,
+  "first_fix_touch": 1,
+  "changed": [
+   "cutdeck/sync_plan.py",
+   "tests/test_cutdeck_sync_plan.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1142,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-D3-2",
+  "arm": "N1",
+  "probe": "D3",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 80.7,
+  "timed_out": false,
+  "cost": 0.2413,
+  "tokens": 445440,
+  "calls": 13,
+  "files_read": 4,
+  "first_fix_touch": 1,
+  "changed": [
+   "cutdeck/sync_plan.py",
+   "tests/test_cutdeck_sync_plan.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1142,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-D4-1",
+  "arm": "N1",
+  "probe": "D4",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 39.0,
+  "timed_out": false,
+  "cost": 0.1274,
+  "tokens": 222444,
+  "calls": 9,
+  "files_read": 3,
+  "first_fix_touch": 3,
+  "changed": [
+   "transcribe/cues/split.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1142,
+   "py_red": 9,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-D4-2",
+  "arm": "N1",
+  "probe": "D4",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 109.8,
+  "timed_out": false,
+  "cost": 0.1533,
+  "tokens": 301044,
+  "calls": 10,
+  "files_read": 3,
+  "first_fix_touch": 4,
+  "changed": [
+   "transcribe/cues/split.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1142,
+   "py_red": 9,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-P5-1",
+  "arm": "N1",
+  "probe": "P5",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 102.1,
+  "timed_out": false,
+  "cost": 0.1909,
+  "tokens": 420545,
+  "calls": 12,
+  "files_read": 3,
+  "first_fix_touch": 1,
+  "changed": [
+   "tests/test_faster_whisper.py",
+   "transcribe/engines/faster_whisper.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1142,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-P5-2",
+  "arm": "N1",
+  "probe": "P5",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 105.7,
+  "timed_out": false,
+  "cost": 0.2132,
+  "tokens": 402308,
+  "calls": 11,
+  "files_read": 2,
+  "first_fix_touch": 1,
+  "changed": [
+   "tests/test_faster_whisper.py",
+   "transcribe/engines/faster_whisper.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1142,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-P6-1",
+  "arm": "N1",
+  "probe": "P6",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 65.8,
+  "timed_out": false,
+  "cost": 0.2257,
+  "tokens": 367355,
+  "calls": 9,
+  "files_read": 2,
+  "first_fix_touch": 1,
+  "changed": [
+   "uxp/cutdeck/timeline/nativeCut.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1141,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-P6-2",
+  "arm": "N1",
+  "probe": "P6",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 100.9,
+  "timed_out": false,
+  "cost": 0.3076,
+  "tokens": 598684,
+  "calls": 16,
+  "files_read": 6,
+  "first_fix_touch": 1,
+  "changed": [
+   "tests/cutdeck_native_cut.test.cjs",
+   "tests/fakes/native_cut_host.cjs",
+   "uxp/cutdeck/timeline/nativeCut.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1141,
+   "py_red": 10,
+   "node_tests": 732,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-P7-1",
+  "arm": "N1",
+  "probe": "P7",
+  "kind": "feature",
+  "model": "claude-sonnet-5-5",
+  "seconds": 44.1,
+  "timed_out": false,
+  "cost": 0.1926,
+  "tokens": 331486,
+  "calls": 12,
+  "files_read": 6,
+  "first_fix_touch": 2,
+  "changed": [
+   "tests/cutdeck_native_sync.test.cjs",
+   "uxp/cutdeck/README.md",
+   "uxp/cutdeck/timeline/nativeSync.js"
+  ],
+  "stray": [
+   "uxp/cutdeck/README.md"
+  ],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1141,
+   "py_red": 10,
+   "node_tests": 733,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N1-P7-2",
+  "arm": "N1",
+  "probe": "P7",
+  "kind": "feature",
+  "model": "claude-sonnet-5-5",
+  "seconds": 64.8,
+  "timed_out": false,
+  "cost": 0.2282,
+  "tokens": 424673,
+  "calls": 14,
+  "files_read": 6,
+  "first_fix_touch": 1,
+  "changed": [
+   "tests/cutdeck_native_sync.test.cjs",
+   "uxp/cutdeck/README.md",
+   "uxp/cutdeck/timeline/nativeSync.js"
+  ],
+  "stray": [
+   "uxp/cutdeck/README.md"
+  ],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1141,
+   "py_red": 10,
+   "node_tests": 733,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-D1-1",
+  "arm": "N2",
+  "probe": "D1",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 84.4,
+  "timed_out": false,
+  "cost": 0.2972,
+  "tokens": 519063,
+  "calls": 14,
+  "files_read": 6,
+  "first_fix_touch": 2,
+  "changed": [
+   "tests/cutdeck_native_cut.test.cjs",
+   "uxp/cutdeck/timeline/nativeCut.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1144,
+   "py_red": 10,
+   "node_tests": 733,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-D1-2",
+  "arm": "N2",
+  "probe": "D1",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 91.1,
+  "timed_out": false,
+  "cost": 0.2251,
+  "tokens": 438860,
+  "calls": 12,
+  "files_read": 5,
+  "first_fix_touch": 1,
+  "changed": [
+   "uxp/cutdeck/timeline/nativeCut.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1144,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-D3-1",
+  "arm": "N2",
+  "probe": "D3",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 81.5,
+  "timed_out": false,
+  "cost": 0.1885,
+  "tokens": 345720,
+  "calls": 10,
+  "files_read": 2,
+  "first_fix_touch": 1,
+  "changed": [
+   "cutdeck/sync_plan.py",
+   "tests/test_cutdeck_sync_plan.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1145,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-D3-2",
+  "arm": "N2",
+  "probe": "D3",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 84.4,
+  "timed_out": false,
+  "cost": 0.2058,
+  "tokens": 385031,
+  "calls": 12,
+  "files_read": 2,
+  "first_fix_touch": 1,
+  "changed": [
+   "cutdeck/sync_plan.py",
+   "tests/test_cutdeck_sync_plan.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1145,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-D4-1",
+  "arm": "N2",
+  "probe": "D4",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 53.9,
+  "timed_out": false,
+  "cost": 0.1729,
+  "tokens": 388788,
+  "calls": 11,
+  "files_read": 3,
+  "first_fix_touch": 5,
+  "changed": [
+   "tests/test_smoke.py",
+   "transcribe/cues/split.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1146,
+   "py_red": 9,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-D4-2",
+  "arm": "N2",
+  "probe": "D4",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 36.6,
+  "timed_out": false,
+  "cost": 0.1148,
+  "tokens": 213832,
+  "calls": 7,
+  "files_read": 3,
+  "first_fix_touch": 3,
+  "changed": [
+   "tests/test_smoke.py",
+   "transcribe/cues/split.py"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1146,
+   "py_red": 9,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-P5-1",
+  "arm": "N2",
+  "probe": "P5",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 79.3,
+  "timed_out": false,
+  "cost": 0.1737,
+  "tokens": 296890,
+  "calls": 10,
+  "files_read": 2,
+  "first_fix_touch": 1,
+  "changed": [
+   "transcribe/engines/faster_whisper.py"
+  ],
+  "stray": [],
+  "ok": false,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1144,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-P5-2",
+  "arm": "N2",
+  "probe": "P5",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 85.6,
+  "timed_out": false,
+  "cost": 0.2541,
+  "tokens": 474598,
+  "calls": 14,
+  "files_read": 4,
+  "first_fix_touch": 1,
+  "changed": [
+   "tests/test_faster_whisper_tail_seam.py",
+   "transcribe/engines/faster_whisper.py"
+  ],
+  "stray": [],
+  "ok": false,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1145,
+   "py_red": 10,
+   "node_tests": 731,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-P6-1",
+  "arm": "N2",
+  "probe": "P6",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 90.8,
+  "timed_out": false,
+  "cost": 0.3059,
+  "tokens": 643850,
+  "calls": 15,
+  "files_read": 4,
+  "first_fix_touch": 1,
+  "changed": [
+   "tests/cutdeck_native_cut.test.cjs",
+   "tests/fakes/native_cut_host.cjs",
+   "uxp/cutdeck/timeline/nativeCut.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1144,
+   "py_red": 10,
+   "node_tests": 732,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-P6-2",
+  "arm": "N2",
+  "probe": "P6",
+  "kind": "fix",
+  "model": "claude-sonnet-5-5",
+  "seconds": 129.3,
+  "timed_out": false,
+  "cost": 0.3993,
+  "tokens": 931207,
+  "calls": 23,
+  "files_read": 7,
+  "first_fix_touch": 1,
+  "changed": [
+   "tests/cutdeck_native_cut.test.cjs",
+   "uxp/cutdeck/timeline/nativeCut.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1144,
+   "py_red": 10,
+   "node_tests": 732,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-P7-1",
+  "arm": "N2",
+  "probe": "P7",
+  "kind": "feature",
+  "model": "claude-sonnet-5-5",
+  "seconds": 59.2,
+  "timed_out": false,
+  "cost": 0.218,
+  "tokens": 423892,
+  "calls": 14,
+  "files_read": 6,
+  "first_fix_touch": 1,
+  "changed": [
+   "tests/cutdeck_native_sync.test.cjs",
+   "uxp/cutdeck/timeline/nativeSync.js"
+  ],
+  "stray": [],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1144,
+   "py_red": 10,
+   "node_tests": 733,
+   "node_red": 0
+  }
+ },
+ {
+  "run": "N2-P7-2",
+  "arm": "N2",
+  "probe": "P7",
+  "kind": "feature",
+  "model": "claude-sonnet-5-5",
+  "seconds": 60.1,
+  "timed_out": false,
+  "cost": 0.2114,
+  "tokens": 369937,
+  "calls": 15,
+  "files_read": 6,
+  "first_fix_touch": 2,
+  "changed": [
+   "tests/cutdeck_native_sync.test.cjs",
+   "uxp/cutdeck/README.md",
+   "uxp/cutdeck/timeline/nativeSync.js"
+  ],
+  "stray": [
+   "uxp/cutdeck/README.md"
+  ],
+  "ok": true,
+  "damage": [],
+  "suite_after": {
+   "py_pass": 1144,
+   "py_red": 10,
+   "node_tests": 733,
+   "node_red": 0
+  }
+ },
+ {
   "run": "O1-D1-1",
   "arm": "O1",
   "probe": "D1",

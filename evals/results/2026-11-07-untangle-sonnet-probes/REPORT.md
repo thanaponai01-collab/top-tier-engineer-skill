@@ -61,10 +61,67 @@ hasn't been run.
 $21.53 for the 84 counted runs, plus about $6.4 discarded (P7 v1 and the first D4 smoke), so about
 $28 in total.
 
+## Untangle 1.41.0 arm (N1, N2)
+
+Two fresh Opus untangles of the cutoff tree with the plugin at 1.41.0 (`harness/untangle_arm.py`, same
+prompt as the compare run). Both reached `UNTANGLE-GATE: done`.
+
+| run | cost | calls | what it moved | nativeCut.js | faster_whisper.py |
+|---|---|---|---|---|---|
+| N1 | $1.21 | 32 | align intents (the same move as 1.38.0) | skip + guard (existing test file) | skip + guard |
+| N2 | $1.10 | 28 | one tail-redecode path in faster_whisper.py | skip + guard | **target**: 3 copies of shift-and-merge into `_splice_tail` |
+
+Both put `untangle: known bug:` comments at `split.py:177` (and :415 in N2), the D4 fix site.
+
+### Sonnet probes on the 1.41.0 trees
+
+| arm | passed | cost / run | tokens / run | calls | files read | damage runs |
+|---|---|---|---|---|---|---|
+| orig | 11/12 | $0.284 | 575k | 14.9 | 5.6 | 0 |
+| plain | 20/24 | $0.236 | 484k | 13.8 | 4.2 | 0 |
+| ours 1.38 | 20/24 | $0.265 | 537k | 14.6 | 4.9 | 0 |
+| caldoai | 22/24 | $0.254 | 530k | 14.5 | 4.5 | 0 |
+| **ours 1.41** | **22/24** | **$0.226** | **436k** | **12.8** | **4.0** | 0 |
+
+| arm | D1 | D3 | D4 | P5 | P6 | P7 |
+|---|---|---|---|---|---|---|
+| orig | 2/2 $0.29 | 1/2 $0.33 | 2/2 $0.19 | 2/2 $0.31 | 2/2 $0.37 | 2/2 $0.22 |
+| plain | 4/4 $0.22 | 3/4 $0.27 | 4/4 $0.12 | 3/4 $0.30 | 2/4 $0.31 | 4/4 $0.19 |
+| ours 1.38 | 3/4 $0.23 | 2/4 $0.31 | 4/4 $0.19 | 3/4 $0.32 | 4/4 $0.34 | 4/4 $0.21 |
+| caldoai | 3/4 $0.26 | 4/4 $0.21 | 4/4 $0.15 | 4/4 $0.40 | 3/4 $0.30 | 4/4 $0.22 |
+| ours 1.41 | 4/4 $0.24 | 4/4 $0.25 | 4/4 $0.14 | 2/4 $0.21 | 4/4 $0.31 | 4/4 $0.21 |
+
+**Read: still a tie.**
+- 1.41.0 is the cheapest arm and the only one with both D1 and D3 at 4/4. But D3's fix file
+  (`sync_plan.py`) is untouched in every arm, and D3 still ranges from 1/2 to 4/4 across arms. That
+  is the size of the noise, and it covers every difference in the table.
+- D4 (the known-bug comment sits at the fix site) didn't get faster. Calls before opening `split.py`
+  were 3-5 on 1.41.0 and 3-11 elsewhere, because the reworded prompt already names the engine file.
+- **P5 0/2 on N2, the one tree that restructured P5's area.** Both runs found the right function
+  (`_batch_recover_tails`, now built on N2's `_splice_tail`). Both replaced seek grouping with
+  assigning each word by its timestamp, instead of fixing the seek key. The hidden test calls
+  `_group_segments_by_window` directly, so it fails. It's a fix the grader can't see, not a missed
+  bug. The real fix still applies cleanly on N2's tree.
+
+### Findings about 1.41.0 itself
+
+- **The fix-heavy rule is met by naming an existing test.** Both runs skipped `nativeCut.js` with
+  `guard: node --test tests/cutdeck_native_cut.test.cjs`, the test file that was already there, so
+  the rule changed nothing for the file with 5 of the 12 later commits. To force more than a skip,
+  the guard would have to be new, or fail on some mutation of the file.
+- **Red grouping didn't happen.** Both runs still wrote 8 separate `env: uharfbuzz` lines (10 red
+  slots in all). The agent's pytest command had no `-rf`, so maybe no `FAILED x - message` lines
+  were printed to group on. Not checked yet.
+
+Spend for the arm: untangles $2.31, probes $5.43.
+
 ## Next
 
-1. Run two fresh untangle 1.41.0 trees (Opus, about $3), add them with `SP_ARMS`, and run the six
-   probes on both (about $6). This is the first arm that should change the files the probes hit.
-2. If 1.41.0 also ties, a gain from untangle is unmeasurable on this repo with these probes. The next
-   lever is probes whose report does *not* point at the file (a symptom seen from the UI only), or a
-   second repo.
+A gain from untangle can't be measured on this repo with these probes. Five arms, including the one
+that restructured a probe's area, sit inside the noise of an untouched probe (D3). The options:
+
+1. Probes whose report doesn't point at the file: a UI-only symptom, or a feature that cuts across
+   modules. That is the case where structure decides how much an agent searches.
+2. A second repo, with more later commits landing in code the untangle can move.
+3. Fix the two 1.41.0 findings above whatever the eval shows: a skip guard must be new or mutation-checked, and
+   reds must group without `-rf`.

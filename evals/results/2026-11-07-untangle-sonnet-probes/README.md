@@ -47,3 +47,5 @@ python harness/sp.py table
 
 Runs and trees live in the session scratchpad (`SP_WORK`); `data/probes.json` gets the rows.
 Smoke: `orig-D4-1` ok, $0.25, 18 calls, 9 files read, fix file at call 11, no damage.
+
+1.41.0 arm: `harness/untangle_arm.py N1` makes a fresh untangled tree with this checkout's plugin; results in REPORT.md.
