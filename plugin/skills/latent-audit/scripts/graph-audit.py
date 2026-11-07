@@ -82,11 +82,33 @@ TEXT_EXT = {".py", ".pyi", ".txt", ".md", ".yml", ".yaml", ".toml", ".cfg",
             ".xml", ".env", ".service"}
 TEXT_NAMES = {"dockerfile", "makefile", "procfile"}
 SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "venv", "dist", ".latent",
-             "build", ".tox", ".mypy_cache", ".pytest_cache", ".blast", ".mistakes", ".formal"}
+             "build", ".tox", ".mypy_cache", ".pytest_cache", ".blast", ".mistakes", ".formal", ".checkup"}
 
 # Modules assumed reachable even with zero in-edges (framework/tooling entry):
 ENTRY_BASENAMES = {"main", "app", "application", "cli", "manage", "wsgi",
                    "asgi", "setup", "conftest", "__main__", "__init__"}
+
+
+def git_ignored(root):
+    """Paths git ignores under root (dirs end with '/'), relative to root; empty if not a repo.
+    A copy in .claude/worktrees or a build folder is not the codebase."""
+    try:
+        p = subprocess.run(["git", "-C", root, "ls-files", "--others", "--ignored",
+                            "--exclude-standard", "--directory", "-z"],
+                           capture_output=True, text=True, timeout=120)
+    except (OSError, subprocess.SubprocessError):
+        return set()
+    if p.returncode != 0:
+        return set()
+    return {x for x in p.stdout.split("\0") if x}
+
+
+def is_ignored(relpath, ignored):
+    """relpath uses '/'; a directory entry in ignored ends with '/'."""
+    if relpath in ignored:
+        return True
+    parts = relpath.split("/")
+    return any("/".join(parts[:i]) + "/" in ignored for i in range(1, len(parts) + 1))
 
 
 def iter_files(roots, wanted_ext=None):
@@ -94,9 +116,15 @@ def iter_files(roots, wanted_ext=None):
         if os.path.isfile(root):
             yield root
             continue
+        ignored = git_ignored(root)
         for dirpath, dirnames, filenames in os.walk(root):
-            dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+            here = os.path.relpath(dirpath, root).replace(os.sep, "/")
+            here = "" if here == "." else here + "/"
+            dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS
+                           and not is_ignored(here + d + "/", ignored)]
             for f in filenames:
+                if is_ignored(here + f, ignored):
+                    continue
                 p = os.path.join(dirpath, f)
                 ext = os.path.splitext(f)[1].lower()
                 if wanted_ext is None or ext in wanted_ext \

@@ -1,0 +1,471 @@
+[
+  {
+    "case": "checkup-ugly-but-idle",
+    "skill": "checkup",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   rule-in-two-places-first \u2014 \"`shop/receipt.py:3-24` is a copy of `shop/cart.py:3-15`, constants included.\"\n  MISSED  two-http-clients\n  found   ugly-but-idle-ranked-low \u2014 \"Don't rewrite the nested if-statements in the tax table just to make it cleaner.\"\n  held    ugly-first",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2409,
+        "cacheReadInputTokens": 80371,
+        "cacheCreationInputTokens": 9663,
+        "webSearchRequests": 0,
+        "costUSD": 0.1415902,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 633,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 9663,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1415902,
+    "turns": 4,
+    "api_seconds": 30.967,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  checkup-ugly-but-idle  [checkup]  3/3 found, score 1.00 (needs 1.00)\n  found   rule-in-two-places-first: the first thing to fix is the member/bulk discount rule kept twice, in shop/cart.py and shop/receipt.py, with no import between them; the git history shows them changing together and fixes for the receipt drifting from the cart (for example 'fix: receipt total differs from cart for members', 'fix: receipt and cart round the discount differently'). It must be ranked first, above the tax tables\n  found   two-http-clients: HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once\n  found   ugly-but-idle-ranked-low: legacy/tax_tables.py sales_tax is the most tangled function (deeply nested, about 25 branches), but nothing has changed it since the first commit, so it is ranked below the two above or said to be left alone for now, not named the first fix\n  held    ugly-first: naming the tangled tax-table function as the first or most urgent thing to fix\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 36.2,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "checkup-ugly-but-idle",
+    "skill": "checkup",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: FAIL  2/3 found\n  found   rule-in-two-places-first \u2014 \"The fix: compute the total in one place (cart plus tax) and pass that result to the receipt. That also removes the dupli\"\n  MISSED  two-http-clients\n  found   ugly-but-idle-ranked-low \u2014 \"`legacy/tax_tables.py` looks the worst but hasn't changed** since the first commit.\"\n  held    ugly-first",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2509,
+        "cacheReadInputTokens": 81666,
+        "cacheCreationInputTokens": 10797,
+        "webSearchRequests": 0,
+        "costUSD": 0.1529212,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 744,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 10797,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 2,
+    "total": 3,
+    "missed": [
+      "HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1529212,
+    "turns": 4,
+    "api_seconds": 31.721,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  checkup-ugly-but-idle  [checkup]  3/3 found, score 1.00 (needs 1.00)\n  found   rule-in-two-places-first: the first thing to fix is the member/bulk discount rule kept twice, in shop/cart.py and shop/receipt.py, with no import between them; the git history shows them changing together and fixes for the receipt drifting from the cart (for example 'fix: receipt total differs from cart for members', 'fix: receipt and cart round the discount differently'). It must be ranked first, above the tax tables\n  found   two-http-clients: HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once\n  found   ugly-but-idle-ranked-low: legacy/tax_tables.py sales_tax is the most tangled function (deeply nested, about 25 branches), but nothing has changed it since the first commit, so it is ranked below the two above or said to be left alone for now, not named the first fix\n  held    ugly-first: naming the tangled tax-table function as the first or most urgent thing to fix\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 36.5,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "checkup-ugly-but-idle",
+    "skill": "checkup",
+    "arm": "without",
+    "passed": false,
+    "report_passed": false,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: FAIL  1/3 found\n  MISSED  rule-in-two-places-first\n  MISSED  two-http-clients\n  found   ugly-but-idle-ranked-low \u2014 \"add tests that pin down the current results before anyone touches this code.\"\n  held    ugly-first",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": false,
+    "skills_loaded": [],
+    "skill_calls": [],
+    "skill_reads": [],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 2216,
+        "cacheReadInputTokens": 81443,
+        "cacheCreationInputTokens": 10386,
+        "webSearchRequests": 0,
+        "costUSD": 0.1437286,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 454,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 10386,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 1,
+    "total": 3,
+    "missed": [
+      "the first thing to fix is the member/bulk discount rule kept twice, in shop/cart.py and shop/receipt.py, with no import between them; the git history shows them changing together and fixes for the receipt drifting from the cart (for example 'fix: receipt total differs from cart for members', 'fix: receipt and cart round the discount differently'). It must be ranked first, above the tax tables",
+      "HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once"
+    ],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.1437286,
+    "turns": 4,
+    "api_seconds": 32.339,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  checkup-ugly-but-idle  [checkup]  2/3 found, score 0.67 (needs 1.00)\n  found   rule-in-two-places-first: the first thing to fix is the member/bulk discount rule kept twice, in shop/cart.py and shop/receipt.py, with no import between them; the git history shows them changing together and fixes for the receipt drifting from the cart (for example 'fix: receipt total differs from cart for members', 'fix: receipt and cart round the discount differently'). It must be ranked first, above the tax tables\n  found   two-http-clients: HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once\n  MISSED  ugly-but-idle-ranked-low: legacy/tax_tables.py sales_tax is the most tangled function (deeply nested, about 25 branches), but nothing has changed it since the first commit, so it is ranked below the two above or said to be left alone for now, not named the first fix\n            named it, but never said what was wrong with it\n  held    ugly-first: naming the tangled tax-table function as the first or most urgent thing to fix\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 37.1,
+    "timed_out": false,
+    "staged_plugin": null,
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "checkup-ugly-but-idle",
+    "skill": "checkup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   rule-in-two-places-first \u2014 \"**1. The discount rules exist twice, in `shop/cart.py` and `shop/receipt.py`.**\"\n  found   two-http-clients \u2014 \"`payments.py` uses `http.client` and `notify.py` uses `urllib.request`.\"\n  found   ugly-but-idle-ranked-low \u2014 \"But nothing has touched it since it was ported in the first commit, it has never been fixed, and checkout only ever call\"\n  held    ugly-first",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "checkup"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "checkup",
+        "path": "<tmp>\\tte-plugin-2fvjggma\\verify-loop\\skills\\checkup\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-2fvjggma\\verify-loop\\skills\\checkup\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 3841,
+        "cacheReadInputTokens": 236285,
+        "cacheCreationInputTokens": 18704,
+        "webSearchRequests": 0,
+        "costUSD": 0.273781,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 811,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 18704,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.273781,
+    "turns": 9,
+    "api_seconds": 49.433,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  checkup-ugly-but-idle  [checkup]  3/3 found, score 1.00 (needs 1.00)\n  found   rule-in-two-places-first: the first thing to fix is the member/bulk discount rule kept twice, in shop/cart.py and shop/receipt.py, with no import between them; the git history shows them changing together and fixes for the receipt drifting from the cart (for example 'fix: receipt total differs from cart for members', 'fix: receipt and cart round the discount differently'). It must be ranked first, above the tax tables\n  found   two-http-clients: HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once\n  found   ugly-but-idle-ranked-low: legacy/tax_tables.py sales_tax is the most tangled function (deeply nested, about 25 branches), but nothing has changed it since the first commit, so it is ranked below the two above or said to be left alone for now, not named the first fix\n  held    ugly-first: naming the tangled tax-table function as the first or most urgent thing to fix\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 59.7,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-2fvjggma\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "checkup-ugly-but-idle",
+    "skill": "checkup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": false,
+    "judge_text": "judge: PASS  3/3 found\n  found   rule-in-two-places-first \u2014 \"**1. Put the pricing rule in one place (`shop/cart.py` and `shop/receipt.py`).**\"\n  found   two-http-clients \u2014 \"**2. Use one HTTP and retry approach (`shop/payments.py` and `shop/notify.py`).**\"\n  found   ugly-but-idle-ranked-low \u2014 \"No third fix is warranted yet.\"\n  held    ugly-first",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "checkup"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "checkup",
+        "path": "<tmp>\\tte-plugin-2fvjggma\\verify-loop\\skills\\checkup\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-2fvjggma\\verify-loop\\skills\\checkup\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 3687,
+        "cacheReadInputTokens": 193592,
+        "cacheCreationInputTokens": 13360,
+        "webSearchRequests": 0,
+        "costUSD": 0.2194024,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 738,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 13360,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2194024,
+    "turns": 8,
+    "api_seconds": 45.466,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "FAIL  checkup-ugly-but-idle  [checkup]  2/3 found, score 0.67 (needs 1.00)\n  found   rule-in-two-places-first: the first thing to fix is the member/bulk discount rule kept twice, in shop/cart.py and shop/receipt.py, with no import between them; the git history shows them changing together and fixes for the receipt drifting from the cart (for example 'fix: receipt total differs from cart for members', 'fix: receipt and cart round the discount differently'). It must be ranked first, above the tax tables\n  found   two-http-clients: HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once\n  MISSED  ugly-but-idle-ranked-low: legacy/tax_tables.py sales_tax is the most tangled function (deeply nested, about 25 branches), but nothing has changed it since the first commit, so it is ranked below the two above or said to be left alone for now, not named the first fix\n            named it, but never said what was wrong with it\n  held    ugly-first: naming the tangled tax-table function as the first or most urgent thing to fix\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 52.2,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-2fvjggma\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  },
+  {
+    "case": "checkup-ugly-but-idle",
+    "skill": "checkup",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  3/3 found\n  found   rule-in-two-places-first \u2014 \"**The discount rules are written out twice, in `shop/cart.py` and `shop/receipt.py`.**\"\n  found   two-http-clients \u2014 \"**HTTP calls are made two different ways, each with its own retry loop.**\"\n  found   ugly-but-idle-ranked-low \u2014 \"I recorded it as not worth fixing now.\"\n  held    ugly-first",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "checkup"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "checkup",
+        "path": "<tmp>\\tte-plugin-2fvjggma\\verify-loop\\skills\\checkup\\SKILL.md",
+        "sub": false
+      }
+    ],
+    "skill_read_candidates": [
+      "<tmp>\\tte-plugin-2fvjggma\\verify-loop\\skills\\checkup\\SKILL.md"
+    ],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 4044,
+        "cacheReadInputTokens": 227799,
+        "cacheCreationInputTokens": 15841,
+        "webSearchRequests": 0,
+        "costUSD": 0.2532398,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 786,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 15841,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 3,
+    "total": 3,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "left the code untouched (a report-only task)",
+        "ok": true,
+        "detail": "no code file changed"
+      }
+    ],
+    "changes": {
+      "changed": [],
+      "added": [],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.2532398,
+    "turns": 9,
+    "api_seconds": 49.376,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  checkup-ugly-but-idle  [checkup]  3/3 found, score 1.00 (needs 1.00)\n  found   rule-in-two-places-first: the first thing to fix is the member/bulk discount rule kept twice, in shop/cart.py and shop/receipt.py, with no import between them; the git history shows them changing together and fixes for the receipt drifting from the cart (for example 'fix: receipt total differs from cart for members', 'fix: receipt and cart round the discount differently'). It must be ranked first, above the tax tables\n  found   two-http-clients: HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once\n  found   ugly-but-idle-ranked-low: legacy/tax_tables.py sales_tax is the most tangled function (deeply nested, about 25 branches), but nothing has changed it since the first commit, so it is ranked below the two above or said to be left alone for now, not named the first fix\n  held    ugly-first: naming the tangled tax-table function as the first or most urgent thing to fix\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 57.0,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-2fvjggma\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

@@ -18,7 +18,9 @@ kept on purpose, the one exception to the rule below, see BUILD.md 1.37.0), and 
 and the manual-only `formal-check` skill at `plugin/skills/formal-check/SKILL.md` (points at
 debug-protocol for a bug it finds), and the manual-only `untangle` skill at
 `plugin/skills/untangle/SKILL.md` (standalone), and the manual-only `cleanup` skill at
-`plugin/skills/cleanup/SKILL.md` (points at untangle for restructuring).
+`plugin/skills/cleanup/SKILL.md` (points at untangle for restructuring), and the manual-only
+`checkup` skill at `plugin/skills/checkup/SKILL.md` (runs structure-gate, latent-audit, arch-design
+and feature-map's helpers when present; names the fixer skill per finding).
 
 - Mechanics, not advice: every rule is a script or test that can fail, never a tip for the agent.
 

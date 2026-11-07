@@ -250,5 +250,19 @@ class Keep(unittest.TestCase):
             self.assertNotIn("stale", p.stdout)
 
 
+class IgnoredPaths(unittest.TestCase):
+    """A function in a git-ignored folder is not a function of the system."""
+
+    def test_a_copy_in_an_ignored_folder_is_not_listed(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as tmp:
+            app = "def go():\n    return 1\n\nif __name__ == '__main__':\n    go()\n"
+            make(tmp, {"app.py": app, ".gitignore": "worktrees/\n", "worktrees/copy/app.py": app})
+            subprocess.run(["git", "init", "-q", tmp], check=True)
+            code, out, err = run("wire.py", tmp)
+            self.assertIn("1 Python files", out, out + err)
+            self.assertNotIn("worktrees", out, out)
+
+
 if __name__ == "__main__":
     unittest.main()

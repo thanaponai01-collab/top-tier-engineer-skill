@@ -1,0 +1,73 @@
+{
+  "case": "checkup-ugly-but-idle",
+  "skill": "checkup",
+  "arm": "without",
+  "passed": false,
+  "report_passed": false,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: FAIL  4/5 found\n  found   rule-in-two-places-first \u2014 \"**The discount rules are written twice.** `shop/cart.py:3-15` and `shop/receipt.py:3-24` each define the same constants \"\n  MISSED  two-http-clients\n  found   ugly-but-idle-ranked-low \u2014 \"`legacy/tax_tables.py` is ugly but stable.\"\n  found   receipt-leaves-out-tax \u2014 \"`checkout()` charges the cart total plus tax, but `render()` prints `receipt_total()`, which leaves tax out.\"\n  found   payment-retry-double-charge \u2014 \"`shop/payments.py:10-20` retries on a 502, a 503 or any `OSError`, and sends no idempotency key.\"\n  held    ugly-first",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 1967,
+      "cacheReadInputTokens": 80137,
+      "cacheCreationInputTokens": 11428,
+      "webSearchRequests": 0,
+      "costUSD": 0.1468234,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 435,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 11428,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 5,
+  "missed": [
+    "HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once"
+  ],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1468234,
+  "turns": 4,
+  "api_seconds": 25.071,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 29.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

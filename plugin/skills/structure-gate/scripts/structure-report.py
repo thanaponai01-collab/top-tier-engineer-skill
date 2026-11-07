@@ -124,7 +124,7 @@ SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "venv", "dist",
              ".next", "coverage", "site-packages",
              # other skills' state: .debug/before is a copy of the code, not more code
              ".structure", ".debug", ".wire", ".latent", ".features", ".verify-state-cache", ".threat", ".evolve", ".perf",
-             ".release", ".blast", ".mistakes", ".formal"}
+             ".release", ".blast", ".mistakes", ".formal", ".checkup"}
 
 # AST node types that add a branch (cyclomatic) — kept explicit for transparency.
 BRANCH_NODES = (ast.If, ast.For, ast.AsyncFor, ast.While, ast.ExceptHandler,
@@ -136,16 +136,43 @@ BRANCH_NODES = (ast.If, ast.For, ast.AsyncFor, ast.While, ast.ExceptHandler,
 Finding = namedtuple("Finding", "kind path line detail symbol value")
 
 
+def git_ignored(root):
+    """Paths git ignores under root (dirs end with '/'), relative to root; empty if not a repo.
+    A copy in .claude/worktrees or a build folder is not the codebase."""
+    import subprocess
+    try:
+        p = subprocess.run(["git", "-C", root, "ls-files", "--others", "--ignored",
+                            "--exclude-standard", "--directory", "-z"],
+                           capture_output=True, text=True, timeout=120)
+    except (OSError, subprocess.SubprocessError):
+        return set()
+    if p.returncode != 0:
+        return set()
+    return {x for x in p.stdout.split("\0") if x}
+
+
+def is_ignored(relpath, ignored):
+    """relpath uses '/'; a directory entry in ignored ends with '/'."""
+    if relpath in ignored:
+        return True
+    parts = relpath.split("/")
+    return any("/".join(parts[:i]) + "/" in ignored for i in range(1, len(parts) + 1))
+
+
 def iter_files(paths, exts):
     for p in paths:
         if os.path.isfile(p):
             if os.path.splitext(p)[1] in exts:
                 yield p
             continue
+        ignored = git_ignored(p)
         for root, dirs, files in os.walk(p):
-            dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+            here = os.path.relpath(root, p).replace(os.sep, "/")
+            here = "" if here == "." else here + "/"
+            dirs[:] = [d for d in dirs if d not in SKIP_DIRS
+                       and not is_ignored(here + d + "/", ignored)]
             for f in files:
-                if os.path.splitext(f)[1] in exts:
+                if os.path.splitext(f)[1] in exts and not is_ignored(here + f, ignored):
                     yield os.path.join(root, f)
 
 

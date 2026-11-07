@@ -31,6 +31,7 @@ SCRIPTS = {
     "formal.py": os.path.join(ROOT, "plugin", "skills", "formal-check", "scripts"),
     "untangle.py": os.path.join(ROOT, "plugin", "skills", "untangle", "scripts"),
     "cleanup.py": os.path.join(ROOT, "plugin", "skills", "cleanup", "scripts"),
+    "checkup.py": os.path.join(ROOT, "plugin", "skills", "checkup", "scripts"),
 }
 
 

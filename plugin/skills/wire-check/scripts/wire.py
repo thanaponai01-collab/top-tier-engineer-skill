@@ -32,7 +32,7 @@ BEFORE = f"{STATE}/before.json"
 TARGETS = f"{STATE}/targets.json"
 VERDICTS = f"{STATE}/verdicts.md"
 SKIP_DIRS = {".git", "__pycache__", "node_modules", ".venv", "venv", "env", "build", "dist",
-             STATE, ".features", ".verify-state", ".pytest_cache", ".mypy_cache", ".blast", ".mistakes", ".formal"}
+             STATE, ".features", ".verify-state", ".pytest_cache", ".mypy_cache", ".blast", ".mistakes", ".formal", ".checkup"}
 COPY_IGNORE = shutil.ignore_patterns(".git", "__pycache__", "node_modules", ".venv", "venv", "*.pyc", STATE)
 BASH = shutil.which("bash")
 CLASSES = ("served", "not-registered", "not-routed", "never-invoked", "effect-lost", "unknown")
@@ -94,13 +94,40 @@ def check_files(repo):
     return {p.replace("\\", "/").lstrip("./") for ln in lines for p in re.findall(r"[\w./\\-]+\.py", ln)}
 
 
+def git_ignored(root):
+    """Paths git ignores under root (dirs end with '/'), relative to root; empty if not a repo.
+    A copy in .claude/worktrees or a build folder is not the codebase."""
+    try:
+        p = subprocess.run(["git", "-C", root, "ls-files", "--others", "--ignored",
+                            "--exclude-standard", "--directory", "-z"],
+                           capture_output=True, text=True, timeout=120)
+    except (OSError, subprocess.SubprocessError):
+        return set()
+    if p.returncode != 0:
+        return set()
+    return {x for x in p.stdout.split("\0") if x}
+
+
+def is_ignored(relpath, ignored):
+    """relpath uses '/'; a directory entry in ignored ends with '/'."""
+    if relpath in ignored:
+        return True
+    parts = relpath.split("/")
+    return any("/".join(parts[:i]) + "/" in ignored for i in range(1, len(parts) + 1))
+
+
 def py_files(repo):
-    out, checks = [], check_files(repo)
+    out, checks, ignored = [], check_files(repo), git_ignored(repo)
     for d, subdirs, names in os.walk(repo):
-        subdirs[:] = sorted(s for s in subdirs if s not in SKIP_DIRS and not s.startswith(".verify"))
+        here = rel(d, repo)
+        here = "" if here == "." else here + "/"
+        subdirs[:] = sorted(s for s in subdirs if s not in SKIP_DIRS and not s.startswith(".verify")
+                            and not is_ignored(here + s + "/", ignored))
         for n in sorted(names):
             if n.endswith(".py"):
                 r = rel(os.path.join(d, n), repo)
+                if is_ignored(r, ignored):
+                    continue
                 if not is_test(r) and r != "setup.py" and r not in checks:
                     out.append(r)
     return out

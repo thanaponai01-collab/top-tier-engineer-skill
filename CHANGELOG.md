@@ -14,6 +14,52 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.43.0 - 2026-11-07 - checkup: one structure report, ranked by where changes land
+
+- New manual-only skill `checkup`. The user wanted one thing to run on any codebase that says how
+  well it is structured and what to fix first, instead of knowing which of five skills to run.
+  Brief: `work/briefs/checkup.md`.
+- `scripts/checkup.py` runs the sibling helpers that are installed (structure-report.py,
+  graph-audit.py, dep-map.py, features.py) over the git-tracked files and prints eight sections:
+  easy to find things, one change in one place, dependencies one way, deep modules, one way per
+  job, logic apart from I/O, dead code, tests that can fail. A section nothing measured says
+  `not checked: <why>`; tests that can fail is always that, and names verify-loop.
+- Every finding is weighted by the history: commits plus twice the fix commits of its files in the
+  last 300, and for a pair only the commits that touched both. A finding no commit in the last 100
+  touched is `idle`. Pairs come from checkup's own read of the history, since change-map.py only
+  reports pairs in different folders; a pair with a test file in it is left out.
+- "One way per job" is new: dep-map's I/O imports grouped by job (http, database, mail), so
+  urllib in one module and http.client in another is one finding.
+- `--gate`: (1) the report is current with the tracked files; (2) going down by weight until three
+  are not `none:`, each finding has `cost:` citing a commit that touched its files (an idle one may
+  say `cost: next: <the coming change>`) or `none: <why>`; (3) a verdict per section the measurement
+  allows (`good` not with a costed finding, `poor` only with one, `not checked` only where nothing
+  measured) and the three fixes are the costed findings, highest weight first.
+- graph-audit.py, wire.py and structure-report.py now skip git-ignored paths and `.checkup/`. On
+  this repo graph-audit read 1,696 modules (80s) and wire.py 1,438 files, most of them agent
+  worktree copies under `.claude/worktrees/`; now 1,092 modules (12s) and 974 files.
+- `tests/test_checkup.py`; `tests/test_graph_audit.py` and `tests/test_wire.py` each gain an
+  ignored-folder case. New eval case `checkup-ugly-but-idle`.
+- Eval (`evals/results/2026-11-07-checkup/REPORT.md`, 3 tries per arm, Opus): with checkup 3/3,
+  plain 0/3, at $0.25 vs $0.15 a try. But plain Opus also kept the idle tax table off the top in
+  3/3; the gap is the two-HTTP-libraries finding. And the skill arm missed two real bugs every plain
+  run found (the receipt leaves out tax that checkout charges; payment retries with no idempotency
+  key), because it stayed inside its eight sections.
+- Fix for that narrowing, as a gate: a new stage 3, Read (Answer is now 4). The report lists the
+  eight non-test code files changes land in most; each needs `- <path>: risk: <name>(): <what can
+  go wrong>` or `nothing: <name>(): <what it does>`, where `<name>` must appear in that file. Every
+  `risk:` is printed in the answer before the fixes. The two bugs are now must-find items in
+  `checkup-ugly-but-idle`, so that case now grades both what structure measures and what a reader of
+  the code finds.
+- A filled line now beats a drafted slot with the same key. In an eval run the agent's own lines
+  came before the gate's slots, the gate read the empty slots, stayed open, and the agent went
+  reading checkup.py to find out why.
+- Second eval (`evals/results/2026-11-07-checkup-read-fix/REPORT.md`, Opus, 3 tries): checkup with
+  Read 3/3, plain 1/3, checkup without Read 0/3 on the updated case; both bugs found in 6/6 runs
+  with Read vs 0/3 before; $0.30 vs $0.15 a try. The discount item was reworded to "first
+  structural fix" mid-round, since checkup now lists a real bug before the structure fixes; under
+  the old wording it was 2/3 vs 0/3.
+
 ## 1.42.0 - 2026-11-07 - cleanup: clear what agents leave behind, without explaining it each time
 
 - New manual-only skill `cleanup`. The user wanted one word to get a cleanup, not a better cleanup

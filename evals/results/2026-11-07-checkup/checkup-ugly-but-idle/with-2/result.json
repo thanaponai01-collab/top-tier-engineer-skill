@@ -1,0 +1,81 @@
+{
+  "case": "checkup-ugly-but-idle",
+  "skill": "checkup",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  3/3 found\n  found   rule-in-two-places-first \u2014 \"**The discount rules are written out twice, in `shop/cart.py` and `shop/receipt.py`.**\"\n  found   two-http-clients \u2014 \"**HTTP calls are made two different ways, each with its own retry loop.**\"\n  found   ugly-but-idle-ranked-low \u2014 \"I recorded it as not worth fixing now.\"\n  held    ugly-first",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": true,
+  "skills_loaded": [
+    "checkup"
+  ],
+  "skill_calls": [],
+  "skill_reads": [
+    {
+      "skill": "checkup",
+      "path": "<tmp>\\tte-plugin-2fvjggma\\verify-loop\\skills\\checkup\\SKILL.md",
+      "sub": false
+    }
+  ],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-2fvjggma\\verify-loop\\skills\\checkup\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 4044,
+      "cacheReadInputTokens": 227799,
+      "cacheCreationInputTokens": 15841,
+      "webSearchRequests": 0,
+      "costUSD": 0.2532398,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 786,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 15841,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 3,
+  "total": 3,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.2532398,
+  "turns": 9,
+  "api_seconds": 49.376,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 57.0,
+  "timed_out": false,
+  "staged_plugin": "<tmp>\\tte-plugin-2fvjggma\\verify-loop",
+  "stderr_tail": "",
+  "end_output": null
+}

@@ -1,0 +1,73 @@
+{
+  "case": "checkup-ugly-but-idle",
+  "skill": "checkup",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  5/5 found\n  found   rule-in-two-places-first \u2014 \"**Put the discount rule in one place: `shop/cart.py` and `shop/receipt.py`.**\"\n  found   two-http-clients \u2014 \"`payments` uses `http.client` and `notify` uses `urllib.request`, and each has its own retry, timeout and backoff code.\"\n  found   ugly-but-idle-ranked-low \u2014 \"It hasn't changed since the first commit, so it costs nothing today.\"\n  found   receipt-leaves-out-tax \u2014 \"`checkout()` charges the cart total plus sales tax, but `render()` prints the total without tax.\"\n  found   payment-retry-double-charge \u2014 \"`shop/payments.py` `charge()` resends `POST /charge` after a 502/503 or a network error, including a timeout after the r\"\n  held    ugly-first",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [
+    "<tmp>\\tte-plugin-qd4x1vh8\\verify-loop\\skills\\checkup\\SKILL.md"
+  ],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 4689,
+      "cacheReadInputTokens": 205750,
+      "cacheCreationInputTokens": 17259,
+      "webSearchRequests": 0,
+      "costUSD": 0.273066,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1126,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 17259,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.273066,
+  "turns": 8,
+  "api_seconds": 57.769,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 66.3,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-qd4x1vh8\\verify-loop"
+}

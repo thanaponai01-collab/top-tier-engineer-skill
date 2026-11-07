@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "rule-in-two-places-first",
+      "what": "the first thing to fix is the member/bulk discount rule kept twice, in shop/cart.py and shop/receipt.py, with no import between them; the git history shows them changing together and fixes for the receipt drifting from the cart (for example 'fix: receipt total differs from cart for members', 'fix: receipt and cart round the discount differently'). It must be the first structural fix, above the tax tables; a real bug (such as the two below) may be listed before it",
+      "found": true,
+      "quote": "the checkup ranks it first among the structural findings.",
+      "quote_checked": true
+    },
+    {
+      "id": "two-http-clients",
+      "what": "HTTP is done two ways: shop/notify.py uses urllib.request and shop/payments.py uses http.client, each with its own retry and timeout loop, and each got its own fixes (email timeouts, webhook hammering, leaked connections); one shared client would take those fixes once",
+      "found": true,
+      "quote": "`payments.py` uses `http.client` and `notify.py` uses `urllib`.",
+      "quote_checked": true
+    },
+    {
+      "id": "ugly-but-idle-ranked-low",
+      "what": "legacy/tax_tables.py sales_tax is the most tangled function (deeply nested, about 25 branches), but nothing has changed it since the first commit, so it is ranked below the two above or said to be left alone for now, not named the first fix",
+      "found": true,
+      "quote": "I'd leave the tangled `legacy/tax_tables.py` for now.",
+      "quote_checked": true
+    },
+    {
+      "id": "receipt-leaves-out-tax",
+      "what": "shop/checkout.py charges cart total plus sales tax, but the receipt it returns (shop/receipt.py receipt_total) prints the discounted subtotal with no tax, so the customer's receipt shows a different amount from what they were charged",
+      "found": true,
+      "quote": "`checkout()` charges the cart total **plus sales tax**, but the receipt it returns leaves the tax out.",
+      "quote_checked": true
+    },
+    {
+      "id": "payment-retry-double-charge",
+      "what": "shop/payments.py charge retries POST /charge on timeouts and on 502/503 with no idempotency key, so a request the payment server did take can be sent again and one order charged more than once",
+      "found": true,
+      "quote": "It has no idempotency key, so the payment provider can't tell a retry from a new charge.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "ugly-first",
+      "what": "naming the tangled tax-table function as the first or most urgent thing to fix",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0305106,
+  "model": "claude-sonnet-5-5"
+}

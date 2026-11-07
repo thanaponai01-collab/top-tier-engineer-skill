@@ -1,0 +1,71 @@
+{
+  "case": "checkup-ugly-but-idle",
+  "skill": "checkup",
+  "arm": "without",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  5/5 found\n  found   rule-in-two-places-first \u2014 \"**1. The discount rules are written twice, and the copies keep drifting apart.**\"\n  found   two-http-clients \u2014 \"each with its own hand-written retry loop\"\n  found   ugly-but-idle-ranked-low \u2014 \"## Leave for later\"\n  found   receipt-leaves-out-tax \u2014 \"`checkout.py:9-11` charges the cart total plus sales tax, but `render()` prints the total before tax.\"\n  found   payment-retry-double-charge \u2014 \"If the payment provider processes the charge but the response takes longer than 15 seconds, the code sends the charge ag\"\n  held    ugly-first",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 2231,
+      "cacheReadInputTokens": 80405,
+      "cacheCreationInputTokens": 11679,
+      "webSearchRequests": 0,
+      "costUSD": 0.154165,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 519,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 11679,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 5,
+  "total": 5,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "left the code untouched (a report-only task)",
+      "ok": true,
+      "detail": "no code file changed"
+    }
+  ],
+  "changes": {
+    "changed": [],
+    "added": [],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.154165,
+  "turns": 4,
+  "api_seconds": 28.257,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 32.4,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": null
+}

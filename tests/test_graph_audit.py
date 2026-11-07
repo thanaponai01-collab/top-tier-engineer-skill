@@ -233,6 +233,29 @@ class FeatureMapRoots(unittest.TestCase):
             self.assertIn("BREAKS                        map: recorded runs", out)
 
 
+class IgnoredPaths(unittest.TestCase):
+    """A git-ignored folder (an agent worktree, a build copy) is not the codebase: a copy of a
+    module there is neither a module nor a dead one."""
+
+    def test_a_copy_in_an_ignored_folder_is_not_reported(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as tmp:
+            def w(rel, text):
+                p = os.path.join(tmp, rel)
+                os.makedirs(os.path.dirname(p), exist_ok=True)
+                open(p, "w", encoding="utf-8").write(text)
+            w("main.py", "import helper\nif __name__ == '__main__':\n    helper.go()\n")
+            w("helper.py", "def go():\n    return 1\n")
+            w(".gitignore", "worktrees/\n")
+            w("worktrees/copy/helper.py", "def go():\n    return 1\n")
+            w("worktrees/copy/orphan.py", "X = 1\n")
+            subprocess.run(["git", "init", "-q", tmp], check=True)
+            code, out, err = run("graph-audit.py", tmp, "--json")
+            r = json.loads(out)
+            self.assertNotIn("worktrees", json.dumps(r["dead_modules"]), out)
+            self.assertNotIn("orphan", out, out)
+
+
 if __name__ == "__main__":
     unittest.main()
 
