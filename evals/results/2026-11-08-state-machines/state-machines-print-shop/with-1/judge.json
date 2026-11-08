@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "found": 4,
+  "total": 4,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "canceled-typo",
+      "what": "orders.refund checks status == \"canceled\" but cancel() writes \"cancelled\", so no order can ever be refunded",
+      "found": true,
+      "quote": "`refund` checked for the status `\"canceled\"`, but `cancel` sets `\"cancelled\"`, so nothing ever matched.",
+      "quote_checked": true
+    },
+    {
+      "id": "pending-never-set",
+      "what": "jobs.expire_unpaid sweeps status == \"pending\", which nothing writes (checkout writes \"awaiting_payment\"), so unpaid orders never expire and keep their paper",
+      "found": true,
+      "quote": "`expire_unpaid` looked for status `\"pending\"`, which nothing ever sets.",
+      "quote_checked": true
+    },
+    {
+      "id": "jam-stuck-printing",
+      "what": "PrintJob.start returns on PrinterError without clearing printing, so after one jam every later start raises PrinterBusy",
+      "found": true,
+      "quote": "After a printer error the job stayed marked as printing, so every later print was refused as \"printer is busy\".",
+      "quote_checked": true
+    },
+    {
+      "id": "ship-unguarded",
+      "what": "orders.ship sets shipped from any status, so a cancelled or unpaid order can ship",
+      "found": true,
+      "quote": "`ship` had no check, so draft, unpaid, unprinted or even cancelled orders could be marked shipped.",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "notify-flags-called-a-bug",
+      "what": "notify_email and notify_sms are independent preferences; every combination is valid, so calling a combination impossible or merging them into one state is wrong",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "archive-called-unguarded",
+      "what": "archive() is guarded by @allowed_from(\"shipped\"); saying it can be archived from any state is wrong",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0377486,
+  "model": "claude-sonnet-5-5"
+}

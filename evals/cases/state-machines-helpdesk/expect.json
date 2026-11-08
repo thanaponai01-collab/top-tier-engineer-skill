@@ -1,0 +1,73 @@
+{
+  "case": "state-machines-helpdesk",
+  "skill": "state-machines",
+  "question": "a 20-module helpdesk whose ticket state, agent presence, CRM sync flags, article status, webhook status and roles are implicit state machines. Five bugs sit in five different files: auto-assign looks for presence \"available\", which nothing sets (agents are online/away/offline), so no ticket is ever auto-assigned; the SLA report counts state \"resolved\", which nothing sets (tickets are solved), so it always reports 0 solved; an email reply sets any ticket open, so closed tickets reopen though the README says closed is final; a CRM rate limit returns with syncing still true, so sync is busy forever; take() refuses escalated tickets, so escalated is a state nothing leaves. Three things look wrong but are not: fax is checked but only the partner API sets it, the two notification flags are independent, and reopen() is guarded by a decorator. Does the agent find all five, leave the three alone, and fix the five without breaking anything?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "presence-available-never-set",
+      "what": "routing/assign.py keeps agents whose presence == \"available\", a value nothing writes (presence is online, away or offline), so auto-assign never assigns anything",
+      "must_name": ["available"],
+      "must_say_any": ["online", "never set", "nothing sets", "never written", "no agent", "never assign", "nobody", "never eligible", "empty"]
+    },
+    {
+      "id": "report-resolved-never-set",
+      "what": "sla/report.py counts state == \"resolved\", which nothing writes (tickets become solved), so the report always says 0 solved",
+      "must_name": ["resolved"],
+      "must_say_any": ["solved", "never set", "nothing sets", "always 0", "always zero", "zero", "never counts", "never written"]
+    },
+    {
+      "id": "reply-reopens-closed",
+      "what": "inbound/email.handle_reply sets the ticket open whatever its state, so a reply reopens a closed ticket; the README says it must start a new ticket linked by parent_id",
+      "must_name": ["closed"],
+      "must_say_any": ["handle_reply", "email reply", "reply", "reopen"]
+    },
+    {
+      "id": "rate-limit-stuck-syncing",
+      "what": "crm/sync.CrmSync.run returns on RateLimited without clearing syncing, so every later run says busy and nothing syncs again",
+      "must_name": ["syncing"],
+      "must_say_any": ["ratelimited", "rate limit", "rate-limit", "busy", "forever", "stuck", "never reset", "never cleared", "stays true"]
+    },
+    {
+      "id": "escalated-dead-end",
+      "what": "take() accepts only new or open tickets, so an escalated ticket can never leave escalated; the README says a senior agent's take makes it open",
+      "must_name": ["escalated"],
+      "must_say_any": ["take", "dead end", "dead-end", "stuck", "nothing leaves", "no way out", "can't leave", "cannot leave", "never leave"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "fax-called-dead",
+      "what": "the report's channel != \"fax\" filter looks like a check for a value nothing sets, but the partner API sets channel from its payload and the README says fax tickets come that way; calling it dead or removing it is wrong",
+      "must_not_say_any": ["fax is never set", "fax check is dead", "removed the fax", "fax can never", "no ticket is ever fax", "fax never happens", "dead fax check"],
+      "must_say_any": ["partner", "payload", "fax gateway", "comes from", "set from"]
+    },
+    {
+      "id": "notify-flags-called-a-bug",
+      "what": "notify_desktop and notify_mobile are independent choices; every mix is valid",
+      "must_not_say_any": ["notify flags are a bug", "impossible combination", "notify_desktop and notify_mobile can both", "merged them", "merged notify_"],
+      "must_say_any": ["independent", "any mix", "every combination", "all four", "not a bug", "valid", "fine"]
+    },
+    {
+      "id": "reopen-called-unguarded",
+      "what": "reopen() is guarded by @from_states(\"solved\"); saying it reopens from any state is wrong",
+      "must_not_say_any": ["reopen is unguarded", "reopen has no guard", "reopen() has no check", "reopen from any", "reopen() is unguarded", "tickets reopen from any state"],
+      "must_say_any": ["from_states", "decorator", "guarded"]
+    }
+  ],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the five bugs are fixed and the desk's other behavior is unchanged (tests/test_hidden.py)",
+    "edits_allowed": ["desk/*", "tests/*", "*.md", ".states/*", "data/*", "tmp/*"],
+    "replays": [
+      {
+        "id": "fixed-and-unbroken",
+        "kind": "outcome",
+        "what": "online agents get new tickets, the report counts solved, a reply to a closed ticket starts a linked ticket, sync recovers after a rate limit, a senior takes an escalated ticket; reopen guard, fax filter, notification mixes, kb and webhooks unchanged",
+        "replace": {"tests/test_hidden.py": "reference/test_hidden.py"},
+        "command": ["python", "-m", "unittest", "tests.test_hidden"],
+        "expect": "pass",
+        "timeout": 120
+      }
+    ]
+  }
+}

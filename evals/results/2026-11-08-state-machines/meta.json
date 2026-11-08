@@ -1,0 +1,15 @@
+{
+  "started": "2026-11-08-0910",
+  "repeats": 3,
+  "arms": [
+    "with",
+    "without"
+  ],
+  "version": "1.46.0",
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "out_rel": "evals/results/2026-11-08-state-machines",
+  "user_memory_bytes": 0,
+  "claude_version": "2.1.319 (Claude Code)"
+}

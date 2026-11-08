@@ -14,6 +14,32 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.46.0 - 2026-11-08 - state-machines: the state machines nobody declared, each bug proven
+
+New manual-only skill, lean like cleanup: one word for "find all of the implicit state machines".
+
+- `scripts/states.py <repo>` writes `.states/candidates.md`: every field set to string literals in
+  two or more places (Python by AST, JS/TS by text), with every write and check by `file:line`;
+  values **checked but never set** (a typo, a renamed state, or data from outside); and flags of
+  one class written as booleans or None, with how many combinations they allow.
+- `--run CMD` records the tests and copies the tree as it was to `.states/before/`.
+- `--done` reads `.states/machines.json` and refuses while a candidate is neither mapped nor
+  dismissed with a reason, a write is in no transition (a constructor literal counts as the
+  starting value; other writes such as loading saved data go in `also` with a why), a written
+  value is not a state, a checked-never-set value or a state nothing leaves has no finding, a bug
+  has no test, its test passes on the tree as it was or fails there on an import error, a fixed
+  bug's test fails now or an open one's passes, or a test that passed fails or fewer run. Open
+  bugs' tests live in `.states/proofs/` so the suite stays green. One field name can belong to
+  several machines. It writes `.states/MACHINES.md`, a mermaid diagram per machine.
+- `tests/test_states.py`: 36 tests; 18 of the first 20 refusal rules were caught when disabled,
+  and the two that survived (a machine with no states, a transition with no `at`) now have tests.
+- Eval (Opus, 3 tries each), two new cases: `state-machines-print-shop` plain 3/3 $0.24, with the
+  skill 3/3 $0.34; `state-machines-helpdesk` (20 modules, five bugs in five files, three decoys)
+  plain 2/3 $0.28, with the skill 3/3 $0.66. The plain failure narrowed `take()` to escalated
+  tickets only, which nothing in the skill checks, so this is a tie: plain Opus already finds
+  these when asked in full. The skill gives the one-word request, the diagrams and a failing test
+  per bug.
+
 ## 1.45.0 - 2026-11-08 - dependency-health: what the dependencies owe, with a record
 
 New manual-only skill, lean like cleanup: the user wants one word to get a dependency check, not

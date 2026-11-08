@@ -1,0 +1,61 @@
+{
+  "case": "state-machines-print-shop",
+  "skill": "state-machines",
+  "question": "a print-shop app whose order status, print job flags and customer notify flags are three implicit state machines. Four bugs are planted: refund checks for \"canceled\" while cancel writes \"cancelled\", the nightly job expires orders that are \"pending\", a state nothing sets, a printer jam leaves the job flagged printing forever, and ship() moves any order to shipped. Two things look like bugs but are not: the notify flags are independent and every combination is valid, and archive() is guarded by a decorator. Does the agent find all four, leave the two alone, and fix the four without breaking anything?",
+  "pass_score": 1.0,
+  "planted": [
+    {
+      "id": "canceled-typo",
+      "what": "orders.refund checks status == \"canceled\" but cancel() writes \"cancelled\", so no order can ever be refunded",
+      "must_name": ["refund"],
+      "must_say_any": ["canceled", "spelling", "spelled", "typo", "never be refunded", "never refund", "can't be refunded", "cannot be refunded", "can never"]
+    },
+    {
+      "id": "pending-never-set",
+      "what": "jobs.expire_unpaid sweeps status == \"pending\", which nothing writes (checkout writes \"awaiting_payment\"), so unpaid orders never expire and keep their paper",
+      "must_name": ["pending"],
+      "must_say_any": ["awaiting_payment", "never set", "nothing sets", "never written", "nothing writes", "never expire", "never matches", "doesn't exist", "does not exist"]
+    },
+    {
+      "id": "jam-stuck-printing",
+      "what": "PrintJob.start returns on PrinterError without clearing printing, so after one jam every later start raises PrinterBusy",
+      "must_name": ["printing"],
+      "must_say_any": ["jam", "printererror", "printer error", "busy", "stuck", "forever", "never reset", "never cleared", "stays true", "left true"]
+    },
+    {
+      "id": "ship-unguarded",
+      "what": "orders.ship sets shipped from any status, so a cancelled or unpaid order can ship",
+      "must_name": ["ship"],
+      "must_say_any": ["any status", "any state", "no check", "no guard", "unguarded", "not checked", "cancelled order", "unpaid", "without check"]
+    }
+  ],
+  "traps": [
+    {
+      "id": "notify-flags-called-a-bug",
+      "what": "notify_email and notify_sms are independent preferences; every combination is valid, so calling a combination impossible or merging them into one state is wrong",
+      "must_not_say_any": ["notify flags are a bug", "impossible combination of notify", "notify_email and notify_sms can both", "notify flags should be one", "merged notify_email"],
+      "must_say_any": ["independent", "every combination", "all four", "not a bug", "fine", "valid", "not a state machine", "left alone"]
+    },
+    {
+      "id": "archive-called-unguarded",
+      "what": "archive() is guarded by @allowed_from(\"shipped\"); saying it can be archived from any state is wrong",
+      "must_not_say_any": ["archive is unguarded", "archive has no guard", "archive() has no check", "archive from any", "archive() is unguarded", "archived from any state"],
+      "must_say_any": ["allowed_from", "decorator", "guarded"]
+    }
+  ],
+  "workdir": {
+    "what": "outcome, judged the same for both arms: the four bugs are fixed and the shop's other behavior is unchanged (tests/test_hidden.py)",
+    "edits_allowed": ["printshop/*", "tests/*", "*.md", ".states/*", "data/*", "tmp/*"],
+    "replays": [
+      {
+        "id": "fixed-and-unbroken",
+        "kind": "outcome",
+        "what": "refund after cancel works, unpaid orders expire, the printer recovers from a jam, ship refuses cancelled and unpaid orders; happy path, archive guard, refund-once and notify combinations unchanged",
+        "replace": {"tests/test_hidden.py": "reference/test_hidden.py"},
+        "command": ["python", "-m", "unittest", "tests.test_hidden"],
+        "expect": "pass",
+        "timeout": 120
+      }
+    ]
+  }
+}

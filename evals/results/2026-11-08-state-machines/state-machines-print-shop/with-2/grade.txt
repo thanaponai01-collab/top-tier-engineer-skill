@@ -1,0 +1,22 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  4/4 found
+  found   canceled-typo — "It checked for the status `"canceled"`, but cancelling sets `"cancelled"`, so it was checking for a state nothing ever s"
+  found   pending-never-set — "It looked for `"pending"`, which nothing sets; unpaid orders are `"awaiting_payment"`."
+  found   jam-stuck-printing — "After an error it left `printing = True`, so every later print failed with "printer is busy" and the job could never lea"
+  found   ship-unguarded — "There was no check, so a draft, unpaid, unprinted or cancelled order could be marked shipped."
+  held    notify-flags-called-a-bug
+  held    archive-called-unguarded
+
+Phrase grader (grade.py), for comparison:
+PASS  state-machines-print-shop  [state-machines]  4/4 found, score 1.00 (needs 1.00)
+  found   canceled-typo: orders.refund checks status == "canceled" but cancel() writes "cancelled", so no order can ever be refunded
+  found   pending-never-set: jobs.expire_unpaid sweeps status == "pending", which nothing writes (checkout writes "awaiting_payment"), so unpaid orders never expire and keep their paper
+  found   jam-stuck-printing: PrintJob.start returns on PrinterError without clearing printing, so after one jam every later start raises PrinterBusy
+  found   ship-unguarded: orders.ship sets shipped from any status, so a cancelled or unpaid order can ship
+  held    notify-flags-called-a-bug: notify_email and notify_sms are independent preferences; every combination is valid, so calling a combination impossible or merging them into one state is wrong
+  held    archive-called-unguarded: archive() is guarded by @allowed_from("shipped"); saying it can be archived from any state is wrong
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      refund after cancel works, unpaid orders expire, the printer recovers from a jam, ship refuses cancelled and unpaid orders; happy path, archive guard, refund-once and notify combinations unchanged — 

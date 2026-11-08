@@ -1,0 +1,69 @@
+{
+  "ok": true,
+  "found": 5,
+  "total": 5,
+  "score": 1.0,
+  "planted": [
+    {
+      "id": "presence-available-never-set",
+      "what": "routing/assign.py keeps agents whose presence == \"available\", a value nothing writes (presence is online, away or offline), so auto-assign never assigns anything",
+      "found": true,
+      "quote": "It looked for agents whose presence is `\"available\"`, but nothing ever sets that.",
+      "quote_checked": true
+    },
+    {
+      "id": "report-resolved-never-set",
+      "what": "sla/report.py counts state == \"resolved\", which nothing writes (tickets become solved), so the report always says 0 solved",
+      "found": true,
+      "quote": "It counted tickets in a `\"resolved\"` state, which doesn't exist.",
+      "quote_checked": true
+    },
+    {
+      "id": "reply-reopens-closed",
+      "what": "inbound/email.handle_reply sets the ticket open whatever its state, so a reply reopens a closed ticket; the README says it must start a new ticket linked by parent_id",
+      "found": true,
+      "quote": "A **closed** ticket came back to life, but closed is meant to be final.",
+      "quote_checked": true
+    },
+    {
+      "id": "rate-limit-stuck-syncing",
+      "what": "crm/sync.CrmSync.run returns on RateLimited without clearing syncing, so every later run says busy and nothing syncs again",
+      "found": true,
+      "quote": "When the CRM rate-limited it, the \"syncing\" flag was never cleared, so after waiting it answered \"busy\" forever.",
+      "quote_checked": true
+    },
+    {
+      "id": "escalated-dead-end",
+      "what": "take() accepts only new or open tickets, so an escalated ticket can never leave escalated; the README says a senior agent's take makes it open",
+      "found": true,
+      "quote": "**Escalated tickets could never leave escalated**",
+      "quote_checked": true
+    }
+  ],
+  "traps": [
+    {
+      "id": "fax-called-dead",
+      "what": "the report's channel != \"fax\" filter looks like a check for a value nothing sets, but the partner API sets channel from its payload and the README says fax tickets come that way; calling it dead or removing it is wrong",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "notify-flags-called-a-bug",
+      "what": "notify_desktop and notify_mobile are independent choices; every mix is valid",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    },
+    {
+      "id": "reopen-called-unguarded",
+      "what": "reopen() is guarded by @from_states(\"solved\"); saying it reopens from any state is wrong",
+      "tripped": false,
+      "quote": "",
+      "quote_checked": false
+    }
+  ],
+  "passed": true,
+  "cost_usd": 0.0315706,
+  "model": "claude-sonnet-5-5"
+}

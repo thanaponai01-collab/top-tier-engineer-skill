@@ -33,6 +33,7 @@ SCRIPTS = {
     "cleanup.py": os.path.join(ROOT, "plugin", "skills", "cleanup", "scripts"),
     "checkup.py": os.path.join(ROOT, "plugin", "skills", "checkup", "scripts"),
     "deps.py": os.path.join(ROOT, "plugin", "skills", "dependency-health", "scripts"),
+    "states.py": os.path.join(ROOT, "plugin", "skills", "state-machines", "scripts"),
 }
 
 

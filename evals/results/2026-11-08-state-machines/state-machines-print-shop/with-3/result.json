@@ -1,0 +1,102 @@
+{
+  "case": "state-machines-print-shop",
+  "skill": "state-machines",
+  "arm": "with",
+  "passed": true,
+  "report_passed": true,
+  "graded_by": "meaning",
+  "phrase_passed": true,
+  "judge_text": "judge: PASS  4/4 found\n  found   canceled-typo \u2014 \"`refund()` checked for `\"canceled\"` but `cancel()` writes `\"cancelled\"`, so every refund was refused.\"\n  found   pending-never-set \u2014 \"It looked for `\"pending\"`, a state nothing sets, so unpaid orders kept their paper forever.\"\n  found   jam-stuck-printing \u2014 \"After an error, `printing` stayed true, so every later print was refused with \"printer is busy\".\"\n  found   ship-unguarded \u2014 \"A draft, unpaid, cancelled, or paid-but-unprinted order could be marked shipped.\"\n  held    notify-flags-called-a-bug\n  held    archive-called-unguarded",
+  "actions_passed": true,
+  "followed_skill": null,
+  "leaked": false,
+  "errored": false,
+  "used_skill": false,
+  "skills_loaded": [],
+  "skill_calls": [],
+  "skill_reads": [],
+  "skill_read_candidates": [],
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 7747,
+      "cacheReadInputTokens": 253660,
+      "cacheCreationInputTokens": 21383,
+      "webSearchRequests": 0,
+      "costUSD": 0.37680800000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1504,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 21383,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "dispatch_count": 0,
+  "found": 4,
+  "total": 4,
+  "missed": [],
+  "tripped": [],
+  "action_checks": [
+    {
+      "check": "changed nothing outside the allowed files",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    },
+    {
+      "check": "refund after cancel works, unpaid orders expire, the printer recovers from a jam, ship refuses cancelled and unpaid orders; happy path, archive guard, refund-once and notify combinations unchanged",
+      "ok": true,
+      "detail": "",
+      "workdir": true
+    }
+  ],
+  "changes": {
+    "changed": [
+      "fixture/printshop/jobs.py",
+      "fixture/printshop/orders.py",
+      "fixture/printshop/printer.py"
+    ],
+    "added": [
+      "fixture/.states/MACHINES.md",
+      "fixture/.states/before/README.md",
+      "fixture/.states/before/printshop/__init__.py",
+      "fixture/.states/before/printshop/__main__.py",
+      "fixture/.states/before/printshop/guards.py",
+      "fixture/.states/before/printshop/jobs.py",
+      "fixture/.states/before/printshop/models.py",
+      "fixture/.states/before/printshop/notify.py",
+      "fixture/.states/before/printshop/orders.py",
+      "fixture/.states/before/printshop/printer.py",
+      "fixture/.states/before/printshop/stock.py",
+      "fixture/.states/before/printshop/store.py",
+      "fixture/.states/before/tests/__init__.py",
+      "fixture/.states/before/tests/test_orders.py",
+      "fixture/.states/candidates.md",
+      "fixture/.states/machines.json",
+      "fixture/.states/proofs/test_expiry_clock.py",
+      "fixture/.states/record.json",
+      "fixture/tests/test_states.py"
+    ],
+    "deleted": []
+  },
+  "model": "claude-opus-5-5",
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "cost_usd": 0.37680800000000003,
+  "turns": 10,
+  "api_seconds": 74.533,
+  "helper_calls": [],
+  "helper_subcommands": [],
+  "helper_source_reads": [],
+  "helper_used": false,
+  "mcp_servers": [],
+  "seconds": 97.1,
+  "timed_out": false,
+  "stderr_tail": "",
+  "end_output": null,
+  "staged_plugin": "<tmp>\\tte-plugin-hwwvyp68\\verify-loop"
+}

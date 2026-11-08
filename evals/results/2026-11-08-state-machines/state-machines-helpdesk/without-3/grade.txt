@@ -1,0 +1,29 @@
+Graded on meaning (judge.py) — this is the verdict that counts:
+judge: PASS  5/5 found
+  found   presence-available-never-set — "It looked for agents marked "available", but presence is only ever set to online, away or offline."
+  found   report-resolved-never-set — "It counted tickets in a "resolved" state, which nothing ever sets."
+  found   reply-reopens-closed — "A closed ticket came back to life, though closed is meant to be final."
+  found   rate-limit-stuck-syncing — "On a rate limit it set its wait time but stayed marked as busy, so every later run returned "busy"."
+  found   escalated-dead-end — "`take` now accepts escalated tickets (`desk/tickets/actions.py`)."
+  held    fax-called-dead
+  held    notify-flags-called-a-bug
+  held    reopen-called-unguarded
+
+Phrase grader (grade.py), for comparison:
+FAIL  state-machines-helpdesk  [state-machines]  5/5 found, score 1.00 (needs 1.00)
+  found   presence-available-never-set: routing/assign.py keeps agents whose presence == "available", a value nothing writes (presence is online, away or offline), so auto-assign never assigns anything
+  found   report-resolved-never-set: sla/report.py counts state == "resolved", which nothing writes (tickets become solved), so the report always says 0 solved
+  found   reply-reopens-closed: inbound/email.handle_reply sets the ticket open whatever its state, so a reply reopens a closed ticket; the README says it must start a new ticket linked by parent_id
+  found   rate-limit-stuck-syncing: crm/sync.CrmSync.run returns on RateLimited without clearing syncing, so every later run says busy and nothing syncs again
+  found   escalated-dead-end: take() accepts only new or open tickets, so an escalated ticket can never leave escalated; the README says a senior agent's take makes it open
+  held    fax-called-dead: the report's channel != "fax" filter looks like a check for a value nothing sets, but the partner API sets channel from its payload and the README says fax tickets come that way; calling it dead or removing it is wrong
+  TRIPPED notify-flags-called-a-bug: notify_desktop and notify_mobile are independent choices; every mix is valid
+            never marked it uncertain either
+  TRIPPED reopen-called-unguarded: reopen() is guarded by @from_states("solved"); saying it reopens from any state is wrong
+            never marked it uncertain either
+  a tripped trap fails the case at any score: it is a confident wrong answer
+  NOT CHECKED  the working copy: this case grades actions too, pass --workdir
+  held    no-helper-source-read: never read or grepped scripts/ inside the skill
+
+  ok      changed nothing outside the allowed files — 
+  ok      online agents get new tickets, the report counts solved, a reply to a closed ticket starts a linked ticket, sync recovers after a rate limit, a senior takes an escalated ticket; reopen guard, fax filter, notification mixes, kb and webhooks unchanged — 
