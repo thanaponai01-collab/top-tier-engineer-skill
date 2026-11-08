@@ -1,7 +1,7 @@
 ---
 name: evolve-maintain
 description: >-
-  Change a running system without breaking it: upgrades, deprecations, removing an old API, large refactors. Use for "upgrade X", "refactor this module".
+  Change a running system without breaking it: upgrades, deprecations, removing an old API, large refactors. Every command and job that reads what changed does what it did before, unless asked otherwise. Use for "upgrade X", "refactor this module", "remove the old endpoint".
 disable-model-invocation: true
 metadata:
   stage: build
@@ -10,25 +10,40 @@ metadata:
 
 # Maintenance & Evolution
 
-**Goal:** make the change asked for, and leave every feature that reads what changed doing what it
-did before, unless the user asked for that feature to change too. The break to look for is far from
-the edit: a command, job or config line that reads the changed name and that no test runs. How you
-find the readers and make the change is yours: read it all if it fits, grep, run things. What counts
-as done is checked by the helper. `E` is `python <this skill's base directory>/scripts/evolve.py <repo>`.
+Make the change asked for, and leave every feature that reads what changed doing what it did
+before, unless the user asked for that feature to change too. The break to look for is far from the
+edit: a command, scheduled job or config line that reads the changed name, and that no test runs.
+How you find the readers and make the change is up to you: read it all if it fits, search, run it.
 
-Run `E` before your first edit: it keeps the tree as it is in `.evolve/before/`. Run `E --gate`
-whenever you like; it says which stage is open and what fixes it, and prints the answer once all
-three hold (`EVOLVE-GATE: done`).
+**What done looks like**
 
-## The stages
+- Before the first edit, the commands users and jobs really run were run on the code as it was,
+  and what each printed and every file it wrote were kept somewhere the edit cannot touch.
+- Every reader of a name the change touched (a function, a script, a config or job line, a route
+  string) was exercised by one of those commands, or the answer says why the change cannot reach
+  what it does. "A test covers it" is not a reason unless that test runs the real way in.
+- After the change, the same commands were rerun. Each prints and writes what it did before; a
+  difference the user asked for is named as asked for, and any other difference is a break, fixed
+  before the answer. Reverting is a fix.
+- Nothing is deleted until it is shown that nothing loads it (`latent-audit` does this, when it is
+  installed). When a break's cause is unclear, prove it before fixing it (`debug-protocol`, when
+  installed).
 
-| Stage | Holds when |
-|---|---|
-| **1. Before** | The tree as it was is kept, and the commands users and jobs run are recorded on it: `E --run "<command>"` runs it in a throwaway copy of the kept tree under a call tracer and records what it prints and every file it writes. It always runs on the tree as it was, so a run added after the edit still records the old behavior. A run that prints something different the second time is refused |
-| **2. Reach** | Every function, script or config line that reads a name the change touched (on the tree as it was) was entered by a recorded run, or has `- READER: out: <why the change cannot reach what it does>` in `.evolve/notes.md` (the gate appends the slots). An `out:` that says a run or test covers it is refused: the tracer would have seen that run |
-| **3. Hold** | Every recorded command, rerun on the changed tree, prints and writes what it did before. A difference the user asked for gets `- run N: intended: <why>`; any other is a break to fix |
+**Avoid**
 
-When the cause of a bug is unknown, prove it first (`debug-protocol` does this, if it is
-installed). Before deleting anything, show that nothing loads it: `latent-audit` does this if it's
-installed. Reverting is a fix. Report the drafted answer with its `[[fill: ...]]` slots filled.
-Delete `.evolve/` afterwards.
+- Trusting a code search for callers. Config files, job definitions, names built at runtime and
+  other repos call code no import shows.
+- Comparing only stdout. A cached value can leak into a file the command writes, a backup or an
+  export, while what it prints looks the same.
+- Calling the change safe because the suite is green. The suite shows only what it runs.
+- Throwing the "before" runs away with a scratch copy, so there is nothing left to compare against.
+
+**The answer**
+
+```
+Changed: <what was changed, in one line>
+Before: `<command>` (one per command users or jobs run; what it printed and wrote is kept at <where>)
+Readers: <file:line or job>: exercised by `<command>`   (or: out: <why the change cannot reach it>)
+After: `<command>`: same output and files | intended: <what differs and why> | broke: <what>, fixed by <how>
+Not checked: <readers, commands or environments no run here covered>
+```

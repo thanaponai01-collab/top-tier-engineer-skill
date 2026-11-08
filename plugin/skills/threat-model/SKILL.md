@@ -1,7 +1,7 @@
 ---
 name: threat-model
 description: >-
-  Find what an attacker can make a system do, and turn each abuse into a test. Use for auth, secrets, untrusted input, "is this secure?", "can this be abused?"
+  Find what an attacker can make a system do, prove each abuse by running it, and keep each one as a test. Use for auth, secrets, untrusted input, "is this secure?", "can this be abused?"
 disable-model-invocation: true
 metadata:
   stage: design
@@ -10,25 +10,41 @@ metadata:
 
 # Threat Model
 
-**Goal:** say what an attacker (a signed-up account, or anyone) can make the system do today,
-worst first. Every way in is either attacked or shown to have nothing behind it, and every attack is
-left behind as a test the project's suite runs, so a later change that reopens a door turns the suite
-red. Never claim it is secure: claim which attacks were run and how each came out. How you find the
-abuses is yours: read it all if it fits, probe it, think like the attacker. What counts as done is
-checked by the helper. `T` is `python <this skill's base directory>/scripts/threat.py <repo>`.
+Say what an attacker can make the system do today, worst first: someone with a signed-up account,
+or anyone at all. Every claim comes from an attack that was run, not from reading the code. Never
+call the system secure; say which attacks were run and how each came out. How you find the abuses
+is up to you: read it all if it fits, probe it, think like the attacker.
 
-`T` lists the doors it found. Run `T --gate` whenever you like; it says which stage is open and what
-fixes it, and prints the answer once all three hold (`THREAT-GATE: done`).
+**What done looks like**
 
-## The stages
+- Every way in is on the list: routes, handlers, registered plugins, scripts, jobs, a second door to
+  the same data. Each one is either attacked or given a reason an attacker gains nothing through it.
+- Each attack was run and came out open (the abuse works) or blocked. It is kept as a test in the
+  project's own suite that passes only when the abuse is refused, so a later change that reopens the
+  door turns the suite red. Open ones are marked so the suite's red is expected, not a surprise.
+- An attack really goes through the door it names: it reaches the handler the way an attacker
+  would, not a helper or a wrapped name the real route never calls.
+- Fix only when asked. Fix where the decision belongs, keep the owner's own path working, and show
+  each fixed attack passing now and failing again with the fix taken back out.
 
-| Stage | Holds when |
-|---|---|
-| **1. Doors** | The scan found the ways in: functions in a route table, behind a registering decorator, handler methods, `__main__` blocks. Code it cannot parse is listed too. A door it misses is named with `--door FILE::FUNC` |
-| **2. Attack** | Every door is entered by a recorded attack, or has `- DOOR: out: <why an attacker gains nothing>` in `.threat/doors.md` (the gate appends the slots). An attack is a test that passes only when the abuse is refused, in a `tests/test_*.py` file: `T --attack "<cmd naming that test>" --door FILE::FUNC --gets "<what the attacker gets>"`. It runs in a throwaway copy under a call tracer and is refused if it never enters the door, runs no tests, or crashes instead of failing an assertion. `out:` is refused when the reason leans on a defense: a defense you read about is what an attack has to prove |
-| **3. Hold** | Every attack reruns as recorded. After a fix, each attack passes now, and each one that was open fails again with the changed files put back |
+**Avoid**
 
-Fix only when asked. Fix where the decision really belongs, and keep the owner's own path working.
-A secret found in source is reported by location and kind, never pasted, with "rotate it" as the fix.
-Report the drafted answer with its `[[fill: ...]]` slots filled. Keep the attack tests; delete
-`.threat/` afterwards, or commit it with a fix.
+- Calling a door safe because of a guard you read about. A defense is what an attack has to prove:
+  a decorator, a check or a role filter that looks applied may never reach the route.
+- An attack that crashes, runs no test, or lives outside the repo and is deleted after. A probe
+  nobody keeps protects nothing.
+- Pasting a secret found in the source. Name its file:line and kind; the fix is to rotate it.
+- Ranking by how clever the attack is. Rank by what the attacker gets.
+
+**The answer**
+
+```
+Attacker: <who: anyone / signed-up account / staff / ...>
+1. <door: file::function> — <what the attacker gets>: open | blocked | fixed
+   Attack: `<test command>` (<file:line of the kept test>)
+   (one per attack, worst first)
+No attack: <door>: <why an attacker gains nothing through it>     (one per door)
+Secrets: <file:line, kind: rotate it>                             (or: none found)
+Fixed: <door>: <change>; the attack passes now and fails with the change taken out   (or: not asked)
+Not attacked: <doors, services or configs no run here reached>
+```

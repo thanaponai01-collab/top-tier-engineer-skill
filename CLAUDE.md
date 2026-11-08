@@ -11,8 +11,8 @@ manual-only `debug-protocol` skill at `plugin/skills/debug-protocol/SKILL.md` (m
 `plugin/skills/evolve-maintain/SKILL.md` (names debug-protocol and latent-audit when present), and the
 manual-only `perf-optimize` skill at `plugin/skills/perf-optimize/SKILL.md` (standalone), and the
 manual-only `safe-release` skill at `plugin/skills/safe-release/SKILL.md` (standalone), and the
-manual-only `arch-design` skill at `plugin/skills/arch-design/SKILL.md` (standalone; main's prose
-kept on purpose, the one exception to the rule below, see BUILD.md 1.37.0), and the manual-only
+manual-only `arch-design` skill at `plugin/skills/arch-design/SKILL.md` (standalone; main's prose,
+see BUILD.md 1.37.0), and the manual-only
 `blast-radius` skill at `plugin/skills/blast-radius/SKILL.md` (standalone), and the manual-only
 `mistake-proof` skill at `plugin/skills/mistake-proof/SKILL.md` (points at evolve-maintain when present),
 and the manual-only `formal-check` skill at `plugin/skills/formal-check/SKILL.md` (points at
@@ -26,7 +26,24 @@ for a large upgrade), and the manual-only `state-machines` skill at
 `plugin/skills/state-machines/SKILL.md` (standalone), and the manual-only `test-diet` skill at
 `plugin/skills/test-diet/SKILL.md` (standalone).
 
-- Mechanics, not advice: every rule is a script or test that can fail, never a tip for the agent.
+## How a skill is written
+
+A skill is a saved prompt: plain words the user would otherwise type again. It guides a capable
+model, today's or a better one later, and trusts it to use its own knowledge and judgment.
+
+- Say what is wanted, not how to do it: the goal, what done looks like, what to avoid, and the
+  shape of the output that comes back. That output shape is the one thing to pin down.
+- Leave the method free. No step-by-step procedures, no workarounds for a model's weak spots;
+  those age badly as models improve.
+- Keep it short and readable by a person: about one page of plain prose.
+- The test is "did it do what the user meant", tried on a real task. Beating a plain model is not
+  the goal.
+- Add a script only when it does something reading cannot (an exact count, a record kept across
+  sessions) and a test showed it mattered. Skills whose scripts already proved a win keep them
+  (verify-loop, structure-gate, debug-protocol, checkup, feature-map, dependency-health); the rest
+  move to prose when next touched.
+
+## Repo mechanics
 
 - Helper scripts live in each skill's `scripts/` and are stdlib-only Python.
 - Before committing: `python -m unittest discover tests`.
@@ -38,9 +55,8 @@ for a large upgrade), and the manual-only `state-machines` skill at
 
 - intent: BRIEF.md
 - work: BUILD.md
-- Before building something new, copy `work/SPEC_TEMPLATE.md` to BRIEF.md (a new skill: to
-  `work/briefs/<skill>.md`) and fill it: intent, context, guardrails, freedom, gates, output.
-  `python tools/spec_check.py <file>` and `tests/test_spec.py` refuse a gap; terms in `work/SPEC_TERMS.md`.
+- Before building a new skill, write a few lines in `work/briefs/<skill>.md`: why it exists and
+  what output it should return. `work/SPEC_TEMPLATE.md` and `tools/spec_check.py` are optional.
 - Read these for automatic progression work; its command contract is in
   `plugin/skills/verify-loop/references/helpers.md`.
 - Authorized updates refresh affected intent, evidence and Next; read-only reviews report gaps.

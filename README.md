@@ -9,9 +9,8 @@ linked to VERIFY.md sections. And `latent-audit` (manual-only, `/verify-loop:lat
 and layer breaches, where a file is deleted only after `graph-audit.py --try-delete` deletes it in a
 throwaway copy and the map's recorded runs, VERIFY.md's checks and the commands you name still pass.
 And `wire-check` (manual-only, `/verify-loop:wire-check`): is the code connected to the running
-system? `wire.py` runs every way in under a call tracer, has a verdict written for every function
-nothing entered, and holds a component you connect to a `FEATURES.md` trace and a VERIFY.md check
-seen red on the broken wiring.
+system? In plain words: every way in is run, each piece nothing reached gets a verdict naming its
+first broken link, and a component you connect keeps a check that fails when the wiring breaks.
 And `debug-protocol` (manual-only, `/verify-loop:debug-protocol`): the root cause, proven both ways.
 `debug.py` keeps the code as it was reproduced, reruns the trigger with only the suspected lines
 replaced, and accepts a fix only at the cause, held by a check that fails with the cause put back.
@@ -20,22 +19,21 @@ And `structure-gate` (manual-only, `/verify-loop:structure-gate`): is it spaghet
 every region no parser entered get a counted reading or UNKNOWN, and refuses a clean verdict over
 code no linter or test can reach.
 And `threat-model` (manual-only, `/verify-loop:threat-model`): what can an attacker make it do?
-`threat.py` counts every way in, makes each one attacked or shown to have nothing behind it, keeps
-each attack as a test the suite runs, and accepts a fix only when every open attack passes and fails
-again with the change put back.
+Every way in is attacked or shown to have nothing behind it, worst first, each attack run and
+kept as a test the suite runs, and a fix shown passing now and failing with the change taken out.
 And `evolve-maintain` (manual-only, `/verify-loop:evolve-maintain`): change a running system without
-breaking it. `evolve.py` keeps the tree as it was and records what each command prints and writes on
-it, makes every function or config line that reads what changed get entered by a recorded run (or a
-reason), and reruns every command on the changed tree: any difference is fixed or marked as asked for.
-And `perf-optimize` (manual-only, `/verify-loop:perf-optimize`): make it measurably faster. `perf.py`
-times and profiles the work on the code as it was at two sizes, keeps a change only when the output is
-the same bytes, it beats the noise and a profile pointed at what it changed, and accepts it only with
-a guard in the suite that fails when each changed file is put back.
+breaking it. A plain-prose skill: keep what each command users and jobs run prints and writes
+before the edit, exercise every reader of a changed name (or say why the change cannot reach it),
+and rerun every command after: any difference not asked for is a break, fixed before the answer.
+And `perf-optimize` (manual-only, `/verify-loop:perf-optimize`): make it measurably faster. A
+plain-prose skill: time the work on the code as it was at two sizes, find where the time goes from
+runs, keep a change only when the output is the same, it beats the noise and it aims at what the
+measurement showed, and leave a check in the suite that fails when the gain is taken out.
 And `safe-release` (manual-only, `/verify-loop:safe-release`): deploy, or change stored data, with
-a proven way back. `release.py` rehearses the change and its way back on copies of the live data,
-runs today's code on the migrated data (the deploy window, a code-only revert), compares the data
-after the way back row for row, and accepts a call only with every loss named and the live data
-untouched.
+a way back that was run, not guessed. A plain-prose skill: rehearse the change, a rerun of it and
+its way back on a copy of the live data, run today's code on the migrated copy (the deploy window, a
+code-only revert), compare the data after the way back row for row, name every loss with the step
+that causes it, and never write the live data.
 And `arch-design` (manual-only, `/verify-loop:arch-design`): could the architecture be better? It
 shows where the structure costs you, counted, as before/after pictures with the call chain behind
 each problem, writes the top move out with its steps, proof and door, names the store or seam it is
@@ -87,20 +85,15 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
 - `plugin/skills/verify-loop/scripts/` — stdlib-only Python helpers (`verify.py` is the entry point).
 - `plugin/skills/latent-audit/` — the latent-audit skill; `scripts/graph-audit.py` (import graph,
   `--layers`, `--try-delete ... --run CMD`).
-- `plugin/skills/wire-check/` — the wire-check skill; `scripts/wire.py` (`--snapshot --run CMD`,
-  `--gate`, `--target FILE::FUNC`).
+- `plugin/skills/wire-check/` — the wire-check skill (prose only, no scripts).
 - `plugin/skills/debug-protocol/` — the debug-protocol skill; `scripts/debug.py` (`--repro`,
   `--prove FILE:LINE --as`, `--gate --regress CMD`).
 - `plugin/skills/structure-gate/` — the structure-gate skill; `scripts/structure.py` (`--gate PATHS`,
   notes in `.structure/notes.md`) over `scripts/structure-report.py` (`--json`, `--baseline FILE`).
-- `plugin/skills/threat-model/` — the threat-model skill; `scripts/threat.py` (doors, `--attack CMD
-  --door FILE::FUNC --gets TEXT`, `--gate`; notes in `.threat/doors.md`).
-- `plugin/skills/evolve-maintain/` — the evolve-maintain skill; `scripts/evolve.py` (keeps the tree,
-  `--run CMD`, `--gate`; notes in `.evolve/notes.md`).
-- `plugin/skills/perf-optimize/` — the perf-optimize skill; `scripts/perf.py` (`--measure CMD --size N`,
-  `--gate --guard CMD`; notes in `.perf/notes.md`).
-- `plugin/skills/safe-release/` — the safe-release skill; `scripts/release.py` (`--rehearse --forward
-  CMD --back CMD --probe CMD`, `--gate`; plan in `.release/plan.md`).
+- `plugin/skills/threat-model/` — the threat-model skill (prose only, no scripts).
+- `plugin/skills/evolve-maintain/` — the evolve-maintain skill (prose only, no scripts).
+- `plugin/skills/perf-optimize/` — the perf-optimize skill (prose only, no scripts).
+- `plugin/skills/safe-release/` — the safe-release skill (prose only, no scripts).
 - `plugin/skills/arch-design/` — the arch-design skill; `scripts/dep-map.py` and `scripts/change-map.py`
   (import graph and change history for repos too big to read), `scripts/arch-design.py check` (the
   optional `docs/arch-design.md` handoff file).

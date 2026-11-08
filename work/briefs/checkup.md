@@ -109,8 +109,9 @@ a `cost:` note that names the coming change it will slow down.
 graph-audit.py, wire.py and structure-report.py, the eval case and its results under
 `evals/results/<date>-checkup/`, and the release bookkeeping.
 <!-- acceptance -->`tests/test_checkup.py` holds every rule above, and each rule, broken in the
-helper, turns at least one of its tests red. `tests/test_graph_audit.py` and `tests/test_wire.py`
-each gain a case where a git-ignored folder holds a copy of a module and is not reported. The eval
+helper, turns at least one of its tests red. `tests/test_graph_audit.py` (and wire.py's
+tests, removed with wire.py when wire-check went to prose) gain a case where a git-ignored folder
+holds a copy of a module and is not reported. The eval
 case has a fixture whose ugliest file is never changed, while the real cost is two files that
 change together with no import between them, and a second HTTP library. The skill arm puts the
 pair first in 3 of 3 runs. The plain-Opus arm's result is reported as found, whether it ties or

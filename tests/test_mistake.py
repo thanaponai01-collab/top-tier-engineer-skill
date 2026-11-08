@@ -315,8 +315,8 @@ class Shape(unittest.TestCase):
             self.assertIn(part, body)
 
     def test_other_helpers_skip_mistakes_and_mistake_skips_theirs(self):
-        for tool in ("debug.py", "structure-report.py", "verify.py", "threat.py", "evolve.py", "perf.py",
-                     "release.py", "wire.py", "features.py", "graph-audit.py", "blast.py"):
+        for tool in ("debug.py", "structure-report.py", "verify.py",
+                     "features.py", "graph-audit.py", "blast.py"):
             with open(os.path.join(SCRIPTS[tool], tool), encoding="utf-8") as fh:
                 self.assertIn('".mistakes"', fh.read(), f"{tool} does not skip .mistakes/")
         with open(os.path.join(SCRIPTS["mistake.py"], "mistake.py"), encoding="utf-8") as fh:

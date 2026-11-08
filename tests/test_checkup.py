@@ -331,7 +331,7 @@ class Shape(unittest.TestCase):
 
     def test_the_helpers_it_runs_skip_its_state(self):
         """Otherwise a rerun reads module names in .checkup/report.json and calls dead code live."""
-        for tool in ("graph-audit.py", "structure-report.py", "wire.py"):
+        for tool in ("graph-audit.py", "structure-report.py"):
             with open(os.path.join(SCRIPTS[tool], tool), encoding="utf-8") as fh:
                 self.assertIn('".checkup"', fh.read(), f"{tool} does not skip .checkup/")
 

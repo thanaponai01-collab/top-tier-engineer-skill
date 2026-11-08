@@ -424,8 +424,8 @@ class Shape(unittest.TestCase):
             self.assertIn(part, body)
 
     def test_other_helpers_skip_formal_and_formal_skips_theirs(self):
-        for tool in ("debug.py", "structure-report.py", "verify.py", "threat.py", "evolve.py", "perf.py",
-                     "release.py", "wire.py", "features.py", "graph-audit.py", "blast.py", "mistake.py"):
+        for tool in ("debug.py", "structure-report.py", "verify.py",
+                     "features.py", "graph-audit.py", "blast.py", "mistake.py"):
             with open(os.path.join(SCRIPTS[tool], tool), encoding="utf-8") as fh:
                 self.assertTrue('".formal"' in fh.read(), f"{tool} does not skip .formal/")
         with open(os.path.join(SCRIPTS["formal.py"], "formal.py"), encoding="utf-8") as fh:
