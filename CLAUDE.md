@@ -23,7 +23,8 @@ debug-protocol for a bug it finds), and the manual-only `untangle` skill at
 and feature-map's helpers when present; names the fixer skill per finding), and the manual-only
 `dependency-health` skill at `plugin/skills/dependency-health/SKILL.md` (points at evolve-maintain
 for a large upgrade), and the manual-only `state-machines` skill at
-`plugin/skills/state-machines/SKILL.md` (standalone).
+`plugin/skills/state-machines/SKILL.md` (standalone), and the manual-only `test-diet` skill at
+`plugin/skills/test-diet/SKILL.md` (standalone).
 
 - Mechanics, not advice: every rule is a script or test that can fail, never a tip for the agent.
 

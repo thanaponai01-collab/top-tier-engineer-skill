@@ -14,6 +14,31 @@ session left.
 - `assess` reads the repo's own recorded state for these lines, not its scratch state.
 - `baseline` records each file's content hash (`baseline_files`) so a later session can diff it.
 
+## 1.47.0 - 2026-11-08 - test-diet: shorter, faster tests that still catch every bug
+
+New manual-only skill: the state-machines lens pointed at the tests, for "my tests feel too long".
+
+- `scripts/diet.py <repo>` writes `.diet/candidates.md`: `setup:<id>` blocks of three or more
+  statements repeated across test functions (local names and literals normalized, so `u`/`user` and
+  `"ann"`/`"bob"` still match), with the calls each copy replays (`make_user -> Cart -> add`);
+  other languages' test files by repeated four-line windows; `slow:<test>` tests whose body sleeps,
+  opens the network or starts a process; `mock:<test>` tests whose every assertion is on a mock.
+- `--run CMD [--mutants N]` refuses a red suite or one it cannot count, times every test
+  (`python -m unittest` through its own runner, `pytest` through `--durations`), adds tests at
+  0.25 s or more as slow leads, hashes every app file, counts non-blank test lines, and plants N
+  (default 20) small bugs in the app files the tests import (flipped comparison, and/or, +/-,
+  off-by-one, True/False, dropped `not`), recording which the suite catches.
+- `--done` reads `.diet/plan.json` and refuses while a lead is neither covered by a change nor kept
+  with a reason, a covered setup still has any window in two or more places, a covered slow test
+  still exists and is not twice as fast or under 0.1 s, a covered mock-only test still checks only
+  mocks, an app file changed, appeared or went away, the tests fail, test lines grew, the suite is
+  slower by more than a quarter plus half a second, or a planted bug the old tests caught is missed.
+  It writes `.diet/REPORT.md` with lines, tests, seconds and planted bugs caught, before and after.
+- `tests/test_diet.py`: 28 tests; all 16 refusal rules caught when disabled one at a time.
+- Tried on a small cart fixture: 41 -> 24 test lines, 6 -> 5 tests, 0.63 -> 0.25 s, 8/11 planted
+  bugs still caught; deleting the discount test was refused with the two planted bugs it alone held.
+  No eval case yet, so no comparison with plain Opus.
+
 ## 1.46.0 - 2026-11-08 - state-machines: the state machines nobody declared, each bug proven
 
 New manual-only skill, lean like cleanup: one word for "find all of the implicit state machines".
