@@ -21,6 +21,10 @@ the removed script, and the full suite passes.
 <!-- grounding -->
 - The user does not read code. The answer is the numbers before and after, then plain words.
 - "Too long" means long to read and long to run; both are in scope.
+- 2026-11-09: the user sees agents keep adding tests and running the full suite every time. So every
+  test is checked (planted bugs per test show which catch nothing the others miss), dead tests are
+  removed (code gone or uncalled, skipped forever, never collected), and a quick command for use
+  while working is named with its share of planted bugs caught.
 - Deleting or merging tests is where the danger is. Fewer tests is allowed; fewer bugs caught is
   not, so the measure is planted bugs, not test count.
 - A slow test whose cause is in the app (a retry sleep) cannot be fixed from the tests; it is kept
