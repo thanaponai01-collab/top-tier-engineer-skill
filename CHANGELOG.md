@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.49.0 - 2026-11-09 - test-diet checks every test
+
+- test-diet records which planted bugs each test catches; a test that catches nothing the others
+  miss is merged or deleted, unless it checks what planted bugs cannot show.
+- Dead tests are removed: code removed or no longer called, skipped forever, never collected,
+  commented out.
+- A quick command for use while working is named, with its share of planted bugs caught; the full
+  suite is for before a commit. App code only tests use is reported, not removed.
+
 ## 1.48.0 - 2026-11-09 - Skills as saved prompts
 
 ### Plain prose instead of scripts
