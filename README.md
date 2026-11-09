@@ -6,8 +6,8 @@ is `verify-loop`: write a check that can fail, then loop until it passes, with r
 also ships `feature-map` (manual-only, `/verify-loop:feature-map`): a `FEATURES.md` of every
 feature, its entry points and call traces, checked against the code by `features.py check` and
 linked to VERIFY.md sections. And `latent-audit` (manual-only, `/verify-loop:latent-audit`): dead code
-and layer breaches, where a file is deleted only after `graph-audit.py --try-delete` deletes it in a
-throwaway copy and the map's recorded runs, VERIFY.md's checks and the commands you name still pass.
+and layer breaches, in plain words: only code that is truly never loaded or called is deleted, every
+command is rerun after, and every file that looked dead gets a verdict.
 And `wire-check` (manual-only, `/verify-loop:wire-check`): is the code connected to the running
 system? In plain words: every way in is run, each piece nothing reached gets a verdict naming its
 first broken link, and a component you connect keeps a check that fails when the wiring breaks.
@@ -83,8 +83,9 @@ See [the command contract](plugin/skills/verify-loop/references/helpers.md#advan
 - `plugin/skills/verify-loop/SKILL.md` — the skill; `references/` holds its modes (change, challenge,
   CI, project recipe, create, maintain, compliance, answer, triage).
 - `plugin/skills/verify-loop/scripts/` — stdlib-only Python helpers (`verify.py` is the entry point).
-- `plugin/skills/latent-audit/` — the latent-audit skill; `scripts/graph-audit.py` (import graph,
-  `--layers`, `--try-delete ... --run CMD`).
+- `plugin/skills/latent-audit/` — the latent-audit skill (prose); `scripts/graph-audit.py` (import
+  graph, `--layers`, `--snapshot`, `--try-delete ... --run CMD`) is optional for it and is run by
+  checkup and arch-design.
 - `plugin/skills/wire-check/` — the wire-check skill (prose only, no scripts).
 - `plugin/skills/debug-protocol/` — the debug-protocol skill; `scripts/debug.py` (`--repro`,
   `--prove FILE:LINE --as`, `--gate --regress CMD`).

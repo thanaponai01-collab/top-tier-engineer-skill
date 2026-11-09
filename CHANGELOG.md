@@ -1,6 +1,23 @@
 # Changelog
 
-## Unreleased
+## 1.48.0 - 2026-11-09 - Skills as saved prompts
+
+### Plain prose instead of scripts
+
+A skill is now a saved prompt: plain words the user would otherwise type again, written for
+today's model or a better one, with the method left free and the output shape pinned down.
+Beating a plain model is no longer the goal (CLAUDE.md, "How a skill is written").
+
+- Rewritten as one page of prose each, with their scripts, references and tests removed:
+  perf-optimize, threat-model, safe-release, wire-check, evolve-maintain, state-machines,
+  cleanup, untangle, blast-radius, mistake-proof, formal-check and test-diet. Most of these tied
+  plain Opus in evals at 1.4-2.6x the cost; the rest had no eval showing their scripts helped.
+- latent-audit's page is prose too; `scripts/graph-audit.py` stays because checkup runs it.
+- Unchanged, because their scripts proved a win: verify-loop, structure-gate, debug-protocol,
+  checkup, feature-map, dependency-health. arch-design was already prose.
+- A new skill needs only a few lines in `work/briefs/<skill>.md`; the spec template and
+  `tools/spec_check.py` are optional.
+- test-diet's never-committed `diet.py` changes are kept in `work/test-diet-diet-py-uncommitted.patch`.
 
 ### Orientation comes first
 

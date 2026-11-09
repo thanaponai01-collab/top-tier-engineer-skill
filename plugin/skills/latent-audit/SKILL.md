@@ -1,7 +1,7 @@
 ---
 name: latent-audit
 description: >-
-  Find dead code and layer violations, proving code dead before deleting it. Use for "find dead code", "clean up the codebase", "are the layers respected?"
+  Find dead code and remove it without breaking anything: only code that is truly never loaded or called goes, every command is rerun after, and every file that looked dead gets a verdict. Also checks a declared layer order. Use for "find dead code", "clean up the codebase", "are the layers respected?"
 disable-model-invocation: true
 metadata:
   stage: review
@@ -10,30 +10,45 @@ metadata:
 
 # Latent Audit
 
-**Goal:** remove the code nothing reaches, keep everything that is reached, and account for every
-file that looked dead. How you find what reaches it is yours. What counts as done is checked by
-the helper. `H` is `python <this skill's base directory>/scripts/graph-audit.py <repo>`.
+Remove the code nothing reaches, keep everything that is reached, and account for every file or
+function that looked dead. "No import names it" is a suspicion, not proof: code is also loaded by
+a name built at runtime (`import_module(f"...{fmt}_report")`, `require` of a built string), by a
+name written in a config file or schedule, through plugins and entry points, by a script the README
+tells people to run, or from outside the language altogether. A green test suite proves nothing
+about code the tests never touch. How you find what really reaches the code is up to you. If
+`FEATURES.md` (feature-map) or `VERIFY.md` (verify-loop) is in the repo, its recorded ways in and
+checks count among the commands that could notice a deletion. `scripts/graph-audit.py <repo>` is
+there if it helps. It prints the import graph and the suspects, and `--snapshot --run "<cmd>"`
+records what each command really imports. You don't have to use it. Report only, unless the user
+asked you to delete.
 
-Run `H --gate` whenever you like; it says which stage is open and what fixes it, and prints the
-answer once all three hold (`LATENT-GATE: done`).
+**What done looks like**
 
-## The stages
+- Before anything changes, every command that could load the code (the app's commands, jobs, the
+  tests, the recorded checks) was run and passed, so there is something to compare with.
+- Only code shown to be never loaded or called is deleted, in place. After deleting, every one of
+  those commands runs again and still does what it did before.
+- Every suspect gets a verdict: `dead` (deleted, or reported if deletion wasn't asked for), `live`
+  (with the `file:line` that loads it), or `watch` (kept, with what would settle it).
+- A deleted file's name is spelled nowhere that would still try to load it.
+- If the repo declares a layer order, every import that points up it is listed by `file:line`.
+  With no declared order, the layers are "unchecked", never "clean".
+- The verdicts stay in `.latent/verdicts.md`, so a later session asked to delete something can
+  see what was already shown live and why.
 
-| Stage | Holds when |
-|---|---|
-| **1. Snapshot** | Before anything changes, `H --snapshot --run "<cmd>" ...` ran every command that could load code and recorded what each one imported (the map's recorded runs, VERIFY.md and the unit tests are added for you). Every runtime loader the helper finds (`import_module(f"...")`) loaded at least one of its suspects, or `.latent/verdicts.md` says `- loader <file:line>: <why it loads none>` |
-| **2. Change** | Only files the snapshot never saw loaded are deleted, in place, and every snapshot command still passes. A deleted file whose name another file spells (a schedule, a config) needs `- <file>: dead: <why that line never loads it>` |
-| **3. Account** | Every suspect still here that the snapshot never loaded has a line in `.latent/verdicts.md`: `dead` (report without deleting), `watch` (keep, with why), or `live` (with the `file:line` that loads it) |
+**Avoid**
 
-`H --gate --run "<cmd>" ...` takes the snapshot and checks the stages in one call.
+- Deleting on a grep, a static graph, green tests, or someone's word that it is dead.
+- Changing code that is not dead: no refactors, renames or "while I'm here" fixes.
+- Calling a command green that wasn't run after the last deletion.
 
-## Other tools
+**The answer**
 
-- `H` alone: the import graph. Files `FEATURES.md` (`feature-map`) names are `MAPPED` and live.
-- `H --try-delete <file> ... --run "<cmd>"`: for code a snapshot cannot observe (it loads outside
-  Python, or its entry point cannot run here). Deletes in a throwaway copy and reruns everything;
-  a `nothing-breaks` receipt lets stage 2 accept a deletion the snapshot did not cover.
-- `H --layers layers.txt`: imports that point up a declared layer order (top first, e.g.
-  `interface: app/routes/`). No declared order means "layers unchecked", never "clean".
-
-Report only, unless asked to delete. Commit `.latent/` with the change.
+```
+Deleted: <file or function> (<why nothing reaches it>)          (one line each, or: none)
+Kept though it looked dead: <file>: live via <file:line that loads it>
+Watch: <file>: <why it is kept, what would settle it>
+Layers: <file:line> imports up from <layer> to <layer>          (or: none, or: unchecked, no declared order)
+Commands: `<command>`: passed before, passed after              (one line each)
+Record: .latent/verdicts.md
+```
