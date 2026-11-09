@@ -25,7 +25,7 @@ siblings, the full suite passes, and the eval case below has been run on both ar
   which modules import which network, database or process library, so two libraries doing one job
   (`requests` in one module, `urllib.request` in another) can be counted from data that already
   exists.
-- Run on this repo on 2026-11-07: structure.py took 1.4s and untangle.py 0.3s. graph-audit.py
+- Run on this repo on 2026-11-07: structure.py took 1.4s and untangle's helper (since removed) 0.3s. graph-audit.py
   took 80s, and both it and wire.py walked `.claude/worktrees/`, which is excluded from git:
   1,696 modules and 1,438 files, against 5,760 tracked files. Most of the dead-module and
   way-in lines came from worktree copies. A checkup that reports those is noise. structure.py
@@ -59,7 +59,7 @@ in CLAUDE.md, both plugin manifests and CHANGELOG.md, as 1.43.0.
 - The report opens with what was measured: files and lines counted, the share each helper
   entered, and each helper that was missing or failed, before any finding.
 - Only git-tracked files count. A finding in an ignored or untracked path is dropped and counted.
-- Each finding gets a weight from the history, counted the way untangle.py counts: commits plus
+- Each finding gets a weight from the history, counted from git history: commits plus
   twice the fix commits of its files in the last 300 (for a pair, only the commits that touched
   both). Findings are listed by weight, highest first. A finding no commit in the last 100
   touched is labeled `idle`.

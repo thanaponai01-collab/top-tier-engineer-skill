@@ -1,0 +1,87 @@
+diff --git a/plugin/skills/test-diet/scripts/diet.py b/plugin/skills/test-diet/scripts/diet.py
+index 04634722..6799fb76 100644
+--- a/plugin/skills/test-diet/scripts/diet.py
++++ b/plugin/skills/test-diet/scripts/diet.py
+@@ -72,8 +72,20 @@ def digest(root, rel):
+         return hashlib.sha1(fh.read()).hexdigest()
+ 
+ 
++def ignored(root, rels):
++    """The files git ignores (caches, local state): not the app, whatever writes them."""
++    try:
++        p = subprocess.run(["git", "-C", root, "check-ignore", "--stdin", "-z"], input="\0".join(rels),
++                           capture_output=True, text=True, encoding="utf-8", errors="replace")
++    except OSError:
++        return set()
++    return set(p.stdout.split("\0")) - {""} if p.returncode in (0, 1) else set()
++
++
+ def app_hashes(root):
+-    return {r: digest(root, r) for r in walk(root) if not is_test(r)}
++    rels = [r for r in walk(root) if not is_test(r)]
++    skip = ignored(root, rels)
++    return {r: digest(root, r) for r in rels if r not in skip}
+ 
+ 
+ def test_lines(root):
+@@ -305,10 +317,10 @@ def find(root, paths=None):
+     return leads, tests
+ 
+ 
+-def repeated_now(root, hashes):
+-    """How many places still hold any window of a block that was repeated."""
++def repeated_now(root, hashes, paths=None):
++    """How many places still hold any window of a block that was repeated, in the paths the record was made for."""
+     seen = {}
+-    for rel in test_files(root):
++    for rel in test_files(root, paths):
+         text = read(root, rel)
+         if text is None:
+             continue
+@@ -467,6 +479,9 @@ def plant(text, index):
+ def imported_app_files(root):
+     """App .py files the Python tests import, directly."""
+     app = {r for r in walk(root) if r.endswith(".py") and not is_test(r)}
++    # import roots: the repo, src/, and any top-level folder that holds a package (tools/bbas -> `import bbas`)
++    pres = ["", "src/"] + sorted({r.split("/", 1)[0] + "/" for r in app
++                                  if r.count("/") == 2 and r.endswith("/__init__.py")} - {"src/"})
+     found = set()
+     for rel in test_files(root):
+         if not rel.endswith(".py"):
+@@ -484,7 +499,7 @@ def imported_app_files(root):
+                 mods += [n.module + "." + a.name for a in n.names]
+         for m in mods:
+             base = m.replace(".", "/")
+-            for pre in ("", "src/"):
++            for pre in pres:
+                 for cand in (f"{pre}{base}.py", f"{pre}{base}/__init__.py"):
+                     if cand in app:
+                         found.add(cand)
+@@ -576,7 +591,8 @@ def done(root):
+             problems.append(f"kept {k.get('candidate')} with no reason")
+     # app untouched
+     now_app = app_hashes(root)
+-    before_app = record["app"]
++    skip = ignored(root, list(record["app"]))
++    before_app = {r: h for r, h in record["app"].items() if r not in skip}
+     for rel in sorted(set(before_app) | set(now_app)):
+         if rel not in now_app:
+             problems.append(f"app file {rel} went away: this skill changes test files only")
+@@ -594,7 +610,7 @@ def done(root):
+                 problems.append(f"{lid} is neither covered by a change nor kept with a reason")
+             continue
+         if lead["kind"] == "setup":
+-            left = repeated_now(root, set(lead["hashes"]))
++            left = repeated_now(root, set(lead["hashes"]), record.get("paths"))
+             if left >= 2:
+                 problems.append(f"{lid} is covered but part of it is still repeated in {left} places")
+         elif lead["kind"] == "slow":
+@@ -696,7 +712,7 @@ def main(argv=None):
+     muts = mutants(root, a.mutants)
+     hit = caught(root, a.run, muts, timeout) if muts else []
+     record = {"suite": {k: suite[k] for k in ("cmd", "exit", "ran", "seconds")}, "times": times, "leads": leads,
+-              "lines": test_lines(root), "app": app_hashes(root), "mutants": muts, "caught": hit, "timeout": timeout}
++              "lines": test_lines(root), "app": app_hashes(root), "paths": a.paths or None, "mutants": muts, "caught": hit, "timeout": timeout}
+     save(root, "record.json", record)
+     print("\n".join(write_candidates(root, leads, record)[5:]))
+     print(f"recorded: {suite['ran']} tests in {suite['seconds']:.2f} s"

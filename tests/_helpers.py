@@ -21,15 +21,8 @@ SCRIPTS = {
     "dep-map.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
     "change-map.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
     "arch-design.py": os.path.join(ROOT, "plugin", "skills", "arch-design", "scripts"),
-    "blast.py": os.path.join(ROOT, "plugin", "skills", "blast-radius", "scripts"),
-    "mistake.py": os.path.join(ROOT, "plugin", "skills", "mistake-proof", "scripts"),
-    "formal.py": os.path.join(ROOT, "plugin", "skills", "formal-check", "scripts"),
-    "untangle.py": os.path.join(ROOT, "plugin", "skills", "untangle", "scripts"),
-    "cleanup.py": os.path.join(ROOT, "plugin", "skills", "cleanup", "scripts"),
     "checkup.py": os.path.join(ROOT, "plugin", "skills", "checkup", "scripts"),
     "deps.py": os.path.join(ROOT, "plugin", "skills", "dependency-health", "scripts"),
-    "states.py": os.path.join(ROOT, "plugin", "skills", "state-machines", "scripts"),
-    "diet.py": os.path.join(ROOT, "plugin", "skills", "test-diet", "scripts"),
 }
 
 

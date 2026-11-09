@@ -10,27 +10,42 @@ metadata:
 
 # Untangle
 
-**Goal:** the next person to change this code, most likely an agent, spends less effort finding
-what to change, breaks less without noticing, and finds a bug's cause faster. What the program does
-stays the same. Untangle where the history says changes land and fixes repeat. A tangle that is
-easy to see but that nothing ever changes is not the target. How you read the code and what you move
-are yours. What counts as done is checked by the helper. `U` is
-`python <this skill's base directory>/scripts/untangle.py <repo>`; it needs git.
+Make the next change cheaper. The next person to change this code, most likely an agent, should
+spend less effort finding what to change, break less without noticing, and find a bug's cause
+faster. What the program does stays the same. Untangle where the git history says changes land and
+fixes repeat: files with many commits and many fix commits, and files that keep changing together.
+A tangle that is easy to see but that nothing ever changes is not the target. How you read the code
+and what you move are up to you.
 
-`U` alone ranks the files that change most and get fixed most, the pairs of files that keep changing
-together, and the fix subjects behind each. A file untouched in the last 100 commits is not ranked.
-Run `U --gate --run "<test cmd>" ...` whenever you like. It says which stage is open and what fixes
-it, appends the slots it needs to `.untangle/notes.md`, and prints the answer once all three hold
-(`UNTANGLE-GATE: done`). A guard or suite run is reused while the code is unchanged, so rerunning the
-gate after editing only the notes is cheap.
+**What done looks like**
 
-## The stages
+- Each file that changes and gets fixed most, and each pair that keeps changing together, is a
+  target (with the commits that show what it costs) or skipped with a reason. A file where a third
+  or more of its commits are fixes has a tangle inside it; skip it only if a test already catches
+  each of its recent fixes being undone.
+- The tests were run on the committed tree before any change. Tests already red then are each
+  sorted as environment, stale, or a real bug, with the evidence. A red test caused by a real fault
+  is a bug, not a stale test. A bug gets a `untangle: known bug: <symptom>` comment next to the
+  fault, where the next person debugging will look.
+- Every changed file serves a target. Each move has a test that passes now and would fail if the
+  tangle came back, or says why there is none.
+- The same tests run after: no test that passed before fails now, and no fewer tests run.
 
-| Stage | Holds when |
-|---|---|
-| **1. Baseline** | Before any code changed, `--run` recorded every test command on the tree as committed, and each command ran tests (a command that ran none, or printed no count and failed, is refused and nothing is recorded). Every ranked hotspot and pair has `target: <the commits that show what it costs>` or `skip: <why it does not hurt>`. Fixes repeated in one file are a tangle inside that file: a `FIX-HEAVY` hotspot (a third or more of its commits are fixes) can be skipped only with `\| guard: <cmd>`, run by the gate, that names a test file mentioning that module and goes red with each of the file's last 5 fixes undone (one that no longer reverts cleanly is passed over). A fix with nothing to pin takes `\| unguarded: <sha>: <why>`. Every red test (one slot per file and failure message, a message the runner cut short included) has `env`, `stale` or `bug`, with its evidence. A `bug` names the `file:line` of the fault and has a `untangle: known bug: <symptom>` comment within 3 lines of it, where the next person debugging will look. A test that is red because of a real fault is a bug, not a stale test |
-| **2. Untangle** | Every changed code file is a target, or has `- also <file>: serves <target>`; a file whose only change is a bug comment needs neither. Every target has `- move <target>: <what changed> \| guard: <cmd>` (or `guard: none: <why>`, or `not moved: <why>`). A targeted pair takes one move, `- move <a> + <b>: ...`, for both files. A move whose files did not change is refused. A guard passes now and fails on the committed tree, with its test files copied in, so it catches the tangle coming back |
-| **3. Same behavior** | The same `--run` commands on the changed tree: no test that was green at the baseline is red, and no command ran fewer tests |
+**Avoid**
 
-Don't fix a `bug` red as part of the untangle; it changes behavior. Name it first in the answer.
-Commit `.untangle/` with the change, or delete it.
+- Fixing a bug found along the way. It changes behavior: mark it and name it first in the answer.
+- Undoing a past fix while moving code. Each fix in the history was there for a reason.
+- Picking tangles by how they look (import direction, layers, copied helpers) when the history
+  shows the pain elsewhere. Clearing dead code and litter is cleanup's job.
+- Calling a test green that was not run after the last change.
+
+**The answer**
+
+```
+Known bugs (not fixed): <file:line>: <symptom>                  (or: none)
+Targets: <file or pair>: <commits that show the cost> -> <what changed>  (one line each)
+Skipped: <file or pair>: <why it does not hurt>
+Red before: <test>: env | stale | bug: <evidence>               (or: none)
+Guards: <target>: `<command>` passes now, fails on the old tree  (or: none: <why>)
+Tests: `<command>`: <n> passed before, <n> passed after, nothing green went red
+```

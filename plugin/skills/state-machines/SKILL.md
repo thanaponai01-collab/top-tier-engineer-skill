@@ -10,35 +10,43 @@ metadata:
 
 # State machines
 
-**Goal:** the user sees every implicit state machine as a picture, knows in plain words which ones
-have bugs, and each bug is held by a test that fails on the code as it was. The bugs live in the gaps:
-a value checked but never set, a flag combination that should be impossible but is reachable, a state
-nothing leaves, a move that skips its guard. Fix only what the user asked you to fix.
-`S` is `python <this skill's base directory>/scripts/states.py <repo>`, run from the repo root.
+Show the user every state machine the code holds without saying so: a status string set in six
+files and checked in twelve, flags that only make sense in some combinations, a field whose `None`
+means "not yet". Draw each one as a picture and say in plain words which have bugs. The bugs live
+in the gaps: a value checked but never set (a typo, a renamed state), a combination that should be
+impossible but can be reached, a state nothing leaves, a move that skips its guard. Fix only what
+the user asked you to fix. How you find them is up to you: read it all if it fits, search, run it.
 
-1. `S [paths] --run "<test cmd>"` before you change anything. It lists candidate fields in
-   `.states/candidates.md` with every write and every check by `file:line`, records the tests, and
-   copies the tree as it was to `.states/before/`. Values marked **checked but never set** are a
-   typo, a renamed state, or data from outside; each needs a finding either way.
-2. Read the code and write `.states/machines.json`:
-   `machines`: `name`, `fields` (candidate ids or field names), `initial`, `states`, `terminal`,
-   `transitions` (`from` or `"*"`, `to`, `at` as `path:line` or `path:function`), and `also`
-   (`at`, `why`) for writes that are not moves, such as loading saved data.
-   `dismissed`: `candidate`, `why`, for leads that are not machines (independent preferences are
-   not a machine: every combination is legal).
-   `findings`: `kind` (`bug` or `ok`), `machine`, `what`, `at`, `covers` (ids such as
-   `value:status=canceled` or `deadend:<machine>:<state>`), and for a bug `test` and `fixed`;
-   for `ok`, `why`.
-   Look for guards outside the function too (decorators, callers) before you call a move unguarded.
-3. Prove each bug with a test command. A fixed bug's test goes in the suite. An open bug's test goes in
-   `.states/proofs/` (run it with e.g. `python -m unittest discover -s .states/proofs`) so the suite
-   stays green.
-4. `S --done`. It refuses while a candidate is unmapped and undismissed, a write it saw is no
-   transition, a written value is no state, a checked-never-set value or a state nothing leaves has
-   no finding, a bug's test passes on the tree as it was or fails there on an import error, a fixed
-   bug's test fails now, or a test that passed now fails. Fix the cause, never the check. It writes
-   `.states/MACHINES.md` (a diagram per machine) and prints `STATES: done`.
+**What done looks like**
 
-The answer, in plain words: each machine and its states; bugs, fixed or open, each with the test
-that proves it; what looked like a bug and is not (and why). Point the user at `.states/MACHINES.md`
-for the pictures.
+- Every write and every check of each status field or flag is accounted for by `file:line`: each
+  write is a move in some machine (or a named non-move, such as loading saved data), and each
+  written value is one of its states.
+- Every value that is checked but never set, and every state nothing leaves, gets a verdict: a bug,
+  or the reason it is fine (set from outside data, a state meant to be final).
+- Each bug is proven by a test that fails on the code as it was, for the reason named, not on an
+  import error. A fixed bug's test passes now and stays in the suite; an open bug's test is kept
+  apart so the suite stays green. No test that passed before fails after.
+- Each machine is drawn as a diagram (mermaid is fine) with its states and moves, in a file the
+  user can open.
+
+**Avoid**
+
+- Calling a move unguarded before looking for guards outside the function: decorators, callers.
+- Calling independent flags a machine. Preferences such as email on and SMS on allow every mix.
+- Calling a never-set value dead when outside data (an API payload, a saved file) can set it.
+- Reporting a bug no test has shown failing.
+
+**The answer**
+
+```
+Machines: <file the diagrams are in>
+1. <machine: field(s)> — states: <a, b, c>; final: <c>
+   Bug: <what goes wrong, in plain words> (<file:line>): fixed | open
+     Proof: `<test command>` (<file:line of the test>) fails on the code as it was
+   (one line per bug; one block per machine)
+Not bugs: <what looked wrong>: <why it is fine>      (one per lead)
+Not machines: <field or flags>: <why: independent, every mix valid>
+Fixed: <bug>: <change>; its test passes now        (or: not asked)
+Tests: <command>: <n> passed before, <n> passed after
+```
