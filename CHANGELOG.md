@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.50.0 - 2026-11-10 - Skills as a lens, with an answer the owner can read
+
+- A skill is now a lens (how an expert looks at the problem), what done looks like, and the
+  answer. No steps or stages; the model chooses its own method (CLAUDE.md, "How a skill is written").
+- The answer has two layers. The top is for an owner who does not read code: `Verdict`,
+  `What I found`, `What I did`, `Your call`, in everyday words. File names, commands and proof go
+  below a `Details` line for the developer or agent who picks it up.
+- state-machines is the first skill written this way and the example to copy. One run on
+  `state-machines-print-shop`: 4/4 found, $0.33 (`evals/results/2026-11-10-plain-answer`). The
+  other skills get the two-layer answer when next touched.
+
 ## 1.49.0 - 2026-11-09 - test-diet checks every test
 
 - test-diet records which planted bugs each test catches; a test that catches nothing the others
