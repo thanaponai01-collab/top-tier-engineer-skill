@@ -1,0 +1,97 @@
+[
+  {
+    "case": "state-machines-print-shop",
+    "skill": "state-machines",
+    "arm": "with",
+    "passed": true,
+    "report_passed": true,
+    "graded_by": "meaning",
+    "phrase_passed": true,
+    "judge_text": "judge: PASS  4/4 found\n  found   canceled-typo \u2014 \"Bug: `refund` checked `\"canceled\"`, which nothing sets (`orders.py:29`): fixed\"\n  found   pending-never-set \u2014 \"Bug: `expire_unpaid` checked `\"pending\"`, which nothing sets (`jobs.py:11`): fixed.\"\n  found   jam-stuck-printing \u2014 \"every later `start` raised `PrinterBusy`\"\n  found   ship-unguarded \u2014 \"Bug: `ship` had no guard and no callers that check first (`orders.py:46` before): fixed with `@allowed_from(\"printing\")`\"\n  held    notify-flags-called-a-bug\n  held    archive-called-unguarded",
+    "actions_passed": true,
+    "followed_skill": null,
+    "leaked": false,
+    "errored": false,
+    "used_skill": true,
+    "skills_loaded": [
+      "state-machines"
+    ],
+    "skill_calls": [],
+    "skill_reads": [
+      {
+        "skill": "state-machines",
+        "path": "<tmp>\\tte-plugin-wbh5nw08\\verify-loop\\skills\\state-machines\\skill.md",
+        "sub": false,
+        "via": "shell"
+      }
+    ],
+    "skill_read_candidates": [],
+    "model_usage": {
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 6439,
+        "cacheReadInputTokens": 239979,
+        "cacheCreationInputTokens": 18755,
+        "webSearchRequests": 0,
+        "costUSD": 0.32688779999999995,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1061,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 18755,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "dispatch_count": 0,
+    "found": 4,
+    "total": 4,
+    "missed": [],
+    "tripped": [],
+    "action_checks": [
+      {
+        "check": "changed nothing outside the allowed files",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      },
+      {
+        "check": "refund after cancel works, unpaid orders expire, the printer recovers from a jam, ship refuses cancelled and unpaid orders; happy path, archive guard, refund-once and notify combinations unchanged",
+        "ok": true,
+        "detail": "",
+        "workdir": true
+      }
+    ],
+    "changes": {
+      "changed": [
+        "fixture/printshop/jobs.py",
+        "fixture/printshop/orders.py",
+        "fixture/printshop/printer.py"
+      ],
+      "added": [
+        "fixture/STATE_MACHINES.md",
+        "fixture/tests/test_state_bugs.py"
+      ],
+      "deleted": []
+    },
+    "model": "claude-opus-5-5",
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "cost_usd": 0.32688779999999995,
+    "turns": 9,
+    "api_seconds": 71.518,
+    "helper_calls": [],
+    "helper_subcommands": [],
+    "helper_source_reads": [],
+    "helper_used": false,
+    "mcp_servers": [],
+    "grade_text": "PASS  state-machines-print-shop  [state-machines]  4/4 found, score 1.00 (needs 1.00)\n  found   canceled-typo: orders.refund checks status == \"canceled\" but cancel() writes \"cancelled\", so no order can ever be refunded\n  found   pending-never-set: jobs.expire_unpaid sweeps status == \"pending\", which nothing writes (checkout writes \"awaiting_payment\"), so unpaid orders never expire and keep their paper\n  found   jam-stuck-printing: PrintJob.start returns on PrinterError without clearing printing, so after one jam every later start raises PrinterBusy\n  found   ship-unguarded: orders.ship sets shipped from any status, so a cancelled or unpaid order can ship\n  held    notify-flags-called-a-bug: notify_email and notify_sms are independent preferences; every combination is valid, so calling a combination impossible or merging them into one state is wrong\n  held    archive-called-unguarded: archive() is guarded by @allowed_from(\"shipped\"); saying it can be archived from any state is wrong\n  NOT CHECKED  the working copy: this case grades actions too, pass --workdir\n  held    no-helper-source-read: never read or grepped scripts/ inside the skill",
+    "seconds": 75.3,
+    "timed_out": false,
+    "staged_plugin": "<tmp>\\tte-plugin-wbh5nw08\\verify-loop",
+    "stderr_tail": "",
+    "end_output": null
+  }
+]

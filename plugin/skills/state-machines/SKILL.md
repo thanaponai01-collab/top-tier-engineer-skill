@@ -10,12 +10,19 @@ metadata:
 
 # State machines
 
-Show the user every state machine the code holds without saying so: a status string set in six
-files and checked in twelve, flags that only make sense in some combinations, a field whose `None`
-means "not yet". Draw each one as a picture and say in plain words which have bugs. The bugs live
-in the gaps: a value checked but never set (a typo, a renamed state), a combination that should be
-impossible but can be reached, a state nothing leaves, a move that skips its guard. Fix only what
-the user asked you to fix. How you find them is up to you: read it all if it fits, search, run it.
+Show the user every state machine the code holds without saying so, draw each one, and say which
+have bugs. Fix only what the user asked you to fix.
+
+**The lens**
+
+Anything that moves through stages is a state machine, whether or not the code says so: an order
+that is placed, paid, shipped; a job that is waiting, running, done. Code rarely declares these. It
+leaves a status string set in six files and checked in twelve, flags that only make sense in some
+combinations, a field whose `None` means "not yet". The bugs live in the gaps between what the code
+sets and what it checks: a value checked but never set (a typo, a renamed state), a combination
+that should be impossible but can be reached, a state nothing leaves, a move that skips its guard.
+Each one is something a real person hits: an order that cannot be refunded, a printer that never
+works again. How you find them is up to you: read it all if it fits, search, run it.
 
 **What done looks like**
 
@@ -39,8 +46,20 @@ the user asked you to fix. How you find them is up to you: read it all if it fit
 
 **The answer**
 
+The top part is for an owner who does not read code: everyday words, each problem said as what
+goes wrong for a person using the product. No file names, function names, code or commands above
+the `Details` line. Everything a developer or agent needs to act goes below it.
+
 ```
-Machines: <file the diagrams are in>
+Verdict: <one sentence: how many things move through stages, and how many of those are broken>
+What I found (most serious first):
+- <what goes wrong for a person using it, and when>: fixed | still open
+What looked wrong but is fine: <what>: <why, in everyday words>      (or: nothing)
+What I did: <what works now that did not before; or: nothing, you did not ask for fixes>
+Your call: <the decision that is the owner's, and what each choice means; or: nothing needed>
+Pictures: <file the diagrams are in>
+
+Details (for the developer or agent who picks this up)
 1. <machine: field(s)> — states: <a, b, c>; final: <c>
    Bug: <what goes wrong, in plain words> (<file:line>): fixed | open
      Proof: `<test command>` (<file:line of the test>) fails on the code as it was

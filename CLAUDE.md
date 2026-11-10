@@ -31,17 +31,28 @@ for a large upgrade), and the manual-only `state-machines` skill at
 A skill is a saved prompt: plain words the user would otherwise type again. It guides a capable
 model, today's or a better one later, and trusts it to use its own knowledge and judgment.
 
-- Say what is wanted, not how to do it: the goal, what done looks like, what to avoid, and the
-  shape of the output that comes back. That output shape is the one thing to pin down.
-- Leave the method free. No step-by-step procedures, no workarounds for a model's weak spots;
-  those age badly as models improve.
+- A skill has three parts: a lens, what done looks like (with what to avoid), and the answer.
+- The lens is how an expert looks at this kind of problem: what to notice, what good and bad look
+  like, where the trouble usually hides. It is knowledge, not instructions, so a better model sees
+  more through the same lens and the skill does not need rewriting.
+- What done looks like is a list of things true at the end, in any order. Never an order of work:
+  no steps, no stages, no workarounds for a model's weak spots; those age badly as models improve.
+  The model chooses its own method.
+- The answer is the one thing to pin down, and it has two layers. The top is for the owner, who
+  does not read code: `Verdict`, `What I found`, `What I did`, `Your call`, in everyday words,
+  each problem said as what goes wrong for a person using the product. No file names, function
+  names, code or commands up there. Below a `Details` line comes everything a developer or agent
+  needs to act: `file:line`, commands, proof. The same four top lines in every skill, so the owner
+  learns the shape once.
 - Keep it short and readable by a person: about one page of plain prose.
 - The test is "did it do what the user meant", tried on a real task. Beating a plain model is not
   the goal.
 - Add a script only when it does something reading cannot (an exact count, a record kept across
   sessions) and a test showed it mattered. Skills whose scripts already proved a win keep them
   (verify-loop, structure-gate, debug-protocol, checkup, feature-map, dependency-health); the rest
-  move to prose when next touched.
+  move to prose when next touched. A script checks the result; it does not set the order of work.
+- Skills written before the two-layer answer get it when next touched. `state-machines` is the
+  example to copy.
 
 ## Repo mechanics
 
@@ -55,8 +66,10 @@ model, today's or a better one later, and trusts it to use its own knowledge and
 
 - intent: BRIEF.md
 - work: BUILD.md
-- Before building a new skill, write a few lines in `work/briefs/<skill>.md`: why it exists and
-  what output it should return. `work/SPEC_TEMPLATE.md` and `tools/spec_check.py` are optional.
+- Before building a new skill, write a few lines in `work/briefs/<skill>.md`: why it exists, its
+  lens, and the answer it should return to an owner who does not read code.
+  `work/SPEC_TEMPLATE.md` and `tools/spec_check.py` are optional; a one-stage `Gates` part
+  (a repo in, the answer out) is enough there.
 - Read these for automatic progression work; its command contract is in
   `plugin/skills/verify-loop/references/helpers.md`.
 - Authorized updates refresh affected intent, evidence and Next; read-only reviews report gaps.

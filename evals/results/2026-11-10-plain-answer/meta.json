@@ -1,0 +1,14 @@
+{
+  "started": "2026-11-10-1143",
+  "repeats": 1,
+  "arms": [
+    "with"
+  ],
+  "version": "1.49.0",
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "out_rel": "evals/results/2026-11-10-plain-answer",
+  "user_memory_bytes": 0,
+  "claude_version": "2.1.322 (Claude Code)"
+}
